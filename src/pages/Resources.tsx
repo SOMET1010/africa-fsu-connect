@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Search, Upload, FileText, Download, Filter, Eye, Calendar, User, Star } from "lucide-react";
+import { useDocuments } from "@/hooks/useDocuments";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,90 +15,75 @@ import FileUpload from "@/components/shared/FileUpload";
 import { useToast } from "@/hooks/use-toast";
 
 const Resources = () => {
+  const { documents, loading, uploading, uploadDocument, downloadDocument, searchDocuments } = useDocuments();
+  const { toast } = useToast();
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [previewDoc, setPreviewDoc] = useState<any>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const { toast } = useToast();
+  const [uploadMetadata, setUploadMetadata] = useState({
+    title: '',
+    description: '',
+    document_type: 'autre' as const,
+    country: '',
+    tags: [] as string[]
+  });
 
-  const documents = [
-    {
-      id: 1,
-      title: "Cadre Réglementaire FSU - Côte d'Ivoire 2024",
-      description: "Document de référence sur la réglementation du Fonds de Service Universel en Côte d'Ivoire",
-      type: "Réglementation",
-      country: "Côte d'Ivoire",
-      region: "CEDEAO",
-      size: "2.4 MB",
-      uploadDate: "2024-01-15",
-      downloads: 156,
-      language: "Français",
-      rating: 4.5,
-      author: "ANSUT CI",
-      keywords: ["réglementation", "fsu", "côte d'ivoire"]
-    },
-    {
-      id: 2,
-      title: "USF Best Practices Guide - SADC Region",
-      description: "Comprehensive guide on Universal Service Fund implementation across Southern Africa",
-      type: "Guide",
-      country: "Afrique du Sud",
-      region: "SADC",
-      size: "5.1 MB",
-      uploadDate: "2024-01-10",
-      downloads: 203,
-      language: "English",
-      rating: 4.8,
-      author: "ICASA SA",
-      keywords: ["best practices", "sadc", "implementation"]
-    },
-    {
-      id: 3,
-      title: "Rapport Annuel FSU 2023 - Sénégal",
-      description: "Bilan des activités et projets du FSU sénégalais pour l'année 2023",
-      type: "Rapport",
-      country: "Sénégal",
-      region: "CEDEAO",
-      size: "8.7 MB",
-      uploadDate: "2024-01-08",
-      downloads: 89,
-      language: "Français",
-      rating: 4.2,
-      author: "ARTP Sénégal",
-      keywords: ["rapport annuel", "sénégal", "bilan"]
-    }
-  ];
+  // Documents are now fetched from useDocuments hook
 
   const searchFilters = [
     {
-      id: "type",
+      id: "document_type",
       label: "Type de Document",
       options: [
-        { value: "Réglementation", label: "Réglementation" },
-        { value: "Guide", label: "Guide" },
-        { value: "Rapport", label: "Rapport" }
+        { value: "guide", label: "Guide" },
+        { value: "rapport", label: "Rapport" },
+        { value: "presentation", label: "Présentation" },
+        { value: "formulaire", label: "Formulaire" },
+        { value: "autre", label: "Autre" }
       ]
     },
     {
       id: "country",
       label: "Pays",
       options: [
-        { value: "Côte d'Ivoire", label: "Côte d'Ivoire" },
-        { value: "Sénégal", label: "Sénégal" },
-        { value: "Afrique du Sud", label: "Afrique du Sud" }
+        { value: "ci", label: "Côte d'Ivoire" },
+        { value: "sn", label: "Sénégal" },
+        { value: "za", label: "Afrique du Sud" },
+        { value: "ng", label: "Nigéria" },
+        { value: "gh", label: "Ghana" }
       ]
     }
   ];
 
   const handleSearch = (query: string, filters: Record<string, string>) => {
-    // Filtering logic will be implemented by SearchBar component
+    searchDocuments(query, filters);
   };
 
-  const handleFileUpload = (files: File[]) => {
-    toast({
-      title: "Documents uploadés",
-      description: `${files.length} document(s) ont été uploadés avec succès.`,
-    });
-    setIsUploadOpen(false);
+  const handleFileUpload = async (files: File[]) => {
+    if (!uploadMetadata.title) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez renseigner le titre du document",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      for (const file of files) {
+        await uploadDocument(file, uploadMetadata);
+      }
+      setIsUploadOpen(false);
+      setUploadMetadata({
+        title: '',
+        description: '',
+        document_type: 'autre',
+        country: '',
+        tags: []
+      });
+    } catch (error) {
+      // Error handled in hook
+    }
   };
 
   const handlePreview = (doc: any) => {
@@ -104,10 +92,14 @@ const Resources = () => {
   };
 
   const handleDownload = (doc: any) => {
-    toast({
-      title: "Téléchargement",
-      description: `Le téléchargement de "${doc.title}" a commencé.`,
-    });
+    downloadDocument(doc);
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (!bytes) return 'N/A';
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
   };
 
   return (
@@ -141,19 +133,71 @@ const Resources = () => {
                   Ajouter un Document
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+                <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>Ajouter un Nouveau Document</DialogTitle>
                   <DialogDescription>
                     Uploadez un nouveau document dans la bibliothèque FSU
                   </DialogDescription>
                 </DialogHeader>
-                <FileUpload
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
-                  maxSize={50 * 1024 * 1024} // 50MB
-                  multiple={true}
-                  onFilesSelected={handleFileUpload}
-                />
+                <div className="space-y-4">
+                  {/* Metadata form */}
+                  <div className="grid gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="title">Titre du document *</Label>
+                      <Input
+                        id="title"
+                        value={uploadMetadata.title}
+                        onChange={(e) => setUploadMetadata(prev => ({ ...prev, title: e.target.value }))}
+                        placeholder="Titre du document"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="description">Description</Label>
+                      <Textarea
+                        id="description"
+                        value={uploadMetadata.description}
+                        onChange={(e) => setUploadMetadata(prev => ({ ...prev, description: e.target.value }))}
+                        placeholder="Description du document"
+                      />
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="type">Type de document</Label>
+                        <Select 
+                          value={uploadMetadata.document_type}
+                          onValueChange={(value: any) => setUploadMetadata(prev => ({ ...prev, document_type: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="guide">Guide</SelectItem>
+                            <SelectItem value="rapport">Rapport</SelectItem>
+                            <SelectItem value="presentation">Présentation</SelectItem>
+                            <SelectItem value="formulaire">Formulaire</SelectItem>
+                            <SelectItem value="autre">Autre</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="country">Pays</Label>
+                        <Input
+                          id="country"
+                          value={uploadMetadata.country}
+                          onChange={(e) => setUploadMetadata(prev => ({ ...prev, country: e.target.value }))}
+                          placeholder="Pays d'origine"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <FileUpload
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                    maxSize={50}
+                    multiple={false}
+                    onFilesSelected={handleFileUpload}
+                  />
+                </div>
               </DialogContent>
             </Dialog>
           </div>
@@ -161,63 +205,95 @@ const Resources = () => {
 
         {/* Documents Grid */}
         <div className="grid gap-6">
-          {documents.map((doc) => (
-            <Card key={doc.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <CardTitle className="text-xl mb-2">{doc.title}</CardTitle>
-                    <CardDescription className="text-base">
-                      {doc.description}
-                    </CardDescription>
+          {loading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <Card key={index} className="animate-pulse">
+                <CardHeader>
+                  <div className="h-6 bg-muted rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-muted rounded w-full"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {Array.from({ length: 4 }).map((_, i) => (
+                        <div key={i} className="h-4 bg-muted rounded"></div>
+                      ))}
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="h-4 bg-muted rounded w-1/3"></div>
+                      <div className="flex gap-2">
+                        <div className="h-8 bg-muted rounded w-20"></div>
+                        <div className="h-8 bg-muted rounded w-24"></div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex gap-2 ml-4">
-                    <Badge variant="secondary">{doc.type}</Badge>
-                    <Badge variant="outline">{doc.region}</Badge>
-                  </div>
-                </div>
-              </CardHeader>
+                </CardContent>
+              </Card>
+            ))
+          ) : documents.length === 0 ? (
+            <Card className="text-center py-12">
               <CardContent>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm text-muted-foreground">
-                    <div>
-                      <span className="font-medium">Pays:</span> {doc.country}
-                    </div>
-                    <div>
-                      <span className="font-medium">Taille:</span> {doc.size}
-                    </div>
-                    <div>
-                      <span className="font-medium">Téléchargements:</span> {doc.downloads}
-                    </div>
-                    <div>
-                      <span className="font-medium">Langue:</span> {doc.language}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-medium">{doc.rating}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm text-muted-foreground">
-                      <span className="font-medium">Auteur:</span> {doc.author} • 
-                      <span className="font-medium"> Publié:</span> {new Date(doc.uploadDate).toLocaleDateString('fr-FR')}
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => handlePreview(doc)}>
-                        <Eye className="h-4 w-4 mr-2" />
-                        Aperçu
-                      </Button>
-                      <Button size="sm" onClick={() => handleDownload(doc)}>
-                        <Download className="h-4 w-4 mr-2" />
-                        Télécharger
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+                <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">Aucun document trouvé</h3>
+                <p className="text-muted-foreground">
+                  Aucun document ne correspond à vos critères de recherche.
+                </p>
               </CardContent>
             </Card>
-          ))}
+          ) : (
+            documents.map((doc) => (
+              <Card key={doc.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <CardTitle className="text-xl mb-2">{doc.title}</CardTitle>
+                      <CardDescription className="text-base">
+                        {doc.description}
+                      </CardDescription>
+                    </div>
+                    <div className="flex gap-2 ml-4">
+                      <Badge variant="secondary" className="capitalize">{doc.document_type}</Badge>
+                      {doc.country && <Badge variant="outline">{doc.country}</Badge>}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
+                      <div>
+                        <span className="font-medium">Pays:</span> {doc.country || 'N/A'}
+                      </div>
+                      <div>
+                        <span className="font-medium">Taille:</span> {formatFileSize(doc.file_size || 0)}
+                      </div>
+                      <div>
+                        <span className="font-medium">Téléchargements:</span> {doc.download_count || 0}
+                      </div>
+                      <div>
+                        <span className="font-medium">Type:</span> {doc.mime_type?.split('/')[1]?.toUpperCase() || 'N/A'}
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <div className="text-sm text-muted-foreground">
+                        <span className="font-medium">Publié:</span> {new Date(doc.created_at).toLocaleDateString('fr-FR')}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={() => handlePreview(doc)}>
+                          <Eye className="h-4 w-4 mr-2" />
+                          Aperçu
+                        </Button>
+                        <Button size="sm" onClick={() => handleDownload(doc)}>
+                          <Download className="h-4 w-4 mr-2" />
+                          Télécharger
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
 
         {/* Document Preview Dialog */}

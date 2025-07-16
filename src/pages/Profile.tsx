@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { User, Settings, Bell, Shield, Globe, Save } from "lucide-react";
+import { useState, useRef } from "react";
+import { User, Settings, Bell, Shield, Globe, Save, Camera } from "lucide-react";
+import { useProfile } from "@/hooks/useProfile";
+import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,9 +13,70 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 
 const Profile = () => {
+  const { user } = useAuth();
+  const { profile, loading, updating, updateProfile, uploadAvatar } = useProfile();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [forumNotifications, setForumNotifications] = useState(true);
   const [eventNotifications, setEventNotifications] = useState(true);
+  
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    bio: '',
+    country: '',
+    organization: ''
+  });
+
+  // Update form data when profile loads
+  useState(() => {
+    if (profile) {
+      setFormData({
+        first_name: profile.first_name || '',
+        last_name: profile.last_name || '',
+        email: profile.email || '',
+        bio: profile.bio || '',
+        country: profile.country || '',
+        organization: profile.organization || ''
+      });
+    }
+  });
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        await uploadAvatar(file);
+      } catch (error) {
+        // Error is handled in the hook
+      }
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      await updateProfile(formData);
+    } catch (error) {
+      // Error is handled in the hook
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Chargement du profil...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -34,16 +97,34 @@ const Profile = () => {
             <Card>
               <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center">
-                  <Avatar className="h-24 w-24 mb-4">
-                    <AvatarImage src="/api/placeholder/96/96" />
-                    <AvatarFallback className="text-lg">AK</AvatarFallback>
-                  </Avatar>
-                  <h3 className="text-lg font-semibold">Dr. Amina Kone</h3>
-                  <p className="text-sm text-muted-foreground mb-2">Directrice ANSUT</p>
-                  <p className="text-sm text-muted-foreground mb-4">Côte d'Ivoire</p>
-                  <Button variant="outline" size="sm" className="w-full">
-                    Changer la Photo
-                  </Button>
+                  <div className="relative">
+                    <Avatar className="h-24 w-24 mb-4">
+                      <AvatarImage src={profile?.avatar_url || undefined} />
+                      <AvatarFallback className="text-lg">
+                        {profile?.first_name?.[0]}{profile?.last_name?.[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0"
+                      onClick={handleAvatarClick}
+                    >
+                      <Camera className="h-4 w-4" />
+                    </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAvatarUpload}
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold">
+                    {profile?.first_name} {profile?.last_name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-2">{profile?.organization}</p>
+                  <p className="text-sm text-muted-foreground mb-4">{profile?.country}</p>
                 </div>
               </CardContent>
             </Card>
@@ -103,57 +184,61 @@ const Profile = () => {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="prenom">Prénom</Label>
-                        <Input id="prenom" defaultValue="Amina" />
+                        <Input 
+                          id="prenom" 
+                          value={formData.first_name}
+                          onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="nom">Nom</Label>
-                        <Input id="nom" defaultValue="Kone" />
+                        <Input 
+                          id="nom" 
+                          value={formData.last_name}
+                          onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
+                        />
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" defaultValue="amina.kone@ansut.ci" />
+                      <Input 
+                        id="email" 
+                        type="email" 
+                        value={formData.email}
+                        onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                      />
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="poste">Poste</Label>
-                        <Input id="poste" defaultValue="Directrice Générale" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="organisation">Organisation</Label>
-                        <Input id="organisation" defaultValue="ANSUT Côte d'Ivoire" />
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="organisation">Organisation</Label>
+                      <Input 
+                        id="organisation" 
+                        value={formData.organization}
+                        onChange={(e) => setFormData(prev => ({ ...prev, organization: e.target.value }))}
+                      />
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="pays">Pays</Label>
-                        <Select defaultValue="ci">
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="ci">Côte d'Ivoire</SelectItem>
-                            <SelectItem value="sn">Sénégal</SelectItem>
-                            <SelectItem value="bf">Burkina Faso</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="region">Région</Label>
-                        <Select defaultValue="cedeao">
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="cedeao">CEDEAO</SelectItem>
-                            <SelectItem value="sadc">SADC</SelectItem>
-                            <SelectItem value="eac">EAC</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="pays">Pays</Label>
+                      <Select 
+                        value={formData.country} 
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, country: value }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionnez un pays" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ci">Côte d'Ivoire</SelectItem>
+                          <SelectItem value="sn">Sénégal</SelectItem>
+                          <SelectItem value="bf">Burkina Faso</SelectItem>
+                          <SelectItem value="ml">Mali</SelectItem>
+                          <SelectItem value="ne">Niger</SelectItem>
+                          <SelectItem value="gh">Ghana</SelectItem>
+                          <SelectItem value="ng">Nigéria</SelectItem>
+                          <SelectItem value="za">Afrique du Sud</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     <div className="space-y-2">
@@ -162,12 +247,18 @@ const Profile = () => {
                         id="bio" 
                         placeholder="Décrivez brièvement votre parcours et expertise..."
                         className="min-h-24"
+                        value={formData.bio}
+                        onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
                       />
                     </div>
 
-                    <Button className="w-full md:w-auto">
+                    <Button 
+                      className="w-full md:w-auto" 
+                      onClick={handleSaveProfile}
+                      disabled={updating}
+                    >
                       <Save className="h-4 w-4 mr-2" />
-                      Enregistrer les Modifications
+                      {updating ? 'Enregistrement...' : 'Enregistrer les Modifications'}
                     </Button>
                   </CardContent>
                 </Card>
@@ -299,9 +390,13 @@ const Profile = () => {
                     <div className="space-y-2">
                       <Label>Rôle Actuel</Label>
                       <div className="p-3 bg-muted rounded-lg">
-                        <p className="font-medium">Super Administrateur</p>
+                        <p className="font-medium capitalize">{profile?.role?.replace('_', ' ')}</p>
                         <p className="text-sm text-muted-foreground">
-                          Accès complet à toutes les fonctionnalités de la plateforme
+                          {profile?.role === 'super_admin' && 'Accès complet à toutes les fonctionnalités'}
+                          {profile?.role === 'admin_pays' && 'Administration au niveau du pays'}
+                          {profile?.role === 'editeur' && 'Création et édition de contenu'}
+                          {profile?.role === 'contributeur' && 'Contribution et partage de ressources'}
+                          {profile?.role === 'lecteur' && 'Consultation des ressources'}
                         </p>
                       </div>
                     </div>

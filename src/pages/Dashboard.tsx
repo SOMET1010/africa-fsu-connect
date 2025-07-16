@@ -5,42 +5,47 @@ import {
   Users, 
   MapPin, 
   TrendingUp, 
-  DollarSign,
+  FileText,
   Target,
-  Globe,
+  Calendar,
   BookOpen,
-  Calendar
+  Send
 } from "lucide-react";
+import { useDashboardStats } from "@/hooks/useDashboardStats";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Dashboard = () => {
-  const stats = [
+  const { stats, loading } = useDashboardStats();
+  const { profile } = useAuth();
+
+  const displayStats = [
     {
-      title: "Pays Participants",
-      value: "54",
-      change: "+3 ce mois",
-      icon: Globe,
+      title: "Utilisateurs Actifs",
+      value: stats.totalProfiles.toString(),
+      change: "Total inscrits",
+      icon: Users,
       color: "text-[hsl(var(--primary))]"
     },
     {
-      title: "Projets FSU Actifs",
-      value: "1,247",
-      change: "+89 ce mois",
-      icon: Target,
-      color: "text-[hsl(var(--fsu-blue))]"
-    },
-    {
-      title: "Fonds Mobilisés",
-      value: "$2.3B",
-      change: "+15% ce trimestre",
-      icon: DollarSign,
-      color: "text-[hsl(var(--fsu-gold))]"
-    },
-    {
-      title: "Bénéficiaires",
-      value: "45.2M",
-      change: "+2.1M ce mois",
-      icon: Users,
+      title: "Documents Partagés", 
+      value: stats.totalDocuments.toString(),
+      change: `+${stats.documentsThisMonth} ce mois`,
+      icon: FileText,
       color: "text-[hsl(var(--secondary))]"
+    },
+    {
+      title: "Événements",
+      value: stats.totalEvents.toString(),
+      change: `+${stats.eventsThisMonth} ce mois`,
+      icon: Calendar,
+      color: "text-[hsl(var(--accent))]"
+    },
+    {
+      title: "Soumissions",
+      value: stats.totalSubmissions.toString(),
+      change: "En attente de révision",
+      icon: Send,
+      color: "text-[hsl(var(--muted-foreground))]"
     }
   ];
 
@@ -87,20 +92,35 @@ const Dashboard = () => {
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat, index) => (
-          <Card key={index} className="border-border">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {stat.title}
-              </CardTitle>
-              <stat.icon className={`h-4 w-4 ${stat.color}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-              <p className="text-xs text-muted-foreground">{stat.change}</p>
-            </CardContent>
-          </Card>
-        ))}
+        {loading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <Card key={index} className="border-border">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <div className="h-4 bg-muted rounded w-24 animate-pulse"></div>
+                <div className="h-4 w-4 bg-muted rounded animate-pulse"></div>
+              </CardHeader>
+              <CardContent>
+                <div className="h-8 bg-muted rounded w-16 mb-2 animate-pulse"></div>
+                <div className="h-3 bg-muted rounded w-20 animate-pulse"></div>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          displayStats.map((stat, index) => (
+            <Card key={index} className="border-border">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {stat.title}
+                </CardTitle>
+                <stat.icon className={`h-4 w-4 ${stat.color}`} />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+                <p className="text-xs text-muted-foreground">{stat.change}</p>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
