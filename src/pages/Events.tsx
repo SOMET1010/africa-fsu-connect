@@ -1,12 +1,23 @@
 import { useState } from "react";
-import { Calendar, Clock, MapPin, Users, Video, Plus, Download } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, Video, Plus, Download, Bell, ExternalLink, UserCheck } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 const Events = () => {
   const [selectedView, setSelectedView] = useState("list");
+  const [isNewEventOpen, setIsNewEventOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [registeredEvents, setRegisteredEvents] = useState<number[]>([]);
+  const { toast } = useToast();
 
   const events = [
     {
@@ -23,7 +34,9 @@ const Events = () => {
       maxParticipants: 200,
       organizer: "Union Africaine des Télécommunications",
       status: "À venir",
-      tags: ["UAT", "Assemblée", "FSU"]
+      tags: ["UAT", "Assemblée", "FSU"],
+      agenda: "Ordre du jour détaillé disponible",
+      requirements: "Inscription obligatoire avant le 10 mars"
     },
     {
       id: 2,
@@ -39,7 +52,9 @@ const Events = () => {
       maxParticipants: 150,
       organizer: "ANSUT Côte d'Ivoire",
       status: "Inscription ouverte",
-      tags: ["Innovation", "CEDEAO", "Technologie"]
+      tags: ["Innovation", "CEDEAO", "Technologie"],
+      agenda: "Présentations et démonstrations interactives",
+      requirements: "Aucun prérequis technique"
     },
     {
       id: 3,
@@ -55,7 +70,9 @@ const Events = () => {
       maxParticipants: 60,
       organizer: "ARTP Sénégal",
       status: "À venir",
-      tags: ["Réglementation", "Harmonisation", "Workshop"]
+      tags: ["Réglementation", "Harmonisation", "Workshop"],
+      agenda: "Sessions de travail collaboratives",
+      requirements: "Expérience en réglementation souhaitée"
     },
     {
       id: 4,
@@ -71,7 +88,9 @@ const Events = () => {
       maxParticipants: 0,
       organizer: "Secrétariat FSU",
       status: "Urgent",
-      tags: ["Deadline", "Financement", "Projets"]
+      tags: ["Deadline", "Financement", "Projets"],
+      agenda: "Date limite stricte",
+      requirements: "Dossier complet requis"
     }
   ];
 
@@ -99,6 +118,26 @@ const Events = () => {
     }
   };
 
+  const handleRegister = (eventId: number) => {
+    setRegisteredEvents(prev => [...prev, eventId]);
+    toast({
+      title: "Inscription confirmée",
+      description: "Vous êtes maintenant inscrit à cet événement.",
+    });
+  };
+
+  const handleViewDetails = (event: any) => {
+    setSelectedEvent(event);
+    setIsDetailsOpen(true);
+  };
+
+  const handleExportCalendar = () => {
+    toast({
+      title: "Export calendrier",
+      description: "Le fichier .ics a été généré et téléchargé.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -124,14 +163,87 @@ const Events = () => {
           </Tabs>
           
           <div className="flex gap-2">
-            <Button variant="outline">
+            <Button variant="outline" onClick={handleExportCalendar}>
               <Download className="h-4 w-4 mr-2" />
               Exporter .ics
             </Button>
-            <Button className="bg-primary hover:bg-primary/90">
-              <Plus className="h-4 w-4 mr-2" />
-              Nouvel Événement
-            </Button>
+            <Dialog open={isNewEventOpen} onOpenChange={setIsNewEventOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-primary hover:bg-primary/90">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Nouvel Événement
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Créer un Nouvel Événement</DialogTitle>
+                  <DialogDescription>
+                    Organisez un événement pour la communauté FSU
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="event-title">Titre de l'Événement</Label>
+                      <Input id="event-title" placeholder="Ex: Webinaire Innovation" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="event-type">Type</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionner le type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="conference">Conférence</SelectItem>
+                          <SelectItem value="webinaire">Webinaire</SelectItem>
+                          <SelectItem value="workshop">Workshop</SelectItem>
+                          <SelectItem value="deadline">Deadline</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="event-description">Description</Label>
+                    <Textarea
+                      id="event-description"
+                      placeholder="Décrivez l'événement..."
+                      className="min-h-24"
+                    />
+                  </div>
+                  
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="event-date">Date</Label>
+                      <Input id="event-date" type="date" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="event-time">Heure</Label>
+                      <Input id="event-time" type="time" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="event-duration">Durée (heures)</Label>
+                      <Input id="event-duration" type="number" placeholder="2" />
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-2 pt-4">
+                    <Button variant="outline" onClick={() => setIsNewEventOpen(false)}>
+                      Annuler
+                    </Button>
+                    <Button onClick={() => {
+                      toast({
+                        title: "Événement créé",
+                        description: "Votre événement a été créé avec succès.",
+                      });
+                      setIsNewEventOpen(false);
+                    }}>
+                      Créer l'Événement
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
@@ -194,13 +306,19 @@ const Events = () => {
                     </div>
                     <div className="flex gap-2">
                       {event.type !== "Deadline" && (
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => handleViewDetails(event)}>
                           Détails
                         </Button>
                       )}
-                      {event.status === "Inscription ouverte" && (
-                        <Button size="sm">
+                      {event.status === "Inscription ouverte" && !registeredEvents.includes(event.id) && (
+                        <Button size="sm" onClick={() => handleRegister(event.id)}>
                           S'inscrire
+                        </Button>
+                      )}
+                      {registeredEvents.includes(event.id) && (
+                        <Button size="sm" variant="outline" disabled>
+                          <UserCheck className="h-4 w-4 mr-2" />
+                          Inscrit
                         </Button>
                       )}
                       <Button variant="ghost" size="sm">
@@ -260,6 +378,80 @@ const Events = () => {
               ))}
           </TabsContent>
         </Tabs>
+
+        {/* Event Details Dialog */}
+        <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{selectedEvent?.title}</DialogTitle>
+              <DialogDescription>
+                {selectedEvent?.description}
+              </DialogDescription>
+            </DialogHeader>
+            {selectedEvent && (
+              <div className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-medium mb-2">Informations Générales</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <span>{new Date(selectedEvent.date).toLocaleDateString('fr-FR')}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <span>{selectedEvent.time} - {selectedEvent.endTime}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                        <span>{selectedEvent.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-muted-foreground" />
+                        <span>{selectedEvent.participants}/{selectedEvent.maxParticipants} participants</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium mb-2">Détails</h4>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className="font-medium">Organisateur:</span> {selectedEvent.organizer}
+                      </div>
+                      <div>
+                        <span className="font-medium">Agenda:</span> {selectedEvent.agenda}
+                      </div>
+                      <div>
+                        <span className="font-medium">Prérequis:</span> {selectedEvent.requirements}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex gap-2 pt-4">
+                  {selectedEvent.status === "Inscription ouverte" && !registeredEvents.includes(selectedEvent.id) && (
+                    <Button onClick={() => {
+                      handleRegister(selectedEvent.id);
+                      setIsDetailsOpen(false);
+                    }}>
+                      S'inscrire à l'Événement
+                    </Button>
+                  )}
+                  {selectedEvent.isVirtual && (
+                    <Button variant="outline">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Lien de Connexion
+                    </Button>
+                  )}
+                  <Button variant="ghost" onClick={() => setIsDetailsOpen(false)}>
+                    Fermer
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileText, Upload, Send, Save, User } from "lucide-react";
+import { FileText, Upload, Send, Save, User, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,9 +7,42 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import FileUpload from "@/components/shared/FileUpload";
+import { useToast } from "@/hooks/use-toast";
 
 const Submit = () => {
   const [selectedType, setSelectedType] = useState("");
+  const [formData, setFormData] = useState<any>({});
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const { toast } = useToast();
+
+  const submissions = [
+    {
+      id: 1,
+      type: "Projet",
+      title: "Extension 4G - Zones Rurales",
+      status: "Brouillon",
+      lastModified: "2024-01-15",
+      reviewer: null
+    },
+    {
+      id: 2,
+      type: "Position",
+      title: "Harmonisation Réglementaire CEDEAO",
+      status: "En révision",
+      lastModified: "2024-01-10",
+      reviewer: "Dr. Amina Kone"
+    },
+    {
+      id: 3,
+      type: "Financement",
+      title: "Villages Connectés Phase 3",
+      status: "Approuvé",
+      lastModified: "2024-01-05",
+      reviewer: "Comité Technique"
+    }
+  ];
 
   const submissionTypes = [
     {
@@ -42,6 +75,56 @@ const Submit = () => {
     }
   ];
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Brouillon":
+        return "bg-gray-100 text-gray-800 border-gray-200";
+      case "En révision":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "Approuvé":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "Rejeté":
+        return "bg-red-100 text-red-800 border-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "Brouillon":
+        return <Clock className="h-4 w-4" />;
+      case "En révision":
+        return <AlertCircle className="h-4 w-4" />;
+      case "Approuvé":
+        return <CheckCircle className="h-4 w-4" />;
+      default:
+        return <Clock className="h-4 w-4" />;
+    }
+  };
+
+  const handleSaveDraft = () => {
+    toast({
+      title: "Brouillon sauvegardé",
+      description: "Votre brouillon a été sauvegardé avec succès.",
+    });
+  };
+
+  const handleSubmit = () => {
+    toast({
+      title: "Soumission envoyée",
+      description: "Votre soumission a été envoyée pour révision.",
+    });
+  };
+
+  const handleFileUpload = (files: File[]) => {
+    setUploadedFiles(prev => [...prev, ...files]);
+    toast({
+      title: "Fichiers ajoutés",
+      description: `${files.length} fichier(s) ajouté(s) avec succès.`,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -55,6 +138,48 @@ const Submit = () => {
             ou demandes de financement à la communauté FSU africaine.
           </p>
         </div>
+
+        {/* My Submissions */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Mes Soumissions</CardTitle>
+            <CardDescription>
+              Historique de vos soumissions et leur statut
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {submissions.map((submission) => (
+                <div key={submission.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-primary/10 p-2 rounded">
+                      {getStatusIcon(submission.status)}
+                    </div>
+                    <div>
+                      <p className="font-medium">{submission.title}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {submission.type} • Modifié le {new Date(submission.lastModified).toLocaleDateString('fr-FR')}
+                      </p>
+                      {submission.reviewer && (
+                        <p className="text-sm text-muted-foreground">
+                          Réviseur: {submission.reviewer}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Badge className={getStatusColor(submission.status)}>
+                      {submission.status}
+                    </Badge>
+                    <Button variant="outline" size="sm">
+                      Voir
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         <Tabs value={selectedType} onValueChange={setSelectedType} className="space-y-6">
           {/* Type Selection */}
@@ -142,22 +267,37 @@ const Submit = () => {
                   />
                 </div>
 
-                <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center">
-                  <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Glissez-déposez vos documents ou cliquez pour sélectionner
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    PDF, DOC, XLS acceptés (max 50MB)
-                  </p>
+                <div className="space-y-2">
+                  <Label>Documents Justificatifs</Label>
+                  <FileUpload
+                    accept=".pdf,.doc,.docx,.xls,.xlsx"
+                    maxSize={50 * 1024 * 1024} // 50MB
+                    multiple={true}
+                    onFilesSelected={handleFileUpload}
+                  />
+                  {uploadedFiles.length > 0 && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium mb-2">Fichiers ajoutés:</p>
+                      <div className="space-y-1">
+                        {uploadedFiles.map((file, index) => (
+                          <div key={index} className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                            <span>{file.name}</span>
+                            <Button variant="ghost" size="sm">
+                              Supprimer
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex gap-4 pt-4">
-                  <Button variant="outline" className="flex-1">
+                  <Button variant="outline" className="flex-1" onClick={handleSaveDraft}>
                     <Save className="h-4 w-4 mr-2" />
                     Enregistrer en Brouillon
                   </Button>
-                  <Button className="flex-1 bg-primary hover:bg-primary/90">
+                  <Button className="flex-1 bg-primary hover:bg-primary/90" onClick={handleSubmit}>
                     <Send className="h-4 w-4 mr-2" />
                     Soumettre pour Révision
                   </Button>
@@ -208,11 +348,11 @@ const Submit = () => {
                 </div>
 
                 <div className="flex gap-4 pt-4">
-                  <Button variant="outline" className="flex-1">
+                  <Button variant="outline" className="flex-1" onClick={handleSaveDraft}>
                     <Save className="h-4 w-4 mr-2" />
                     Enregistrer en Brouillon
                   </Button>
-                  <Button className="flex-1 bg-primary hover:bg-primary/90">
+                  <Button className="flex-1 bg-primary hover:bg-primary/90" onClick={handleSubmit}>
                     <Send className="h-4 w-4 mr-2" />
                     Soumettre pour Révision
                   </Button>

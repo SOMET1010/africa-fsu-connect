@@ -1,15 +1,21 @@
 import { useState } from "react";
-import { Search, Upload, FileText, Download, Filter } from "lucide-react";
+import { Search, Upload, FileText, Download, Filter, Eye, Calendar, User, Star } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import SearchBar from "@/components/shared/SearchBar";
+import FileUpload from "@/components/shared/FileUpload";
+import { useToast } from "@/hooks/use-toast";
 
 const Resources = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedType, setSelectedType] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("");
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [previewDoc, setPreviewDoc] = useState<any>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const { toast } = useToast();
 
   const documents = [
     {
@@ -22,7 +28,10 @@ const Resources = () => {
       size: "2.4 MB",
       uploadDate: "2024-01-15",
       downloads: 156,
-      language: "Français"
+      language: "Français",
+      rating: 4.5,
+      author: "ANSUT CI",
+      keywords: ["réglementation", "fsu", "côte d'ivoire"]
     },
     {
       id: 2,
@@ -34,7 +43,10 @@ const Resources = () => {
       size: "5.1 MB",
       uploadDate: "2024-01-10",
       downloads: 203,
-      language: "English"
+      language: "English",
+      rating: 4.8,
+      author: "ICASA SA",
+      keywords: ["best practices", "sadc", "implementation"]
     },
     {
       id: 3,
@@ -46,17 +58,57 @@ const Resources = () => {
       size: "8.7 MB",
       uploadDate: "2024-01-08",
       downloads: 89,
-      language: "Français"
+      language: "Français",
+      rating: 4.2,
+      author: "ARTP Sénégal",
+      keywords: ["rapport annuel", "sénégal", "bilan"]
     }
   ];
 
-  const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = !selectedType || doc.type === selectedType;
-    const matchesCountry = !selectedCountry || doc.country === selectedCountry;
-    return matchesSearch && matchesType && matchesCountry;
-  });
+  const searchFilters = [
+    {
+      id: "type",
+      label: "Type de Document",
+      options: [
+        { value: "Réglementation", label: "Réglementation" },
+        { value: "Guide", label: "Guide" },
+        { value: "Rapport", label: "Rapport" }
+      ]
+    },
+    {
+      id: "country",
+      label: "Pays",
+      options: [
+        { value: "Côte d'Ivoire", label: "Côte d'Ivoire" },
+        { value: "Sénégal", label: "Sénégal" },
+        { value: "Afrique du Sud", label: "Afrique du Sud" }
+      ]
+    }
+  ];
+
+  const handleSearch = (query: string, filters: Record<string, string>) => {
+    // Filtering logic will be implemented by SearchBar component
+  };
+
+  const handleFileUpload = (files: File[]) => {
+    toast({
+      title: "Documents uploadés",
+      description: `${files.length} document(s) ont été uploadés avec succès.`,
+    });
+    setIsUploadOpen(false);
+  };
+
+  const handlePreview = (doc: any) => {
+    setPreviewDoc(doc);
+    setIsPreviewOpen(true);
+  };
+
+  const handleDownload = (doc: any) => {
+    toast({
+      title: "Téléchargement",
+      description: `Le téléchargement de "${doc.title}" a commencé.`,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -72,60 +124,44 @@ const Resources = () => {
           </p>
         </div>
 
-        {/* Actions Bar */}
-        <div className="flex flex-col lg:flex-row gap-4 mb-8 p-6 bg-card rounded-lg border">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Rechercher dans les documents..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
-          
-          <div className="flex gap-2">
-            <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">Tous types</SelectItem>
-                <SelectItem value="Réglementation">Réglementation</SelectItem>
-                <SelectItem value="Guide">Guide</SelectItem>
-                <SelectItem value="Rapport">Rapport</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Pays" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">Tous pays</SelectItem>
-                <SelectItem value="Côte d'Ivoire">Côte d'Ivoire</SelectItem>
-                <SelectItem value="Sénégal">Sénégal</SelectItem>
-                <SelectItem value="Afrique du Sud">Afrique du Sud</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Button variant="outline">
-              <Filter className="h-4 w-4 mr-2" />
-              Filtres
-            </Button>
-
-            <Button className="bg-primary hover:bg-primary/90">
-              <Upload className="h-4 w-4 mr-2" />
-              Ajouter
-            </Button>
+        {/* Enhanced Search Bar */}
+        <div className="mb-8">
+          <SearchBar
+            placeholder="Rechercher dans les documents..."
+            onSearch={handleSearch}
+            filters={searchFilters}
+            showFilters={true}
+            className="mb-4"
+          />
+          <div className="flex justify-end">
+            <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-primary hover:bg-primary/90">
+                  <Upload className="h-4 w-4 mr-2" />
+                  Ajouter un Document
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Ajouter un Nouveau Document</DialogTitle>
+                  <DialogDescription>
+                    Uploadez un nouveau document dans la bibliothèque FSU
+                  </DialogDescription>
+                </DialogHeader>
+                <FileUpload
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                  maxSize={50 * 1024 * 1024} // 50MB
+                  multiple={true}
+                  onFilesSelected={handleFileUpload}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
         {/* Documents Grid */}
         <div className="grid gap-6">
-          {filteredDocuments.map((doc) => (
+          {documents.map((doc) => (
             <Card key={doc.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex justify-between items-start">
@@ -142,8 +178,8 @@ const Resources = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="flex justify-between items-center">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm text-muted-foreground">
                     <div>
                       <span className="font-medium">Pays:</span> {doc.country}
                     </div>
@@ -156,16 +192,27 @@ const Resources = () => {
                     <div>
                       <span className="font-medium">Langue:</span> {doc.language}
                     </div>
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      <span className="font-medium">{doc.rating}</span>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
-                      <FileText className="h-4 w-4 mr-2" />
-                      Aperçu
-                    </Button>
-                    <Button size="sm">
-                      <Download className="h-4 w-4 mr-2" />
-                      Télécharger
-                    </Button>
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="text-sm text-muted-foreground">
+                      <span className="font-medium">Auteur:</span> {doc.author} • 
+                      <span className="font-medium"> Publié:</span> {new Date(doc.uploadDate).toLocaleDateString('fr-FR')}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={() => handlePreview(doc)}>
+                        <Eye className="h-4 w-4 mr-2" />
+                        Aperçu
+                      </Button>
+                      <Button size="sm" onClick={() => handleDownload(doc)}>
+                        <Download className="h-4 w-4 mr-2" />
+                        Télécharger
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -173,15 +220,35 @@ const Resources = () => {
           ))}
         </div>
 
-        {filteredDocuments.length === 0 && (
-          <div className="text-center py-12">
-            <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">Aucun document trouvé</h3>
-            <p className="text-muted-foreground">
-              Essayez de modifier vos critères de recherche
-            </p>
-          </div>
-        )}
+        {/* Document Preview Dialog */}
+        <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh]">
+            <DialogHeader>
+              <DialogTitle>{previewDoc?.title}</DialogTitle>
+              <DialogDescription>
+                {previewDoc?.description}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="bg-muted/50 rounded-lg p-8 text-center">
+              <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground mb-4">
+                Aperçu du document en cours de développement
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Document: {previewDoc?.title}
+              </p>
+              <div className="flex justify-center gap-2 mt-4">
+                <Button onClick={() => handleDownload(previewDoc)}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Télécharger
+                </Button>
+                <Button variant="outline" onClick={() => setIsPreviewOpen(false)}>
+                  Fermer
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
