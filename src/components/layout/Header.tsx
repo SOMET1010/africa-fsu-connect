@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { 
   Menu, 
   X, 
   Globe, 
   User, 
   LogOut,
-  Settings
+  Settings,
+  LogIn
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -22,6 +25,8 @@ import Breadcrumb from "@/components/shared/Breadcrumb";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, profile, signOut, isAdmin } = useAuth();
 
   const navigation = [
     { name: "Accueil", href: "/", icon: "🏠" },
@@ -34,6 +39,33 @@ const Header = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  const getRoleColor = (role: string) => {
+    switch (role) {
+      case 'super_admin': return 'bg-red-500';
+      case 'admin_pays': return 'bg-orange-500';
+      case 'editeur': return 'bg-blue-500';
+      case 'contributeur': return 'bg-green-500';
+      case 'lecteur': return 'bg-gray-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  const getRoleLabel = (role: string) => {
+    switch (role) {
+      case 'super_admin': return 'Super Admin';
+      case 'admin_pays': return 'Admin Pays';
+      case 'editeur': return 'Éditeur';
+      case 'contributeur': return 'Contributeur';
+      case 'lecteur': return 'Lecteur';
+      default: return role;
+    }
+  };
 
   return (
     <header className="bg-card border-b border-border sticky top-0 z-50">
@@ -72,52 +104,86 @@ const Header = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-2">
-            {/* Notification Center */}
-            <NotificationCenter />
-            
-            {/* Language Selector */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="hidden md:flex">
-                  <Globe className="h-4 w-4 mr-2" />
-                  FR
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>🇫🇷 Français</DropdownMenuItem>
-                <DropdownMenuItem>🇬🇧 English</DropdownMenuItem>
-                <DropdownMenuItem>🇵🇹 Português</DropdownMenuItem>
-                <DropdownMenuItem>🇪🇸 Español</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {user && (
+              <>
+                {/* Notification Center */}
+                <NotificationCenter />
+                
+                {/* Language Selector */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="hidden md:flex">
+                      <Globe className="h-4 w-4 mr-2" />
+                      FR
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem>🇫🇷 Français</DropdownMenuItem>
+                    <DropdownMenuItem>🇬🇧 English</DropdownMenuItem>
+                    <DropdownMenuItem>🇵🇹 Português</DropdownMenuItem>
+                    <DropdownMenuItem>🇪🇸 Español</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            )}
 
-            {/* User Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm">
-                  <User className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link to="/profile">
-                    <User className="h-4 w-4 mr-2" />
-                    Mon Profil
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/admin">
-                    <Settings className="h-4 w-4 mr-2" />
-                    Administration
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Déconnexion
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* User Menu or Login Button */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                    <User className="h-4 w-4" />
+                    {profile && (
+                      <Badge className={`${getRoleColor(profile.role)} text-white text-xs hidden sm:inline-flex`}>
+                        {getRoleLabel(profile.role)}
+                      </Badge>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  {profile && (
+                    <>
+                      <div className="px-2 py-1.5 text-sm">
+                        <div className="font-medium">
+                          {profile.first_name} {profile.last_name}
+                        </div>
+                        <div className="text-muted-foreground">{profile.email}</div>
+                        <Badge className={`${getRoleColor(profile.role)} text-white text-xs mt-1`}>
+                          {getRoleLabel(profile.role)}
+                        </Badge>
+                      </div>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile">
+                      <User className="h-4 w-4 mr-2" />
+                      Mon Profil
+                    </Link>
+                  </DropdownMenuItem>
+                  {isAdmin() && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin">
+                        <Settings className="h-4 w-4 mr-2" />
+                        Administration
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Déconnexion
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button asChild size="sm">
+                <Link to="/auth">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Se connecter
+                </Link>
+              </Button>
+            )}
 
             {/* Mobile Menu Button */}
             <Button

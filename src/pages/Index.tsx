@@ -90,7 +90,7 @@ const Index = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-[hsl(var(--primary))] hover:bg-white/90">
-                <Link to="/dashboard" className="flex items-center">
+                <Link to="/auth" className="flex items-center">
                   Accéder au Tableau de Bord
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -204,7 +204,7 @@ const Index = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-white text-[hsl(var(--primary))] hover:bg-white/90">
-              Créer un Compte
+              <Link to="/auth">Créer un Compte</Link>
             </Button>
             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
               En Savoir Plus
