@@ -23,11 +23,11 @@ const Header = () => {
 
   const navigation = [
     { name: "Accueil", href: "/", icon: "🏠" },
-    { name: "Tableaux de Bord", href: "/dashboard", icon: "📊" },
-    { name: "Projets FSU", href: "/projects", icon: "🚀" },
-    { name: "Ressources", href: "/resources", icon: "📚" },
-    { name: "Organisations", href: "/organizations", icon: "🏢" },
-    { name: "Formation", href: "/training", icon: "🎓" },
+    { name: "Tableau de Bord", href: "/dashboard", icon: "📊" },
+    { name: "Projets", href: "/projects", icon: "🚀" },
+    { name: "Ressources", href: "/docs", icon: "📚" },
+    { name: "Forum", href: "/forum", icon: "💬" },
+    { name: "Soumissions", href: "/submit", icon: "📝" },
     { name: "Événements", href: "/events", icon: "📅" },
   ];
 
@@ -94,13 +94,17 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <User className="h-4 w-4 mr-2" />
-                  Mon Profil
+                <DropdownMenuItem asChild>
+                  <Link to="/profile">
+                    <User className="h-4 w-4 mr-2" />
+                    Mon Profil
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="h-4 w-4 mr-2" />
-                  Paramètres
+                <DropdownMenuItem asChild>
+                  <Link to="/admin">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Administration
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
