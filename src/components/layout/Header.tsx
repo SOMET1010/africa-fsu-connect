@@ -16,6 +16,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import NotificationCenter from "@/components/shared/NotificationCenter";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -70,6 +72,9 @@ const Header = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-2">
+            {/* Notification Center */}
+            <NotificationCenter />
+            
             {/* Language Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -148,6 +153,11 @@ const Header = () => {
             </div>
           </div>
         )}
+      </div>
+      
+      {/* Breadcrumb */}
+      <div className="container mx-auto px-4 py-2 border-t border-border">
+        <Breadcrumb />
       </div>
     </header>
   );
