@@ -13,12 +13,15 @@ export interface AdminUser {
   created_at: string;
   last_sign_in_at?: string;
   email_confirmed_at?: string;
+  avatar_url?: string;
+  blocked?: boolean;
 }
 
 export interface UserStats {
   totalUsers: number;
   activeUsers: number;
   newUsersThisMonth: number;
+  adminUsers: number;
   usersByRole: Record<string, number>;
   usersByCountry: Record<string, number>;
 }
@@ -29,6 +32,7 @@ export const useAdminUsers = () => {
     totalUsers: 0,
     activeUsers: 0,
     newUsersThisMonth: 0,
+    adminUsers: 0,
     usersByRole: {},
     usersByCountry: {}
   });
@@ -55,9 +59,11 @@ export const useAdminUsers = () => {
         country: profile.country,
         organization: profile.organization,
         created_at: profile.created_at,
+        avatar_url: profile.avatar_url,
         // These would come from auth.users in a real scenario
         last_sign_in_at: undefined,
-        email_confirmed_at: undefined
+        email_confirmed_at: undefined,
+        blocked: false // Default to not blocked for now
       })) || [];
 
       setUsers(formattedUsers);
@@ -79,12 +85,12 @@ export const useAdminUsers = () => {
 
     const stats: UserStats = {
       totalUsers: usersData.length,
-      activeUsers: usersData.filter(user => 
-        user.last_sign_in_at && 
-        new Date(user.last_sign_in_at) > new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
-      ).length,
+      activeUsers: usersData.filter(user => !user.blocked).length,
       newUsersThisMonth: usersData.filter(user => 
         new Date(user.created_at) >= thisMonth
+      ).length,
+      adminUsers: usersData.filter(user => 
+        ['super_admin', 'admin_pays', 'editeur'].includes(user.role)
       ).length,
       usersByRole: {},
       usersByCountry: {}

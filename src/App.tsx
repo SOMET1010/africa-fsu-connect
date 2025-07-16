@@ -16,6 +16,7 @@ import Submit from "./pages/Submit";
 import Events from "./pages/Events";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
+import AdminUsers from "./pages/AdminUsers";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -71,6 +72,11 @@ const App = () => (
             <Route path="/admin" element={
               <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
                 <Layout><Admin /></Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/users" element={
+              <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
+                <Layout><AdminUsers /></Layout>
               </ProtectedRoute>
             } />
             
