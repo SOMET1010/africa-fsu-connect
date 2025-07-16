@@ -218,15 +218,204 @@ export const useForum = () => {
   // Update post view count
   const incrementViewCount = async (postId: string) => {
     try {
+      const currentPost = posts.find(p => p.id === postId);
+      if (!currentPost) return;
+
       const { error } = await supabase
         .from('forum_posts')
-        .update({ view_count: posts.find(p => p.id === postId)?.view_count + 1 || 1 })
+        .update({ view_count: currentPost.view_count + 1 })
         .eq('id', postId);
 
       if (error) throw error;
     } catch (err: any) {
       // Silent fail for view count update
       console.error('Failed to update view count:', err);
+    }
+  };
+
+  // Admin functions
+  const updatePostStatus = async (postId: string, updates: { is_pinned?: boolean; is_locked?: boolean }) => {
+    try {
+      const { error } = await supabase
+        .from('forum_posts')
+        .update(updates)
+        .eq('id', postId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Post mis à jour",
+        description: "Le statut du post a été modifié avec succès.",
+      });
+
+      await fetchPosts();
+    } catch (err: any) {
+      setError(err.message);
+      toast({
+        title: "Erreur",
+        description: err.message,
+        variant: "destructive",
+      });
+      throw err;
+    }
+  };
+
+  const deletePost = async (postId: string) => {
+    try {
+      // First delete all replies
+      const { error: repliesError } = await supabase
+        .from('forum_replies')
+        .delete()
+        .eq('post_id', postId);
+
+      if (repliesError) throw repliesError;
+
+      // Then delete the post
+      const { error } = await supabase
+        .from('forum_posts')
+        .delete()
+        .eq('id', postId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Post supprimé",
+        description: "Le post et ses réponses ont été supprimés avec succès.",
+      });
+
+      await fetchPosts();
+    } catch (err: any) {
+      setError(err.message);
+      toast({
+        title: "Erreur",
+        description: err.message,
+        variant: "destructive",
+      });
+      throw err;
+    }
+  };
+
+  const updatePost = async (postId: string, updates: { title?: string; content?: string; category_id?: string }) => {
+    try {
+      const { error } = await supabase
+        .from('forum_posts')
+        .update(updates)
+        .eq('id', postId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Post modifié",
+        description: "Le post a été modifié avec succès.",
+      });
+
+      await fetchPosts();
+    } catch (err: any) {
+      setError(err.message);
+      toast({
+        title: "Erreur",
+        description: err.message,
+        variant: "destructive",
+      });
+      throw err;
+    }
+  };
+
+  const createCategory = async (name: string, description?: string, color?: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Utilisateur non connecté");
+
+      const { data, error } = await supabase
+        .from('forum_categories')
+        .insert([{
+          name,
+          description,
+          color: color || '#3B82F6',
+          created_by: user.id
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Catégorie créée",
+        description: "La nouvelle catégorie a été créée avec succès.",
+      });
+
+      await fetchCategories();
+      return data;
+    } catch (err: any) {
+      setError(err.message);
+      toast({
+        title: "Erreur",
+        description: err.message,
+        variant: "destructive",
+      });
+      throw err;
+    }
+  };
+
+  const updateCategory = async (categoryId: string, updates: { name?: string; description?: string; color?: string }) => {
+    try {
+      const { error } = await supabase
+        .from('forum_categories')
+        .update(updates)
+        .eq('id', categoryId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Catégorie modifiée",
+        description: "La catégorie a été modifiée avec succès.",
+      });
+
+      await fetchCategories();
+    } catch (err: any) {
+      setError(err.message);
+      toast({
+        title: "Erreur",
+        description: err.message,
+        variant: "destructive",
+      });
+      throw err;
+    }
+  };
+
+  const deleteCategory = async (categoryId: string) => {
+    try {
+      // Check if there are posts in this category
+      const { data: postsInCategory } = await supabase
+        .from('forum_posts')
+        .select('id')
+        .eq('category_id', categoryId);
+
+      if (postsInCategory && postsInCategory.length > 0) {
+        throw new Error("Impossible de supprimer une catégorie contenant des posts. Veuillez d'abord déplacer ou supprimer les posts.");
+      }
+
+      const { error } = await supabase
+        .from('forum_categories')
+        .delete()
+        .eq('id', categoryId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Catégorie supprimée",
+        description: "La catégorie a été supprimée avec succès.",
+      });
+
+      await fetchCategories();
+    } catch (err: any) {
+      setError(err.message);
+      toast({
+        title: "Erreur",
+        description: err.message,
+        variant: "destructive",
+      });
+      throw err;
     }
   };
 
@@ -295,6 +484,13 @@ export const useForum = () => {
     createPost,
     createReply,
     incrementViewCount,
+    // Admin functions
+    updatePostStatus,
+    deletePost,
+    updatePost,
+    createCategory,
+    updateCategory,
+    deleteCategory,
     refetch: () => {
       fetchCategories();
       fetchPosts();

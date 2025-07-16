@@ -17,6 +17,7 @@ import Events from "./pages/Events";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import AdminUsers from "./pages/AdminUsers";
+import AdminForum from "./pages/AdminForum";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -77,6 +78,11 @@ const App = () => (
             <Route path="/admin/users" element={
               <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
                 <Layout><AdminUsers /></Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/forum" element={
+              <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
+                <Layout><AdminForum /></Layout>
               </ProtectedRoute>
             } />
             
