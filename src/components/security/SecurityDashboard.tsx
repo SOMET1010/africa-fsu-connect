@@ -23,6 +23,11 @@ import {
 import { useSecurity } from '@/hooks/useSecurity';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import WebAuthnManager from './WebAuthnManager';
+import AnomalyDetection from './AnomalyDetection';
+import AdvancedEncryption from './AdvancedEncryption';
+import ComplianceReports from './ComplianceReports';
+import NetworkSecurity from './NetworkSecurity';
 
 const SecurityDashboard = () => {
   const {
@@ -140,10 +145,15 @@ const SecurityDashboard = () => {
       </div>
 
       <Tabs defaultValue="preferences" className="space-y-6">
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="preferences">Préférences</TabsTrigger>
           <TabsTrigger value="sessions">Sessions</TabsTrigger>
           <TabsTrigger value="audit">Journal d'audit</TabsTrigger>
+          <TabsTrigger value="webauthn">WebAuthn</TabsTrigger>
+          <TabsTrigger value="anomaly">Anomalies IA</TabsTrigger>
+          <TabsTrigger value="encryption">Chiffrement</TabsTrigger>
+          <TabsTrigger value="compliance">Conformité</TabsTrigger>
+          <TabsTrigger value="network">Réseau</TabsTrigger>
         </TabsList>
 
         {/* Security Preferences */}
@@ -343,6 +353,31 @@ const SecurityDashboard = () => {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* WebAuthn Tab */}
+        <TabsContent value="webauthn">
+          <WebAuthnManager />
+        </TabsContent>
+
+        {/* Anomaly Detection Tab */}
+        <TabsContent value="anomaly">
+          <AnomalyDetection />
+        </TabsContent>
+
+        {/* Advanced Encryption Tab */}
+        <TabsContent value="encryption">
+          <AdvancedEncryption />
+        </TabsContent>
+
+        {/* Compliance Reports Tab */}
+        <TabsContent value="compliance">
+          <ComplianceReports />
+        </TabsContent>
+
+        {/* Network Security Tab */}
+        <TabsContent value="network">
+          <NetworkSecurity />
         </TabsContent>
       </Tabs>
     </div>
