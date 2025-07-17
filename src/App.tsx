@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
-import Layout from "./components/layout/Layout";
+import AppShell from "./components/layout/AppShell";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -31,63 +31,63 @@ const App = () => (
         <AuthProvider>
           <Routes>
             {/* Public routes */}
-            <Route path="/" element={<Layout><Index /></Layout>} />
-            <Route path="/auth" element={<Auth />} />
+            <Route path="/" element={<AppShell><Index /></AppShell>} />
+            <Route path="/auth" element={<AppShell hideFooter><Auth /></AppShell>} />
             
             {/* Protected routes */}
             <Route path="/dashboard" element={
               <ProtectedRoute>
-                <Layout><Dashboard /></Layout>
+                <AppShell><Dashboard /></AppShell>
               </ProtectedRoute>
             } />
             <Route path="/projects" element={
               <ProtectedRoute>
-                <Layout><Projects /></Layout>
+                <AppShell><Projects /></AppShell>
               </ProtectedRoute>
             } />
             <Route path="/docs" element={
               <ProtectedRoute>
-                <Layout><Resources /></Layout>
+                <AppShell><Resources /></AppShell>
               </ProtectedRoute>
             } />
             <Route path="/forum" element={
               <ProtectedRoute>
-                <Layout><Forum /></Layout>
+                <AppShell><Forum /></AppShell>
               </ProtectedRoute>
             } />
             <Route path="/submit" element={
               <ProtectedRoute>
-                <Layout><Submit /></Layout>
+                <AppShell><Submit /></AppShell>
               </ProtectedRoute>
             } />
             <Route path="/events" element={
               <ProtectedRoute>
-                <Layout><Events /></Layout>
+                <AppShell><Events /></AppShell>
               </ProtectedRoute>
             } />
             <Route path="/profile" element={
               <ProtectedRoute>
-                <Layout><Profile /></Layout>
+                <AppShell><Profile /></AppShell>
               </ProtectedRoute>
             } />
             <Route path="/admin" element={
               <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
-                <Layout><Admin /></Layout>
+                <AppShell><Admin /></AppShell>
               </ProtectedRoute>
             } />
             <Route path="/admin/users" element={
               <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
-                <Layout><AdminUsers /></Layout>
+                <AppShell><AdminUsers /></AppShell>
               </ProtectedRoute>
             } />
             <Route path="/admin/forum" element={
               <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
-                <Layout><AdminForum /></Layout>
+                <AppShell><AdminForum /></AppShell>
               </ProtectedRoute>
             } />
             
             {/* Catch-all route */}
-            <Route path="*" element={<Layout><NotFound /></Layout>} />
+            <Route path="*" element={<AppShell><NotFound /></AppShell>} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
