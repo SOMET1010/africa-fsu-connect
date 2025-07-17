@@ -94,17 +94,17 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
 
     try {
       const { data, error } = await supabase
-        .from('user_preferences')
+        .from('user_preferences' as any)
         .select('preferences')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') {
+      if (error) {
         throw error;
       }
 
-      if (data?.preferences) {
-        setPreferences({ ...defaultPreferences, ...data.preferences });
+      if (data && (data as any).preferences) {
+        setPreferences({ ...defaultPreferences, ...(data as any).preferences });
       }
     } catch (error) {
       console.error('Error loading preferences:', error);
@@ -120,7 +120,7 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
     if (user) {
       try {
         const { error } = await supabase
-          .from('user_preferences')
+          .from('user_preferences' as any)
           .upsert({
             user_id: user.id,
             preferences: newPreferences,
@@ -145,7 +145,7 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
     if (user) {
       try {
         const { error } = await supabase
-          .from('user_preferences')
+          .from('user_preferences' as any)
           .delete()
           .eq('user_id', user.id);
 
