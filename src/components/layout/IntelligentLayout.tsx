@@ -11,7 +11,11 @@ interface IntelligentLayoutProps {
   children: React.ReactNode;
 }
 
-export const IntelligentLayout = ({ children }: IntelligentLayoutProps) => {
+interface IntelligentLayoutInnerProps {
+  children: React.ReactNode;
+}
+
+const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
   const location = useLocation();
   const { trackActivity } = useContextualIntelligence();
   const { animationsEnabled } = useAccessibilityPreferences();
@@ -26,41 +30,49 @@ export const IntelligentLayout = ({ children }: IntelligentLayoutProps) => {
   }, [location.pathname, trackActivity]);
 
   return (
-    <UserPreferencesProvider>
-      <div className="min-h-screen bg-background">
-        {/* Skip navigation for accessibility */}
-        <a 
-          href="#main-content" 
-          className="skip-link"
-          tabIndex={0}
-        >
-          Aller au contenu principal
-        </a>
+    <div className="min-h-screen bg-background">
+      {/* Skip navigation for accessibility */}
+      <a 
+        href="#main-content" 
+        className="skip-link"
+        tabIndex={0}
+      >
+        Aller au contenu principal
+      </a>
 
-        {/* Collaboration presence indicator */}
-        <div className="fixed top-4 right-4 z-50">
-          <CollaborationPresence 
-            roomId={location.pathname} 
-            showDetails={false}
-          />
-        </div>
-
-        {/* Main content with conditional animations */}
-        <main id="main-content" className="relative">
-          {animationsEnabled ? (
-            <AnimatedPage>
-              {children}
-            </AnimatedPage>
-          ) : (
-            children
-          )}
-        </main>
-
-        {/* Smart suggestions sidebar */}
-        <div className="fixed bottom-4 right-4 w-80 max-w-[calc(100vw-2rem)] z-40">
-          <SmartSuggestions compact maxSuggestions={2} />
-        </div>
+      {/* Collaboration presence indicator */}
+      <div className="fixed top-4 right-4 z-50">
+        <CollaborationPresence 
+          roomId={location.pathname} 
+          showDetails={false}
+        />
       </div>
+
+      {/* Main content with conditional animations */}
+      <main id="main-content" className="relative">
+        {animationsEnabled ? (
+          <AnimatedPage>
+            {children}
+          </AnimatedPage>
+        ) : (
+          children
+        )}
+      </main>
+
+      {/* Smart suggestions sidebar */}
+      <div className="fixed bottom-4 right-4 w-80 max-w-[calc(100vw-2rem)] z-40">
+        <SmartSuggestions compact maxSuggestions={2} />
+      </div>
+    </div>
+  );
+};
+
+export const IntelligentLayout = ({ children }: IntelligentLayoutProps) => {
+  return (
+    <UserPreferencesProvider>
+      <IntelligentLayoutInner>
+        {children}
+      </IntelligentLayoutInner>
     </UserPreferencesProvider>
   );
 };

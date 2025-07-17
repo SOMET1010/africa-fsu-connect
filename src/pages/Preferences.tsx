@@ -1,11 +1,7 @@
-import { Routes, Route } from 'react-router-dom';
 import { PreferencesPanel } from '@/components/preferences/PreferencesPanel';
-import { IntelligentLayout } from '@/components/layout/IntelligentLayout';
 
-const PreferencesPage = () => (
-  <IntelligentLayout>
-    <PreferencesPanel />
-  </IntelligentLayout>
+const Preferences = () => (
+  <PreferencesPanel />
 );
 
-export default PreferencesPage;
+export default Preferences;
