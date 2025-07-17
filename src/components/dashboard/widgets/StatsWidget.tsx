@@ -2,6 +2,7 @@ import { LucideIcon } from "lucide-react";
 import { DashboardWidget } from "../DashboardWidget";
 import { CardContent } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { StatusIndicator } from "@/components/ui/status-indicator";
 
 interface StatItem {
   title: string;
@@ -55,8 +56,8 @@ export const StatsWidget = ({ id, stats, loading, onRemove }: StatsWidgetProps) 
         {stats.map((stat, index) => (
           <div 
             key={index} 
-            className={`space-y-2 p-3 rounded-lg border border-border/50 transition-all duration-200 
-              ${stat.clickable ? 'cursor-pointer hover:border-primary/30 hover:bg-muted/30' : ''}`}
+            className={`space-y-2 p-3 rounded-lg border border-border/50 transition-all duration-200 animate-fade-in hover:shadow-medium
+              ${stat.clickable ? 'cursor-pointer hover:border-primary/30 hover:bg-muted/30 hover:scale-105' : ''}`}
             onClick={stat.clickable ? stat.onStatClick : undefined}
           >
             <div className="flex items-center justify-between">
@@ -65,9 +66,12 @@ export const StatsWidget = ({ id, stats, loading, onRemove }: StatsWidgetProps) 
               </p>
               <stat.icon className={`h-4 w-4 ${stat.color} flex-shrink-0`} />
             </div>
-            <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+            <div className="text-2xl font-bold text-foreground animate-fade-in">{stat.value}</div>
             {stat.change && (
-              <p className="text-xs text-muted-foreground">{stat.change}</p>
+              <div className="flex items-center space-x-1">
+                <StatusIndicator status="success" size="sm" />
+                <p className="text-xs text-muted-foreground">{stat.change}</p>
+              </div>
             )}
           </div>
         ))}
