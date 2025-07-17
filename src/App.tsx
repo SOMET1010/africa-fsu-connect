@@ -19,6 +19,7 @@ import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import AdminUsers from "./pages/AdminUsers";
 import AdminForum from "./pages/AdminForum";
+import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 import Preferences from "./pages/Preferences";
 
@@ -73,11 +74,16 @@ const App = () => (
                   <AppShell><Profile /></AppShell>
                 </ProtectedRoute>
               } />
-              <Route path="/preferences" element={
-                <ProtectedRoute>
-                  <AppShell><Preferences /></AppShell>
-                </ProtectedRoute>
-              } />
+               <Route path="/preferences" element={
+                 <ProtectedRoute>
+                   <AppShell><Preferences /></AppShell>
+                 </ProtectedRoute>
+               } />
+               <Route path="/security" element={
+                 <ProtectedRoute>
+                   <AppShell><Security /></AppShell>
+                 </ProtectedRoute>
+               } />
               <Route path="/admin" element={
                 <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
                   <AppShell><Admin /></AppShell>

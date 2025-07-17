@@ -25,7 +25,8 @@ import {
   Users,
   Shield,
   BarChart3,
-  BookOpen
+  BookOpen,
+  ShieldCheck
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -36,6 +37,7 @@ const menuSections = [
     items: [
       { title: "Tableau de Bord", url: "/dashboard", icon: Home },
       { title: "Mon Profil", url: "/profile", icon: User },
+      { title: "Sécurité", url: "/security", icon: Shield },
     ]
   },
   {
@@ -55,7 +57,7 @@ const adminSection = {
   items: [
     { title: "Vue d'ensemble", url: "/admin", icon: BarChart3 },
     { title: "Utilisateurs", url: "/admin/users", icon: Users },
-    { title: "Modération Forum", url: "/admin/forum", icon: Shield },
+    { title: "Modération Forum", url: "/admin/forum", icon: ShieldCheck },
   ]
 };
 

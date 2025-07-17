@@ -48,6 +48,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const logSecurityEvent = async (userId: string, actionType: string, details?: any, success: boolean = true) => {
+    try {
+      await supabase.rpc('log_security_event', {
+        p_user_id: userId,
+        p_action_type: actionType,
+        p_details: details,
+        p_success: success,
+      });
+    } catch (error) {
+      console.error('Failed to log security event:', error);
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -84,17 +97,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
+    // Log security event
+    if (data.user) {
+      await logSecurityEvent(
+        data.user.id, 
+        error ? 'login_failed' : 'login', 
+        { email }, 
+        !error
+      );
+    }
+
     return { error };
   };
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -105,10 +129,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
       }
     });
+
+    // Log security event
+    if (data.user) {
+      await logSecurityEvent(
+        data.user.id, 
+        error ? 'signup_failed' : 'signup', 
+        { email }, 
+        !error
+      );
+    }
+
     return { error };
   };
 
   const signOut = async () => {
+    // Log security event before signing out
+    if (user) {
+      await logSecurityEvent(user.id, 'logout');
+    }
+
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error('Error signing out:', error);
