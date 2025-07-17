@@ -6,6 +6,8 @@ import Footer from "./Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoadingProvider } from "@/contexts/LoadingContext";
 import { GlobalLoadingIndicator } from "@/components/ui/loading";
+import MobileBottomNav from "@/components/navigation/MobileBottomNav";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AppShellProps {
   children: ReactNode;
@@ -14,6 +16,7 @@ interface AppShellProps {
 
 const AppShell = ({ children, hideFooter = false }: AppShellProps) => {
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   
   // Pour les pages publiques (pas de sidebar)
   if (!user) {
@@ -35,14 +38,15 @@ const AppShell = ({ children, hideFooter = false }: AppShellProps) => {
       <SidebarProvider>
         <div className="min-h-screen flex w-full bg-background">
           <GlobalLoadingIndicator />
-          <AppSidebar />
+          {!isMobile && <AppSidebar />}
           <div className="flex-1 flex flex-col">
-            <AppHeader showSidebar={true} />
-            <main className="flex-1 p-6 overflow-auto">
+            <AppHeader showSidebar={!isMobile} />
+            <main className={`flex-1 overflow-auto ${isMobile ? 'p-4 pb-20' : 'p-6'}`}>
               {children}
             </main>
-            {!hideFooter && <Footer />}
+            {!hideFooter && !isMobile && <Footer />}
           </div>
+          {isMobile && <MobileBottomNav />}
         </div>
       </SidebarProvider>
     </LoadingProvider>
