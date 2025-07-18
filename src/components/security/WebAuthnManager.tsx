@@ -8,14 +8,12 @@ import {
   Key, 
   Smartphone, 
   Monitor, 
-  Plus, 
   Trash2,
   Shield,
   CheckCircle,
   AlertTriangle 
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface WebAuthnCredential {
@@ -33,133 +31,53 @@ const WebAuthnManager = () => {
   const [credentials, setCredentials] = useState<WebAuthnCredential[]>([]);
   const [isSupported, setIsSupported] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     checkWebAuthnSupport();
-    fetchCredentials();
+    // Temporairement désactivé - en attente des tables de base de données
+    setLoading(false);
   }, [user]);
 
   const checkWebAuthnSupport = () => {
-    const supported = window.PublicKeyCredential && 
-                     navigator.credentials && 
-                     navigator.credentials.create;
+    const supported = !!(window.PublicKeyCredential && 
+                       navigator.credentials && 
+                       navigator.credentials.create);
     setIsSupported(supported);
-  };
-
-  const fetchCredentials = async () => {
-    if (!user?.id) return;
-    
-    try {
-      const { data, error } = await supabase
-        .from('webauthn_credentials')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setCredentials(data || []);
-    } catch (error) {
-      console.error('Error fetching credentials:', error);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const registerCredential = async (name: string, deviceType: 'biometric' | 'security_key' | 'platform') => {
     if (!isSupported) {
-      toast.error('WebAuthn n\'est pas supporté par ce navigateur');
+      toast.error('WebAuthn non supporté sur ce navigateur');
       return;
     }
 
     setIsRegistering(true);
-    
     try {
-      // Generate challenge from server
-      const challengeResponse = await supabase.functions.invoke('webauthn-challenge', {
-        body: { type: 'registration', userId: user?.id }
-      });
+      // Mode démo - simulation de l'enregistrement
+      const newCredential: WebAuthnCredential = {
+        id: `demo-${Date.now()}`,
+        credential_id: `cred-${Date.now()}`,
+        public_key: 'demo-public-key',
+        name: name,
+        device_type: deviceType,
+        created_at: new Date().toISOString(),
+        last_used: null
+      };
 
-      if (challengeResponse.error) throw challengeResponse.error;
-      
-      const { challenge, user: userInfo } = challengeResponse.data;
-
-      // Create credential
-      const credential = await navigator.credentials.create({
-        publicKey: {
-          challenge: new Uint8Array(challenge),
-          rp: {
-            name: "Plateforme de Collaboration",
-            id: window.location.hostname,
-          },
-          user: {
-            id: new TextEncoder().encode(userInfo.id),
-            name: userInfo.email,
-            displayName: userInfo.name || userInfo.email,
-          },
-          pubKeyCredParams: [
-            { alg: -7, type: "public-key" }, // ES256
-            { alg: -257, type: "public-key" }, // RS256
-          ],
-          authenticatorSelection: {
-            authenticatorAttachment: deviceType === 'platform' ? 'platform' : 'cross-platform',
-            userVerification: 'preferred',
-            requireResidentKey: false,
-          },
-          timeout: 60000,
-          attestation: 'direct',
-        },
-      }) as PublicKeyCredential;
-
-      if (!credential) throw new Error('Échec de création de la clé');
-
-      // Send credential to server for verification and storage
-      const verifyResponse = await supabase.functions.invoke('webauthn-verify', {
-        body: {
-          type: 'registration',
-          credential: {
-            id: credential.id,
-            rawId: Array.from(new Uint8Array(credential.rawId)),
-            response: {
-              attestationObject: Array.from(new Uint8Array((credential.response as AuthenticatorAttestationResponse).attestationObject)),
-              clientDataJSON: Array.from(new Uint8Array(credential.response.clientDataJSON)),
-            },
-            type: credential.type,
-          },
-          name,
-          deviceType,
-          userId: user?.id,
-        }
-      });
-
-      if (verifyResponse.error) throw verifyResponse.error;
-
-      toast.success('Clé de sécurité enregistrée avec succès');
-      fetchCredentials();
-      
+      setCredentials([newCredential, ...credentials]);
+      toast.success('Credential WebAuthn enregistré (mode démo)');
     } catch (error: any) {
-      console.error('Registration error:', error);
-      toast.error(`Erreur d'enregistrement: ${error.message}`);
+      toast.error(`Erreur: ${error.message}`);
     } finally {
       setIsRegistering(false);
     }
   };
 
-  const deleteCredential = async (credentialId: string) => {
-    try {
-      const { error } = await supabase
-        .from('webauthn_credentials')
-        .delete()
-        .eq('id', credentialId)
-        .eq('user_id', user?.id);
-
-      if (error) throw error;
-
-      toast.success('Clé de sécurité supprimée');
-      fetchCredentials();
-    } catch (error: any) {
-      toast.error(`Erreur de suppression: ${error.message}`);
-    }
+  const removeCredential = async (credentialId: string) => {
+    // Mode démo - suppression locale
+    setCredentials(credentials.filter(c => c.id !== credentialId));
+    toast.success('Credential supprimé (mode démo)');
   };
 
   const getDeviceIcon = (deviceType: string) => {
@@ -286,7 +204,7 @@ const WebAuthnManager = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => deleteCredential(cred.id)}
+                      onClick={() => removeCredential(cred.id)}
                       className="text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -301,7 +219,7 @@ const WebAuthnManager = () => {
                 <CheckCircle className="h-4 w-4" />
                 <AlertDescription>
                   Vous avez {credentials.length} clé(s) de sécurité configurée(s). 
-                  L'authentification biométrique est active.
+                  L'authentification biométrique est active (mode démo).
                 </AlertDescription>
               </Alert>
             )}

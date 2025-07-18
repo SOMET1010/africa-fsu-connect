@@ -47,85 +47,41 @@ interface AnomalySettings {
 const AnomalyDetection = () => {
   const { user } = useAuth();
   const [alerts, setAlerts] = useState<AnomalyAlert[]>([]);
-  const [settings, setSettings] = useState<AnomalySettings | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState<AnomalySettings | null>({
+    id: 'demo',
+    user_id: user?.id || '',
+    location_monitoring: true,
+    device_monitoring: true,
+    time_pattern_monitoring: true,
+    failed_login_threshold: 5,
+    auto_block_enabled: false,
+    sensitivity_level: 'medium'
+  });
+  const [loading, setLoading] = useState(false); // Désactivé temporairement
 
   useEffect(() => {
-    fetchAnomalyData();
+    // Temporairement désactivé - en attente des tables de base de données
+    setLoading(false);
   }, [user]);
 
   const fetchAnomalyData = async () => {
-    if (!user?.id) return;
-
-    try {
-      // Fetch anomaly alerts
-      const { data: alertsData, error: alertsError } = await supabase
-        .from('anomaly_alerts')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(20);
-
-      if (alertsError) throw alertsError;
-
-      // Fetch settings
-      const { data: settingsData, error: settingsError } = await supabase
-        .from('anomaly_settings')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (settingsError && settingsError.code !== 'PGRST116') {
-        throw settingsError;
-      }
-
-      setAlerts(alertsData || []);
-      setSettings(settingsData);
-    } catch (error) {
-      console.error('Error fetching anomaly data:', error);
-    } finally {
-      setLoading(false);
-    }
+    // Temporairement désactivé - en attente des tables de base de données
+    console.log('Anomaly data fetching temporarily disabled - waiting for database migration');
   };
 
   const updateSettings = async (newSettings: Partial<AnomalySettings>) => {
-    if (!user?.id) return;
+    if (!user?.id || !settings) return;
 
-    try {
-      const { data, error } = await supabase
-        .from('anomaly_settings')
-        .upsert({
-          user_id: user.id,
-          ...settings,
-          ...newSettings,
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-      
-      setSettings(data);
-    } catch (error) {
-      console.error('Error updating settings:', error);
-    }
+    // Mode démo - mise à jour locale
+    const updatedSettings = { ...settings, ...newSettings };
+    setSettings(updatedSettings);
   };
 
   const resolveAlert = async (alertId: string) => {
-    try {
-      const { error } = await supabase
-        .from('anomaly_alerts')
-        .update({ resolved: true })
-        .eq('id', alertId)
-        .eq('user_id', user?.id);
-
-      if (error) throw error;
-
-      setAlerts(alerts.map(alert => 
-        alert.id === alertId ? { ...alert, resolved: true } : alert
-      ));
-    } catch (error) {
-      console.error('Error resolving alert:', error);
-    }
+    // Mode démo - résolution locale
+    setAlerts(alerts.map(alert => 
+      alert.id === alertId ? { ...alert, resolved: true } : alert
+    ));
   };
 
   const getSeverityColor = (severity: string) => {

@@ -56,43 +56,17 @@ const ComplianceReports = () => {
     from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     to: new Date()
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Désactivé temporairement
   const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
-    fetchComplianceData();
+    // Temporairement désactivé - en attente des tables de base de données
+    setLoading(false);
   }, [user]);
 
   const fetchComplianceData = async () => {
-    if (!user?.id) return;
-
-    try {
-      // Fetch compliance reports
-      const { data: reportsData, error: reportsError } = await supabase
-        .from('compliance_reports')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('generated_at', { ascending: false })
-        .limit(10);
-
-      if (reportsError) throw reportsError;
-
-      // Fetch data processing records
-      const { data: recordsData, error: recordsError } = await supabase
-        .from('data_processing_records')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (recordsError) throw recordsError;
-
-      setReports(reportsData || []);
-      setDataRecords(recordsData || []);
-    } catch (error) {
-      console.error('Error fetching compliance data:', error);
-    } finally {
-      setLoading(false);
-    }
+    // Temporairement désactivé - en attente des tables de base de données
+    console.log('Compliance data fetching temporarily disabled - waiting for database migration');
   };
 
   const generateReport = async () => {

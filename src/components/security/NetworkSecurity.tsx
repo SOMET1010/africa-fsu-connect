@@ -62,7 +62,7 @@ const NetworkSecurity = () => {
   });
   const [ddosProtection, setDdosProtection] = useState(false);
   const [geoFiltering, setGeoFiltering] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Désactivé temporairement
   const [newRule, setNewRule] = useState({
     type: 'ip_block',
     value: '',
@@ -71,124 +71,45 @@ const NetworkSecurity = () => {
   });
 
   useEffect(() => {
-    fetchNetworkSecurityData();
+    // Temporairement désactivé - en attente des tables de base de données
+    setLoading(false);
   }, [user]);
 
   const fetchNetworkSecurityData = async () => {
-    if (!user?.id) return;
-
-    try {
-      // Fetch network rules
-      const { data: rulesData, error: rulesError } = await supabase
-        .from('network_security_rules')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (rulesError) throw rulesError;
-
-      // Fetch security events
-      const { data: eventsData, error: eventsError } = await supabase
-        .from('network_security_events')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (eventsError) throw eventsError;
-
-      // Fetch network settings
-      const { data: settingsData, error: settingsError } = await supabase
-        .from('network_security_settings')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      if (settingsError && settingsError.code !== 'PGRST116') {
-        console.error('Error fetching settings:', settingsError);
-      }
-
-      setRules(rulesData || []);
-      setEvents(eventsData || []);
-      
-      if (settingsData) {
-        setRateLimitConfig(settingsData.rate_limit_config || rateLimitConfig);
-        setDdosProtection(settingsData.ddos_protection_enabled || false);
-        setGeoFiltering(settingsData.geo_filtering_enabled || false);
-      }
-    } catch (error) {
-      console.error('Error fetching network security data:', error);
-    } finally {
-      setLoading(false);
-    }
+    // Temporairement désactivé - en attente des tables de base de données
+    console.log('Network security data fetching temporarily disabled - waiting for database migration');
   };
 
   const addRule = async () => {
     if (!newRule.value.trim() || !user?.id) return;
 
-    try {
-      const { data, error } = await supabase
-        .from('network_security_rules')
-        .insert({
-          user_id: user.id,
-          type: newRule.type,
-          value: newRule.value,
-          action: newRule.action,
-          description: newRule.description,
-          is_active: true
-        })
-        .select()
-        .single();
+    // Mode démo - ajouter la règle localement
+    const newRuleData: NetworkRule = {
+      id: `demo-${Date.now()}`,
+      type: newRule.type as any,
+      value: newRule.value,
+      action: newRule.action as any,
+      description: newRule.description,
+      created_at: new Date().toISOString(),
+      is_active: true
+    };
 
-      if (error) throw error;
-
-      setRules([data, ...rules]);
-      setNewRule({ type: 'ip_block', value: '', action: 'block', description: '' });
-      toast.success('Règle ajoutée');
-    } catch (error: any) {
-      toast.error(`Erreur: ${error.message}`);
-    }
+    setRules([newRuleData, ...rules]);
+    setNewRule({ type: 'ip_block', value: '', action: 'block', description: '' });
+    toast.success('Règle ajoutée (mode démo)');
   };
 
   const toggleRule = async (ruleId: string, isActive: boolean) => {
-    try {
-      const { error } = await supabase
-        .from('network_security_rules')
-        .update({ is_active: isActive })
-        .eq('id', ruleId)
-        .eq('user_id', user?.id);
-
-      if (error) throw error;
-
-      setRules(rules.map(rule => 
-        rule.id === ruleId ? { ...rule, is_active: isActive } : rule
-      ));
-      toast.success(isActive ? 'Règle activée' : 'Règle désactivée');
-    } catch (error: any) {
-      toast.error(`Erreur: ${error.message}`);
-    }
+    // Mode démo - mise à jour locale
+    setRules(rules.map(rule => 
+      rule.id === ruleId ? { ...rule, is_active: isActive } : rule
+    ));
+    toast.success(isActive ? 'Règle activée (mode démo)' : 'Règle désactivée (mode démo)');
   };
 
   const updateNetworkSettings = async (settings: any) => {
-    if (!user?.id) return;
-
-    try {
-      const { error } = await supabase
-        .from('network_security_settings')
-        .upsert({
-          user_id: user.id,
-          rate_limit_config: rateLimitConfig,
-          ddos_protection_enabled: ddosProtection,
-          geo_filtering_enabled: geoFiltering,
-          ...settings
-        });
-
-      if (error) throw error;
-      
-      toast.success('Paramètres mis à jour');
-    } catch (error: any) {
-      toast.error(`Erreur: ${error.message}`);
-    }
+    // Mode démo - mise à jour locale
+    toast.success('Paramètres mis à jour (mode démo)');
   };
 
   const getEventIcon = (eventType: string) => {

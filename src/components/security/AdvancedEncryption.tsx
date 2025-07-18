@@ -40,44 +40,17 @@ const AdvancedEncryption = () => {
   const [encryptedText, setEncryptedText] = useState('');
   const [textToDecrypt, setTextToDecrypt] = useState('');
   const [decryptedText, setDecryptedText] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Désactivé temporairement
   const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
-    fetchEncryptionData();
+    // Temporairement désactivé - en attente des tables de base de données
+    setLoading(false);
   }, [user]);
 
   const fetchEncryptionData = async () => {
-    if (!user?.id) return;
-
-    try {
-      // Fetch encryption keys
-      const { data: keysData, error: keysError } = await supabase
-        .from('encryption_keys')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (keysError) throw keysError;
-
-      // Check if E2E is enabled
-      const { data: prefsData, error: prefsError } = await supabase
-        .from('security_preferences')
-        .select('e2e_encryption_enabled')
-        .eq('user_id', user.id)
-        .single();
-
-      if (prefsError && prefsError.code !== 'PGRST116') {
-        console.error('Error fetching preferences:', prefsError);
-      }
-
-      setEncryptionKeys(keysData || []);
-      setE2eEnabled(prefsData?.e2e_encryption_enabled || false);
-    } catch (error) {
-      console.error('Error fetching encryption data:', error);
-    } finally {
-      setLoading(false);
-    }
+    // Temporairement désactivé - en attente des tables de base de données
+    console.log('Encryption data fetching temporarily disabled - waiting for database migration');
   };
 
   const generateEncryptionKey = async () => {
@@ -101,23 +74,9 @@ const AdvancedEncryption = () => {
   };
 
   const toggleE2E = async (enabled: boolean) => {
-    if (!user?.id) return;
-
-    try {
-      const { error } = await supabase
-        .from('security_preferences')
-        .upsert({
-          user_id: user.id,
-          e2e_encryption_enabled: enabled,
-        });
-
-      if (error) throw error;
-
-      setE2eEnabled(enabled);
-      toast.success(enabled ? 'Chiffrement E2E activé' : 'Chiffrement E2E désactivé');
-    } catch (error: any) {
-      toast.error(`Erreur: ${error.message}`);
-    }
+    // Temporairement désactivé - en attente de la migration de base de données
+    setE2eEnabled(enabled);
+    toast.success(enabled ? 'Chiffrement E2E activé (mode démo)' : 'Chiffrement E2E désactivé');
   };
 
   const encryptText = async () => {

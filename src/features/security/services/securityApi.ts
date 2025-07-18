@@ -17,7 +17,7 @@ export class SecurityApiService {
     return data as SecurityPreferences | null;
   }
 
-  static async updateSecurityPreferences(preferences: Partial<SecurityPreferences>): Promise<SecurityPreferences> {
+  static async updateSecurityPreferences(preferences: Partial<SecurityPreferences> & { user_id: string }): Promise<SecurityPreferences> {
     const { data, error } = await supabase
       .from('security_preferences')
       .upsert(preferences)
