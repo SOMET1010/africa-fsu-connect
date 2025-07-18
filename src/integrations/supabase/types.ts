@@ -14,6 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      anomaly_alerts: {
+        Row: {
+          auto_blocked: boolean | null
+          created_at: string
+          details: Json | null
+          id: string
+          message: string
+          resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          auto_blocked?: boolean | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          message: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          auto_blocked?: boolean | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          message?: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      anomaly_settings: {
+        Row: {
+          auto_block_enabled: boolean | null
+          created_at: string
+          device_monitoring: boolean | null
+          failed_login_threshold: number | null
+          id: string
+          location_monitoring: boolean | null
+          sensitivity_level: string | null
+          time_pattern_monitoring: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auto_block_enabled?: boolean | null
+          created_at?: string
+          device_monitoring?: boolean | null
+          failed_login_threshold?: number | null
+          id?: string
+          location_monitoring?: boolean | null
+          sensitivity_level?: string | null
+          time_pattern_monitoring?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auto_block_enabled?: boolean | null
+          created_at?: string
+          device_monitoring?: boolean | null
+          failed_login_threshold?: number | null
+          id?: string
+          location_monitoring?: boolean | null
+          sensitivity_level?: string | null
+          time_pattern_monitoring?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action_type: string
@@ -49,6 +130,48 @@ export type Database = {
           resource_type?: string | null
           success?: boolean | null
           user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      compliance_reports: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          file_url: string | null
+          id: string
+          report_data: Json | null
+          report_type: string
+          scheduled_for: string | null
+          status: string | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          file_url?: string | null
+          id?: string
+          report_data?: Json | null
+          report_type: string
+          scheduled_for?: string | null
+          status?: string | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          file_url?: string | null
+          id?: string
+          report_data?: Json | null
+          report_type?: string
+          scheduled_for?: string | null
+          status?: string | null
+          title?: string
           user_id?: string | null
         }
         Relationships: []
@@ -104,6 +227,45 @@ export type Database = {
           title?: string
           updated_at?: string
           uploaded_by?: string
+        }
+        Relationships: []
+      }
+      encryption_keys: {
+        Row: {
+          algorithm: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          key_data: string
+          key_id: string
+          last_used: string | null
+          name: string
+          user_id: string
+        }
+        Insert: {
+          algorithm?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_data: string
+          key_id: string
+          last_used?: string | null
+          name: string
+          user_id: string
+        }
+        Update: {
+          algorithm?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_data?: string
+          key_id?: string
+          last_used?: string | null
+          name?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -309,6 +471,51 @@ export type Database = {
           },
         ]
       }
+      network_security_events: {
+        Row: {
+          blocked: boolean | null
+          created_at: string
+          description: string
+          details: Json | null
+          event_type: string
+          id: string
+          resolved: boolean | null
+          resolved_at: string | null
+          severity: string
+          source_ip: unknown | null
+          target_ip: unknown | null
+          user_id: string | null
+        }
+        Insert: {
+          blocked?: boolean | null
+          created_at?: string
+          description: string
+          details?: Json | null
+          event_type: string
+          id?: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          severity: string
+          source_ip?: unknown | null
+          target_ip?: unknown | null
+          user_id?: string | null
+        }
+        Update: {
+          blocked?: boolean | null
+          created_at?: string
+          description?: string
+          details?: Json | null
+          event_type?: string
+          id?: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          severity?: string
+          source_ip?: unknown | null
+          target_ip?: unknown | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           action_url: string | null
@@ -391,6 +598,7 @@ export type Database = {
         Row: {
           backup_codes: string[] | null
           created_at: string
+          e2e_encryption_enabled: boolean | null
           id: string
           login_notifications: boolean | null
           max_concurrent_sessions: number | null
@@ -404,6 +612,7 @@ export type Database = {
         Insert: {
           backup_codes?: string[] | null
           created_at?: string
+          e2e_encryption_enabled?: boolean | null
           id?: string
           login_notifications?: boolean | null
           max_concurrent_sessions?: number | null
@@ -417,6 +626,7 @@ export type Database = {
         Update: {
           backup_codes?: string[] | null
           created_at?: string
+          e2e_encryption_enabled?: boolean | null
           id?: string
           login_notifications?: boolean | null
           max_concurrent_sessions?: number | null
@@ -543,6 +753,42 @@ export type Database = {
         }
         Relationships: []
       }
+      webauthn_credentials: {
+        Row: {
+          created_at: string
+          credential_id: string
+          device_type: string | null
+          id: string
+          is_active: boolean | null
+          last_used: string | null
+          name: string
+          public_key: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credential_id: string
+          device_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_used?: string | null
+          name: string
+          public_key: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credential_id?: string
+          device_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_used?: string | null
+          name?: string
+          public_key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -552,9 +798,28 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: number
       }
+      cleanup_old_anomaly_alerts: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      generate_anomaly_alert: {
+        Args: {
+          p_user_id: string
+          p_type: string
+          p_severity: string
+          p_message: string
+          p_details?: Json
+          p_auto_block?: boolean
+        }
+        Returns: string
+      }
       get_user_role: {
         Args: { user_id: string }
         Returns: Database["public"]["Enums"]["user_role"]
+      }
+      get_user_security_status: {
+        Args: { p_user_id: string }
+        Returns: Json
       }
       is_admin: {
         Args: { user_id: string }

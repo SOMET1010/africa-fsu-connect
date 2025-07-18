@@ -1,144 +1,70 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
-  Globe,
-  Shield,
-  Ban,
   Activity,
   MapPin,
   Clock,
+  Monitor,
+  Ban,
   AlertTriangle,
   CheckCircle,
-  TrendingUp,
   Zap
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-
-interface NetworkRule {
-  id: string;
-  type: 'ip_block' | 'geo_block' | 'rate_limit' | 'user_agent_block';
-  value: string;
-  action: 'block' | 'allow' | 'monitor';
-  description: string;
-  created_at: string;
-  is_active: boolean;
-}
-
-interface SecurityEvent {
-  id: string;
-  event_type: string;
-  ip_address: string;
-  country?: string;
-  blocked: boolean;
-  details: any;
-  created_at: string;
-}
-
-interface RateLimitConfig {
-  requests_per_minute: number;
-  requests_per_hour: number;
-  requests_per_day: number;
-  burst_size: number;
-}
+import { SecurityApiService } from '@/features/security/services/securityApi';
+import { NetworkSecurityEvent } from '@/features/security/core/types';
 
 const NetworkSecurity = () => {
   const { user } = useAuth();
-  const [rules, setRules] = useState<NetworkRule[]>([]);
-  const [events, setEvents] = useState<SecurityEvent[]>([]);
-  const [rateLimitConfig, setRateLimitConfig] = useState<RateLimitConfig>({
-    requests_per_minute: 60,
-    requests_per_hour: 1000,
-    requests_per_day: 10000,
-    burst_size: 10
-  });
-  const [ddosProtection, setDdosProtection] = useState(false);
-  const [geoFiltering, setGeoFiltering] = useState(false);
-  const [loading, setLoading] = useState(false); // Désactivé temporairement
-  const [newRule, setNewRule] = useState({
-    type: 'ip_block',
-    value: '',
-    action: 'block',
-    description: ''
-  });
+  const [events, setEvents] = useState<NetworkSecurityEvent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Temporairement désactivé - en attente des tables de base de données
-    setLoading(false);
-  }, [user]);
-
-  const fetchNetworkSecurityData = async () => {
-    // Temporairement désactivé - en attente des tables de base de données
-    console.log('Network security data fetching temporarily disabled - waiting for database migration');
-  };
-
-  const addRule = async () => {
-    if (!newRule.value.trim() || !user?.id) return;
-
-    // Mode démo - ajouter la règle localement
-    const newRuleData: NetworkRule = {
-      id: `demo-${Date.now()}`,
-      type: newRule.type as any,
-      value: newRule.value,
-      action: newRule.action as any,
-      description: newRule.description,
-      created_at: new Date().toISOString(),
-      is_active: true
+    const loadEvents = async () => {
+      try {
+        const networkEvents = await SecurityApiService.getNetworkSecurityEvents();
+        setEvents(networkEvents);
+      } catch (error) {
+        console.error('Error loading network events:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    setRules([newRuleData, ...rules]);
-    setNewRule({ type: 'ip_block', value: '', action: 'block', description: '' });
-    toast.success('Règle ajoutée (mode démo)');
-  };
-
-  const toggleRule = async (ruleId: string, isActive: boolean) => {
-    // Mode démo - mise à jour locale
-    setRules(rules.map(rule => 
-      rule.id === ruleId ? { ...rule, is_active: isActive } : rule
-    ));
-    toast.success(isActive ? 'Règle activée (mode démo)' : 'Règle désactivée (mode démo)');
-  };
-
-  const updateNetworkSettings = async (settings: any) => {
-    // Mode démo - mise à jour locale
-    toast.success('Paramètres mis à jour (mode démo)');
-  };
+    loadEvents();
+  }, [user]);
 
   const getEventIcon = (eventType: string) => {
     switch (eventType) {
-      case 'blocked_ip':
+      case 'intrusion_attempt':
         return <Ban className="h-4 w-4 text-red-500" />;
-      case 'rate_limit':
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 'geo_block':
-        return <MapPin className="h-4 w-4 text-orange-500" />;
-      case 'ddos_detected':
+      case 'ddos_attack':
         return <AlertTriangle className="h-4 w-4 text-red-600" />;
+      case 'malware_detected':
+        return <AlertTriangle className="h-4 w-4 text-orange-500" />;
+      case 'suspicious_traffic':
+        return <Activity className="h-4 w-4 text-yellow-500" />;
+      case 'firewall_breach':
+        return <Ban className="h-4 w-4 text-red-600" />;
       default:
         return <Activity className="h-4 w-4 text-blue-500" />;
     }
   };
 
-  const getRuleTypeLabel = (type: string) => {
-    switch (type) {
-      case 'ip_block':
-        return 'Blocage IP';
-      case 'geo_block':
-        return 'Blocage géographique';
-      case 'rate_limit':
-        return 'Limitation de débit';
-      case 'user_agent_block':
-        return 'Blocage User-Agent';
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case 'low':
+        return 'text-blue-600 bg-blue-100 dark:bg-blue-900/20';
+      case 'medium':
+        return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20';
+      case 'high':
+        return 'text-orange-600 bg-orange-100 dark:bg-orange-900/20';
+      case 'critical':
+        return 'text-red-600 bg-red-100 dark:bg-red-900/20';
       default:
-        return 'Autre';
+        return 'text-gray-600 bg-gray-100 dark:bg-gray-900/20';
     }
   };
 
@@ -160,213 +86,6 @@ const NetworkSecurity = () => {
 
   return (
     <div className="space-y-6">
-      {/* DDoS Protection */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            Protection réseau avancée
-          </CardTitle>
-          <CardDescription>
-            Configuration des protections contre les attaques réseau
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label>Protection DDoS</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Détection et mitigation automatique des attaques DDoS
-                  </p>
-                </div>
-                <Switch
-                  checked={ddosProtection}
-                  onCheckedChange={(checked) => {
-                    setDdosProtection(checked);
-                    updateNetworkSettings({ ddos_protection_enabled: checked });
-                  }}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label>Filtrage géographique</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Bloquer le trafic de certains pays
-                  </p>
-                </div>
-                <Switch
-                  checked={geoFiltering}
-                  onCheckedChange={(checked) => {
-                    setGeoFiltering(checked);
-                    updateNetworkSettings({ geo_filtering_enabled: checked });
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="font-medium">Limitation de débit</h4>
-              
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Req/minute</Label>
-                  <Input
-                    type="number"
-                    value={rateLimitConfig.requests_per_minute}
-                    onChange={(e) => setRateLimitConfig({
-                      ...rateLimitConfig,
-                      requests_per_minute: parseInt(e.target.value)
-                    })}
-                    onBlur={() => updateNetworkSettings({ rate_limit_config: rateLimitConfig })}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Req/heure</Label>
-                  <Input
-                    type="number"
-                    value={rateLimitConfig.requests_per_hour}
-                    onChange={(e) => setRateLimitConfig({
-                      ...rateLimitConfig,
-                      requests_per_hour: parseInt(e.target.value)
-                    })}
-                    onBlur={() => updateNetworkSettings({ rate_limit_config: rateLimitConfig })}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Req/jour</Label>
-                  <Input
-                    type="number"
-                    value={rateLimitConfig.requests_per_day}
-                    onChange={(e) => setRateLimitConfig({
-                      ...rateLimitConfig,
-                      requests_per_day: parseInt(e.target.value)
-                    })}
-                    onBlur={() => updateNetworkSettings({ rate_limit_config: rateLimitConfig })}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Burst size</Label>
-                  <Input
-                    type="number"
-                    value={rateLimitConfig.burst_size}
-                    onChange={(e) => setRateLimitConfig({
-                      ...rateLimitConfig,
-                      burst_size: parseInt(e.target.value)
-                    })}
-                    onBlur={() => updateNetworkSettings({ rate_limit_config: rateLimitConfig })}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Security Rules */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Ban className="h-5 w-5" />
-            Règles de sécurité réseau
-          </CardTitle>
-          <CardDescription>
-            Configuration des règles de blocage et de filtrage
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Add New Rule */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-3 p-4 border rounded-lg">
-            <Select
-              value={newRule.type}
-              onValueChange={(value) => setNewRule({ ...newRule, type: value })}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ip_block">Blocage IP</SelectItem>
-                <SelectItem value="geo_block">Pays</SelectItem>
-                <SelectItem value="user_agent_block">User-Agent</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Input
-              placeholder="Valeur (IP, pays, etc.)"
-              value={newRule.value}
-              onChange={(e) => setNewRule({ ...newRule, value: e.target.value })}
-            />
-
-            <Select
-              value={newRule.action}
-              onValueChange={(value) => setNewRule({ ...newRule, action: value })}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="block">Bloquer</SelectItem>
-                <SelectItem value="allow">Autoriser</SelectItem>
-                <SelectItem value="monitor">Surveiller</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Input
-              placeholder="Description"
-              value={newRule.description}
-              onChange={(e) => setNewRule({ ...newRule, description: e.target.value })}
-            />
-
-            <Button onClick={addRule} disabled={!newRule.value.trim()}>
-              Ajouter
-            </Button>
-          </div>
-
-          {/* Rules List */}
-          {rules.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <Ban className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>Aucune règle configurée</p>
-              <p className="text-sm">Ajoutez des règles de sécurité réseau</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {rules.map((rule) => (
-                <div key={rule.id} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Ban className="h-4 w-4" />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">
-                          {getRuleTypeLabel(rule.type)}
-                        </Badge>
-                        <Badge 
-                          className={
-                            rule.action === 'block' ? 'bg-red-100 text-red-600 dark:bg-red-900/20' :
-                            rule.action === 'allow' ? 'bg-green-100 text-green-600 dark:bg-green-900/20' :
-                            'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20'
-                          }
-                        >
-                          {rule.action.toUpperCase()}
-                        </Badge>
-                      </div>
-                      <p className="font-medium">{rule.value}</p>
-                      <p className="text-sm text-muted-foreground">{rule.description}</p>
-                    </div>
-                  </div>
-                  <Switch
-                    checked={rule.is_active}
-                    onCheckedChange={(checked) => toggleRule(rule.id, checked)}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
       {/* Security Events */}
       <Card>
         <CardHeader>
@@ -375,15 +94,15 @@ const NetworkSecurity = () => {
             Événements de sécurité réseau
           </CardTitle>
           <CardDescription>
-            Surveillance en temps réel des tentatives d'attaque
+            Surveillance en temps réel des tentatives d'attaque réseau
           </CardDescription>
         </CardHeader>
         <CardContent>
           {events.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
-              <p className="font-medium">Aucune menace détectée</p>
-              <p className="text-sm">Votre réseau est sécurisé</p>
+              <p className="font-medium">Aucune menace réseau détectée</p>
+              <p className="text-sm">Votre infrastructure est sécurisée</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -391,20 +110,34 @@ const NetworkSecurity = () => {
                 <div key={event.id} className="flex items-start gap-3 p-3 border rounded-lg">
                   {getEventIcon(event.event_type)}
                   <div className="flex-1">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-2">
                       <p className="font-medium capitalize">
                         {event.event_type.replace('_', ' ')}
                       </p>
-                      <Badge variant={event.blocked ? 'destructive' : 'default'}>
-                        {event.blocked ? 'Bloqué' : 'Autorisé'}
-                      </Badge>
+                      <div className="flex gap-2">
+                        <Badge className={getSeverityColor(event.severity)}>
+                          {event.severity.toUpperCase()}
+                        </Badge>
+                        <Badge variant={event.blocked ? 'destructive' : 'default'}>
+                          {event.blocked ? 'Bloqué' : 'Surveillé'}
+                        </Badge>
+                        {event.resolved && (
+                          <Badge variant="outline">Résolu</Badge>
+                        )}
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      IP: {event.ip_address} {event.country && `• ${event.country}`}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(event.created_at).toLocaleString()}
-                    </p>
+                    <p className="text-sm mb-1">{event.description}</p>
+                    <div className="text-xs text-muted-foreground space-y-1">
+                      {event.source_ip && (
+                        <p>IP source: {event.source_ip}</p>
+                      )}
+                      {event.target_ip && (
+                        <p>IP cible: {event.target_ip}</p>
+                      )}
+                      <p>
+                        {new Date(event.created_at).toLocaleString()}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -414,14 +147,12 @@ const NetworkSecurity = () => {
       </Card>
 
       {/* Status Alert */}
-      {(ddosProtection || geoFiltering) && (
-        <Alert>
-          <Zap className="h-4 w-4" />
-          <AlertDescription>
-            Protections réseau activées: DDoS {ddosProtection && '✓'} • Filtrage géographique {geoFiltering && '✓'}
-          </AlertDescription>
-        </Alert>
-      )}
+      <Alert>
+        <Zap className="h-4 w-4" />
+        <AlertDescription>
+          Surveillance réseau activée. Détection automatique des intrusions et attaques DDoS.
+        </AlertDescription>
+      </Alert>
     </div>
   );
 };

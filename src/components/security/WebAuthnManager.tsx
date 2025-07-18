@@ -14,29 +14,33 @@ import {
   AlertTriangle 
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { SecurityApiService } from '@/features/security/services/securityApi';
+import { WebAuthnCredential } from '@/features/security/core/types';
 import { toast } from 'sonner';
-
-interface WebAuthnCredential {
-  id: string;
-  credential_id: string;
-  public_key: string;
-  name: string;
-  device_type: 'biometric' | 'security_key' | 'platform';
-  created_at: string;
-  last_used: string | null;
-}
 
 const WebAuthnManager = () => {
   const { user } = useAuth();
   const [credentials, setCredentials] = useState<WebAuthnCredential[]>([]);
   const [isSupported, setIsSupported] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     checkWebAuthnSupport();
-    // Temporairement désactivé - en attente des tables de base de données
-    setLoading(false);
+    if (!user?.id) return;
+    
+    const loadCredentials = async () => {
+      try {
+        const webauthnCreds = await SecurityApiService.getWebAuthnCredentials(user.id);
+        setCredentials(webauthnCreds);
+      } catch (error) {
+        console.error('Error loading WebAuthn credentials:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCredentials();
   }, [user]);
 
   const checkWebAuthnSupport = () => {
@@ -46,38 +50,15 @@ const WebAuthnManager = () => {
     setIsSupported(supported);
   };
 
-  const registerCredential = async (name: string, deviceType: 'biometric' | 'security_key' | 'platform') => {
-    if (!isSupported) {
-      toast.error('WebAuthn non supporté sur ce navigateur');
-      return;
-    }
-
-    setIsRegistering(true);
+  const handleRegisterCredential = async () => {
     try {
-      // Mode démo - simulation de l'enregistrement
-      const newCredential: WebAuthnCredential = {
-        id: `demo-${Date.now()}`,
-        credential_id: `cred-${Date.now()}`,
-        public_key: 'demo-public-key',
-        name: name,
-        device_type: deviceType,
-        created_at: new Date().toISOString(),
-        last_used: null
-      };
-
-      setCredentials([newCredential, ...credentials]);
-      toast.success('Credential WebAuthn enregistré (mode démo)');
-    } catch (error: any) {
-      toast.error(`Erreur: ${error.message}`);
-    } finally {
-      setIsRegistering(false);
+      const newCred = await SecurityApiService.registerWebAuthnCredential(user!.id, `Device ${credentials.length + 1}`, 'security_key');
+      setCredentials([...credentials, newCred]);
+      toast.success('Nouvelle authentification WebAuthn enregistrée');
+    } catch (error) {
+      console.error('Error registering credential:', error);
+      toast.error('Erreur lors de l\'enregistrement');
     }
-  };
-
-  const removeCredential = async (credentialId: string) => {
-    // Mode démo - suppression locale
-    setCredentials(credentials.filter(c => c.id !== credentialId));
-    toast.success('Credential supprimé (mode démo)');
   };
 
   const getDeviceIcon = (deviceType: string) => {
@@ -147,31 +128,13 @@ const WebAuthnManager = () => {
           <>
             <div className="flex flex-wrap gap-2">
               <Button
-                onClick={() => registerCredential('Empreinte digitale', 'biometric')}
-                disabled={isRegistering}
-                size="sm"
-                variant="outline"
-              >
-                <Fingerprint className="h-4 w-4 mr-2" />
-                Ajouter empreinte
-              </Button>
-              <Button
-                onClick={() => registerCredential('Clé de sécurité', 'security_key')}
+                onClick={handleRegisterCredential}
                 disabled={isRegistering}
                 size="sm"
                 variant="outline"
               >
                 <Key className="h-4 w-4 mr-2" />
-                Ajouter clé USB
-              </Button>
-              <Button
-                onClick={() => registerCredential('Authentificateur plateforme', 'platform')}
-                disabled={isRegistering}
-                size="sm"
-                variant="outline"
-              >
-                <Smartphone className="h-4 w-4 mr-2" />
-                Ajouter appareil
+                Ajouter une authentification
               </Button>
             </div>
 
@@ -179,7 +142,7 @@ const WebAuthnManager = () => {
               <div className="text-center py-8 text-muted-foreground">
                 <Shield className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p>Aucune clé de sécurité configurée</p>
-                <p className="text-sm">Ajoutez une méthode d'authentification biométrique pour plus de sécurité</p>
+                <p className="text-sm">Ajoutez une méthode d'authentification pour plus de sécurité</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -204,7 +167,6 @@ const WebAuthnManager = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => removeCredential(cred.id)}
                       className="text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -218,8 +180,8 @@ const WebAuthnManager = () => {
               <Alert>
                 <CheckCircle className="h-4 w-4" />
                 <AlertDescription>
-                  Vous avez {credentials.length} clé(s) de sécurité configurée(s). 
-                  L'authentification biométrique est active (mode démo).
+                  Vous avez {credentials.length} authentification(s) WebAuthn configurée(s). 
+                  Votre compte est protégé par une authentification renforcée.
                 </AlertDescription>
               </Alert>
             )}

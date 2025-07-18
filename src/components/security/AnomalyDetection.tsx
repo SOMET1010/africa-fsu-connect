@@ -18,70 +18,46 @@ import {
   XCircle
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { SecurityApiService } from '@/features/security/services/securityApi';
+import { AnomalyAlert, AnomalySettings } from '@/features/security/core/types';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
-
-interface AnomalyAlert {
-  id: string;
-  type: 'suspicious_login' | 'unusual_location' | 'multiple_failures' | 'device_change' | 'time_anomaly';
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  message: string;
-  details: any;
-  created_at: string;
-  resolved: boolean;
-  auto_blocked: boolean;
-}
-
-interface AnomalySettings {
-  id: string;
-  user_id: string;
-  location_monitoring: boolean;
-  device_monitoring: boolean;
-  time_pattern_monitoring: boolean;
-  failed_login_threshold: number;
-  auto_block_enabled: boolean;
-  sensitivity_level: 'low' | 'medium' | 'high';
-}
 
 const AnomalyDetection = () => {
   const { user } = useAuth();
   const [alerts, setAlerts] = useState<AnomalyAlert[]>([]);
-  const [settings, setSettings] = useState<AnomalySettings | null>({
-    id: 'demo',
-    user_id: user?.id || '',
-    location_monitoring: true,
-    device_monitoring: true,
-    time_pattern_monitoring: true,
-    failed_login_threshold: 5,
-    auto_block_enabled: false,
-    sensitivity_level: 'medium'
-  });
-  const [loading, setLoading] = useState(false); // Désactivé temporairement
+  const [settings, setSettings] = useState<AnomalySettings | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Temporairement désactivé - en attente des tables de base de données
-    setLoading(false);
+    if (!user?.id) return;
+    
+    const loadData = async () => {
+      try {
+        const [anomalyAlerts, anomalySettings] = await Promise.all([
+          SecurityApiService.getAnomalyAlerts(user.id),
+          SecurityApiService.getAnomalySettings(user.id)
+        ]);
+        
+        setAlerts(anomalyAlerts);
+        setSettings(anomalySettings);
+      } catch (error) {
+        console.error('Error loading anomaly data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, [user]);
 
-  const fetchAnomalyData = async () => {
-    // Temporairement désactivé - en attente des tables de base de données
-    console.log('Anomaly data fetching temporarily disabled - waiting for database migration');
-  };
-
-  const updateSettings = async (newSettings: Partial<AnomalySettings>) => {
-    if (!user?.id || !settings) return;
-
-    // Mode démo - mise à jour locale
-    const updatedSettings = { ...settings, ...newSettings };
-    setSettings(updatedSettings);
-  };
-
-  const resolveAlert = async (alertId: string) => {
-    // Mode démo - résolution locale
-    setAlerts(alerts.map(alert => 
-      alert.id === alertId ? { ...alert, resolved: true } : alert
-    ));
+  const handleUpdateSettings = async (newSettings: Partial<AnomalySettings>) => {
+    try {
+      const updated = await SecurityApiService.updateAnomalySettings(user!.id, newSettings);
+      setSettings(updated);
+    } catch (error) {
+      console.error('Error updating settings:', error);
+    }
   };
 
   const getSeverityColor = (severity: string) => {
@@ -160,7 +136,7 @@ const AnomalyDetection = () => {
                 </div>
                 <Switch
                   checked={settings?.location_monitoring ?? true}
-                  onCheckedChange={(checked) => updateSettings({ location_monitoring: checked })}
+                  onCheckedChange={(checked) => handleUpdateSettings({ location_monitoring: checked })}
                 />
               </div>
 
@@ -173,7 +149,7 @@ const AnomalyDetection = () => {
                 </div>
                 <Switch
                   checked={settings?.device_monitoring ?? true}
-                  onCheckedChange={(checked) => updateSettings({ device_monitoring: checked })}
+                  onCheckedChange={(checked) => handleUpdateSettings({ device_monitoring: checked })}
                 />
               </div>
 
@@ -186,7 +162,7 @@ const AnomalyDetection = () => {
                 </div>
                 <Switch
                   checked={settings?.time_pattern_monitoring ?? true}
-                  onCheckedChange={(checked) => updateSettings({ time_pattern_monitoring: checked })}
+                  onCheckedChange={(checked) => handleUpdateSettings({ time_pattern_monitoring: checked })}
                 />
               </div>
             </div>
@@ -204,7 +180,7 @@ const AnomalyDetection = () => {
                 </div>
                 <Switch
                   checked={settings?.auto_block_enabled ?? false}
-                  onCheckedChange={(checked) => updateSettings({ auto_block_enabled: checked })}
+                  onCheckedChange={(checked) => handleUpdateSettings({ auto_block_enabled: checked })}
                 />
               </div>
 
@@ -212,7 +188,7 @@ const AnomalyDetection = () => {
                 <Label>Seuil d'échecs de connexion</Label>
                 <select
                   value={settings?.failed_login_threshold ?? 5}
-                  onChange={(e) => updateSettings({ failed_login_threshold: parseInt(e.target.value) })}
+                  onChange={(e) => handleUpdateSettings({ failed_login_threshold: parseInt(e.target.value) })}
                   className="w-full p-2 border rounded-md bg-background"
                 >
                   <option value={3}>3 tentatives</option>
@@ -225,7 +201,7 @@ const AnomalyDetection = () => {
                 <Label>Niveau de sensibilité</Label>
                 <select
                   value={settings?.sensitivity_level ?? 'medium'}
-                  onChange={(e) => updateSettings({ sensitivity_level: e.target.value as 'low' | 'medium' | 'high' })}
+                  onChange={(e) => handleUpdateSettings({ sensitivity_level: e.target.value as 'low' | 'medium' | 'high' })}
                   className="w-full p-2 border rounded-md bg-background"
                 >
                   <option value="low">Faible</option>
@@ -297,30 +273,8 @@ const AnomalyDetection = () => {
                             locale: fr
                           })}
                         </p>
-                        {alert.details && (
-                          <div className="mt-2 text-xs text-muted-foreground space-y-1">
-                            {alert.details.ip_address && (
-                              <p>IP: {alert.details.ip_address}</p>
-                            )}
-                            {alert.details.location && (
-                              <p>Localisation: {alert.details.location}</p>
-                            )}
-                            {alert.details.user_agent && (
-                              <p>Navigateur: {alert.details.user_agent}</p>
-                            )}
-                          </div>
-                        )}
                       </div>
                     </div>
-                    {!alert.resolved && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => resolveAlert(alert.id)}
-                      >
-                        Résoudre
-                      </Button>
-                    )}
                   </div>
                 </div>
               ))}
