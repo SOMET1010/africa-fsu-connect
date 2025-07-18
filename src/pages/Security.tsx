@@ -1,7 +1,8 @@
-import SecurityDashboard from '@/components/security/SecurityDashboard';
+
+import SecurityPage from '@/features/security/pages/SecurityPage';
 
 const Security = () => {
-  return <SecurityDashboard />;
+  return <SecurityPage />;
 };
 
 export default Security;
