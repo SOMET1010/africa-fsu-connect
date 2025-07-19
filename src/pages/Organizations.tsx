@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -18,7 +19,6 @@ import {
   Phone, 
   MapPin, 
   ExternalLink,
-  Users,
   RotateCcw,
   CheckCircle,
   Clock,
@@ -202,22 +202,22 @@ export default function Organizations() {
                 {agency.website_url}
               </a>
             </div>
-            <div className="flex items-center space-x-2">
-              <Mail className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{agency.email}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Phone className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{agency.phone}</span>
-            </div>
+            {agency.contact_email && (
+              <div className="flex items-center space-x-2">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">{agency.contact_email}</span>
+              </div>
+            )}
+            {agency.phone && (
+              <div className="flex items-center space-x-2">
+                <Phone className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">{agency.phone}</span>
+              </div>
+            )}
             <div className="flex items-center space-x-2">
               <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{agency.address}, {agency.city}, {agency.country}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Users className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm">
-                {agency.employees_count ? `${agency.employees_count} employés` : "Nombre d'employés non spécifié"}
+                {[agency.address, agency.country].filter(Boolean).join(', ')}
               </span>
             </div>
           </div>
