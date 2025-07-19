@@ -167,6 +167,47 @@ export default function Organizations() {
         </Button>
       </div>
 
+      {/* Search and Filters */}
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex-1">
+          <Input
+            placeholder="Rechercher par nom, acronyme ou pays..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+          <SelectTrigger className="w-full md:w-48">
+            <SelectValue placeholder="Toutes les régions" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Toutes les régions</SelectItem>
+            {REGIONS.map((region) => (
+              <SelectItem key={region} value={region}>{region}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+          <SelectTrigger className="w-full md:w-48">
+            <SelectValue placeholder="Tous les statuts" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tous les statuts</SelectItem>
+            <SelectItem value="synced">Synchronisé</SelectItem>
+            <SelectItem value="pending">En attente</SelectItem>
+            <SelectItem value="failed">Échec</SelectItem>
+            <SelectItem value="partial">Partiel</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Results count */}
+      <div className="text-sm text-muted-foreground">
+        {filteredAgencies.length} organisation{filteredAgencies.length > 1 ? 's' : ''} trouvée{filteredAgencies.length > 1 ? 's' : ''}
+        {agencies.length !== filteredAgencies.length && ` sur ${agencies.length} au total`}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredAgencies.map((agency) => (
           <div key={agency.id} className="border rounded-lg p-6 space-y-4 hover:shadow-lg transition-shadow">
@@ -220,9 +261,29 @@ export default function Organizations() {
                 {[agency.address, agency.country].filter(Boolean).join(', ')}
               </span>
             </div>
+            <div className="flex items-center space-x-2">
+              <Badge variant="secondary" className="text-xs">
+                {agency.region}
+              </Badge>
+              {agency.acronym && (
+                <Badge variant="outline" className="text-xs">
+                  {agency.acronym}
+                </Badge>
+              )}
+            </div>
           </div>
         ))}
       </div>
+
+      {filteredAgencies.length === 0 && !loading && (
+        <div className="text-center py-12">
+          <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium mb-2">Aucune organisation trouvée</h3>
+          <p className="text-muted-foreground">
+            Essayez de modifier vos critères de recherche ou filtres
+          </p>
+        </div>
+      )}
 
       {selectedAgency && (
         <SyncConfigDialog
