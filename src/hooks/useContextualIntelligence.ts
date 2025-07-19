@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -27,14 +27,14 @@ export const useContextualIntelligence = () => {
   const { user, profile } = useAuth();
 
   // Track user activity
-  const trackActivity = (activity: Omit<UserActivity, 'timestamp'>) => {
+  const trackActivity = useCallback((activity: Omit<UserActivity, 'timestamp'>) => {
     const newActivity = { ...activity, timestamp: new Date() };
     setActivities(prev => [newActivity, ...prev.slice(0, 99)]); // Keep last 100 activities
     
     // Store in localStorage for persistence
     const stored = JSON.parse(localStorage.getItem('userActivities') || '[]');
     localStorage.setItem('userActivities', JSON.stringify([newActivity, ...stored.slice(0, 99)]));
-  };
+  }, []);
 
   // Load stored activities
   useEffect(() => {

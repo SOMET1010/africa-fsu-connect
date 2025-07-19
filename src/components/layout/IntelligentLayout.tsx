@@ -27,7 +27,7 @@ const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
       action: 'page_visit',
       metadata: { timestamp: Date.now() }
     });
-  }, [location.pathname, trackActivity]);
+  }, [location.pathname]); // Removed trackActivity from dependencies to avoid infinite loop
 
   return (
     <div className="min-h-screen bg-background">
