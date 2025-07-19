@@ -6,6 +6,10 @@ export interface CrawlResult {
   data?: any[];
   error?: string;
   creditsUsed?: number;
+  processed?: number;
+  created?: number;
+  totalSuccessful?: number;
+  totalProcessed?: number;
 }
 
 export interface SyncConfig {
