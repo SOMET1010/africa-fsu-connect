@@ -8,8 +8,11 @@ export interface CrawlResult {
   creditsUsed?: number;
   processed?: number;
   created?: number;
+  updated?: number;
+  failed?: number;
   totalSuccessful?: number;
   totalProcessed?: number;
+  results?: any[];
 }
 
 export interface SyncConfig {

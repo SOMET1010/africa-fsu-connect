@@ -174,6 +174,8 @@ serve(async (req) => {
           created: totalCreated,
           updated: totalUpdated,
           failed: totalFailed,
+          totalProcessed: totalProcessed,
+          totalSuccessful: totalFailed === 0 ? 1 : 0,
           errors: errors.length > 0 ? errors : undefined
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

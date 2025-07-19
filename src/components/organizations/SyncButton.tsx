@@ -47,7 +47,7 @@ export function SyncButton({ agency, onConfigClick, onHistoryClick }: SyncButton
       if (result.success) {
         toast({
           title: "Synchronisation réussie",
-          description: `${result.processed || 0} pages traitées, ${result.created || 0} éléments créés`
+          description: `${result.totalProcessed || 0} pages traitées, ${result.created || 0} éléments créés`
         });
       } else {
         toast({

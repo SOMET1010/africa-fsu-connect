@@ -196,6 +196,30 @@ export default function Organizations() {
                 </Button>
               </div>
             </div>
+            <div className="flex items-center space-x-2">
+              <Globe className="h-4 w-4 text-muted-foreground" />
+              <a href={agency.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline">
+                {agency.website_url}
+              </a>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Mail className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm">{agency.email}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Phone className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm">{agency.phone}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm">{agency.address}, {agency.city}, {agency.country}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Users className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm">
+                {agency.employees_count ? `${agency.employees_count} employés` : "Nombre d'employés non spécifié"}
+              </span>
+            </div>
           </div>
         ))}
       </div>
