@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Organizations from "./pages/Organizations";
 import Projects from "./pages/Projects";
 import Resources from "./pages/Resources";
 import Forum from "./pages/Forum";
@@ -42,6 +43,11 @@ const App = () => (
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <AppShell><Dashboard /></AppShell>
+                </ProtectedRoute>
+              } />
+              <Route path="/organizations" element={
+                <ProtectedRoute>
+                  <AppShell><Organizations /></AppShell>
                 </ProtectedRoute>
               } />
               <Route path="/projects" element={

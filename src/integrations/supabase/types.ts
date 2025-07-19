@@ -14,6 +14,267 @@ export type Database = {
   }
   public: {
     Tables: {
+      agencies: {
+        Row: {
+          acronym: string
+          address: string | null
+          api_endpoint: string | null
+          contact_email: string | null
+          country: string
+          created_at: string
+          description: string | null
+          established_date: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          logo_url: string | null
+          metadata: Json | null
+          name: string
+          phone: string | null
+          region: string
+          sync_status: string | null
+          updated_at: string
+          website_url: string
+        }
+        Insert: {
+          acronym: string
+          address?: string | null
+          api_endpoint?: string | null
+          contact_email?: string | null
+          country: string
+          created_at?: string
+          description?: string | null
+          established_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          logo_url?: string | null
+          metadata?: Json | null
+          name: string
+          phone?: string | null
+          region: string
+          sync_status?: string | null
+          updated_at?: string
+          website_url: string
+        }
+        Update: {
+          acronym?: string
+          address?: string | null
+          api_endpoint?: string | null
+          contact_email?: string | null
+          country?: string
+          created_at?: string
+          description?: string | null
+          established_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          logo_url?: string | null
+          metadata?: Json | null
+          name?: string
+          phone?: string | null
+          region?: string
+          sync_status?: string | null
+          updated_at?: string
+          website_url?: string
+        }
+        Relationships: []
+      }
+      agency_connectors: {
+        Row: {
+          agency_id: string
+          auth_config: Json | null
+          auth_method: string | null
+          connector_type: string
+          created_at: string
+          endpoint_url: string | null
+          error_message: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          sync_frequency: number | null
+          sync_status: string | null
+          updated_at: string
+        }
+        Insert: {
+          agency_id: string
+          auth_config?: Json | null
+          auth_method?: string | null
+          connector_type: string
+          created_at?: string
+          endpoint_url?: string | null
+          error_message?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          sync_frequency?: number | null
+          sync_status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agency_id?: string
+          auth_config?: Json | null
+          auth_method?: string | null
+          connector_type?: string
+          created_at?: string
+          endpoint_url?: string | null
+          error_message?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          sync_frequency?: number | null
+          sync_status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_connectors_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agency_projects: {
+        Row: {
+          agency_id: string
+          beneficiaries: number | null
+          budget: number | null
+          completion_percentage: number | null
+          coordinates: unknown | null
+          created_at: string
+          description: string | null
+          end_date: string | null
+          external_id: string | null
+          id: string
+          last_updated_at: string | null
+          location: string | null
+          source_url: string | null
+          start_date: string | null
+          status: string
+          sync_status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          agency_id: string
+          beneficiaries?: number | null
+          budget?: number | null
+          completion_percentage?: number | null
+          coordinates?: unknown | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          external_id?: string | null
+          id?: string
+          last_updated_at?: string | null
+          location?: string | null
+          source_url?: string | null
+          start_date?: string | null
+          status: string
+          sync_status?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          agency_id?: string
+          beneficiaries?: number | null
+          budget?: number | null
+          completion_percentage?: number | null
+          coordinates?: unknown | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          external_id?: string | null
+          id?: string
+          last_updated_at?: string | null
+          location?: string | null
+          source_url?: string | null
+          start_date?: string | null
+          status?: string
+          sync_status?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_projects_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agency_resources: {
+        Row: {
+          agency_id: string
+          created_at: string
+          description: string | null
+          download_count: number | null
+          external_id: string | null
+          file_size: number | null
+          file_url: string | null
+          id: string
+          last_updated_at: string | null
+          mime_type: string | null
+          resource_type: string
+          source_url: string | null
+          sync_status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          agency_id: string
+          created_at?: string
+          description?: string | null
+          download_count?: number | null
+          external_id?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          last_updated_at?: string | null
+          mime_type?: string | null
+          resource_type: string
+          source_url?: string | null
+          sync_status?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          agency_id?: string
+          created_at?: string
+          description?: string | null
+          download_count?: number | null
+          external_id?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          last_updated_at?: string | null
+          mime_type?: string | null
+          resource_type?: string
+          source_url?: string | null
+          sync_status?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_resources_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       anomaly_alerts: {
         Row: {
           auto_blocked: boolean | null
@@ -686,6 +947,69 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      sync_logs: {
+        Row: {
+          agency_id: string
+          completed_at: string | null
+          connector_id: string | null
+          duration_ms: number | null
+          error_details: Json | null
+          id: string
+          records_created: number | null
+          records_failed: number | null
+          records_processed: number | null
+          records_updated: number | null
+          started_at: string
+          status: string
+          sync_type: string
+        }
+        Insert: {
+          agency_id: string
+          completed_at?: string | null
+          connector_id?: string | null
+          duration_ms?: number | null
+          error_details?: Json | null
+          id?: string
+          records_created?: number | null
+          records_failed?: number | null
+          records_processed?: number | null
+          records_updated?: number | null
+          started_at?: string
+          status: string
+          sync_type: string
+        }
+        Update: {
+          agency_id?: string
+          completed_at?: string | null
+          connector_id?: string | null
+          duration_ms?: number | null
+          error_details?: Json | null
+          id?: string
+          records_created?: number | null
+          records_failed?: number | null
+          records_processed?: number | null
+          records_updated?: number | null
+          started_at?: string
+          status?: string
+          sync_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sync_logs_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sync_logs_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "agency_connectors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_preferences: {
         Row: {

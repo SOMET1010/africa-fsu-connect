@@ -26,7 +26,8 @@ import {
   Shield,
   BarChart3,
   BookOpen,
-  ShieldCheck
+  ShieldCheck,
+  Building2
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -43,6 +44,7 @@ const menuSections = [
   {
     label: "Collaboration",
     items: [
+      { title: "Organisations", url: "/organizations", icon: Building2 },
       { title: "Projets FSU", url: "/projects", icon: FolderOpen },
       { title: "Ressources", url: "/docs", icon: BookOpen },
       { title: "Forum", url: "/forum", icon: MessageSquare },
