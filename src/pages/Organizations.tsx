@@ -29,10 +29,10 @@ import {
 const REGIONS = ["Europe", "Afrique", "Asie", "Amérique"];
 
 const SYNC_STATUS_COLORS = {
-  synced: "text-success",
-  pending: "text-warning", 
-  failed: "text-destructive",
-  partial: "text-warning"
+  synced: "text-green-600",
+  pending: "text-yellow-600", 
+  failed: "text-red-600",
+  partial: "text-yellow-600"
 };
 
 const SYNC_STATUS_ICONS = {
@@ -55,7 +55,7 @@ export default function Organizations() {
 
   const filteredAgencies = agencies.filter(agency => {
     const matchesSearch = agency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         agency.acronym.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         agency.acronym?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          agency.country.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRegion = selectedRegion === "all" || agency.region === selectedRegion;
     const matchesStatus = selectedStatus === "all" || agency.sync_status === selectedStatus;
@@ -218,7 +218,7 @@ export default function Organizations() {
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="flex items-center gap-1">
-                  {SYNC_STATUS_ICONS[agency.sync_status]}
+                  {SYNC_STATUS_ICONS[agency.sync_status as keyof typeof SYNC_STATUS_ICONS]}
                   {agency.sync_status}
                 </Badge>
                 <SyncButton 

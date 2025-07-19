@@ -1,9 +1,12 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import type { Database } from '@/integrations/supabase/types';
 
-type Agency = Database['public']['Tables']['agencies']['Row'];
+type Agency = Database['public']['Tables']['agencies']['Row'] & {
+  agency_connectors?: Database['public']['Tables']['agency_connectors']['Row'][];
+};
 type AgencyInsert = Database['public']['Tables']['agencies']['Insert'];
 type AgencyUpdate = Database['public']['Tables']['agencies']['Update'];
 
@@ -18,7 +21,10 @@ export const useAgencies = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('agencies')
-        .select('*')
+        .select(`
+          *,
+          agency_connectors (*)
+        `)
         .order('name');
 
       if (error) throw error;

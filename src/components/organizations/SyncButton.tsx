@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -69,20 +70,20 @@ export function SyncButton({ agency, onConfigClick, onHistoryClick }: SyncButton
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'synced': return 'text-success';
-      case 'pending': return 'text-warning';
-      case 'failed': return 'text-destructive';
-      case 'partial': return 'text-warning';
+      case 'synced': return 'text-green-600';
+      case 'pending': return 'text-yellow-600';
+      case 'failed': return 'text-red-600';
+      case 'partial': return 'text-yellow-600';
       default: return 'text-muted-foreground';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'synced': return <RefreshCw className="h-3 w-3 text-success" />;
-      case 'pending': return <RefreshCw className="h-3 w-3 text-warning animate-spin" />;
-      case 'failed': return <AlertTriangle className="h-3 w-3 text-destructive" />;
-      case 'partial': return <AlertTriangle className="h-3 w-3 text-warning" />;
+      case 'synced': return <RefreshCw className="h-3 w-3 text-green-600" />;
+      case 'pending': return <RefreshCw className="h-3 w-3 text-yellow-600 animate-spin" />;
+      case 'failed': return <AlertTriangle className="h-3 w-3 text-red-600" />;
+      case 'partial': return <AlertTriangle className="h-3 w-3 text-yellow-600" />;
       default: return <RefreshCw className="h-3 w-3 text-muted-foreground" />;
     }
   };
