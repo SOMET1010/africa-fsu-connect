@@ -1,15 +1,16 @@
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAgencies } from "@/hooks/useAgencies";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { SyncConfigDialog } from "@/components/organizations/SyncConfigDialog";
 import { SyncButton } from "@/components/organizations/SyncButton";
 import { SyncHistoryDialog } from "@/components/organizations/SyncHistoryDialog";
+import { OrganizationsOverview } from "@/components/organizations/OrganizationsOverview";
 import { FirecrawlService } from "@/services/firecrawlService";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -150,7 +151,7 @@ export default function Organizations() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Organisations Partenaires</h1>
           <p className="text-muted-foreground">
-            Découvrez nos agences partenaires et leurs initiatives
+            Tableau de bord interactif des agences et projets
           </p>
         </div>
         <Button 
@@ -167,123 +168,142 @@ export default function Organizations() {
         </Button>
       </div>
 
-      {/* Search and Filters */}
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
-          <Input
-            placeholder="Rechercher par nom, acronyme ou pays..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full"
+      <Tabs defaultValue="dashboard" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="dashboard">Tableau de bord</TabsTrigger>
+          <TabsTrigger value="list">Liste détaillée</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dashboard">
+          <OrganizationsOverview 
+            agencies={agencies}
+            onAgencyClick={(agency) => {
+              setSelectedAgency(agency);
+              setConfigDialogOpen(true);
+            }}
           />
-        </div>
-        <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-          <SelectTrigger className="w-full md:w-48">
-            <SelectValue placeholder="Toutes les régions" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Toutes les régions</SelectItem>
-            {REGIONS.map((region) => (
-              <SelectItem key={region} value={region}>{region}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-          <SelectTrigger className="w-full md:w-48">
-            <SelectValue placeholder="Tous les statuts" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tous les statuts</SelectItem>
-            <SelectItem value="synced">Synchronisé</SelectItem>
-            <SelectItem value="pending">En attente</SelectItem>
-            <SelectItem value="failed">Échec</SelectItem>
-            <SelectItem value="partial">Partiel</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+        </TabsContent>
 
-      {/* Results count */}
-      <div className="text-sm text-muted-foreground">
-        {filteredAgencies.length} organisation{filteredAgencies.length > 1 ? 's' : ''} trouvée{filteredAgencies.length > 1 ? 's' : ''}
-        {agencies.length !== filteredAgencies.length && ` sur ${agencies.length} au total`}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredAgencies.map((agency) => (
-          <div key={agency.id} className="border rounded-lg p-6 space-y-4 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Building2 className="h-5 w-5 text-muted-foreground" />
-                <span className="font-semibold">{agency.name}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="flex items-center gap-1">
-                  {SYNC_STATUS_ICONS[agency.sync_status as keyof typeof SYNC_STATUS_ICONS]}
-                  {agency.sync_status}
-                </Badge>
-                <SyncButton 
-                  agency={agency}
-                  onConfigClick={() => {
-                    setSelectedAgency(agency);
-                    setConfigDialogOpen(true);
-                  }}
-                  onHistoryClick={() => {
-                    setSelectedAgency(agency);
-                    setHistoryDialogOpen(true);
-                  }}
-                />
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <ExternalLink className="h-4 w-4" />
-                </Button>
-              </div>
+        <TabsContent value="list" className="space-y-6">
+          {/* Search and Filters */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <Input
+                placeholder="Rechercher par nom, acronyme ou pays..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full"
+              />
             </div>
-            <div className="flex items-center space-x-2">
-              <Globe className="h-4 w-4 text-muted-foreground" />
-              <a href={agency.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline">
-                {agency.website_url}
-              </a>
-            </div>
-            {agency.contact_email && (
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">{agency.contact_email}</span>
-              </div>
-            )}
-            {agency.phone && (
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">{agency.phone}</span>
-              </div>
-            )}
-            <div className="flex items-center space-x-2">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">
-                {[agency.address, agency.country].filter(Boolean).join(', ')}
-              </span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Badge variant="secondary" className="text-xs">
-                {agency.region}
-              </Badge>
-              {agency.acronym && (
-                <Badge variant="outline" className="text-xs">
-                  {agency.acronym}
-                </Badge>
-              )}
-            </div>
+            <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+              <SelectTrigger className="w-full md:w-48">
+                <SelectValue placeholder="Toutes les régions" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toutes les régions</SelectItem>
+                {REGIONS.map((region) => (
+                  <SelectItem key={region} value={region}>{region}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+              <SelectTrigger className="w-full md:w-48">
+                <SelectValue placeholder="Tous les statuts" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous les statuts</SelectItem>
+                <SelectItem value="synced">Synchronisé</SelectItem>
+                <SelectItem value="pending">En attente</SelectItem>
+                <SelectItem value="failed">Échec</SelectItem>
+                <SelectItem value="partial">Partiel</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        ))}
-      </div>
 
-      {filteredAgencies.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium mb-2">Aucune organisation trouvée</h3>
-          <p className="text-muted-foreground">
-            Essayez de modifier vos critères de recherche ou filtres
-          </p>
-        </div>
-      )}
+          {/* Results count */}
+          <div className="text-sm text-muted-foreground">
+            {filteredAgencies.length} organisation{filteredAgencies.length > 1 ? 's' : ''} trouvée{filteredAgencies.length > 1 ? 's' : ''}
+            {agencies.length !== filteredAgencies.length && ` sur ${agencies.length} au total`}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredAgencies.map((agency) => (
+              <div key={agency.id} className="border rounded-lg p-6 space-y-4 hover:shadow-lg transition-shadow">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5 text-muted-foreground" />
+                    <span className="font-semibold">{agency.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="flex items-center gap-1">
+                      {SYNC_STATUS_ICONS[agency.sync_status as keyof typeof SYNC_STATUS_ICONS]}
+                      {agency.sync_status}
+                    </Badge>
+                    <SyncButton 
+                      agency={agency}
+                      onConfigClick={() => {
+                        setSelectedAgency(agency);
+                        setConfigDialogOpen(true);
+                      }}
+                      onHistoryClick={() => {
+                        setSelectedAgency(agency);
+                        setHistoryDialogOpen(true);
+                      }}
+                    />
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <ExternalLink className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Globe className="h-4 w-4 text-muted-foreground" />
+                  <a href={agency.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline">
+                    {agency.website_url}
+                  </a>
+                </div>
+                {agency.contact_email && (
+                  <div className="flex items-center space-x-2">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">{agency.contact_email}</span>
+                  </div>
+                )}
+                {agency.phone && (
+                  <div className="flex items-center space-x-2">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">{agency.phone}</span>
+                  </div>
+                )}
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm">
+                    {[agency.address, agency.country].filter(Boolean).join(', ')}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Badge variant="secondary" className="text-xs">
+                    {agency.region}
+                  </Badge>
+                  {agency.acronym && (
+                    <Badge variant="outline" className="text-xs">
+                      {agency.acronym}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {filteredAgencies.length === 0 && !loading && (
+            <div className="text-center py-12">
+              <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium mb-2">Aucune organisation trouvée</h3>
+              <p className="text-muted-foreground">
+                Essayez de modifier vos critères de recherche ou filtres
+              </p>
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
 
       {selectedAgency && (
         <SyncConfigDialog
