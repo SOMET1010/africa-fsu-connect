@@ -13,7 +13,9 @@ import {
   CheckCircle,
   Clock,
   AlertTriangle,
-  Network
+  Network,
+  Target,
+  DollarSign
 } from "lucide-react";
 
 interface Agency {
@@ -25,11 +27,12 @@ interface Agency {
   website_url?: string;
   contact_email?: string;
   last_sync_at?: string;
+  metadata?: any;
 }
 
 interface OrganizationsOverviewProps {
   agencies: Agency[];
-  onAgencyClick?: (agency: Agency) => void;
+  onAgencyClick?: (Agency: Agency) => void;
 }
 
 const SYNC_STATUS_ICONS = {
@@ -48,12 +51,28 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
         acc[agency.region] = {
           count: 0,
           synced: 0,
-          countries: new Set()
+          countries: new Set(),
+          governanceTypes: new Set()
         };
       }
       acc[agency.region].count++;
       acc[agency.region].countries.add(agency.country);
       if (agency.sync_status === 'synced') acc[agency.region].synced++;
+      
+      // Ajouter les types de gouvernance
+      if (agency.metadata && agency.metadata.governance_type) {
+        acc[agency.region].governanceTypes.add(agency.metadata.governance_type);
+      }
+      
+      return acc;
+    }, {} as any);
+
+    // Compter les types de gouvernance
+    const governanceStats = agencies.reduce((acc, agency) => {
+      if (agency.metadata && agency.metadata.governance_type) {
+        const type = agency.metadata.governance_type;
+        acc[type] = (acc[type] || 0) + 1;
+      }
       return acc;
     }, {} as any);
 
@@ -62,10 +81,14 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
       synced: agencies.filter(a => a.sync_status === 'synced').length,
       pending: agencies.filter(a => a.sync_status === 'pending').length,
       failed: agencies.filter(a => a.sync_status === 'failed').length,
+      autonomous: governanceStats['autonomous_agency'] || 0,
+      regulatorManaged: (governanceStats['unit_within_regulator'] || 0) + (governanceStats['regulator_managed_fund'] || 0),
+      ministryManaged: governanceStats['ministry_unit'] || 0,
       regions: Object.entries(regionStats).map(([region, stats]: [string, any]) => ({
         region,
         ...stats,
-        countries: stats.countries.size
+        countries: stats.countries.size,
+        governanceTypes: stats.governanceTypes.size
       }))
     };
   }, [agencies]);
@@ -81,10 +104,10 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
         <Card className="p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-lg">
-              <Building2 className="h-4 w-4 text-primary" />
+              <Zap className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Institutions Partenaires</p>
+              <p className="text-sm text-muted-foreground">SUTEL Africaines</p>
               <p className="text-2xl font-bold">{stats.total}</p>
             </div>
           </div>
@@ -93,13 +116,13 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
         <Card className="p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-              <Zap className="h-4 w-4 text-green-600" />
+              <Target className="h-4 w-4 text-green-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Données synchronisées</p>
-              <p className="text-2xl font-bold">{stats.synced}</p>
+              <p className="text-sm text-muted-foreground">Agences autonomes</p>
+              <p className="text-2xl font-bold">{stats.autonomous}</p>
               <p className="text-xs text-green-600">
-                {stats.total > 0 ? Math.round((stats.synced / stats.total) * 100) : 0}% du réseau
+                Gestion indépendante
               </p>
             </div>
           </div>
@@ -108,11 +131,14 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
         <Card className="p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-              <Map className="h-4 w-4 text-blue-600" />
+              <Building2 className="h-4 w-4 text-blue-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Régions couvertes</p>
-              <p className="text-2xl font-bold">{stats.regions.length}</p>
+              <p className="text-sm text-muted-foreground">Unités régulateur</p>
+              <p className="text-2xl font-bold">{stats.regulatorManaged}</p>
+              <p className="text-xs text-blue-600">
+                Gestion intégrée
+              </p>
             </div>
           </div>
         </Card>
@@ -123,7 +149,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               <Globe className="h-4 w-4 text-purple-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Pays représentés</p>
+              <p className="text-sm text-muted-foreground">Pays couverts</p>
               <p className="text-2xl font-bold">
                 {[...new Set(agencies.map(a => a.country))].length}
               </p>
@@ -135,7 +161,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
-          <TabsTrigger value="regions">Couverture régionale</TabsTrigger>
+          <TabsTrigger value="governance">Types de gouvernance</TabsTrigger>
           <TabsTrigger value="network">Réseau</TabsTrigger>
         </TabsList>
 
@@ -145,7 +171,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Map className="h-5 w-5" />
-                Répartition institutionnelle
+                Répartition régionale SUTEL
               </h3>
               <div className="space-y-4">
                 {stats.regions.map((region) => (
@@ -157,7 +183,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">{region.region}</span>
                       <Badge variant="outline">
-                        {region.count} institutions
+                        {region.count} SUTEL{region.count > 1 ? 's' : ''}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -208,46 +234,73 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
           </div>
         </TabsContent>
 
-        <TabsContent value="regions" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {stats.regions.map((region) => (
-              <Card 
-                key={region.region} 
-                className={`p-4 cursor-pointer transition-all ${
-                  selectedRegion === region.region 
-                    ? 'ring-2 ring-primary' 
-                    : 'hover:shadow-md'
-                }`}
-                onClick={() => setSelectedRegion(region.region === selectedRegion ? null : region.region)}
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">{region.region}</h3>
-                    <Building2 className="h-4 w-4 text-primary" />
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div>
-                      <p className="text-muted-foreground">Institutions</p>
-                      <p className="font-semibold">{region.count}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">Pays</p>
-                      <p className="font-semibold">{region.countries}</p>
-                    </div>
-                  </div>
-
-                  <Progress 
-                    value={region.count > 0 ? (region.synced / region.count) * 100 : 0} 
-                    className="h-2"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    {region.synced}/{region.count} avec données collectées
-                  </p>
+        <TabsContent value="governance" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                  <Target className="h-4 w-4 text-green-600" />
                 </div>
-              </Card>
-            ))}
+                <h3 className="font-semibold">Agences Autonomes</h3>
+              </div>
+              <p className="text-2xl font-bold mb-2">{stats.autonomous}</p>
+              <p className="text-sm text-muted-foreground">
+                Structures indépendantes avec autonomie de gestion et budget propre
+              </p>
+            </Card>
+
+            <Card className="p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                  <Building2 className="h-4 w-4 text-blue-600" />
+                </div>
+                <h3 className="font-semibold">Unités Régulateur</h3>
+              </div>
+              <p className="text-2xl font-bold mb-2">{stats.regulatorManaged}</p>
+              <p className="text-sm text-muted-foreground">
+                Départements spécialisés intégrés aux autorités de régulation
+              </p>
+            </Card>
+
+            <Card className="p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+                  <DollarSign className="h-4 w-4 text-purple-600" />
+                </div>
+                <h3 className="font-semibold">Fonds Ministériels</h3>
+              </div>
+              <p className="text-2xl font-bold mb-2">{stats.ministryManaged}</p>
+              <p className="text-sm text-muted-foreground">
+                Fonds gérés directement par les ministères de tutelle
+              </p>
+            </Card>
           </div>
+
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold mb-4">Mission des SUTEL</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-muted/30 rounded-lg">
+                <Target className="h-8 w-8 mx-auto mb-2 text-primary" />
+                <h4 className="font-medium">Inclusion Numérique</h4>
+                <p className="text-xs text-muted-foreground mt-1">Réduire la fracture numérique</p>
+              </div>
+              <div className="text-center p-4 bg-muted/30 rounded-lg">
+                <Map className="h-8 w-8 mx-auto mb-2 text-primary" />
+                <h4 className="font-medium">Zones Rurales</h4>
+                <p className="text-xs text-muted-foreground mt-1">Connecter les zones isolées</p>
+              </div>
+              <div className="text-center p-4 bg-muted/30 rounded-lg">
+                <DollarSign className="h-8 w-8 mx-auto mb-2 text-primary" />
+                <h4 className="font-medium">Financement</h4>
+                <p className="text-xs text-muted-foreground mt-1">Fonds dédiés au service universel</p>
+              </div>
+              <div className="text-center p-4 bg-muted/30 rounded-lg">
+                <Network className="h-8 w-8 mx-auto mb-2 text-primary" />
+                <h4 className="font-medium">Infrastructure</h4>
+                <p className="text-xs text-muted-foreground mt-1">Déploiement réseau national</p>
+              </div>
+            </div>
+          </Card>
         </TabsContent>
 
         <TabsContent value="network" className="space-y-4">
@@ -258,7 +311,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
       {selectedRegion && (
         <Card className="p-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Institutions - {selectedRegion}</h3>
+            <h3 className="font-semibold">SUTEL - {selectedRegion}</h3>
             <button 
               onClick={() => setSelectedRegion(null)}
               className="text-sm text-muted-foreground hover:text-foreground"
@@ -280,9 +333,16 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mb-1">{agency.country}</p>
-                <Badge variant="outline" className="text-xs">
-                  Institution officielle
-                </Badge>
+                <div className="flex gap-1">
+                  <Badge variant="default" className="text-xs">
+                    SUTEL
+                  </Badge>
+                  {agency.metadata?.governance_type === 'autonomous_agency' && (
+                    <Badge variant="outline" className="text-xs">
+                      Autonome
+                    </Badge>
+                  )}
+                </div>
               </div>
             ))}
           </div>

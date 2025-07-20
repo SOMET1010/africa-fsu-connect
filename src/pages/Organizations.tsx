@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -21,6 +22,7 @@ import {
   RefreshCw,
   Info,
   Network,
+  Zap,
   Globe
 } from "lucide-react";
 
@@ -38,7 +40,15 @@ export default function Organizations() {
   const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
   const [batchSyncing, setBatchSyncing] = useState(false);
 
-  const filteredAgencies = agencies.filter(agency => {
+  // Filtrer spécifiquement les SUTEL (agences avec metadata.sutel_type)
+  const sutelAgencies = agencies.filter(agency => 
+    agency.metadata && 
+    typeof agency.metadata === 'object' && 
+    'sutel_type' in agency.metadata && 
+    agency.metadata.sutel_type
+  );
+
+  const filteredAgencies = sutelAgencies.filter(agency => {
     const matchesSearch = agency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          agency.acronym?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          agency.country.toLowerCase().includes(searchTerm.toLowerCase());
@@ -134,11 +144,11 @@ export default function Organizations() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <Network className="h-8 w-8 text-primary" />
-            Réseau Institutionnel des Partenaires
+            <Zap className="h-8 w-8 text-primary" />
+            Réseau SUTEL Africain
           </h1>
           <p className="text-muted-foreground mt-2">
-            Organisations officielles de régulation des télécommunications et partenaires institutionnels
+            Agences spécialisées dans le Service Universel des Télécommunications en Afrique
           </p>
         </div>
         <Button 
@@ -163,17 +173,18 @@ export default function Organizations() {
           </div>
           <div className="flex-1">
             <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
-              Réseau de Partenaires Institutionnels Authentiques
+              Réseau SUTEL : Agences du Service Universel des Télécommunications
             </h3>
             <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
-              Ce réseau comprend {agencies.length} organisations officielles de régulation des télécommunications 
-              à travers {[...new Set(agencies.map(a => a.country))].length} pays. Chaque institution est 
-              reconnue officiellement avec un mandat légal dans son territoire de compétence.
+              Ce réseau regroupe {sutelAgencies.length} agences spécialisées dans le déploiement du service universel 
+              des télécommunications à travers {[...new Set(sutelAgencies.map(a => a.country))].length} pays africains. 
+              Chaque SUTEL a pour mission de réduire la fracture numérique et d'étendre l'accès aux services de télécommunications 
+              dans les zones mal desservies.
             </p>
             <div className="flex items-center gap-4 text-xs text-blue-600 dark:text-blue-400">
-              <span>• Institutions gouvernementales officielles</span>
-              <span>• Autorités de régulation reconnues</span>
-              <span>• Partenaires institutionnels confirmés</span>
+              <span>• Fonds de service universel</span>
+              <span>• Agences autonomes spécialisées</span>
+              <span>• Inclusion numérique territoriale</span>
             </div>
           </div>
         </div>
@@ -181,13 +192,13 @@ export default function Organizations() {
 
       <Tabs defaultValue="dashboard" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="dashboard">Vue d'ensemble institutionnelle</TabsTrigger>
-          <TabsTrigger value="directory">Annuaire des institutions</TabsTrigger>
+          <TabsTrigger value="dashboard">Vue d'ensemble SUTEL</TabsTrigger>
+          <TabsTrigger value="directory">Annuaire des SUTEL</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
           <OrganizationsOverview 
-            agencies={agencies}
+            agencies={sutelAgencies}
             onAgencyClick={(agency) => setProfileAgency(agency)}
           />
         </TabsContent>
@@ -197,7 +208,7 @@ export default function Organizations() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <Input
-                placeholder="Rechercher une institution par nom, acronyme ou pays..."
+                placeholder="Rechercher une SUTEL par nom, acronyme ou pays..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full"
@@ -231,11 +242,11 @@ export default function Organizations() {
           {/* Results count */}
           <div className="flex items-center justify-between">
             <div className="text-sm text-muted-foreground">
-              {filteredAgencies.length} institution{filteredAgencies.length > 1 ? 's' : ''} 
-              {agencies.length !== filteredAgencies.length && ` sur ${agencies.length} au total`}
+              {filteredAgencies.length} SUTEL{filteredAgencies.length > 1 ? 's' : ''} 
+              {sutelAgencies.length !== filteredAgencies.length && ` sur ${sutelAgencies.length} au total`}
             </div>
             <div className="text-xs text-muted-foreground">
-              Institutions partenaires officielles et reconnues
+              Agences spécialisées du service universel des télécommunications
             </div>
           </div>
 
@@ -252,7 +263,7 @@ export default function Organizations() {
           {filteredAgencies.length === 0 && !loading && (
             <div className="text-center py-12">
               <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium mb-2">Aucune institution trouvée</h3>
+              <h3 className="text-lg font-medium mb-2">Aucune SUTEL trouvée</h3>
               <p className="text-muted-foreground">
                 Essayez de modifier vos critères de recherche ou filtres
               </p>
