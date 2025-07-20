@@ -98,12 +98,27 @@ export const AgencyCard = ({ agency, onViewProfile }: AgencyCardProps) => {
             {agency.region}
           </Badge>
           
+          {/* SUTEL Type Badge */}
+          {agency.metadata && typeof agency.metadata === 'object' && 'sutel_type' in agency.metadata && agency.metadata.sutel_type && (
+            <Badge variant="default" className="text-xs bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
+              SUTEL
+            </Badge>
+          )}
+          
           {/* Governance Type Badge */}
           {agency.metadata && typeof agency.metadata === 'object' && 'governance_type' in agency.metadata && agency.metadata.governance_type && (
             <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
               {agency.metadata.governance_type === 'autonomous_agency' ? 'Agence autonome' :
-               agency.metadata.governance_type === 'unit_within_regulator' ? 'Unité ARN' :
+               agency.metadata.governance_type === 'unit_within_regulator' ? 'Unité régulateur' :
+               agency.metadata.governance_type === 'ministry_unit' ? 'Unité ministérielle' :
                String(agency.metadata.governance_type)}
+            </Badge>
+          )}
+          
+          {/* Parent Authority Badge */}
+          {agency.metadata && typeof agency.metadata === 'object' && 'parent_authority' in agency.metadata && agency.metadata.parent_authority && (
+            <Badge variant="outline" className="text-xs bg-gray-50 text-gray-700 border-gray-200">
+              via {String(agency.metadata.parent_authority)}
             </Badge>
           )}
           
