@@ -1,21 +1,22 @@
+
 import { useState } from "react";
-import { Search, Upload, FileText, Download, Filter, Eye, Calendar, User, Star } from "lucide-react";
+import { Upload, FileText, Plus, Search } from "lucide-react";
 import { useDocuments } from "@/hooks/useDocuments";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SearchBar from "@/components/shared/SearchBar";
 import FileUpload from "@/components/shared/FileUpload";
+import ResourceStats from "@/components/resources/ResourceStats";
+import DocumentCard from "@/components/resources/DocumentCard";
+import SampleDataButton from "@/components/resources/SampleDataButton";
 import { useToast } from "@/hooks/use-toast";
 
 const Resources = () => {
-  const { documents, loading, uploading, uploadDocument, downloadDocument, searchDocuments } = useDocuments();
+  const { documents, loading, uploading, uploadDocument, downloadDocument, searchDocuments, refetch } = useDocuments();
   const { toast } = useToast();
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [previewDoc, setPreviewDoc] = useState<any>(null);
@@ -27,8 +28,6 @@ const Resources = () => {
     country: '',
     tags: [] as string[]
   });
-
-  // Documents are now fetched from useDocuments hook
 
   const searchFilters = [
     {
@@ -50,7 +49,10 @@ const Resources = () => {
         { value: "sn", label: "Sénégal" },
         { value: "za", label: "Afrique du Sud" },
         { value: "ng", label: "Nigéria" },
-        { value: "gh", label: "Ghana" }
+        { value: "gh", label: "Ghana" },
+        { value: "ke", label: "Kenya" },
+        { value: "tz", label: "Tanzanie" },
+        { value: "ug", label: "Ouganda" }
       ]
     }
   ];
@@ -60,7 +62,7 @@ const Resources = () => {
   };
 
   const handleFileUpload = async (files: File[]) => {
-    if (!uploadMetadata.title) {
+    if (!uploadMetadata.title.trim()) {
       toast({
         title: "Erreur",
         description: "Veuillez renseigner le titre du document",
@@ -95,53 +97,60 @@ const Resources = () => {
     downloadDocument(doc);
   };
 
-  const formatFileSize = (bytes: number) => {
-    if (!bytes) return 'N/A';
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header Section */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-4">
-            Bibliothèque de Ressources FSU
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl">
-            Accédez à l'ensemble des documents, rapports, guides et ressources 
-            partagés par les agences FSU africaines.
-          </p>
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h1 className="text-4xl font-bold text-primary mb-4">
+                Bibliothèque de Ressources FSU
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-3xl">
+                Accédez à l'ensemble des documents, rapports, guides et ressources 
+                partagés par les agences FSU africaines. Une collection collaborative 
+                de connaissances pour soutenir le développement en Afrique.
+              </p>
+            </div>
+            {documents.length === 0 && !loading && (
+              <SampleDataButton onDataAdded={refetch} />
+            )}
+          </div>
         </div>
 
-        {/* Enhanced Search Bar */}
-        <div className="mb-8">
-          <SearchBar
-            placeholder="Rechercher dans les documents..."
-            onSearch={handleSearch}
-            filters={searchFilters}
-            showFilters={true}
-            className="mb-4"
-          />
-          <div className="flex justify-end">
+        {/* Statistics */}
+        <ResourceStats documents={documents} loading={loading} />
+
+        {/* Search and Upload Section */}
+        <div className="mb-8 space-y-4">
+          <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
+            <div className="flex-1">
+              <SearchBar
+                placeholder="Rechercher des documents par titre ou description..."
+                onSearch={handleSearch}
+                filters={searchFilters}
+                showFilters={true}
+              />
+            </div>
             <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-primary/90">
-                  <Upload className="h-4 w-4 mr-2" />
+                <Button className="bg-primary hover:bg-primary/90 flex items-center gap-2">
+                  <Plus className="h-4 w-4" />
                   Ajouter un Document
                 </Button>
               </DialogTrigger>
-                <DialogContent className="max-w-2xl">
+              <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                  <DialogTitle>Ajouter un Nouveau Document</DialogTitle>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Upload className="h-5 w-5" />
+                    Ajouter un Nouveau Document
+                  </DialogTitle>
                   <DialogDescription>
-                    Uploadez un nouveau document dans la bibliothèque FSU
+                    Partagez vos ressources avec la communauté FSU africaine
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
-                  {/* Metadata form */}
                   <div className="grid gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="title">Titre du document *</Label>
@@ -149,7 +158,7 @@ const Resources = () => {
                         id="title"
                         value={uploadMetadata.title}
                         onChange={(e) => setUploadMetadata(prev => ({ ...prev, title: e.target.value }))}
-                        placeholder="Titre du document"
+                        placeholder="Ex: Guide de bonnes pratiques pour..."
                       />
                     </div>
                     <div className="space-y-2">
@@ -158,7 +167,8 @@ const Resources = () => {
                         id="description"
                         value={uploadMetadata.description}
                         onChange={(e) => setUploadMetadata(prev => ({ ...prev, description: e.target.value }))}
-                        placeholder="Description du document"
+                        placeholder="Décrivez le contenu et l'utilité de ce document..."
+                        rows={3}
                       />
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
@@ -181,22 +191,24 @@ const Resources = () => {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="country">Pays</Label>
+                        <Label htmlFor="country">Pays d'origine</Label>
                         <Input
                           id="country"
                           value={uploadMetadata.country}
                           onChange={(e) => setUploadMetadata(prev => ({ ...prev, country: e.target.value }))}
-                          placeholder="Pays d'origine"
+                          placeholder="Ex: Côte d'Ivoire"
                         />
                       </div>
                     </div>
                   </div>
-                  <FileUpload
-                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
-                    maxSize={50}
-                    multiple={false}
-                    onFilesSelected={handleFileUpload}
-                  />
+                  <div className="border-t pt-4">
+                    <FileUpload
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                      maxSize={50}
+                      multiple={false}
+                      onFilesSelected={handleFileUpload}
+                    />
+                  </div>
                 </div>
               </DialogContent>
             </Dialog>
@@ -204,95 +216,36 @@ const Resources = () => {
         </div>
 
         {/* Documents Grid */}
-        <div className="grid gap-6">
+        <div className="space-y-6">
           {loading ? (
-            Array.from({ length: 3 }).map((_, index) => (
-              <Card key={index} className="animate-pulse">
-                <CardHeader>
-                  <div className="h-6 bg-muted rounded w-3/4 mb-2"></div>
-                  <div className="h-4 bg-muted rounded w-full"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {Array.from({ length: 4 }).map((_, i) => (
-                        <div key={i} className="h-4 bg-muted rounded"></div>
-                      ))}
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="h-4 bg-muted rounded w-1/3"></div>
-                      <div className="flex gap-2">
-                        <div className="h-8 bg-muted rounded w-20"></div>
-                        <div className="h-8 bg-muted rounded w-24"></div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
+            <div className="grid gap-6">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div key={index} className="animate-pulse bg-muted rounded-lg h-64"></div>
+              ))}
+            </div>
           ) : documents.length === 0 ? (
-            <Card className="text-center py-12">
-              <CardContent>
-                <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">Aucun document trouvé</h3>
-                <p className="text-muted-foreground">
-                  Aucun document ne correspond à vos critères de recherche.
-                </p>
-              </CardContent>
-            </Card>
+            <div className="text-center py-16">
+              <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-medium mb-2">Aucun document trouvé</h3>
+              <p className="text-muted-foreground mb-6">
+                Aucun document ne correspond à vos critères de recherche.
+              </p>
+              <Button onClick={() => searchDocuments('', {})} variant="outline">
+                <Search className="h-4 w-4 mr-2" />
+                Voir tous les documents
+              </Button>
+            </div>
           ) : (
-            documents.map((doc) => (
-              <Card key={doc.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <CardTitle className="text-xl mb-2">{doc.title}</CardTitle>
-                      <CardDescription className="text-base">
-                        {doc.description}
-                      </CardDescription>
-                    </div>
-                    <div className="flex gap-2 ml-4">
-                      <Badge variant="secondary" className="capitalize">{doc.document_type}</Badge>
-                      {doc.country && <Badge variant="outline">{doc.country}</Badge>}
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
-                      <div>
-                        <span className="font-medium">Pays:</span> {doc.country || 'N/A'}
-                      </div>
-                      <div>
-                        <span className="font-medium">Taille:</span> {formatFileSize(doc.file_size || 0)}
-                      </div>
-                      <div>
-                        <span className="font-medium">Téléchargements:</span> {doc.download_count || 0}
-                      </div>
-                      <div>
-                        <span className="font-medium">Type:</span> {doc.mime_type?.split('/')[1]?.toUpperCase() || 'N/A'}
-                      </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm text-muted-foreground">
-                        <span className="font-medium">Publié:</span> {new Date(doc.created_at).toLocaleDateString('fr-FR')}
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => handlePreview(doc)}>
-                          <Eye className="h-4 w-4 mr-2" />
-                          Aperçu
-                        </Button>
-                        <Button size="sm" onClick={() => handleDownload(doc)}>
-                          <Download className="h-4 w-4 mr-2" />
-                          Télécharger
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
+            <div className="grid gap-6">
+              {documents.map((doc) => (
+                <DocumentCard
+                  key={doc.id}
+                  document={doc}
+                  onPreview={handlePreview}
+                  onDownload={handleDownload}
+                />
+              ))}
+            </div>
           )}
         </div>
 
@@ -300,20 +253,29 @@ const Resources = () => {
         <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
           <DialogContent className="max-w-4xl max-h-[80vh]">
             <DialogHeader>
-              <DialogTitle>{previewDoc?.title}</DialogTitle>
+              <DialogTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                {previewDoc?.title}
+              </DialogTitle>
               <DialogDescription>
                 {previewDoc?.description}
               </DialogDescription>
             </DialogHeader>
-            <div className="bg-muted/50 rounded-lg p-8 text-center">
-              <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground mb-4">
-                Aperçu du document en cours de développement
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Document: {previewDoc?.title}
-              </p>
-              <div className="flex justify-center gap-2 mt-4">
+            <div className="bg-muted/50 rounded-lg p-8 text-center space-y-4">
+              <FileText className="h-16 w-16 text-muted-foreground mx-auto" />
+              <div>
+                <p className="text-lg font-medium mb-2">Aperçu du document</p>
+                <p className="text-muted-foreground mb-4">
+                  L'aperçu intégré sera bientôt disponible. En attendant, vous pouvez télécharger le document.
+                </p>
+                <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground max-w-md mx-auto">
+                  <div>Type: {previewDoc?.document_type}</div>
+                  <div>Pays: {previewDoc?.country || 'N/A'}</div>
+                  <div>Taille: {previewDoc?.file_size ? `${Math.round(previewDoc.file_size / 1024)} KB` : 'N/A'}</div>
+                  <div>Téléchargements: {previewDoc?.download_count || 0}</div>
+                </div>
+              </div>
+              <div className="flex justify-center gap-3 pt-4">
                 <Button onClick={() => handleDownload(previewDoc)}>
                   <Download className="h-4 w-4 mr-2" />
                   Télécharger

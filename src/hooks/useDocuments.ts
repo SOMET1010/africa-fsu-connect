@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -147,11 +148,27 @@ export const useDocuments = () => {
     try {
       setLoading(true);
       
-      const { data, error } = await supabase
+      let queryBuilder = supabase
         .from('documents')
         .select('*')
-        .eq('is_public', true)
-        .order('created_at', { ascending: false });
+        .eq('is_public', true);
+
+      // Apply text search on title and description
+      if (query.trim()) {
+        queryBuilder = queryBuilder.or(`title.ilike.%${query}%,description.ilike.%${query}%`);
+      }
+
+      // Apply document type filter
+      if (filters.document_type) {
+        queryBuilder = queryBuilder.eq('document_type', filters.document_type);
+      }
+
+      // Apply country filter
+      if (filters.country) {
+        queryBuilder = queryBuilder.eq('country', filters.country);
+      }
+
+      const { data, error } = await queryBuilder.order('created_at', { ascending: false });
 
       if (error) throw error;
       setDocuments(data || []);
