@@ -2,13 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import type { Database } from '@/integrations/supabase/types';
-
-type Project = Database['public']['Tables']['agency_projects']['Row'] & {
-  agencies?: Database['public']['Tables']['agencies']['Row'];
-};
-type ProjectInsert = Database['public']['Tables']['agency_projects']['Insert'];
-type ProjectUpdate = Database['public']['Tables']['agency_projects']['Update'];
+import type { Project, ProjectInsert, ProjectUpdate } from '@/types/projects';
 
 export const useProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);

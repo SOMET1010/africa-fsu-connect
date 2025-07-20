@@ -7,12 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAgencies } from "@/hooks/useAgencies";
-import type { Database } from '@/integrations/supabase/types';
-
-type Project = Database['public']['Tables']['agency_projects']['Row'] & {
-  agencies?: Database['public']['Tables']['agencies']['Row'];
-};
-type ProjectInsert = Database['public']['Tables']['agency_projects']['Insert'];
+import type { Project, ProjectInsert } from "@/types/projects";
 
 interface ProjectDialogProps {
   open: boolean;

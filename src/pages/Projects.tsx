@@ -22,6 +22,7 @@ import { ProjectCard } from "@/components/projects/ProjectCard";
 import { ProjectDialog } from "@/components/projects/ProjectDialog";
 import { ProjectStats } from "@/components/projects/ProjectStats";
 import { useToast } from "@/hooks/use-toast";
+import type { Project } from "@/types/projects";
 
 const Projects = () => {
   const { projects, loading, createProject, updateProject, deleteProject } = useProjects();

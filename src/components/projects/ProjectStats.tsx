@@ -9,11 +9,7 @@ import {
   TrendingUp,
   Activity
 } from "lucide-react";
-import type { Database } from '@/integrations/supabase/types';
-
-type Project = Database['public']['Tables']['agency_projects']['Row'] & {
-  agencies?: Database['public']['Tables']['agencies']['Row'];
-};
+import type { Project } from "@/types/projects";
 
 interface ProjectStatsProps {
   projects: Project[];
