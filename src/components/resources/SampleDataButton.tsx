@@ -15,7 +15,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
     {
       title: "Guide de Développement Rural en Afrique de l'Ouest",
       description: "Un guide complet sur les meilleures pratiques pour le développement rural dans la région ouest-africaine, incluant des stratégies d'agriculture durable et de gestion des ressources naturelles.",
-      document_type: "guide",
+      document_type: "guide" as const,
       country: "Sénégal",
       mime_type: "application/pdf",
       file_name: "guide_developpement_rural_2024.pdf",
@@ -25,7 +25,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
     {
       title: "Rapport d'Impact - Projets FSU 2023",
       description: "Analyse détaillée de l'impact des projets FSU menés en 2023 à travers différents pays africains, avec des données sur l'efficacité et les résultats obtenus.",
-      document_type: "rapport",
+      document_type: "rapport" as const,
       country: "Côte d'Ivoire",
       mime_type: "application/pdf",
       file_name: "rapport_impact_fsu_2023.pdf",
@@ -35,7 +35,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
     {
       title: "Présentation - Innovation Technologique en Agriculture",
       description: "Présentation sur les nouvelles technologies appliquées à l'agriculture africaine, incluant l'IoT, les drones et les systèmes d'irrigation intelligents.",
-      document_type: "presentation",
+      document_type: "presentation" as const,
       country: "Kenya",
       mime_type: "application/vnd.ms-powerpoint",
       file_name: "innovation_agri_tech.pptx",
@@ -45,7 +45,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
     {
       title: "Formulaire de Candidature - Programme de Formation",
       description: "Formulaire standardisé pour les candidatures aux programmes de formation FSU destinés aux professionnels du développement en Afrique.",
-      document_type: "formulaire",
+      document_type: "formulaire" as const,
       country: "Ghana",
       mime_type: "application/vnd.ms-excel",
       file_name: "formulaire_candidature_formation.xlsx",
@@ -55,7 +55,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
     {
       title: "Étude de Cas - Microfinance et Inclusion Financière",
       description: "Analyse approfondie des programmes de microfinance mis en place dans plusieurs pays africains et leur impact sur l'inclusion financière des populations rurales.",
-      document_type: "rapport",
+      document_type: "rapport" as const,
       country: "Tanzanie",
       mime_type: "application/pdf",
       file_name: "etude_microfinance_2024.pdf",
@@ -65,7 +65,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
     {
       title: "Manuel - Gestion des Ressources Hydriques",
       description: "Manuel pratique pour la gestion durable des ressources en eau dans les communautés rurales africaines, avec des exemples concrets et des outils pratiques.",
-      document_type: "guide",
+      document_type: "guide" as const,
       country: "Ouganda",
       mime_type: "application/pdf",
       file_name: "manuel_gestion_eau.pdf",

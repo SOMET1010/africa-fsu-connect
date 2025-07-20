@@ -160,7 +160,7 @@ export const useDocuments = () => {
 
       // Apply document type filter
       if (filters.document_type) {
-        queryBuilder = queryBuilder.eq('document_type', filters.document_type);
+        queryBuilder = queryBuilder.eq('document_type', filters.document_type as any);
       }
 
       // Apply country filter

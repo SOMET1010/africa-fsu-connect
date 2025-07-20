@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Upload, FileText, Plus, Search } from "lucide-react";
+import { Upload, FileText, Plus, Search, Download } from "lucide-react";
 import { useDocuments } from "@/hooks/useDocuments";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
