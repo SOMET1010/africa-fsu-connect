@@ -12,23 +12,16 @@ import {
   CheckCircle,
   Clock,
   AlertTriangle,
-  Info
+  Info,
+  Calendar,
+  DollarSign,
+  Target,
+  Users
 } from "lucide-react";
 
-interface Agency {
-  id: string;
-  name: string;
-  acronym?: string;
-  country: string;
-  region: string;
-  website_url?: string;
-  contact_email?: string;
-  phone?: string;
-  address?: string;
-  description?: string;
-  sync_status: string;
-  logo_url?: string;
-}
+import type { Tables } from "@/integrations/supabase/types";
+
+type Agency = Tables<"agencies">;
 
 interface AgencyCardProps {
   agency: Agency;
@@ -100,10 +93,37 @@ export const AgencyCard = ({ agency, onViewProfile }: AgencyCardProps) => {
           </div>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Badge variant="secondary" className="text-xs">
             {agency.region}
           </Badge>
+          
+          {/* Governance Type Badge */}
+          {agency.metadata && typeof agency.metadata === 'object' && 'governance_type' in agency.metadata && agency.metadata.governance_type && (
+            <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+              {agency.metadata.governance_type === 'autonomous_agency' ? 'Agence autonome' :
+               agency.metadata.governance_type === 'unit_within_regulator' ? 'Unité ARN' :
+               String(agency.metadata.governance_type)}
+            </Badge>
+          )}
+          
+          {/* Organization Type Badge */}
+          {agency.metadata && typeof agency.metadata === 'object' && 'type' in agency.metadata && agency.metadata.type && (
+            <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">
+              {agency.metadata.type === 'continental_organization' ? 'Continental' :
+               agency.metadata.type === 'regional_organization' ? 'Régional' :
+               String(agency.metadata.type)}
+            </Badge>
+          )}
+          
+          {/* Funding Rate Badge */}
+          {agency.metadata && typeof agency.metadata === 'object' && 'funding_rate' in agency.metadata && agency.metadata.funding_rate && (
+            <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200 flex items-center gap-1">
+              <DollarSign className="h-3 w-3" />
+              {String(agency.metadata.funding_rate)}
+            </Badge>
+          )}
+          
           <Badge 
             variant={agency.sync_status === 'synced' ? 'default' : 'outline'}
             className="text-xs"
@@ -119,6 +139,31 @@ export const AgencyCard = ({ agency, onViewProfile }: AgencyCardProps) => {
         <p className="text-sm text-muted-foreground line-clamp-2">
           {agency.description}
         </p>
+      )}
+
+      {/* Enhanced metadata display */}
+      {(agency.established_date || 
+        (agency.metadata && typeof agency.metadata === 'object' && ('focus' in agency.metadata || 'scope' in agency.metadata))) && (
+        <div className="space-y-2 p-3 bg-muted/30 rounded-lg">
+          {agency.established_date && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Calendar className="h-3 w-3" />
+              Créée en {new Date(agency.established_date).getFullYear()}
+            </div>
+          )}
+          {agency.metadata && typeof agency.metadata === 'object' && 'focus' in agency.metadata && agency.metadata.focus && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Target className="h-3 w-3" />
+              Focus: {String(agency.metadata.focus).replace('_', ' ')}
+            </div>
+          )}
+          {agency.metadata && typeof agency.metadata === 'object' && 'scope' in agency.metadata && agency.metadata.scope && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Users className="h-3 w-3" />
+              Portée: {String(agency.metadata.scope).replace('_', ' ')}
+            </div>
+          )}
+        </div>
       )}
 
       <div className="pt-2 border-t flex items-center justify-between">
