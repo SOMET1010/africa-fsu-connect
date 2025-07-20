@@ -4,16 +4,16 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { OrganizationsMap } from "./OrganizationsMap";
 import { 
   Building2, 
   Globe, 
   Zap,
-  Users,
-  Activity,
   Map,
   CheckCircle,
   Clock,
-  AlertTriangle
+  AlertTriangle,
+  Network
 } from "lucide-react";
 
 interface Agency {
@@ -31,17 +31,6 @@ interface OrganizationsOverviewProps {
   agencies: Agency[];
   onAgencyClick?: (agency: Agency) => void;
 }
-
-const REGION_COLORS = {
-  "Europe": "hsl(var(--chart-1))",
-  "Afrique": "hsl(var(--chart-2))", 
-  "Asie": "hsl(var(--chart-3))",
-  "Amérique": "hsl(var(--chart-4))",
-  "CEDEAO": "hsl(var(--chart-2))",
-  "EACO": "hsl(var(--chart-3))",
-  "SADC": "hsl(var(--chart-4))",
-  "UMA": "hsl(var(--chart-5))"
-};
 
 const SYNC_STATUS_ICONS = {
   synced: <CheckCircle className="h-4 w-4 text-green-600" />,
@@ -95,7 +84,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               <Building2 className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Organisations Partenaires</p>
+              <p className="text-sm text-muted-foreground">Institutions Partenaires</p>
               <p className="text-2xl font-bold">{stats.total}</p>
             </div>
           </div>
@@ -107,10 +96,10 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               <Zap className="h-4 w-4 text-green-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Synchronisées</p>
+              <p className="text-sm text-muted-foreground">Données synchronisées</p>
               <p className="text-2xl font-bold">{stats.synced}</p>
               <p className="text-xs text-green-600">
-                {stats.total > 0 ? Math.round((stats.synced / stats.total) * 100) : 0}% du total
+                {stats.total > 0 ? Math.round((stats.synced / stats.total) * 100) : 0}% du réseau
               </p>
             </div>
           </div>
@@ -122,7 +111,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               <Map className="h-4 w-4 text-blue-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Régions</p>
+              <p className="text-sm text-muted-foreground">Régions couvertes</p>
               <p className="text-2xl font-bold">{stats.regions.length}</p>
             </div>
           </div>
@@ -134,7 +123,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               <Globe className="h-4 w-4 text-purple-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Pays</p>
+              <p className="text-sm text-muted-foreground">Pays représentés</p>
               <p className="text-2xl font-bold">
                 {[...new Set(agencies.map(a => a.country))].length}
               </p>
@@ -144,9 +133,10 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
-          <TabsTrigger value="regions">Par régions</TabsTrigger>
+          <TabsTrigger value="regions">Couverture régionale</TabsTrigger>
+          <TabsTrigger value="network">Réseau</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -155,7 +145,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Map className="h-5 w-5" />
-                Répartition par région
+                Répartition institutionnelle
               </h3>
               <div className="space-y-4">
                 {stats.regions.map((region) => (
@@ -167,12 +157,12 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">{region.region}</span>
                       <Badge variant="outline">
-                        {region.count} org.
+                        {region.count} institutions
                       </Badge>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <span>{region.countries} pays</span>
-                      <span>{region.synced}/{region.count} sync.</span>
+                      <span>{region.synced}/{region.count} synchronisées</span>
                     </div>
                     <Progress 
                       value={region.count > 0 ? (region.synced / region.count) * 100 : 0} 
@@ -186,31 +176,33 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
             {/* Status Overview */}
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                État de synchronisation
+                <Network className="h-5 w-5" />
+                État de la collecte de données
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/10 rounded-lg">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span>Synchronisé</span>
+                    <span>Données collectées</span>
                   </div>
                   <span className="font-semibold">{stats.synced}</span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-yellow-50 dark:bg-yellow-900/10 rounded-lg">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <span>En attente</span>
+                    <span>Collecte en cours</span>
                   </div>
                   <span className="font-semibold">{stats.pending}</span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/10 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <span>Échec</span>
+                {stats.failed > 0 && (
+                  <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/10 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <span>Erreur collecte</span>
+                    </div>
+                    <span className="font-semibold">{stats.failed}</span>
                   </div>
-                  <span className="font-semibold">{stats.failed}</span>
-                </div>
+                )}
               </div>
             </Card>
           </div>
@@ -231,15 +223,12 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold">{region.region}</h3>
-                    <div 
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: REGION_COLORS[region.region as keyof typeof REGION_COLORS] }}
-                    ></div>
+                    <Building2 className="h-4 w-4 text-primary" />
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
-                      <p className="text-muted-foreground">Organisations</p>
+                      <p className="text-muted-foreground">Institutions</p>
                       <p className="font-semibold">{region.count}</p>
                     </div>
                     <div>
@@ -253,19 +242,23 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                     className="h-2"
                   />
                   <p className="text-xs text-muted-foreground">
-                    {region.synced}/{region.count} synchronisées
+                    {region.synced}/{region.count} avec données collectées
                   </p>
                 </div>
               </Card>
             ))}
           </div>
         </TabsContent>
+
+        <TabsContent value="network" className="space-y-4">
+          <OrganizationsMap agencies={agencies} />
+        </TabsContent>
       </Tabs>
 
       {selectedRegion && (
         <Card className="p-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Organisations - {selectedRegion}</h3>
+            <h3 className="font-semibold">Institutions - {selectedRegion}</h3>
             <button 
               onClick={() => setSelectedRegion(null)}
               className="text-sm text-muted-foreground hover:text-foreground"
@@ -284,18 +277,12 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                   <span className="font-medium text-sm">{agency.name}</span>
                   <div className="flex items-center gap-1">
                     {SYNC_STATUS_ICONS[agency.sync_status as keyof typeof SYNC_STATUS_ICONS]}
-                    <Badge 
-                      variant={agency.sync_status === 'synced' ? 'default' : 'secondary'}
-                      className="text-xs"
-                    >
-                      {agency.sync_status}
-                    </Badge>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mb-1">{agency.country}</p>
-                {agency.website_url && (
-                  <p className="text-xs text-blue-600 truncate">{agency.website_url}</p>
-                )}
+                <Badge variant="outline" className="text-xs">
+                  Institution officielle
+                </Badge>
               </div>
             ))}
           </div>

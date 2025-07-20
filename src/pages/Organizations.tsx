@@ -1,8 +1,6 @@
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAgencies } from "@/hooks/useAgencies";
@@ -13,38 +11,20 @@ import { SyncConfigDialog } from "@/components/organizations/SyncConfigDialog";
 import { SyncButton } from "@/components/organizations/SyncButton";
 import { SyncHistoryDialog } from "@/components/organizations/SyncHistoryDialog";
 import { OrganizationsOverview } from "@/components/organizations/OrganizationsOverview";
+import { AgencyCard } from "@/components/organizations/AgencyCard";
+import { AgencyProfile } from "@/components/organizations/AgencyProfile";
 import { FirecrawlService } from "@/services/firecrawlService";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Building2, 
-  Globe, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  ExternalLink,
   RotateCcw,
-  CheckCircle,
-  Clock,
-  AlertTriangle,
   RefreshCw,
-  Info
+  Info,
+  Network,
+  Globe
 } from "lucide-react";
 
-const REGIONS = ["Europe", "Afrique", "Asie", "Amérique"];
-
-const SYNC_STATUS_COLORS = {
-  synced: "text-green-600",
-  pending: "text-yellow-600", 
-  failed: "text-red-600",
-  partial: "text-yellow-600"
-};
-
-const SYNC_STATUS_ICONS = {
-  synced: <CheckCircle className="h-3 w-3" />,
-  pending: <Clock className="h-3 w-3" />,
-  failed: <AlertTriangle className="h-3 w-3" />,
-  partial: <AlertTriangle className="h-3 w-3" />
-};
+const REGIONS = ["Europe", "Afrique", "Asie", "Amérique", "CEDEAO", "EACO", "SADC", "UMA"];
 
 export default function Organizations() {
   const { agencies, loading, error, refetch } = useAgencies();
@@ -53,6 +33,7 @@ export default function Organizations() {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedAgency, setSelectedAgency] = useState<any>(null);
+  const [profileAgency, setProfileAgency] = useState<any>(null);
   const [configDialogOpen, setConfigDialogOpen] = useState(false);
   const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
   const [batchSyncing, setBatchSyncing] = useState(false);
@@ -152,9 +133,12 @@ export default function Organizations() {
     <div className="container mx-auto py-8 space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Organisations Partenaires</h1>
-          <p className="text-muted-foreground">
-            Réseau des agences et institutions partenaires
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+            <Network className="h-8 w-8 text-primary" />
+            Réseau Institutionnel des Partenaires
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            Organisations officielles de régulation des télécommunications et partenaires institutionnels
           </p>
         </div>
         <Button 
@@ -167,48 +151,53 @@ export default function Organizations() {
           ) : (
             <RotateCcw className="h-4 w-4" />
           )}
-          {batchSyncing ? "Synchronisation..." : "Synchroniser"}
+          {batchSyncing ? "Collecte en cours..." : "Actualiser les données"}
         </Button>
       </div>
 
-      {/* Info Card */}
-      <Card className="p-4 bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800">
-        <div className="flex items-start gap-3">
-          <Info className="h-5 w-5 text-blue-600 mt-0.5" />
-          <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-100">
-              Collecte de données en cours
+      {/* Enhanced Info Card */}
+      <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 border-blue-200 dark:border-blue-800">
+        <div className="flex items-start gap-4">
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+            <Globe className="h-6 w-6 text-blue-600" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+              Réseau de Partenaires Institutionnels Authentiques
             </h3>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-              Les informations sur les projets et ressources seront disponibles progressivement 
-              au fur et à mesure de la synchronisation avec les sites web des agences partenaires.
+            <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+              Ce réseau comprend {agencies.length} organisations officielles de régulation des télécommunications 
+              à travers {[...new Set(agencies.map(a => a.country))].length} pays. Chaque institution est 
+              reconnue officiellement avec un mandat légal dans son territoire de compétence.
             </p>
+            <div className="flex items-center gap-4 text-xs text-blue-600 dark:text-blue-400">
+              <span>• Institutions gouvernementales officielles</span>
+              <span>• Autorités de régulation reconnues</span>
+              <span>• Partenaires institutionnels confirmés</span>
+            </div>
           </div>
         </div>
       </Card>
 
       <Tabs defaultValue="dashboard" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="dashboard">Vue d'ensemble</TabsTrigger>
-          <TabsTrigger value="list">Liste des organisations</TabsTrigger>
+          <TabsTrigger value="dashboard">Vue d'ensemble institutionnelle</TabsTrigger>
+          <TabsTrigger value="directory">Annuaire des institutions</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
           <OrganizationsOverview 
             agencies={agencies}
-            onAgencyClick={(agency) => {
-              setSelectedAgency(agency);
-              setConfigDialogOpen(true);
-            }}
+            onAgencyClick={(agency) => setProfileAgency(agency)}
           />
         </TabsContent>
 
-        <TabsContent value="list" className="space-y-6">
+        <TabsContent value="directory" className="space-y-6">
           {/* Search and Filters */}
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <Input
-                placeholder="Rechercher par nom, acronyme ou pays..."
+                placeholder="Rechercher une institution par nom, acronyme ou pays..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full"
@@ -227,114 +216,43 @@ export default function Organizations() {
             </Select>
             <Select value={selectedStatus} onValueChange={setSelectedStatus}>
               <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Tous les statuts" />
+                <SelectValue placeholder="État des données" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tous les statuts</SelectItem>
-                <SelectItem value="synced">Synchronisé</SelectItem>
-                <SelectItem value="pending">En attente</SelectItem>
-                <SelectItem value="failed">Échec</SelectItem>
-                <SelectItem value="partial">Partiel</SelectItem>
+                <SelectItem value="all">Tous les états</SelectItem>
+                <SelectItem value="synced">Données collectées</SelectItem>
+                <SelectItem value="pending">Collecte en cours</SelectItem>
+                <SelectItem value="failed">Erreur collecte</SelectItem>
+                <SelectItem value="partial">Données partielles</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Results count */}
-          <div className="text-sm text-muted-foreground">
-            {filteredAgencies.length} organisation{filteredAgencies.length > 1 ? 's' : ''} trouvée{filteredAgencies.length > 1 ? 's' : ''}
-            {agencies.length !== filteredAgencies.length && ` sur ${agencies.length} au total`}
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-muted-foreground">
+              {filteredAgencies.length} institution{filteredAgencies.length > 1 ? 's' : ''} 
+              {agencies.length !== filteredAgencies.length && ` sur ${agencies.length} au total`}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Institutions partenaires officielles et reconnues
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAgencies.map((agency) => (
-              <Card key={agency.id} className="p-6 space-y-4 hover:shadow-lg transition-shadow">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="h-5 w-5 text-muted-foreground" />
-                    <span className="font-semibold">{agency.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="flex items-center gap-1">
-                      {SYNC_STATUS_ICONS[agency.sync_status as keyof typeof SYNC_STATUS_ICONS]}
-                      {agency.sync_status}
-                    </Badge>
-                    <SyncButton 
-                      agency={agency}
-                      onConfigClick={() => {
-                        setSelectedAgency(agency);
-                        setConfigDialogOpen(true);
-                      }}
-                      onHistoryClick={() => {
-                        setSelectedAgency(agency);
-                        setHistoryDialogOpen(true);
-                      }}
-                    />
-                    {agency.website_url && (
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 w-8 p-0"
-                        onClick={() => window.open(agency.website_url, '_blank')}
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                </div>
-                
-                {agency.website_url && (
-                  <div className="flex items-center space-x-2">
-                    <Globe className="h-4 w-4 text-muted-foreground" />
-                    <a 
-                      href={agency.website_url} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="text-sm text-blue-500 hover:underline truncate"
-                    >
-                      {agency.website_url}
-                    </a>
-                  </div>
-                )}
-                
-                {agency.contact_email && (
-                  <div className="flex items-center space-x-2">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{agency.contact_email}</span>
-                  </div>
-                )}
-                
-                {agency.phone && (
-                  <div className="flex items-center space-x-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{agency.phone}</span>
-                  </div>
-                )}
-                
-                <div className="flex items-center space-x-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">
-                    {[agency.address, agency.country].filter(Boolean).join(', ')}
-                  </span>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <Badge variant="secondary" className="text-xs">
-                    {agency.region}
-                  </Badge>
-                  {agency.acronym && (
-                    <Badge variant="outline" className="text-xs">
-                      {agency.acronym}
-                    </Badge>
-                  )}
-                </div>
-              </Card>
+              <AgencyCard 
+                key={agency.id} 
+                agency={agency}
+                onViewProfile={setProfileAgency}
+              />
             ))}
           </div>
 
           {filteredAgencies.length === 0 && !loading && (
             <div className="text-center py-12">
               <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium mb-2">Aucune organisation trouvée</h3>
+              <h3 className="text-lg font-medium mb-2">Aucune institution trouvée</h3>
               <p className="text-muted-foreground">
                 Essayez de modifier vos critères de recherche ou filtres
               </p>
@@ -343,6 +261,15 @@ export default function Organizations() {
         </TabsContent>
       </Tabs>
 
+      {/* Agency Profile Modal */}
+      {profileAgency && (
+        <AgencyProfile
+          agency={profileAgency}
+          onClose={() => setProfileAgency(null)}
+        />
+      )}
+
+      {/* Existing dialogs */}
       {selectedAgency && (
         <SyncConfigDialog
           open={configDialogOpen}
