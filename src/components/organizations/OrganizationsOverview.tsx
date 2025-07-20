@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,13 +8,12 @@ import {
   Building2, 
   Globe, 
   Zap,
-  TrendingUp,
   Users,
-  DollarSign,
   Activity,
   Map,
-  BarChart3,
-  PieChart
+  CheckCircle,
+  Clock,
+  AlertTriangle
 } from "lucide-react";
 
 interface Agency {
@@ -22,10 +22,9 @@ interface Agency {
   country: string;
   region: string;
   sync_status: string;
-  project_count?: number;
+  website_url?: string;
+  contact_email?: string;
   last_sync_at?: string;
-  budget_total?: number;
-  completion_avg?: number;
 }
 
 interface OrganizationsOverviewProps {
@@ -44,6 +43,13 @@ const REGION_COLORS = {
   "UMA": "hsl(var(--chart-5))"
 };
 
+const SYNC_STATUS_ICONS = {
+  synced: <CheckCircle className="h-4 w-4 text-green-600" />,
+  pending: <Clock className="h-4 w-4 text-yellow-600" />,
+  failed: <AlertTriangle className="h-4 w-4 text-red-600" />,
+  partial: <AlertTriangle className="h-4 w-4 text-yellow-600" />
+};
+
 export const OrganizationsOverview = ({ agencies, onAgencyClick }: OrganizationsOverviewProps) => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
 
@@ -52,15 +58,11 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
       if (!acc[agency.region]) {
         acc[agency.region] = {
           count: 0,
-          projects: 0,
-          budget: 0,
           synced: 0,
           countries: new Set()
         };
       }
       acc[agency.region].count++;
-      acc[agency.region].projects += agency.project_count || 0;
-      acc[agency.region].budget += agency.budget_total || 0;
       acc[agency.region].countries.add(agency.country);
       if (agency.sync_status === 'synced') acc[agency.region].synced++;
       return acc;
@@ -69,8 +71,8 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
     return {
       total: agencies.length,
       synced: agencies.filter(a => a.sync_status === 'synced').length,
-      totalProjects: Object.values(regionStats).reduce((sum: number, r: any) => sum + r.projects, 0),
-      totalBudget: Object.values(regionStats).reduce((sum: number, r: any) => sum + r.budget, 0),
+      pending: agencies.filter(a => a.sync_status === 'pending').length,
+      failed: agencies.filter(a => a.sync_status === 'failed').length,
       regions: Object.entries(regionStats).map(([region, stats]: [string, any]) => ({
         region,
         ...stats,
@@ -93,7 +95,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               <Building2 className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Organisations</p>
+              <p className="text-sm text-muted-foreground">Organisations Partenaires</p>
               <p className="text-2xl font-bold">{stats.total}</p>
             </div>
           </div>
@@ -108,7 +110,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               <p className="text-sm text-muted-foreground">Synchronisées</p>
               <p className="text-2xl font-bold">{stats.synced}</p>
               <p className="text-xs text-green-600">
-                {Math.round((stats.synced / stats.total) * 100)}% du total
+                {stats.total > 0 ? Math.round((stats.synced / stats.total) * 100) : 0}% du total
               </p>
             </div>
           </div>
@@ -117,12 +119,11 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
         <Card className="p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-              <BarChart3 className="h-4 w-4 text-blue-600" />
+              <Map className="h-4 w-4 text-blue-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Projets</p>
-              <p className="text-2xl font-bold">{Number(stats.totalProjects)}</p>
-              <p className="text-xs text-muted-foreground">En cours de collecte</p>
+              <p className="text-sm text-muted-foreground">Régions</p>
+              <p className="text-2xl font-bold">{stats.regions.length}</p>
             </div>
           </div>
         </Card>
@@ -133,18 +134,19 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               <Globe className="h-4 w-4 text-purple-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Régions</p>
-              <p className="text-2xl font-bold">{stats.regions.length}</p>
+              <p className="text-sm text-muted-foreground">Pays</p>
+              <p className="text-2xl font-bold">
+                {[...new Set(agencies.map(a => a.country))].length}
+              </p>
             </div>
           </div>
         </Card>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
           <TabsTrigger value="regions">Par régions</TabsTrigger>
-          <TabsTrigger value="projects">Projets</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -164,18 +166,18 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">{region.region}</span>
-                       <Badge variant="outline">
-                         {String(region.count)} org.
-                       </Badge>
+                      <Badge variant="outline">
+                        {region.count} org.
+                      </Badge>
                     </div>
-                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                       <span>{String(region.countries)} pays</span>
-                       <span>{String(region.synced)}/{String(region.count)} sync.</span>
-                     </div>
-                     <Progress 
-                       value={(Number(region.synced) / Number(region.count)) * 100} 
-                       className="mt-2 h-2"
-                     />
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span>{region.countries} pays</span>
+                      <span>{region.synced}/{region.count} sync.</span>
+                    </div>
+                    <Progress 
+                      value={region.count > 0 ? (region.synced / region.count) * 100 : 0} 
+                      className="mt-2 h-2"
+                    />
                   </div>
                 ))}
               </div>
@@ -200,18 +202,14 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                     <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                     <span>En attente</span>
                   </div>
-                  <span className="font-semibold">
-                    {agencies.filter(a => a.sync_status === 'pending').length}
-                  </span>
+                  <span className="font-semibold">{stats.pending}</span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/10 rounded-lg">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                     <span>Échec</span>
                   </div>
-                  <span className="font-semibold">
-                    {agencies.filter(a => a.sync_status === 'failed').length}
-                  </span>
+                  <span className="font-semibold">{stats.failed}</span>
                 </div>
               </div>
             </Card>
@@ -239,46 +237,28 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                     ></div>
                   </div>
                   
-                   <div className="grid grid-cols-2 gap-2 text-sm">
-                     <div>
-                       <p className="text-muted-foreground">Organisations</p>
-                       <p className="font-semibold">{String(region.count)}</p>
-                     </div>
-                     <div>
-                       <p className="text-muted-foreground">Pays</p>
-                       <p className="font-semibold">{String(region.countries)}</p>
-                     </div>
-                   </div>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Organisations</p>
+                      <p className="font-semibold">{region.count}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Pays</p>
+                      <p className="font-semibold">{region.countries}</p>
+                    </div>
+                  </div>
 
-                   <Progress 
-                     value={(Number(region.synced) / Number(region.count)) * 100} 
-                     className="h-2"
-                   />
-                   <p className="text-xs text-muted-foreground">
-                     {String(region.synced)}/{String(region.count)} synchronisées
-                   </p>
+                  <Progress 
+                    value={region.count > 0 ? (region.synced / region.count) * 100 : 0} 
+                    className="h-2"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {region.synced}/{region.count} synchronisées
+                  </p>
                 </div>
               </Card>
             ))}
           </div>
-        </TabsContent>
-
-        <TabsContent value="projects" className="space-y-4">
-          <Card className="p-6">
-            <div className="text-center py-8">
-              <PieChart className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium mb-2">Collecte de données en cours</h3>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                Les informations sur les projets seront disponibles une fois la synchronisation 
-                avec les agences partenaires terminée.
-              </p>
-              <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
-                <p className="text-sm text-blue-700 dark:text-blue-300">
-                  🚀 {stats.synced} agences synchronisées sur {stats.total}
-                </p>
-              </div>
-            </div>
-          </Card>
         </TabsContent>
       </Tabs>
 
@@ -302,14 +282,20 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium text-sm">{agency.name}</span>
-                  <Badge 
-                    variant={agency.sync_status === 'synced' ? 'default' : 'secondary'}
-                    className="text-xs"
-                  >
-                    {agency.sync_status}
-                  </Badge>
+                  <div className="flex items-center gap-1">
+                    {SYNC_STATUS_ICONS[agency.sync_status as keyof typeof SYNC_STATUS_ICONS]}
+                    <Badge 
+                      variant={agency.sync_status === 'synced' ? 'default' : 'secondary'}
+                      className="text-xs"
+                    >
+                      {agency.sync_status}
+                    </Badge>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground">{agency.country}</p>
+                <p className="text-xs text-muted-foreground mb-1">{agency.country}</p>
+                {agency.website_url && (
+                  <p className="text-xs text-blue-600 truncate">{agency.website_url}</p>
+                )}
               </div>
             ))}
           </div>

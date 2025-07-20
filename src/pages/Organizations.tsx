@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -7,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAgencies } from "@/hooks/useAgencies";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { SyncConfigDialog } from "@/components/organizations/SyncConfigDialog";
 import { SyncButton } from "@/components/organizations/SyncButton";
 import { SyncHistoryDialog } from "@/components/organizations/SyncHistoryDialog";
@@ -24,7 +26,8 @@ import {
   CheckCircle,
   Clock,
   AlertTriangle,
-  RefreshCw
+  RefreshCw,
+  Info
 } from "lucide-react";
 
 const REGIONS = ["Europe", "Afrique", "Asie", "Amérique"];
@@ -151,7 +154,7 @@ export default function Organizations() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Organisations Partenaires</h1>
           <p className="text-muted-foreground">
-            Tableau de bord interactif des agences et projets
+            Réseau des agences et institutions partenaires
           </p>
         </div>
         <Button 
@@ -164,14 +167,30 @@ export default function Organizations() {
           ) : (
             <RotateCcw className="h-4 w-4" />
           )}
-          {batchSyncing ? "Synchronisation..." : "Synchroniser tout"}
+          {batchSyncing ? "Synchronisation..." : "Synchroniser"}
         </Button>
       </div>
 
+      {/* Info Card */}
+      <Card className="p-4 bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800">
+        <div className="flex items-start gap-3">
+          <Info className="h-5 w-5 text-blue-600 mt-0.5" />
+          <div>
+            <h3 className="font-medium text-blue-900 dark:text-blue-100">
+              Collecte de données en cours
+            </h3>
+            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+              Les informations sur les projets et ressources seront disponibles progressivement 
+              au fur et à mesure de la synchronisation avec les sites web des agences partenaires.
+            </p>
+          </div>
+        </div>
+      </Card>
+
       <Tabs defaultValue="dashboard" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="dashboard">Tableau de bord</TabsTrigger>
-          <TabsTrigger value="list">Liste détaillée</TabsTrigger>
+          <TabsTrigger value="dashboard">Vue d'ensemble</TabsTrigger>
+          <TabsTrigger value="list">Liste des organisations</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
@@ -228,7 +247,7 @@ export default function Organizations() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAgencies.map((agency) => (
-              <div key={agency.id} className="border rounded-lg p-6 space-y-4 hover:shadow-lg transition-shadow">
+              <Card key={agency.id} className="p-6 space-y-4 hover:shadow-lg transition-shadow">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Building2 className="h-5 w-5 text-muted-foreground" />
@@ -250,35 +269,54 @@ export default function Organizations() {
                         setHistoryDialogOpen(true);
                       }}
                     />
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
+                    {agency.website_url && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 w-8 p-0"
+                        onClick={() => window.open(agency.website_url, '_blank')}
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Globe className="h-4 w-4 text-muted-foreground" />
-                  <a href={agency.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline">
-                    {agency.website_url}
-                  </a>
-                </div>
+                
+                {agency.website_url && (
+                  <div className="flex items-center space-x-2">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    <a 
+                      href={agency.website_url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-sm text-blue-500 hover:underline truncate"
+                    >
+                      {agency.website_url}
+                    </a>
+                  </div>
+                )}
+                
                 {agency.contact_email && (
                   <div className="flex items-center space-x-2">
                     <Mail className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">{agency.contact_email}</span>
                   </div>
                 )}
+                
                 {agency.phone && (
                   <div className="flex items-center space-x-2">
                     <Phone className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">{agency.phone}</span>
                   </div>
                 )}
+                
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm">
                     {[agency.address, agency.country].filter(Boolean).join(', ')}
                   </span>
                 </div>
+                
                 <div className="flex items-center space-x-2">
                   <Badge variant="secondary" className="text-xs">
                     {agency.region}
@@ -289,7 +327,7 @@ export default function Organizations() {
                     </Badge>
                   )}
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
 
