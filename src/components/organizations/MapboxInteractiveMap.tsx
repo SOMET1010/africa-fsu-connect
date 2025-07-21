@@ -32,7 +32,8 @@ const COUNTRY_COORDINATES: Record<string, [number, number]> = {
   "Ghana": [-0.1870, 5.6037], // Accra
   "Afrique du Sud": [28.2293, -25.7479], // Johannesburg
   "Rwanda": [30.0619, -1.9441], // Kigali
-  "Uganda": [32.5825, 0.3476], // Kampala (corrigé: était "Ouganda")
+  "Uganda": [32.5825, 0.3476], // Kampala
+  // Pays supplémentaires pour référence future
   "Tanzanie": [39.2083, -6.7924], // Dar es Salaam
   "Zambie": [28.2871, -15.3875], // Lusaka
   "Botswana": [25.9087, -24.6282], // Gaborone
@@ -143,7 +144,11 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
     // Add markers for each agency
     filteredAgencies.forEach((agency) => {
       const coordinates = COUNTRY_COORDINATES[agency.country];
-      if (!coordinates || !map.current) return;
+      console.log(`Agency: ${agency.name}, Country: ${agency.country}, Coordinates:`, coordinates);
+      if (!coordinates || !map.current) {
+        console.log(`No coordinates found for country: ${agency.country}`);
+        return;
+      }
 
       // Create a DOM element for the marker
       const markerEl = document.createElement('div');
