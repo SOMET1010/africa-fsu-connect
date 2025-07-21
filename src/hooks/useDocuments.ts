@@ -188,7 +188,7 @@ export const useDocuments = () => {
       setLoading(false);
       setSearching(false);
     }
-  }, [searching, toast]);
+  }, [toast]);
 
   useEffect(() => {
     fetchDocuments();

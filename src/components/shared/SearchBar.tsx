@@ -33,19 +33,14 @@ const SearchBar = ({
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Optimisation : éviter les appels répétés avec les mêmes paramètres
-  const memoizedOnSearch = useCallback((query: string, filtersObj: Record<string, string>) => {
-    onSearch?.(query, filtersObj);
-  }, [onSearch]);
-
   // Debounced search avec protection contre les doubles appels
   useEffect(() => {
     const timer = setTimeout(() => {
-      memoizedOnSearch(searchQuery, activeFilters);
+      onSearch?.(searchQuery, activeFilters);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, activeFilters, memoizedOnSearch]);
+  }, [searchQuery, activeFilters]); // Removed onSearch from dependencies to avoid infinite loop
 
   const handleFilterChange = useCallback((filterId: string, value: string) => {
     setActiveFilters(prev => {
