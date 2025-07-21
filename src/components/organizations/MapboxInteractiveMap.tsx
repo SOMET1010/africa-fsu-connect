@@ -218,16 +218,28 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
 
   };
 
-  // Initialize map when token and agencies are available
+  // Initialize map when token is available (only once)
   useEffect(() => {
-    if (mapboxToken && filteredAgencies.length > 0 && !isLoadingToken) {
+    if (mapboxToken && !isLoadingToken && !map.current) {
       initializeMap();
     }
 
+    // Cleanup only when component unmounts
     return () => {
-      map.current?.remove();
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
     };
-  }, [mapboxToken, filteredAgencies, isLoadingToken]);
+  }, [mapboxToken, isLoadingToken]);
+
+  // Update markers when agencies change
+  useEffect(() => {
+    if (map.current && mapboxToken && filteredAgencies.length > 0) {
+      // Clear existing markers and re-add them
+      initializeMap();
+    }
+  }, [filteredAgencies]);
 
   if (isLoadingToken) {
     return (
