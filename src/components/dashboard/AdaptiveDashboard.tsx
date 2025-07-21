@@ -19,6 +19,7 @@ import {
   Bell
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { MapWidget } from "./widgets/MapWidget";
 
 interface DashboardSection {
   id: string;
@@ -42,22 +43,28 @@ const dashboardSections: DashboardSection[] = [
     priority: 2
   },
   {
+    id: 'map',
+    title: 'Carte SUTEL',
+    component: MapWidget,
+    priority: 3
+  },
+  {
     id: 'stats',
     title: 'Statistiques',
     component: StatsWidget,
-    priority: 3
+    priority: 4
   },
   {
     id: 'recent-activity',
     title: 'Activité Récente',
     component: RecentActivityWidget,
-    priority: 4
+    priority: 5
   },
   {
     id: 'regional-progress',
     title: 'Progrès Régional',
     component: RegionalProgressWidget,
-    priority: 5,
+    priority: 6,
     roles: ['admin_pays', 'super_admin']
   }
 ];
@@ -202,13 +209,15 @@ export function AdaptiveDashboard() {
               case 'welcome':
                 return 'lg:col-span-12';
               case 'quick-actions':
-                return 'lg:col-span-8';
+                return 'lg:col-span-6';
+              case 'map':
+                return 'lg:col-span-6';
               case 'stats':
                 return 'lg:col-span-4';
               case 'recent-activity':
-                return 'lg:col-span-7';
+                return 'lg:col-span-8';
               case 'regional-progress':
-                return 'lg:col-span-5';
+                return 'lg:col-span-12';
               default:
                 return 'lg:col-span-6';
             }

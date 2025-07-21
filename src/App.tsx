@@ -23,6 +23,7 @@ import AdminForum from "./pages/AdminForum";
 import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 import Preferences from "./pages/Preferences";
+import Map from "./pages/Map";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,11 @@ const App = () => (
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <AppShell><Dashboard /></AppShell>
+                </ProtectedRoute>
+              } />
+              <Route path="/map" element={
+                <ProtectedRoute>
+                  <AppShell><Map /></AppShell>
                 </ProtectedRoute>
               } />
               <Route path="/organizations" element={

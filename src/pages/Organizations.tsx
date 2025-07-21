@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -15,8 +14,10 @@ import { OrganizationsOverview } from "@/components/organizations/OrganizationsO
 import { EnrichedAgencyCard } from "@/components/organizations/EnrichedAgencyCard";
 import { AutoEnrichmentPanel } from "@/components/organizations/AutoEnrichmentPanel";
 import { AgencyProfile } from "@/components/organizations/AgencyProfile";
+import { MapboxInteractiveMap } from "@/components/organizations/MapboxInteractiveMap";
 import { FirecrawlService } from "@/services/firecrawlService";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 import { 
   Building2, 
   RotateCcw,
@@ -175,9 +176,18 @@ export default function Organizations() {
             <Globe className="h-6 w-6 text-blue-600" />
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
-              Réseau SUTEL : Agences du Service Universel des Télécommunications
-            </h3>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold text-blue-900 dark:text-blue-100">
+                Réseau SUTEL : Agences du Service Universel des Télécommunications
+              </h3>
+              <Link 
+                to="/map" 
+                className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+              >
+                <Globe className="h-4 w-4" />
+                Voir la carte interactive
+              </Link>
+            </div>
             <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
               Ce réseau regroupe {sutelAgencies.length} agences spécialisées dans le déploiement du service universel 
               des télécommunications à travers {[...new Set(sutelAgencies.map(a => a.country))].length} pays africains. 
@@ -194,13 +204,17 @@ export default function Organizations() {
       </Card>
 
       <Tabs defaultValue="dashboard" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="dashboard">Vue d'ensemble SUTEL</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="dashboard">Vue d'ensemble</TabsTrigger>
+          <TabsTrigger value="map" className="flex items-center gap-2">
+            <Globe className="h-4 w-4" />
+            Carte Interactive
+          </TabsTrigger>
           <TabsTrigger value="enrichment" className="flex items-center gap-2">
             <Sparkles className="h-4 w-4" />
-            Enrichissement Auto
+            Enrichissement
           </TabsTrigger>
-          <TabsTrigger value="directory">Annuaire Enrichi</TabsTrigger>
+          <TabsTrigger value="directory">Annuaire</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
@@ -208,6 +222,26 @@ export default function Organizations() {
             agencies={sutelAgencies}
             onAgencyClick={(agency) => setProfileAgency(agency)}
           />
+        </TabsContent>
+
+        <TabsContent value="map">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold">Localisation des agences SUTEL</h3>
+                <p className="text-sm text-muted-foreground">
+                  Explorez la répartition géographique des {sutelAgencies.length} agences SUTEL à travers l'Afrique
+                </p>
+              </div>
+              <Link to="/map">
+                <Button variant="outline">
+                  <Globe className="h-4 w-4 mr-2" />
+                  Plein écran
+                </Button>
+              </Link>
+            </div>
+            <MapboxInteractiveMap agencies={sutelAgencies} />
+          </div>
         </TabsContent>
 
         <TabsContent value="enrichment">

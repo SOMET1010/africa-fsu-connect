@@ -1,4 +1,3 @@
-
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   Home, 
@@ -6,7 +5,7 @@ import {
   Building2, 
   BookOpen, 
   User,
-  MessageSquare
+  Globe
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -32,10 +31,10 @@ export function ImprovedMobileBottomNav() {
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
-      to: "/projects",
-      icon: FolderOpen,
-      label: "Projets",
-      roles: ["contributeur", "editeur", "admin_pays", "super_admin"]
+      to: "/map",
+      icon: Globe,
+      label: "Carte",
+      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
       to: "/organizations",
