@@ -220,8 +220,8 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
               className="flex-1"
             />
             <Button onClick={handleTokenSubmit} disabled={!mapboxToken.trim()}>
-              <Settings className="h-4 w-4 mr-2" />
-              Initialiser
+              <Globe className="h-4 w-4 mr-2" />
+              Valider
             </Button>
           </div>
         </div>
