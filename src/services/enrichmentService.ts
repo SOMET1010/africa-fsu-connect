@@ -56,13 +56,13 @@ export class EnrichmentService {
       const enrichedMetadata = await this.extractEnrichedMetadata(agency, crawlResult.data);
 
       // Mettre à jour l'agence avec les nouvelles données
+      const currentMetadata = agency.metadata || {};
+      const newMetadata = Object.assign({}, currentMetadata, enrichedMetadata);
+      
       const { error: updateError } = await supabase
         .from('agencies')
         .update({
-          metadata: {
-            ...agency.metadata,
-            ...enrichedMetadata
-          },
+          metadata: newMetadata,
           sync_status: 'synced',
           last_sync_at: new Date().toISOString()
         })
@@ -85,8 +85,8 @@ export class EnrichmentService {
     }
   }
 
-  static async extractEnrichedMetadata(agency: any, crawlData: any): Promise<any> {
-    const enrichedData: any = {};
+  static async extractEnrichedMetadata(agency: any, crawlData: any): Promise<Record<string, any>> {
+    const enrichedData: Record<string, any> = {};
 
     // Extraction du logo si pas déjà présent
     if (!agency.logo_url && crawlData) {
