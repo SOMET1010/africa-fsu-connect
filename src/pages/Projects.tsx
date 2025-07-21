@@ -8,7 +8,9 @@ import {
   Plus,
   Filter,
   Download,
-  BarChart3
+  BarChart3,
+  Bell,
+  Database
 } from "lucide-react";
 import {
   Select,
@@ -23,6 +25,10 @@ import { ProjectDialog } from "@/components/projects/ProjectDialog";
 import { ProjectStats } from "@/components/projects/ProjectStats";
 import { ProjectsMap } from "@/components/projects/ProjectsMap";
 import { ProjectAnalytics } from "@/components/projects/ProjectAnalytics";
+import { ProjectExport } from "@/components/projects/ProjectExport";
+import { ProjectReports } from "@/components/projects/ProjectReports";
+import { ProjectNotifications } from "@/components/projects/ProjectNotifications";
+import { SampleProjectData } from "@/components/projects/SampleProjectData";
 import { useToast } from "@/hooks/use-toast";
 import type { Project } from "@/types/projects";
 
@@ -34,7 +40,7 @@ const Projects = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'map' | 'analytics'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'map' | 'analytics' | 'reports' | 'notifications'>('grid');
 
   const filteredProjects = projects.filter(project => {
     const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -131,15 +137,21 @@ const Projects = () => {
             >
               Analytique
             </Button>
+            <Button 
+              variant={viewMode === 'reports' ? 'default' : 'ghost'} 
+              size="sm"
+              onClick={() => setViewMode('reports')}
+            >
+              Rapports
+            </Button>
+            <Button 
+              variant={viewMode === 'notifications' ? 'default' : 'ghost'} 
+              size="sm"
+              onClick={() => setViewMode('notifications')}
+            >
+              <Bell className="h-4 w-4" />
+            </Button>
           </div>
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            Exporter
-          </Button>
-          <Button variant="outline" size="sm">
-            <BarChart3 className="h-4 w-4 mr-2" />
-            Rapports
-          </Button>
           <Button onClick={handleCreateProject}>
             <Plus className="h-4 w-4 mr-2" />
             Nouveau Projet
@@ -147,69 +159,77 @@ const Projects = () => {
         </div>
       </div>
 
+      {/* Demo Data Button - only show if no projects */}
+      {projects.length === 0 && <SampleProjectData />}
+
       {/* Statistics */}
       <ProjectStats projects={projects} />
 
-      {/* Map View */}
-      {viewMode === 'map' && <ProjectsMap projects={filteredProjects} />}
-      
-      {/* Analytics View */}
-      {viewMode === 'analytics' && <ProjectAnalytics projects={filteredProjects} />}
-
-      {/* Filters - only show for grid view */}
-      {viewMode === 'grid' && (
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
-            Filtres et recherche
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Rechercher par nom, pays ou localisation..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Région" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Toutes les régions</SelectItem>
-                {regions.map((region) => (
-                  <SelectItem key={region} value={region}>
-                    {region}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Statut" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous les statuts</SelectItem>
-                {statuses.map((status) => (
-                  <SelectItem key={status} value={status}>
-                    {status}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Export Tools - show for all views except notifications */}
+      {viewMode !== 'notifications' && (
+        <div className="mb-8">
+          <ProjectExport projects={filteredProjects} />
+        </div>
       )}
 
-      {/* Projects Grid - only show for grid view */}
+      {/* View-specific content */}
+      {viewMode === 'map' && <ProjectsMap projects={filteredProjects} />}
+      {viewMode === 'analytics' && <ProjectAnalytics projects={filteredProjects} />}
+      {viewMode === 'reports' && <ProjectReports projects={filteredProjects} />}
+      {viewMode === 'notifications' && <ProjectNotifications projects={filteredProjects} />}
+
+      {/* Filters and Grid - only show for grid view */}
       {viewMode === 'grid' && (
         <>
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Filter className="h-5 w-5" />
+                Filtres et recherche
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Rechercher par nom, pays ou localisation..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Région" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Toutes les régions</SelectItem>
+                    {regions.map((region) => (
+                      <SelectItem key={region} value={region}>
+                        {region}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Statut" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Tous les statuts</SelectItem>
+                    {statuses.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {status}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
               <ProjectCard
