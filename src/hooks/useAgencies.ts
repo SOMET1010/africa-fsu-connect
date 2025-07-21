@@ -2,22 +2,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { Tables } from '@/integrations/supabase/types';
 
-export interface Agency {
-  id: string;
-  name: string;
-  acronym: string;
-  country: string;
-  region: string;
-  website_url: string;
-  contact_email?: string;
-  phone?: string;
-  description?: string;
-  logo_url?: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
+export type Agency = Tables<'agencies'>;
 
 export const useAgencies = () => {
   const [agencies, setAgencies] = useState<Agency[]>([]);
