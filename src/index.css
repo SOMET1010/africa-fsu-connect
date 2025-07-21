@@ -8,58 +8,64 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    /* Core color palette - African inspired */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
-    /* African FSU Platform Colors */
-    --primary: 142 76% 36%;  /* African green */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 25 95% 53%;  /* African orange */
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 210 40% 96.1%;
+    
+    /* Primary colors - Rich blue inspired by African skies */
+    --primary: 214 88% 51%;
+    --primary-light: 214 88% 71%;
+    --primary-dark: 214 88% 31%;
+    --primary-foreground: 0 0% 98%;
+    
+    /* Secondary colors - Warm earth tones */
+    --secondary: 25 95% 53%;
+    --secondary-light: 25 95% 73%;
+    --secondary-foreground: 0 0% 98%;
+    
+    /* Accent colors - Vibrant African colors */
+    --accent: 142 76% 36%;
+    --accent-light: 142 76% 56%;
+    --accent-foreground: 0 0% 98%;
+    
+    /* Neutral tones */
+    --muted: 210 40% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 142 76% 36%;
-
-    /* FSU Platform specific colors */
-    --fsu-gold: 45 93% 47%;      /* Pan-African gold */
-    --fsu-red: 0 73% 41%;        /* Pan-African red */
-    --fsu-black: 0 0% 0%;        /* Pan-African black */
-    --fsu-blue: 214 100% 35%;    /* UAT blue */
+    --ring: 214 88% 51%;
+    
+    /* Status colors */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 0 0% 9%;
+    
+    /* Chart colors - African palette */
+    --chart-1: 214 88% 51%;
+    --chart-2: 25 95% 53%;
+    --chart-3: 142 76% 36%;
+    --chart-4: 43 96% 56%;
+    --chart-5: 280 100% 70%;
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(142 76% 36%), hsl(214 100% 35%));
-    --gradient-secondary: linear-gradient(135deg, hsl(45 93% 47%), hsl(25 95% 53%));
+    --gradient-primary: linear-gradient(135deg, hsl(214 88% 51%), hsl(214 88% 71%));
+    --gradient-secondary: linear-gradient(135deg, hsl(25 95% 53%), hsl(25 95% 73%));
+    --gradient-hero: linear-gradient(135deg, hsl(214 88% 51%), hsl(214 88% 31%), hsl(25 95% 53%));
     
-    /* Animation colors and effects */
-    --success: 142 76% 36%;
-    --warning: 45 93% 47%;
-    --info: 214 100% 35%;
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(214 88% 51% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(214 88% 51% / 0.1), 0 2px 4px -2px hsl(214 88% 51% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(214 88% 51% / 0.1), 0 4px 6px -4px hsl(214 88% 51% / 0.1);
+    --shadow-xl: 0 20px 25px -5px hsl(214 88% 51% / 0.1), 0 8px 10px -6px hsl(214 88% 51% / 0.1);
     
-    /* Shadows and glows */
-    --shadow-soft: 0 2px 8px 0 hsl(222.2 84% 4.9% / 0.06);
-    --shadow-medium: 0 4px 16px 0 hsl(222.2 84% 4.9% / 0.12);
-    --shadow-strong: 0 8px 32px 0 hsl(222.2 84% 4.9% / 0.16);
-    --glow-primary: 0 0 20px hsl(142 76% 36% / 0.4);
-    --glow-secondary: 0 0 20px hsl(25 95% 53% / 0.4);
-    
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -199,8 +205,45 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
+  
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Enhanced typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+  
+  h1 { @apply text-4xl lg:text-5xl; }
+  h2 { @apply text-3xl lg:text-4xl; }
+  h3 { @apply text-2xl lg:text-3xl; }
+  h4 { @apply text-xl lg:text-2xl; }
+  h5 { @apply text-lg lg:text-xl; }
+  h6 { @apply text-base lg:text-lg; }
+  
+  /* Smooth transitions for all interactive elements */
+  button, a, [role="button"] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+  
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border hover:bg-muted-foreground/30 rounded-full;
   }
 }
