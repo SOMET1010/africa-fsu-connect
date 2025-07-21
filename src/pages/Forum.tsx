@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import SearchBar from "@/components/shared/SearchBar";
+import OptimizedSearchBar from "@/components/shared/OptimizedSearchBar";
 import { useToast } from "@/hooks/use-toast";
 
 const Forum = () => {
@@ -148,7 +148,7 @@ const Forum = () => {
 
         {/* Enhanced Search and Actions */}
         <div className="mb-8">
-          <SearchBar
+          <OptimizedSearchBar
             placeholder="Rechercher dans les discussions..."
             onSearch={handleSearch}
             filters={searchFilters}
