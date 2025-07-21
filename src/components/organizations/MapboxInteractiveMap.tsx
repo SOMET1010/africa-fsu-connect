@@ -23,16 +23,16 @@ interface MapboxInteractiveMapProps {
   agencies: Agency[];
 }
 
-// Coordonnées approximatives des capitales africaines où se trouvent les agences SUTEL
+// Coordonnées correctes des capitales africaines [longitude, latitude]
 const COUNTRY_COORDINATES: Record<string, [number, number]> = {
   "Sénégal": [-17.4441, 14.6928], // Dakar
-  "Côte d'Ivoire": [-4.0305, 5.3600], // Abidjan
+  "Côte d'Ivoire": [-4.0305, 5.3600], // Abidjan  
   "Nigeria": [7.5244, 9.0765], // Abuja
   "Kenya": [36.8219, -1.2921], // Nairobi
   "Ghana": [-0.1870, 5.6037], // Accra
   "Afrique du Sud": [28.2293, -25.7479], // Johannesburg
   "Rwanda": [30.0619, -1.9441], // Kigali
-  "Ouganda": [32.5825, 0.3476], // Kampala
+  "Uganda": [32.5825, 0.3476], // Kampala (corrigé: était "Ouganda")
   "Tanzanie": [39.2083, -6.7924], // Dar es Salaam
   "Zambie": [28.2871, -15.3875], // Lusaka
   "Botswana": [25.9087, -24.6282], // Gaborone
