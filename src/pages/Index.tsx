@@ -1,17 +1,20 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { HeroSection } from "@/components/landing/HeroSection";
 import { 
-  Globe, 
   Target, 
   Users, 
-  TrendingUp, 
-  MapPin,
   BookOpen,
-  Calendar,
   MessageSquare,
-  ArrowRight
+  Calendar,
+  BarChart3,
+  ArrowRight,
+  CheckCircle,
+  Globe,
+  Building2
 } from "lucide-react";
 
 const Index = () => {
@@ -19,133 +22,105 @@ const Index = () => {
     {
       icon: Target,
       title: "Projets FSU",
-      description: "Suivi et gestion des initiatives de service universel à travers l'Afrique",
-      link: "/projects"
+      description: "Suivi et gestion collaborative des initiatives de service universel",
+      link: "/projects",
+      highlights: ["Gestion de projet", "Suivi en temps réel", "Rapports automatisés"]
     },
     {
       icon: BookOpen,
-      title: "Bibliothèque de Ressources",
-      description: "Guides, rapports et meilleures pratiques partagées par la communauté",
-      link: "/resources"
+      title: "Ressources Partagées",
+      description: "Bibliothèque de guides, rapports et meilleures pratiques",
+      link: "/docs",
+      highlights: ["Guides pratiques", "Études de cas", "Documentation technique"]
     },
     {
-      icon: Globe,
-      title: "Répertoire des Organisations",
-      description: "Cartographie interactive des agences FSU et partenaires continentaux",
-      link: "/organizations"
+      icon: Building2,
+      title: "Répertoire d'Organisations",
+      description: "Cartographie interactive des agences FSU et partenaires",
+      link: "/organizations",
+      highlights: ["Carte interactive", "Profils détaillés", "Coordination facilitée"]
     },
     {
       icon: MessageSquare,
-      title: "Forum de Discussion",
-      description: "Espace d'échange d'expériences et de coordination technique",
-      link: "/forum"
+      title: "Forum Collaboratif",
+      description: "Espace d'échange d'expériences et de coordination",
+      link: "/forum",
+      highlights: ["Discussions thématiques", "Expertise partagée", "Réseau professionnel"]
     },
     {
       icon: Calendar,
       title: "Événements & Formation",
-      description: "Agenda collaboratif et modules d'e-learning spécialisés",
-      link: "/events"
+      description: "Agenda collaboratif et modules d'apprentissage",
+      link: "/events",
+      highlights: ["Formations en ligne", "Webinaires", "Rencontres régionales"]
     },
     {
-      icon: TrendingUp,
-      title: "Tableaux de Bord",
-      description: "Analytics et reporting pour le suivi des performances régionales",
-      link: "/dashboard"
+      icon: BarChart3,
+      title: "Analytics & Reporting",
+      description: "Tableaux de bord et analyses de performance",
+      link: "/dashboard",
+      highlights: ["Métriques clés", "Analyses régionales", "Rapports personnalisés"]
     }
   ];
 
-  const stats = [
-    { label: "Pays Participants", value: "54", color: "text-[hsl(var(--primary))]" },
-    { label: "Projets Actifs", value: "1,247", color: "text-[hsl(var(--fsu-blue))]" },
-    { label: "Organisations", value: "186", color: "text-[hsl(var(--fsu-gold))]" },
-    { label: "Bénéficiaires", value: "45M+", color: "text-[hsl(var(--secondary))]" }
+  const regions = [
+    { name: "CEDEAO", countries: 15, projects: 342, color: "bg-blue-500" },
+    { name: "SADC", countries: 16, projects: 289, color: "bg-green-500" },
+    { name: "EACO", countries: 8, projects: 198, color: "bg-purple-500" },
+    { name: "ECCAS", countries: 11, projects: 156, color: "bg-orange-500" },
+    { name: "UMA", countries: 5, projects: 143, color: "bg-red-500" }
   ];
 
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--fsu-blue))] text-white">
-        <div className="container mx-auto px-4 py-20">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="flex items-center justify-center mb-6">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mr-4">
-                <span className="text-2xl font-bold">FSU</span>
-              </div>
-              <div className="text-left">
-                <h2 className="text-lg font-semibold">Plateforme Africaine</h2>
-                <p className="text-white/80">Union Africaine des Télécommunications</p>
-              </div>
-            </div>
-            
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Collaboration et Innovation
-              <span className="block text-3xl md:text-5xl text-[hsl(var(--fsu-gold))]">
-                Fonds du Service Universel
-              </span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
-              Unir les forces africaines pour une connectivité universelle et inclusive à travers le continent
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-[hsl(var(--primary))] hover:bg-white/90">
-                <Link to="/auth" className="flex items-center">
-                  Accéder au Tableau de Bord
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                <Link to="/projects">Explorer les Projets</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Statistics Section */}
-      <section className="py-16 bg-card">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className={`text-3xl md:text-4xl font-bold ${stat.color} mb-2`}>
-                  {stat.value}
-                </div>
-                <p className="text-muted-foreground">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* Features Section */}
-      <section className="py-20">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-4 px-4 py-2">
+              <Globe className="w-4 h-4 mr-2" />
+              Écosystème Intégré
+            </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Écosystème Intégré de Collaboration
+              Une Plateforme Complète pour la Collaboration
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Une plateforme complète pour coordonner, partager et accélérer les initiatives de service universel en Afrique
+              Tous les outils nécessaires pour coordonner, partager et accélérer les initiatives FSU
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="border-border hover:shadow-lg transition-all hover:scale-105">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--fsu-blue))] rounded-lg flex items-center justify-center mb-4">
-                    <feature.icon className="h-6 w-6 text-white" />
+              <Card key={index} className="group border-border hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-card">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <feature.icon className="h-6 w-6 text-white" />
+                    </div>
+                    <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                      {feature.title}
+                    </CardTitle>
                   </div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4">{feature.description}</p>
+                <CardContent className="pt-0">
+                  <div className="space-y-2 mb-4">
+                    {feature.highlights.map((highlight, idx) => (
+                      <div key={idx} className="flex items-center text-sm text-muted-foreground">
+                        <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                        {highlight}
+                      </div>
+                    ))}
+                  </div>
                   <Link to={feature.link}>
-                    <Button variant="outline" className="w-full">
+                    <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all">
                       Découvrir
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
                 </CardContent>
@@ -159,32 +134,35 @@ const Index = () => {
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
+            <Badge variant="outline" className="mb-4 px-4 py-2">
+              <Users className="w-4 h-4 mr-2" />
+              Collaboration Régionale
+            </Badge>
             <h2 className="text-3xl font-bold text-foreground mb-4">
-              Régions Africaines Connectées
+              Communautés Économiques Africaines
             </h2>
-            <p className="text-muted-foreground">
-              Collaboration active à travers les communautés économiques régionales
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Coordination active à travers les cinq principales régions du continent
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            {["CEDEAO", "SADC", "EACO", "ECCAS", "UMA"].map((region, index) => (
-              <Card key={index} className="text-center border-border">
-                <CardContent className="pt-6">
-                  <Badge className="mb-4 bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--fsu-blue))] text-white">
-                    {region}
-                  </Badge>
-                  <div className="flex items-center justify-center mb-2">
-                    <MapPin className="h-4 w-4 mr-2 text-[hsl(var(--primary))]" />
-                    <span className="text-sm font-medium">
-                      {Math.floor(Math.random() * 15) + 8} pays
-                    </span>
+            {regions.map((region, index) => (
+              <Card key={index} className="text-center border-border bg-card hover:shadow-md transition-all">
+                <CardContent className="pt-6 pb-4">
+                  <div className={`w-12 h-12 ${region.color} rounded-xl mx-auto mb-4 flex items-center justify-center`}>
+                    <span className="text-white font-bold text-lg">{region.name[0]}</span>
                   </div>
-                  <div className="flex items-center justify-center">
-                    <Users className="h-4 w-4 mr-2 text-[hsl(var(--fsu-blue))]" />
-                    <span className="text-sm text-muted-foreground">
-                      {Math.floor(Math.random() * 300) + 50} projets
-                    </span>
+                  <h3 className="font-bold text-lg text-foreground mb-2">{region.name}</h3>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <div className="flex items-center justify-center">
+                      <Globe className="h-4 w-4 mr-2" />
+                      {region.countries} pays
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <Target className="h-4 w-4 mr-2" />
+                      {region.projects} projets
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -194,20 +172,23 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--fsu-blue))] text-white">
+      <section className="py-20 bg-gradient-to-r from-primary via-blue-600 to-blue-800 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Rejoignez la Transformation Numérique de l'Afrique
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Ensemble, construisons un écosystème numérique inclusif qui ne laisse personne de côté
+            Ensemble, construisons un écosystème numérique inclusif et durable
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-[hsl(var(--primary))] hover:bg-white/90">
-              <Link to="/auth">Créer un Compte</Link>
+            <Button size="lg" className="bg-white text-primary hover:bg-white/90 px-8 py-3">
+              <Link to="/auth" className="flex items-center">
+                Créer un Compte
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-              En Savoir Plus
+            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-3">
+              <Link to="/organizations">En Savoir Plus</Link>
             </Button>
           </div>
         </div>
