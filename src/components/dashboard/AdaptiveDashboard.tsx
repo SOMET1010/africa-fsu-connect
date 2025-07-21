@@ -23,7 +23,7 @@ import { Link } from "react-router-dom";
 interface DashboardSection {
   id: string;
   title: string;
-  component: React.ComponentType;
+  component: React.ComponentType<any>;
   roles?: string[];
   priority: number;
 }
@@ -94,11 +94,65 @@ const roleBasedInsights = {
 
 export function AdaptiveDashboard() {
   const { profile } = useProfile();
-  const { stats } = useDashboardStats();
+  const { stats, loading } = useDashboardStats();
   
   const userRole = profile?.role || 'lecteur';
   const greeting = roleBasedGreetings[userRole as keyof typeof roleBasedGreetings];
   const insights = roleBasedInsights[userRole as keyof typeof roleBasedInsights];
+
+  // Prepare stats data for StatsWidget
+  const statsData = [
+    {
+      title: "Profils",
+      value: stats.totalProfiles.toString(),
+      icon: Users,
+      color: "text-primary",
+      change: "Total dans la base"
+    },
+    {
+      title: "Documents",
+      value: stats.totalDocuments.toString(),
+      icon: FileText,
+      color: "text-[hsl(var(--fsu-gold))]",
+      change: `+${stats.documentsThisMonth} ce mois`
+    },
+    {
+      title: "Événements",
+      value: stats.totalEvents.toString(),
+      icon: Calendar,
+      color: "text-[hsl(var(--fsu-blue))]",
+      change: `+${stats.eventsThisMonth} ce mois`
+    },
+    {
+      title: "Soumissions",
+      value: stats.totalSubmissions.toString(),
+      icon: TrendingUp,
+      color: "text-secondary",
+      change: "Total traité"
+    }
+  ];
+
+  // Sample recent activities data
+  const recentActivities = [
+    {
+      title: "Nouveau projet ajouté",
+      description: "Projet d'infrastructure dans la région Nord",
+      time: "Il y a 2 heures",
+      type: "project" as const
+    },
+    {
+      title: "Rapport mensuel publié",
+      description: "Rapport de suivi des activités de janvier",
+      time: "Il y a 4 heures", 
+      type: "report" as const
+    },
+    {
+      title: "Formation planifiée",
+      description: "Session de formation sur les nouveaux outils",
+      time: "Hier",
+      type: "training" as const
+    }
+  ];
   
   const availableSections = dashboardSections
     .filter(section => !section.roles || section.roles.includes(userRole))
@@ -160,9 +214,30 @@ export function AdaptiveDashboard() {
             }
           };
 
+          // Pass appropriate props based on section type
+          const getComponentProps = (sectionId: string) => {
+            switch (sectionId) {
+              case 'stats':
+                return {
+                  id: 'dashboard-stats',
+                  stats: statsData,
+                  loading: loading
+                };
+              case 'recent-activity':
+                return {
+                  id: 'dashboard-activity',
+                  activities: recentActivities,
+                  onViewAll: () => console.log('View all activities'),
+                  onActivityClick: (activity: any) => console.log('Activity clicked:', activity)
+                };
+              default:
+                return {};
+            }
+          };
+
           return (
             <div key={section.id} className={`${getGridClasses(section.id)} animate-slide-up`}>
-              <Component />
+              <Component {...getComponentProps(section.id)} />
             </div>
           );
         })}
