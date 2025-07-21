@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Upload, FileText, Plus, Search, Download } from "lucide-react";
 import { useDocuments } from "@/hooks/useDocuments";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,8 @@ const Resources = () => {
     tags: [] as string[]
   });
 
-  const searchFilters = [
+  // Mémoriser les filtres pour éviter les re-créations
+  const searchFilters = useMemo(() => [
     {
       id: "document_type",
       label: "Type de Document",
@@ -55,11 +56,12 @@ const Resources = () => {
         { value: "ug", label: "Ouganda" }
       ]
     }
-  ];
+  ], []);
 
-  const handleSearch = (query: string, filters: Record<string, string>) => {
+  // Stabiliser la fonction handleSearch avec useCallback
+  const handleSearch = useCallback((query: string, filters: Record<string, string>) => {
     searchDocuments(query, filters);
-  };
+  }, [searchDocuments]);
 
   const handleFileUpload = async (files: File[]) => {
     if (!uploadMetadata.title.trim()) {

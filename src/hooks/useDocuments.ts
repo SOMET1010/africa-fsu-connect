@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -14,8 +14,9 @@ export const useDocuments = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [searching, setSearching] = useState(false);
 
-  const fetchDocuments = async () => {
+  const fetchDocuments = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -36,7 +37,7 @@ export const useDocuments = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
   const uploadDocument = async (file: File, metadata: Omit<DocumentInsert, 'uploaded_by' | 'file_url' | 'file_name' | 'file_size' | 'mime_type'>) => {
     if (!user) {
@@ -144,8 +145,12 @@ export const useDocuments = () => {
     }
   };
 
-  const searchDocuments = async (query: string, filters: Record<string, string> = {}) => {
+  const searchDocuments = useCallback(async (query: string, filters: Record<string, string> = {}) => {
+    // Protection contre les appels multiples
+    if (searching) return;
+    
     try {
+      setSearching(true);
       setLoading(true);
       
       let queryBuilder = supabase
@@ -181,12 +186,13 @@ export const useDocuments = () => {
       });
     } finally {
       setLoading(false);
+      setSearching(false);
     }
-  };
+  }, [searching, toast]);
 
   useEffect(() => {
     fetchDocuments();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fetchDocuments]);
 
   return {
     documents,

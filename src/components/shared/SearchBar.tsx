@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Search, Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -32,47 +33,56 @@ const SearchBar = ({
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Debounced search
+  // Optimisation : éviter les appels répétés avec les mêmes paramètres
+  const memoizedOnSearch = useCallback((query: string, filtersObj: Record<string, string>) => {
+    onSearch?.(query, filtersObj);
+  }, [onSearch]);
+
+  // Debounced search avec protection contre les doubles appels
   useEffect(() => {
     const timer = setTimeout(() => {
-      onSearch?.(searchQuery, activeFilters);
+      memoizedOnSearch(searchQuery, activeFilters);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, activeFilters, onSearch]);
+  }, [searchQuery, activeFilters, memoizedOnSearch]);
 
-  const handleFilterChange = (filterId: string, value: string) => {
-    if (value === "") {
-      const newFilters = { ...activeFilters };
+  const handleFilterChange = useCallback((filterId: string, value: string) => {
+    setActiveFilters(prev => {
+      if (value === "") {
+        const newFilters = { ...prev };
+        delete newFilters[filterId];
+        return newFilters;
+      } else {
+        return {
+          ...prev,
+          [filterId]: value
+        };
+      }
+    });
+  }, []);
+
+  const clearFilter = useCallback((filterId: string) => {
+    setActiveFilters(prev => {
+      const newFilters = { ...prev };
       delete newFilters[filterId];
-      setActiveFilters(newFilters);
-    } else {
-      setActiveFilters(prev => ({
-        ...prev,
-        [filterId]: value
-      }));
-    }
-  };
+      return newFilters;
+    });
+  }, []);
 
-  const clearFilter = (filterId: string) => {
-    const newFilters = { ...activeFilters };
-    delete newFilters[filterId];
-    setActiveFilters(newFilters);
-  };
-
-  const clearAllFilters = () => {
+  const clearAllFilters = useCallback(() => {
     setActiveFilters({});
-  };
+  }, []);
 
-  const getActiveFilterCount = () => {
+  const activeFilterCount = useMemo(() => {
     return Object.keys(activeFilters).length;
-  };
+  }, [activeFilters]);
 
-  const getFilterLabel = (filterId: string, value: string) => {
+  const getFilterLabel = useCallback((filterId: string, value: string) => {
     const filter = filters.find(f => f.id === filterId);
     const option = filter?.options.find(o => o.value === value);
     return option?.label || value;
-  };
+  }, [filters]);
 
   return (
     <div className={`space-y-4 ${className}`}>
@@ -94,12 +104,12 @@ const SearchBar = ({
               <Button variant="outline" className="relative">
                 <Filter className="h-4 w-4 mr-2" />
                 Filtres
-                {getActiveFilterCount() > 0 && (
+                {activeFilterCount > 0 && (
                   <Badge 
                     variant="secondary" 
                     className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
                   >
-                    {getActiveFilterCount()}
+                    {activeFilterCount}
                   </Badge>
                 )}
               </Button>
@@ -114,7 +124,7 @@ const SearchBar = ({
                         Affinez vos résultats de recherche
                       </CardDescription>
                     </div>
-                    {getActiveFilterCount() > 0 && (
+                    {activeFilterCount > 0 && (
                       <Button 
                         variant="ghost" 
                         size="sm" 
@@ -158,7 +168,7 @@ const SearchBar = ({
       </div>
 
       {/* Active Filters */}
-      {getActiveFilterCount() > 0 && (
+      {activeFilterCount > 0 && (
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm text-muted-foreground">Filtres actifs:</span>
           {Object.entries(activeFilters).map(([filterId, value]) => {
