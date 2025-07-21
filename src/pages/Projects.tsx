@@ -21,6 +21,8 @@ import { useProjects } from "@/hooks/useProjects";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { ProjectDialog } from "@/components/projects/ProjectDialog";
 import { ProjectStats } from "@/components/projects/ProjectStats";
+import { ProjectsMap } from "@/components/projects/ProjectsMap";
+import { ProjectAnalytics } from "@/components/projects/ProjectAnalytics";
 import { useToast } from "@/hooks/use-toast";
 import type { Project } from "@/types/projects";
 
@@ -32,6 +34,7 @@ const Projects = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'map' | 'analytics'>('grid');
 
   const filteredProjects = projects.filter(project => {
     const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -106,6 +109,29 @@ const Projects = () => {
           </p>
         </div>
         <div className="flex gap-2">
+          <div className="flex border rounded-lg p-1">
+            <Button 
+              variant={viewMode === 'grid' ? 'default' : 'ghost'} 
+              size="sm"
+              onClick={() => setViewMode('grid')}
+            >
+              Grille
+            </Button>
+            <Button 
+              variant={viewMode === 'map' ? 'default' : 'ghost'} 
+              size="sm"
+              onClick={() => setViewMode('map')}
+            >
+              Carte
+            </Button>
+            <Button 
+              variant={viewMode === 'analytics' ? 'default' : 'ghost'} 
+              size="sm"
+              onClick={() => setViewMode('analytics')}
+            >
+              Analytique
+            </Button>
+          </div>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             Exporter
@@ -124,7 +150,14 @@ const Projects = () => {
       {/* Statistics */}
       <ProjectStats projects={projects} />
 
-      {/* Filters */}
+      {/* Map View */}
+      {viewMode === 'map' && <ProjectsMap projects={filteredProjects} />}
+      
+      {/* Analytics View */}
+      {viewMode === 'analytics' && <ProjectAnalytics projects={filteredProjects} />}
+
+      {/* Filters - only show for grid view */}
+      {viewMode === 'grid' && (
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -172,35 +205,40 @@ const Projects = () => {
           </div>
         </CardContent>
       </Card>
+      )}
 
-      {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProjects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            onEdit={handleEditProject}
-            onDelete={handleDeleteProject}
-            onView={handleViewProject}
-          />
-        ))}
-      </div>
+      {/* Projects Grid - only show for grid view */}
+      {viewMode === 'grid' && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onEdit={handleEditProject}
+                onDelete={handleDeleteProject}
+                onView={handleViewProject}
+              />
+            ))}
+          </div>
 
-      {filteredProjects.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">
-            {projects.length === 0 
-              ? "Aucun projet trouvé. Créez votre premier projet !" 
-              : "Aucun projet trouvé avec les critères de recherche actuels."
-            }
-          </p>
-          {projects.length === 0 && (
-            <Button onClick={handleCreateProject}>
-              <Plus className="h-4 w-4 mr-2" />
-              Créer un projet
-            </Button>
+          {filteredProjects.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground mb-4">
+                {projects.length === 0 
+                  ? "Aucun projet trouvé. Créez votre premier projet !" 
+                  : "Aucun projet trouvé avec les critères de recherche actuels."
+                }
+              </p>
+              {projects.length === 0 && (
+                <Button onClick={handleCreateProject}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Créer un projet
+                </Button>
+              )}
+            </div>
           )}
-        </div>
+        </>
       )}
 
       {/* Project Dialog */}
