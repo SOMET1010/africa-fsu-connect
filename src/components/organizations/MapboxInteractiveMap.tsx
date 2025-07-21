@@ -58,6 +58,7 @@ const SYNC_STATUS_COLORS = {
 export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
+  const markers = useRef<mapboxgl.Marker[]>([]);
   const [mapboxToken, setMapboxToken] = useState<string>('');
   const [isLoadingToken, setIsLoadingToken] = useState<boolean>(true);
   const [tokenError, setTokenError] = useState<string>('');
@@ -79,8 +80,6 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
         
         console.log('Calling get-mapbox-token function...');
         const { data, error } = await supabase.functions.invoke('get-mapbox-token');
-        
-        console.log('Function response:', { data, error });
         
         if (error) {
           console.error('Error fetching Mapbox token:', error);
@@ -106,45 +105,30 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
     fetchMapboxToken();
   }, []);
 
-  const initializeMap = () => {
-    if (!mapContainer.current || !mapboxToken) return;
+  // Clear all existing markers
+  const clearMarkers = () => {
+    markers.current.forEach(marker => {
+      marker.remove();
+    });
+    markers.current = [];
+    console.log('Cleared all markers');
+  };
 
-    try {
-      // Initialize map
-      mapboxgl.accessToken = mapboxToken;
-      
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/light-v11',
-        projection: 'globe' as any,
-        zoom: 2,
-        center: [20, 0], // Centre sur l'Afrique
-        pitch: 0,
-      });
-
-      // Handle map load errors
-      map.current.on('error', (e) => {
-        console.error('Erreur Mapbox:', e);
-        alert('Erreur: Token Mapbox invalide ou problème de connexion');
-      });
-    } catch (error) {
-      console.error('Erreur lors de l\'initialisation de la carte:', error);
-      alert('Erreur: Token Mapbox invalide');
+  // Add markers to the map
+  const addMarkersToMap = (agenciesToShow: Agency[]) => {
+    if (!map.current) {
+      console.log('Map not initialized yet');
       return;
     }
 
-    // Add navigation controls
-    map.current.addControl(
-      new mapboxgl.NavigationControl({
-        visualizePitch: true,
-      }),
-      'top-right'
-    );
-
-    // Add markers for each agency
-    filteredAgencies.forEach((agency) => {
+    console.log(`Adding ${agenciesToShow.length} markers to map`);
+    
+    agenciesToShow.forEach((agency) => {
       const coordinates = COUNTRY_COORDINATES[agency.country];
-      if (!coordinates || !map.current) return;
+      if (!coordinates) {
+        console.log(`No coordinates found for country: ${agency.country}`);
+        return;
+      }
 
       // Create a DOM element for the marker
       const markerEl = document.createElement('div');
@@ -168,7 +152,10 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
       // Create marker
       const marker = new mapboxgl.Marker(markerEl)
         .setLngLat(coordinates)
-        .addTo(map.current);
+        .addTo(map.current!);
+
+      // Store marker reference
+      markers.current.push(marker);
 
       // Create popup content
       const popupContent = `
@@ -208,38 +195,82 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
       });
     });
 
-    // Add atmosphere effects
-    map.current.on('style.load', () => {
-      map.current?.setFog({
-        color: 'rgb(255, 255, 255)',
-        'high-color': 'rgb(200, 200, 225)',
-        'horizon-blend': 0.1,
-      });
-    });
-
+    console.log(`Successfully added ${markers.current.length} markers`);
   };
 
-  // Initialize map when token is available (only once)
+  // Initialize map once when token is available
   useEffect(() => {
-    if (mapboxToken && !isLoadingToken && !map.current) {
-      initializeMap();
+    if (!mapboxToken || isLoadingToken || map.current) return;
+
+    if (!mapContainer.current) {
+      console.error('Map container not available');
+      return;
+    }
+
+    try {
+      console.log('Initializing Mapbox map...');
+      mapboxgl.accessToken = mapboxToken;
+      
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/light-v11',
+        projection: 'globe' as any,
+        zoom: 2,
+        center: [20, 0], // Centre sur l'Afrique
+        pitch: 0,
+      });
+
+      // Handle map load errors
+      map.current.on('error', (e) => {
+        console.error('Erreur Mapbox:', e);
+        setTokenError('Erreur: Token Mapbox invalide ou problème de connexion');
+      });
+
+      // Add navigation controls
+      map.current.addControl(
+        new mapboxgl.NavigationControl({
+          visualizePitch: true,
+        }),
+        'top-right'
+      );
+
+      // Add atmosphere effects
+      map.current.on('style.load', () => {
+        if (map.current) {
+          map.current.setFog({
+            color: 'rgb(255, 255, 255)',
+            'high-color': 'rgb(200, 200, 225)',
+            'horizon-blend': 0.1,
+          });
+          console.log('Map style loaded, adding initial markers...');
+          addMarkersToMap(filteredAgencies);
+        }
+      });
+
+      console.log('Map initialized successfully');
+    } catch (error) {
+      console.error('Erreur lors de l\'initialisation de la carte:', error);
+      setTokenError('Erreur: Token Mapbox invalide');
     }
 
     // Cleanup only when component unmounts
     return () => {
       if (map.current) {
+        console.log('Cleaning up map...');
+        clearMarkers();
         map.current.remove();
         map.current = null;
       }
     };
   }, [mapboxToken, isLoadingToken]);
 
-  // Update markers when agencies change
+  // Update markers when filtered agencies change (but don't recreate the map)
   useEffect(() => {
-    if (map.current && mapboxToken && filteredAgencies.length > 0) {
-      // Clear existing markers and re-add them
-      initializeMap();
-    }
+    if (!map.current || isLoadingToken) return;
+
+    console.log('Updating markers for filtered agencies...');
+    clearMarkers();
+    addMarkersToMap(filteredAgencies);
   }, [filteredAgencies]);
 
   if (isLoadingToken) {
