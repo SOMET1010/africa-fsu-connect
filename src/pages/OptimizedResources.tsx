@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo } from "react";
+
+import { useState, useCallback, useMemo, useRef } from "react";
 import { Upload, FileText, Plus, Search, Download } from "lucide-react";
 import { useOptimizedDocuments } from "@/hooks/useOptimizedDocuments";
 import { SearchProvider, useSearch } from "@/contexts/SearchContext";
@@ -8,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import OptimizedSearchBar from "@/components/shared/OptimizedSearchBar";
+import OptimizedSearchBar, { type SearchBarRef } from "@/components/shared/OptimizedSearchBar";
 import FileUpload from "@/components/shared/FileUpload";
 import ResourceStats from "@/components/resources/ResourceStats";
 import DocumentCard from "@/components/resources/DocumentCard";
@@ -20,6 +21,7 @@ const ResourcesContent = () => {
   const { uploadDocument, downloadDocument } = useOptimizedDocuments();
   const { toast } = useToast();
   
+  const searchBarRef = useRef<SearchBarRef>(null);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [previewDoc, setPreviewDoc] = useState<any>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -70,7 +72,7 @@ const ResourcesContent = () => {
     fetchInitialDocuments();
   }, [fetchInitialDocuments]);
 
-  const handleFileUpload = async (files: File[]) => {
+  const handleFileUpload = useCallback(async (files: File[]) => {
     if (!uploadMetadata.title.trim()) {
       toast({
         title: "Erreur",
@@ -92,19 +94,29 @@ const ResourcesContent = () => {
         country: '',
         tags: []
       });
+      // Refresh search results
+      const params = searchBarRef.current?.getSearchParams();
+      if (params) {
+        performSearch(params.query, params.filters);
+      }
     } catch (error) {
       // Error handled in hook
     }
-  };
+  }, [uploadMetadata, uploadDocument, performSearch, toast]);
 
-  const handlePreview = (doc: any) => {
+  const handlePreview = useCallback((doc: any) => {
     setPreviewDoc(doc);
     setIsPreviewOpen(true);
-  };
+  }, []);
 
-  const handleDownload = (doc: any) => {
+  const handleDownload = useCallback((doc: any) => {
     downloadDocument(doc);
-  };
+  }, [downloadDocument]);
+
+  const handleShowAllDocuments = useCallback(() => {
+    searchBarRef.current?.reset();
+    performSearch('', {});
+  }, [performSearch]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -131,41 +143,18 @@ const ResourcesContent = () => {
         {/* Statistics */}
         <ResourceStats documents={state.documents} loading={state.loading} />
 
-        {/* Search Section - Now using optimized components */}
+        {/* Search and Upload Section */}
         <div className="mb-8 space-y-4">
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
             <div className="flex-1">
               <OptimizedSearchBar
+                ref={searchBarRef}
                 placeholder="Rechercher des documents par titre ou description..."
-                onSearch={performSearch}
-                filters={[
-                  {
-                    id: "document_type",
-                    label: "Type de Document",
-                    options: [
-                      { value: "guide", label: "Guide" },
-                      { value: "rapport", label: "Rapport" },
-                      { value: "presentation", label: "Présentation" },
-                      { value: "formulaire", label: "Formulaire" },
-                      { value: "autre", label: "Autre" }
-                    ]
-                  },
-                  {
-                    id: "country",
-                    label: "Pays",
-                    options: [
-                      { value: "ci", label: "Côte d'Ivoire" },
-                      { value: "sn", label: "Sénégal" },
-                      { value: "za", label: "Afrique du Sud" },
-                      { value: "ng", label: "Nigéria" },
-                      { value: "gh", label: "Ghana" },
-                      { value: "ke", label: "Kenya" },
-                      { value: "tz", label: "Tanzanie" },
-                      { value: "ug", label: "Ouganda" }
-                    ]
-                  }
-                ]}
+                onSearch={handleSearch}
+                filters={searchFilters}
                 showFilters={true}
+                initialQuery={state.query}
+                initialFilters={state.filters}
               />
             </div>
             <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
@@ -250,7 +239,7 @@ const ResourcesContent = () => {
           </div>
         </div>
 
-        {/* Documents Grid - Now using state from SearchContext */}
+        {/* Documents Grid */}
         <div className="space-y-6">
           {state.loading ? (
             <div className="grid gap-6">
@@ -265,7 +254,7 @@ const ResourcesContent = () => {
               <p className="text-muted-foreground mb-6">
                 Aucun document ne correspond à vos critères de recherche.
               </p>
-              <Button onClick={() => performSearch('', {})} variant="outline">
+              <Button onClick={handleShowAllDocuments} variant="outline">
                 <Search className="h-4 w-4 mr-2" />
                 Voir tous les documents
               </Button>
@@ -276,19 +265,58 @@ const ResourcesContent = () => {
                 <DocumentCard
                   key={doc.id}
                   document={doc}
-                  onPreview={() => {}}
-                  onDownload={() => downloadDocument(doc)}
+                  onPreview={handlePreview}
+                  onDownload={handleDownload}
                 />
               ))}
             </div>
           )}
         </div>
+
+        {/* Document Preview Dialog */}
+        <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh]">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                {previewDoc?.title}
+              </DialogTitle>
+              <DialogDescription>
+                {previewDoc?.description}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="bg-muted/50 rounded-lg p-8 text-center space-y-4">
+              <FileText className="h-16 w-16 text-muted-foreground mx-auto" />
+              <div>
+                <p className="text-lg font-medium mb-2">Aperçu du document</p>
+                <p className="text-muted-foreground mb-4">
+                  L'aperçu intégré sera bientôt disponible. En attendant, vous pouvez télécharger le document.
+                </p>
+                <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground max-w-md mx-auto">
+                  <div>Type: {previewDoc?.document_type}</div>
+                  <div>Pays: {previewDoc?.country || 'N/A'}</div>
+                  <div>Taille: {previewDoc?.file_size ? `${Math.round(previewDoc.file_size / 1024)} KB` : 'N/A'}</div>
+                  <div>Téléchargements: {previewDoc?.download_count || 0}</div>
+                </div>
+              </div>
+              <div className="flex justify-center gap-3 pt-4">
+                <Button onClick={() => handleDownload(previewDoc)}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Télécharger
+                </Button>
+                <Button variant="outline" onClick={() => setIsPreviewOpen(false)}>
+                  Fermer
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
 };
 
-const Resources = () => {
+const OptimizedResources = () => {
   return (
     <SearchProvider>
       <ResourcesContent />
@@ -296,4 +324,4 @@ const Resources = () => {
   );
 };
 
-export default Resources;
+export default OptimizedResources;
