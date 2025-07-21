@@ -144,11 +144,7 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
     // Add markers for each agency
     filteredAgencies.forEach((agency) => {
       const coordinates = COUNTRY_COORDINATES[agency.country];
-      console.log(`Agency: ${agency.name}, Country: ${agency.country}, Coordinates:`, coordinates);
-      if (!coordinates || !map.current) {
-        console.log(`No coordinates found for country: ${agency.country}`);
-        return;
-      }
+      if (!coordinates || !map.current) return;
 
       // Create a DOM element for the marker
       const markerEl = document.createElement('div');

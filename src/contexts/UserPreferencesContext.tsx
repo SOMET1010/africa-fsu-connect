@@ -124,6 +124,8 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
           .upsert({
             user_id: user.id,
             preferences: newPreferences,
+          }, {
+            onConflict: 'user_id'
           });
 
         if (error) throw error;
