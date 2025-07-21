@@ -186,7 +186,7 @@ export const useDocuments = () => {
 
   useEffect(() => {
     fetchDocuments();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     documents,
