@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { OrganizationsMap } from "./OrganizationsMap";
+import { MapboxInteractiveMap } from "./MapboxInteractiveMap";
 import { 
   Building2, 
   Globe, 
@@ -24,9 +25,11 @@ interface Agency {
   country: string;
   region: string;
   sync_status: string;
+  acronym: string;
   website_url?: string;
   contact_email?: string;
   last_sync_at?: string;
+  description?: string;
   metadata?: any;
 }
 
@@ -159,10 +162,11 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
           <TabsTrigger value="governance">Types de gouvernance</TabsTrigger>
           <TabsTrigger value="network">Réseau</TabsTrigger>
+          <TabsTrigger value="map">Carte interactive</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -305,6 +309,10 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
 
         <TabsContent value="network" className="space-y-4">
           <OrganizationsMap agencies={agencies} />
+        </TabsContent>
+
+        <TabsContent value="map" className="space-y-4">
+          <MapboxInteractiveMap agencies={agencies} />
         </TabsContent>
       </Tabs>
 
