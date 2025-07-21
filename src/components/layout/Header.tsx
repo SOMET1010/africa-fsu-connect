@@ -21,12 +21,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import NotificationCenter from "@/components/shared/NotificationCenter";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import { useUserPreferences } from "@/contexts/UserPreferencesContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, profile, signOut, isAdmin } = useAuth();
+  const { preferences, updatePreferences } = useUserPreferences();
 
   const navigation = [
     { name: "Accueil", href: "/", icon: "🏠" },
@@ -114,14 +116,22 @@ const Header = () => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="hidden md:flex">
                       <Globe className="h-4 w-4 mr-2" />
-                      FR
+                      {preferences.language === 'fr' ? 'FR' : 'EN'}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem>🇫🇷 Français</DropdownMenuItem>
-                    <DropdownMenuItem>🇬🇧 English</DropdownMenuItem>
-                    <DropdownMenuItem>🇵🇹 Português</DropdownMenuItem>
-                    <DropdownMenuItem>🇪🇸 Español</DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => updatePreferences({ language: 'fr' })}
+                      className={preferences.language === 'fr' ? 'bg-accent' : ''}
+                    >
+                      🇫🇷 Français
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => updatePreferences({ language: 'en' })}
+                      className={preferences.language === 'en' ? 'bg-accent' : ''}
+                    >
+                      🇺🇸 English
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>

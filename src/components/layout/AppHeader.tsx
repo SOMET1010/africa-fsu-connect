@@ -23,6 +23,7 @@ import {
   Menu
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useUserPreferences } from "@/contexts/UserPreferencesContext";
 
 interface AppHeaderProps {
   showSidebar: boolean;
@@ -32,6 +33,7 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { preferences, updatePreferences } = useUserPreferences();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -113,9 +115,27 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
         {/* Right side */}
         <div className="flex items-center space-x-4">
           {/* Sélecteur de langue */}
-          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-            <Globe className="h-4 w-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                <Globe className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem 
+                onClick={() => updatePreferences({ language: 'fr' })}
+                className={preferences.language === 'fr' ? 'bg-accent' : ''}
+              >
+                🇫🇷 Français
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => updatePreferences({ language: 'en' })}
+                className={preferences.language === 'en' ? 'bg-accent' : ''}
+              >
+                🇺🇸 English
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {user ? (
             <>
