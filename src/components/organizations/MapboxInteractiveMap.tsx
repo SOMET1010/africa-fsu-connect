@@ -76,22 +76,27 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
         setIsLoadingToken(true);
         setTokenError('');
         
+        console.log('Calling get-mapbox-token function...');
         const { data, error } = await supabase.functions.invoke('get-mapbox-token');
+        
+        console.log('Function response:', { data, error });
         
         if (error) {
           console.error('Error fetching Mapbox token:', error);
-          setTokenError('Erreur lors de la récupération du token Mapbox');
+          setTokenError(`Erreur Edge Function: ${error.message}`);
           return;
         }
         
         if (data?.token) {
+          console.log('Token received successfully');
           setMapboxToken(data.token);
         } else {
-          setTokenError('Token Mapbox non disponible');
+          console.error('No token in response:', data);
+          setTokenError('Token Mapbox non disponible dans la réponse');
         }
       } catch (error) {
         console.error('Error in fetchMapboxToken:', error);
-        setTokenError('Erreur lors de la récupération du token Mapbox');
+        setTokenError(`Erreur réseau: ${error instanceof Error ? error.message : 'Unknown error'}`);
       } finally {
         setIsLoadingToken(false);
       }
