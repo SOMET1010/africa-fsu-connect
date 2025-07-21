@@ -12,7 +12,8 @@ import { SyncConfigDialog } from "@/components/organizations/SyncConfigDialog";
 import { SyncButton } from "@/components/organizations/SyncButton";
 import { SyncHistoryDialog } from "@/components/organizations/SyncHistoryDialog";
 import { OrganizationsOverview } from "@/components/organizations/OrganizationsOverview";
-import { AgencyCard } from "@/components/organizations/AgencyCard";
+import { EnrichedAgencyCard } from "@/components/organizations/EnrichedAgencyCard";
+import { AutoEnrichmentPanel } from "@/components/organizations/AutoEnrichmentPanel";
 import { AgencyProfile } from "@/components/organizations/AgencyProfile";
 import { FirecrawlService } from "@/services/firecrawlService";
 import { useToast } from "@/hooks/use-toast";
@@ -23,7 +24,8 @@ import {
   Info,
   Network,
   Zap,
-  Globe
+  Globe,
+  Sparkles
 } from "lucide-react";
 
 const REGIONS = ["Europe", "Afrique", "Asie", "Amérique", "CEDEAO", "EACO", "SADC", "UMA"];
@@ -102,7 +104,8 @@ export default function Organizations() {
             extract_news: config.extractSchema.news,
             sync_frequency: config.frequency,
             include_paths: config.includePaths,
-            exclude_paths: config.excludePaths
+            exclude_paths: config.excludePaths,
+            auto_enrichment: true
           },
           sync_frequency: config.frequency * 3600,
           is_active: true
@@ -191,15 +194,26 @@ export default function Organizations() {
       </Card>
 
       <Tabs defaultValue="dashboard" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="dashboard">Vue d'ensemble SUTEL</TabsTrigger>
-          <TabsTrigger value="directory">Annuaire des SUTEL</TabsTrigger>
+          <TabsTrigger value="enrichment" className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4" />
+            Enrichissement Auto
+          </TabsTrigger>
+          <TabsTrigger value="directory">Annuaire Enrichi</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
           <OrganizationsOverview 
             agencies={sutelAgencies}
             onAgencyClick={(agency) => setProfileAgency(agency)}
+          />
+        </TabsContent>
+
+        <TabsContent value="enrichment">
+          <AutoEnrichmentPanel 
+            agencies={sutelAgencies}
+            onRefresh={refetch}
           />
         </TabsContent>
 
@@ -231,7 +245,7 @@ export default function Organizations() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tous les états</SelectItem>
-                <SelectItem value="synced">Données collectées</SelectItem>
+                <SelectItem value="synced">Données enrichies</SelectItem>
                 <SelectItem value="pending">Collecte en cours</SelectItem>
                 <SelectItem value="failed">Erreur collecte</SelectItem>
                 <SelectItem value="partial">Données partielles</SelectItem>
@@ -245,14 +259,15 @@ export default function Organizations() {
               {filteredAgencies.length} SUTEL{filteredAgencies.length > 1 ? 's' : ''} 
               {sutelAgencies.length !== filteredAgencies.length && ` sur ${sutelAgencies.length} au total`}
             </div>
-            <div className="text-xs text-muted-foreground">
-              Agences spécialisées du service universel des télécommunications
+            <div className="text-xs text-muted-foreground flex items-center gap-1">
+              <Sparkles className="h-3 w-3" />
+              Données enrichies automatiquement
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAgencies.map((agency) => (
-              <AgencyCard 
+              <EnrichedAgencyCard 
                 key={agency.id} 
                 agency={agency}
                 onViewProfile={setProfileAgency}
