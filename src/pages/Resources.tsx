@@ -5,9 +5,9 @@ import { SearchProvider, useSearch } from "@/contexts/SearchContext";
 import OptimizedSearchBar, { type SearchBarRef } from "@/components/shared/OptimizedSearchBar";
 import ResourceStats from "@/components/resources/ResourceStats";
 import DocumentCard from "@/components/resources/DocumentCard";
-import DocumentUploadDialog from "@/components/resources/DocumentUploadDialog";
-import DocumentPreviewDialog from "@/components/resources/DocumentPreviewDialog";
-import EmptyDocumentsState from "@/components/resources/EmptyDocumentsState";
+import DocumentUploadDialog from "@/pages/resources/components/DocumentUploadDialog";
+import DocumentPreviewDialog from "@/pages/resources/components/DocumentPreviewDialog";
+import EmptyDocumentsState from "@/pages/resources/components/EmptyDocumentsState";
 import SampleDataButton from "@/components/resources/SampleDataButton";
 import { useToast } from "@/hooks/use-toast";
 
@@ -20,7 +20,6 @@ const ResourcesContent = () => {
   const [previewDoc, setPreviewDoc] = useState<any>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  // Memoized search filters
   const searchFilters = useMemo(() => [
     {
       id: "document_type",
@@ -49,7 +48,6 @@ const ResourcesContent = () => {
     }
   ], []);
 
-  // Initial load
   React.useEffect(() => {
     fetchInitialDocuments();
   }, [fetchInitialDocuments]);
@@ -68,7 +66,6 @@ const ResourcesContent = () => {
       for (const file of files) {
         await uploadDocument(file, metadata);
       }
-      // Refresh search results
       const params = searchBarRef.current?.getSearchParams();
       if (params) {
         performSearch(params.query, params.filters);
@@ -95,7 +92,6 @@ const ResourcesContent = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        {/* Header Section */}
         <div className="mb-8">
           <div className="flex justify-between items-start mb-4">
             <div>
@@ -114,10 +110,8 @@ const ResourcesContent = () => {
           </div>
         </div>
 
-        {/* Statistics */}
         <ResourceStats documents={state.documents} loading={state.loading} />
 
-        {/* Search and Upload Section */}
         <div className="mb-8 space-y-4">
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
             <div className="flex-1">
@@ -135,7 +129,6 @@ const ResourcesContent = () => {
           </div>
         </div>
 
-        {/* Documents Grid */}
         <div className="space-y-6">
           {state.loading ? (
             <div className="grid gap-6">
@@ -159,7 +152,6 @@ const ResourcesContent = () => {
           )}
         </div>
 
-        {/* Document Preview Dialog */}
         <DocumentPreviewDialog
           document={previewDoc}
           isOpen={isPreviewOpen}

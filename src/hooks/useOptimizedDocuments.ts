@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -23,17 +23,9 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  
-  // Refs for preventing duplicate operations
-  const fetchingRef = useRef(false);
-  const uploadingRef = useRef(false);
 
-  // Memoized fetch function
   const fetchDocuments = useCallback(async () => {
-    if (fetchingRef.current) return;
-    
     try {
-      fetchingRef.current = true;
       setLoading(true);
       
       const { data, error } = await supabase
@@ -45,7 +37,6 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
       if (error) throw error;
       setDocuments(data || []);
     } catch (error) {
-      console.error('Error fetching documents:', error);
       toast({
         title: "Erreur",
         description: "Impossible de charger les documents",
@@ -53,11 +44,9 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
       });
     } finally {
       setLoading(false);
-      fetchingRef.current = false;
     }
   }, [toast]);
 
-  // Memoized upload function
   const uploadDocument = useCallback(async (
     file: File, 
     metadata: Omit<DocumentInsert, 'uploaded_by' | 'file_url' | 'file_name' | 'file_size' | 'mime_type'>
@@ -71,10 +60,7 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
       return;
     }
 
-    if (uploadingRef.current) return;
-
     try {
-      uploadingRef.current = true;
       setUploading(true);
       
       // Upload file to storage
@@ -119,7 +105,6 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
 
       return data;
     } catch (error) {
-      console.error('Error uploading document:', error);
       toast({
         title: "Erreur",
         description: "Impossible d'uploader le document",
@@ -128,11 +113,9 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
       throw error;
     } finally {
       setUploading(false);
-      uploadingRef.current = false;
     }
   }, [user, toast]);
 
-  // Memoized download function
   const downloadDocument = useCallback(async (document: Document) => {
     try {
       // Increment download count
@@ -163,7 +146,6 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
         description: `Téléchargement de "${document.title}" commencé`
       });
     } catch (error) {
-      console.error('Error downloading document:', error);
       toast({
         title: "Erreur",
         description: "Impossible de télécharger le document",
@@ -172,7 +154,6 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
     }
   }, [toast]);
 
-  // Memoized return object
   const returnValue = useMemo(() => ({
     documents,
     loading,

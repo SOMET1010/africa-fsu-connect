@@ -1,136 +1,103 @@
-import { useState, useCallback } from "react";
-import { Upload, File, X, AlertCircle, CheckCircle } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+
+import React, { useCallback, useState } from "react";
+import { Upload, X, FileText, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 interface FileUploadProps {
+  onFilesSelected: (files: File[]) => void;
   accept?: string;
   maxSize?: number; // in MB
   multiple?: boolean;
-  onFilesSelected?: (files: File[]) => void;
+  disabled?: boolean;
   className?: string;
 }
 
-interface UploadedFile {
-  file: File;
-  id: string;
-  progress: number;
-  status: 'uploading' | 'completed' | 'error';
-}
-
 const FileUpload = ({ 
-  accept = ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png",
-  maxSize = 50,
-  multiple = true,
-  onFilesSelected,
+  onFilesSelected, 
+  accept = "*", 
+  maxSize = 50, 
+  multiple = false, 
+  disabled = false,
   className = ""
 }: FileUploadProps) => {
-  const [isDragOver, setIsDragOver] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [dragActive, setDragActive] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const { toast } = useToast();
 
-  const validateFile = (file: File): string | null => {
+  const validateFile = useCallback((file: File): boolean => {
     // Check file size
     if (file.size > maxSize * 1024 * 1024) {
-      return `Le fichier ${file.name} dépasse la taille maximale de ${maxSize}MB`;
+      toast({
+        title: "Fichier trop volumineux",
+        description: `Le fichier ${file.name} dépasse la limite de ${maxSize}MB`,
+        variant: "destructive"
+      });
+      return false;
     }
 
-    // Check file type
-    const allowedTypes = accept.split(',').map(type => type.trim().toLowerCase());
-    const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
-    
-    if (!allowedTypes.includes(fileExtension)) {
-      return `Type de fichier non autorisé: ${fileExtension}`;
+    // Check file type if accept is specified
+    if (accept !== "*" && !accept.includes(file.type) && !accept.includes(file.name.split('.').pop()!)) {
+      toast({
+        title: "Type de fichier non supporté",
+        description: `Le type de fichier ${file.name} n'est pas autorisé`,
+        variant: "destructive"
+      });
+      return false;
     }
 
-    return null;
-  };
+    return true;
+  }, [accept, maxSize, toast]);
 
   const handleFiles = useCallback((files: FileList | null) => {
     if (!files) return;
 
     const fileArray = Array.from(files);
-    const validFiles: File[] = [];
-    const errors: string[] = [];
-
-    fileArray.forEach(file => {
-      const error = validateFile(file);
-      if (error) {
-        errors.push(error);
-      } else {
-        validFiles.push(file);
-      }
-    });
-
-    if (errors.length > 0) {
-      // Here you would typically show these errors to the user
-      console.error("File validation errors:", errors);
-    }
-
+    const validFiles = fileArray.filter(validateFile);
+    
     if (validFiles.length > 0) {
-      // Simulate upload process
-      const newFiles = validFiles.map(file => ({
-        file,
-        id: Math.random().toString(36).substr(2, 9),
-        progress: 0,
-        status: 'uploading' as const
-      }));
-
-      setUploadedFiles(prev => [...prev, ...newFiles]);
-
-      // Simulate upload progress
-      newFiles.forEach(uploadFile => {
-        const interval = setInterval(() => {
-          setUploadedFiles(prev => 
-            prev.map(f => 
-              f.id === uploadFile.id 
-                ? { ...f, progress: Math.min(f.progress + 10, 100) }
-                : f
-            )
-          );
-        }, 200);
-
-        setTimeout(() => {
-          clearInterval(interval);
-          setUploadedFiles(prev => 
-            prev.map(f => 
-              f.id === uploadFile.id 
-                ? { ...f, progress: 100, status: 'completed' }
-                : f
-            )
-          );
-        }, 2000);
-      });
-
-      onFilesSelected?.(validFiles);
+      setSelectedFiles(validFiles);
+      onFilesSelected(validFiles);
     }
-  }, [accept, maxSize, onFilesSelected]);
+  }, [validateFile, onFilesSelected]);
+
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragOver(false);
-    handleFiles(e.dataTransfer.files);
-  }, [handleFiles]);
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (disabled) return;
+    
+    const files = e.dataTransfer.files;
+    handleFiles(files);
+  }, [disabled, handleFiles]);
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setIsDragOver(true);
-  }, []);
+    if (disabled) return;
+    
+    const files = e.target.files;
+    handleFiles(files);
+  }, [disabled, handleFiles]);
 
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-  }, []);
+  const removeFile = useCallback((index: number) => {
+    const newFiles = selectedFiles.filter((_, i) => i !== index);
+    setSelectedFiles(newFiles);
+    onFilesSelected(newFiles);
+  }, [selectedFiles, onFilesSelected]);
 
-  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    handleFiles(e.target.files);
-  }, [handleFiles]);
-
-  const removeFile = (id: string) => {
-    setUploadedFiles(prev => prev.filter(f => f.id !== id));
-  };
-
-  const formatFileSize = (bytes: number) => {
+  const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -140,84 +107,70 @@ const FileUpload = ({
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {/* Drop Zone */}
-      <Card 
-        className={`border-2 border-dashed transition-colors ${
-          isDragOver 
-            ? 'border-primary bg-primary/5' 
-            : 'border-muted-foreground/25 hover:border-primary/50'
-        }`}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-      >
-        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <Upload className={`h-12 w-12 mb-4 ${isDragOver ? 'text-primary' : 'text-muted-foreground'}`} />
-          <h3 className="text-lg font-medium mb-2">
-            Glissez-déposez vos fichiers ici
-          </h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            ou cliquez pour sélectionner des fichiers
-          </p>
-          <Button variant="outline" asChild>
-            <label className="cursor-pointer">
-              Sélectionner des fichiers
+      <Card className={`border-2 border-dashed transition-colors ${
+        dragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
+      } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
+        <CardContent className="p-8">
+          <div
+            className="text-center space-y-4"
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            <div className="flex justify-center">
+              <Upload className="h-12 w-12 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-lg font-medium">
+                Glissez vos fichiers ici ou cliquez pour sélectionner
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Taille maximale: {maxSize}MB
+                {accept !== "*" && ` • Types acceptés: ${accept}`}
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={disabled}
+              className="relative overflow-hidden"
+            >
+              Sélectionner {multiple ? 'les fichiers' : 'le fichier'}
               <input
                 type="file"
-                className="hidden"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                onChange={handleChange}
                 accept={accept}
                 multiple={multiple}
-                onChange={handleFileInput}
+                disabled={disabled}
               />
-            </label>
-          </Button>
-          <p className="text-xs text-muted-foreground mt-4">
-            Formats acceptés: {accept.replace(/\./g, '').toUpperCase()} • Taille max: {maxSize}MB
-          </p>
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
-      {/* Uploaded Files List */}
-      {uploadedFiles.length > 0 && (
+      {selectedFiles.length > 0 && (
         <div className="space-y-2">
-          <h4 className="text-sm font-medium">Fichiers sélectionnés:</h4>
-          {uploadedFiles.map((uploadFile) => (
-            <Card key={uploadFile.id} className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3 flex-1">
-                  <File className="h-5 w-5 text-muted-foreground" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {uploadFile.file.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatFileSize(uploadFile.file.size)}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  {uploadFile.status === 'uploading' && (
-                    <div className="w-24">
-                      <Progress value={uploadFile.progress} className="h-2" />
-                    </div>
-                  )}
-                  {uploadFile.status === 'completed' && (
-                    <CheckCircle className="h-4 w-4 text-green-600" />
-                  )}
-                  {uploadFile.status === 'error' && (
-                    <AlertCircle className="h-4 w-4 text-red-600" />
-                  )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeFile(uploadFile.id)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+          <h4 className="font-medium">Fichiers sélectionnés:</h4>
+          {selectedFiles.map((file, index) => (
+            <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
+              <div className="flex items-center gap-3">
+                <FileText className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="font-medium">{file.name}</p>
+                  <p className="text-sm text-muted-foreground">{formatFileSize(file.size)}</p>
                 </div>
               </div>
-            </Card>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => removeFile(index)}
+                disabled={disabled}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           ))}
         </div>
       )}

@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -54,7 +55,6 @@ const DocumentCard = ({ document, onPreview, onDownload }: DocumentCardProps) =>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {/* Document metadata */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <HardDrive className="h-4 w-4" />
@@ -74,7 +74,6 @@ const DocumentCard = ({ document, onPreview, onDownload }: DocumentCardProps) =>
             </div>
           </div>
           
-          {/* Action buttons */}
           <div className="flex justify-between items-center pt-2 border-t">
             <div className="text-sm text-muted-foreground">
               Publié le {new Date(document.created_at).toLocaleDateString('fr-FR', { 
