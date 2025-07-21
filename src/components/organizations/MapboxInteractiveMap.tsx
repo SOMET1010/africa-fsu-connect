@@ -125,10 +125,12 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
     
     agenciesToShow.forEach((agency) => {
       const coordinates = COUNTRY_COORDINATES[agency.country];
+      console.log(`Processing agency: ${agency.acronym} in ${agency.country}`, coordinates);
       if (!coordinates) {
-        console.log(`No coordinates found for country: ${agency.country}`);
+        console.log(`❌ No coordinates found for country: ${agency.country}`);
         return;
       }
+      console.log(`✅ Adding marker for ${agency.acronym} at coordinates:`, coordinates);
 
       // Create a DOM element for the marker
       const markerEl = document.createElement('div');
