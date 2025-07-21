@@ -71,8 +71,8 @@ export const ProjectAnalytics = ({ projects }: ProjectAnalyticsProps) => {
     }
   };
 
-  const activeProjects = projects.filter(p => p.status === 'en_cours');
-  const completedProjects = projects.filter(p => p.status === 'termine');
+  const activeProjects = projects.filter(p => p.status === 'ongoing');
+  const completedProjects = projects.filter(p => p.status === 'completed');
 
   return (
     <div className="space-y-6">

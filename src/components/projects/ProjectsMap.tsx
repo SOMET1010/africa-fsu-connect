@@ -20,10 +20,10 @@ export const ProjectsMap = ({ projects }: ProjectsMapProps) => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'en_cours': return 'bg-blue-500';
-      case 'termine': return 'bg-green-500';
-      case 'en_pause': return 'bg-yellow-500';
-      case 'planifie': return 'bg-purple-500';
+      case 'ongoing': return 'bg-blue-500';
+      case 'completed': return 'bg-green-500';
+      case 'suspended': return 'bg-yellow-500';
+      case 'planned': return 'bg-purple-500';
       default: return 'bg-gray-500';
     }
   };
@@ -56,8 +56,8 @@ export const ProjectsMap = ({ projects }: ProjectsMapProps) => {
           {/* Regional project markers */}
           {Object.entries(projectsByRegion).map(([region, regionProjects]) => {
             const position = getRegionPosition(region);
-            const activeProjects = regionProjects.filter(p => p.status === 'en_cours').length;
-            const completedProjects = regionProjects.filter(p => p.status === 'termine').length;
+            const activeProjects = regionProjects.filter(p => p.status === 'ongoing').length;
+            const completedProjects = regionProjects.filter(p => p.status === 'completed').length;
             
             return (
               <div
