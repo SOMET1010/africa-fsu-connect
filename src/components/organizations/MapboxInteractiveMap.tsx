@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MapPin, Globe, Search, Settings } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Agency {
   id: string;
@@ -56,8 +57,9 @@ const SYNC_STATUS_COLORS = {
 export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
-  const [showTokenInput, setShowTokenInput] = useState(true);
+  const [mapboxToken, setMapboxToken] = useState<string>('');
+  const [isLoadingToken, setIsLoadingToken] = useState<boolean>(true);
+  const [tokenError, setTokenError] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
 
@@ -66,6 +68,37 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
     agency.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
     agency.acronym.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Fetch Mapbox token on component mount
+  useEffect(() => {
+    const fetchMapboxToken = async () => {
+      try {
+        setIsLoadingToken(true);
+        setTokenError('');
+        
+        const { data, error } = await supabase.functions.invoke('get-mapbox-token');
+        
+        if (error) {
+          console.error('Error fetching Mapbox token:', error);
+          setTokenError('Erreur lors de la récupération du token Mapbox');
+          return;
+        }
+        
+        if (data?.token) {
+          setMapboxToken(data.token);
+        } else {
+          setTokenError('Token Mapbox non disponible');
+        }
+      } catch (error) {
+        console.error('Error in fetchMapboxToken:', error);
+        setTokenError('Erreur lors de la récupération du token Mapbox');
+      } finally {
+        setIsLoadingToken(false);
+      }
+    };
+
+    fetchMapboxToken();
+  }, []);
 
   const initializeMap = () => {
     if (!mapContainer.current || !mapboxToken) return;
@@ -178,27 +211,46 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
       });
     });
 
-    setShowTokenInput(false);
   };
 
+  // Initialize map when token and agencies are available
   useEffect(() => {
-    if (mapboxToken && !map.current) {
+    if (mapboxToken && filteredAgencies.length > 0 && !isLoadingToken) {
       initializeMap();
     }
 
     return () => {
       map.current?.remove();
     };
-  }, [mapboxToken, filteredAgencies]);
+  }, [mapboxToken, filteredAgencies, isLoadingToken]);
 
-  const handleTokenSubmit = () => {
-    if (mapboxToken.trim()) {
-      console.log('Token soumis:', mapboxToken);
-      initializeMap();
-    }
-  };
+  if (isLoadingToken) {
+    return (
+      <div className="space-y-4">
+        <Card className="p-8 text-center">
+          <div className="flex items-center justify-center space-x-2">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+            <span>Chargement de la carte Mapbox...</span>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
-  if (showTokenInput) {
+  if (tokenError) {
+    return (
+      <div className="space-y-4">
+        <Card className="p-8 text-center">
+          <div className="text-red-500">
+            <h3 className="text-lg font-semibold mb-2">Erreur de configuration</h3>
+            <p>{tokenError}</p>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!mapboxToken) {
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
@@ -220,9 +272,9 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
               onChange={(e) => setMapboxToken(e.target.value)}
               className="flex-1"
             />
-            <Button onClick={handleTokenSubmit} disabled={!mapboxToken.trim()}>
+            <Button disabled>
               <Globe className="h-4 w-4 mr-2" />
-              Valider
+              Configuration automatique...
             </Button>
           </div>
         </div>
