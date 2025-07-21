@@ -193,6 +193,7 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
 
   const handleTokenSubmit = () => {
     if (mapboxToken.trim()) {
+      console.log('Token soumis:', mapboxToken);
       initializeMap();
     }
   };
