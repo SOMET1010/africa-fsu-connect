@@ -70,17 +70,29 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
   const initializeMap = () => {
     if (!mapContainer.current || !mapboxToken) return;
 
-    // Initialize map
-    mapboxgl.accessToken = mapboxToken;
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      projection: 'globe' as any,
-      zoom: 2,
-      center: [20, 0], // Centre sur l'Afrique
-      pitch: 0,
-    });
+    try {
+      // Initialize map
+      mapboxgl.accessToken = mapboxToken;
+      
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/light-v11',
+        projection: 'globe' as any,
+        zoom: 2,
+        center: [20, 0], // Centre sur l'Afrique
+        pitch: 0,
+      });
+
+      // Handle map load errors
+      map.current.on('error', (e) => {
+        console.error('Erreur Mapbox:', e);
+        alert('Erreur: Token Mapbox invalide ou problème de connexion');
+      });
+    } catch (error) {
+      console.error('Erreur lors de l\'initialisation de la carte:', error);
+      alert('Erreur: Token Mapbox invalide');
+      return;
+    }
 
     // Add navigation controls
     map.current.addControl(
