@@ -121,11 +121,15 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
       return;
     }
 
+    if (!map.current.loaded()) {
+      console.log('Map not loaded yet, cannot add markers');
+      return;
+    }
+
     console.log(`Adding ${agenciesToShow.length} markers to map`);
     
     agenciesToShow.forEach((agency) => {
       const coordinates = COUNTRY_COORDINATES[agency.country];
-      console.log(`Processing agency: ${agency.acronym} in ${agency.country}`, coordinates);
       if (!coordinates) {
         console.log(`❌ No coordinates found for country: ${agency.country}`);
         return;
@@ -151,15 +155,16 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
         markerEl.style.animation = 'pulse 2s infinite';
       }
 
-      // Create marker
-      const marker = new mapboxgl.Marker(markerEl)
-        .setLngLat(coordinates)
-        .addTo(map.current!);
+      // Create marker with error handling
+      try {
+        const marker = new mapboxgl.Marker(markerEl)
+          .setLngLat(coordinates)
+          .addTo(map.current!);
 
-      // Store marker reference
-      markers.current.push(marker);
+        // Store marker reference
+        markers.current.push(marker);
 
-      // Create popup content
+        // Create popup content
       const popupContent = `
         <div style="padding: 8px; min-width: 200px;">
           <h3 style="margin: 0 0 8px 0; font-size: 14px; font-weight: bold;">${agency.acronym}</h3>
@@ -190,11 +195,14 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
         closeOnClick: false
       }).setHTML(popupContent);
 
-      // Add click event to marker
-      markerEl.addEventListener('click', () => {
-        setSelectedAgency(agency);
-        marker.setPopup(popup).togglePopup();
-      });
+        // Add click event to marker
+        markerEl.addEventListener('click', () => {
+          setSelectedAgency(agency);
+          marker.setPopup(popup).togglePopup();
+        });
+      } catch (markerError) {
+        console.error(`Error creating marker for ${agency.acronym}:`, markerError);
+      }
     });
 
     console.log(`Successfully added ${markers.current.length} markers`);
@@ -210,57 +218,104 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
     }
 
     try {
-      console.log('Initializing Mapbox map...');
+      console.log('Initializing Mapbox map with token:', mapboxToken.substring(0, 20) + '...');
       mapboxgl.accessToken = mapboxToken;
       
-      map.current = new mapboxgl.Map({
+      // Test if the token works by creating a simple map first
+      const mapConfig = {
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/light-v11',
-        projection: 'globe' as any,
         zoom: 2,
-        center: [20, 0], // Centre sur l'Afrique
+        center: [20, 0] as [number, number], // Centre sur l'Afrique
         pitch: 0,
-      });
+        // Removed projection: 'globe' as it can cause issues
+        attributionControl: true,
+        logoPosition: 'bottom-left' as const
+      };
 
-      // Handle map load errors
+      console.log('Creating map with config:', mapConfig);
+      map.current = new mapboxgl.Map(mapConfig);
+
+      // Handle map load errors with better error messages
       map.current.on('error', (e) => {
-        console.error('Erreur Mapbox:', e);
-        setTokenError('Erreur: Token Mapbox invalide ou problème de connexion');
+        console.error('Erreur détaillée Mapbox:', e);
+        if (e.error?.message?.includes('Unauthorized')) {
+          setTokenError('Token Mapbox invalide ou expiré. Vérifiez votre token sur mapbox.com');
+        } else if (e.error?.message?.includes('network')) {
+          setTokenError('Problème de connexion réseau. Vérifiez votre connexion internet');
+        } else {
+          setTokenError(`Erreur Mapbox: ${e.error?.message || 'Erreur inconnue'}`);
+        }
       });
 
-      // Add navigation controls
-      map.current.addControl(
-        new mapboxgl.NavigationControl({
-          visualizePitch: true,
-        }),
-        'top-right'
-      );
+      // Add load event listener
+      map.current.on('load', () => {
+        console.log('Map loaded successfully');
+        
+        // Try to add fog effects (optional, may fail on some devices)
+        try {
+          if (map.current && map.current.setFog) {
+            map.current.setFog({
+              color: 'rgb(255, 255, 255)',
+              'high-color': 'rgb(200, 200, 225)',
+              'horizon-blend': 0.1,
+            });
+            console.log('Fog effects added');
+          }
+        } catch (fogError) {
+          console.warn('Could not add fog effects:', fogError);
+        }
 
-      // Add atmosphere effects
+        // Add markers after map is fully loaded
+        console.log('Adding initial markers...');
+        addMarkersToMap(filteredAgencies);
+      });
+
+      // Add style load event (backup for older browsers)
       map.current.on('style.load', () => {
-        if (map.current) {
-          map.current.setFog({
-            color: 'rgb(255, 255, 255)',
-            'high-color': 'rgb(200, 200, 225)',
-            'horizon-blend': 0.1,
-          });
-          console.log('Map style loaded, adding initial markers...');
+        console.log('Map style loaded');
+        if (map.current && !map.current.loaded()) {
           addMarkersToMap(filteredAgencies);
         }
       });
 
-      console.log('Map initialized successfully');
+      // Add navigation controls
+      try {
+        map.current.addControl(
+          new mapboxgl.NavigationControl({
+            visualizePitch: true,
+          }),
+          'top-right'
+        );
+        console.log('Navigation controls added');
+      } catch (controlError) {
+        console.warn('Could not add navigation controls:', controlError);
+      }
+
+      console.log('Map initialization completed');
     } catch (error) {
       console.error('Erreur lors de l\'initialisation de la carte:', error);
-      setTokenError('Erreur: Token Mapbox invalide');
+      if (error instanceof Error) {
+        if (error.message.includes('Unauthorized')) {
+          setTokenError('Token Mapbox invalide. Vérifiez votre configuration sur mapbox.com');
+        } else {
+          setTokenError(`Erreur d'initialisation: ${error.message}`);
+        }
+      } else {
+        setTokenError('Erreur d\'initialisation de la carte');
+      }
     }
 
     // Cleanup only when component unmounts
     return () => {
       if (map.current) {
         console.log('Cleaning up map...');
-        clearMarkers();
-        map.current.remove();
+        try {
+          clearMarkers();
+          map.current.remove();
+        } catch (cleanupError) {
+          console.warn('Error during cleanup:', cleanupError);
+        }
         map.current = null;
       }
     };
@@ -268,12 +323,22 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
 
   // Update markers when filtered agencies change (but don't recreate the map)
   useEffect(() => {
-    if (!map.current || isLoadingToken) return;
+    if (!map.current || isLoadingToken || !mapboxToken) return;
 
-    console.log('Updating markers for filtered agencies...');
-    clearMarkers();
-    addMarkersToMap(filteredAgencies);
-  }, [filteredAgencies]);
+    // Wait for map to be fully loaded before updating markers
+    if (map.current.loaded()) {
+      console.log('Updating markers for filtered agencies...');
+      clearMarkers();
+      addMarkersToMap(filteredAgencies);
+    } else {
+      console.log('Map not loaded yet, waiting...');
+      map.current.on('load', () => {
+        console.log('Map loaded, now updating markers...');
+        clearMarkers();
+        addMarkersToMap(filteredAgencies);
+      });
+    }
+  }, [filteredAgencies, mapboxToken]);
 
   if (isLoadingToken) {
     return (
