@@ -18,6 +18,9 @@ const translations = {
     'nav.settings': 'Paramètres',
     'nav.logout': 'Se déconnecter',
     'nav.start': 'Commencer',
+    'nav.home': 'Accueil',
+    'nav.submit': 'Soumettre',
+    'nav.admin_users': 'Utilisateurs Admin',
 
     // Textes communs
     'common.loading': 'Chargement...',
@@ -212,6 +215,9 @@ const translations = {
     'nav.settings': 'Settings',
     'nav.logout': 'Logout',
     'nav.start': 'Get Started',
+    'nav.home': 'Home',
+    'nav.submit': 'Submit',
+    'nav.admin_users': 'Admin Users',
 
     // Common texts
     'common.loading': 'Loading...',

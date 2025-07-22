@@ -19,7 +19,7 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ children }: AdminLayoutProps) {
   return (
-    <SidebarProvider defaultOpen>
+    <SidebarProvider defaultCollapsed={false}>
       <div className="min-h-screen flex w-full bg-background">
         {/* Admin Header */}
         <header className="fixed top-0 left-0 right-0 h-16 bg-background border-b z-50 flex items-center justify-between px-4">

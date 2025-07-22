@@ -37,11 +37,11 @@ import { useTranslation } from "@/hooks/useTranslation";
 export function AppSidebar() {
   const location = useLocation();
   const { user, profile } = useAuth();
-  const { state } = useSidebar();
+  const { state, collapsed } = useSidebar();
   const { t } = useTranslation();
   
   const currentPath = location.pathname;
-  const isCollapsed = state === "collapsed";
+  const isCollapsed = collapsed;
   
   const menuSections = [
     {
@@ -101,9 +101,8 @@ export function AppSidebar() {
 
   return (
     <Sidebar 
-      variant="sidebar" 
       className="border-r border-sidebar-border bg-sidebar"
-      collapsible="icon"
+      collapsible={true}
     >
       <SidebarHeader className="border-b border-sidebar-border p-4">
         <div className="flex items-center space-x-3">

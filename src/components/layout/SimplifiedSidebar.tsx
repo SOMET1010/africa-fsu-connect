@@ -102,10 +102,10 @@ const adminItems = [
 export function SimplifiedSidebar() {
   const location = useLocation();
   const { user, profile } = useAuth();
-  const { state } = useSidebar();
+  const { state, collapsed } = useSidebar();
   
   const currentPath = location.pathname;
-  const isCollapsed = state === "collapsed";
+  const isCollapsed = collapsed;
   
   const isActive = (path: string) => currentPath === path;
   const isAdminUser = profile?.role && ['super_admin', 'admin_pays', 'editeur'].includes(profile.role);
@@ -160,9 +160,8 @@ export function SimplifiedSidebar() {
 
   return (
     <Sidebar 
-      variant="sidebar" 
       className="border-r border-border bg-card"
-      collapsible="icon"
+      collapsible={true}
     >
       <SidebarHeader className="border-b border-border p-4">
         <div className="flex items-center space-x-3">

@@ -1,25 +1,32 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Globe } from "lucide-react";
+import { Mail, Phone, MapPin, Globe, Sparkles } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-card border-t border-border mt-16">
-      <div className="container mx-auto px-4 py-12">
+    <footer className="relative bg-gradient-to-b from-background via-muted/20 to-muted/40 border-t border-border/50 mt-16 overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary rounded-full blur-3xl transform -translate-y-1/2" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-fsu-blue rounded-full blur-3xl transform translate-y-1/2" />
+      </div>
+      
+      <div className="relative container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--fsu-blue))] rounded-lg flex items-center justify-center">
+            <div className="flex items-center space-x-3 group">
+              <div className="relative w-10 h-10 bg-gradient-to-br from-primary via-primary to-fsu-blue rounded-xl flex items-center justify-center shadow-lg">
                 <span className="text-primary-foreground font-bold text-sm">FSU</span>
+                <Sparkles className="absolute -top-1 -right-1 h-3 w-3 text-primary opacity-60" />
               </div>
               <div>
-                <h3 className="font-bold text-foreground">Plateforme FSU Afrique</h3>
-                <p className="text-xs text-muted-foreground">UAT • ANSUT</p>
+                <h3 className="font-bold text-foreground text-lg leading-tight">Plateforme FSU Afrique</h3>
+                <p className="text-xs text-primary/80 font-medium">UAT • ANSUT</p>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Plateforme panafricaine de collaboration et d'innovation pour les Fonds de Service Universel, 
               portée par l'Union Africaine des Télécommunications et l'ANSUT Côte d'Ivoire.
             </p>
@@ -27,25 +34,29 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Liens Rapides</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="font-semibold text-foreground text-lg">Liens Rapides</h4>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/docs" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/docs" className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300">
+                  <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-4 mr-0 group-hover:mr-2"></span>
                   Bibliothèque de Ressources
                 </Link>
               </li>
               <li>
-                <Link to="/forum" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/forum" className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300">
+                  <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-4 mr-0 group-hover:mr-2"></span>
                   Forum de Discussion
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/projects" className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300">
+                  <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-4 mr-0 group-hover:mr-2"></span>
                   Projets FSU
                 </Link>
               </li>
               <li>
-                <Link to="/events" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/events" className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300">
+                  <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-4 mr-0 group-hover:mr-2"></span>
                   Événements
                 </Link>
               </li>
@@ -54,15 +65,16 @@ const Footer = () => {
 
           {/* Institutions */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Institutions Partenaires</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="font-semibold text-foreground text-lg">Institutions Partenaires</h4>
+            <ul className="space-y-3 text-sm">
               <li>
                 <a 
                   href="https://uat.int" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300"
                 >
+                  <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-4 mr-0 group-hover:mr-2"></span>
                   Union Africaine des Télécommunications
                 </a>
               </li>
@@ -71,8 +83,9 @@ const Footer = () => {
                   href="https://ansut.ci" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300"
                 >
+                  <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-4 mr-0 group-hover:mr-2"></span>
                   ANSUT Côte d'Ivoire
                 </a>
               </li>
@@ -81,8 +94,9 @@ const Footer = () => {
                   href="https://au.int" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300"
                 >
+                  <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-4 mr-0 group-hover:mr-2"></span>
                   Union Africaine
                 </a>
               </li>
@@ -91,8 +105,9 @@ const Footer = () => {
                   href="https://itu.int" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300"
                 >
+                  <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-4 mr-0 group-hover:mr-2"></span>
                   Union Internationale des Télécommunications
                 </a>
               </li>
@@ -101,32 +116,40 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Contact</h4>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-muted-foreground" />
+            <h4 className="font-semibold text-foreground text-lg">Contact</h4>
+            <div className="space-y-4 text-sm">
+              <div className="group flex items-center space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors duration-300">
+                <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300">
+                  <Mail className="h-4 w-4 text-primary" />
+                </div>
                 <a 
                   href="mailto:contact@fsu-afrique.org" 
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-300"
                 >
                   contact@fsu-afrique.org
                 </a>
               </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-muted-foreground" />
+              <div className="group flex items-center space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors duration-300">
+                <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300">
+                  <Phone className="h-4 w-4 text-primary" />
+                </div>
                 <span className="text-muted-foreground">+225 27 22 44 44 44</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
+              <div className="group flex items-center space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors duration-300">
+                <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300">
+                  <MapPin className="h-4 w-4 text-primary" />
+                </div>
                 <span className="text-muted-foreground">Abidjan, Côte d'Ivoire</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Globe className="h-4 w-4 text-muted-foreground" />
+              <div className="group flex items-center space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors duration-300">
+                <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300">
+                  <Globe className="h-4 w-4 text-primary" />
+                </div>
                 <a 
                   href="https://uat.int" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-300"
                 >
                   uat.int
                 </a>
@@ -136,19 +159,19 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-border mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-sm text-muted-foreground">
+        <div className="border-t border-border/50 mt-12 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+            <div className="text-sm text-muted-foreground text-center md:text-left">
               © {currentYear} Plateforme FSU Afrique. Tous droits réservés.
             </div>
-            <div className="flex space-x-6 text-sm">
-              <Link to="/legal/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+            <div className="flex flex-wrap justify-center md:justify-end gap-6 text-sm">
+              <Link to="/legal/privacy" className="text-muted-foreground hover:text-primary transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
                 Politique de Confidentialité
               </Link>
-              <Link to="/legal/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/legal/terms" className="text-muted-foreground hover:text-primary transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
                 Conditions d'Utilisation
               </Link>
-              <Link to="/legal/cookies" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/legal/cookies" className="text-muted-foreground hover:text-primary transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
                 Politique des Cookies
               </Link>
             </div>

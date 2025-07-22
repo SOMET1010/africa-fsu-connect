@@ -14,6 +14,7 @@ interface SidebarContextProps {
   collapsedWidth: number
   setCollapsed: (collapsed: boolean) => void
   toggle: () => void
+  state: "expanded" | "collapsed"
 }
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -66,10 +67,31 @@ export function SidebarProvider({
         collapsedWidth,
         setCollapsed,
         toggle,
+        state: collapsed ? "collapsed" : "expanded",
       }}
     >
       {children}
     </SidebarContext.Provider>
+  )
+}
+
+// Sidebar header
+export function SidebarHeader({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("p-2", className)} {...props} />
+  )
+}
+
+// Sidebar footer
+export function SidebarFooter({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("p-2", className)} {...props} />
   )
 }
 
