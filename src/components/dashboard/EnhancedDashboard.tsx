@@ -1,9 +1,11 @@
+
 import { useState, useEffect } from "react";
-import { BarChart3, Users, Target, Zap, Calendar, MessageSquare, FileText, TrendingUp } from "lucide-react";
-import { ModernStatsWidget } from "./widgets/ModernStatsWidget";
+import { BarChart3, Users, Target, Zap, Calendar, MessageSquare, FileText, TrendingUp, Settings, Bell } from "lucide-react";
+import { ModernStatsCard } from "@/components/ui/modern-stats-card";
+import { HeroSection } from "@/components/ui/hero-section";
+import { ModernCard, ModernIconCard } from "@/components/ui/modern-card";
+import { ModernButton } from "@/components/ui/modern-button";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { EnhancedCard, IconCard } from "@/components/ui/enhanced-card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
@@ -17,67 +19,113 @@ export const EnhancedDashboard = () => {
   const [dashboardStats, setDashboardStats] = useState([
     {
       title: "Projets Actifs",
-      value: "12",
-      change: { value: "+2", trend: "up" as const },
+      value: 12,
       icon: Target,
-      color: "bg-blue-500",
-      clickable: true,
-      onStatClick: () => console.log("Navigate to projects")
+      trend: { value: 8, label: "Cette semaine", positive: true },
+      prefix: "",
+      suffix: "",
+      description: "Projets en cours de développement"
     },
     {
       title: "Collaborateurs",
-      value: "248",
-      change: { value: "+15", trend: "up" as const },
+      value: 248,
       icon: Users,
-      color: "bg-green-500",
-      clickable: true,
+      trend: { value: 12, label: "Ce mois", positive: true },
+      prefix: "",
+      suffix: "",
+      description: "Membres actifs de la communauté"
     },
     {
       title: "Documents",
-      value: "89",
-      change: { value: "+7", trend: "up" as const },
+      value: 89,
       icon: FileText,
-      color: "bg-purple-500",
-      clickable: true,
+      trend: { value: 15, label: "Documents ajoutés", positive: true },
+      prefix: "",
+      suffix: "",
+      description: "Ressources disponibles"
     },
     {
       title: "Événements",
-      value: "5",
-      change: { value: "-1", trend: "down" as const },
+      value: 5,
       icon: Calendar,
-      color: "bg-orange-500",
-      clickable: true,
+      trend: { value: -2, label: "Cette semaine", positive: false },
+      prefix: "",
+      suffix: "",
+      description: "Prochaines activités"
     }
   ]);
 
   const quickActions = [
     {
       title: "Nouveau Projet",
-      description: "Lancez une nouvelle initiative",
+      description: "Lancez une nouvelle initiative FSU",
       icon: Target,
       href: "/projects?action=create",
-      color: "bg-blue-500"
+      stats: [
+        { label: "En cours", value: "12" },
+        { label: "Terminés", value: "45" }
+      ]
     },
     {
-      title: "Rejoindre Discussion",
-      description: "Participez au forum",
+      title: "Forum Communauté",
+      description: "Participez aux discussions",
       icon: MessageSquare,
       href: "/forum",
-      color: "bg-green-500"
+      stats: [
+        { label: "Messages", value: "234" },
+        { label: "Actifs", value: "89" }
+      ]
     },
     {
-      title: "Consulter Ressources",
-      description: "Explorez les documents",
+      title: "Centre de Ressources",
+      description: "Explorez la documentation",
       icon: FileText,
       href: "/resources",
-      color: "bg-purple-500"
+      stats: [
+        { label: "Documents", value: "89" },
+        { label: "Téléchargés", value: "456" }
+      ]
     },
     {
-      title: "Voir Événements",
+      title: "Calendrier Événements",
       description: "Prochaines activités",
       icon: Calendar,
       href: "/events",
-      color: "bg-orange-500"
+      stats: [
+        { label: "À venir", value: "5" },
+        { label: "Ce mois", value: "12" }
+      ]
+    }
+  ];
+
+  const recentActivity = [
+    { 
+      action: "Projet créé", 
+      title: "Initiative Connectivité Rurale 2024", 
+      time: "Il y a 2h", 
+      type: "project",
+      user: "Marie Kouassi"
+    },
+    { 
+      action: "Document ajouté", 
+      title: "Guide Implementation FSU", 
+      time: "Il y a 4h", 
+      type: "document",
+      user: "Ahmed Diallo"
+    },
+    { 
+      action: "Discussion créée", 
+      title: "Stratégies Développement Digital", 
+      time: "Hier", 
+      type: "forum",
+      user: "Grace Okonkwo"
+    },
+    { 
+      action: "Événement planifié", 
+      title: "Webinaire Innovation Télécom", 
+      time: "Il y a 1 jour", 
+      type: "event",
+      user: "Jean Mukendi"
     }
   ];
 
@@ -87,66 +135,76 @@ export const EnhancedDashboard = () => {
         
         {/* Hero Section */}
         <ScrollReveal direction="fade">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-hero p-8 text-white">
-            <div className="absolute inset-0 bg-black/20" />
-            <div className="relative z-10">
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                <div>
-                  <h1 className="text-4xl lg:text-5xl font-bold font-poppins mb-3">
-                    Bonjour, {profile?.first_name || 'Collaborateur'} ! 👋
-                  </h1>
-                  <p className="text-xl text-white/90 font-inter">
-                    Votre espace de travail collaboratif vous attend
-                  </p>
-                </div>
-                
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <CommandPalette />
-                  <Button variant="secondary" size="lg" className="bg-white/20 backdrop-blur border-white/30 hover:bg-white/30">
-                    <Zap className="mr-2 h-5 w-5" />
-                    Actions Rapides
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <HeroSection
+            title={`Bonjour, ${profile?.first_name || 'Collaborateur'} ! 👋`}
+            subtitle="Plateforme FSU"
+            description="Votre espace de travail collaboratif pour le service universel des télécommunications vous attend. Découvrez vos projets, connectez-vous avec la communauté et accédez à vos ressources."
+            actions={[
+              {
+                label: "Actions Rapides",
+                onClick: () => {},
+                icon: <Zap className="h-5 w-5" />,
+                variant: "default"
+              },
+              {
+                label: "Préférences",
+                onClick: () => {},
+                icon: <Settings className="h-4 w-4" />,
+                variant: "outline"
+              }
+            ]}
+            className="mb-8"
+          />
         </ScrollReveal>
 
-        {/* Stats Widget */}
-        <ModernStatsWidget 
-          stats={dashboardStats}
-          title="Aperçu de votre activité"
-        />
+        {/* Stats Cards */}
+        <ScrollReveal delay={200}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {dashboardStats.map((stat, index) => (
+              <ModernStatsCard
+                key={index}
+                title={stat.title}
+                value={stat.value}
+                icon={stat.icon}
+                trend={stat.trend}
+                prefix={stat.prefix}
+                suffix={stat.suffix}
+                description={stat.description}
+                variant="gradient"
+                size="md"
+              />
+            ))}
+          </div>
+        </ScrollReveal>
 
         {/* Quick Actions Grid */}
         <ScrollReveal delay={400}>
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-semibold font-poppins">Actions Rapides</h2>
+                <h2 className="text-2xl font-bold font-poppins text-foreground">Actions Rapides</h2>
                 <p className="text-muted-foreground font-inter">Accédez rapidement à vos outils essentiels</p>
               </div>
-              <Badge variant="secondary" className="hidden sm:flex">
+              <Badge variant="secondary" className="hidden sm:flex items-center gap-1">
+                <Target className="h-3 w-3" />
                 4 raccourcis disponibles
               </Badge>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {quickActions.map((action, index) => (
                 <ScrollReveal key={index} delay={100 * (index + 1)} direction="up">
                   <Link to={action.href}>
-                    <IconCard
+                    <ModernIconCard
                       icon={action.icon}
                       title={action.title}
                       description={action.description}
-                      variant="glassmorphism"
+                      variant="gradient"
                       hover="lift"
                       interactive
-                      iconColor="text-white"
-                      className="h-full group"
-                    >
-                      <div className={`w-full h-1 rounded-full ${action.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                    </IconCard>
+                      stats={action.stats}
+                      className="h-full group border-border/30"
+                    />
                   </Link>
                 </ScrollReveal>
               ))}
@@ -156,42 +214,56 @@ export const EnhancedDashboard = () => {
 
         {/* Recent Activity */}
         <ScrollReveal delay={600}>
-          <EnhancedCard variant="glassmorphism" hover="glow" className="p-6">
+          <ModernCard variant="glass" hover="glow" className="p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-xl font-semibold font-poppins flex items-center gap-2">
+                <h3 className="text-xl font-bold font-poppins flex items-center gap-2 text-foreground">
                   <TrendingUp className="h-5 w-5 text-primary" />
                   Activité Récente
                 </h3>
                 <p className="text-sm text-muted-foreground font-inter mt-1">
-                  Vos dernières interactions sur la plateforme
+                  Les dernières interactions de votre communauté FSU
                 </p>
               </div>
-              <Button variant="outline" size="sm">
+              <ModernButton variant="outline" size="sm">
+                <Bell className="h-4 w-4 mr-2" />
                 Voir tout
-              </Button>
+              </ModernButton>
             </div>
             
             <div className="space-y-4">
-              {[
-                { action: "Projet créé", title: "Initiative Numérique 2024", time: "Il y a 2h", type: "project" },
-                { action: "Document ajouté", title: "Guide des bonnes pratiques", time: "Il y a 4h", type: "document" },
-                { action: "Discussion rejointe", title: "Forum Développement Durable", time: "Hier", type: "forum" }
-              ].map((activity, index) => (
-                <div key={index} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-muted/30 transition-colors">
-                  <div className={`w-2 h-2 rounded-full ${
+              {recentActivity.map((activity, index) => (
+                <div key={index} className="flex items-center space-x-4 p-4 rounded-xl hover:bg-muted/30 transition-all duration-200 group">
+                  <div className={`w-3 h-3 rounded-full ${
                     activity.type === "project" ? "bg-blue-500" : 
-                    activity.type === "document" ? "bg-purple-500" : "bg-green-500"
-                  }`} />
+                    activity.type === "document" ? "bg-purple-500" : 
+                    activity.type === "forum" ? "bg-green-500" : "bg-orange-500"
+                  } group-hover:scale-110 transition-transform duration-200`} />
                   <div className="flex-1">
-                    <p className="font-medium">{activity.action}: {activity.title}</p>
-                    <p className="text-sm text-muted-foreground">{activity.time}</p>
+                    <p className="font-semibold text-foreground">
+                      <span className="text-primary">{activity.action}</span>: {activity.title}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-sm text-muted-foreground">{activity.time}</p>
+                      <span className="text-muted-foreground">•</span>
+                      <p className="text-sm font-medium text-muted-foreground">par {activity.user}</p>
+                    </div>
+                  </div>
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <ModernButton variant="ghost" size="sm">
+                      Voir
+                    </ModernButton>
                   </div>
                 </div>
               ))}
             </div>
-          </EnhancedCard>
+          </ModernCard>
         </ScrollReveal>
+
+        {/* Command Palette Integration */}
+        <div className="fixed bottom-6 right-6 z-50">
+          <CommandPalette />
+        </div>
       </div>
     </div>
   );

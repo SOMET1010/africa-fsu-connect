@@ -1,354 +1,289 @@
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { useState, useEffect } from "react";
+import { useTranslation } from "@/hooks/useTranslation";
 import { useAgencies } from "@/hooks/useAgencies";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { SyncConfigDialog } from "@/components/organizations/SyncConfigDialog";
-import { SyncButton } from "@/components/organizations/SyncButton";
-import { SyncHistoryDialog } from "@/components/organizations/SyncHistoryDialog";
+import { HeroSection } from "@/components/ui/hero-section";
+import { ModernStatsCard } from "@/components/ui/modern-stats-card";
+import { ModernCard } from "@/components/ui/modern-card";
+import { ModernButton } from "@/components/ui/modern-button";
+import { Input } from "@/components/ui/input";
 import { OrganizationsOverview } from "@/components/organizations/OrganizationsOverview";
+import { OrganizationsMap } from "@/components/organizations/OrganizationsMap";
 import { EnrichedAgencyCard } from "@/components/organizations/EnrichedAgencyCard";
 import { AutoEnrichmentPanel } from "@/components/organizations/AutoEnrichmentPanel";
-import { AgencyProfile } from "@/components/organizations/AgencyProfile";
-import { LeafletInteractiveMap } from "@/components/organizations/LeafletInteractiveMap";
-import { FirecrawlService } from "@/services/firecrawlService";
-import { useToast } from "@/hooks/use-toast";
-import { useTranslation } from "@/hooks/useTranslation";
-import { Link } from "react-router-dom";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { 
+  Search, 
+  MapPin, 
   Building2, 
-  RotateCcw,
-  RefreshCw,
-  Info,
-  Network,
-  Zap,
-  Globe,
-  Sparkles
+  Globe, 
+  Users, 
+  TrendingUp,
+  Filter,
+  Download,
+  Sync,
+  BarChart3
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const REGIONS = ["Europe", "Afrique", "Asie", "Amérique", "CEDEAO", "EACO", "SADC", "UMA"];
-
-export default function Organizations() {
-  const { agencies, loading, error, refetch } = useAgencies();
-  const { toast } = useToast();
+const Organizations = () => {
   const { t } = useTranslation();
+  const { agencies, loading, error } = useAgencies();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState<string>("all");
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
-  const [selectedAgency, setSelectedAgency] = useState<any>(null);
-  const [profileAgency, setProfileAgency] = useState<any>(null);
-  const [configDialogOpen, setConfigDialogOpen] = useState(false);
-  const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
-  const [batchSyncing, setBatchSyncing] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState("all");
+  const [selectedCountry, setSelectedCountry] = useState("all");
+  const [viewMode, setViewMode] = useState<'grid' | 'map' | 'overview' | 'enrichment'>('grid');
 
-  // Filtrer spécifiquement les SUTEL (agences avec metadata.sutel_type)
-  const sutelAgencies = agencies.filter(agency => 
-    agency.metadata && 
-    typeof agency.metadata === 'object' && 
-    'sutel_type' in agency.metadata && 
-    agency.metadata.sutel_type
-  );
+  // Get unique regions and countries for filters
+  const regions = [...new Set(agencies.map(agency => agency.region).filter(Boolean))];
+  const countries = [...new Set(agencies.map(agency => agency.country).filter(Boolean))];
 
-  const filteredAgencies = sutelAgencies.filter(agency => {
+  // Filter agencies based on search and filters
+  const filteredAgencies = agencies.filter(agency => {
     const matchesSearch = agency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          agency.acronym?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          agency.country.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRegion = selectedRegion === "all" || agency.region === selectedRegion;
-    const matchesStatus = selectedStatus === "all" || agency.sync_status === selectedStatus;
     
-    return matchesSearch && matchesRegion && matchesStatus;
+    const matchesRegion = selectedRegion === "all" || agency.region === selectedRegion;
+    const matchesCountry = selectedCountry === "all" || agency.country === selectedCountry;
+    
+    return matchesSearch && matchesRegion && matchesCountry;
   });
 
-  const handleBatchSync = async () => {
-    setBatchSyncing(true);
-    try {
-      const result = await FirecrawlService.batchSyncAllAgencies();
-      if (result.success) {
-        toast({
-          title: "Synchronisation en lot terminée",
-          description: `${result.totalSuccessful || 0}/${result.totalProcessed || 0} agences synchronisées`
-        });
-        refetch();
-      } else {
-        toast({
-          title: "Erreur de synchronisation",
-          description: result.error || "Une erreur est survenue",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Impossible de lancer la synchronisation en lot",
-        variant: "destructive"
-      });
-    } finally {
-      setBatchSyncing(false);
-    }
-  };
-
-  const handleSaveConfig = async (config: any) => {
-    if (!selectedAgency) return;
-
-    try {
-      const { error } = await supabase
-        .from('agency_connectors')
-        .upsert({
-          agency_id: selectedAgency.id,
-          connector_type: 'firecrawl',
-          auth_config: {
-            urls: config.urls,
-            extract_projects: config.extractSchema.projects,
-            extract_resources: config.extractSchema.resources,
-            extract_news: config.extractSchema.news,
-            sync_frequency: config.frequency,
-            include_paths: config.includePaths,
-            exclude_paths: config.excludePaths,
-            auto_enrichment: true
-          },
-          sync_frequency: config.frequency * 3600,
-          is_active: true
-        }, { onConflict: 'agency_id,connector_type' });
-
-      if (error) throw error;
-      refetch();
-    } catch (error) {
-      throw new Error("Impossible de sauvegarder la configuration");
-    }
-  };
+  // Calculate stats
+  const totalOrganizations = agencies.length;
+  const activeRegions = regions.length;
+  const totalCountries = countries.length;
+  const enrichedAgencies = agencies.filter(agency => agency.description || agency.website).length;
 
   if (loading) {
     return (
-      <div className="container mx-auto py-8 space-y-8">
-        <div className="space-y-4">
-          <Skeleton className="h-8 w-64" />
-          <Skeleton className="h-4 w-96" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="border rounded-lg p-4 space-y-3">
-              <Skeleton className="h-6 w-3/4" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-2/3" />
-              <div className="flex gap-2">
-                <Skeleton className="h-6 w-16" />
-                <Skeleton className="h-6 w-20" />
-              </div>
-            </div>
-          ))}
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <Zap className="h-8 w-8 text-primary" />
-            {t('sutel.title')}
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            {t('sutel.subtitle')}
-          </p>
-        </div>
-        <Button 
-          onClick={handleBatchSync} 
-          disabled={batchSyncing}
-          className="flex items-center gap-2"
-        >
-          {batchSyncing ? (
-            <RefreshCw className="h-4 w-4 animate-spin" />
-          ) : (
-            <RotateCcw className="h-4 w-4" />
-          )}
-          {batchSyncing ? "Collecte en cours..." : "Actualiser les données"}
-        </Button>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        
+        {/* Hero Section */}
+        <HeroSection
+          title="Organisations FSU"
+          subtitle="Réseau Africain"
+          description="Découvrez les agences et organismes de régulation des télécommunications à travers l'Afrique. Une plateforme collaborative pour renforcer les liens et partager les bonnes pratiques."
+          actions={[
+            {
+              label: "Synchroniser",
+              onClick: () => {},
+              icon: <Sync className="h-5 w-5" />,
+              variant: "default"
+            },
+            {
+              label: "Analytics",
+              onClick: () => setViewMode('overview'),
+              icon: <BarChart3 className="h-5 w-5" />,
+              variant: "outline"
+            }
+          ]}
+        />
 
-      {/* Enhanced Info Card */}
-      <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 border-blue-200 dark:border-blue-800">
-        <div className="flex items-start gap-4">
-          <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-            <Globe className="h-6 w-6 text-blue-600" />
+        {/* Statistics Cards */}
+        <ScrollReveal delay={200}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ModernStatsCard
+              title="Organisations"
+              value={totalOrganizations}
+              icon={Building2}
+              variant="gradient"
+              trend={{ value: 5, label: "Nouvelles ce mois", positive: true }}
+              description="Agences de régulation actives"
+            />
+            <ModernStatsCard
+              title="Régions"
+              value={activeRegions}
+              icon={Globe}
+              variant="gradient"
+              trend={{ value: 2, label: "Couverture étendue", positive: true }}
+              description="Zones géographiques couvertes"
+            />
+            <ModernStatsCard
+              title="Pays"
+              value={totalCountries}
+              icon={MapPin}
+              variant="gradient"
+              trend={{ value: 8, label: "Expansion continue", positive: true }}
+              description="Présence continentale"
+            />
+            <ModernStatsCard
+              title="Profils Enrichis"
+              value={enrichedAgencies}
+              icon={Users}
+              variant="gradient"
+              trend={{ value: 15, label: "Données complétées", positive: true }}
+              description="Informations détaillées"
+            />
           </div>
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-blue-900 dark:text-blue-100">
-                Réseau SUTEL : Agences du Service Universel des Télécommunications
-              </h3>
-              <Link 
-                to="/map" 
-                className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-              >
-                <Globe className="h-4 w-4" />
-                Voir la carte interactive
-              </Link>
-            </div>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
-              Ce réseau regroupe {sutelAgencies.length} agences spécialisées dans le déploiement du service universel 
-              des télécommunications à travers {[...new Set(sutelAgencies.map(a => a.country))].length} pays africains. 
-              Chaque SUTEL a pour mission de réduire la fracture numérique et d'étendre l'accès aux services de télécommunications 
-              dans les zones mal desservies.
-            </p>
-            <div className="flex items-center gap-4 text-xs text-blue-600 dark:text-blue-400">
-              <span>• Fonds de service universel</span>
-              <span>• Agences autonomes spécialisées</span>
-              <span>• Inclusion numérique territoriale</span>
-            </div>
-          </div>
-        </div>
-      </Card>
+        </ScrollReveal>
 
-      <Tabs defaultValue="dashboard" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="dashboard">Vue d'ensemble</TabsTrigger>
-          <TabsTrigger value="map" className="flex items-center gap-2">
-            <Globe className="h-4 w-4" />
-            Carte Interactive
-          </TabsTrigger>
-          <TabsTrigger value="enrichment" className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4" />
-            Enrichissement
-          </TabsTrigger>
-          <TabsTrigger value="directory">Annuaire</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="dashboard">
-          <OrganizationsOverview 
-            agencies={sutelAgencies}
-            onAgencyClick={(agency) => setProfileAgency(agency)}
-          />
-        </TabsContent>
-
-        <TabsContent value="map">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">Localisation des agences SUTEL</h3>
-                <p className="text-sm text-muted-foreground">
-                  Explorez la répartition géographique des {sutelAgencies.length} agences SUTEL à travers l'Afrique
-                </p>
+        {/* View Mode Toggle */}
+        <ScrollReveal delay={400}>
+          <ModernCard variant="glass" className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-foreground">Vue des Organisations</h2>
+              <div className="flex border border-border/50 rounded-xl p-1 bg-muted/30">
+                <ModernButton 
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'} 
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                >
+                  Grille
+                </ModernButton>
+                <ModernButton 
+                  variant={viewMode === 'map' ? 'default' : 'ghost'} 
+                  size="sm"
+                  onClick={() => setViewMode('map')}
+                >
+                  Carte
+                </ModernButton>
+                <ModernButton 
+                  variant={viewMode === 'overview' ? 'default' : 'ghost'} 
+                  size="sm"
+                  onClick={() => setViewMode('overview')}
+                >
+                  Vue d'ensemble
+                </ModernButton>
+                <ModernButton 
+                  variant={viewMode === 'enrichment' ? 'default' : 'ghost'} 
+                  size="sm"
+                  onClick={() => setViewMode('enrichment')}
+                >
+                  Enrichissement
+                </ModernButton>
               </div>
-              <Link to="/map">
-                <Button variant="outline">
-                  <Globe className="h-4 w-4 mr-2" />
-                  Plein écran
-                </Button>
-              </Link>
             </div>
-            <LeafletInteractiveMap agencies={sutelAgencies} />
-          </div>
-        </TabsContent>
+          </ModernCard>
+        </ScrollReveal>
 
-        <TabsContent value="enrichment">
-          <AutoEnrichmentPanel 
-            agencies={sutelAgencies}
-            onRefresh={refetch}
-          />
-        </TabsContent>
+        {/* View-specific content */}
+        {viewMode === 'map' && (
+          <ScrollReveal delay={600}>
+            <OrganizationsMap agencies={filteredAgencies} />
+          </ScrollReveal>
+        )}
+        
+        {viewMode === 'overview' && (
+          <ScrollReveal delay={600}>
+            <OrganizationsOverview agencies={filteredAgencies} />
+          </ScrollReveal>
+        )}
+        
+        {viewMode === 'enrichment' && (
+          <ScrollReveal delay={600}>
+            <AutoEnrichmentPanel />
+          </ScrollReveal>
+        )}
 
-        <TabsContent value="directory" className="space-y-6">
-          {/* Search and Filters */}
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <Input
-                placeholder="Rechercher une SUTEL par nom, acronyme ou pays..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Toutes les régions" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Toutes les régions</SelectItem>
-                {REGIONS.map((region) => (
-                  <SelectItem key={region} value={region}>{region}</SelectItem>
+        {/* Filters and Grid - only show for grid view */}
+        {viewMode === 'grid' && (
+          <>
+            <ScrollReveal delay={600}>
+              <ModernCard variant="glass" className="p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <Filter className="h-5 w-5 text-primary" />
+                  <h3 className="text-lg font-semibold">Filtres et Recherche</h3>
+                </div>
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Rechercher par nom, acronyme ou pays..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 h-12 rounded-xl border-border/50 bg-background/50"
+                    />
+                  </div>
+                  <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                    <SelectTrigger className="w-full md:w-48 h-12 rounded-xl border-border/50 bg-background/50">
+                      <SelectValue placeholder="Région" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Toutes les régions</SelectItem>
+                      {regions.map((region) => (
+                        <SelectItem key={region} value={region}>
+                          {region}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+                    <SelectTrigger className="w-full md:w-48 h-12 rounded-xl border-border/50 bg-background/50">
+                      <SelectValue placeholder="Pays" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Tous les pays</SelectItem>
+                      {countries.map((country) => (
+                        <SelectItem key={country} value={country}>
+                          {country}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </ModernCard>
+            </ScrollReveal>
+
+            {/* Organizations Grid */}
+            <ScrollReveal delay={800}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredAgencies.map((agency, index) => (
+                  <ScrollReveal key={agency.id} delay={100 * (index % 6)} direction="up">
+                    <EnrichedAgencyCard agency={agency} />
+                  </ScrollReveal>
                 ))}
-              </SelectContent>
-            </Select>
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="État des données" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous les états</SelectItem>
-                <SelectItem value="synced">Données enrichies</SelectItem>
-                <SelectItem value="pending">Collecte en cours</SelectItem>
-                <SelectItem value="failed">Erreur collecte</SelectItem>
-                <SelectItem value="partial">Données partielles</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+              </div>
+            </ScrollReveal>
 
-          {/* Results count */}
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              {filteredAgencies.length} SUTEL{filteredAgencies.length > 1 ? 's' : ''} 
-              {sutelAgencies.length !== filteredAgencies.length && ` sur ${sutelAgencies.length} au total`}
-            </div>
-            <div className="text-xs text-muted-foreground flex items-center gap-1">
-              <Sparkles className="h-3 w-3" />
-              Données enrichies automatiquement
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredAgencies.map((agency) => (
-              <EnrichedAgencyCard 
-                key={agency.id} 
-                agency={agency}
-                onViewProfile={setProfileAgency}
-              />
-            ))}
-          </div>
-
-          {filteredAgencies.length === 0 && !loading && (
-            <div className="text-center py-12">
-              <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium mb-2">Aucune SUTEL trouvée</h3>
-              <p className="text-muted-foreground">
-                Essayez de modifier vos critères de recherche ou filtres
-              </p>
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
-
-      {/* Agency Profile Modal */}
-      {profileAgency && (
-        <AgencyProfile
-          agency={profileAgency}
-          onClose={() => setProfileAgency(null)}
-        />
-      )}
-
-      {/* Existing dialogs */}
-      {selectedAgency && (
-        <SyncConfigDialog
-          open={configDialogOpen}
-          onOpenChange={setConfigDialogOpen}
-          agency={selectedAgency}
-          onSave={handleSaveConfig}
-        />
-      )}
-
-      {selectedAgency && (
-        <SyncHistoryDialog
-          open={historyDialogOpen}
-          onOpenChange={setHistoryDialogOpen}
-          agencyId={selectedAgency.id}
-          agencyName={selectedAgency.name}
-        />
-      )}
+            {filteredAgencies.length === 0 && (
+              <ScrollReveal delay={600}>
+                <ModernCard variant="glass" className="p-12 text-center">
+                  <Building2 className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">
+                    Aucune organisation trouvée
+                  </h3>
+                  <p className="text-muted-foreground mb-6">
+                    Essayez de modifier vos critères de recherche ou filtres.
+                  </p>
+                  <ModernButton 
+                    onClick={() => {
+                      setSearchTerm("");
+                      setSelectedRegion("all");
+                      setSelectedCountry("all");
+                    }}
+                    size="lg"
+                  >
+                    <Filter className="h-4 w-4 mr-2" />
+                    Réinitialiser les filtres
+                  </ModernButton>
+                </ModernCard>
+              </ScrollReveal>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
-}
+};
+
+export default Organizations;

@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useMemo, useRef } from "react";
 import { useOptimizedDocuments } from "@/hooks/useOptimizedDocuments";
 import { SearchProvider, useSearch } from "@/contexts/SearchContext";
@@ -9,8 +8,22 @@ import DocumentUploadDialog from "@/pages/resources/components/DocumentUploadDia
 import DocumentPreviewDialog from "@/pages/resources/components/DocumentPreviewDialog";
 import EmptyDocumentsState from "@/pages/resources/components/EmptyDocumentsState";
 import SampleDataButton from "@/components/resources/SampleDataButton";
+import { HeroSection } from "@/components/ui/hero-section";
+import { ModernCard } from "@/components/ui/modern-card";
+import { ModernButton } from "@/components/ui/modern-button";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/hooks/useTranslation";
+import { 
+  FileText, 
+  Upload, 
+  Download, 
+  Search, 
+  Filter,
+  Database,
+  Plus,
+  BarChart3
+} from "lucide-react";
 
 const ResourcesContent = () => {
   const { state, performSearch, fetchInitialDocuments } = useSearch();
@@ -92,66 +105,112 @@ const ResourcesContent = () => {
   }, [performSearch]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h1 className="text-4xl font-bold text-primary mb-4">
-                {t('resources.title')}
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-3xl">
-                {t('resources.subtitle')}
-              </p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        
+        {/* Hero Section */}
+        <ScrollReveal direction="fade">
+          <HeroSection
+            title="Centre de Ressources FSU"
+            subtitle="Documentation Collaborative"
+            description="Accédez à une bibliothèque complète de documents, guides, rapports et ressources pour le service universel des télécommunications. Partagez vos connaissances et explorez les meilleures pratiques."
+            actions={[
+              {
+                label: "Ajouter Document",
+                onClick: () => {},
+                icon: <Upload className="h-5 w-5" />,
+                variant: "default"
+              },
+              {
+                label: "Analytics",
+                onClick: () => {},
+                icon: <BarChart3 className="h-5 w-5" />,
+                variant: "outline"
+              }
+            ]}
+          >
             {state.documents.length === 0 && !state.loading && (
-              <SampleDataButton onDataAdded={fetchInitialDocuments} />
+              <div className="mt-6">
+                <SampleDataButton onDataAdded={fetchInitialDocuments} />
+              </div>
+            )}
+          </HeroSection>
+        </ScrollReveal>
+
+        {/* Resource Stats */}
+        <ScrollReveal delay={200}>
+          <ResourceStats documents={state.documents} loading={state.loading} />
+        </ScrollReveal>
+
+        {/* Search and Upload Section */}
+        <ScrollReveal delay={400}>
+          <ModernCard variant="glass" className="p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <Search className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-semibold">Recherche et Filtres</h3>
+            </div>
+            <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
+              <div className="flex-1">
+                <OptimizedSearchBar
+                  ref={searchBarRef}
+                  placeholder="Rechercher des documents par titre ou description..."
+                  onSearch={performSearch}
+                  filters={searchFilters}
+                  showFilters={true}
+                  initialQuery={state.query}
+                  initialFilters={state.filters}
+                />
+              </div>
+              <DocumentUploadDialog onUpload={handleFileUpload} />
+            </div>
+          </ModernCard>
+        </ScrollReveal>
+
+        {/* Documents Section */}
+        <ScrollReveal delay={600}>
+          <div className="space-y-6">
+            {state.loading ? (
+              <div className="grid gap-6">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <div key={index} className="animate-pulse">
+                    <ModernCard className="h-64 bg-muted/30" />
+                  </div>
+                ))}
+              </div>
+            ) : state.documents.length === 0 ? (
+              <EmptyDocumentsState onShowAll={handleShowAllDocuments} />
+            ) : (
+              <>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground">Documents Disponibles</h2>
+                    <p className="text-muted-foreground">
+                      {state.documents.length} document{state.documents.length > 1 ? 's' : ''} trouvé{state.documents.length > 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  <ModernButton variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" />
+                    Télécharger tout
+                  </ModernButton>
+                </div>
+                
+                <div className="grid gap-6">
+                  {state.documents.map((doc, index) => (
+                    <ScrollReveal key={doc.id} delay={100 * (index % 6)} direction="up">
+                      <DocumentCard
+                        document={doc}
+                        onPreview={handlePreview}
+                        onDownload={handleDownload}
+                      />
+                    </ScrollReveal>
+                  ))}
+                </div>
+              </>
             )}
           </div>
-        </div>
+        </ScrollReveal>
 
-        <ResourceStats documents={state.documents} loading={state.loading} />
-
-        <div className="mb-8 space-y-4">
-          <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
-            <div className="flex-1">
-              <OptimizedSearchBar
-                ref={searchBarRef}
-                placeholder="Rechercher des documents par titre ou description..."
-                onSearch={performSearch}
-                filters={searchFilters}
-                showFilters={true}
-                initialQuery={state.query}
-                initialFilters={state.filters}
-              />
-            </div>
-            <DocumentUploadDialog onUpload={handleFileUpload} />
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          {state.loading ? (
-            <div className="grid gap-6">
-              {Array.from({ length: 3 }).map((_, index) => (
-                <div key={index} className="animate-pulse bg-muted rounded-lg h-64"></div>
-              ))}
-            </div>
-          ) : state.documents.length === 0 ? (
-            <EmptyDocumentsState onShowAll={handleShowAllDocuments} />
-          ) : (
-            <div className="grid gap-6">
-              {state.documents.map((doc) => (
-                <DocumentCard
-                  key={doc.id}
-                  document={doc}
-                  onPreview={handlePreview}
-                  onDownload={handleDownload}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
+        {/* Document Preview Dialog */}
         <DocumentPreviewDialog
           document={previewDoc}
           isOpen={isPreviewOpen}
