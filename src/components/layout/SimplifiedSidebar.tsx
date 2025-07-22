@@ -78,6 +78,12 @@ const collaborationItems = [
     description: "Discussions"
   },
   { 
+    title: "Soumettre", 
+    url: "/submit", 
+    icon: FileText,
+    description: "Envoi de données"
+  },
+  { 
     title: "Événements", 
     url: "/events", 
     icon: Calendar,
