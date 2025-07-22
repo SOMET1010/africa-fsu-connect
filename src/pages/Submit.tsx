@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import FileUpload from "@/components/shared/FileUpload";
+import ContextualNavigation from "@/components/shared/ContextualNavigation";
 import { useToast } from "@/hooks/use-toast";
 
 const Submit = () => {
@@ -128,6 +129,9 @@ const Submit = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
+        {/* Navigation contextuelle */}
+        <ContextualNavigation />
+
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-primary mb-4">
@@ -271,7 +275,7 @@ const Submit = () => {
                   <Label>Documents Justificatifs</Label>
                   <FileUpload
                     accept=".pdf,.doc,.docx,.xls,.xlsx"
-                    maxSize={50 * 1024 * 1024} // 50MB
+                    maxSize={50 * 1024 * 1024}
                     multiple={true}
                     onFilesSelected={handleFileUpload}
                   />
