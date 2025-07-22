@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
-import { Globe, TrendingUp, Users, Wifi, Activity, Database, Zap } from "lucide-react";
+import { Globe, TrendingUp, Users, Wifi, Activity, Database, Zap, Globe2, Shield } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { useEnhancedIndicators, useRegionalIndicatorStats, useDataSourceStats } from "@/hooks/useEnhancedIndicators";
 
@@ -54,24 +54,29 @@ export const GlobalIndicatorsWidget = () => {
   const uniqueRegions = new Set(indicators?.map(i => i.region)).size;
   const latestYear = Math.max(...(indicators?.map(i => i.year) || [2024]));
 
+  // Calculer les standards internationaux
+  const internationalStandards = indicators?.filter(ind => 
+    ind.metadata?.category && ['Infrastructure', 'Inclusion', 'Qualité', 'Économique'].includes(ind.metadata.category)
+  ).length || 0;
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-      {/* Overview Stats Enhanced */}
+      {/* Overview Stats Enhanced avec Standards Internationaux */}
       <ScrollReveal className="xl:col-span-3">
-        <Card className="bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 border-primary/20">
+        <Card className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 border-blue-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              <Zap className="h-6 w-6 text-primary" />
-              Indicateurs FSU - Données Enrichies en Temps Réel
+              <Globe2 className="h-6 w-6 text-blue-600" />
+              Indicateurs FSU - Standards Internationaux ITU/OCDE/G20
             </CardTitle>
             <div className="flex flex-wrap gap-2 mt-2">
               <Badge variant="default" className="flex items-center gap-1">
-                <Database className="h-3 w-3" />
-                Données Officielles
+                <Shield className="h-3 w-3" />
+                Standards ITU/OCDE
               </Badge>
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Globe className="h-3 w-3" />
-                Multi-Sources
+                Multi-Sources Officielles
               </Badge>
               <Badge variant="outline" className="flex items-center gap-1">
                 <Activity className="h-3 w-3" />
@@ -80,10 +85,14 @@ export const GlobalIndicatorsWidget = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">{totalIndicators.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-blue-600">{totalIndicators.toLocaleString()}</div>
                 <div className="text-sm text-muted-foreground">Indicateurs Totaux</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">{internationalStandards}</div>
+                <div className="text-sm text-muted-foreground">Standards Internationaux</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-secondary">{uniqueCountries}</div>
@@ -129,7 +138,7 @@ export const GlobalIndicatorsWidget = () => {
                   <div className="flex justify-between text-sm">
                     <span className="font-medium">{indicator.country_code}</span>
                     <span className="text-muted-foreground">
-                      {indicator.value.toFixed(1)}{indicator.unit === 'percentage' ? '%' : ''}
+                      {indicator.value.toFixed(1)}{indicator.unit === 'pourcentage' ? '%' : ''}
                     </span>
                   </div>
                   <Progress value={progress} className="h-2" />
@@ -238,6 +247,14 @@ export const GlobalIndicatorsWidget = () => {
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
                     Maj: {new Date(source.lastUpdate).toLocaleDateString()}
+                  </div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge variant={source.apiStatus === 'active' ? 'default' : 'secondary'} className="text-xs">
+                      {source.apiStatus}
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      {source.reliability}% fiabilité
+                    </Badge>
                   </div>
                 </div>
                 <Badge variant={source.totalIndicators > 100 ? "default" : "secondary"}>
