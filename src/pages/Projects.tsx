@@ -1,9 +1,10 @@
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "@/hooks/useTranslation";
-import { Button } from "@/components/ui/button";
+import { ModernButton } from "@/components/ui/modern-button";
 import { Input } from "@/components/ui/input";
+import { HeroSection } from "@/components/ui/hero-section";
+import { ModernStatsCard } from "@/components/ui/modern-stats-card";
 import { 
   Search, 
   Plus,
@@ -11,7 +12,11 @@ import {
   Download,
   BarChart3,
   Bell,
-  Database
+  Database,
+  FolderOpen,
+  Users,
+  Clock,
+  CheckCircle
 } from "lucide-react";
 import {
   Select,
@@ -23,7 +28,6 @@ import {
 import { useProjects } from "@/hooks/useProjects";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { ProjectDialog } from "@/components/projects/ProjectDialog";
-import { ProjectStats } from "@/components/projects/ProjectStats";
 import { ProjectsMap } from "@/components/projects/ProjectsMap";
 import { ProjectAnalytics } from "@/components/projects/ProjectAnalytics";
 import { ProjectExport } from "@/components/projects/ProjectExport";
@@ -31,7 +35,7 @@ import { ProjectReports } from "@/components/projects/ProjectReports";
 import { ProjectNotifications } from "@/components/projects/ProjectNotifications";
 import { SampleProjectData } from "@/components/projects/SampleProjectData";
 import { useToast } from "@/hooks/use-toast";
-import type { Project } from "@/types/projects";
+import { ModernCard } from "@/components/ui/modern-card";
 
 const Projects = () => {
   const { t } = useTranslation();
@@ -94,6 +98,12 @@ const Projects = () => {
   const regions = [...new Set(projects.map(p => p.agencies?.region).filter(Boolean))];
   const statuses = [...new Set(projects.map(p => p.status))];
 
+  // Calculate stats
+  const totalProjects = projects.length;
+  const activeProjects = projects.filter(p => p.status === 'En cours').length;
+  const completedProjects = projects.filter(p => p.status === 'Terminé').length;
+  const pendingProjects = projects.filter(p => p.status === 'En attente').length;
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -105,92 +115,127 @@ const Projects = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Page Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            {t('projects.title')}
-          </h1>
-          <p className="text-muted-foreground">
-            {t('projects.subtitle')}
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Hero Section */}
+        <HeroSection
+          title="Gestion des Projets FSU"
+          subtitle="Plateforme collaborative"
+          description="Découvrez, gérez et suivez tous les projets de fonds de service universel des télécommunications à travers l'Afrique."
+          actions={[
+            {
+              label: "Nouveau Projet",
+              onClick: handleCreateProject,
+              icon: <Plus className="h-5 w-5" />,
+              variant: "default"
+            },
+            {
+              label: "Voir Analytics",
+              onClick: () => setViewMode('analytics'),
+              icon: <BarChart3 className="h-5 w-5" />,
+              variant: "outline"
+            }
+          ]}
+        />
+
+        {/* Demo Data Button - only show if no projects */}
+        {projects.length === 0 && <SampleProjectData />}
+
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <ModernStatsCard
+            title="Projets Totaux"
+            value={totalProjects}
+            icon={FolderOpen}
+            variant="gradient"
+            trend={{ value: 12, label: "Ce mois", positive: true }}
+          />
+          <ModernStatsCard
+            title="Projets Actifs"
+            value={activeProjects}
+            icon={Clock}
+            variant="gradient"
+            trend={{ value: 8, label: "Cette semaine", positive: true }}
+          />
+          <ModernStatsCard
+            title="Projets Terminés"
+            value={completedProjects}
+            icon={CheckCircle}
+            variant="gradient"
+            trend={{ value: 5, label: "Ce mois", positive: true }}
+          />
+          <ModernStatsCard
+            title="En Attente"
+            value={pendingProjects}
+            icon={Users}
+            variant="gradient"
+            trend={{ value: -2, label: "Cette semaine", positive: false }}
+          />
         </div>
-        <div className="flex gap-2">
-          <div className="flex border rounded-lg p-1">
-            <Button 
-              variant={viewMode === 'grid' ? 'default' : 'ghost'} 
-              size="sm"
-              onClick={() => setViewMode('grid')}
-            >
-              Grille
-            </Button>
-            <Button 
-              variant={viewMode === 'map' ? 'default' : 'ghost'} 
-              size="sm"
-              onClick={() => setViewMode('map')}
-            >
-              Carte
-            </Button>
-            <Button 
-              variant={viewMode === 'analytics' ? 'default' : 'ghost'} 
-              size="sm"
-              onClick={() => setViewMode('analytics')}
-            >
-              Analytique
-            </Button>
-            <Button 
-              variant={viewMode === 'reports' ? 'default' : 'ghost'} 
-              size="sm"
-              onClick={() => setViewMode('reports')}
-            >
-              Rapports
-            </Button>
-            <Button 
-              variant={viewMode === 'notifications' ? 'default' : 'ghost'} 
-              size="sm"
-              onClick={() => setViewMode('notifications')}
-            >
-              <Bell className="h-4 w-4" />
-            </Button>
+
+        {/* View Mode Toggle */}
+        <ModernCard variant="glass" className="p-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-foreground">Vue des Projets</h2>
+            <div className="flex border border-border/50 rounded-xl p-1 bg-muted/30">
+              <ModernButton 
+                variant={viewMode === 'grid' ? 'default' : 'ghost'} 
+                size="sm"
+                onClick={() => setViewMode('grid')}
+              >
+                Grille
+              </ModernButton>
+              <ModernButton 
+                variant={viewMode === 'map' ? 'default' : 'ghost'} 
+                size="sm"
+                onClick={() => setViewMode('map')}
+              >
+                Carte
+              </ModernButton>
+              <ModernButton 
+                variant={viewMode === 'analytics' ? 'default' : 'ghost'} 
+                size="sm"
+                onClick={() => setViewMode('analytics')}
+              >
+                Analytics
+              </ModernButton>
+              <ModernButton 
+                variant={viewMode === 'reports' ? 'default' : 'ghost'} 
+                size="sm"
+                onClick={() => setViewMode('reports')}
+              >
+                Rapports
+              </ModernButton>
+              <ModernButton 
+                variant={viewMode === 'notifications' ? 'default' : 'ghost'} 
+                size="sm"
+                onClick={() => setViewMode('notifications')}
+              >
+                <Bell className="h-4 w-4" />
+              </ModernButton>
+            </div>
           </div>
-          <Button onClick={handleCreateProject}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nouveau Projet
-          </Button>
-        </div>
-      </div>
+        </ModernCard>
 
-      {/* Demo Data Button - only show if no projects */}
-      {projects.length === 0 && <SampleProjectData />}
-
-      {/* Statistics */}
-      <ProjectStats projects={projects} />
-
-      {/* Export Tools - show for all views except notifications */}
-      {viewMode !== 'notifications' && (
-        <div className="mb-8">
+        {/* Export Tools - show for all views except notifications */}
+        {viewMode !== 'notifications' && (
           <ProjectExport projects={filteredProjects} />
-        </div>
-      )}
+        )}
 
-      {/* View-specific content */}
-      {viewMode === 'map' && <ProjectsMap projects={filteredProjects} />}
-      {viewMode === 'analytics' && <ProjectAnalytics projects={filteredProjects} />}
-      {viewMode === 'reports' && <ProjectReports projects={filteredProjects} />}
-      {viewMode === 'notifications' && <ProjectNotifications projects={filteredProjects} />}
+        {/* View-specific content */}
+        {viewMode === 'map' && <ProjectsMap projects={filteredProjects} />}
+        {viewMode === 'analytics' && <ProjectAnalytics projects={filteredProjects} />}
+        {viewMode === 'reports' && <ProjectReports projects={filteredProjects} />}
+        {viewMode === 'notifications' && <ProjectNotifications projects={filteredProjects} />}
 
-      {/* Filters and Grid - only show for grid view */}
-      {viewMode === 'grid' && (
-        <>
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Filter className="h-5 w-5" />
-                Filtres et recherche
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+        {/* Filters and Grid - only show for grid view */}
+        {viewMode === 'grid' && (
+          <>
+            <ModernCard variant="glass" className="p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <Filter className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Filtres et Recherche</h3>
+              </div>
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -198,11 +243,11 @@ const Projects = () => {
                     placeholder="Rechercher par nom, pays ou localisation..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 h-12 rounded-xl border-border/50 bg-background/50"
                   />
                 </div>
                 <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                  <SelectTrigger className="w-full md:w-48">
+                  <SelectTrigger className="w-full md:w-48 h-12 rounded-xl border-border/50 bg-background/50">
                     <SelectValue placeholder="Région" />
                   </SelectTrigger>
                   <SelectContent>
@@ -215,7 +260,7 @@ const Projects = () => {
                   </SelectContent>
                 </Select>
                 <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                  <SelectTrigger className="w-full md:w-48">
+                  <SelectTrigger className="w-full md:w-48 h-12 rounded-xl border-border/50 bg-background/50">
                     <SelectValue placeholder="Statut" />
                   </SelectTrigger>
                   <SelectContent>
@@ -228,48 +273,55 @@ const Projects = () => {
                   </SelectContent>
                 </Select>
               </div>
-            </CardContent>
-          </Card>
+            </ModernCard>
 
-          {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onEdit={handleEditProject}
-                onDelete={handleDeleteProject}
-                onView={handleViewProject}
-              />
-            ))}
-          </div>
-
-          {filteredProjects.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground mb-4">
-                {projects.length === 0 
-                  ? "Aucun projet trouvé. Créez votre premier projet !" 
-                  : "Aucun projet trouvé avec les critères de recherche actuels."
-                }
-              </p>
-              {projects.length === 0 && (
-                <Button onClick={handleCreateProject}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Créer un projet
-                </Button>
-              )}
+            {/* Projects Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProjects.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  onEdit={handleEditProject}
+                  onDelete={handleDeleteProject}
+                  onView={handleViewProject}
+                />
+              ))}
             </div>
-          )}
-        </>
-      )}
 
-      {/* Project Dialog */}
-      <ProjectDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        project={editingProject}
-        onSave={handleSaveProject}
-      />
+            {filteredProjects.length === 0 && (
+              <ModernCard variant="glass" className="p-12 text-center">
+                <Database className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-xl font-semibold mb-2">
+                  {projects.length === 0 
+                    ? "Aucun projet trouvé" 
+                    : "Aucun projet correspond aux critères"
+                  }
+                </h3>
+                <p className="text-muted-foreground mb-6">
+                  {projects.length === 0 
+                    ? "Créez votre premier projet pour commencer !" 
+                    : "Essayez de modifier vos critères de recherche."
+                  }
+                </p>
+                {projects.length === 0 && (
+                  <ModernButton onClick={handleCreateProject} size="lg">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Créer un projet
+                  </ModernButton>
+                )}
+              </ModernCard>
+            )}
+          </>
+        )}
+
+        {/* Project Dialog */}
+        <ProjectDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          project={editingProject}
+          onSave={handleSaveProject}
+        />
+      </div>
     </div>
   );
 };
