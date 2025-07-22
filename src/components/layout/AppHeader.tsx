@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserPreferences } from "@/contexts/UserPreferencesContext";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface AppHeaderProps {
   showSidebar: boolean;
@@ -34,6 +35,7 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { preferences, updatePreferences } = useUserPreferences();
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -41,13 +43,13 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
       await signOut();
       navigate("/");
       toast({
-        title: "Déconnexion réussie",
-        description: "À bientôt !",
+        title: t('auth.logout.success'),
+        description: t('auth.logout.goodbye'),
       });
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Impossible de se déconnecter",
+        title: t('common.error'),
+        description: t('auth.logout.error'),
         variant: "destructive",
       });
     }
@@ -180,19 +182,19 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="flex items-center">
                       <User className="mr-2 h-4 w-4" />
-                      <span>Profil</span>
+                      <span>{t('nav.profile')}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/settings" className="flex items-center">
                       <Settings className="mr-2 h-4 w-4" />
-                      <span>Paramètres</span>
+                      <span>{t('nav.settings')}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Se déconnecter</span>
+                    <span>{t('nav.logout')}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -201,7 +203,7 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
             /* Boutons pour les utilisateurs non connectés */
             <div className="flex items-center space-x-2">
               <Button variant="ghost" asChild>
-                <Link to="/auth">Se connecter</Link>
+                <Link to="/auth">{t('auth.login')}</Link>
               </Button>
               <Button asChild>
                 <Link to="/auth">Commencer</Link>

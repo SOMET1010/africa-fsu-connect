@@ -17,6 +17,7 @@ import { AgencyProfile } from "@/components/organizations/AgencyProfile";
 import { LeafletInteractiveMap } from "@/components/organizations/LeafletInteractiveMap";
 import { FirecrawlService } from "@/services/firecrawlService";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/hooks/useTranslation";
 import { Link } from "react-router-dom";
 import { 
   Building2, 
@@ -34,6 +35,7 @@ const REGIONS = ["Europe", "Afrique", "Asie", "Amérique", "CEDEAO", "EACO", "SA
 export default function Organizations() {
   const { agencies, loading, error, refetch } = useAgencies();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
@@ -149,10 +151,10 @@ export default function Organizations() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
             <Zap className="h-8 w-8 text-primary" />
-            Réseau SUTEL Africain
+            {t('sutel.title')}
           </h1>
           <p className="text-muted-foreground mt-2">
-            Agences spécialisées dans le Service Universel des Télécommunications en Afrique
+            {t('sutel.subtitle')}
           </p>
         </div>
         <Button 

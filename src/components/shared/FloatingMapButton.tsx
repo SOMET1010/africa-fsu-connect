@@ -6,10 +6,12 @@ import { LeafletInteractiveMap } from "@/components/organizations/LeafletInterac
 import { useAgencies } from "@/hooks/useAgencies";
 import { Globe, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export const FloatingMapButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { agencies } = useAgencies();
+  const { t } = useTranslation();
 
   const sutelAgencies = agencies.filter(agency => 
     agency.metadata && 
@@ -38,7 +40,7 @@ export const FloatingMapButton = () => {
             <DialogTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                Carte Interactive SUTEL - Aperçu rapide
+                {t('sutel.interactive.map')}
               </div>
               <div className="flex items-center gap-2">
                 <Link 
@@ -46,7 +48,7 @@ export const FloatingMapButton = () => {
                   onClick={() => setIsOpen(false)}
                   className="text-sm text-primary hover:underline"
                 >
-                  Voir en plein écran →
+                  {t('sutel.fullscreen')} →
                 </Link>
                 <Button 
                   variant="ghost" 
