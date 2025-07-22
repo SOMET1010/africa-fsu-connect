@@ -1,0 +1,13 @@
+
+plugins {
+    id "com.liferay.workspace" version "4.0.7"
+}
+
+liferayWorkspace {
+    dockerImageLiferay = "liferay/portal:7.4.3.92-ga92"
+    targetPlatformVersion = "7.4.3.92"
+}
+
+repositories {
+    mavenCentral()
+}
