@@ -1,10 +1,12 @@
 
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { GlobalIndicatorsWidget } from "@/components/dashboard/widgets/GlobalIndicatorsWidget";
+import { IndicatorsEnrichmentPanel } from "@/components/indicators/IndicatorsEnrichmentPanel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Download, Filter, Calendar, Globe } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TrendingUp, Download, Filter, Calendar, Globe, Database } from "lucide-react";
 
 const Indicators = () => {
   return (
@@ -71,9 +73,28 @@ const Indicators = () => {
           </Card>
         </ScrollReveal>
 
-        {/* Main Widget */}
+        {/* Main Content with Tabs */}
         <ScrollReveal delay={400}>
-          <GlobalIndicatorsWidget />
+          <Tabs defaultValue="dashboard" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="dashboard" className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Dashboard
+              </TabsTrigger>
+              <TabsTrigger value="enrichment" className="flex items-center gap-2">
+                <Database className="h-4 w-4" />
+                Enrichissement
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="dashboard" className="mt-6">
+              <GlobalIndicatorsWidget />
+            </TabsContent>
+            
+            <TabsContent value="enrichment" className="mt-6">
+              <IndicatorsEnrichmentPanel />
+            </TabsContent>
+          </Tabs>
         </ScrollReveal>
       </div>
     </div>
