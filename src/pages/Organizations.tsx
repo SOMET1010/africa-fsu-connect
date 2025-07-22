@@ -23,7 +23,7 @@ import {
   TrendingUp,
   Filter,
   Download,
-  Sync,
+  RefreshCw,
   BarChart3
 } from "lucide-react";
 import {
@@ -62,7 +62,7 @@ const Organizations = () => {
   const totalOrganizations = agencies.length;
   const activeRegions = regions.length;
   const totalCountries = countries.length;
-  const enrichedAgencies = agencies.filter(agency => agency.description || agency.website).length;
+  const enrichedAgencies = agencies.filter(agency => agency.description || agency.website_url).length;
 
   if (loading) {
     return (
@@ -87,7 +87,7 @@ const Organizations = () => {
             {
               label: "Synchroniser",
               onClick: () => {},
-              icon: <Sync className="h-5 w-5" />,
+              icon: <RefreshCw className="h-5 w-5" />,
               variant: "default"
             },
             {
@@ -191,7 +191,7 @@ const Organizations = () => {
         
         {viewMode === 'enrichment' && (
           <ScrollReveal delay={600}>
-            <AutoEnrichmentPanel />
+            <AutoEnrichmentPanel agencies={filteredAgencies} onRefresh={() => {}} />
           </ScrollReveal>
         )}
 
@@ -249,7 +249,7 @@ const Organizations = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredAgencies.map((agency, index) => (
                   <ScrollReveal key={agency.id} delay={100 * (index % 6)} direction="up">
-                    <EnrichedAgencyCard agency={agency} />
+                    <EnrichedAgencyCard agency={agency} onViewProfile={() => {}} />
                   </ScrollReveal>
                 ))}
               </div>
