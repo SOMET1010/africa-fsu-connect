@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MessageCircle, Reply, ThumbsUp, Pin, Search, Plus, Heart, Lightbulb, ThumbsDown, Edit, Trash2 } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,7 @@ import OptimizedSearchBar from "@/components/shared/OptimizedSearchBar";
 import { useToast } from "@/hooks/use-toast";
 
 const Forum = () => {
+  const { t } = useTranslation();
   const [isNewPostOpen, setIsNewPostOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [newPostTitle, setNewPostTitle] = useState("");
@@ -138,11 +140,10 @@ const Forum = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-primary mb-4">
-            Forum de Discussion FSU
+            {t('forum.title')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl">
-            Espace d'échange et de collaboration entre les agences FSU africaines. 
-            Partagez vos expériences, posez vos questions et contribuez aux discussions thématiques.
+            {t('forum.subtitle')}
           </p>
         </div>
 

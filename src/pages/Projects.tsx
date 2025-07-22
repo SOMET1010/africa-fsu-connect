@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "@/hooks/useTranslation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -33,6 +34,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { Project } from "@/types/projects";
 
 const Projects = () => {
+  const { t } = useTranslation();
   const { projects, loading, createProject, updateProject, deleteProject } = useProjects();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
@@ -108,10 +110,10 @@ const Projects = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            Projets FSU/SUTEL
+            {t('projects.title')}
           </h1>
           <p className="text-muted-foreground">
-            Gestion et suivi des projets de service universel en Afrique
+            {t('projects.subtitle')}
           </p>
         </div>
         <div className="flex gap-2">

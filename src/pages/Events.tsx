@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Calendar, Clock, MapPin, Users, Video, Plus, Download, Bell, ExternalLink, UserCheck } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 
 const Events = () => {
+  const { t } = useTranslation();
   const [selectedView, setSelectedView] = useState("list");
   const [isNewEventOpen, setIsNewEventOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -144,11 +146,10 @@ const Events = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-primary mb-4">
-            Agenda des Événements FSU
+            {t('events.title')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl">
-            Suivez les événements, conférences, webinaires et deadlines importantes 
-            de la communauté FSU africaine.
+            {t('events.subtitle')}
           </p>
         </div>
 
