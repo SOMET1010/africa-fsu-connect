@@ -1,4 +1,3 @@
-
 import { Calendar, Users, MapPin, Clock } from "lucide-react";
 import { useEvents } from "@/hooks/useEvents";
 import { Badge } from "@/components/ui/badge";
