@@ -1,4 +1,3 @@
-
 import { ReactNode } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -6,8 +5,10 @@ import { FloatingMapButton } from "@/components/shared/FloatingMapButton";
 import ImprovedMobileBottomNav from "@/components/navigation/ImprovedMobileBottomNav";
 import { useAuth } from "@/contexts/AuthContext";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { SimplifiedSidebar } from "./SimplifiedSidebar";
 import { useLocation } from "react-router-dom";
+import { PageTransition } from "@/components/ui/page-transition";
+import { ModernSidebar } from "./ModernSidebar";
+import ModernHeader from "./ModernHeader";
 
 interface AppShellProps {
   children: ReactNode;
@@ -24,13 +25,15 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
 
   return (
     <SidebarProvider defaultCollapsed={!shouldSidebarBeOpen}>
-      <div className="min-h-screen bg-background flex w-full">
-        {user && <SimplifiedSidebar />}
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 flex w-full">
+        {user && <ModernSidebar />}
         
-        <div className="flex flex-col flex-1">
-          <Header />
-          <main className="flex-1">
-            {children}
+        <div className="flex flex-col flex-1 min-w-0">
+          <ModernHeader />
+          <main className="flex-1 relative">
+            <PageTransition variant="fade" duration="normal">
+              {children}
+            </PageTransition>
           </main>
           {!hideFooter && <Footer />}
         </div>
