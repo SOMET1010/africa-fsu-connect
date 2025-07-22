@@ -1,3 +1,4 @@
+
 import { useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -31,45 +32,47 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-const menuSections = [
-  {
-    label: "Personnel",
-    items: [
-      { title: "Tableau de Bord", url: "/dashboard", icon: Home },
-      { title: "Mon Profil", url: "/profile", icon: User },
-      { title: "Sécurité", url: "/security", icon: Shield },
-    ]
-  },
-  {
-    label: "Collaboration",
-    items: [
-      { title: "Organisations", url: "/organizations", icon: Building2 },
-      { title: "Projets FSU", url: "/projects", icon: FolderOpen },
-      { title: "Ressources", url: "/docs", icon: BookOpen },
-      { title: "Forum", url: "/forum", icon: MessageSquare },
-      { title: "Soumettre", url: "/submit", icon: Send },
-      { title: "Événements", url: "/events", icon: Calendar },
-    ]
-  }
-];
-
-const adminSection = {
-  label: "Administration",
-  items: [
-    { title: "Vue d'ensemble", url: "/admin", icon: BarChart3 },
-    { title: "Utilisateurs", url: "/admin/users", icon: Users },
-    { title: "Modération Forum", url: "/admin/forum", icon: ShieldCheck },
-  ]
-};
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function AppSidebar() {
   const location = useLocation();
   const { user, profile } = useAuth();
   const { state } = useSidebar();
+  const { t } = useTranslation();
   
   const currentPath = location.pathname;
   const isCollapsed = state === "collapsed";
+  
+  const menuSections = [
+    {
+      label: "Personnel",
+      items: [
+        { title: t('nav.dashboard'), url: "/dashboard", icon: Home },
+        { title: t('nav.profile'), url: "/profile", icon: User },
+        { title: t('nav.security'), url: "/security", icon: Shield },
+      ]
+    },
+    {
+      label: "Collaboration",
+      items: [
+        { title: t('nav.organizations'), url: "/organizations", icon: Building2 },
+        { title: t('nav.projects'), url: "/projects", icon: FolderOpen },
+        { title: t('nav.resources'), url: "/docs", icon: BookOpen },
+        { title: t('nav.forum'), url: "/forum", icon: MessageSquare },
+        { title: "Soumettre", url: "/submit", icon: Send },
+        { title: t('nav.events'), url: "/events", icon: Calendar },
+      ]
+    }
+  ];
+
+  const adminSection = {
+    label: t('nav.admin'),
+    items: [
+      { title: "Vue d'ensemble", url: "/admin", icon: BarChart3 },
+      { title: "Utilisateurs", url: "/admin/users", icon: Users },
+      { title: "Modération Forum", url: "/admin/forum", icon: ShieldCheck },
+    ]
+  };
   
   const isActive = (path: string) => currentPath === path;
   const isAdminUser = profile?.role && ['super_admin', 'admin_pays', 'editeur'].includes(profile.role);
@@ -110,7 +113,7 @@ export function AppSidebar() {
           {!isCollapsed && (
             <div className="min-w-0">
               <h2 className="font-bold text-sidebar-foreground text-sm leading-tight">
-                Plateforme FSU
+                {t('landing.title')}
               </h2>
               <p className="text-xs text-sidebar-foreground/70">Afrique</p>
             </div>

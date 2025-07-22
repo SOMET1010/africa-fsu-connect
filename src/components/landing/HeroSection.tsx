@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Globe } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function HeroSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative bg-gradient-to-br from-primary via-blue-600 to-blue-800 text-white overflow-hidden">
       {/* Background pattern */}
@@ -15,37 +18,37 @@ export function HeroSection() {
           {/* Badge d'introduction */}
           <Badge variant="secondary" className="mb-6 px-4 py-2 bg-white/20 text-white border-white/30 hover:bg-white/30">
             <Globe className="w-4 h-4 mr-2" />
-            Plateforme Collaborative Africaine
+            {t('hero.badge')}
           </Badge>
           
           {/* Titre principal */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            <span className="block">Fonds du Service</span>
-            <span className="block text-yellow-300">Universel Afrique</span>
+            <span className="block">{t('hero.title.line1')}</span>
+            <span className="block text-yellow-300">{t('hero.title.line2')}</span>
           </h1>
           
           {/* Sous-titre */}
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Unissons nos forces pour une connectivité universelle et inclusive à travers le continent africain
+            {t('hero.subtitle')}
           </p>
           
           {/* Statistiques rapides */}
           <div className="flex flex-wrap justify-center gap-8 mb-10 text-center">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[120px]">
               <div className="text-2xl lg:text-3xl font-bold text-yellow-300">54</div>
-              <div className="text-sm text-white/80">Pays</div>
+              <div className="text-sm text-white/80">{t('hero.stats.countries')}</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[120px]">
               <div className="text-2xl lg:text-3xl font-bold text-yellow-300">1,247</div>
-              <div className="text-sm text-white/80">Projets</div>
+              <div className="text-sm text-white/80">{t('hero.stats.projects')}</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[120px]">
               <div className="text-2xl lg:text-3xl font-bold text-yellow-300">186</div>
-              <div className="text-sm text-white/80">Organisations</div>
+              <div className="text-sm text-white/80">{t('hero.stats.organizations')}</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[120px]">
               <div className="text-2xl lg:text-3xl font-bold text-yellow-300">45M+</div>
-              <div className="text-sm text-white/80">Bénéficiaires</div>
+              <div className="text-sm text-white/80">{t('hero.stats.beneficiaries')}</div>
             </div>
           </div>
           
@@ -57,7 +60,7 @@ export function HeroSection() {
               asChild
             >
               <Link to="/auth" className="flex items-center">
-                Commencer maintenant
+                {t('common.get.started')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
@@ -67,7 +70,7 @@ export function HeroSection() {
               className="border-white/30 text-white hover:bg-white/10 hover:border-white px-8 py-3 text-lg backdrop-blur-sm"
               asChild
             >
-              <Link to="/organizations">Explorer les projets</Link>
+              <Link to="/organizations">{t('common.explore.projects')}</Link>
             </Button>
           </div>
         </div>

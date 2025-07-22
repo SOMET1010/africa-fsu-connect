@@ -16,50 +16,77 @@ import {
   Globe,
   Building2
 } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const Index = () => {
+  const { t } = useTranslation();
+
   const features = [
     {
       icon: Target,
-      title: "Projets FSU",
-      description: "Suivi et gestion collaborative des initiatives de service universel",
+      title: t('features.fsu.projects'),
+      description: t('features.fsu.projects.desc'),
       link: "/projects",
-      highlights: ["Gestion de projet", "Suivi en temps réel", "Rapports automatisés"]
+      highlights: [
+        t('features.fsu.projects.highlight1'), 
+        t('features.fsu.projects.highlight2'), 
+        t('features.fsu.projects.highlight3')
+      ]
     },
     {
       icon: BookOpen,
-      title: "Ressources Partagées",
-      description: "Bibliothèque de guides, rapports et meilleures pratiques",
+      title: t('features.shared.resources'),
+      description: t('features.shared.resources.desc'),
       link: "/docs",
-      highlights: ["Guides pratiques", "Études de cas", "Documentation technique"]
+      highlights: [
+        t('features.shared.resources.highlight1'), 
+        t('features.shared.resources.highlight2'), 
+        t('features.shared.resources.highlight3')
+      ]
     },
     {
       icon: Building2,
-      title: "Répertoire d'Organisations",
-      description: "Cartographie interactive des agences FSU et partenaires",
+      title: t('features.organizations.directory'),
+      description: t('features.organizations.directory.desc'),
       link: "/organizations",
-      highlights: ["Carte interactive", "Profils détaillés", "Coordination facilitée"]
+      highlights: [
+        t('features.organizations.directory.highlight1'), 
+        t('features.organizations.directory.highlight2'), 
+        t('features.organizations.directory.highlight3')
+      ]
     },
     {
       icon: MessageSquare,
-      title: "Forum Collaboratif",
-      description: "Espace d'échange d'expériences et de coordination",
+      title: t('features.collaborative.forum'),
+      description: t('features.collaborative.forum.desc'),
       link: "/forum",
-      highlights: ["Discussions thématiques", "Expertise partagée", "Réseau professionnel"]
+      highlights: [
+        t('features.collaborative.forum.highlight1'), 
+        t('features.collaborative.forum.highlight2'), 
+        t('features.collaborative.forum.highlight3')
+      ]
     },
     {
       icon: Calendar,
-      title: "Événements & Formation",
-      description: "Agenda collaboratif et modules d'apprentissage",
+      title: t('features.events.training'),
+      description: t('features.events.training.desc'),
       link: "/events",
-      highlights: ["Formations en ligne", "Webinaires", "Rencontres régionales"]
+      highlights: [
+        t('features.events.training.highlight1'), 
+        t('features.events.training.highlight2'), 
+        t('features.events.training.highlight3')
+      ]
     },
     {
       icon: BarChart3,
-      title: "Analytics & Reporting",
-      description: "Tableaux de bord et analyses de performance",
+      title: t('features.analytics.reporting'),
+      description: t('features.analytics.reporting.desc'),
       link: "/dashboard",
-      highlights: ["Métriques clés", "Analyses régionales", "Rapports personnalisés"]
+      highlights: [
+        t('features.analytics.reporting.highlight1'), 
+        t('features.analytics.reporting.highlight2'), 
+        t('features.analytics.reporting.highlight3')
+      ]
     }
   ];
 
@@ -82,13 +109,13 @@ const Index = () => {
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-4 px-4 py-2">
               <Globe className="w-4 h-4 mr-2" />
-              Écosystème Intégré
+              {t('features.badge')}
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Une Plateforme Complète pour la Collaboration
+              {t('features.title')}
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Tous les outils nécessaires pour coordonner, partager et accélérer les initiatives FSU
+              {t('features.subtitle')}
             </p>
           </div>
           
@@ -119,7 +146,7 @@ const Index = () => {
                   </div>
                   <Link to={feature.link}>
                     <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                      Découvrir
+                      {t('common.discover')}
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
@@ -136,13 +163,13 @@ const Index = () => {
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4 px-4 py-2">
               <Users className="w-4 h-4 mr-2" />
-              Collaboration Régionale
+              {t('regions.badge')}
             </Badge>
             <h2 className="text-3xl font-bold text-foreground mb-4">
-              Communautés Économiques Africaines
+              {t('regions.title')}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Coordination active à travers les cinq principales régions du continent
+              {t('regions.subtitle')}
             </p>
           </div>
           
@@ -157,11 +184,11 @@ const Index = () => {
                   <div className="space-y-1 text-sm text-muted-foreground">
                     <div className="flex items-center justify-center">
                       <Globe className="h-4 w-4 mr-2" />
-                      {region.countries} pays
+                      {region.countries} {t('common.countries')}
                     </div>
                     <div className="flex items-center justify-center">
                       <Target className="h-4 w-4 mr-2" />
-                      {region.projects} projets
+                      {region.projects} {t('common.projects')}
                     </div>
                   </div>
                 </CardContent>
@@ -175,20 +202,20 @@ const Index = () => {
       <section className="py-20 bg-gradient-to-r from-primary via-blue-600 to-blue-800 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Rejoignez la Transformation Numérique de l'Afrique
+            {t('cta.title')}
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Ensemble, construisons un écosystème numérique inclusif et durable
+            {t('cta.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-white text-primary hover:bg-white/90 px-8 py-3">
               <Link to="/auth" className="flex items-center">
-                Créer un Compte
+                {t('common.create.account')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-3">
-              <Link to="/organizations">En Savoir Plus</Link>
+              <Link to="/organizations">{t('common.learn.more')}</Link>
             </Button>
           </div>
         </div>
