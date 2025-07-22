@@ -5,7 +5,8 @@ import {
   MessageSquare, 
   Calendar, 
   Settings,
-  User
+  User,
+  TrendingUp
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,12 @@ const MobileBottomNav = () => {
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
+      to: "/indicators",
+      icon: TrendingUp,
+      label: "Indicateurs",
+      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+    },
+    {
       to: "/resources",
       icon: FolderOpen,
       label: "Ressources",
@@ -33,12 +40,6 @@ const MobileBottomNav = () => {
       to: "/forum",
       icon: MessageSquare,
       label: "Forum",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
-    },
-    {
-      to: "/events",
-      icon: Calendar,
-      label: "Événements",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {

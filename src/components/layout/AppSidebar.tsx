@@ -28,7 +28,8 @@ import {
   BarChart3,
   BookOpen,
   ShieldCheck,
-  Building2
+  Building2,
+  TrendingUp
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -55,6 +56,7 @@ export function AppSidebar() {
     {
       label: "Collaboration",
       items: [
+        { title: "Indicateurs", url: "/indicators", icon: TrendingUp },
         { title: t('nav.organizations'), url: "/organizations", icon: Building2 },
         { title: t('nav.projects'), url: "/projects", icon: FolderOpen },
         { title: t('nav.resources'), url: "/docs", icon: BookOpen },
