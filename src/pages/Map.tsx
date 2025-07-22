@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAgencies } from "@/hooks/useAgencies";
-import { MapboxInteractiveMap } from "@/components/organizations/MapboxInteractiveMap";
+import { LeafletInteractiveMap } from "@/components/organizations/LeafletInteractiveMap";
 import { 
   Globe, 
   MapPin, 
@@ -172,7 +172,7 @@ export default function Map() {
 
       {/* Carte interactive */}
       <div className="min-h-[600px]">
-        <MapboxInteractiveMap agencies={filteredAgencies} />
+        <LeafletInteractiveMap agencies={filteredAgencies} />
       </div>
 
       {/* Note informative */}
@@ -185,7 +185,7 @@ export default function Map() {
               Cette carte interactive présente la localisation des agences SUTEL (Service Universel des Télécommunications) 
               à travers l'Afrique. Chaque marqueur représente une agence officiellement reconnue avec pour mission 
               de réduire la fracture numérique dans son territoire de compétence. Cliquez sur un marqueur pour 
-              obtenir plus d'informations sur l'agence.
+              obtenir plus d'informations sur l'agence. Cette carte utilise OpenStreetMap, une solution libre et gratuite.
             </p>
           </div>
         </div>
