@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { WelcomeWidget } from "../onboarding/WelcomeWidget";
-import { UserFirstDashboard } from "./UserFirstDashboard";
+import { EnhancedDashboard } from "./EnhancedDashboard";
 import { VirtualAssistant } from "./VirtualAssistant";
 import { SmartOnboarding } from "../onboarding/SmartOnboarding";
 
@@ -27,10 +27,10 @@ export function AdaptiveDashboard() {
     return <SmartOnboarding />;
   }
   
-  // Sinon, afficher le dashboard user-first avec l'assistant virtuel
+  // Sinon, afficher le dashboard enhanced avec l'assistant virtuel
   return (
     <div className="relative">
-      <UserFirstDashboard />
+      <EnhancedDashboard />
       <VirtualAssistant />
     </div>
   );

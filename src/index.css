@@ -175,12 +175,13 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   }
   
-  /* Professional typography scale */
+  /* Modern typography scale with Google Fonts */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight;
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
     line-height: 1.2;
   }
   
@@ -190,6 +191,11 @@ All colors MUST be HSL.
   h4 { @apply text-xl lg:text-2xl; font-weight: 500; }
   h5 { @apply text-lg lg:text-xl; font-weight: 500; }
   h6 { @apply text-base lg:text-lg; font-weight: 500; }
+  
+  /* Body text uses Inter */
+  p, span, div {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
   
   /* Professional transitions for all interactive elements */
   button, a, [role="button"], .interactive {
@@ -233,6 +239,15 @@ All colors MUST be HSL.
   
   .action-bar {
     @apply flex items-center justify-between gap-4 p-4 bg-muted/30 border-t border-border;
+  }
+  
+  /* Font family utilities */
+  .font-inter {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  .font-poppins {
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
   }
   
   /* Professional animations */
