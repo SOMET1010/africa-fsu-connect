@@ -94,90 +94,92 @@ const LiferayApp = ({ namespace, currentUrl, userId }: LiferayAppProps) => {
               <HashRouter basename={`/web/guest/-/${namespace}`}>
                 <LiferayAuthProvider>
                   <IntelligentLayout>
-                    {/* Routes publiques */}
-                    <Route path="/" element={<AppShell><Index /></AppShell>} />
-                    <Route path="/auth" element={<AppShell hideFooter><Auth /></AppShell>} />
-                    
-                    {/* Routes protégées */}
-                    <Route path="/dashboard" element={
-                      <ProtectedRoute>
-                        <AppShell><Dashboard /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/map" element={
-                      <ProtectedRoute>
-                        <AppShell><Map /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/organizations" element={
-                      <ProtectedRoute>
-                        <AppShell><Organizations /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/projects" element={
-                      <ProtectedRoute>
-                        <AppShell><Projects /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/docs" element={
-                      <ProtectedRoute>
-                        <AppShell><Resources /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/forum" element={
-                      <ProtectedRoute>
-                        <AppShell><Forum /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/submit" element={
-                      <ProtectedRoute>
-                        <AppShell><Submit /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/events" element={
-                      <ProtectedRoute>
-                        <AppShell><Events /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/profile" element={
-                      <ProtectedRoute>
-                        <AppShell><Profile /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/preferences" element={
-                      <ProtectedRoute>
-                        <AppShell><Preferences /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/security" element={
-                      <ProtectedRoute>
-                        <AppShell><Security /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/admin" element={
-                      <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
-                        <AppShell><Admin /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/admin/users" element={
-                      <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
-                        <AppShell><AdminUsers /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/admin/forum" element={
-                      <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
-                        <AppShell><AdminForum /></AppShell>
-                      </ProtectedRoute>
-                    } />
-                    
-                    {/* Route par défaut */}
-                    <Route path="*" element={<AppShell><NotFound /></AppShell>} />
-                  </Routes>
-                </IntelligentLayout>
-              </LiferayAuthProvider>
-            </HashRouter>
-          </div>
-        </LiferayWrapper>
+                    <Routes>
+                      {/* Routes publiques */}
+                      <Route path="/" element={<AppShell><Index /></AppShell>} />
+                      <Route path="/auth" element={<AppShell hideFooter><Auth /></AppShell>} />
+                      
+                      {/* Routes protégées */}
+                      <Route path="/dashboard" element={
+                        <ProtectedRoute>
+                          <AppShell><Dashboard /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/map" element={
+                        <ProtectedRoute>
+                          <AppShell><Map /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/organizations" element={
+                        <ProtectedRoute>
+                          <AppShell><Organizations /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/projects" element={
+                        <ProtectedRoute>
+                          <AppShell><Projects /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/docs" element={
+                        <ProtectedRoute>
+                          <AppShell><Resources /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/forum" element={
+                        <ProtectedRoute>
+                          <AppShell><Forum /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/submit" element={
+                        <ProtectedRoute>
+                          <AppShell><Submit /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/events" element={
+                        <ProtectedRoute>
+                          <AppShell><Events /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/profile" element={
+                        <ProtectedRoute>
+                          <AppShell><Profile /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/preferences" element={
+                        <ProtectedRoute>
+                          <AppShell><Preferences /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/security" element={
+                        <ProtectedRoute>
+                          <AppShell><Security /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/admin" element={
+                        <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
+                          <AppShell><Admin /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/admin/users" element={
+                        <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
+                          <AppShell><AdminUsers /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/admin/forum" element={
+                        <ProtectedRoute requiredRoles={['super_admin', 'admin_pays', 'editeur']}>
+                          <AppShell><AdminForum /></AppShell>
+                        </ProtectedRoute>
+                      } />
+                      
+                      {/* Route par défaut */}
+                      <Route path="*" element={<AppShell><NotFound /></AppShell>} />
+                    </Routes>
+                  </IntelligentLayout>
+                </LiferayAuthProvider>
+              </HashRouter>
+            </div>
+          </LiferayWrapper>
+        </TooltipProvider>
       </QueryClientProvider>
     </LiferayContext.Provider>
   );

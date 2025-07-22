@@ -1,6 +1,6 @@
 
 import { ReactNode, useEffect } from 'react';
-import { useLiferay } from '@/src/LiferayApp';
+import { useLiferay } from '@/LiferayApp';
 
 interface LiferayWrapperProps {
   children: ReactNode;
