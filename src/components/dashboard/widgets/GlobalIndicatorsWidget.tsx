@@ -9,17 +9,51 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--accent))', 'hsl(var(--muted))'];
 
+const getCountryName = (countryCode: string): string => {
+  const countryMap: Record<string, string> = {
+    'CI': 'Côte d\'Ivoire',
+    'KE': 'Kenya', 
+    'NG': 'Nigeria',
+    'GH': 'Ghana',
+    'SN': 'Sénégal'
+  };
+  return countryMap[countryCode] || countryCode;
+};
+
 export const GlobalIndicatorsWidget = () => {
   const { data: indicators, isLoading: indicatorsLoading } = useUniversalServiceIndicators();
   const { data: definitions } = useIndicatorDefinitions();
   const { data: stats } = useIndicatorStats();
 
+  console.log("GlobalIndicatorsWidget render:", { indicators, indicatorsLoading, stats });
+
   if (indicatorsLoading) {
     return <SkeletonCard className="h-96" />;
   }
 
-  // Sample data for demonstration
-  const sampleData = [
+  // Process real data from database
+  const processedData = indicators ? 
+    indicators.reduce((acc: any[], indicator) => {
+      const existingCountry = acc.find(item => item.country_code === indicator.country_code);
+      if (existingCountry) {
+        if (indicator.indicator_code === 'MOBILE_PENETRATION') existingCountry.mobile = indicator.value;
+        if (indicator.indicator_code === 'INTERNET_PENETRATION') existingCountry.internet = indicator.value;
+        if (indicator.indicator_code === 'BROADBAND_PENETRATION') existingCountry.broadband = indicator.value;
+      } else {
+        const newCountry: any = { 
+          name: getCountryName(indicator.country_code), 
+          country_code: indicator.country_code 
+        };
+        if (indicator.indicator_code === 'MOBILE_PENETRATION') newCountry.mobile = indicator.value;
+        if (indicator.indicator_code === 'INTERNET_PENETRATION') newCountry.internet = indicator.value;
+        if (indicator.indicator_code === 'BROADBAND_PENETRATION') newCountry.broadband = indicator.value;
+        acc.push(newCountry);
+      }
+      return acc;
+    }, []) : [];
+
+  // Sample data for demonstration (fallback)
+  const sampleData = processedData.length > 0 ? processedData : [
     { name: "Côte d'Ivoire", mobile: 142.5, internet: 58.2, broadband: 1.8 },
     { name: "Kenya", mobile: 110.4, internet: 87.2, broadband: 2.3 },
     { name: "Nigeria", mobile: 104.7, internet: 51.9, broadband: 0.1 },
