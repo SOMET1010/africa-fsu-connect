@@ -116,7 +116,7 @@ const SecurityPreferences = () => {
       </SectionCard>
 
       {localPreferences?.two_factor_enabled && (
-        <Alert variant="warning" className="animate-fade-in">
+        <Alert variant="default" className="animate-fade-in">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
             L'authentification à deux facteurs est activée. Assurez-vous de conserver vos codes de récupération en lieu sûr.

@@ -11,11 +11,11 @@ const ActiveSessions = () => {
   const { activeSessions, terminateSession } = useSecurity();
 
   const getDeviceIcon = (userAgent?: string) => {
-    if (!userAgent) return <Monitor className="h-4 w-4" />;
+    if (!userAgent) return Monitor;
     if (userAgent.includes('Mobile') || userAgent.includes('Android') || userAgent.includes('iPhone')) {
-      return <Smartphone className="h-4 w-4" />;
+      return Smartphone;
     }
-    return <Monitor className="h-4 w-4" />;
+    return Monitor;
   };
 
   const getBrowserName = (userAgent?: string) => {
