@@ -1,173 +1,210 @@
-import { useState } from "react";
-import { Calendar, Clock, MapPin, Users, Video, Plus, Download, Bell, ExternalLink, UserCheck } from "lucide-react";
+
+import { useState, useMemo } from "react";
+import { Plus, Calendar as CalendarIcon, List, Grid } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEvents, Event, CreateEventData } from "@/hooks/useEvents";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { EventsHero } from "@/components/events/EventsHero";
+import { ModernEventCard } from "@/components/events/ModernEventCard";
+import { EventFilters } from "@/components/events/EventFilters";
+import { Calendar } from "@/components/ui/calendar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 
 const Events = () => {
   const { t } = useTranslation();
-  const [selectedView, setSelectedView] = useState("list");
-  const [isNewEventOpen, setIsNewEventOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [registeredEvents, setRegisteredEvents] = useState<number[]>([]);
+  const { 
+    events, 
+    loading, 
+    createEvent, 
+    registerForEvent, 
+    unregisterFromEvent, 
+    generateCalendarFile 
+  } = useEvents();
+  
   const { toast } = useToast();
 
-  const events = [
-    {
-      id: 1,
-      title: "Assemblée Générale UAT 2024",
-      description: "Assemblée générale annuelle de l'Union Africaine des Télécommunications avec focus sur les FSU",
-      date: "2024-03-15",
-      time: "09:00",
-      endTime: "17:00",
-      type: "Conférence",
-      location: "Abidjan, Côte d'Ivoire",
-      isVirtual: false,
-      participants: 156,
-      maxParticipants: 200,
-      organizer: "Union Africaine des Télécommunications",
-      status: "À venir",
-      tags: ["UAT", "Assemblée", "FSU"],
-      agenda: "Ordre du jour détaillé disponible",
-      requirements: "Inscription obligatoire avant le 10 mars"
-    },
-    {
-      id: 2,
-      title: "Webinaire: Innovations FSU en Afrique de l'Ouest",
-      description: "Présentation des innovations technologiques dans les projets FSU de la région CEDEAO",
-      date: "2024-02-28",
-      time: "14:00",
-      endTime: "16:00",
-      type: "Webinaire",
-      location: "En ligne",
-      isVirtual: true,
-      participants: 89,
-      maxParticipants: 150,
-      organizer: "ANSUT Côte d'Ivoire",
-      status: "Inscription ouverte",
-      tags: ["Innovation", "CEDEAO", "Technologie"],
-      agenda: "Présentations et démonstrations interactives",
-      requirements: "Aucun prérequis technique"
-    },
-    {
-      id: 3,
-      title: "Workshop: Cadres Réglementaires FSU",
-      description: "Atelier de travail sur l'harmonisation des cadres réglementaires FSU en Afrique",
-      date: "2024-04-10",
-      time: "10:00",
-      endTime: "16:00",
-      type: "Workshop",
-      location: "Dakar, Sénégal",
-      isVirtual: false,
-      participants: 45,
-      maxParticipants: 60,
-      organizer: "ARTP Sénégal",
-      status: "À venir",
-      tags: ["Réglementation", "Harmonisation", "Workshop"],
-      agenda: "Sessions de travail collaboratives",
-      requirements: "Expérience en réglementation souhaitée"
-    },
-    {
-      id: 4,
-      title: "Deadline: Soumission Projets FSU 2024",
-      description: "Date limite pour la soumission des projets FSU pour financement 2024",
-      date: "2024-03-01",
-      time: "23:59",
-      endTime: "23:59",
-      type: "Deadline",
-      location: "N/A",
-      isVirtual: true,
-      participants: 0,
-      maxParticipants: 0,
-      organizer: "Secrétariat FSU",
-      status: "Urgent",
-      tags: ["Deadline", "Financement", "Projets"],
-      agenda: "Date limite stricte",
-      requirements: "Dossier complet requis"
-    }
-  ];
+  // UI State
+  const [selectedView, setSelectedView] = useState("grid");
+  const [isNewEventOpen, setIsNewEventOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  
+  // Filter State
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState("all");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState("all");
+  const [onlyRegistered, setOnlyRegistered] = useState(false);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "À venir":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "Inscription ouverte":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "Urgent":
-        return "bg-red-100 text-red-800 border-red-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
+  // Form State
+  const [newEvent, setNewEvent] = useState<Partial<CreateEventData>>({
+    title: "",
+    description: "",
+    start_date: "",
+    end_date: "",
+    location: "",
+    is_virtual: false,
+    virtual_link: "",
+    max_attendees: undefined
+  });
 
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case "Webinaire":
-        return <Video className="h-4 w-4" />;
-      case "Deadline":
-        return <Clock className="h-4 w-4" />;
-      default:
-        return <Calendar className="h-4 w-4" />;
-    }
-  };
+  // Filtered Events
+  const filteredEvents = useMemo(() => {
+    return events.filter(event => {
+      // Search filter
+      if (searchTerm && !event.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          !event.description?.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return false;
+      }
 
-  const handleRegister = (eventId: number) => {
-    setRegisteredEvents(prev => [...prev, eventId]);
-    toast({
-      title: "Inscription confirmée",
-      description: "Vous êtes maintenant inscrit à cet événement.",
+      // Type filter (simplified matching)
+      if (selectedType !== "all") {
+        const eventTitle = event.title.toLowerCase();
+        if (selectedType === "webinaire" && !eventTitle.includes("webinaire")) return false;
+        if (selectedType === "conference" && !eventTitle.includes("conférence") && !eventTitle.includes("assemblée")) return false;
+        if (selectedType === "workshop" && !eventTitle.includes("workshop") && !eventTitle.includes("atelier")) return false;
+        if (selectedType === "deadline" && !eventTitle.includes("deadline")) return false;
+      }
+
+      // Date filter
+      if (selectedDate) {
+        const eventDate = new Date(event.start_date).toDateString();
+        const filterDate = selectedDate.toDateString();
+        if (eventDate !== filterDate) return false;
+      }
+
+      // Location filter
+      if (selectedLocation !== "all") {
+        if (selectedLocation === "online" && !event.is_virtual) return false;
+        if (selectedLocation !== "online" && event.is_virtual) return false;
+        if (!event.is_virtual && !event.location?.toLowerCase().includes(selectedLocation)) return false;
+      }
+
+      // Registration filter
+      if (onlyRegistered && !event.is_registered) return false;
+
+      return true;
     });
+  }, [events, searchTerm, selectedType, selectedDate, selectedLocation, onlyRegistered]);
+
+  const hasActiveFilters = searchTerm !== "" || selectedType !== "all" || 
+                          selectedDate !== null || selectedLocation !== "all" || onlyRegistered;
+
+  const handleClearFilters = () => {
+    setSearchTerm("");
+    setSelectedType("all");
+    setSelectedDate(null);
+    setSelectedLocation("all");
+    setOnlyRegistered(false);
   };
 
-  const handleViewDetails = (event: any) => {
+  const handleViewDetails = (event: Event) => {
     setSelectedEvent(event);
     setIsDetailsOpen(true);
   };
 
-  const handleExportCalendar = () => {
-    toast({
-      title: "Export calendrier",
-      description: "Le fichier .ics a été généré et téléchargé.",
-    });
+  const handleRegister = async (eventId: string) => {
+    try {
+      await registerForEvent(eventId);
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
   };
 
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-4">
-            {t('events.title')}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl">
-            {t('events.subtitle')}
-          </p>
-        </div>
+  const handleUnregister = async (eventId: string) => {
+    try {
+      await unregisterFromEvent(eventId);
+    } catch (error) {
+      console.error('Unregistration failed:', error);
+    }
+  };
 
-        {/* Actions Bar */}
-        <div className="flex flex-col lg:flex-row justify-between gap-4 mb-8">
-          <Tabs value={selectedView} onValueChange={setSelectedView}>
-            <TabsList>
-              <TabsTrigger value="list">Liste</TabsTrigger>
-              <TabsTrigger value="calendar">Calendrier</TabsTrigger>
-              <TabsTrigger value="upcoming">À venir</TabsTrigger>
-            </TabsList>
-          </Tabs>
-          
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={handleExportCalendar}>
-              <Download className="h-4 w-4 mr-2" />
-              Exporter .ics
-            </Button>
+  const handleCreateEvent = async () => {
+    try {
+      if (!newEvent.title || !newEvent.start_date || !newEvent.end_date) {
+        toast({
+          title: "Erreur",
+          description: "Veuillez remplir tous les champs obligatoires.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      await createEvent(newEvent as CreateEventData);
+      setIsNewEventOpen(false);
+      setNewEvent({
+        title: "",
+        description: "",
+        start_date: "",
+        end_date: "",
+        location: "",
+        is_virtual: false,
+        virtual_link: "",
+        max_attendees: undefined
+      });
+    } catch (error) {
+      console.error('Event creation failed:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <PageContainer>
+        <div className="space-y-8">
+          <Skeleton className="h-64 w-full rounded-2xl" />
+          <div className="space-y-4">
+            <Skeleton className="h-12 w-full" />
+            <div className="flex gap-4">
+              <Skeleton className="h-10 w-48" />
+              <Skeleton className="h-10 w-48" />
+              <Skeleton className="h-10 w-48" />
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="h-80 rounded-xl" />
+            ))}
+          </div>
+        </div>
+      </PageContainer>
+    );
+  }
+
+  return (
+    <PageContainer>
+      <div className="space-y-8">
+        {/* Hero Section */}
+        <EventsHero />
+
+        {/* Actions & Filters */}
+        <div className="space-y-6">
+          <div className="flex flex-col lg:flex-row justify-between gap-4">
+            <Tabs value={selectedView} onValueChange={setSelectedView}>
+              <TabsList className="w-auto">
+                <TabsTrigger value="grid" className="flex items-center gap-2">
+                  <Grid className="h-4 w-4" />
+                  Grille
+                </TabsTrigger>
+                <TabsTrigger value="list" className="flex items-center gap-2">
+                  <List className="h-4 w-4" />
+                  Liste
+                </TabsTrigger>
+                <TabsTrigger value="calendar" className="flex items-center gap-2">
+                  <CalendarIcon className="h-4 w-4" />
+                  Calendrier
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+
             <Dialog open={isNewEventOpen} onOpenChange={setIsNewEventOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-primary hover:bg-primary/90">
@@ -175,7 +212,7 @@ const Events = () => {
                   Nouvel Événement
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Créer un Nouvel Événement</DialogTitle>
                   <DialogDescription>
@@ -185,22 +222,26 @@ const Events = () => {
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="event-title">Titre de l'Événement</Label>
-                      <Input id="event-title" placeholder="Ex: Webinaire Innovation" />
+                      <Label htmlFor="event-title">Titre de l'Événement *</Label>
+                      <Input 
+                        id="event-title" 
+                        placeholder="Ex: Webinaire Innovation" 
+                        value={newEvent.title}
+                        onChange={(e) => setNewEvent(prev => ({ ...prev, title: e.target.value }))}
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="event-type">Type</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Sélectionner le type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="conference">Conférence</SelectItem>
-                          <SelectItem value="webinaire">Webinaire</SelectItem>
-                          <SelectItem value="workshop">Workshop</SelectItem>
-                          <SelectItem value="deadline">Deadline</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label htmlFor="max-attendees">Nombre max de participants</Label>
+                      <Input 
+                        id="max-attendees" 
+                        type="number" 
+                        placeholder="100"
+                        value={newEvent.max_attendees || ""}
+                        onChange={(e) => setNewEvent(prev => ({ 
+                          ...prev, 
+                          max_attendees: e.target.value ? parseInt(e.target.value) : undefined 
+                        }))}
+                      />
                     </div>
                   </div>
                   
@@ -209,36 +250,68 @@ const Events = () => {
                     <Textarea
                       id="event-description"
                       placeholder="Décrivez l'événement..."
-                      className="min-h-24"
+                      value={newEvent.description}
+                      onChange={(e) => setNewEvent(prev => ({ ...prev, description: e.target.value }))}
                     />
                   </div>
                   
-                  <div className="grid md:grid-cols-3 gap-4">
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="event-date">Date</Label>
-                      <Input id="event-date" type="date" />
+                      <Label htmlFor="start-date">Date de début *</Label>
+                      <Input 
+                        id="start-date" 
+                        type="datetime-local"
+                        value={newEvent.start_date}
+                        onChange={(e) => setNewEvent(prev => ({ ...prev, start_date: e.target.value }))}
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="event-time">Heure</Label>
-                      <Input id="event-time" type="time" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="event-duration">Durée (heures)</Label>
-                      <Input id="event-duration" type="number" placeholder="2" />
+                      <Label htmlFor="end-date">Date de fin *</Label>
+                      <Input 
+                        id="end-date" 
+                        type="datetime-local"
+                        value={newEvent.end_date}
+                        onChange={(e) => setNewEvent(prev => ({ ...prev, end_date: e.target.value }))}
+                      />
                     </div>
                   </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Switch 
+                      id="is-virtual"
+                      checked={newEvent.is_virtual}
+                      onCheckedChange={(checked) => setNewEvent(prev => ({ ...prev, is_virtual: checked }))}
+                    />
+                    <Label htmlFor="is-virtual">Événement virtuel</Label>
+                  </div>
+
+                  {newEvent.is_virtual ? (
+                    <div className="space-y-2">
+                      <Label htmlFor="virtual-link">Lien de connexion</Label>
+                      <Input 
+                        id="virtual-link"
+                        placeholder="https://..."
+                        value={newEvent.virtual_link}
+                        onChange={(e) => setNewEvent(prev => ({ ...prev, virtual_link: e.target.value }))}
+                      />
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Label htmlFor="location">Lieu</Label>
+                      <Input 
+                        id="location"
+                        placeholder="Adresse de l'événement"
+                        value={newEvent.location}
+                        onChange={(e) => setNewEvent(prev => ({ ...prev, location: e.target.value }))}
+                      />
+                    </div>
+                  )}
                   
                   <div className="flex gap-2 pt-4">
                     <Button variant="outline" onClick={() => setIsNewEventOpen(false)}>
                       Annuler
                     </Button>
-                    <Button onClick={() => {
-                      toast({
-                        title: "Événement créé",
-                        description: "Votre événement a été créé avec succès.",
-                      });
-                      setIsNewEventOpen(false);
-                    }}>
+                    <Button onClick={handleCreateEvent}>
                       Créer l'Événement
                     </Button>
                   </div>
@@ -246,137 +319,128 @@ const Events = () => {
               </DialogContent>
             </Dialog>
           </div>
+
+          <EventFilters
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            selectedType={selectedType}
+            onTypeChange={setSelectedType}
+            selectedDate={selectedDate}
+            onDateChange={setSelectedDate}
+            selectedLocation={selectedLocation}
+            onLocationChange={setSelectedLocation}
+            onlyRegistered={onlyRegistered}
+            onRegisteredChange={setOnlyRegistered}
+            onClearFilters={handleClearFilters}
+            hasActiveFilters={hasActiveFilters}
+          />
         </div>
 
+        {/* Content */}
         <Tabs value={selectedView} className="space-y-6">
+          <TabsContent value="grid" className="space-y-6">
+            {filteredEvents.length === 0 ? (
+              <div className="text-center py-12">
+                <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">Aucun événement trouvé</h3>
+                <p className="text-muted-foreground mb-4">
+                  {hasActiveFilters 
+                    ? "Essayez de modifier vos filtres de recherche" 
+                    : "Il n'y a pas d'événements pour le moment"}
+                </p>
+                {hasActiveFilters && (
+                  <Button variant="outline" onClick={handleClearFilters}>
+                    Effacer les filtres
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredEvents.map((event) => (
+                  <ModernEventCard
+                    key={event.id}
+                    event={event}
+                    onViewDetails={handleViewDetails}
+                    onRegister={handleRegister}
+                    onUnregister={handleUnregister}
+                    onGenerateCalendar={generateCalendarFile}
+                  />
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
           <TabsContent value="list" className="space-y-4">
-            {events.map((event) => (
-              <Card key={event.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div className="flex gap-4 flex-1">
-                      <div className="bg-primary/10 p-3 rounded-lg">
-                        {getTypeIcon(event.type)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <CardTitle className="text-xl">{event.title}</CardTitle>
-                          <Badge className={getStatusColor(event.status)}>
-                            {event.status}
-                          </Badge>
-                        </div>
-                        <CardDescription className="text-base mb-3">
-                          {event.description}
-                        </CardDescription>
-                        <div className="flex flex-wrap gap-2">
-                          {event.tags.map(tag => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span>{new Date(event.date).toLocaleDateString('fr-FR')}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                      <span>{event.time} - {event.endTime}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      <span>{event.location}</span>
-                    </div>
-                    {event.type !== "Deadline" && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                        <span>{event.participants}/{event.maxParticipants} participants</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm text-muted-foreground">
-                      <span className="font-medium">Organisé par:</span> {event.organizer}
-                    </div>
-                    <div className="flex gap-2">
-                      {event.type !== "Deadline" && (
-                        <Button variant="outline" size="sm" onClick={() => handleViewDetails(event)}>
-                          Détails
-                        </Button>
-                      )}
-                      {event.status === "Inscription ouverte" && !registeredEvents.includes(event.id) && (
-                        <Button size="sm" onClick={() => handleRegister(event.id)}>
-                          S'inscrire
-                        </Button>
-                      )}
-                      {registeredEvents.includes(event.id) && (
-                        <Button size="sm" variant="outline" disabled>
-                          <UserCheck className="h-4 w-4 mr-2" />
-                          Inscrit
-                        </Button>
-                      )}
-                      <Button variant="ghost" size="sm">
-                        <Calendar className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {filteredEvents.length === 0 ? (
+              <div className="text-center py-12">
+                <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">Aucun événement trouvé</h3>
+                <p className="text-muted-foreground">
+                  {hasActiveFilters 
+                    ? "Essayez de modifier vos filtres de recherche" 
+                    : "Il n'y a pas d'événements pour le moment"}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredEvents.map((event) => (
+                  <ModernEventCard
+                    key={event.id}
+                    event={event}
+                    onViewDetails={handleViewDetails}
+                    onRegister={handleRegister}
+                    onUnregister={handleUnregister}
+                    onGenerateCalendar={generateCalendarFile}
+                  />
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="calendar" className="space-y-4">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="text-center py-12">
-                  <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Vue Calendrier</h3>
-                  <p className="text-muted-foreground mb-4">
-                    La vue calendrier sera implémentée dans la prochaine version
-                  </p>
-                  <Button variant="outline">
-                    Voir en Liste
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="upcoming" className="space-y-4">
-            {events
-              .filter(event => new Date(event.date) > new Date())
-              .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-              .slice(0, 3)
-              .map((event) => (
-                <Card key={event.id} className="border-primary/20">
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <Badge className={getStatusColor(event.status)} variant="outline">
-                          {event.status}
-                        </Badge>
-                        <CardTitle className="text-xl mt-2">{event.title}</CardTitle>
-                        <CardDescription>{event.description}</CardDescription>
+            <div className="grid lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate || undefined}
+                  onSelect={(date) => setSelectedDate(date || null)}
+                  className="rounded-md border"
+                />
+              </div>
+              <div className="lg:col-span-2">
+                {selectedDate ? (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium">
+                      Événements du {selectedDate.toLocaleDateString('fr-FR')}
+                    </h3>
+                    {filteredEvents.length === 0 ? (
+                      <p className="text-muted-foreground">Aucun événement ce jour</p>
+                    ) : (
+                      <div className="space-y-4">
+                        {filteredEvents.map((event) => (
+                          <ModernEventCard
+                            key={event.id}
+                            event={event}
+                            onViewDetails={handleViewDetails}
+                            onRegister={handleRegister}
+                            onUnregister={handleUnregister}
+                            onGenerateCalendar={generateCalendarFile}
+                          />
+                        ))}
                       </div>
-                      <div className="text-right">
-                        <div className="text-sm text-muted-foreground">
-                          {new Date(event.date).toLocaleDateString('fr-FR')}
-                        </div>
-                        <div className="text-sm font-medium">
-                          {event.time}
-                        </div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                </Card>
-              ))}
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-medium mb-2">Sélectionnez une date</h3>
+                    <p className="text-muted-foreground">
+                      Cliquez sur une date dans le calendrier pour voir les événements
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
 
@@ -396,53 +460,79 @@ const Events = () => {
                     <h4 className="font-medium mb-2">Informations Générales</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span>{new Date(selectedEvent.date).toLocaleDateString('fr-FR')}</span>
+                        <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                        <span>{new Date(selectedEvent.start_date).toLocaleDateString('fr-FR')}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-muted-foreground" />
-                        <span>{selectedEvent.time} - {selectedEvent.endTime}</span>
+                        <span className="font-medium">Début:</span>
+                        <span>{new Date(selectedEvent.start_date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span>{selectedEvent.location}</span>
+                        <span className="font-medium">Fin:</span>
+                        <span>{new Date(selectedEvent.end_date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                        <span>{selectedEvent.participants}/{selectedEvent.maxParticipants} participants</span>
+                        <span className="font-medium">Lieu:</span>
+                        <span>{selectedEvent.location || "En ligne"}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">Participants:</span>
+                        <span>
+                          {selectedEvent.current_attendees}
+                          {selectedEvent.max_attendees && `/${selectedEvent.max_attendees}`}
+                        </span>
                       </div>
                     </div>
                   </div>
                   
                   <div>
-                    <h4 className="font-medium mb-2">Détails</h4>
+                    <h4 className="font-medium mb-2">Organisateur</h4>
                     <div className="space-y-2 text-sm">
-                      <div>
-                        <span className="font-medium">Organisateur:</span> {selectedEvent.organizer}
-                      </div>
-                      <div>
-                        <span className="font-medium">Agenda:</span> {selectedEvent.agenda}
-                      </div>
-                      <div>
-                        <span className="font-medium">Prérequis:</span> {selectedEvent.requirements}
-                      </div>
+                      {selectedEvent.organizer ? (
+                        <>
+                          <div>
+                            <span className="font-medium">Nom:</span> {selectedEvent.organizer.first_name} {selectedEvent.organizer.last_name}
+                          </div>
+                          <div>
+                            <span className="font-medium">Rôle:</span> {selectedEvent.organizer.role}
+                          </div>
+                          {selectedEvent.organizer.organization && (
+                            <div>
+                              <span className="font-medium">Organisation:</span> {selectedEvent.organizer.organization}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-muted-foreground">Informations non disponibles</span>
+                      )}
                     </div>
                   </div>
                 </div>
                 
                 <div className="flex gap-2 pt-4">
-                  {selectedEvent.status === "Inscription ouverte" && !registeredEvents.includes(selectedEvent.id) && (
+                  {!selectedEvent.is_registered ? (
                     <Button onClick={() => {
                       handleRegister(selectedEvent.id);
                       setIsDetailsOpen(false);
                     }}>
                       S'inscrire à l'Événement
                     </Button>
+                  ) : (
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        handleUnregister(selectedEvent.id);
+                        setIsDetailsOpen(false);
+                      }}
+                    >
+                      Se désinscrire
+                    </Button>
                   )}
-                  {selectedEvent.isVirtual && (
-                    <Button variant="outline">
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Lien de Connexion
+                  {selectedEvent.virtual_link && (
+                    <Button variant="outline" asChild>
+                      <a href={selectedEvent.virtual_link} target="_blank" rel="noopener noreferrer">
+                        Rejoindre en ligne
+                      </a>
                     </Button>
                   )}
                   <Button variant="ghost" onClick={() => setIsDetailsOpen(false)}>
@@ -454,7 +544,7 @@ const Events = () => {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 
