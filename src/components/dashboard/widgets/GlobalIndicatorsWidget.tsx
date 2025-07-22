@@ -1,65 +1,104 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { Globe, TrendingUp, Users, Wifi, Activity } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
+import { Globe, TrendingUp, Users, Wifi, Activity, Database, Zap } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { useEnhancedIndicators, useRegionalIndicatorStats, useDataSourceStats } from "@/hooks/useEnhancedIndicators";
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--accent))', 'hsl(var(--muted))'];
 
 export const GlobalIndicatorsWidget = () => {
-  console.log("GlobalIndicatorsWidget component is rendering!");
+  console.log("GlobalIndicatorsWidget component is rendering with enhanced data!");
   
-  // Sample data pour tester l'affichage
-  const sampleData = [
-    { name: "Côte d'Ivoire", mobile: 142.5, internet: 58.2, broadband: 1.8 },
-    { name: "Kenya", mobile: 110.4, internet: 87.2, broadband: 2.3 },
-    { name: "Nigeria", mobile: 104.7, internet: 51.9, broadband: 0.1 },
-    { name: "Ghana", mobile: 138.1, internet: 68.1, broadband: 0.9 },
-    { name: "Senegal", mobile: 105.9, internet: 58.2, broadband: 2.1 }
-  ];
+  const { data: indicators, isLoading: indicatorsLoading } = useEnhancedIndicators({ year: 2024 });
+  const { data: regionalStats, isLoading: regionalLoading } = useRegionalIndicatorStats();
+  const { data: sourceStats, isLoading: sourceLoading } = useDataSourceStats();
 
-  const connectivityData = [
-    { indicator: "Couverture 4G", value: 85.4, target: 90 },
-    { indicator: "Accès Internet", value: 64.7, target: 75 },
-    { indicator: "Haut Débit Mobile", value: 78.9, target: 85 },
-    { indicator: "Haut Débit Fixe", value: 12.3, target: 25 }
-  ];
+  // Traitement des données pour les graphiques
+  const connectivityData = indicators?.filter(ind => 
+    ['INTERNET_PENETRATION', 'MOBILE_PENETRATION', 'NETWORK_COVERAGE_4G', 'NETWORK_COVERAGE_5G']
+    .includes(ind.indicator_code)
+  ).slice(0, 20) || [];
 
-  const regionData = [
-    { name: "Afrique de l'Ouest", value: 35, color: COLORS[0] },
-    { name: "Afrique de l'Est", value: 28, color: COLORS[1] },
-    { name: "Afrique Centrale", value: 20, color: COLORS[2] },
-    { name: "Afrique Australe", value: 17, color: COLORS[3] }
-  ];
+  const regionData = regionalStats?.map((stat, index) => ({
+    name: stat.region,
+    value: stat.totalIndicators,
+    coverage: stat.coverage,
+    color: COLORS[index % COLORS.length]
+  })) || [];
+
+  const countryComparisonData = indicators?.filter(ind => 
+    ind.indicator_code === 'INTERNET_PENETRATION'
+  ).slice(0, 8).map(ind => ({
+    name: ind.country_code,
+    internet: ind.value,
+    mobile: indicators?.find(i => i.country_code === ind.country_code && i.indicator_code === 'MOBILE_PENETRATION')?.value || 0,
+    coverage4g: indicators?.find(i => i.country_code === ind.country_code && i.indicator_code === 'NETWORK_COVERAGE_4G')?.value || 0
+  })) || [];
+
+  if (indicatorsLoading || regionalLoading || sourceLoading) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-3 h-32 bg-muted animate-pulse rounded-lg" />
+        <div className="h-64 bg-muted animate-pulse rounded-lg" />
+        <div className="h-64 bg-muted animate-pulse rounded-lg" />
+        <div className="lg:col-span-2 xl:col-span-3 h-80 bg-muted animate-pulse rounded-lg" />
+      </div>
+    );
+  }
+
+  const totalIndicators = indicators?.length || 0;
+  const uniqueCountries = new Set(indicators?.map(i => i.country_code)).size;
+  const uniqueRegions = new Set(indicators?.map(i => i.region)).size;
+  const latestYear = Math.max(...(indicators?.map(i => i.year) || [2024]));
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-      {/* Overview Stats */}
+      {/* Overview Stats Enhanced */}
       <ScrollReveal className="xl:col-span-3">
-        <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
+        <Card className="bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 border-primary/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              <Globe className="h-6 w-6 text-primary" />
-              Indicateurs du Service Universel - Vue Globale
+              <Zap className="h-6 w-6 text-primary" />
+              Indicateurs FSU - Données Enrichies en Temps Réel
             </CardTitle>
+            <div className="flex flex-wrap gap-2 mt-2">
+              <Badge variant="default" className="flex items-center gap-1">
+                <Database className="h-3 w-3" />
+                Données Officielles
+              </Badge>
+              <Badge variant="secondary" className="flex items-center gap-1">
+                <Globe className="h-3 w-3" />
+                Multi-Sources
+              </Badge>
+              <Badge variant="outline" className="flex items-center gap-1">
+                <Activity className="h-3 w-3" />
+                Temps Réel
+              </Badge>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">24</div>
-                <div className="text-sm text-muted-foreground">Indicateurs</div>
+                <div className="text-2xl font-bold text-primary">{totalIndicators.toLocaleString()}</div>
+                <div className="text-sm text-muted-foreground">Indicateurs Totaux</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-secondary">5</div>
-                <div className="text-sm text-muted-foreground">Pays</div>
+                <div className="text-2xl font-bold text-secondary">{uniqueCountries}</div>
+                <div className="text-sm text-muted-foreground">Pays Couverts</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-accent">4</div>
+                <div className="text-2xl font-bold text-accent">{uniqueRegions}</div>
                 <div className="text-sm text-muted-foreground">Régions</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-chart-1">2024</div>
+                <div className="text-2xl font-bold text-chart-1">{sourceStats?.length || 0}</div>
+                <div className="text-sm text-muted-foreground">Sources API</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-chart-2">{latestYear}</div>
                 <div className="text-sm text-muted-foreground">Dernière Année</div>
               </div>
             </div>
@@ -67,40 +106,53 @@ export const GlobalIndicatorsWidget = () => {
         </Card>
       </ScrollReveal>
 
-      {/* Connectivity Progress */}
+      {/* Connectivity Progress Enhanced */}
       <ScrollReveal>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Wifi className="h-5 w-5 text-primary" />
-              Objectifs de Connectivité
+              Indicateurs Clés de Connectivité
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {connectivityData.map((item, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>{item.indicator}</span>
-                  <span className="font-medium">{item.value}% / {item.target}%</span>
+            {connectivityData.slice(0, 6).map((indicator, index) => {
+              const target = indicator.indicator_code === 'INTERNET_PENETRATION' ? 75 :
+                            indicator.indicator_code === 'MOBILE_PENETRATION' ? 120 :
+                            indicator.indicator_code === 'NETWORK_COVERAGE_4G' ? 90 :
+                            indicator.indicator_code === 'NETWORK_COVERAGE_5G' ? 50 : 100;
+              
+              const progress = Math.min((indicator.value / target) * 100, 100);
+              
+              return (
+                <div key={index} className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="font-medium">{indicator.country_code}</span>
+                    <span className="text-muted-foreground">
+                      {indicator.value.toFixed(1)}{indicator.unit === 'percentage' ? '%' : ''}
+                    </span>
+                  </div>
+                  <Progress value={progress} className="h-2" />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>{indicator.indicator_name}</span>
+                    <Badge variant="outline" className="text-xs">
+                      {indicator.data_source}
+                    </Badge>
+                  </div>
                 </div>
-                <Progress value={(item.value / item.target) * 100} className="h-2" />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Actuel: {item.value}%</span>
-                  <span>Objectif: {item.target}%</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </CardContent>
         </Card>
       </ScrollReveal>
 
-      {/* Regional Distribution */}
+      {/* Regional Distribution Enhanced */}
       <ScrollReveal>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5 text-secondary" />
-              Répartition Régionale
+              Couverture Régionale
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -119,14 +171,17 @@ export const GlobalIndicatorsWidget = () => {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip formatter={(value: any, name: any) => [`${value} indicateurs`, 'Total']} />
               </PieChart>
             </ResponsiveContainer>
             <div className="grid grid-cols-2 gap-2 mt-4">
               {regionData.map((item, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-xs">{item.name}</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-medium">{item.name}</div>
+                    <div className="text-xs text-muted-foreground">{item.coverage}% couverture</div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -134,58 +189,59 @@ export const GlobalIndicatorsWidget = () => {
         </Card>
       </ScrollReveal>
 
-      {/* Country Comparison */}
+      {/* Country Comparison Enhanced */}
       <ScrollReveal className="lg:col-span-2 xl:col-span-3">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-accent" />
-              Comparaison par Pays - Indicateurs Clés
+              Comparaison Multi-Indicateurs par Pays
             </CardTitle>
             <div className="flex gap-2 flex-wrap">
+              <Badge variant="outline">Pénétration Internet</Badge>
               <Badge variant="outline">Pénétration Mobile</Badge>
-              <Badge variant="outline">Accès Internet</Badge>
-              <Badge variant="outline">Haut Débit</Badge>
+              <Badge variant="outline">Couverture 4G</Badge>
             </div>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={sampleData}>
+              <BarChart data={countryComparisonData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip />
-                <Bar dataKey="mobile" fill="hsl(var(--primary))" name="Mobile %" />
-                <Bar dataKey="internet" fill="hsl(var(--secondary))" name="Internet %" />
-                <Bar dataKey="broadband" fill="hsl(var(--accent))" name="Haut Débit %" />
+                <Tooltip formatter={(value: any, name: any) => [`${value?.toFixed(1)}%`, name]} />
+                <Bar dataKey="internet" fill="hsl(var(--primary))" name="Internet %" />
+                <Bar dataKey="mobile" fill="hsl(var(--secondary))" name="Mobile %" />
+                <Bar dataKey="coverage4g" fill="hsl(var(--accent))" name="4G %" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
       </ScrollReveal>
 
-      {/* Data Sources */}
+      {/* Data Sources Enhanced */}
       <ScrollReveal>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Activity className="h-5 w-5 text-chart-1" />
-              Sources de Données
+              Sources de Données Actives
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {["GSMA", "ITU", "Banque Mondiale", "UAT"].map((source, index) => (
+            {sourceStats?.slice(0, 5).map((source, index) => (
               <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                <div>
-                  <div className="font-medium">{source}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {index === 0 ? "Données mobiles" : 
-                     index === 1 ? "Statistiques TIC" :
-                     index === 2 ? "Indicateurs développement" : "Coordination régionale"}
+                <div className="flex-1">
+                  <div className="font-medium text-sm">{source.name}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {source.totalIndicators} indicateurs • {source.categories.length} catégories
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    Maj: {new Date(source.lastUpdate).toLocaleDateString()}
                   </div>
                 </div>
-                <Badge variant={index < 2 ? "default" : "secondary"}>
-                  {index < 2 ? "Actif" : "En cours"}
+                <Badge variant={source.totalIndicators > 100 ? "default" : "secondary"}>
+                  {source.totalIndicators > 1000 ? `${Math.round(source.totalIndicators/1000)}k` : source.totalIndicators}
                 </Badge>
               </div>
             ))}
