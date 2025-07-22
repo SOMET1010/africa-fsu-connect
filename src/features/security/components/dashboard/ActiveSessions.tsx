@@ -1,59 +1,58 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useSecurity } from '../../hooks/useSecurity';
+import { SectionCard } from '@/components/layout/SectionCard';
 import { Button } from '@/components/ui/button';
-import { Monitor, Smartphone, MapPin, LogOut } from 'lucide-react';
+import { ProfessionalCard } from '@/components/ui/professional-card';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { useSecurity } from '../../hooks/useSecurity';
-import { getDeviceInfo } from '../../core/utils';
+import { Monitor, Smartphone, MapPin, LogOut } from 'lucide-react';
 
 const ActiveSessions = () => {
   const { activeSessions, terminateSession } = useSecurity();
 
   const getDeviceIcon = (userAgent?: string) => {
-    const deviceInfo = getDeviceInfo(userAgent);
-    return deviceInfo.type === 'mobile' ? <Smartphone className="h-4 w-4" /> : <Monitor className="h-4 w-4" />;
+    if (!userAgent) return <Monitor className="h-4 w-4" />;
+    if (userAgent.includes('Mobile') || userAgent.includes('Android') || userAgent.includes('iPhone')) {
+      return <Smartphone className="h-4 w-4" />;
+    }
+    return <Monitor className="h-4 w-4" />;
   };
 
-  const getDeviceName = (userAgent?: string) => {
-    return getDeviceInfo(userAgent).name;
+  const getBrowserName = (userAgent?: string) => {
+    if (!userAgent) return 'Navigateur inconnu';
+    if (userAgent.includes('Chrome')) return 'Chrome';
+    if (userAgent.includes('Firefox')) return 'Firefox';
+    if (userAgent.includes('Safari')) return 'Safari';
+    if (userAgent.includes('Edge')) return 'Edge';
+    return 'Navigateur inconnu';
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Sessions actives</CardTitle>
-        <CardDescription>
-          Gérez vos sessions de connexion actives
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {activeSessions?.length === 0 ? (
-          <p className="text-muted-foreground text-center py-4">
-            Aucune session active trouvée
-          </p>
-        ) : (
-          <div className="space-y-4">
-            {activeSessions?.map((session) => (
-              <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-start gap-3">
-                  {getDeviceIcon(session.user_agent)}
-                  <div>
-                    <p className="font-medium">
-                      {getDeviceName(session.user_agent)}
-                    </p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="h-3 w-3" />
-                      <span>{session.location || session.ip_address || 'Localisation inconnue'}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Dernière activité: {formatDistanceToNow(new Date(session.last_activity), { 
-                        addSuffix: true, 
-                        locale: fr 
-                      })}
-                    </p>
-                  </div>
+    <SectionCard 
+      title="Sessions actives" 
+      description="Gérez vos sessions de connexion actives"
+      variant="default"
+    >
+      {activeSessions?.length === 0 ? (
+        <div className="text-muted-foreground text-center py-4">
+          Aucune session active trouvée
+        </div>
+      ) : (
+        <div className="grid gap-4">
+          {activeSessions?.map((session) => (
+            <ProfessionalCard
+              key={session.id}
+              title={getBrowserName(session.user_agent)}
+              description={
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="h-3 w-3" />
+                  <span>{session.location || session.ip_address || 'Localisation inconnue'}</span>
                 </div>
+              }
+              icon={getDeviceIcon(session.user_agent)}
+              variant="default"
+              size="sm"
+              actions={
                 <Button
                   variant="outline"
                   size="sm"
@@ -63,12 +62,19 @@ const ActiveSessions = () => {
                   <LogOut className="h-4 w-4 mr-2" />
                   Terminer
                 </Button>
-              </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+              }
+            >
+              <p className="text-sm text-muted-foreground">
+                Dernière activité: {formatDistanceToNow(new Date(session.last_activity), { 
+                  addSuffix: true, 
+                  locale: fr 
+                })}
+              </p>
+            </ProfessionalCard>
+          ))}
+        </div>
+      )}
+    </SectionCard>
   );
 };
 

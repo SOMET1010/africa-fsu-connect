@@ -8,7 +8,7 @@ import { LucideIcon } from "lucide-react";
 
 interface ProfessionalCardProps {
   title: string;
-  description?: string;
+  description?: string | React.ReactNode;
   icon?: LucideIcon;
   badge?: string;
   badgeVariant?: "default" | "secondary" | "destructive" | "outline";
