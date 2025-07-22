@@ -10,11 +10,13 @@ import DocumentPreviewDialog from "@/pages/resources/components/DocumentPreviewD
 import EmptyDocumentsState from "@/pages/resources/components/EmptyDocumentsState";
 import SampleDataButton from "@/components/resources/SampleDataButton";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const ResourcesContent = () => {
   const { state, performSearch, fetchInitialDocuments } = useSearch();
   const { uploadDocument, downloadDocument } = useOptimizedDocuments();
   const { toast } = useToast();
+  const { t } = useTranslation();
   
   const searchBarRef = useRef<SearchBarRef>(null);
   const [previewDoc, setPreviewDoc] = useState<any>(null);
@@ -96,12 +98,10 @@ const ResourcesContent = () => {
           <div className="flex justify-between items-start mb-4">
             <div>
               <h1 className="text-4xl font-bold text-primary mb-4">
-                Bibliothèque de Ressources FSU
+                {t('resources.title')}
               </h1>
               <p className="text-lg text-muted-foreground max-w-3xl">
-                Accédez à l'ensemble des documents, rapports, guides et ressources 
-                partagés par les agences FSU africaines. Une collection collaborative 
-                de connaissances pour soutenir le développement en Afrique.
+                {t('resources.subtitle')}
               </p>
             </div>
             {state.documents.length === 0 && !state.loading && (

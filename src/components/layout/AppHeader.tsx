@@ -108,7 +108,10 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
                 <span className="text-primary-foreground font-bold text-sm">FSU</span>
               </div>
               <div className="hidden sm:block">
-                <span className="font-bold text-foreground">Plateforme FSU Afrique</span>
+                <span className="font-bold text-foreground">{t('landing.title')}</span>
+                <span className="ml-2 text-xs bg-primary/10 px-2 py-1 rounded">
+                  {preferences.language?.toUpperCase()}
+                </span>
               </div>
             </Link>
           )}
@@ -206,7 +209,7 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
                 <Link to="/auth">{t('auth.login')}</Link>
               </Button>
               <Button asChild>
-                <Link to="/auth">Commencer</Link>
+                <Link to="/auth">{t('nav.start')}</Link>
               </Button>
             </div>
           )}

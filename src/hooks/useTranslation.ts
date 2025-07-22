@@ -16,6 +16,7 @@ const translations = {
     'nav.profile': 'Profil',
     'nav.settings': 'Paramètres',
     'nav.logout': 'Se déconnecter',
+    'nav.start': 'Commencer',
 
     // Textes communs
     'common.loading': 'Chargement...',
@@ -42,6 +43,19 @@ const translations = {
     'sutel.subtitle': 'Agences spécialisées dans le Service Universel des Télécommunications en Afrique',
     'sutel.interactive.map': 'Carte Interactive SUTEL - Aperçu rapide',
     'sutel.fullscreen': 'Voir en plein écran',
+
+    // Resources/Docs
+    'resources.title': 'Bibliothèque de Ressources',
+    'resources.subtitle': 'Guides, rapports et meilleures pratiques',
+    'resources.upload': 'Télécharger un document',
+    'resources.categories': 'Catégories',
+    'resources.recent': 'Documents récents',
+    'resources.no.docs': 'Aucun document trouvé',
+    'resources.upload.success': 'Document téléchargé avec succès',
+
+    // Landing page
+    'landing.title': 'Plateforme FSU Afrique',
+    'landing.subtitle': 'Réseau collaboratif des Fonds de Service Universel africains',
   },
   en: {
     // Navigation and general interface
@@ -57,6 +71,7 @@ const translations = {
     'nav.profile': 'Profile',
     'nav.settings': 'Settings',
     'nav.logout': 'Logout',
+    'nav.start': 'Get Started',
 
     // Common texts
     'common.loading': 'Loading...',
@@ -83,6 +98,19 @@ const translations = {
     'sutel.subtitle': 'Agencies specialized in Universal Telecommunications Services in Africa',
     'sutel.interactive.map': 'SUTEL Interactive Map - Quick Preview',
     'sutel.fullscreen': 'View fullscreen',
+
+    // Resources/Docs
+    'resources.title': 'Resource Library',
+    'resources.subtitle': 'Guides, reports and best practices',
+    'resources.upload': 'Upload document',
+    'resources.categories': 'Categories',
+    'resources.recent': 'Recent documents',
+    'resources.no.docs': 'No documents found',
+    'resources.upload.success': 'Document uploaded successfully',
+
+    // Landing page
+    'landing.title': 'FSU Africa Platform',
+    'landing.subtitle': 'Collaborative network of African Universal Service Funds',
   }
 };
 
@@ -93,7 +121,9 @@ export const useTranslation = () => {
   const currentLanguage = preferences.language;
 
   const t = (key: TranslationKey): string => {
-    return translations[currentLanguage]?.[key] || translations.fr[key] || key;
+    const translation = translations[currentLanguage]?.[key] || translations.fr[key] || key;
+    console.log(`Translation: ${key} -> ${translation} (lang: ${currentLanguage})`);
+    return translation;
   };
 
   return { t, currentLanguage };
