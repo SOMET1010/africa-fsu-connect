@@ -437,6 +437,48 @@ export type Database = {
         }
         Relationships: []
       }
+      data_sources: {
+        Row: {
+          acronym: string
+          api_endpoint: string | null
+          api_key_required: boolean | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          update_frequency: string | null
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          acronym: string
+          api_endpoint?: string | null
+          api_key_required?: boolean | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          update_frequency?: string | null
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          acronym?: string
+          api_endpoint?: string | null
+          api_key_required?: boolean | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          update_frequency?: string | null
+          updated_at?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           country: string | null
@@ -732,6 +774,48 @@ export type Database = {
           },
         ]
       }
+      indicator_definitions: {
+        Row: {
+          calculation_method: string | null
+          category: string | null
+          code: string
+          created_at: string
+          data_type: string | null
+          description: string | null
+          id: string
+          name: string
+          source_organization: string | null
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          calculation_method?: string | null
+          category?: string | null
+          code: string
+          created_at?: string
+          data_type?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          source_organization?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          calculation_method?: string | null
+          category?: string | null
+          code?: string
+          created_at?: string
+          data_type?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          source_organization?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       network_security_events: {
         Row: {
           blocked: boolean | null
@@ -1010,6 +1094,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      universal_service_indicators: {
+        Row: {
+          country_code: string | null
+          created_at: string
+          data_source: string
+          id: string
+          indicator_code: string
+          indicator_name: string
+          last_updated_at: string
+          metadata: Json | null
+          quarter: number | null
+          region: string | null
+          source_url: string | null
+          unit: string | null
+          value: number | null
+          year: number
+        }
+        Insert: {
+          country_code?: string | null
+          created_at?: string
+          data_source: string
+          id?: string
+          indicator_code: string
+          indicator_name: string
+          last_updated_at?: string
+          metadata?: Json | null
+          quarter?: number | null
+          region?: string | null
+          source_url?: string | null
+          unit?: string | null
+          value?: number | null
+          year: number
+        }
+        Update: {
+          country_code?: string | null
+          created_at?: string
+          data_source?: string
+          id?: string
+          indicator_code?: string
+          indicator_name?: string
+          last_updated_at?: string
+          metadata?: Json | null
+          quarter?: number | null
+          region?: string | null
+          source_url?: string | null
+          unit?: string | null
+          value?: number | null
+          year?: number
+        }
+        Relationships: []
       }
       user_preferences: {
         Row: {
