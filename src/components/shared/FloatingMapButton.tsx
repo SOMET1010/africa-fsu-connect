@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { MapboxInteractiveMap } from "@/components/organizations/MapboxInteractiveMap";
+import { LeafletInteractiveMap } from "@/components/organizations/LeafletInteractiveMap";
 import { useAgencies } from "@/hooks/useAgencies";
 import { Globe, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -61,7 +61,7 @@ export const FloatingMapButton = () => {
           </DialogHeader>
           
           <div className="h-[70vh] -mx-6 -mb-6">
-            <MapboxInteractiveMap agencies={sutelAgencies} />
+            <LeafletInteractiveMap agencies={sutelAgencies} />
           </div>
         </DialogContent>
       </Dialog>

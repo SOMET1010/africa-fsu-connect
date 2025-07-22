@@ -14,7 +14,7 @@ import { OrganizationsOverview } from "@/components/organizations/OrganizationsO
 import { EnrichedAgencyCard } from "@/components/organizations/EnrichedAgencyCard";
 import { AutoEnrichmentPanel } from "@/components/organizations/AutoEnrichmentPanel";
 import { AgencyProfile } from "@/components/organizations/AgencyProfile";
-import { MapboxInteractiveMap } from "@/components/organizations/MapboxInteractiveMap";
+import { LeafletInteractiveMap } from "@/components/organizations/LeafletInteractiveMap";
 import { FirecrawlService } from "@/services/firecrawlService";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
@@ -240,7 +240,7 @@ export default function Organizations() {
                 </Button>
               </Link>
             </div>
-            <MapboxInteractiveMap agencies={sutelAgencies} />
+            <LeafletInteractiveMap agencies={sutelAgencies} />
           </div>
         </TabsContent>
 

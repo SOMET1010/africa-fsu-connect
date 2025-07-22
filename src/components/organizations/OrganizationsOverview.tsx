@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { OrganizationsMap } from "./OrganizationsMap";
-import { MapboxInteractiveMap } from "./MapboxInteractiveMap";
+import { LeafletInteractiveMap } from "./LeafletInteractiveMap";
 import { 
   Building2, 
   Globe, 
@@ -312,7 +312,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
         </TabsContent>
 
         <TabsContent value="map" className="space-y-4">
-          <MapboxInteractiveMap agencies={agencies} />
+          <LeafletInteractiveMap agencies={agencies} />
         </TabsContent>
       </Tabs>
 
