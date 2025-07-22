@@ -121,6 +121,9 @@ export const EnhancedDashboard = () => {
               <h2 className="text-2xl font-semibold font-poppins">Indicateurs du Service Universel</h2>
               <p className="text-muted-foreground font-inter">Données en temps réel des organisations internationales</p>
             </div>
+            <div className="p-4 bg-red-100 border border-red-500 rounded-lg mb-4">
+              <p className="text-red-800 font-bold">TEST: GlobalIndicatorsWidget devrait être ici</p>
+            </div>
             <GlobalIndicatorsWidget />
           </div>
         </ScrollReveal>
