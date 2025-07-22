@@ -1,8 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { BarChart3, Users, Target, Zap, Calendar, MessageSquare, FileText, TrendingUp } from "lucide-react";
 import { ModernStatsWidget } from "./widgets/ModernStatsWidget";
-import { GlobalIndicatorsWidget } from "./widgets/GlobalIndicatorsWidget";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { EnhancedCard, IconCard } from "@/components/ui/enhanced-card";
 import { Button } from "@/components/ui/button";
@@ -111,20 +109,6 @@ export const EnhancedDashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </ScrollReveal>
-
-        {/* Universal Service Indicators */}
-        <ScrollReveal delay={200}>
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-semibold font-poppins">Indicateurs du Service Universel</h2>
-              <p className="text-muted-foreground font-inter">Données en temps réel des organisations internationales</p>
-            </div>
-            <div className="p-4 bg-red-100 border border-red-500 rounded-lg mb-4">
-              <p className="text-red-800 font-bold">TEST: GlobalIndicatorsWidget devrait être ici</p>
-            </div>
-            <GlobalIndicatorsWidget />
           </div>
         </ScrollReveal>
 

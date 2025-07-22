@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { 
@@ -13,7 +12,8 @@ import {
   Building2,
   Settings,
   Shield,
-  Users
+  Users,
+  TrendingUp
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -38,6 +38,7 @@ export const AppNavigation = () => {
 
   const mainNavItems: NavItem[] = [
     { name: t('nav.dashboard'), path: '/dashboard', icon: BarChart2 },
+    { name: 'Indicateurs', path: '/indicators', icon: TrendingUp },
     { name: t('nav.map'), path: '/map', icon: MapPin },
     { name: t('nav.projects'), path: '/projects', icon: Rocket },
     { name: t('nav.organizations'), path: '/organizations', icon: Building2 },

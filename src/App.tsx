@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Indicators from "./pages/Indicators";
 import Organizations from "./pages/Organizations";
 import Projects from "./pages/Projects";
 import Resources from "./pages/Resources";
@@ -44,6 +45,11 @@ const App = () => (
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <AppShell><Dashboard /></AppShell>
+                </ProtectedRoute>
+              } />
+              <Route path="/indicators" element={
+                <ProtectedRoute>
+                  <AppShell><Indicators /></AppShell>
                 </ProtectedRoute>
               } />
               <Route path="/map" element={
