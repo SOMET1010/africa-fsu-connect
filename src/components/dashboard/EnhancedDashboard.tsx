@@ -13,6 +13,9 @@ import { CommandPalette } from "@/components/ui/command-palette";
 
 export const EnhancedDashboard = () => {
   const { profile } = useAuth();
+  
+  console.log("EnhancedDashboard rendering, profile:", profile);
+  
   const [dashboardStats, setDashboardStats] = useState([
     {
       title: "Projets Actifs",

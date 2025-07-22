@@ -1,59 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Globe, TrendingUp, Users, Wifi, Activity } from "lucide-react";
-import { useUniversalServiceIndicators, useIndicatorDefinitions, useIndicatorStats } from "@/hooks/useUniversalServiceIndicators";
-import { SkeletonCard } from "@/components/ui/skeleton-loader";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--accent))', 'hsl(var(--muted))'];
 
-const getCountryName = (countryCode: string): string => {
-  const countryMap: Record<string, string> = {
-    'CI': 'Côte d\'Ivoire',
-    'KE': 'Kenya', 
-    'NG': 'Nigeria',
-    'GH': 'Ghana',
-    'SN': 'Sénégal'
-  };
-  return countryMap[countryCode] || countryCode;
-};
-
 export const GlobalIndicatorsWidget = () => {
-  const { data: indicators, isLoading: indicatorsLoading } = useUniversalServiceIndicators();
-  const { data: definitions } = useIndicatorDefinitions();
-  const { data: stats } = useIndicatorStats();
-
-  console.log("GlobalIndicatorsWidget render:", { indicators, indicatorsLoading, stats });
-
-  if (indicatorsLoading) {
-    return <SkeletonCard className="h-96" />;
-  }
-
-  // Process real data from database
-  const processedData = indicators ? 
-    indicators.reduce((acc: any[], indicator) => {
-      const existingCountry = acc.find(item => item.country_code === indicator.country_code);
-      if (existingCountry) {
-        if (indicator.indicator_code === 'MOBILE_PENETRATION') existingCountry.mobile = indicator.value;
-        if (indicator.indicator_code === 'INTERNET_PENETRATION') existingCountry.internet = indicator.value;
-        if (indicator.indicator_code === 'BROADBAND_PENETRATION') existingCountry.broadband = indicator.value;
-      } else {
-        const newCountry: any = { 
-          name: getCountryName(indicator.country_code), 
-          country_code: indicator.country_code 
-        };
-        if (indicator.indicator_code === 'MOBILE_PENETRATION') newCountry.mobile = indicator.value;
-        if (indicator.indicator_code === 'INTERNET_PENETRATION') newCountry.internet = indicator.value;
-        if (indicator.indicator_code === 'BROADBAND_PENETRATION') newCountry.broadband = indicator.value;
-        acc.push(newCountry);
-      }
-      return acc;
-    }, []) : [];
-
-  // Sample data for demonstration (fallback)
-  const sampleData = processedData.length > 0 ? processedData : [
+  console.log("GlobalIndicatorsWidget component is rendering!");
+  
+  // Sample data pour tester l'affichage
+  const sampleData = [
     { name: "Côte d'Ivoire", mobile: 142.5, internet: 58.2, broadband: 1.8 },
     { name: "Kenya", mobile: 110.4, internet: 87.2, broadband: 2.3 },
     { name: "Nigeria", mobile: 104.7, internet: 51.9, broadband: 0.1 },
@@ -89,19 +47,19 @@ export const GlobalIndicatorsWidget = () => {
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">{stats?.totalIndicators || 0}</div>
+                <div className="text-2xl font-bold text-primary">24</div>
                 <div className="text-sm text-muted-foreground">Indicateurs</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-secondary">{stats?.countriesCount || 0}</div>
+                <div className="text-2xl font-bold text-secondary">5</div>
                 <div className="text-sm text-muted-foreground">Pays</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-accent">{stats?.regionsCount || 0}</div>
+                <div className="text-2xl font-bold text-accent">4</div>
                 <div className="text-sm text-muted-foreground">Régions</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-chart-1">{stats?.latestYear || 2024}</div>
+                <div className="text-2xl font-bold text-chart-1">2024</div>
                 <div className="text-sm text-muted-foreground">Dernière Année</div>
               </div>
             </div>
