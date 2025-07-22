@@ -248,7 +248,7 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
         }
       });
 
-      // Add load event listener
+      // Add load event listener with proper marker addition
       map.current.on('load', () => {
         console.log('Map loaded successfully');
         
@@ -266,16 +266,22 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
           console.warn('Could not add fog effects:', fogError);
         }
 
-        // Add markers after map is fully loaded
-        console.log('Adding initial markers...');
-        addMarkersToMap(filteredAgencies);
+        // Add markers after map is fully loaded - IMPORTANT: delay to ensure full initialization
+        setTimeout(() => {
+          console.log('Adding initial markers after delay...');
+          addMarkersToMap(filteredAgencies);
+        }, 100);
       });
 
-      // Add style load event (backup for older browsers)
+      // Add style load event as a backup and for initial load in some browsers
       map.current.on('style.load', () => {
         console.log('Map style loaded');
-        if (map.current && !map.current.loaded()) {
-          addMarkersToMap(filteredAgencies);
+        // Only add markers if they haven't been added yet and map is ready
+        if (map.current && map.current.loaded() && markers.current.length === 0) {
+          setTimeout(() => {
+            console.log('Adding markers via style.load backup...');
+            addMarkersToMap(filteredAgencies);
+          }, 100);
         }
       });
 
@@ -326,17 +332,21 @@ export const MapboxInteractiveMap = ({ agencies }: MapboxInteractiveMapProps) =>
     if (!map.current || isLoadingToken || !mapboxToken) return;
 
     // Wait for map to be fully loaded before updating markers
-    if (map.current.loaded()) {
+    const updateMarkers = () => {
       console.log('Updating markers for filtered agencies...');
       clearMarkers();
       addMarkersToMap(filteredAgencies);
+    };
+
+    if (map.current.loaded()) {
+      updateMarkers();
     } else {
-      console.log('Map not loaded yet, waiting...');
-      map.current.on('load', () => {
-        console.log('Map loaded, now updating markers...');
-        clearMarkers();
-        addMarkersToMap(filteredAgencies);
-      });
+      console.log('Map not loaded yet, waiting for load event...');
+      const onLoad = () => {
+        setTimeout(updateMarkers, 100);
+        map.current?.off('load', onLoad);
+      };
+      map.current.on('load', onLoad);
     }
   }, [filteredAgencies, mapboxToken]);
 
