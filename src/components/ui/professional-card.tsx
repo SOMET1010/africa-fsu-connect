@@ -21,7 +21,7 @@ interface ProfessionalCardProps {
   className?: string;
 }
 
-export const ProfessionalCard = React.forwardRef<
+const ProfessionalCard = React.forwardRef<
   HTMLDivElement,
   ProfessionalCardProps
 >(({

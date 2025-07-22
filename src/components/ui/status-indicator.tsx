@@ -11,7 +11,7 @@ interface StatusIndicatorProps {
   className?: string;
 }
 
-export const StatusIndicator = React.forwardRef<
+const StatusIndicator = React.forwardRef<
   HTMLDivElement,
   StatusIndicatorProps
 >(({
