@@ -24,14 +24,14 @@ const Profile = () => {
     first_name: profile?.first_name || "",
     last_name: profile?.last_name || "",
     email: user?.email || "",
-    phone: profile?.phone || "",
+    phone: "",
     organization: profile?.organization || "",
     country: profile?.country || "",
-    position: profile?.position || "",
+    position: "",
     bio: profile?.bio || "",
-    website: profile?.website || "",
-    linkedin: profile?.linkedin || "",
-    twitter: profile?.twitter || ""
+    website: "",
+    linkedin: "",
+    twitter: ""
   });
 
   const [preferences, setPreferences] = useState({

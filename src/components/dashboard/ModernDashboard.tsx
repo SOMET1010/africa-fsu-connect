@@ -155,7 +155,7 @@ export const ModernDashboard = () => {
         
         {/* Hero Section */}
         <div className="animate-fade-in">
-          <GlassCard variant="gradient" className="p-8 text-center relative overflow-hidden">
+          <GlassCard variant="strong" className="p-8 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 animate-pulse-glow"></div>
             <div className="relative z-10">
               <h1 className="text-4xl font-bold font-poppins mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -199,7 +199,7 @@ export const ModernDashboard = () => {
 
         {/* Security Status */}
         <div className="animate-fade-in" style={{ animationDelay: '600ms' }}>
-          <GlassCard variant="glass" className="p-6">
+          <GlassCard variant="default" className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="p-3 rounded-xl bg-green-500/20 border border-green-500/20">
@@ -272,7 +272,7 @@ export const ModernDashboard = () => {
 
         {/* Recent Activity */}
         <div className="animate-fade-in" style={{ animationDelay: '1200ms' }}>
-          <GlassCard variant="glass" className="p-6">
+          <GlassCard variant="subtle" className="p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-xl font-bold font-poppins flex items-center gap-2 text-foreground">
