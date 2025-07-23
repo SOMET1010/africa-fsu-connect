@@ -181,35 +181,33 @@ export function ModernSidebar() {
       <SidebarMenuItem key={item.title}>
         <ModernTooltip>
           <TooltipTrigger asChild>
-            <div>
-              <SidebarMenuButton asChild>
-                <NavLink to={item.url} className={getNavClassName(item.url)}>
-                  <div className="relative flex items-center gap-3 w-full">
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <item.icon className={cn(
-                      "h-5 w-5 shrink-0 transition-all duration-300",
-                      active ? "text-primary scale-110" : "group-hover:scale-105"
-                    )} />
-                    {!isCollapsed && (
-                      <div className="flex flex-col min-w-0 flex-1 ml-3">
-                        <span className={cn(
-                          "font-medium text-sm truncate transition-all duration-300",
-                          active && "text-primary"
-                        )}>
-                          {item.title}
-                        </span>
-                        <span className="text-xs text-muted-foreground/70 truncate">
-                          {item.description}
-                        </span>
-                      </div>
-                    )}
-                    {active && (
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-l-full animate-scale-in" />
-                    )}
-                  </div>
-                </NavLink>
-              </SidebarMenuButton>
-            </div>
+            <SidebarMenuButton asChild>
+              <NavLink to={item.url} className={getNavClassName(item.url)}>
+                <div className="relative flex items-center gap-3 w-full">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <item.icon className={cn(
+                    "h-5 w-5 shrink-0 transition-all duration-300",
+                    active ? "text-primary scale-110" : "group-hover:scale-105"
+                  )} />
+                  {!isCollapsed && (
+                    <div className="flex flex-col min-w-0 flex-1 ml-3">
+                      <span className={cn(
+                        "font-medium text-sm truncate transition-all duration-300",
+                        active && "text-primary"
+                      )}>
+                        {item.title}
+                      </span>
+                      <span className="text-xs text-muted-foreground/70 truncate">
+                        {item.description}
+                      </span>
+                    </div>
+                  )}
+                  {active && (
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-l-full animate-scale-in" />
+                  )}
+                </div>
+              </NavLink>
+            </SidebarMenuButton>
           </TooltipTrigger>
           {isCollapsed && (
             <TooltipContent side="right" variant="glass">
