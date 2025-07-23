@@ -64,7 +64,7 @@ export const CollaborationPresence = ({
           <div className="flex -space-x-2">
             {displayUsers.slice(0, 5).map((user) => (
               <Tooltip key={user.user_id}>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <div className="relative">
                     <Avatar className="h-8 w-8 border-2 border-background">
                       <AvatarImage src={user.avatar_url} alt={user.user_name} />
