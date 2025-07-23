@@ -156,16 +156,18 @@ const OptimizedSearchBar = forwardRef<SearchBarRef, SearchBarProps>(({
           <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
             <PopoverTrigger asChild>
               <Button variant="outline" className="relative">
-                <Filter className="h-4 w-4 mr-2" />
-                Filtres
-                {activeFilterCount > 0 && (
-                  <Badge 
-                    variant="secondary" 
-                    className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
-                  >
-                    {activeFilterCount}
-                  </Badge>
-                )}
+                <>
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filtres
+                  {activeFilterCount > 0 && (
+                    <Badge 
+                      variant="secondary" 
+                      className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                    >
+                      {activeFilterCount}
+                    </Badge>
+                  )}
+                </>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80" align="end">
