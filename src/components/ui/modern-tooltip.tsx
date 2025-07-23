@@ -7,9 +7,9 @@ const TooltipProvider = TooltipPrimitive.Provider;
 
 const ModernTooltip = TooltipPrimitive.Root;
 
-const TooltipTrigger = TooltipPrimitive.Trigger;
+const ModernTooltipTrigger = TooltipPrimitive.Trigger;
 
-const TooltipContent = React.forwardRef<
+const ModernTooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> & {
     variant?: "default" | "glass" | "dark";
@@ -38,6 +38,6 @@ const TooltipContent = React.forwardRef<
     />
   );
 });
-TooltipContent.displayName = TooltipPrimitive.Content.displayName;
+ModernTooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
-export { ModernTooltip, TooltipTrigger, TooltipContent, TooltipProvider };
+export { ModernTooltip, ModernTooltipTrigger, ModernTooltipContent, TooltipProvider };
