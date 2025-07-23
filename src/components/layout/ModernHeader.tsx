@@ -245,15 +245,19 @@ const ModernHeader = () => {
                   <DropdownMenuSeparator className="bg-border/50" />
                   <DropdownMenuItem asChild className="cursor-pointer">
                     <Link to="/profile" className="flex items-center">
-                      <User className="mr-2 h-4 w-4" />
-                      <span>{t('nav.profile')}</span>
+                      <>
+                        <User className="mr-2 h-4 w-4" />
+                        <span>{t('nav.profile')}</span>
+                      </>
                     </Link>
                   </DropdownMenuItem>
                   {isAdmin() && (
                     <DropdownMenuItem asChild className="cursor-pointer">
                       <Link to="/admin" className="flex items-center">
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>{t('nav.admin')}</span>
+                        <>
+                          <Settings className="mr-2 h-4 w-4" />
+                          <span>{t('nav.admin')}</span>
+                        </>
                       </Link>
                     </DropdownMenuItem>
                   )}
