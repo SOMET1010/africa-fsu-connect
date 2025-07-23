@@ -180,7 +180,7 @@ export function ModernSidebar() {
     return (
       <SidebarMenuItem key={item.title}>
         <ModernTooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <SidebarMenuButton asChild>
               <NavLink to={item.url} className={getNavClassName(item.url)}>
                 <div className="relative flex items-center gap-3 w-full">
