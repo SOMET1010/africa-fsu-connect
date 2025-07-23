@@ -79,7 +79,7 @@ export default function HeroSection() {
               className="px-8 py-4 text-base font-medium shadow-elegant hover:shadow-xl transition-all duration-200"
             >
               <Link to="/auth" className="flex items-center">
-                Commencer maintenant
+                <span>Commencer maintenant</span>
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
@@ -91,7 +91,7 @@ export default function HeroSection() {
               className="px-8 py-4 text-base font-medium bg-background/80 backdrop-blur-sm border-border hover:bg-muted/50"
             >
               <Link to="/organizations">
-                Explorer la plateforme
+                <span>Explorer la plateforme</span>
               </Link>
             </Button>
           </div>
