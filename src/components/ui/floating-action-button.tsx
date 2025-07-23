@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import { Plus, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -60,7 +61,7 @@ export function FloatingActionButton({
                 const Icon = action.icon;
                 return (
                   <Tooltip key={index}>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                       <Button
                         size="sm"
                         variant="secondary"
@@ -90,7 +91,7 @@ export function FloatingActionButton({
 
           {/* Primary Button */}
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
                 size="lg"
                 className={cn(

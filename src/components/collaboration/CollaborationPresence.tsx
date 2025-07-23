@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Users, Eye, MessageCircle, Activity } from 'lucide-react';
 import { useRealTimeCollaboration, UserPresence } from '@/hooks/useRealTimeCollaboration';
@@ -65,7 +66,7 @@ export const CollaborationPresence = ({
             {displayUsers.slice(0, 5).map((user) => (
               <Tooltip key={user.user_id}>
                 <TooltipTrigger asChild>
-                  <div className="relative">
+                  <button className="relative">
                     <Avatar className="h-8 w-8 border-2 border-background">
                       <AvatarImage src={user.avatar_url} alt={user.user_name} />
                       <AvatarFallback className="text-xs">
@@ -78,7 +79,7 @@ export const CollaborationPresence = ({
                         getStatusColor(user.status)
                       )}
                     />
-                  </div>
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="space-y-1">
