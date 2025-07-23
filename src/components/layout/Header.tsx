@@ -226,19 +226,19 @@ const Header = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="flex items-center cursor-pointer">
-                      <>
+                      <div className="flex items-center">
                         <User className="mr-2 h-4 w-4" />
                         <span>{t('nav.profile')}</span>
-                      </>
+                      </div>
                     </Link>
                   </DropdownMenuItem>
                   {isAdmin() && (
                     <DropdownMenuItem asChild>
                       <Link to="/admin" className="flex items-center cursor-pointer">
-                        <>
+                        <div className="flex items-center">
                           <Settings className="mr-2 h-4 w-4" />
                           <span>{t('nav.admin')}</span>
-                        </>
+                        </div>
                       </Link>
                     </DropdownMenuItem>
                   )}
