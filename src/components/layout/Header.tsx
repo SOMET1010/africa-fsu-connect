@@ -257,7 +257,7 @@ const Header = () => {
                   </Link>
                 </Button>
                 <Button asChild size="sm">
-                  <Link to="/auth" className="flex items-center space-x-2">
+                  <Link to="/auth">
                     <span className="flex items-center space-x-2">
                       <LogIn className="h-4 w-4 mr-1" />
                       <span>{t('nav.start')}</span>
