@@ -278,11 +278,9 @@ const ModernHeader = () => {
                   </Link>
                 </ModernButton>
                 <ModernButton asChild size="sm" variant="default">
-                  <Link to="/auth">
-                    <span className="flex items-center space-x-2">
-                      <LogIn className="h-4 w-4 mr-1" />
-                      <span>{t('nav.start')}</span>
-                    </span>
+                  <Link to="/auth" className="flex items-center space-x-2">
+                    <LogIn className="h-4 w-4 mr-1" />
+                    <span>{t('nav.start')}</span>
                   </Link>
                 </ModernButton>
               </div>
