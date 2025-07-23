@@ -24,14 +24,9 @@ const Profile = () => {
     first_name: profile?.first_name || "",
     last_name: profile?.last_name || "",
     email: user?.email || "",
-    phone: profile?.phone || "",
     organization: profile?.organization || "",
     country: profile?.country || "",
-    position: profile?.position || "",
-    bio: profile?.bio || "",
-    website: profile?.website || "",
-    linkedin: profile?.linkedin || "",
-    twitter: profile?.twitter || ""
+    bio: profile?.bio || ""
   });
 
   const [preferences, setPreferences] = useState({
@@ -183,12 +178,6 @@ const Profile = () => {
                       <span>{formData.country}</span>
                     </div>
                   )}
-                  {formData.phone && (
-                    <div className="flex items-center space-x-2 text-sm">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <span>{formData.phone}</span>
-                    </div>
-                  )}
                 </div>
               </div>
             </GlassCard>
@@ -232,13 +221,6 @@ const Profile = () => {
                       description="L'email ne peut pas être modifié"
                     />
                     
-                    <ModernInput
-                      label="Téléphone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(value) => setFormData({...formData, phone: value})}
-                      disabled={!isEditing}
-                    />
                     
                     <ModernInput
                       label="Organisation"
@@ -263,14 +245,6 @@ const Profile = () => {
                     />
                   </div>
                   
-                  <div className="mt-6">
-                    <ModernInput
-                      label="Poste"
-                      value={formData.position}
-                      onChange={(value) => setFormData({...formData, position: value})}
-                      disabled={!isEditing}
-                    />
-                  </div>
                   
                   <div className="mt-6">
                     <ModernTextarea
@@ -284,38 +258,6 @@ const Profile = () => {
                   </div>
                 </GlassCard>
 
-                <GlassCard variant="default" className="p-6">
-                  <h3 className="text-lg font-semibold mb-6">Réseaux sociaux</h3>
-                  
-                  <div className="space-y-4">
-                    <ModernInput
-                      label="Site web"
-                      type="url"
-                      value={formData.website}
-                      onChange={(value) => setFormData({...formData, website: value})}
-                      disabled={!isEditing}
-                      placeholder="https://votre-site.com"
-                    />
-                    
-                    <ModernInput
-                      label="LinkedIn"
-                      type="url"
-                      value={formData.linkedin}
-                      onChange={(value) => setFormData({...formData, linkedin: value})}
-                      disabled={!isEditing}
-                      placeholder="https://linkedin.com/in/votre-profil"
-                    />
-                    
-                    <ModernInput
-                      label="Twitter"
-                      type="url"
-                      value={formData.twitter}
-                      onChange={(value) => setFormData({...formData, twitter: value})}
-                      disabled={!isEditing}
-                      placeholder="https://twitter.com/votre-profil"
-                    />
-                  </div>
-                </GlassCard>
               </TabsContent>
 
               <TabsContent value="preferences" className="space-y-6">

@@ -224,7 +224,7 @@ const Security = () => {
                   {activeSessions?.length > 0 ? activeSessions.map((session) => (
                     <div key={session.id} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
                       <div>
-                        <p className="font-medium">{session.device_info || "Appareil inconnu"}</p>
+                        <p className="font-medium">{session.user_agent || "Appareil inconnu"}</p>
                         <p className="text-sm text-muted-foreground">
                           {session.ip_address} • {session.location}
                         </p>

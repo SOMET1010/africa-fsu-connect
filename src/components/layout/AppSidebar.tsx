@@ -135,10 +135,10 @@ export function AppSidebar() {
                 {section.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <NavLink to={item.url} className={getNavClassName(item.url)}>
-                        <item.icon className="h-4 w-4 shrink-0" />
-                        {!isCollapsed && <span className="truncate">{item.title}</span>}
-                      </NavLink>
+                       <NavLink to={item.url} className={getNavClassName(item.url)}>
+                         <item.icon className="h-4 w-4 shrink-0" />
+                         {!isCollapsed && item.title}
+                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -159,10 +159,10 @@ export function AppSidebar() {
                 {adminSection.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <NavLink to={item.url} className={getNavClassName(item.url)}>
-                        <item.icon className="h-4 w-4 shrink-0" />
-                        {!isCollapsed && <span className="truncate">{item.title}</span>}
-                      </NavLink>
+                       <NavLink to={item.url} className={getNavClassName(item.url)}>
+                         <item.icon className="h-4 w-4 shrink-0" />
+                         {!isCollapsed && item.title}
+                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
