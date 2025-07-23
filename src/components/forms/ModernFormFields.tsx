@@ -16,6 +16,7 @@ interface BaseFieldProps {
   error?: string;
   success?: string;
   required?: boolean;
+  disabled?: boolean;
   className?: string;
 }
 
@@ -53,6 +54,7 @@ export const ModernInput = forwardRef<HTMLInputElement, ModernInputProps>(({
   error,
   success,
   required,
+  disabled,
   type = "text",
   placeholder,
   value,
@@ -89,6 +91,7 @@ export const ModernInput = forwardRef<HTMLInputElement, ModernInputProps>(({
           onChange={(e) => onChange?.(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
+          disabled={disabled}
           className={cn(
             "transition-all duration-300 bg-background/50 backdrop-blur-sm",
             "border-border/50 hover:border-border focus:border-primary",
@@ -97,7 +100,8 @@ export const ModernInput = forwardRef<HTMLInputElement, ModernInputProps>(({
             (rightIcon || type === "password") && "pr-10",
             error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
             success && "border-green-500 focus:border-green-500 focus:ring-green-500/20",
-            focused && "shadow-lg shadow-primary/10"
+            focused && "shadow-lg shadow-primary/10",
+            disabled && "opacity-50 cursor-not-allowed"
           )}
           {...props}
         />
@@ -107,6 +111,7 @@ export const ModernInput = forwardRef<HTMLInputElement, ModernInputProps>(({
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            disabled={disabled}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -158,6 +163,7 @@ export const ModernTextarea = forwardRef<HTMLTextAreaElement, ModernTextareaProp
   error,
   success,
   required,
+  disabled,
   placeholder,
   value,
   onChange,
@@ -181,6 +187,7 @@ export const ModernTextarea = forwardRef<HTMLTextAreaElement, ModernTextareaProp
         onChange={(e) => onChange?.(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
+        disabled={disabled}
         rows={rows}
         className={cn(
           "transition-all duration-300 bg-background/50 backdrop-blur-sm",
@@ -188,7 +195,8 @@ export const ModernTextarea = forwardRef<HTMLTextAreaElement, ModernTextareaProp
           "focus:ring-2 focus:ring-primary/20",
           error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
           success && "border-green-500 focus:border-green-500 focus:ring-green-500/20",
-          focused && "shadow-lg shadow-primary/10"
+          focused && "shadow-lg shadow-primary/10",
+          disabled && "opacity-50 cursor-not-allowed"
         )}
         {...props}
       />
@@ -220,6 +228,7 @@ export const ModernSelect = ({
   error,
   success,
   required,
+  disabled,
   placeholder,
   value,
   onChange,
@@ -233,13 +242,14 @@ export const ModernSelect = ({
         {required && <span className="text-red-500">*</span>}
       </Label>
       
-      <Select value={value} onValueChange={onChange}>
+      <Select value={value} onValueChange={onChange} disabled={disabled}>
         <SelectTrigger className={cn(
           "transition-all duration-300 bg-background/50 backdrop-blur-sm",
           "border-border/50 hover:border-border focus:border-primary",
           "focus:ring-2 focus:ring-primary/20",
           error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-          success && "border-green-500 focus:border-green-500 focus:ring-green-500/20"
+          success && "border-green-500 focus:border-green-500 focus:ring-green-500/20",
+          disabled && "opacity-50 cursor-not-allowed"
         )}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
@@ -279,6 +289,7 @@ export const ModernSwitch = ({
   error,
   success,
   required,
+  disabled,
   checked,
   onChange,
   className
@@ -299,6 +310,7 @@ export const ModernSwitch = ({
         <Switch
           checked={checked}
           onCheckedChange={onChange}
+          disabled={disabled}
           className="data-[state=checked]:bg-primary"
         />
       </div>

@@ -12,7 +12,7 @@ import { ModernLoadingSpinner } from "@/components/ui/modern-loading-states";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
-import { useSecurity } from "@/hooks/useSecurity";
+import { useSecurity } from "@/features/security/hooks/useSecurity";
 
 const Security = () => {
   const [showTwoFactorModal, setShowTwoFactorModal] = useState(false);
@@ -151,7 +151,6 @@ const Security = () => {
                 status={metric.status}
                 value={metric.value}
                 className="animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` } as React.CSSProperties}
               />
             ))}
           </div>
@@ -225,7 +224,7 @@ const Security = () => {
                   {activeSessions?.length > 0 ? activeSessions.map((session) => (
                     <div key={session.id} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
                       <div>
-                        <p className="font-medium">{session.device_info}</p>
+                        <p className="font-medium">{session.device_info || "Appareil inconnu"}</p>
                         <p className="text-sm text-muted-foreground">
                           {session.ip_address} • {session.location}
                         </p>
