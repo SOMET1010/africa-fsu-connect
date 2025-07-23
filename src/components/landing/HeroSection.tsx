@@ -79,8 +79,10 @@ export default function HeroSection() {
               className="px-8 py-4 text-base font-medium shadow-elegant hover:shadow-xl transition-all duration-200"
             >
               <Link to="/auth">
-                Commencer maintenant
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <>
+                  Commencer maintenant
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </>
               </Link>
             </Button>
             
