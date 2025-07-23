@@ -184,18 +184,18 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="flex items-center">
-                      <>
+                      <div className="flex items-center">
                         <User className="mr-2 h-4 w-4" />
                         <span>{t('nav.profile')}</span>
-                      </>
+                      </div>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/settings" className="flex items-center">
-                      <>
+                      <div className="flex items-center">
                         <Settings className="mr-2 h-4 w-4" />
                         <span>{t('nav.settings')}</span>
-                      </>
+                      </div>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
