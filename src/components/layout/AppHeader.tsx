@@ -210,10 +210,14 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
             /* Boutons pour les utilisateurs non connectés */
             <div className="flex items-center space-x-2">
               <Button variant="ghost" asChild>
-                <Link to="/auth">{t('auth.login')}</Link>
+                <Link to="/auth">
+                  <span>{t('auth.login')}</span>
+                </Link>
               </Button>
               <Button asChild>
-                <Link to="/auth">{t('nav.start')}</Link>
+                <Link to="/auth">
+                  <span>{t('nav.start')}</span>
+                </Link>
               </Button>
             </div>
           )}

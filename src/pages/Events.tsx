@@ -531,7 +531,7 @@ const Events = () => {
                   {selectedEvent.virtual_link && (
                     <Button variant="outline" asChild>
                       <a href={selectedEvent.virtual_link} target="_blank" rel="noopener noreferrer">
-                        Rejoindre en ligne
+                        <span>Rejoindre en ligne</span>
                       </a>
                     </Button>
                   )}
