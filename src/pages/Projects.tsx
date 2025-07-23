@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ModernButton } from "@/components/ui/modern-button";
 import { Input } from "@/components/ui/input";
@@ -36,17 +35,27 @@ import { ProjectNotifications } from "@/components/projects/ProjectNotifications
 import { SampleProjectData } from "@/components/projects/SampleProjectData";
 import { useToast } from "@/hooks/use-toast";
 import { ModernCard } from "@/components/ui/modern-card";
+import { useSearchParams } from "react-router-dom";
 
 const Projects = () => {
   const { t } = useTranslation();
   const { projects, loading, createProject, updateProject, deleteProject } = useProjects();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [viewMode, setViewMode] = useState<'grid' | 'map' | 'analytics' | 'reports' | 'notifications'>('grid');
+
+  // Check URL parameters to auto-open Analytics view
+  useEffect(() => {
+    const view = searchParams.get('view');
+    if (view === 'analytics') {
+      setViewMode('analytics');
+    }
+  }, [searchParams]);
 
   const filteredProjects = projects.filter(project => {
     const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

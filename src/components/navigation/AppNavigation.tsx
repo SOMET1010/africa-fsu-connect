@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { 
@@ -41,6 +42,7 @@ export const AppNavigation = () => {
     { name: 'Indicateurs', path: '/indicators', icon: TrendingUp },
     { name: t('nav.map'), path: '/map', icon: MapPin },
     { name: t('nav.projects'), path: '/projects', icon: Rocket },
+    { name: 'Analytics', path: '/projects?view=analytics', icon: BarChart2 },
     { name: t('nav.organizations'), path: '/organizations', icon: Building2 },
     { name: t('nav.resources'), path: '/docs', icon: BookOpen },
     { name: t('nav.forum'), path: '/forum', icon: MessageSquare },
@@ -96,7 +98,7 @@ interface NavItemLinkProps {
 
 const NavItemLink = ({ item, pathname }: NavItemLinkProps) => {
   const Icon = item.icon;
-  const isActive = pathname === item.path;
+  const isActive = pathname === item.path || (item.path.includes('?') && pathname === item.path.split('?')[0]);
 
   return (
     <NavLink
@@ -104,21 +106,21 @@ const NavItemLink = ({ item, pathname }: NavItemLinkProps) => {
       className={({ isActive: active }) => cn(
         "flex items-center px-3 py-2 text-sm rounded-md transition-all duration-200",
         "hover:bg-accent/50 hover:text-foreground group relative",
-        active 
+        active || isActive
           ? "bg-primary/10 text-primary font-medium" 
           : "text-muted-foreground"
       )}
     >
-      {({ isActive }) => (
+      {({ isActive: active }) => (
         <>
           <Icon className={cn(
             "h-4 w-4 mr-2 transition-transform",
-            isActive && "text-primary animate-scale-in"
+            (active || isActive) && "text-primary animate-scale-in"
           )} />
           
           <span>{item.name}</span>
           
-          {isActive && (
+          {(active || isActive) && (
             <span className="absolute right-2 h-1.5 w-1.5 rounded-full bg-primary animate-scale-in" />
           )}
         </>

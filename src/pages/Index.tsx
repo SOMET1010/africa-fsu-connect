@@ -81,7 +81,7 @@ const Index = () => {
       icon: BarChart3,
       title: t('features.analytics.reporting'),
       description: t('features.analytics.reporting.desc'),
-      link: "/dashboard",
+      link: "/projects?view=analytics",
       highlights: [
         t('features.analytics.reporting.highlight1'), 
         t('features.analytics.reporting.highlight2'), 
