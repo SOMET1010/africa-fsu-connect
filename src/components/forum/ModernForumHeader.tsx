@@ -83,7 +83,7 @@ export function ModernForumHeader({
     <div className="space-y-6">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <GlassCard variant="glass" className="p-8">
+        <GlassCard variant="default" className="p-8">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-accent/5 to-primary/10 opacity-50" />
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-6">

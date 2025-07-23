@@ -141,7 +141,7 @@ const Forum = () => {
 
   const filteredPosts = selectedCategory === "all" 
     ? enhancedPosts 
-    : enhancedPosts.filter(post => post.category === selectedCategory);
+    : enhancedPosts.filter(post => post.category_id === selectedCategory);
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
     switch (sortBy) {
