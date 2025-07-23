@@ -19,6 +19,17 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
   const { user } = useAuth();
   const location = useLocation();
   
+  // Special handling for auth page
+  if (location.pathname === '/auth') {
+    return (
+      <div className="min-h-screen">
+        <PageTransition variant="fade" duration="normal">
+          {children}
+        </PageTransition>
+      </div>
+    );
+  }
+  
   // Pages où la sidebar doit être ouverte par défaut
   const sidebarOpenPages = ['/submit', '/dashboard', '/indicators', '/organizations'];
   const shouldSidebarBeOpen = sidebarOpenPages.includes(location.pathname);
