@@ -136,10 +136,10 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <NavLink to={item.url} className={getNavClassName(item.url)}>
-                        <>
+                        <div className="flex items-center gap-3">
                           <item.icon className="h-4 w-4 shrink-0" />
                           {!isCollapsed && <span className="truncate">{item.title}</span>}
-                        </>
+                        </div>
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -162,10 +162,10 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <NavLink to={item.url} className={getNavClassName(item.url)}>
-                        <>
+                        <div className="flex items-center gap-3">
                           <item.icon className="h-4 w-4 shrink-0" />
                           {!isCollapsed && <span className="truncate">{item.title}</span>}
-                        </>
+                        </div>
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

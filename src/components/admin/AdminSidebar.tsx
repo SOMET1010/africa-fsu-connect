@@ -116,7 +116,7 @@ export function AdminSidebar() {
                       className={`${getNavClassName(item.url)} flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200`}
                       title={collapsed ? item.title : ""}
                     >
-                      <>
+                      <div className="flex items-center gap-3 w-full">
                         <item.icon className="h-4 w-4 flex-shrink-0" />
                         {!collapsed && (
                           <div className="flex-1 min-w-0">
@@ -126,7 +126,7 @@ export function AdminSidebar() {
                             </div>
                           </div>
                         )}
-                      </>
+                      </div>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
