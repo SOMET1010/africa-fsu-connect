@@ -206,13 +206,15 @@ export function SimplifiedSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} className={getNavClassName(item.url)}>
-                      <item.icon className="h-5 w-5 shrink-0" />
-                      {!isCollapsed && (
-                        <div className="flex flex-col min-w-0 flex-1">
-                          <span className="font-medium text-sm truncate">{item.title}</span>
-                          <span className="text-xs text-muted-foreground truncate">{item.description}</span>
-                        </div>
-                      )}
+                      <>
+                        <item.icon className="h-5 w-5 shrink-0" />
+                        {!isCollapsed && (
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="font-medium text-sm truncate">{item.title}</span>
+                            <span className="text-xs text-muted-foreground truncate">{item.description}</span>
+                          </div>
+                        )}
+                      </>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -263,13 +265,15 @@ export function SimplifiedSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <NavLink to={item.url} className={getNavClassName(item.url)}>
-                        <item.icon className="h-5 w-5 shrink-0" />
-                        {!isCollapsed && (
-                          <div className="flex flex-col min-w-0 flex-1">
-                            <span className="font-medium text-sm truncate">{item.title}</span>
-                            <span className="text-xs text-muted-foreground truncate">{item.description}</span>
-                          </div>
-                        )}
+                        <>
+                          <item.icon className="h-5 w-5 shrink-0" />
+                          {!isCollapsed && (
+                            <div className="flex flex-col min-w-0 flex-1">
+                              <span className="font-medium text-sm truncate">{item.title}</span>
+                              <span className="text-xs text-muted-foreground truncate">{item.description}</span>
+                            </div>
+                          )}
+                        </>
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
