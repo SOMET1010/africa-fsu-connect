@@ -1,6 +1,6 @@
 
-import { Shield, Users, Clock } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Shield, Users, Clock, Settings, Eye, FileText } from 'lucide-react';
+import { ModernTabsWithIcon } from '@/components/ui/modern-tabs';
 import { useSecurity } from '../../hooks/useSecurity';
 import { formatSessionTimeout } from '../../core/utils';
 import SecurityStatusCard from '../shared/SecurityStatusCard';
@@ -26,6 +26,27 @@ const SecurityDashboard = () => {
     );
   }
 
+  const tabs = [
+    {
+      value: "preferences",
+      label: "Préférences",
+      icon: <Settings className="h-4 w-4" />,
+      content: <SecurityPreferences />
+    },
+    {
+      value: "sessions",
+      label: "Sessions",
+      icon: <Eye className="h-4 w-4" />,
+      content: <ActiveSessions />
+    },
+    {
+      value: "audit",
+      label: "Journal d'audit",
+      icon: <FileText className="h-4 w-4" />,
+      content: <AuditLog />
+    }
+  ];
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Security Status Cards */}
@@ -50,25 +71,7 @@ const SecurityDashboard = () => {
         />
       </div>
 
-      <Tabs defaultValue="preferences" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="preferences">Préférences</TabsTrigger>
-          <TabsTrigger value="sessions">Sessions</TabsTrigger>
-          <TabsTrigger value="audit">Journal d'audit</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="preferences" className="animate-fade-in">
-          <SecurityPreferences />
-        </TabsContent>
-
-        <TabsContent value="sessions" className="animate-fade-in">
-          <ActiveSessions />
-        </TabsContent>
-
-        <TabsContent value="audit" className="animate-fade-in">
-          <AuditLog />
-        </TabsContent>
-      </Tabs>
+      <ModernTabsWithIcon tabs={tabs} defaultValue="preferences" />
     </div>
   );
 };
