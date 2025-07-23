@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { GlassCard } from "@/components/ui/glass-card";
-import { ModernTooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/modern-tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -214,7 +214,7 @@ export function ModernForumCard({
             {/* Reaction buttons */}
             <div className="flex items-center gap-1">
               {reactionButtons.map(({ type, icon: Icon, count, color }) => (
-                <ModernTooltip key={type}>
+                <Tooltip key={type}>
                   <TooltipTrigger asChild>
                     <ModernButton
                       variant="ghost"
@@ -244,7 +244,7 @@ export function ModernForumCard({
                     {type === 'lightbulb' && 'Bonne idée'}
                     {type === 'thumbsDown' && 'Je n\'aime pas'}
                   </TooltipContent>
-                </ModernTooltip>
+                </Tooltip>
               ))}
             </div>
 
