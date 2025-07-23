@@ -111,23 +111,23 @@ export function AdminSidebar() {
               {adminMenuItems.map((item) => (
                 <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton asChild className="h-10">
-                    <NavLink 
-                      to={item.url} 
-                      className={`${getNavClassName(item.url)} flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200`}
-                      title={collapsed ? item.title : ""}
-                    >
-                      <div className="flex items-center gap-3 w-full">
-                        <item.icon className="h-4 w-4 flex-shrink-0" />
-                        {!collapsed && (
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium">{item.title}</div>
-                            <div className="text-xs text-muted-foreground truncate">
-                              {item.description}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </NavLink>
+                     <NavLink 
+                       to={item.url} 
+                       className={`${getNavClassName(item.url)} flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200`}
+                       title={collapsed ? item.title : ""}
+                     >
+                       <span className="flex items-center gap-3 w-full">
+                         <item.icon className="h-4 w-4 flex-shrink-0" />
+                         {!collapsed && (
+                           <div className="flex-1 min-w-0">
+                             <div className="text-sm font-medium">{item.title}</div>
+                             <div className="text-xs text-muted-foreground truncate">
+                               {item.description}
+                             </div>
+                           </div>
+                         )}
+                       </span>
+                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
