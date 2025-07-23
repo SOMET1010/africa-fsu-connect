@@ -78,9 +78,11 @@ export default function HeroSection() {
               size="lg" 
               className="px-8 py-4 text-base font-medium shadow-elegant hover:shadow-xl transition-all duration-200"
             >
-              <Link to="/auth" className="flex items-center">
-                <span>Commencer maintenant</span>
-                <ArrowRight className="ml-2 h-5 w-5" />
+              <Link to="/auth">
+                <span className="flex items-center">
+                  Commencer maintenant
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </span>
               </Link>
             </Button>
             
