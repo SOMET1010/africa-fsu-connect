@@ -60,59 +60,55 @@ export const CollaborationPresence = ({
   if (!showDetails) {
     // Compact view - just avatars
     return (
-      <TooltipProvider>
-        <div className={cn("flex items-center gap-2", className)}>
-          <div className="flex -space-x-2">
-            {displayUsers.slice(0, 5).map((user) => (
-              <Tooltip key={user.user_id}>
-                <TooltipTrigger asChild>
-                  <button className="relative">
-                    <Avatar className="h-8 w-8 border-2 border-background">
-                      <AvatarImage src={user.avatar_url} alt={user.user_name} />
-                      <AvatarFallback className="text-xs">
-                        {getInitials(user.user_name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div 
-                      className={cn(
-                        "absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background",
-                        getStatusColor(user.status)
-                      )}
-                    />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <div className="space-y-1">
-                    <p className="font-medium">{user.user_name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {user.status === 'online' ? 'En ligne' : 
-                       user.status === 'away' ? 'Absent' : 'Hors ligne'}
-                    </p>
-                    {user.current_action && (
-                      <p className="text-xs">
-                        Action: {user.current_action}
-                      </p>
-                    )}
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </div>
+      <div className={cn("flex items-center gap-2", className)}>
+        <Card className="shadow-lg border-primary/20">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-semibold text-primary">
+              Collaboration en temps réel
+            </CardTitle>
+          </CardHeader>
           
-          {displayUsers.length > 5 && (
-            <Badge variant="secondary" className="text-xs">
-              +{displayUsers.length - 5}
-            </Badge>
-          )}
-          
-          {isConnected && (
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Activity className="h-3 w-3 text-green-500" />
-              <span>{activeUsers.length} actif{activeUsers.length > 1 ? 's' : ''}</span>
+          <CardContent>
+            <div className="space-y-4">
+               <div className="flex flex-wrap gap-2">
+                {displayUsers.map((user) => (
+                  <Tooltip key={user.user_id}>
+                    <TooltipTrigger asChild>
+                      <button className="relative">
+                        <Avatar className="h-8 w-8 border-2 border-background ring-2 ring-primary/20 transition-all hover:ring-primary/40">
+                          <AvatarImage 
+                            src={user.avatar_url || ''} 
+                            alt={user.user_name || 'Utilisateur'} 
+                          />
+                          <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                            {(user.user_name || 'U').charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className={cn(
+                          "absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-background",
+                          getStatusColor(user.status)
+                        )} />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <div className="text-sm">
+                        <p className="font-medium">{user.user_name || 'Utilisateur'}</p>
+                        <p className="text-muted-foreground">
+                          En ligne
+                        </p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
+              
+              <div className="text-sm text-muted-foreground">
+                <span className="font-medium">{displayUsers.length}</span> utilisateur{displayUsers.length > 1 ? 's' : ''} en ligne
+              </div>
             </div>
-          )}
-        </div>
-      </TooltipProvider>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { GlassCard } from "@/components/ui/glass-card";
-import { ModernTooltip, TooltipTrigger, TooltipContent } from "@/components/ui/modern-tooltip";
+import { ModernTooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/modern-tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
