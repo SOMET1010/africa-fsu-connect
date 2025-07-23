@@ -1,65 +1,51 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { glassEffect, modernTransition, hoverEffects } from "@/lib/design-tokens";
 
 interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "strong" | "subtle";
-  blur?: "sm" | "md" | "lg" | "xl";
-  border?: boolean;
-  shadow?: "none" | "sm" | "md" | "lg";
+  variant?: "light" | "medium" | "strong" | "default";
+  hover?: "none" | "lift" | "scale";
+  padding?: "none" | "sm" | "md" | "lg";
 }
 
-const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(({
-  className,
-  variant = "default",
-  blur = "md",
-  border = true,
-  shadow = "lg",
-  children,
-  ...props
-}, ref) => {
-  const variants = {
-    default: "bg-card/80 backdrop-blur-md",
-    strong: "bg-card/90 backdrop-blur-lg",
-    subtle: "bg-card/60 backdrop-blur-sm"
-  };
+const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
+  ({ className, variant = "medium", hover = "none", padding = "md", ...props }, ref) => {
+    const variantClasses = {
+      light: glassEffect('light'),
+      medium: glassEffect('medium'),
+      strong: glassEffect('strong'),
+      default: glassEffect('medium')
+    };
 
-  const blurLevels = {
-    sm: "backdrop-blur-sm",
-    md: "backdrop-blur-md", 
-    lg: "backdrop-blur-lg",
-    xl: "backdrop-blur-xl"
-  };
+    const hoverClasses = {
+      none: "",
+      lift: hoverEffects.lift,
+      scale: hoverEffects.scale
+    };
 
-  const shadows = {
-    none: "",
-    sm: "shadow-sm",
-    md: "shadow-md",
-    lg: "shadow-lg shadow-black/5"
-  };
+    const paddingClasses = {
+      none: "",
+      sm: "p-4",
+      md: "p-6",
+      lg: "p-8"
+    };
 
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "relative overflow-hidden rounded-2xl transition-all duration-300",
-        variants[variant],
-        blurLevels[blur],
-        border && "border border-border/20",
-        shadows[shadow],
-        "before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:to-transparent before:opacity-0 before:transition-opacity before:duration-300",
-        "hover:before:opacity-100 hover:shadow-xl hover:shadow-primary/5",
-        className
-      )}
-      {...props}
-    >
-      <div className="relative z-10">
-        {children}
-      </div>
-    </div>
-  );
-});
-
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "rounded-xl relative overflow-hidden",
+          variantClasses[variant],
+          hoverClasses[hover],
+          paddingClasses[padding],
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
 GlassCard.displayName = "GlassCard";
 
 export { GlassCard };

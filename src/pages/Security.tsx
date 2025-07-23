@@ -4,12 +4,12 @@ import { Shield, Key, UserCheck, Clock, AlertTriangle, CheckCircle, Eye, Lock } 
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ModernButton } from "@/components/ui/modern-button";
-import { GlassCard } from "@/components/ui/glass-card";
+import { ModernCard } from "@/components/ui/modern-card";
 import { ModernSecurityCard } from "@/components/security/ModernSecurityCard";
 import { ModernInput, ModernSelect, ModernSwitch } from "@/components/forms/ModernFormFields";
 import { ModernModal, ModernModalFooter } from "@/components/ui/modern-modal";
 import { ModernLoadingSpinner } from "@/components/ui/modern-loading-states";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ModernTabsWithIcon } from "@/components/ui/modern-tabs";
 import { Badge } from "@/components/ui/badge";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSecurity } from "@/features/security/hooks/useSecurity";
@@ -87,7 +87,6 @@ const Security = () => {
       setShowTwoFactorModal(true);
     } else {
       setLoading(true);
-      // Simuler la désactivation
       setTimeout(() => {
         setTwoFactorEnabled(false);
         setLoading(false);
@@ -116,6 +115,133 @@ const Security = () => {
       </div>
     );
   }
+
+  const tabs = [
+    {
+      value: "settings",
+      label: "Paramètres",
+      icon: <Shield className="h-4 w-4" />,
+      content: (
+        <ModernCard variant="medium" hover="lift" padding="lg">
+          <h3 className="text-lg font-semibold mb-6">Paramètres de sécurité</h3>
+          
+          <div className="space-y-6">
+            <ModernSwitch
+              label="Authentification à deux facteurs"
+              description="Ajoutez une couche de sécurité supplémentaire avec un code de vérification"
+              checked={twoFactorEnabled}
+              onChange={handleTwoFactorToggle}
+            />
+            
+            <ModernSelect
+              label="Délai d'expiration de session"
+              description="Durée avant déconnexion automatique"
+              value={sessionTimeout}
+              onChange={setSessionTimeout}
+              options={[
+                { value: "1800", label: "30 minutes" },
+                { value: "3600", label: "1 heure" },
+                { value: "7200", label: "2 heures" },
+                { value: "14400", label: "4 heures" },
+                { value: "28800", label: "8 heures" }
+              ]}
+            />
+            
+            <ModernSwitch
+              label="Notifications de sécurité"
+              description="Recevez des alertes par email pour les activités suspectes"
+              checked={notifications}
+              onChange={setNotifications}
+            />
+            
+            <div className="pt-4 border-t border-border/50">
+              <ModernButton 
+                onClick={handlePasswordChange}
+                variant="outline"
+                className="w-full sm:w-auto"
+              >
+                <Lock className="mr-2 h-4 w-4" />
+                Changer le mot de passe
+              </ModernButton>
+            </div>
+          </div>
+        </ModernCard>
+      )
+    },
+    {
+      value: "sessions",
+      label: "Sessions",
+      icon: <UserCheck className="h-4 w-4" />,
+      content: (
+        <ModernCard variant="medium" hover="lift" padding="lg">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold">Sessions actives</h3>
+            <Badge variant="secondary">
+              <AnimatedCounter value={activeSessions?.length || 0} className="mr-1" />
+              sessions
+            </Badge>
+          </div>
+          
+          <div className="space-y-4">
+            {activeSessions?.length > 0 ? activeSessions.map((session) => (
+              <div key={session.id} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                <div>
+                  <p className="font-medium">Appareil inconnu</p>
+                  <p className="text-sm text-muted-foreground">
+                    {session.ip_address} • {session.location}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Dernière activité: {new Date(session.last_activity).toLocaleString()}
+                  </p>
+                </div>
+                <ModernButton variant="outline" size="sm">
+                  Révoquer
+                </ModernButton>
+              </div>
+            )) : (
+              <p className="text-center text-muted-foreground py-8">
+                Aucune session active
+              </p>
+            )}
+          </div>
+        </ModernCard>
+      )
+    },
+    {
+      value: "audit",
+      label: "Journal d'audit",
+      icon: <Eye className="h-4 w-4" />,
+      content: (
+        <ModernCard variant="medium" hover="lift" padding="lg">
+          <h3 className="text-lg font-semibold mb-6">Journal d'audit</h3>
+          
+          <div className="space-y-4">
+            {auditLogs.map((log) => (
+              <div key={log.id} className="flex items-start space-x-4 p-4 bg-muted/30 rounded-lg">
+                <div className={`p-2 rounded-full ${
+                  log.status === 'success' ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'
+                }`}>
+                  {log.status === 'success' ? 
+                    <CheckCircle className="h-4 w-4" /> : 
+                    <AlertTriangle className="h-4 w-4" />
+                  }
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium">{log.action}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {log.ip} • {log.location}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(log.timestamp).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </ModernCard>
+      )
+    }
+  ];
 
   return (
     <div className="min-h-screen">
@@ -155,126 +281,8 @@ const Security = () => {
             ))}
           </div>
 
-          {/* Contenu principal */}
-          <Tabs defaultValue="settings" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="settings">Paramètres</TabsTrigger>
-              <TabsTrigger value="sessions">Sessions</TabsTrigger>
-              <TabsTrigger value="audit">Journal d'audit</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="settings" className="space-y-6">
-              <GlassCard variant="default" className="p-6">
-                <h3 className="text-lg font-semibold mb-6">Paramètres de sécurité</h3>
-                
-                <div className="space-y-6">
-                  <ModernSwitch
-                    label="Authentification à deux facteurs"
-                    description="Ajoutez une couche de sécurité supplémentaire avec un code de vérification"
-                    checked={twoFactorEnabled}
-                    onChange={handleTwoFactorToggle}
-                  />
-                  
-                  <ModernSelect
-                    label="Délai d'expiration de session"
-                    description="Durée avant déconnexion automatique"
-                    value={sessionTimeout}
-                    onChange={setSessionTimeout}
-                    options={[
-                      { value: "1800", label: "30 minutes" },
-                      { value: "3600", label: "1 heure" },
-                      { value: "7200", label: "2 heures" },
-                      { value: "14400", label: "4 heures" },
-                      { value: "28800", label: "8 heures" }
-                    ]}
-                  />
-                  
-                  <ModernSwitch
-                    label="Notifications de sécurité"
-                    description="Recevez des alertes par email pour les activités suspectes"
-                    checked={notifications}
-                    onChange={setNotifications}
-                  />
-                  
-                  <div className="pt-4 border-t border-border/50">
-                    <ModernButton 
-                      onClick={handlePasswordChange}
-                      variant="outline"
-                      className="w-full sm:w-auto"
-                    >
-                      <Lock className="mr-2 h-4 w-4" />
-                      Changer le mot de passe
-                    </ModernButton>
-                  </div>
-                </div>
-              </GlassCard>
-            </TabsContent>
-
-            <TabsContent value="sessions" className="space-y-6">
-              <GlassCard variant="default" className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold">Sessions actives</h3>
-                  <Badge variant="secondary">
-                    <AnimatedCounter value={activeSessions?.length || 0} className="mr-1" />
-                    sessions
-                  </Badge>
-                </div>
-                
-                <div className="space-y-4">
-                  {activeSessions?.length > 0 ? activeSessions.map((session) => (
-                    <div key={session.id} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                      <div>
-                        <p className="font-medium">Appareil inconnu</p>
-                        <p className="text-sm text-muted-foreground">
-                          {session.ip_address} • {session.location}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          Dernière activité: {new Date(session.last_activity).toLocaleString()}
-                        </p>
-                      </div>
-                      <ModernButton variant="outline" size="sm">
-                        Révoquer
-                      </ModernButton>
-                    </div>
-                  )) : (
-                    <p className="text-center text-muted-foreground py-8">
-                      Aucune session active
-                    </p>
-                  )}
-                </div>
-              </GlassCard>
-            </TabsContent>
-
-            <TabsContent value="audit" className="space-y-6">
-              <GlassCard variant="default" className="p-6">
-                <h3 className="text-lg font-semibold mb-6">Journal d'audit</h3>
-                
-                <div className="space-y-4">
-                  {auditLogs.map((log) => (
-                    <div key={log.id} className="flex items-start space-x-4 p-4 bg-muted/30 rounded-lg">
-                      <div className={`p-2 rounded-full ${
-                        log.status === 'success' ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'
-                      }`}>
-                        {log.status === 'success' ? 
-                          <CheckCircle className="h-4 w-4" /> : 
-                          <AlertTriangle className="h-4 w-4" />
-                        }
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium">{log.action}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {log.ip} • {log.location}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {new Date(log.timestamp).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </GlassCard>
-            </TabsContent>
-          </Tabs>
+          {/* Contenu principal avec onglets modernes */}
+          <ModernTabsWithIcon tabs={tabs} defaultValue="settings" />
         </div>
       </PageContainer>
 
