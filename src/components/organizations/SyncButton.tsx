@@ -99,7 +99,7 @@ export function SyncButton({ agency, onConfigClick, onHistoryClick }: SyncButton
           className="h-8"
           disabled={syncing}
         >
-          <>
+          <div className="flex items-center">
             {syncing ? (
               <RefreshCw className="h-4 w-4 animate-spin mr-1" />
             ) : (
@@ -109,7 +109,7 @@ export function SyncButton({ agency, onConfigClick, onHistoryClick }: SyncButton
               Sync
             </span>
             <ChevronDown className="h-3 w-3 ml-1" />
-          </>
+          </div>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
