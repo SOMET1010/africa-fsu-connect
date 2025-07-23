@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { glassEffect, modernTransition, hoverEffects } from "@/lib/design-tokens";
 
 interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "light" | "medium" | "strong" | "default";
+  variant?: "light" | "medium" | "strong" | "default" | "subtle";
   hover?: "none" | "lift" | "scale";
   padding?: "none" | "sm" | "md" | "lg";
 }
@@ -15,7 +15,8 @@ const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
       light: glassEffect('light'),
       medium: glassEffect('medium'),
       strong: glassEffect('strong'),
-      default: glassEffect('medium')
+      default: glassEffect('medium'),
+      subtle: glassEffect('light')
     };
 
     const hoverClasses = {

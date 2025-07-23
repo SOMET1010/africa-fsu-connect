@@ -9,6 +9,14 @@ interface ModernCardProps extends React.HTMLAttributes<HTMLDivElement> {
   padding?: "none" | "sm" | "md" | "lg";
   border?: boolean;
   shadow?: boolean;
+  interactive?: boolean;
+}
+
+interface ModernIconCardProps extends ModernCardProps {
+  icon?: React.ComponentType<any>;
+  title?: string;
+  description?: string;
+  stats?: any;
 }
 
 const ModernCard = React.forwardRef<HTMLDivElement, ModernCardProps>(
@@ -19,6 +27,7 @@ const ModernCard = React.forwardRef<HTMLDivElement, ModernCardProps>(
     padding = "md", 
     border = true,
     shadow = true,
+    interactive = false,
     ...props 
   }, ref) => {
     const baseClasses = "rounded-xl relative overflow-hidden";
@@ -55,6 +64,7 @@ const ModernCard = React.forwardRef<HTMLDivElement, ModernCardProps>(
           paddingClasses[padding],
           !border && "border-none",
           !shadow && "shadow-none",
+          interactive && "cursor-pointer",
           className
         )}
         {...props}
@@ -64,4 +74,24 @@ const ModernCard = React.forwardRef<HTMLDivElement, ModernCardProps>(
 );
 ModernCard.displayName = "ModernCard";
 
-export { ModernCard };
+const ModernIconCard = React.forwardRef<HTMLDivElement, ModernIconCardProps>(
+  ({ icon: Icon, title, description, stats, children, className, ...props }, ref) => {
+    return (
+      <ModernCard ref={ref} className={cn("text-center", className)} {...props}>
+        {Icon && (
+          <div className="flex justify-center mb-4">
+            <div className="p-3 rounded-xl bg-primary/10 border border-primary/20">
+              <Icon className="h-6 w-6 text-primary" />
+            </div>
+          </div>
+        )}
+        {title && <h3 className="font-semibold text-foreground mb-2">{title}</h3>}
+        {description && <p className="text-sm text-muted-foreground mb-4">{description}</p>}
+        {children}
+      </ModernCard>
+    );
+  }
+);
+ModernIconCard.displayName = "ModernIconCard";
+
+export { ModernCard, ModernIconCard };
