@@ -60,7 +60,7 @@ export function FloatingActionButton({
                 const Icon = action.icon;
                 return (
                   <Tooltip key={index}>
-                    <TooltipTrigger asChild>
+                    <TooltipTrigger>
                       <Button
                         size="sm"
                         variant="secondary"
@@ -90,7 +90,7 @@ export function FloatingActionButton({
 
           {/* Primary Button */}
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger>
               <Button
                 size="lg"
                 className={cn(
