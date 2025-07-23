@@ -8,7 +8,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 interface ModernModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title?: string | React.ReactNode;
+  title?: string;
   description?: string;
   children: React.ReactNode;
   size?: "sm" | "md" | "lg" | "xl" | "full";
@@ -97,11 +97,11 @@ export function ModernModal({
         {/* Header */}
         {(title || showCloseButton) && (
           <div className="flex items-center justify-between p-6 border-b border-border/50">
-            <div className="flex-1 pr-4">
+            <div>
               {title && (
-                <div className="text-lg font-semibold text-foreground">
+                <h2 className="text-lg font-semibold text-foreground">
                   {title}
-                </div>
+                </h2>
               )}
               {description && (
                 <p className="text-sm text-muted-foreground mt-1">
@@ -115,7 +115,7 @@ export function ModernModal({
                 variant="ghost"
                 size="sm"
                 onClick={onClose}
-                className="h-8 w-8 p-0 hover:bg-muted/50 shrink-0"
+                className="h-8 w-8 p-0 hover:bg-muted/50"
               >
                 <X className="h-4 w-4" />
               </ModernButton>

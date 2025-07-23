@@ -99,17 +99,15 @@ export function SyncButton({ agency, onConfigClick, onHistoryClick }: SyncButton
           className="h-8"
           disabled={syncing}
         >
-          <div className="flex items-center">
-            {syncing ? (
-              <RefreshCw className="h-4 w-4 animate-spin mr-1" />
-            ) : (
-              getStatusIcon(agency.sync_status)
-            )}
-            <span className={`ml-1 ${getStatusColor(agency.sync_status)}`}>
-              Sync
-            </span>
-            <ChevronDown className="h-3 w-3 ml-1" />
-          </div>
+          {syncing ? (
+            <RefreshCw className="h-4 w-4 animate-spin mr-1" />
+          ) : (
+            getStatusIcon(agency.sync_status)
+          )}
+          <span className={`ml-1 ${getStatusColor(agency.sync_status)}`}>
+            Sync
+          </span>
+          <ChevronDown className="h-3 w-3 ml-1" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

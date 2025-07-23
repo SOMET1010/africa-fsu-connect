@@ -1,20 +1,16 @@
 import { useState } from "react";
 import { FileText, Upload, Send, Save, User, Clock, CheckCircle, AlertCircle } from "lucide-react";
-import { ModernCard } from "@/components/ui/modern-card";
-import { ModernButton } from "@/components/ui/modern-button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { ModernTabs, ModernTabsContent, ModernTabsList, ModernTabsTrigger } from "@/components/ui/modern-tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import FileUpload from "@/components/shared/FileUpload";
 import ContextualNavigation from "@/components/shared/ContextualNavigation";
-import { PageContainer } from "@/components/layout/PageContainer";
-import { PageHeader } from "@/components/layout/PageHeader";
 import { useToast } from "@/hooks/use-toast";
-import { glassEffect, hoverEffects } from "@/lib/design-tokens";
-import { cn } from "@/lib/utils";
 
 const Submit = () => {
   const [selectedType, setSelectedType] = useState("");
@@ -83,15 +79,15 @@ const Submit = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Brouillon":
-        return "bg-muted text-muted-foreground border-muted";
+        return "bg-gray-100 text-gray-800 border-gray-200";
       case "En révision":
-        return "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300";
+        return "bg-blue-100 text-blue-800 border-blue-200";
       case "Approuvé":
-        return "bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300";
+        return "bg-green-100 text-green-800 border-green-200";
       case "Rejeté":
-        return "bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-300";
+        return "bg-red-100 text-red-800 border-red-200";
       default:
-        return "bg-muted text-muted-foreground border-muted";
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -132,114 +128,96 @@ const Submit = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageContainer size="xl" padding="lg">
+      <div className="container mx-auto px-4 py-8">
+        {/* Navigation contextuelle */}
         <ContextualNavigation />
 
-        <PageHeader
-          title="Formulaires de Soumission"
-          description="Soumettez vos projets, positions communes, propositions réglementaires ou demandes de financement à la communauté FSU africaine."
-          gradient
-        />
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-primary mb-4">
+            Formulaires de Soumission
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-3xl">
+            Soumettez vos projets, positions communes, propositions réglementaires 
+            ou demandes de financement à la communauté FSU africaine.
+          </p>
+        </div>
 
         {/* My Submissions */}
-        <ModernCard variant="glass" className="mb-8">
-          <div className="p-6 border-b border-border/50">
-            <h2 className="text-lg font-semibold text-foreground">Mes Soumissions</h2>
-            <p className="text-sm text-muted-foreground mt-1">
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Mes Soumissions</CardTitle>
+            <CardDescription>
               Historique de vos soumissions et leur statut
-            </p>
-          </div>
-          <div className="p-6">
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
             <div className="space-y-4">
-              {submissions.map((submission, index) => (
-                <ModernCard 
-                  key={submission.id} 
-                  variant="light" 
-                  hover="lift"
-                  className={cn(
-                    "p-4 transition-all duration-300",
-                    hoverEffects.lift
-                  )}
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-primary/10 p-2 rounded-lg border border-primary/20">
-                        {getStatusIcon(submission.status)}
-                      </div>
-                      <div>
-                        <p className="font-medium text-foreground">{submission.title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {submission.type} • Modifié le {new Date(submission.lastModified).toLocaleDateString('fr-FR')}
-                        </p>
-                        {submission.reviewer && (
-                          <p className="text-sm text-muted-foreground">
-                            Réviseur: {submission.reviewer}
-                          </p>
-                        )}
-                      </div>
+              {submissions.map((submission) => (
+                <div key={submission.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-primary/10 p-2 rounded">
+                      {getStatusIcon(submission.status)}
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Badge className={getStatusColor(submission.status)}>
-                        {submission.status}
-                      </Badge>
-                      <ModernButton variant="outline" size="sm">
-                        Voir
-                      </ModernButton>
+                    <div>
+                      <p className="font-medium">{submission.title}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {submission.type} • Modifié le {new Date(submission.lastModified).toLocaleDateString('fr-FR')}
+                      </p>
+                      {submission.reviewer && (
+                        <p className="text-sm text-muted-foreground">
+                          Réviseur: {submission.reviewer}
+                        </p>
+                      )}
                     </div>
                   </div>
-                </ModernCard>
+                  <div className="flex items-center gap-3">
+                    <Badge className={getStatusColor(submission.status)}>
+                      {submission.status}
+                    </Badge>
+                    <Button variant="outline" size="sm">
+                      Voir
+                    </Button>
+                  </div>
+                </div>
               ))}
             </div>
-          </div>
-        </ModernCard>
+          </CardContent>
+        </Card>
 
-        <ModernTabs value={selectedType} onValueChange={setSelectedType} className="space-y-8">
+        <Tabs value={selectedType} onValueChange={setSelectedType} className="space-y-6">
           {/* Type Selection */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {submissionTypes.map((type, index) => {
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {submissionTypes.map((type) => {
               const Icon = type.icon;
               return (
-                <ModernCard 
+                <Card 
                   key={type.id} 
-                  variant={selectedType === type.id ? "gradient" : "medium"}
-                  hover="lift"
-                  interactive
-                  className={cn(
-                    "p-6 text-center cursor-pointer transition-all duration-300",
-                    selectedType === type.id && "ring-2 ring-primary/50",
-                    hoverEffects.lift
-                  )}
+                  className={`cursor-pointer hover:shadow-lg transition-all ${
+                    selectedType === type.id ? 'ring-2 ring-primary border-primary' : ''
+                  }`}
                   onClick={() => setSelectedType(type.id)}
-                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="flex justify-center mb-4">
-                    <div className={cn(
-                      "p-3 rounded-xl border transition-all duration-300",
-                      selectedType === type.id 
-                        ? "bg-primary/20 border-primary/30" 
-                        : "bg-primary/10 border-primary/20"
-                    )}>
-                      <Icon className="h-8 w-8 text-primary" />
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">{type.title}</h3>
-                  <p className="text-sm text-muted-foreground">{type.description}</p>
-                </ModernCard>
+                  <CardHeader className="text-center">
+                    <Icon className="h-12 w-12 mx-auto text-primary mb-4" />
+                    <CardTitle className="text-lg">{type.title}</CardTitle>
+                    <CardDescription>{type.description}</CardDescription>
+                  </CardHeader>
+                </Card>
               );
             })}
           </div>
 
           {/* Forms */}
-          <ModernTabsContent value="projet" className="space-y-6">
-            <ModernCard variant="glass">
-              <div className="p-6 border-b border-border/50">
-                <h2 className="text-lg font-semibold text-foreground">Fiche Projet FSU</h2>
-                <p className="text-sm text-muted-foreground mt-1">
+          <TabsContent value="projet" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Fiche Projet FSU</CardTitle>
+                <CardDescription>
                   Remplissez les informations de votre projet FSU pour soumission et évaluation
-                </p>
-              </div>
-              <div className="p-6 space-y-6">
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="titre">Titre du Projet</Label>
@@ -304,16 +282,14 @@ const Submit = () => {
                   {uploadedFiles.length > 0 && (
                     <div className="mt-4">
                       <p className="text-sm font-medium mb-2">Fichiers ajoutés:</p>
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         {uploadedFiles.map((file, index) => (
-                          <ModernCard key={index} variant="light" className="p-3">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-foreground">{file.name}</span>
-                              <ModernButton variant="ghost" size="sm">
-                                Supprimer
-                              </ModernButton>
-                            </div>
-                          </ModernCard>
+                          <div key={index} className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                            <span>{file.name}</span>
+                            <Button variant="ghost" size="sm">
+                              Supprimer
+                            </Button>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -321,28 +297,28 @@ const Submit = () => {
                 </div>
 
                 <div className="flex gap-4 pt-4">
-                  <ModernButton variant="outline" className="flex-1" onClick={handleSaveDraft}>
+                  <Button variant="outline" className="flex-1" onClick={handleSaveDraft}>
                     <Save className="h-4 w-4 mr-2" />
                     Enregistrer en Brouillon
-                  </ModernButton>
-                  <ModernButton variant="default" className="flex-1" onClick={handleSubmit}>
+                  </Button>
+                  <Button className="flex-1 bg-primary hover:bg-primary/90" onClick={handleSubmit}>
                     <Send className="h-4 w-4 mr-2" />
                     Soumettre pour Révision
-                  </ModernButton>
+                  </Button>
                 </div>
-              </div>
-            </ModernCard>
-          </ModernTabsContent>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-          <ModernTabsContent value="position" className="space-y-6">
-            <ModernCard variant="glass">
-              <div className="p-6 border-b border-border/50">
-                <h2 className="text-lg font-semibold text-foreground">Position Commune Africaine</h2>
-                <p className="text-sm text-muted-foreground mt-1">
+          <TabsContent value="position" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Position Commune Africaine</CardTitle>
+                <CardDescription>
                   Contribuez à l'élaboration d'une position commune sur les enjeux FSU
-                </p>
-              </div>
-              <div className="p-6 space-y-6">
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="sujet">Sujet de la Position</Label>
                   <Input id="sujet" placeholder="Ex: Financement des infrastructures rurales" />
@@ -376,75 +352,63 @@ const Submit = () => {
                 </div>
 
                 <div className="flex gap-4 pt-4">
-                  <ModernButton variant="outline" className="flex-1" onClick={handleSaveDraft}>
+                  <Button variant="outline" className="flex-1" onClick={handleSaveDraft}>
                     <Save className="h-4 w-4 mr-2" />
                     Enregistrer en Brouillon
-                  </ModernButton>
-                  <ModernButton variant="default" className="flex-1" onClick={handleSubmit}>
+                  </Button>
+                  <Button className="flex-1 bg-primary hover:bg-primary/90" onClick={handleSubmit}>
                     <Send className="h-4 w-4 mr-2" />
                     Soumettre pour Révision
-                  </ModernButton>
+                  </Button>
                 </div>
-              </div>
-            </ModernCard>
-          </ModernTabsContent>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Placeholder content for other tabs */}
-          <ModernTabsContent value="regulation">
-            <ModernCard variant="glass">
-              <div className="p-6">
+          <TabsContent value="regulation">
+            <Card>
+              <CardContent className="pt-6">
                 <div className="text-center py-12">
-                  <div className="flex justify-center mb-4">
-                    <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-                      <FileText className="h-12 w-12 text-primary" />
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">Proposition Réglementaire</h3>
-                  <p className="text-muted-foreground">
+                  <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Proposition Réglementaire</h3>
+                  <p className="text-muted-foreground mb-4">
                     Formulaire en cours de développement
                   </p>
                 </div>
-              </div>
-            </ModernCard>
-          </ModernTabsContent>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-          <ModernTabsContent value="financement">
-            <ModernCard variant="glass">
-              <div className="p-6">
+          <TabsContent value="financement">
+            <Card>
+              <CardContent className="pt-6">
                 <div className="text-center py-12">
-                  <div className="flex justify-center mb-4">
-                    <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-                      <Upload className="h-12 w-12 text-primary" />
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">Demande de Financement</h3>
-                  <p className="text-muted-foreground">
+                  <Upload className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Demande de Financement</h3>
+                  <p className="text-muted-foreground mb-4">
                     Formulaire en cours de développement
                   </p>
                 </div>
-              </div>
-            </ModernCard>
-          </ModernTabsContent>
-        </ModernTabs>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         {!selectedType && (
-          <ModernCard variant="glass" className="mt-8">
-            <div className="p-6">
+          <Card className="mt-8">
+            <CardContent className="pt-6">
               <div className="text-center py-12">
-                <div className="flex justify-center mb-4">
-                  <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-                    <Send className="h-12 w-12 text-primary" />
-                  </div>
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Sélectionnez un Type de Soumission</h3>
+                <Send className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">Sélectionnez un Type de Soumission</h3>
                 <p className="text-muted-foreground">
                   Choisissez le type de document que vous souhaitez soumettre ci-dessus
                 </p>
               </div>
-            </div>
-          </ModernCard>
+            </CardContent>
+          </Card>
         )}
-      </PageContainer>
+      </div>
     </div>
   );
 };

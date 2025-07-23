@@ -1,9 +1,8 @@
-
 import * as React from "react";
-import { Plus, ChevronUp, X } from "lucide-react";
+import { Plus, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface FABAction {
   icon: React.ElementType;
@@ -51,58 +50,70 @@ export function FloatingActionButton({
   };
 
   return (
-    <div className={cn("fixed z-50", getPositionClasses(), className)}>
-      {/* Secondary actions */}
-      {actions && isExpanded && (
-        <div className="space-y-2 mb-4">
-          {actions.map((action, index) => (
-            <div key={index} className="flex justify-end">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                    onClick={() => {
-                      action.onClick();
-                      setIsExpanded(false);
-                    }}
-                  >
-                    <action.icon className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="left">
-                  <p>{action.label}</p>
-                </TooltipContent>
-              </Tooltip>
+    <TooltipProvider>
+      <div className={cn("fixed z-50", getPositionClasses(), className)}>
+        <div className="flex flex-col items-end gap-2">
+          {/* Secondary Actions */}
+          {isExpanded && actions.length > 0 && (
+            <div className="flex flex-col gap-2 animate-fade-in">
+              {actions.map((action, index) => {
+                const Icon = action.icon;
+                return (
+                  <Tooltip key={index}>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        className={cn(
+                          "h-12 w-12 rounded-full shadow-medium",
+                          "transition-all duration-200 hover:scale-105",
+                          "animate-scale-in"
+                        )}
+                        style={{ animationDelay: `${index * 50}ms` }}
+                        onClick={() => {
+                          action.onClick();
+                          setIsExpanded(false);
+                        }}
+                        disabled={action.disabled}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="left">
+                      <p>{action.label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              })}
             </div>
-          ))}
-        </div>
-      )}
+          )}
 
-      {/* Main button */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            size="lg"
-            className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-            onClick={primaryAction || (() => setIsExpanded(!isExpanded))}
-          >
-            {actions && actions.length > 0 ? (
-              isExpanded ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Plus className="h-6 w-6" />
-              )
-            ) : (
-              <Plus className="h-6 w-6" />
-            )}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="left">
-          <p>{primaryLabel}</p>
-        </TooltipContent>
-      </Tooltip>
-    </div>
+          {/* Primary Button */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="lg"
+                className={cn(
+                  "h-14 w-14 rounded-full shadow-strong",
+                  "transition-all duration-200 hover:scale-105 hover:shadow-lg",
+                  "bg-primary hover:bg-primary/90",
+                  isExpanded && "rotate-45"
+                )}
+                onClick={handlePrimaryClick}
+              >
+                {isExpanded && actions.length > 0 ? (
+                  <ChevronUp className="h-6 w-6" />
+                ) : (
+                  <Plus className="h-6 w-6" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p>{primaryLabel}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
+    </TooltipProvider>
   );
 }

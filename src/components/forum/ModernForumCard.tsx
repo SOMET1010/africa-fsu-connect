@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { ModernTooltip, TooltipTrigger, TooltipContent } from "@/components/ui/modern-tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -214,7 +214,7 @@ export function ModernForumCard({
             {/* Reaction buttons */}
             <div className="flex items-center gap-1">
               {reactionButtons.map(({ type, icon: Icon, count, color }) => (
-                <Tooltip key={type}>
+                <ModernTooltip key={type}>
                   <TooltipTrigger asChild>
                     <ModernButton
                       variant="ghost"
@@ -228,14 +228,12 @@ export function ModernForumCard({
                       onMouseLeave={() => setHoveredReaction(null)}
                       onClick={() => onReaction(type)}
                     >
-                      <div className="relative flex items-center justify-center">
-                        <Icon className={cn("h-4 w-4", color)} />
-                        {count > 0 && (
-                          <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                            {count}
-                          </span>
-                        )}
-                      </div>
+                      <Icon className={cn("h-4 w-4", color)} />
+                      {count > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                          {count}
+                        </span>
+                      )}
                     </ModernButton>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -244,7 +242,7 @@ export function ModernForumCard({
                     {type === 'lightbulb' && 'Bonne idée'}
                     {type === 'thumbsDown' && 'Je n\'aime pas'}
                   </TooltipContent>
-                </Tooltip>
+                </ModernTooltip>
               ))}
             </div>
 

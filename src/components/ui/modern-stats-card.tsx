@@ -18,7 +18,7 @@ interface ModernStatsCardProps {
   prefix?: string;
   suffix?: string;
   description?: string;
-  variant?: "light" | "medium" | "strong" | "gradient" | "glass";
+  variant?: "default" | "gradient" | "glass";
   size?: "sm" | "md" | "lg";
   className?: string;
 }

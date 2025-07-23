@@ -207,15 +207,13 @@ const ModernHeader = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <ModernButton variant="ghost" className="relative h-9 w-9 rounded-full p-0 ring-2 ring-transparent hover:ring-primary/30 transition-all duration-300">
-                    <span className="relative flex items-center justify-center">
-                      <Avatar className="h-9 w-9 transition-transform hover:scale-105">
-                        <AvatarImage src={profile?.avatar_url || ""} alt={profile?.first_name || "User"} />
-                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-xs font-medium">
-                          {getUserInitials()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background animate-pulse" />
-                    </span>
+                    <Avatar className="h-9 w-9 transition-transform hover:scale-105">
+                      <AvatarImage src={profile?.avatar_url || ""} alt={profile?.first_name || "User"} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-xs font-medium">
+                        {getUserInitials()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background animate-pulse" />
                   </ModernButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-64 animate-scale-in bg-card/90 backdrop-blur-xl border-border/50">
@@ -247,19 +245,15 @@ const ModernHeader = () => {
                   <DropdownMenuSeparator className="bg-border/50" />
                   <DropdownMenuItem asChild className="cursor-pointer">
                     <Link to="/profile" className="flex items-center">
-                      <div className="flex items-center">
-                        <User className="mr-2 h-4 w-4" />
-                        <span>{t('nav.profile')}</span>
-                      </div>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>{t('nav.profile')}</span>
                     </Link>
                   </DropdownMenuItem>
                   {isAdmin() && (
                     <DropdownMenuItem asChild className="cursor-pointer">
                       <Link to="/admin" className="flex items-center">
-                        <div className="flex items-center">
-                          <Settings className="mr-2 h-4 w-4" />
-                          <span>{t('nav.admin')}</span>
-                        </div>
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>{t('nav.admin')}</span>
                       </Link>
                     </DropdownMenuItem>
                   )}

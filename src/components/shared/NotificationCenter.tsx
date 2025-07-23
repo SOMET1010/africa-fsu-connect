@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Bell, Check, X, AlertCircle, Info, CheckCircle, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -113,17 +112,15 @@ const NotificationCenter = () => {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="sm" className="relative">
-          <span className="relative flex items-center">
-            <Bell className="h-4 w-4" />
-            {unreadCount > 0 && (
-              <Badge 
-                variant="destructive" 
-                className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
-              >
-                {unreadCount > 9 ? '9+' : unreadCount}
-              </Badge>
-            )}
-          </span>
+          <Bell className="h-4 w-4" />
+          {unreadCount > 0 && (
+            <Badge 
+              variant="destructive" 
+              className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
+            >
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </Badge>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-96" align="end">

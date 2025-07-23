@@ -150,15 +150,13 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
               {/* Menu utilisateur */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
-                    <span className="flex items-center justify-center">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={profile?.avatar_url || ""} />
-                        <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                          {getUserInitials()}
-                        </AvatarFallback>
-                      </Avatar>
-                    </span>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={profile?.avatar_url || ""} />
+                      <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                        {getUserInitials()}
+                      </AvatarFallback>
+                    </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -186,18 +184,14 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="flex items-center">
-                      <div className="flex items-center">
-                        <User className="mr-2 h-4 w-4" />
-                        <span>{t('nav.profile')}</span>
-                      </div>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>{t('nav.profile')}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/settings" className="flex items-center">
-                      <div className="flex items-center">
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>{t('nav.settings')}</span>
-                      </div>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>{t('nav.settings')}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -212,14 +206,10 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
             /* Boutons pour les utilisateurs non connectés */
             <div className="flex items-center space-x-2">
               <Button variant="ghost" asChild>
-                <Link to="/auth">
-                  <span>{t('auth.login')}</span>
-                </Link>
+                <Link to="/auth">{t('auth.login')}</Link>
               </Button>
               <Button asChild>
-                <Link to="/auth">
-                  <span>{t('nav.start')}</span>
-                </Link>
+                <Link to="/auth">{t('nav.start')}</Link>
               </Button>
             </div>
           )}

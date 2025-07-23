@@ -93,10 +93,8 @@ export const EventFilters = ({
         <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline" className="justify-start">
-              <span className="flex items-center">
-                <Calendar className="h-4 w-4 mr-2" />
-                {selectedDate ? format(selectedDate, "PPP", { locale: fr }) : "Sélectionner une date"}
-              </span>
+              <Calendar className="h-4 w-4 mr-2" />
+              {selectedDate ? format(selectedDate, "PPP", { locale: fr }) : "Sélectionner une date"}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">

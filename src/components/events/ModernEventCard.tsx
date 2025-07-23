@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EnhancedCard } from "@/components/ui/enhanced-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Event } from "@/hooks/useEvents";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -164,20 +163,13 @@ export const ModernEventCard = ({
           </Button>
           
           <div className="flex gap-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onGenerateCalendar(event.id)}
-                >
-                  <Download className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Ajouter au calendrier</p>
-              </TooltipContent>
-            </Tooltip>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onGenerateCalendar(event.id)}
+            >
+              <Download className="h-4 w-4" />
+            </Button>
             
             {event.is_registered ? (
               <Button

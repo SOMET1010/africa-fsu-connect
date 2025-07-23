@@ -1,8 +1,8 @@
 
 import { useState } from 'react';
 import { useSecurity } from '../../hooks/useSecurity';
-import { GlassCard } from '@/components/ui/glass-card';
-import { ModernButton } from '@/components/ui/modern-button';
+import { SectionCard } from '@/components/layout/SectionCard';
+import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -24,14 +24,11 @@ const SecurityPreferences = () => {
 
   return (
     <div className="space-y-6">
-      <GlassCard className="p-6">
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold">Paramètres de sécurité</h3>
-          <p className="text-sm text-muted-foreground">
-            Configurez vos préférences de sécurité et d'authentification
-          </p>
-        </div>
-
+      <SectionCard 
+        title="Paramètres de sécurité" 
+        description="Configurez vos préférences de sécurité et d'authentification"
+        variant="elevated"
+      >
         <div className="space-y-6">
           {/* Two-Factor Authentication */}
           <div className="flex items-center justify-between">
@@ -109,14 +106,14 @@ const SecurityPreferences = () => {
         </div>
 
         <div className="flex justify-end mt-6">
-          <ModernButton 
+          <Button 
             onClick={handleSave}
             disabled={updateSecurityPreferences.isPending}
           >
             Enregistrer les modifications
-          </ModernButton>
+          </Button>
         </div>
-      </GlassCard>
+      </SectionCard>
 
       {localPreferences?.two_factor_enabled && (
         <Alert variant="default" className="animate-fade-in">
