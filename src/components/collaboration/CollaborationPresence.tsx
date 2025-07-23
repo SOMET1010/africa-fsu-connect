@@ -4,7 +4,7 @@ import { Users, Eye, MessageCircle, Activity } from 'lucide-react';
 import { useRealTimeCollaboration, UserPresence } from '@/hooks/useRealTimeCollaboration';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
