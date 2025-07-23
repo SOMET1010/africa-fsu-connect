@@ -113,7 +113,7 @@ const NotificationCenter = () => {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="sm" className="relative">
-          <div className="flex items-center">
+          <span className="relative flex items-center">
             <Bell className="h-4 w-4" />
             {unreadCount > 0 && (
               <Badge 
@@ -123,7 +123,7 @@ const NotificationCenter = () => {
                 {unreadCount > 9 ? '9+' : unreadCount}
               </Badge>
             )}
-          </div>
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-96" align="end">

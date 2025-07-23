@@ -75,19 +75,21 @@ export const CollaborationPresence = ({
                   <Tooltip key={user.user_id}>
                     <TooltipTrigger asChild>
                       <button className="relative">
-                        <Avatar className="h-8 w-8 border-2 border-background ring-2 ring-primary/20 transition-all hover:ring-primary/40">
-                          <AvatarImage 
-                            src={user.avatar_url || ''} 
-                            alt={user.user_name || 'Utilisateur'} 
-                          />
-                          <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                            {(user.user_name || 'U').charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className={cn(
-                          "absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-background",
-                          getStatusColor(user.status)
-                        )} />
+                        <span className="relative flex items-center justify-center">
+                          <Avatar className="h-8 w-8 border-2 border-background ring-2 ring-primary/20 transition-all hover:ring-primary/40">
+                            <AvatarImage 
+                              src={user.avatar_url || ''} 
+                              alt={user.user_name || 'Utilisateur'} 
+                            />
+                            <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                              {(user.user_name || 'U').charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className={cn(
+                            "absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-background",
+                            getStatusColor(user.status)
+                          )} />
+                        </span>
                       </button>
                     </TooltipTrigger>
                     <TooltipContent>
