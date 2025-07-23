@@ -215,7 +215,7 @@ export function ModernForumCard({
             <div className="flex items-center gap-1">
               {reactionButtons.map(({ type, icon: Icon, count, color }) => (
                 <ModernTooltip key={type}>
-                  <TooltipTrigger>
+                  <TooltipTrigger asChild>
                     <ModernButton
                       variant="ghost"
                       size="sm"
