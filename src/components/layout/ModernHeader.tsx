@@ -207,13 +207,15 @@ const ModernHeader = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <ModernButton variant="ghost" className="relative h-9 w-9 rounded-full p-0 ring-2 ring-transparent hover:ring-primary/30 transition-all duration-300">
-                    <Avatar className="h-9 w-9 transition-transform hover:scale-105">
-                      <AvatarImage src={profile?.avatar_url || ""} alt={profile?.first_name || "User"} />
-                      <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-xs font-medium">
-                        {getUserInitials()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+                    <span className="relative flex items-center justify-center">
+                      <Avatar className="h-9 w-9 transition-transform hover:scale-105">
+                        <AvatarImage src={profile?.avatar_url || ""} alt={profile?.first_name || "User"} />
+                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-xs font-medium">
+                          {getUserInitials()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+                    </span>
                   </ModernButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-64 animate-scale-in bg-card/90 backdrop-blur-xl border-border/50">
