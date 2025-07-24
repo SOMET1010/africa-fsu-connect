@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
+import { ModernButton } from '@/components/ui/modern-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { GlassCard } from '@/components/ui/glass-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
@@ -97,199 +97,216 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--fsu-blue))] flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-elegant flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+      
+      <div className="w-full max-w-md relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center text-white hover:text-white/80 mb-6">
+          <Link to="/" className="inline-flex items-center text-white hover:text-white/80 mb-6 transition-all duration-200 hover:scale-105">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour à l'accueil
           </Link>
           
           <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
-              <span className="text-2xl font-bold text-white">FSU</span>
+            <div className="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-3xl flex items-center justify-center border border-white/30 shadow-2xl">
+              <span className="text-3xl font-black text-white font-poppins">FSU</span>
             </div>
           </div>
           
-          <h1 className="text-2xl font-bold text-white mb-2">
+          <h1 className="text-3xl font-black text-white mb-2 font-poppins tracking-tight">
             Plateforme FSU Afrique
           </h1>
-          <p className="text-white/80">
+          <p className="text-white/80 font-inter">
             Union Africaine des Télécommunications
           </p>
         </div>
 
         {/* Auth Forms */}
-        <Card className="border-0 shadow-2xl">
+        <GlassCard variant="strong" className="p-0 overflow-hidden border-0 shadow-dramatic">
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Connexion</TabsTrigger>
-              <TabsTrigger value="signup">Inscription</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-muted/20 backdrop-blur-sm border-0 rounded-none">
+              <TabsTrigger value="login" className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary font-semibold">
+                Connexion
+              </TabsTrigger>
+              <TabsTrigger value="signup" className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary font-semibold">
+                Inscription
+              </TabsTrigger>
             </TabsList>
 
             {/* Login Tab */}
-            <TabsContent value="login">
-              <CardHeader>
-                <CardTitle>Se connecter</CardTitle>
-                <CardDescription>
+            <TabsContent value="login" className="p-8 space-y-6">
+              <div className="text-center space-y-2">
+                <h2 className="text-2xl font-bold text-foreground font-poppins">Se connecter</h2>
+                <p className="text-muted-foreground font-inter">
                   Accédez à votre compte FSU
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
+                </p>
+              </div>
+              
+              <form onSubmit={handleLogin} className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="login-email" className="font-medium">Email</Label>
+                  <Input
+                    id="login-email"
+                    type="email"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    placeholder="votre@email.com"
+                    required
+                    className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="login-password" className="font-medium">Mot de passe</Label>
+                  <div className="relative">
                     <Input
-                      id="login-email"
-                      type="email"
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
-                      placeholder="votre@email.com"
+                      id="login-password"
+                      type={showPassword ? "text" : "password"}
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      placeholder="Votre mot de passe"
                       required
+                      className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary pr-12"
                     />
+                    <ModernButton
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </ModernButton>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="login-password">Mot de passe</Label>
-                    <div className="relative">
-                      <Input
-                        id="login-password"
-                        type={showPassword ? "text" : "password"}
-                        value={loginPassword}
-                        onChange={(e) => setLoginPassword(e.target.value)}
-                        placeholder="Votre mot de passe"
-                        required
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
-                  </div>
+                </div>
 
-                  {error && (
-                    <Alert variant="destructive">
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  )}
+                {error && (
+                  <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 backdrop-blur-sm">
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
 
-                  <Button 
-                    type="submit" 
-                    className="w-full"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Se connecter
-                  </Button>
-                </form>
-              </CardContent>
+                <ModernButton 
+                  type="submit" 
+                  className="w-full h-12"
+                  variant="default"
+                  disabled={isSubmitting}
+                  loading={isSubmitting}
+                  loadingText="Connexion en cours..."
+                >
+                  Se connecter
+                </ModernButton>
+              </form>
             </TabsContent>
 
             {/* Signup Tab */}
-            <TabsContent value="signup">
-              <CardHeader>
-                <CardTitle>Créer un compte</CardTitle>
-                <CardDescription>
+            <TabsContent value="signup" className="p-8 space-y-6">
+              <div className="text-center space-y-2">
+                <h2 className="text-2xl font-bold text-foreground font-poppins">Créer un compte</h2>
+                <p className="text-muted-foreground font-inter">
                   Rejoignez la communauté FSU Afrique
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSignup} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-firstname">Prénom</Label>
-                      <Input
-                        id="signup-firstname"
-                        type="text"
-                        value={signupFirstName}
-                        onChange={(e) => setSignupFirstName(e.target.value)}
-                        placeholder="Prénom"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-lastname">Nom</Label>
-                      <Input
-                        id="signup-lastname"
-                        type="text"
-                        value={signupLastName}
-                        onChange={(e) => setSignupLastName(e.target.value)}
-                        placeholder="Nom de famille"
-                      />
-                    </div>
-                  </div>
-
+                </p>
+              </div>
+              
+              <form onSubmit={handleSignup} className="space-y-5">
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-firstname" className="font-medium">Prénom</Label>
                     <Input
-                      id="signup-email"
-                      type="email"
-                      value={signupEmail}
-                      onChange={(e) => setSignupEmail(e.target.value)}
-                      placeholder="votre@email.com"
-                      required
+                      id="signup-firstname"
+                      type="text"
+                      value={signupFirstName}
+                      onChange={(e) => setSignupFirstName(e.target.value)}
+                      placeholder="Prénom"
+                      className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary"
                     />
                   </div>
-                  
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">Mot de passe</Label>
-                    <div className="relative">
-                      <Input
-                        id="signup-password"
-                        type={showPassword ? "text" : "password"}
-                        value={signupPassword}
-                        onChange={(e) => setSignupPassword(e.target.value)}
-                        placeholder="Au moins 6 caractères"
-                        required
-                        minLength={6}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
+                    <Label htmlFor="signup-lastname" className="font-medium">Nom</Label>
+                    <Input
+                      id="signup-lastname"
+                      type="text"
+                      value={signupLastName}
+                      onChange={(e) => setSignupLastName(e.target.value)}
+                      placeholder="Nom de famille"
+                      className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary"
+                    />
                   </div>
+                </div>
 
-                  {error && (
-                    <Alert variant="destructive">
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  )}
+                <div className="space-y-2">
+                  <Label htmlFor="signup-email" className="font-medium">Email</Label>
+                  <Input
+                    id="signup-email"
+                    type="email"
+                    value={signupEmail}
+                    onChange={(e) => setSignupEmail(e.target.value)}
+                    placeholder="votre@email.com"
+                    required
+                    className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="signup-password" className="font-medium">Mot de passe</Label>
+                  <div className="relative">
+                    <Input
+                      id="signup-password"
+                      type={showPassword ? "text" : "password"}
+                      value={signupPassword}
+                      onChange={(e) => setSignupPassword(e.target.value)}
+                      placeholder="Au moins 6 caractères"
+                      required
+                      minLength={6}
+                      className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary pr-12"
+                    />
+                    <ModernButton
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </ModernButton>
+                  </div>
+                </div>
 
-                  <Button 
-                    type="submit" 
-                    className="w-full"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Créer mon compte
-                  </Button>
-                </form>
-              </CardContent>
+                {error && (
+                  <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 backdrop-blur-sm">
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                <ModernButton 
+                  type="submit" 
+                  className="w-full h-12"
+                  variant="default"
+                  disabled={isSubmitting}
+                  loading={isSubmitting}
+                  loadingText="Création en cours..."
+                >
+                  Créer mon compte
+                </ModernButton>
+              </form>
             </TabsContent>
           </Tabs>
-        </Card>
+        </GlassCard>
 
         {/* Footer */}
-        <div className="text-center mt-8 text-white/80 text-sm">
+        <div className="text-center mt-8 text-white/80 text-sm font-inter">
           <p>En vous connectant, vous acceptez nos conditions d'utilisation</p>
         </div>
       </div>
