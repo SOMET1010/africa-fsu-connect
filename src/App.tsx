@@ -27,6 +27,7 @@ const Submit = lazy(() => import("./pages/Submit"));
 const Events = lazy(() => import("./pages/Events"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Preferences = lazy(() => import("./pages/Preferences"));
+const AdvancedPreferences = lazy(() => import("./pages/AdvancedPreferences"));
 const Security = lazy(() => import("./pages/Security"));
 const Map = lazy(() => import("./pages/Map"));
 
@@ -155,6 +156,15 @@ const AppContent = () => {
           <AppShell>
             <Suspense fallback={<PageLoadingFallback />}>
               <Preferences />
+            </Suspense>
+          </AppShell>
+        </ProtectedRoute>
+      } />
+      <Route path="/preferences/advanced" element={
+        <ProtectedRoute>
+          <AppShell>
+            <Suspense fallback={<PageLoadingFallback />}>
+              <AdvancedPreferences />
             </Suspense>
           </AppShell>
         </ProtectedRoute>

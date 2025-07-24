@@ -6,7 +6,8 @@ import {
   BookOpen, 
   User,
   Globe,
-  TrendingUp
+  TrendingUp,
+  Palette
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -47,6 +48,12 @@ export function ImprovedMobileBottomNav() {
       to: "/docs",
       icon: BookOpen,
       label: "Docs",
+      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+    },
+    {
+      to: "/preferences/advanced", 
+      icon: Palette,
+      label: "IA",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {

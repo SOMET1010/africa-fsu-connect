@@ -29,7 +29,8 @@ import {
   BookOpen,
   ShieldCheck,
   Building2,
-  TrendingUp
+  TrendingUp,
+  Palette
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -50,6 +51,8 @@ export function AppSidebar() {
       items: [
         { title: t('nav.dashboard'), url: "/dashboard", icon: Home },
         { title: t('nav.profile'), url: "/profile", icon: User },
+        { title: "Préférences", url: "/preferences", icon: Settings },
+        { title: "Personnalisation IA", url: "/preferences/advanced", icon: Palette },
         { title: t('nav.security'), url: "/security", icon: Shield },
       ]
     },
