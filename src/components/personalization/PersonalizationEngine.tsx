@@ -434,7 +434,7 @@ export const PersonalizationEngine = () => {
             <Card className="p-4">
               <h3 className="font-medium mb-4">Actions les plus fréquentes</h3>
               <div className="space-y-2">
-                {Object.entries(learningData.frequency || {})
+                      {Object.entries(learningData.frequency || {})
                   .sort(([,a], [,b]) => (b as number) - (a as number))
                   .slice(0, 5)
                   .map(([action, frequency], index) => (
@@ -444,7 +444,7 @@ export const PersonalizationEngine = () => {
                         <span className="capitalize">{action.replace('_', ' ')}</span>
                       </div>
                       <span className="text-sm text-muted-foreground">
-                        {frequency} fois
+                        {frequency as number} fois
                       </span>
                     </div>
                   ))}

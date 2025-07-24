@@ -6,12 +6,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { 
-  DragDropContext, 
-  Droppable, 
-  Draggable,
-  DropResult 
-} from '@hello-pangea/react-beautiful-dnd';
 import {
   Layout,
   BarChart3,
@@ -120,7 +114,7 @@ const availableWidgets: Widget[] = [
 
 export const SmartDashboardBuilder = () => {
   const { layout, enabledWidgets, toggleWidget, reorderWidgets, saveLayout } = useDashboardLayout();
-  const { trackUserAction, getPredefinedProfiles } = useAdvancedPersonalization();
+  const { trackUserAction } = useAdvancedPersonalization();
   
   const [widgets, setWidgets] = useState(availableWidgets);
   const [layoutMode, setLayoutMode] = useState<'grid' | 'masonry' | 'list'>('grid');
@@ -157,20 +151,6 @@ export const SmartDashboardBuilder = () => {
       layout: 'grid'
     }
   ];
-
-  const handleDragEnd = useCallback((result: DropResult) => {
-    if (!result.destination) return;
-
-    const items = Array.from(enabledWidgets);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    reorderWidgets(items.map(widget => widget.id));
-    trackUserAction('reorder_widgets', { 
-      from: result.source.index, 
-      to: result.destination.index 
-    });
-  }, [enabledWidgets, reorderWidgets, trackUserAction]);
 
   const handleWidgetToggle = useCallback((widgetId: string) => {
     toggleWidget(widgetId);
@@ -209,7 +189,7 @@ export const SmartDashboardBuilder = () => {
       timestamp: new Date().toISOString()
     };
 
-    saveLayout();
+    saveLayout(layout);
     
     // Sauvegarder dans localStorage pour la réutilisation
     const savedLayouts = JSON.parse(localStorage.getItem('customLayouts') || '[]');
@@ -310,11 +290,11 @@ export const SmartDashboardBuilder = () => {
                   const isEnabled = enabledWidgets.some(w => w.id === widget.id);
                   
                   return (
-                    <Card key={widget.id} className={`${isEnabled ? 'border-primary' : ''}`}>
+                    <Card key={widget.id} className={isEnabled ? 'border-primary' : ''}>
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <IconComponent className="h-5 w-5" />
+                            <IconComponent />
                             <div>
                               <div className="font-medium">{widget.name}</div>
                               <div className="text-sm text-muted-foreground">
@@ -357,51 +337,24 @@ export const SmartDashboardBuilder = () => {
 
               <div className="space-y-3">
                 <Label>Ordre des widgets</Label>
-                <DragDropContext onDragEnd={handleDragEnd}>
-                  <Droppable droppableId="widgets">
-                    {(provided) => (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className="space-y-2"
-                      >
-                        {enabledWidgets.map((widget, index) => {
-                          const IconComponent = widget.icon;
-                          return (
-                            <Draggable
-                              key={widget.id}
-                              draggableId={widget.id}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <Card
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  className="p-3"
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <div
-                                      {...provided.dragHandleProps}
-                                      className="cursor-grab"
-                                    >
-                                      <GripVertical className="h-4 w-4 text-muted-foreground" />
-                                    </div>
-                                    <IconComponent className="h-4 w-4" />
-                                    <span className="font-medium">{widget.name}</span>
-                                    <Badge variant="outline" className="ml-auto">
-                                      {index + 1}
-                                    </Badge>
-                                  </div>
-                                </Card>
-                              )}
-                            </Draggable>
-                          );
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
+                <div className="space-y-2">
+                  {enabledWidgets.map((widget, index) => {
+                    const matchingWidget = availableWidgets.find(w => w.id === widget.id);
+                    const IconComponent = matchingWidget?.icon || FileText;
+                    return (
+                      <Card key={widget.id} className="p-3">
+                        <div className="flex items-center gap-3">
+                          <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
+                          <IconComponent className="h-4 w-4" />
+                          <span className="font-medium">{matchingWidget?.name || widget.id}</span>
+                          <Badge variant="outline" className="ml-auto">
+                            {index + 1}
+                          </Badge>
+                        </div>
+                      </Card>
+                    );
+                  })}
+                </div>
               </div>
 
               <Button onClick={saveCustomLayout} disabled={!layoutName}>
@@ -423,7 +376,7 @@ export const SmartDashboardBuilder = () => {
                     Affiche automatiquement des widgets selon votre activité
                   </p>
                 </div>
-              </div>
+              </Card>
 
               <Card className="p-4">
                 <h3 className="font-medium mb-2">Apprentissage des habitudes</h3>
@@ -439,22 +392,22 @@ export const SmartDashboardBuilder = () => {
               </Card>
 
               <Card className="p-4">
-              <h3 className="font-medium mb-2">Modes adaptatifs</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Mode focus (9h-12h)</span>
-                  <Badge variant="outline">Actif</Badge>
+                <h3 className="font-medium mb-2">Modes adaptatifs</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Mode focus (9h-12h)</span>
+                    <Badge variant="outline">Actif</Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Mode collaboration (14h-17h)</span>
+                    <Badge variant="secondary">Planifié</Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Mode analyse (8h-10h)</span>
+                    <Badge variant="secondary">Planifié</Badge>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Mode collaboration (14h-17h)</span>
-                  <Badge variant="secondary">Planifié</Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Mode analyse (8h-10h)</span>
-                  <Badge variant="secondary">Planifié</Badge>
-                </div>
-              </div>
-            </Card>
+              </Card>
             </div>
           </TabsContent>
         </Tabs>

@@ -77,7 +77,7 @@ export const useAdvancedPersonalization = () => {
     const now = new Date();
     const currentTimeOfDay = now.getHours() < 12 ? 'morning' : now.getHours() < 17 ? 'afternoon' : 'evening';
     
-    if (currentTimeOfDay === 'evening' && !preferences.theme === 'dark') {
+    if (currentTimeOfDay === 'evening' && preferences.theme !== 'dark') {
       suggestions.push({
         type: 'theme',
         title: 'Passer en mode sombre',

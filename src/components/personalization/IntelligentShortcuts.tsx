@@ -42,7 +42,6 @@ interface ShortcutSuggestion {
 
 export const IntelligentShortcuts = () => {
   const { learningData, trackUserAction } = useAdvancedPersonalization();
-  const { enabledShortcuts } = useKeyboardShortcuts([]);
   
   const [shortcuts, setShortcuts] = useState<SmartShortcut[]>([
     {
@@ -88,7 +87,7 @@ export const IntelligentShortcuts = () => {
     actions.forEach(([action, frequency]) => {
       // Ne suggérer que si pas déjà un raccourci
       const existingShortcut = shortcuts.find(s => s.action === action);
-      if (!existingShortcut && frequency > 5) {
+      if (!existingShortcut && (frequency as number) > 5) {
         const suggestedKeys = generateSmartShortcut(action);
         newSuggestions.push({
           action,
