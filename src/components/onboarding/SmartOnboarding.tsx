@@ -331,7 +331,7 @@ export function SmartOnboarding() {
       localStorage.setItem('onboardingCompleted', 'true');
       
       // Rediriger vers le dashboard personnalisé
-      navigate('/dashboard?onboarding=completed');
+      window.location.reload(); // Forcer le rechargement pour appliquer les changements
     } catch (error) {
       console.error('Error completing onboarding:', error);
     } finally {
