@@ -13,11 +13,12 @@ import { Badge } from "@/components/ui/badge";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDashboardStats } from "@/hooks/useDashboardStats";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const ModernDashboard = () => {
   const { profile } = useAuth();
   const { stats, loading } = useDashboardStats();
+  const navigate = useNavigate();
   
   
   
@@ -176,13 +177,13 @@ export const ModernDashboard = () => {
             actions={[
               {
                 label: "Actions Rapides",
-                onClick: () => {},
+                onClick: () => navigate("/profile"),
                 variant: "default",
                 icon: <Zap className="h-5 w-5" />
               },
               {
                 label: "Préférences",
-                onClick: () => {},
+                onClick: () => navigate("/preferences"),
                 variant: "outline",
                 icon: <Settings className="h-4 w-4" />
               }

@@ -8,11 +8,12 @@ import { ModernButton } from "@/components/ui/modern-button";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CommandPalette } from "@/components/ui/command-palette";
 
 export const EnhancedDashboard = () => {
   const { profile } = useAuth();
+  const navigate = useNavigate();
   
   console.log("EnhancedDashboard rendering, profile:", profile);
   
@@ -142,13 +143,13 @@ export const EnhancedDashboard = () => {
             actions={[
               {
                 label: "Actions Rapides",
-                onClick: () => {},
+                onClick: () => navigate("/profile"),
                 icon: <Zap className="h-5 w-5" />,
                 variant: "default"
               },
               {
                 label: "Préférences",
-                onClick: () => {},
+                onClick: () => navigate("/preferences"),
                 icon: <Settings className="h-4 w-4" />,
                 variant: "outline"
               }
