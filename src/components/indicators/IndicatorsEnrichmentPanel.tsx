@@ -190,7 +190,7 @@ export const IndicatorsEnrichmentPanel = () => {
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold text-chart-1">2.7k+</div>
-                <div className="text-xs text-muted-foreground">{t('enrichment.stats.dataPoints')}</div>
+                <div className="text-xs text-muted-foreground">{t('enrichment.stats.datapoints')}</div>
               </div>
             </div>
             
@@ -204,12 +204,12 @@ export const IndicatorsEnrichmentPanel = () => {
                 {isEnriching ? (
                   <>
                     <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                    {t('enrichment.inProgress')}
+                    {t('enrichment.in.progress')}
                   </>
                 ) : (
                   <>
                     <Download className="mr-2 h-4 w-4" />
-                    {t('enrichment.startButton')}
+                    {t('enrichment.start.button')}
                   </>
                 )}
               </Button>
