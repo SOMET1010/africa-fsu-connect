@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import HeroSection from "@/components/landing/HeroSection";
+import { RegionalMapSection } from "@/components/landing/RegionalMapSection";
 import { 
   Target, 
   Users, 
@@ -107,6 +108,9 @@ const Index = () => {
       {/* Hero Section */}
       <HeroSection />
 
+      {/* Regional Map Section */}
+      <RegionalMapSection />
+
       {/* Features Section */}
       <section className="py-20 relative z-10">
         <div className="container mx-auto px-4">
@@ -161,30 +165,37 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Regions Section */}
+      {/* Enhanced Regional Overview Section */}
       <section className="py-20 bg-gradient-to-r from-muted/20 via-muted/10 to-muted/20 backdrop-blur-sm relative z-10">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 px-4 py-2">
+            <Badge variant="outline" className="mb-4 px-4 py-2 bg-gradient-to-r from-primary/10 to-blue-500/10 border-primary/20">
               <Users className="w-4 h-4 mr-2" />
               {t('regions.badge')}
             </Badge>
             <h2 className="text-3xl font-bold text-foreground mb-4">
               {t('regions.title')}
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
               {t('regions.subtitle')}
             </p>
+            <Button asChild variant="outline" className="hover:bg-gradient-to-r hover:from-primary hover:to-blue-600 hover:text-white transition-all duration-300">
+              <Link to="/organizations" className="flex items-center gap-2">
+                <Globe className="h-4 w-4" />
+                Explorer la carte complète
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             {regions.map((region, index) => (
-              <Card key={index} className="text-center border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-xl hover:scale-105 transition-all duration-300 hover:bg-card/90 animate-fade-in" style={{animationDelay: `${(index + 6) * 100}ms`}}>
+              <Card key={index} className="text-center border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-xl hover:scale-105 transition-all duration-300 hover:bg-card/90 animate-fade-in group" style={{animationDelay: `${(index + 6) * 100}ms`}}>
                 <CardContent className="pt-6 pb-4">
-                  <div className={`w-12 h-12 ${region.color} rounded-xl mx-auto mb-4 flex items-center justify-center`}>
+                  <div className={`w-12 h-12 ${region.color} rounded-xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                     <span className="text-white font-bold text-lg">{region.name[0]}</span>
                   </div>
-                  <h3 className="font-bold text-lg text-foreground mb-2">{region.name}</h3>
+                  <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">{region.name}</h3>
                   <div className="space-y-1 text-sm text-muted-foreground">
                     <div className="flex items-center justify-center">
                       <Globe className="h-4 w-4 mr-2" />

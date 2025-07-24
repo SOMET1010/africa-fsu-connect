@@ -156,31 +156,34 @@ const Header = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-2">
+            {/* Language Selector - Always visible */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <Globe className="h-4 w-4" />
+                  <span className="hidden sm:inline text-xs">
+                    {preferences.language === 'fr' ? '🇫🇷' : '🇺🇸'}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="animate-scale-in">
+                <DropdownMenuItem 
+                  onClick={() => updatePreferences({ language: 'fr' })}
+                  className={preferences.language === 'fr' ? 'bg-accent' : ''}
+                >
+                  🇫🇷 Français
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => updatePreferences({ language: 'en' })}
+                  className={preferences.language === 'en' ? 'bg-accent' : ''}
+                >
+                  🇺🇸 English
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {user && (
               <>
-                {/* Language Selector */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                      <Globe className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="animate-scale-in">
-                    <DropdownMenuItem 
-                      onClick={() => updatePreferences({ language: 'fr' })}
-                      className={preferences.language === 'fr' ? 'bg-accent' : ''}
-                    >
-                      🇫🇷 Français
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={() => updatePreferences({ language: 'en' })}
-                      className={preferences.language === 'en' ? 'bg-accent' : ''}
-                    >
-                      🇺🇸 English
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                
                 {/* Notification Center */}
                 <NotificationCenter />
               </>
