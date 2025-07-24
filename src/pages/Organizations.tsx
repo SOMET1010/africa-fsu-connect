@@ -36,11 +36,37 @@ import {
 
 const Organizations = () => {
   const { t } = useTranslation();
-  const { agencies, loading, error } = useAgencies();
+  const { agencies, loading, error, refetch } = useAgencies();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedCountry, setSelectedCountry] = useState("all");
   const [viewMode, setViewMode] = useState<'grid' | 'map' | 'overview' | 'enrichment'>('grid');
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  // Handle sync functionality
+  const handleSync = async () => {
+    setIsSyncing(true);
+    try {
+      await refetch(); // Refresh the agencies data
+      setViewMode('enrichment'); // Switch to enrichment view
+    } catch (error) {
+      console.error('Sync failed:', error);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  // Handle analytics view
+  const handleAnalytics = () => {
+    setViewMode('overview');
+    // Scroll to the content area
+    setTimeout(() => {
+      const element = document.querySelector('[data-view-content]');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
 
   // Get unique regions and countries for filters
   const regions = [...new Set(agencies.map(agency => agency.region).filter(Boolean))];
@@ -85,14 +111,14 @@ const Organizations = () => {
           description="Découvrez les agences et organismes de régulation des télécommunications à travers l'Afrique. Une plateforme collaborative pour renforcer les liens et partager les bonnes pratiques."
           actions={[
             {
-              label: "Synchroniser",
-              onClick: () => setViewMode('enrichment'),
-              icon: <RefreshCw className="h-5 w-5" />,
+              label: isSyncing ? "Synchronisation..." : "Synchroniser",
+              onClick: handleSync,
+              icon: <RefreshCw className={`h-5 w-5 ${isSyncing ? 'animate-spin' : ''}`} />,
               variant: "default"
             },
             {
               label: "Analytics", 
-              onClick: () => setViewMode('overview'),
+              onClick: handleAnalytics,
               icon: <BarChart3 className="h-5 w-5" />,
               variant: "outline"
             }
@@ -177,6 +203,7 @@ const Organizations = () => {
         </ScrollReveal>
 
         {/* View-specific content */}
+        <div data-view-content>
         {viewMode === 'map' && (
           <ScrollReveal delay={600}>
             <OrganizationsMap agencies={filteredAgencies} />
@@ -281,6 +308,7 @@ const Organizations = () => {
             )}
           </>
         )}
+        </div>
       </div>
     </div>
   );
