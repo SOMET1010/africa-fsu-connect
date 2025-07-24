@@ -16,7 +16,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const Submit = () => {
-  console.log("🔍 Submit page rendering");
+  console.log("🚀 NOUVELLE VERSION DE LA PAGE SUBMIT - MISE À JOUR RÉUSSIE!");
   const [selectedType, setSelectedType] = useState("");
   const [formData, setFormData] = useState<any>({});
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -132,6 +132,10 @@ const Submit = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10">
+      {/* MESSAGE VISIBLE POUR CONFIRMER LA MISE À JOUR */}
+      <div className="fixed top-20 right-4 z-50 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
+        ✅ Page Submit mise à jour !
+      </div>
       {/* Subtle Background Effect */}
       <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       
