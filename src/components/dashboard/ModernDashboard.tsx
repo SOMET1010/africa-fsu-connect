@@ -1,6 +1,8 @@
 
 import { useState, useEffect } from "react";
 import { BarChart3, Users, Target, Zap, Calendar, MessageSquare, FileText, TrendingUp, Settings, Bell, Shield, Activity, CheckCircle, AlertTriangle } from "lucide-react";
+import { InteractiveCard } from "@/components/ui/interactive-card";
+import { SmartSkeleton } from "@/components/ui/smart-skeleton";
 import { ModernCard } from "@/components/ui/modern-card";
 import { ModernButton } from "@/components/ui/modern-button";
 import { ModernStatsCard } from "@/components/ui/modern-stats-card";
@@ -139,11 +141,16 @@ export const ModernDashboard = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
         <PageContainer size="xl" padding="md">
-          <div className="animate-pulse space-y-6">
-            <div className="h-32 bg-muted/50 rounded-2xl"></div>
+          <div className="space-y-6">
+            <SmartSkeleton variant="dashboard" height="8rem" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-40 bg-muted/50 rounded-2xl"></div>
+                <SmartSkeleton key={i} variant="card" height="10rem" />
+              ))}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[...Array(2)].map((_, i) => (
+                <SmartSkeleton key={i} variant="card" height="12rem" />
               ))}
             </div>
           </div>
