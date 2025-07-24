@@ -6,6 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 import {
   Layout,
   BarChart3,
@@ -153,23 +154,28 @@ export const SmartDashboardBuilder = () => {
   ];
 
   const handleWidgetToggle = useCallback((widgetId: string) => {
+    // Mettre à jour l'état local des widgets
+    setWidgets(prev => prev.map(w => 
+      w.id === widgetId ? { ...w, enabled: !w.enabled } : w
+    ));
+    
+    // Appeler la fonction du hook
     toggleWidget(widgetId);
     trackUserAction('toggle_widget', { widgetId, enabled: !widgets.find(w => w.id === widgetId)?.enabled });
   }, [toggleWidget, trackUserAction, widgets]);
 
   const applyPredefinedLayout = useCallback((layoutConfig: typeof predefinedLayouts[0]) => {
-    // Désactiver tous les widgets
-    widgets.forEach(widget => {
-      if (widget.enabled && !layoutConfig.widgets.includes(widget.id)) {
-        handleWidgetToggle(widget.id);
-      }
-    });
+    // Mettre à jour l'état des widgets selon le layout
+    setWidgets(prev => prev.map(widget => ({
+      ...widget,
+      enabled: layoutConfig.widgets.includes(widget.id)
+    })));
 
-    // Activer les widgets du layout
+    // Appliquer les changements au dashboard layout
     layoutConfig.widgets.forEach(widgetId => {
       const widget = widgets.find(w => w.id === widgetId);
-      if (widget && !widget.enabled) {
-        handleWidgetToggle(widgetId);
+      if (widget && !enabledWidgets.some(w => w.id === widgetId)) {
+        toggleWidget(widgetId);
       }
     });
 
@@ -177,7 +183,8 @@ export const SmartDashboardBuilder = () => {
     setLayoutName(layoutConfig.name);
     
     trackUserAction('apply_predefined_layout', { layoutId: layoutConfig.id });
-  }, [widgets, handleWidgetToggle, trackUserAction]);
+    toast.success(`Layout "${layoutConfig.name}" appliqué avec succès !`);
+  }, [widgets, enabledWidgets, toggleWidget, trackUserAction]);
 
   const saveCustomLayout = useCallback(() => {
     if (!layoutName) return;
@@ -197,6 +204,8 @@ export const SmartDashboardBuilder = () => {
     localStorage.setItem('customLayouts', JSON.stringify(savedLayouts));
 
     trackUserAction('save_custom_layout', { layoutName, widgetCount: enabledWidgets.length });
+    toast.success(`Layout "${layoutName}" sauvegardé avec succès !`);
+    setLayoutName('');
   }, [layoutName, enabledWidgets, layoutMode, saveLayout, trackUserAction]);
 
   const categoryColors = {

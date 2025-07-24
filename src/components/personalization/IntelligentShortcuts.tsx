@@ -1,24 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { 
-  Keyboard, 
-  Zap, 
-  Plus, 
-  Trash2, 
-  Edit3, 
-  Brain, 
-  Clock,
+import { Progress } from '@/components/ui/progress';
+import {
+  Zap,
+  Plus,
+  Trash2,
   TrendingUp,
-  Command
+  Clock,
+  Target,
+  Lightbulb,
+  Keyboard
 } from 'lucide-react';
 import { useAdvancedPersonalization } from '@/hooks/useAdvancedPersonalization';
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { KeyboardShortcutsManager } from './KeyboardShortcutsManager';
 
 interface SmartShortcut {
   id: string;
@@ -73,7 +72,7 @@ export const IntelligentShortcuts = () => {
     action: '',
     description: ''
   });
-  const [learningEnabled, setLearningEnabled] = useState(true);
+  
 
   // Génération automatique de suggestions basées sur l'usage
   useEffect(() => {
@@ -198,32 +197,27 @@ export const IntelligentShortcuts = () => {
   const stats = getShortcutStats();
 
   return (
-    <Card className="w-full max-w-5xl">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Keyboard className="h-5 w-5" />
-              Raccourcis intelligents
-            </CardTitle>
-            <CardDescription>
-              Raccourcis adaptatifs basés sur vos habitudes d'utilisation
-            </CardDescription>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <div className="text-sm font-medium">{stats.total} raccourcis</div>
-              <div className="text-xs text-muted-foreground">
-                {stats.learned} appris automatiquement
-              </div>
+    <>
+      <KeyboardShortcutsManager />
+      <Card className="w-full max-w-4xl">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Keyboard className="h-5 w-5" />
+                Raccourcis intelligents
+              </CardTitle>
+              <CardDescription>
+                Gérez et découvrez des raccourcis clavier intelligents
+              </CardDescription>
             </div>
-            <Switch
-              checked={learningEnabled}
-              onCheckedChange={setLearningEnabled}
-            />
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary">
+                {stats.total} raccourcis
+              </Badge>
+            </div>
           </div>
-        </div>
-      </CardHeader>
+        </CardHeader>
 
       <CardContent>
         <Tabs defaultValue="active" className="w-full">
@@ -244,32 +238,22 @@ export const IntelligentShortcuts = () => {
           <TabsContent value="active" className="space-y-4">
             <div className="space-y-3">
               {shortcuts.map((shortcut) => (
-                <Card key={shortcut.id} className="p-4">
+                <div
+                  key={shortcut.id}
+                  className="border rounded-lg p-4 transition-colors hover:bg-muted/50"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2">
-                        {shortcut.isLearned && (
-                          <Brain className="h-4 w-4 text-purple-500" />
-                        )}
-                        <div>
-                          <div className="font-medium">{shortcut.name}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {shortcut.description}
-                          </div>
-                        </div>
+                      <Lightbulb className="h-5 w-5" />
+                      <div>
+                        <h4 className="font-medium">{shortcut.name}</h4>
+                        <p className="text-sm text-muted-foreground">{shortcut.description}</p>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
-                        <Badge variant="outline" className="font-mono">
-                          {shortcut.keys}
-                        </Badge>
-                        <div className="text-xs text-muted-foreground mt-1">
-                          Utilisé {shortcut.frequency} fois
-                        </div>
-                      </div>
-                      
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="font-mono">
+                        {shortcut.keys}
+                      </Badge>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -279,7 +263,7 @@ export const IntelligentShortcuts = () => {
                       </Button>
                     </div>
                   </div>
-                </Card>
+                </div>
               ))}
             </div>
           </TabsContent>
@@ -287,56 +271,51 @@ export const IntelligentShortcuts = () => {
           <TabsContent value="suggestions" className="space-y-4">
             <div className="space-y-3">
               {suggestions.length === 0 ? (
-                <Card className="p-8 text-center">
-                  <Brain className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <div className="border rounded-lg p-8 text-center">
+                  <Target className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                   <h3 className="font-medium mb-2">Aucune suggestion pour le moment</h3>
                   <p className="text-sm text-muted-foreground">
                     Continuez à utiliser l'application pour que l'IA apprenne vos habitudes
                   </p>
-                </Card>
+                </div>
               ) : (
                 suggestions.map((suggestion, index) => (
-                  <Card key={index} className="p-4">
+                  <div
+                    key={index}
+                    className="border rounded-lg p-4 transition-colors hover:bg-muted/50"
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <Zap className="h-5 w-5 text-yellow-500" />
                         <div>
-                          <div className="font-medium">
+                          <h4 className="font-medium">
                             {suggestion.action.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {suggestion.reason}
-                          </div>
+                          </h4>
+                          <p className="text-sm text-muted-foreground">
+                            {suggestion.reason} - Confiance: {Math.round(suggestion.confidence)}%
+                          </p>
                         </div>
                       </div>
-                      
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <Badge variant="outline" className="font-mono">
-                            {suggestion.suggestedKeys}
-                          </Badge>
-                          <div className="text-xs text-muted-foreground mt-1">
-                            Confiance: {Math.round(suggestion.confidence)}%
-                          </div>
-                        </div>
-                        
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="font-mono">
+                          {suggestion.suggestedKeys}
+                        </Badge>
                         <Button
                           size="sm"
                           onClick={() => createShortcutFromSuggestion(suggestion)}
                         >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Ajouter
+                          <Plus className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
-                  </Card>
+                  </div>
                 ))
               )}
             </div>
           </TabsContent>
 
           <TabsContent value="create" className="space-y-4">
-            <Card className="p-4">
+            <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-4">Créer un raccourci personnalisé</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -388,40 +367,40 @@ export const IntelligentShortcuts = () => {
                 <Plus className="h-4 w-4 mr-2" />
                 Créer le raccourci
               </Button>
-            </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-4">
-            <div className="grid grid-cols-3 gap-4">
-              <Card className="p-4">
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="border rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className="h-4 w-4 text-green-500" />
                   <span className="font-medium">Utilisation récente</span>
                 </div>
                 <div className="text-2xl font-bold">{stats.recent}</div>
                 <div className="text-sm text-muted-foreground">Cette semaine</div>
-              </Card>
+              </div>
               
-              <Card className="p-4">
+              <div className="border rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Brain className="h-4 w-4 text-purple-500" />
+                  <Lightbulb className="h-4 w-4 text-purple-500" />
                   <span className="font-medium">Appris automatiquement</span>
                 </div>
                 <div className="text-2xl font-bold">{stats.learned}</div>
                 <div className="text-sm text-muted-foreground">Par l'IA</div>
-              </Card>
+              </div>
               
-              <Card className="p-4">
+              <div className="border rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="h-4 w-4 text-blue-500" />
                   <span className="font-medium">Temps économisé</span>
                 </div>
                 <div className="text-2xl font-bold">~{Math.round(stats.total * 2.5)}s</div>
                 <div className="text-sm text-muted-foreground">Par jour</div>
-              </Card>
+              </div>
             </div>
 
-            <Card className="p-4">
+            <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-4">Raccourcis les plus utilisés</h3>
               <div className="space-y-2">
                 {shortcuts
@@ -444,10 +423,11 @@ export const IntelligentShortcuts = () => {
                     </div>
                   ))}
               </div>
-            </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </CardContent>
     </Card>
+    </>
   );
 };

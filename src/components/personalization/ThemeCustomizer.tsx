@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Palette, Save, RotateCcw, Eye, Moon, Sun } from 'lucide-react';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { useAdvancedPersonalization } from '@/hooks/useAdvancedPersonalization';
+import { toast } from 'sonner';
 
 interface ColorPalette {
   name: string;
@@ -127,10 +128,19 @@ export const ThemeCustomizer = () => {
     setCustomColors(palette.colors);
     setThemeName(palette.name);
     applyPreviewTheme(palette.colors);
+    toast.success(`Palette "${palette.name}" appliquée avec succès !`);
   };
 
   const saveCustomTheme = async () => {
     if (!themeName) return;
+
+    // Appliquer immédiatement les variables CSS
+    const root = document.documentElement;
+    root.style.setProperty('--primary', hexToHsl(customColors.primary));
+    root.style.setProperty('--secondary', hexToHsl(customColors.secondary));
+    root.style.setProperty('--accent', hexToHsl(customColors.accent));
+    root.style.setProperty('--background', hexToHsl(customColors.background));
+    root.style.setProperty('--foreground', hexToHsl(customColors.foreground));
 
     const profile = createPersonalizationProfile(themeName, {
       theme: {
@@ -141,12 +151,14 @@ export const ThemeCustomizer = () => {
       }
     });
 
-    // Appliquer immédiatement
+    // Sauvegarder dans les préférences
     await updatePreferences({
+      ...preferences,
       theme: customColors.background === '#0f0f23' ? 'dark' : 'light'
     });
 
     setPreviewMode(false);
+    toast.success(`Thème "${themeName}" sauvegardé et appliqué !`);
   };
 
   const resetTheme = () => {

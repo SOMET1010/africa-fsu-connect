@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useDashboardLayout } from '@/hooks/useDashboardLayout';
 
 export interface PersonalizationProfile {
   id: string;
@@ -32,6 +33,7 @@ export interface PersonalizationProfile {
 export const useAdvancedPersonalization = () => {
   const { preferences, updatePreferences } = useUserPreferences();
   const { user } = useAuth();
+  const { enabledWidgets, toggleWidget, reorderWidgets } = useDashboardLayout();
   const [profiles, setProfiles] = useState<PersonalizationProfile[]>([]);
   const [currentProfile, setCurrentProfile] = useState<string>('default');
   const [learningData, setLearningData] = useState<Record<string, any>>({});
@@ -208,6 +210,9 @@ export const useAdvancedPersonalization = () => {
     generateSuggestions,
     createPersonalizationProfile,
     applyProfile,
-    getPredefinedProfiles
+    getPredefinedProfiles,
+    enabledWidgets,
+    toggleWidget,
+    reorderWidgets
   };
 };

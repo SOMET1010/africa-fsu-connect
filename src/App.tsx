@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { AuthProvider } from "./contexts/AuthContext";
+import { UserPreferencesProvider } from "./contexts/UserPreferencesContext";
 import { IntelligentLayout } from "./components/layout/IntelligentLayout";
 import AppShell from "./components/layout/AppShell";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -221,9 +222,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <IntelligentLayout>
-            <AppContent />
-          </IntelligentLayout>
+          <UserPreferencesProvider>
+            <IntelligentLayout>
+              <AppContent />
+            </IntelligentLayout>
+          </UserPreferencesProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
