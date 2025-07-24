@@ -194,22 +194,33 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
 
       console.log('Map initialized successfully');
 
-      // Add initial markers
-      setTimeout(() => {
+      // Add initial markers after map is ready
+      const markerTimeout = setTimeout(() => {
         console.log('Adding initial markers...');
         addMarkersToMap(filteredAgencies);
       }, 100);
+
+      // Store timeout for cleanup
+      return () => {
+        clearTimeout(markerTimeout);
+      };
 
     } catch (error) {
       console.error('Error initializing Leaflet map:', error);
     }
 
-    // Cleanup
+    // Cleanup function to prevent memory leaks
     return () => {
       if (map.current) {
         console.log('Cleaning up map...');
         try {
+          // Clear all markers first
           clearMarkers();
+          // Remove map tiles and layers
+          map.current.eachLayer((layer) => {
+            map.current!.removeLayer(layer);
+          });
+          // Remove the map instance
           map.current.remove();
         } catch (cleanupError) {
           console.warn('Error during cleanup:', cleanupError);

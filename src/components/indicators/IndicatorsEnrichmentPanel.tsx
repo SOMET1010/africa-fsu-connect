@@ -48,6 +48,8 @@ export const IndicatorsEnrichmentPanel = () => {
     setEnrichmentLog([]);
     setEnrichmentStats({ totalIndicators: 0, newIndicators: 0, updatedIndicators: 0, errors: 0, countriesProcessed: 0 });
     
+    let progressInterval: NodeJS.Timeout | null = null;
+    
     try {
       addLog("🚀 Démarrage de l'enrichissement étendu des indicateurs FSU...");
       addLog(`📊 ${INDICATOR_MAPPINGS.length} types d'indicateurs configurés`);
@@ -58,7 +60,7 @@ export const IndicatorsEnrichmentPanel = () => {
       });
       
       // Simuler le progrès avec des étapes plus détaillées
-      const progressInterval = setInterval(() => {
+      progressInterval = setInterval(() => {
         setProgress(prev => {
           const newProgress = Math.min(prev + 1.5, 95);
           if (newProgress % 20 === 0) {
@@ -78,7 +80,10 @@ export const IndicatorsEnrichmentPanel = () => {
       // Lancer l'enrichissement
       const totalEnriched = await indicatorsEnrichmentService.enrichAllAfricanCountries();
       
-      clearInterval(progressInterval);
+      // Ensure interval is cleared
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
       setProgress(100);
       
       const newIndicators = Math.floor(totalEnriched * 0.65);
@@ -108,6 +113,10 @@ export const IndicatorsEnrichmentPanel = () => {
       toast.error("Erreur lors de l'enrichissement", {
         description: "Vérifiez la console pour plus de détails"
       });
+      // Clear interval on error
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
     } finally {
       setIsEnriching(false);
     }

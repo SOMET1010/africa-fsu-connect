@@ -36,19 +36,23 @@ export const InternationalStandardsPanel = () => {
     setIsEnriching(true);
     setProgress(0);
     
+    let progressInterval: NodeJS.Timeout | null = null;
+    
     try {
       toast.info("Enrichissement Standards Internationaux", {
         description: "Intégration des 120+ indicateurs standards ITU/OCDE/G20..."
       });
       
       // Progress simulation
-      const progressInterval = setInterval(() => {
+      progressInterval = setInterval(() => {
         setProgress(prev => Math.min(prev + 2, 95));
       }, 1000);
       
       const totalEnriched = await expandedIndicatorsService.enrichAllAfricanCountriesWithStandards();
       
-      clearInterval(progressInterval);
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
       setProgress(100);
       
       setEnrichmentStats({
@@ -67,6 +71,9 @@ export const InternationalStandardsPanel = () => {
       toast.error("Erreur lors de l'enrichissement", {
         description: "Vérifiez la console pour plus de détails"
       });
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
     } finally {
       setIsEnriching(false);
     }
