@@ -76,7 +76,7 @@ const Projects = () => {
   };
 
   const handleDeleteProject = async (projectId: string) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) {
+    if (window.confirm(t('projects.delete.confirm'))) {
       await deleteProject(projectId);
     }
   };
@@ -96,7 +96,7 @@ const Projects = () => {
   const handleViewProject = (project) => {
     toast({
       title: project.title,
-      description: `Projet géré par ${project.agencies?.acronym} - ${project.status}`,
+      description: `${t('projects.managed.by')} ${project.agencies?.acronym} - ${project.status}`,
     });
   };
 
@@ -125,18 +125,18 @@ const Projects = () => {
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Hero Section */}
         <HeroSection
-          title="Gestion des Projets FSU"
-          subtitle="Plateforme collaborative"
-          description="Découvrez, gérez et suivez tous les projets de fonds de service universel des télécommunications à travers l'Afrique."
+          title={t('projects.title')}
+          subtitle={t('projects.subtitle')}
+          description={t('projects.description')}
           actions={[
             {
-              label: "Nouveau Projet",
+              label: t('projects.new.project'),
               onClick: handleCreateProject,
               icon: <Plus className="h-5 w-5" />,
               variant: "default"
             },
             {
-              label: "Voir Analytics",
+              label: t('projects.view.analytics'),
               onClick: () => setViewMode('analytics'),
               icon: <BarChart3 className="h-5 w-5" />,
               variant: "outline"
@@ -150,67 +150,67 @@ const Projects = () => {
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <ModernStatsCard
-            title="Projets Totaux"
+            title={t('projects.stats.total')}
             value={totalProjects}
             icon={FolderOpen}
             variant="gradient"
-            trend={{ value: 12, label: "Ce mois", positive: true }}
+            trend={{ value: 12, label: t('dashboard.stats.this.month'), positive: true }}
           />
           <ModernStatsCard
-            title="Projets Actifs"
+            title={t('projects.stats.active')}
             value={activeProjects}
             icon={Clock}
             variant="gradient"
-            trend={{ value: 8, label: "Cette semaine", positive: true }}
+            trend={{ value: 8, label: t('dashboard.stats.this.week'), positive: true }}
           />
           <ModernStatsCard
-            title="Projets Terminés"
+            title={t('projects.stats.completed')}
             value={completedProjects}
             icon={CheckCircle}
             variant="gradient"
-            trend={{ value: 5, label: "Ce mois", positive: true }}
+            trend={{ value: 5, label: t('dashboard.stats.this.month'), positive: true }}
           />
           <ModernStatsCard
-            title="En Attente"
+            title={t('projects.stats.pending')}
             value={pendingProjects}
             icon={Users}
             variant="gradient"
-            trend={{ value: -2, label: "Cette semaine", positive: false }}
+            trend={{ value: -2, label: t('dashboard.stats.this.week'), positive: false }}
           />
         </div>
 
         {/* View Mode Toggle */}
         <ModernCard variant="glass" className="p-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-foreground">Vue des Projets</h2>
+            <h2 className="text-xl font-semibold text-foreground">{t('projects.views.title')}</h2>
             <div className="flex border border-border/50 rounded-xl p-1 bg-muted/30">
               <ModernButton 
                 variant={viewMode === 'grid' ? 'default' : 'ghost'} 
                 size="sm"
                 onClick={() => setViewMode('grid')}
               >
-                Grille
+                {t('projects.view.grid')}
               </ModernButton>
               <ModernButton 
                 variant={viewMode === 'map' ? 'default' : 'ghost'} 
                 size="sm"
                 onClick={() => setViewMode('map')}
               >
-                Carte
+                {t('projects.view.map')}
               </ModernButton>
               <ModernButton 
                 variant={viewMode === 'analytics' ? 'default' : 'ghost'} 
                 size="sm"
                 onClick={() => setViewMode('analytics')}
               >
-                Analytics
+                {t('projects.view.analytics')}
               </ModernButton>
               <ModernButton 
                 variant={viewMode === 'reports' ? 'default' : 'ghost'} 
                 size="sm"
                 onClick={() => setViewMode('reports')}
               >
-                Rapports
+                {t('projects.view.reports')}
               </ModernButton>
               <ModernButton 
                 variant={viewMode === 'notifications' ? 'default' : 'ghost'} 
@@ -240,13 +240,13 @@ const Projects = () => {
             <ModernCard variant="glass" className="p-6">
               <div className="flex items-center gap-2 mb-6">
                 <Filter className="h-5 w-5 text-primary" />
-                <h3 className="text-lg font-semibold">Filtres et Recherche</h3>
+                <h3 className="text-lg font-semibold">{t('projects.filters.title')}</h3>
               </div>
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Rechercher par nom, pays ou localisation..."
+                    placeholder={t('projects.search.placeholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10 h-12 rounded-xl border-border/50 bg-background/50"
@@ -254,10 +254,10 @@ const Projects = () => {
                 </div>
                 <Select value={selectedRegion} onValueChange={setSelectedRegion}>
                   <SelectTrigger className="w-full md:w-48 h-12 rounded-xl border-border/50 bg-background/50">
-                    <SelectValue placeholder="Région" />
+                    <SelectValue placeholder={t('projects.region')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Toutes les régions</SelectItem>
+                    <SelectItem value="all">{t('projects.all.regions')}</SelectItem>
                     {regions.map((region) => (
                       <SelectItem key={region} value={region}>
                         {region}
@@ -267,10 +267,10 @@ const Projects = () => {
                 </Select>
                 <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                   <SelectTrigger className="w-full md:w-48 h-12 rounded-xl border-border/50 bg-background/50">
-                    <SelectValue placeholder="Statut" />
+                    <SelectValue placeholder={t('projects.status')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Tous les statuts</SelectItem>
+                    <SelectItem value="all">{t('projects.all.status')}</SelectItem>
                     {statuses.map((status) => (
                       <SelectItem key={status} value={status}>
                         {status}
@@ -318,20 +318,20 @@ const Projects = () => {
                 <Database className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-xl font-semibold mb-2">
                   {projects.length === 0 
-                    ? "Aucun projet trouvé" 
-                    : "Aucun projet correspond aux critères"
+                    ? t('projects.no.projects') 
+                    : t('projects.no.results')
                   }
                 </h3>
                 <p className="text-muted-foreground mb-6">
                   {projects.length === 0 
-                    ? "Créez votre premier projet pour commencer !" 
-                    : "Essayez de modifier vos critères de recherche."
+                    ? t('projects.create.first') 
+                    : t('projects.adjust.filters')
                   }
                 </p>
                 {projects.length === 0 && (
                   <ModernButton onClick={handleCreateProject} size="lg">
                     <Plus className="h-4 w-4 mr-2" />
-                    Créer un projet
+                    {t('projects.create.project')}
                   </ModernButton>
                 )}
               </ModernCard>

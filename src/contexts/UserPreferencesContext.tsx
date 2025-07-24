@@ -32,7 +32,7 @@ export interface UserPreferences {
 
 const defaultPreferences: UserPreferences = {
   theme: 'system',
-  language: 'fr',
+  language: 'en',
   notifications: {
     email: true,
     push: true,
