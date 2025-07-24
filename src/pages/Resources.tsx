@@ -14,6 +14,7 @@ import { ModernButton } from "@/components/ui/modern-button";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useNavigate } from "react-router-dom";
 import { 
   FileText, 
   Upload, 
@@ -30,10 +31,12 @@ const ResourcesContent = () => {
   const { uploadDocument, downloadDocument } = useOptimizedDocuments();
   const { toast } = useToast();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   
   const searchBarRef = useRef<SearchBarRef>(null);
   const [previewDoc, setPreviewDoc] = useState<any>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
 
   const searchFilters = useMemo(() => [
     {
@@ -104,6 +107,20 @@ const ResourcesContent = () => {
     performSearch('', {});
   }, [performSearch]);
 
+  const handleOpenUploadDialog = useCallback(() => {
+    setIsUploadDialogOpen(true);
+  }, []);
+
+  const handleAnalytics = useCallback(() => {
+    // Scroll to the ResourceStats section
+    setTimeout(() => {
+      const element = document.querySelector('[data-analytics-section]');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="container mx-auto px-4 py-8 space-y-8">
@@ -117,13 +134,13 @@ const ResourcesContent = () => {
             actions={[
               {
                 label: "Ajouter Document",
-                onClick: () => {},
+                onClick: handleOpenUploadDialog,
                 icon: <Upload className="h-5 w-5" />,
                 variant: "default"
               },
               {
                 label: "Analytics",
-                onClick: () => {},
+                onClick: handleAnalytics,
                 icon: <BarChart3 className="h-5 w-5" />,
                 variant: "outline"
               }
@@ -139,7 +156,9 @@ const ResourcesContent = () => {
 
         {/* Resource Stats */}
         <ScrollReveal delay={200}>
-          <ResourceStats documents={state.documents} loading={state.loading} />
+          <div data-analytics-section>
+            <ResourceStats documents={state.documents} loading={state.loading} />
+          </div>
         </ScrollReveal>
 
         {/* Search and Upload Section */}
@@ -161,7 +180,11 @@ const ResourcesContent = () => {
                   initialFilters={state.filters}
                 />
               </div>
-              <DocumentUploadDialog onUpload={handleFileUpload} />
+              <DocumentUploadDialog 
+                onUpload={handleFileUpload} 
+                isOpen={isUploadDialogOpen}
+                onClose={() => setIsUploadDialogOpen(false)}
+              />
             </div>
           </ModernCard>
         </ScrollReveal>

@@ -11,10 +11,13 @@ import FileUpload from "@/components/shared/FileUpload";
 
 interface DocumentUploadDialogProps {
   onUpload: (files: File[], metadata: any) => Promise<void>;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-const DocumentUploadDialog = ({ onUpload }: DocumentUploadDialogProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+const DocumentUploadDialog = ({ onUpload, isOpen: controlledIsOpen, onClose }: DocumentUploadDialogProps) => {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
   const [metadata, setMetadata] = useState({
     title: '',
     description: '',
@@ -25,7 +28,11 @@ const DocumentUploadDialog = ({ onUpload }: DocumentUploadDialogProps) => {
 
   const handleUpload = async (files: File[]) => {
     await onUpload(files, metadata);
-    setIsOpen(false);
+    if (onClose) {
+      onClose();
+    } else {
+      setInternalIsOpen(false);
+    }
     setMetadata({
       title: '',
       description: '',
@@ -35,8 +42,16 @@ const DocumentUploadDialog = ({ onUpload }: DocumentUploadDialogProps) => {
     });
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (controlledIsOpen !== undefined && onClose) {
+      if (!open) onClose();
+    } else {
+      setInternalIsOpen(open);
+    }
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button className="bg-primary hover:bg-primary/90 flex items-center gap-2">
           <Plus className="h-4 w-4" />
