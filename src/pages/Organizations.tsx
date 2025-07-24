@@ -62,10 +62,14 @@ const Organizations = () => {
     // Scroll to the content area
     setTimeout(() => {
       const element = document.querySelector('[data-view-content]');
+      console.log('Analytics scroll element found:', element);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // Fallback: scroll to top if element not found
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    }, 100);
+    }, 200);
   };
 
   // Get unique regions and countries for filters
