@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Plus, Calendar as CalendarIcon, List, Grid, Search, Filter, Clock, MapPin, Users, User } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useEvents, Event, CreateEventData } from "@/hooks/useEvents";
+import { useAccessibility } from "@/hooks/useAccessibility";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -12,9 +13,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { GradientHeroSection } from "@/components/ui/gradient-hero-section";
+import { AccessibleCard } from "@/components/ui/accessible-card";
+import { SkipLinks } from "@/components/ui/skip-links";
+import { AccessibleAlert } from "@/components/ui/accessible-alert";
 import { GradientStatsCard } from "@/components/ui/gradient-stats-card";
-import { GradientLayout } from "@/components/ui/gradient-layout";
 import { EventFilters } from "@/components/events/EventFilters";
 import { ModernEventCard } from "@/components/events/ModernEventCard";
 import { Calendar } from "@/components/ui/calendar";
@@ -24,6 +26,12 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 const Events = () => {
+  const { announceToScreenReader, manageFocus } = useAccessibility({
+    enableSkipLinks: true,
+    enableScreenReaderAnnouncements: true,
+    enableKeyboardNavigation: true,
+    enableFocusManagement: true
+  });
   const { t } = useTranslation();
   const { 
     events, 
@@ -178,9 +186,21 @@ const Events = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      {/* Skip Links for Accessibility */}
+      <SkipLinks 
+        links={[
+          { href: "#main-content", label: "Aller au contenu principal" },
+          { href: "#search-events", label: "Aller à la recherche" },
+          { href: "#events-grid", label: "Aller à la liste des événements" }
+        ]}
+      />
+      
       <div className="p-6 lg:p-8 space-y-8">
         {/* Hero Section with Stats */}
-        <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden">
+        <section 
+          aria-labelledby="hero-title"
+          className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden"
+        >
           {/* Background decoration */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-y-32 translate-x-32" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-2xl translate-y-16 -translate-x-16" />
@@ -192,7 +212,7 @@ const Events = () => {
                   <span className="text-sm font-medium text-white/90">Plateforme FSU</span>
                 </div>
                 
-                <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
+                <h1 id="hero-title" className="text-4xl lg:text-5xl font-bold leading-tight">
                   Événements & Formations
                 </h1>
                 
@@ -202,20 +222,28 @@ const Events = () => {
                 
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button
-                    onClick={() => setSelectedView("calendar")}
+                    onClick={() => {
+                      setSelectedView("calendar");
+                      announceToScreenReader("Vue calendrier activée");
+                    }}
                     variant="secondary"
                     size="lg"
-                    className="font-semibold bg-white text-gray-900 hover:bg-white/90"
+                    className="font-semibold bg-white text-gray-900 hover:bg-white/90 enhanced-focus"
+                    aria-describedby="calendar-button-desc"
                   >
                     <CalendarIcon className="w-5 h-5 mr-2" />
                     Voir le Calendrier
                   </Button>
+                  <span id="calendar-button-desc" className="sr-only">
+                    Basculer vers la vue calendrier pour naviguer par dates
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Stats Grid */}
-            <div className="space-y-4">
+            <div className="space-y-4" role="region" aria-labelledby="stats-heading">
+              <h2 id="stats-heading" className="sr-only">Statistiques des événements</h2>
               <div className="grid grid-cols-2 gap-4">
                 <GradientStatsCard
                   title="Événements Total"
@@ -250,22 +278,37 @@ const Events = () => {
               </div>
             </div>
           </div>
-        </div>
+        </section>
         
         {/* Content Section */}
-        <div className="bg-card rounded-3xl border border-border p-6 lg:p-8 shadow-lg">
+        <main id="main-content" className="bg-card rounded-3xl border border-border p-6 lg:p-8 shadow-lg">
           <Tabs value={selectedView} onValueChange={setSelectedView} className="space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-              <TabsList className="grid w-full lg:w-auto grid-cols-3">
-                <TabsTrigger value="grid" className="flex items-center gap-2">
+              <TabsList className="grid w-full lg:w-auto grid-cols-3" role="tablist" aria-label="Vues des événements">
+                <TabsTrigger 
+                  value="grid" 
+                  className="flex items-center gap-2 enhanced-focus"
+                  aria-controls="events-grid"
+                  aria-selected={selectedView === "grid"}
+                >
                   <Grid className="h-4 w-4" />
                   Grille
                 </TabsTrigger>
-                <TabsTrigger value="list" className="flex items-center gap-2">
+                <TabsTrigger 
+                  value="list" 
+                  className="flex items-center gap-2 enhanced-focus"
+                  aria-controls="events-list"
+                  aria-selected={selectedView === "list"}
+                >
                   <List className="h-4 w-4" />
                   Liste
                 </TabsTrigger>
-                <TabsTrigger value="calendar" className="flex items-center gap-2">
+                <TabsTrigger 
+                  value="calendar" 
+                  className="flex items-center gap-2 enhanced-focus"
+                  aria-controls="events-calendar"
+                  aria-selected={selectedView === "calendar"}
+                >
                   <CalendarIcon className="h-4 w-4" />
                   Calendrier
                 </TabsTrigger>
@@ -273,21 +316,38 @@ const Events = () => {
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" aria-hidden="true" />
                   <Input
+                    id="search-events"
                     placeholder="Rechercher un événement..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      if (e.target.value) {
+                        announceToScreenReader(`Recherche mise à jour: ${filteredEvents.length} événements trouvés`);
+                      }
+                    }}
+                    className="pl-10 enhanced-focus"
+                    aria-label="Rechercher dans les événements"
+                    aria-describedby="search-help"
                   />
+                  <span id="search-help" className="sr-only">
+                    Tapez pour rechercher dans les titres et descriptions des événements
+                  </span>
                 </div>
                 <Dialog open={isNewEventOpen} onOpenChange={setIsNewEventOpen}>
                   <DialogTrigger asChild>
-                    <Button className="bg-primary hover:bg-primary/90">
-                      <Plus className="h-4 w-4 mr-2" />
+                    <Button 
+                      className="bg-primary hover:bg-primary/90 enhanced-focus"
+                      aria-describedby="new-event-desc"
+                    >
+                      <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
                       Nouvel événement
                     </Button>
                   </DialogTrigger>
+                  <span id="new-event-desc" className="sr-only">
+                    Ouvre un formulaire pour créer un nouvel événement
+                  </span>
                   <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                       <DialogTitle>Créer un Nouvel Événement</DialogTitle>
@@ -397,40 +457,74 @@ const Events = () => {
               </div>
             </div>
 
-            <TabsContent value="grid" className="space-y-6">
+            <TabsContent value="grid" className="space-y-6" id="events-grid" role="tabpanel" aria-labelledby="grid-tab">
               {filteredEvents.length === 0 ? (
-                <div className="text-center py-12">
-                  <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Aucun événement trouvé</h3>
-                  <p className="text-muted-foreground mb-4">
-                    {hasActiveFilters 
-                      ? "Essayez de modifier vos filtres de recherche" 
-                      : "Il n'y a pas d'événements pour le moment"}
-                  </p>
-                  {hasActiveFilters && (
-                    <Button variant="outline" onClick={handleClearFilters}>
-                      Effacer les filtres
-                    </Button>
-                  )}
-                </div>
+                <AccessibleAlert
+                  variant="info"
+                  title="Aucun événement trouvé"
+                  className="text-center"
+                  autoFocus={hasActiveFilters}
+                >
+                  <div className="space-y-4">
+                    <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto" aria-hidden="true" />
+                    <p>
+                      {hasActiveFilters 
+                        ? "Essayez de modifier vos filtres de recherche" 
+                        : "Il n'y a pas d'événements pour le moment"}
+                    </p>
+                    {hasActiveFilters && (
+                      <Button 
+                        variant="outline" 
+                        onClick={() => {
+                          handleClearFilters();
+                          announceToScreenReader("Filtres effacés, tous les événements sont maintenant affichés");
+                        }}
+                        className="enhanced-focus"
+                      >
+                        Effacer les filtres
+                      </Button>
+                    )}
+                  </div>
+                </AccessibleAlert>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredEvents.map((event) => (
-                    <Card key={event.id} className="hover:shadow-lg transition-all duration-300 group">
+                <div 
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  role="region"
+                  aria-label={`${filteredEvents.length} événements affichés en grille`}
+                >
+                  {filteredEvents.map((event, index) => (
+                    <AccessibleCard
+                      key={event.id}
+                      title={event.title}
+                      description={event.description || "Aucune description disponible"}
+                      interactive={true}
+                      focusable={true}
+                      className="hover:shadow-lg transition-all duration-300 group"
+                      onClick={() => {
+                        handleViewDetails(event);
+                        announceToScreenReader(`Détails de l'événement ${event.title} ouverts`);
+                      }}
+                      aria-label={`Événement ${index + 1} sur ${filteredEvents.length}: ${event.title}`}
+                    >
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
-                          <div className="space-y-2">
-                            <CardTitle className="group-hover:text-primary transition-colors">
-                              {event.title}
-                            </CardTitle>
-                            <div className="flex items-center text-muted-foreground text-sm">
-                              <CalendarIcon className="h-4 w-4 mr-1" />
+                        <div className="space-y-2">
+                          <CardTitle className="group-hover:text-primary transition-colors">
+                            {event.title}
+                          </CardTitle>
+                          <div className="flex items-center text-muted-foreground text-sm">
+                            <CalendarIcon className="h-4 w-4 mr-1" aria-hidden="true" />
+                            <time dateTime={event.start_date}>
                               {format(new Date(event.start_date), "d MMMM yyyy", { locale: fr })}
-                            </div>
+                            </time>
                           </div>
-                          <Badge variant="secondary">
-                            {event.is_virtual ? "Virtuel" : "Présentiel"}
-                          </Badge>
+                        </div>
+                        <Badge 
+                          variant="secondary"
+                          aria-label={`Type d'événement: ${event.is_virtual ? "Virtuel" : "Présentiel"}`}
+                        >
+                          {event.is_virtual ? "Virtuel" : "Présentiel"}
+                        </Badge>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
@@ -439,24 +533,33 @@ const Events = () => {
                         </CardDescription>
                         <div className="flex items-center justify-between text-sm text-muted-foreground">
                           <div className="flex items-center">
-                            <MapPin className="h-4 w-4 mr-1" />
-                            {event.location || "En ligne"}
+                            <MapPin className="h-4 w-4 mr-1" aria-hidden="true" />
+                            <span aria-label="Lieu">{event.location || "En ligne"}</span>
                           </div>
                           <div className="flex items-center">
-                            <Users className="h-4 w-4 mr-1" />
-                            {event.max_attendees || "Illimité"}
+                            <Users className="h-4 w-4 mr-1" aria-hidden="true" />
+                            <span aria-label="Participants maximum">{event.max_attendees || "Illimité"}</span>
                           </div>
                         </div>
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className="w-full"
-                          onClick={() => event.is_registered ? handleUnregister(event.id) : handleRegister(event.id)}
+                          className="w-full enhanced-focus"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const action = event.is_registered ? handleUnregister : handleRegister;
+                            action(event.id);
+                            const message = event.is_registered 
+                              ? `Désinscription de ${event.title}` 
+                              : `Inscription à ${event.title}`;
+                            announceToScreenReader(message);
+                          }}
+                          aria-label={event.is_registered ? `Se désinscrire de ${event.title}` : `S'inscrire à ${event.title}`}
                         >
                           {event.is_registered ? "Se désinscrire" : "S'inscrire"}
                         </Button>
                       </CardContent>
-                    </Card>
+                    </AccessibleCard>
                   ))}
                 </div>
               )}
@@ -541,7 +644,7 @@ const Events = () => {
               </div>
             </TabsContent>
           </Tabs>
-        </div>
+        </main>
       </div>
     </div>
   );
