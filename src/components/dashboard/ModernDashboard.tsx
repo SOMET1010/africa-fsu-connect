@@ -5,6 +5,8 @@ import { ModernCard } from "@/components/ui/modern-card";
 import { ModernButton } from "@/components/ui/modern-button";
 import { ModernStatsCard } from "@/components/ui/modern-stats-card";
 import { GlassCard } from "@/components/ui/glass-card";
+import { HeroSection } from "@/components/ui/hero-section";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDashboardStats } from "@/hooks/useDashboardStats";
@@ -150,39 +152,40 @@ export const ModernDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 relative overflow-hidden">
+      {/* Subtle Background Effect */}
+      <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      
+      <div className="container mx-auto px-4 py-8 space-y-8 relative z-10">
         
         {/* Hero Section */}
-        <div className="animate-fade-in">
-          <GlassCard variant="strong" className="p-8 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 animate-pulse-glow"></div>
-            <div className="relative z-10">
-              <h1 className="text-4xl font-bold font-poppins mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Bonjour, {profile?.first_name || 'Collaborateur'} ! 👋
-              </h1>
-              <p className="text-xl text-muted-foreground font-inter mb-6">
-                Votre espace de travail collaboratif FSU vous attend
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <ModernButton variant="default" size="lg" className="group">
-                  <Zap className="h-5 w-5 mr-2 group-hover:animate-pulse" />
-                  Actions Rapides
-                </ModernButton>
-                <ModernButton variant="outline" size="lg">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Préférences
-                </ModernButton>
-              </div>
-            </div>
-          </GlassCard>
-        </div>
+        <ScrollReveal direction="fade" delay={0}>
+          <HeroSection
+            title={`Bonjour, ${profile?.first_name || 'Collaborateur'} ! 👋`}
+            subtitle="Dashboard FSU"
+            description="Votre espace de travail collaboratif FSU vous attend"
+            actions={[
+              {
+                label: "Actions Rapides",
+                onClick: () => {},
+                variant: "default",
+                icon: <Zap className="h-5 w-5" />
+              },
+              {
+                label: "Préférences",
+                onClick: () => {},
+                variant: "outline",
+                icon: <Settings className="h-4 w-4" />
+              }
+            ]}
+          />
+        </ScrollReveal>
 
         {/* Stats Cards */}
-        <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
+        <ScrollReveal direction="up" delay={200}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {dashboardStats.map((stat, index) => (
-              <div key={index} className="animate-fade-in" style={{ animationDelay: `${300 + index * 100}ms` }}>
+              <ScrollReveal key={index} direction="up" delay={300 + index * 100}>
                 <ModernStatsCard
                   title={stat.title}
                   value={stat.value}
@@ -192,13 +195,13 @@ export const ModernDashboard = () => {
                   variant="gradient"
                   size="md"
                 />
-              </div>
+              </ScrollReveal>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Security Status */}
-        <div className="animate-fade-in" style={{ animationDelay: '600ms' }}>
+        <ScrollReveal direction="up" delay={600}>
           <GlassCard variant="subtle" className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -223,10 +226,10 @@ export const ModernDashboard = () => {
               </div>
             </div>
           </GlassCard>
-        </div>
+        </ScrollReveal>
 
         {/* Quick Actions Grid */}
-        <div className="animate-fade-in" style={{ animationDelay: '800ms' }}>
+        <ScrollReveal direction="up" delay={800}>
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
@@ -241,7 +244,7 @@ export const ModernDashboard = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {quickActions.map((action, index) => (
-                <div key={index} className="animate-fade-in" style={{ animationDelay: `${900 + index * 100}ms` }}>
+                <ScrollReveal key={index} direction="up" delay={900 + index * 100}>
                   <Link to={action.href}>
                     <ModernCard 
                       variant="gradient" 
@@ -264,14 +267,14 @@ export const ModernDashboard = () => {
                       </div>
                     </ModernCard>
                   </Link>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Recent Activity */}
-        <div className="animate-fade-in" style={{ animationDelay: '1200ms' }}>
+        <ScrollReveal direction="up" delay={1200}>
           <GlassCard variant="subtle" className="p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -319,7 +322,7 @@ export const ModernDashboard = () => {
               ))}
             </div>
           </GlassCard>
-        </div>
+        </ScrollReveal>
       </div>
     </div>
   );
