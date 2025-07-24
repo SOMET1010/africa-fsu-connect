@@ -18,6 +18,7 @@ import {
   Clock
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/hooks/useTranslation";
 import { Link } from "react-router-dom";
 
 interface Message {
@@ -45,6 +46,7 @@ export function VirtualAssistant() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { profile } = useAuth();
+  const { t } = useTranslation();
   
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -60,22 +62,24 @@ export function VirtualAssistant() {
       const welcomeMessage: Message = {
         id: '1',
         type: 'assistant',
-        content: `Bonjour ${profile?.first_name || 'cher utilisateur'} ! 👋 Je suis votre assistant virtuel FSU. Comment puis-je vous aider aujourd'hui ?`,
+        content: profile?.first_name 
+          ? t('assistant.greeting.user').replace('{{userName}}', profile.first_name)
+          : t('assistant.welcome'),
         timestamp: new Date(),
         suggestions: [
           {
             id: 'help-navigation',
-            text: 'Comment naviguer sur la plateforme ?',
+            text: t('assistant.suggestions.explore.forum'),
             action: { type: 'help', target: 'navigation' }
           },
           {
             id: 'create-project',
-            text: 'Créer un nouveau projet',
+            text: t('assistant.suggestions.new.project'),
             action: { type: 'navigate', target: '/projects?action=create' }
           },
           {
             id: 'find-colleagues',
-            text: 'Trouver des collègues',
+            text: t('assistant.suggestions.check.events'),
             action: { type: 'navigate', target: '/organizations' }
           }
         ]
@@ -88,18 +92,18 @@ export function VirtualAssistant() {
     const message = userMessage.toLowerCase();
     
     // Réponses contextuelles basées sur les mots-clés
-    if (message.includes('projet')) {
+    if (message.includes('projet') || message.includes('project')) {
       return {
-        content: "Pour créer un nouveau projet, vous pouvez utiliser le bouton 'Nouveau Projet' sur votre dashboard ou aller directement dans la section Projets. Voulez-vous que je vous guide ?",
+        content: t('assistant.response.project.help'),
         suggestions: [
           {
             id: 'create-project',
-            text: 'Créer un projet maintenant',
+            text: t('assistant.suggestions.new.project'),
             action: { type: 'navigate', target: '/projects?action=create' }
           },
           {
             id: 'view-projects',
-            text: 'Voir mes projets',
+            text: t('nav.projects'),
             action: { type: 'navigate', target: '/projects' }
           }
         ]
@@ -374,13 +378,14 @@ export function VirtualAssistant() {
               <Input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Tapez votre message..."
+                placeholder={t('assistant.placeholder')}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 className="flex-1"
               />
               <Button onClick={handleSendMessage} size="sm" disabled={!inputValue.trim()}>
-                <Send className="h-4 w-4" />
-              </Button>
+              <Send className="h-4 w-4" />
+              <span className="sr-only">{t('assistant.send')}</span>
+            </Button>
             </div>
           </div>
         </CardContent>

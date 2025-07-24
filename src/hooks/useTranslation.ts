@@ -287,6 +287,46 @@ const translations = {
     'time.hours.ago': 'Il y a {{count}}h', 
     'time.days.ago': 'Il y a {{count}} jour',
     'time.yesterday': 'Hier',
+    
+    // Virtual Assistant translations
+    'assistant.welcome': 'Bonjour ! Je suis votre assistant virtuel FSU. Comment puis-je vous aider aujourd\'hui ?',
+    'assistant.greeting.user': 'Bonjour {{userName}} ! Comment puis-je vous aider dans vos projets FSU aujourd\'hui ?',
+    'assistant.suggestions.new.project': 'Créer un nouveau projet',
+    'assistant.suggestions.explore.forum': 'Explorer le forum communautaire',
+    'assistant.suggestions.check.events': 'Vérifier les événements à venir',
+    'assistant.suggestions.view.stats': 'Voir les statistiques',
+    'assistant.response.project.help': 'Je peux vous aider avec la gestion de vos projets FSU. Voulez-vous créer un nouveau projet, consulter les projets existants, ou obtenir des conseils sur la planification ?',
+    'assistant.response.forum.help': 'Le forum FSU est l\'endroit idéal pour échanger avec d\'autres agences. Vous pouvez poser des questions, partager des expériences, ou rejoindre des discussions thématiques.',
+    'assistant.response.stats.help': 'Voici un aperçu de vos statistiques actuelles. Y a-t-il des métriques spécifiques que vous souhaiteriez analyser plus en détail ?',
+    'assistant.response.default': 'Je suis là pour vous aider avec la plateforme FSU. Vous pouvez me poser des questions sur les projets, les événements, le forum, ou naviguer vers différentes sections.',
+    'assistant.placeholder': 'Tapez votre message...',
+    'assistant.send': 'Envoyer',
+    
+    // Enhanced Dashboard translations
+    'dashboard.welcome': 'Bonjour {{userName}}',
+    'dashboard.welcome.guest': 'Bienvenue sur la Plateforme FSU',
+    'dashboard.quick.overview': 'Aperçu Rapide',
+    'dashboard.actions.manage.projects': 'Gérer Projets',
+    'dashboard.actions.community': 'Communauté',
+    'dashboard.actions.resources': 'Ressources',
+    'dashboard.actions.events': 'Événements',
+    'dashboard.actions.analytics': 'Analytics',
+    'dashboard.trends.up': '↗ En hausse',
+    'dashboard.trends.down': '↘ En baisse',
+    'dashboard.trends.stable': '→ Stable',
+    
+    // Common placeholders and forms
+    'placeholder.search.projects': 'Rechercher par nom, pays ou localisation...',
+    'placeholder.search.organizations': 'Rechercher une agence ou un pays...',
+    'placeholder.search.users': 'Rechercher par nom, email...',
+    'placeholder.message': 'Tapez votre message...',
+    'placeholder.event.title': 'Ex: Webinaire Innovation',
+    'placeholder.topic.description': 'Décrivez votre sujet et questions...',
+    
+    // Form validation
+    'form.error': 'Erreur',
+    'form.fill.required.fields': 'Veuillez remplir tous les champs obligatoires.',
+    'form.required': 'obligatoire'
   },
   en: {
     // Navigation and general interface
@@ -518,213 +558,45 @@ const translations = {
     'search_platform': 'Search the platform',
     'general_help': 'General help',
     
-    // Enhanced Dashboard
-    'hello_user': {
-      'fr': 'Bonjour, {name} ! 👋',
-      'en': 'Hello, {name}! 👋'
-    },
-    'collaborator': {
-      'fr': 'Collaborateur',
-      'en': 'Collaborator'
-    },
-    'fsu_platform': {
-      'fr': 'Plateforme FSU',
-      'en': 'FSU Platform'
-    },
-    'collaborative_workspace_description': {
-      'fr': 'Votre espace de travail collaboratif pour le service universel des télécommunications vous attend. Découvrez vos projets, connectez-vous avec la communauté et accédez à vos ressources.',
-      'en': 'Your collaborative workspace for universal telecommunications service awaits you. Discover your projects, connect with the community and access your resources.'
-    },
-    'quick_actions': {
-      'fr': 'Actions Rapides',
-      'en': 'Quick Actions'
-    },
-    'preferences': {
-      'fr': 'Préférences',
-      'en': 'Preferences'
-    },
-    'active_projects': {
-      'fr': 'Projets Actifs',
-      'en': 'Active Projects'
-    },
-    'this_week': {
-      'fr': 'Cette semaine',
-      'en': 'This week'
-    },
-    'projects_in_development': {
-      'fr': 'Projets en cours de développement',
-      'en': 'Projects in development'
-    },
-    'collaborators': {
-      'fr': 'Collaborateurs',
-      'en': 'Collaborators'
-    },
-    'this_month': {
-      'fr': 'Ce mois',
-      'en': 'This month'
-    },
-    'active_community_members': {
-      'fr': 'Membres actifs de la communauté',
-      'en': 'Active community members'
-    },
-    'documents': {
-      'fr': 'Documents',
-      'en': 'Documents'
-    },
-    'documents_added': {
-      'fr': 'Documents ajoutés',
-      'en': 'Documents added'
-    },
-    'available_resources': {
-      'fr': 'Ressources disponibles',
-      'en': 'Available resources'
-    },
-    'events': {
-      'fr': 'Événements',
-      'en': 'Events'
-    },
-    'upcoming_activities': {
-      'fr': 'Prochaines activités',
-      'en': 'Upcoming activities'
-    },
-    'new_project': {
-      'fr': 'Nouveau Projet',
-      'en': 'New Project'
-    },
-    'launch_new_fsu_initiative': {
-      'fr': 'Lancez une nouvelle initiative FSU',
-      'en': 'Launch a new FSU initiative'
-    },
-    'in_progress': {
-      'fr': 'En cours',
-      'en': 'In progress'
-    },
-    'completed': {
-      'fr': 'Terminés',
-      'en': 'Completed'
-    },
-    'community_forum': {
-      'fr': 'Forum Communauté',
-      'en': 'Community Forum'
-    },
-    'participate_in_discussions': {
-      'fr': 'Participez aux discussions',
-      'en': 'Participate in discussions'
-    },
-    'messages': {
-      'fr': 'Messages',
-      'en': 'Messages'
-    },
-    'active_users': {
-      'fr': 'Actifs',
-      'en': 'Active'
-    },
-    'resource_center': {
-      'fr': 'Centre de Ressources',
-      'en': 'Resource Center'
-    },
-    'explore_documentation': {
-      'fr': 'Explorez la documentation',
-      'en': 'Explore documentation'
-    },
-    'downloaded': {
-      'fr': 'Téléchargés',
-      'en': 'Downloaded'
-    },
-    'events_calendar': {
-      'fr': 'Calendrier Événements',
-      'en': 'Events Calendar'
-    },
-    'coming_up': {
-      'fr': 'À venir',
-      'en': 'Coming up'
-    },
-    'access_essential_tools': {
-      'fr': 'Accédez rapidement à vos outils essentiels',
-      'en': 'Quickly access your essential tools'
-    },
-    'shortcuts_available': {
-      'fr': 'raccourcis disponibles',
-      'en': 'shortcuts available'
-    },
-    'recent_activity': {
-      'fr': 'Activité Récente',
-      'en': 'Recent Activity'
-    },
-    'latest_fsu_community_interactions': {
-      'fr': 'Les dernières interactions de votre communauté FSU',
-      'en': 'The latest interactions from your FSU community'
-    },
-    'view_all': {
-      'fr': 'Voir tout',
-      'en': 'View all'
-    },
-    'view': {
-      'fr': 'Voir',
-      'en': 'View'
-    },
-    'project_created': {
-      'fr': 'Projet créé',
-      'en': 'Project created'
-    },
-    'document_added': {
-      'fr': 'Document ajouté',
-      'en': 'Document added'
-    },
-    'discussion_created': {
-      'fr': 'Discussion créée',
-      'en': 'Discussion created'
-    },
-    'event_planned': {
-      'fr': 'Événement planifié',
-      'en': 'Event planned'
-    },
-    'hours_ago': {
-      'fr': 'Il y a {hours}h',
-      'en': '{hours}h ago'
-    },
-    'yesterday': {
-      'fr': 'Hier',
-      'en': 'Yesterday'
-    },
-    'days_ago': {
-      'fr': 'Il y a {days} jour(s)',
-      'en': '{days} day(s) ago'
-    },
-    'by': {
-      'fr': 'par',
-      'en': 'by'
-    },
+    // Virtual Assistant translations
+    'assistant.welcome': 'Hello! I am your USF virtual assistant. How can I help you today?',
+    'assistant.greeting.user': 'Hello {{userName}}! How can I help you with your USF projects today?',
+    'assistant.suggestions.new.project': 'Create a new project',
+    'assistant.suggestions.explore.forum': 'Explore community forum',
+    'assistant.suggestions.check.events': 'Check upcoming events',
+    'assistant.suggestions.view.stats': 'View statistics',
+    'assistant.response.project.help': 'I can help you with managing your USF projects. Would you like to create a new project, view existing projects, or get planning advice?',
+    'assistant.response.forum.help': 'The USF forum is the perfect place to connect with other agencies. You can ask questions, share experiences, or join thematic discussions.',
+    'assistant.response.stats.help': 'Here\'s an overview of your current statistics. Are there specific metrics you\'d like to analyze in more detail?',
+    'assistant.response.default': 'I\'m here to help you with the USF platform. You can ask me about projects, events, forum, or navigate to different sections.',
+    'assistant.placeholder': 'Type your message...',
+    'assistant.send': 'Send',
     
-    // Common placeholders
-    'search_placeholder': {
-      'fr': 'Rechercher...',
-      'en': 'Search...'
-    },
-    'search_events_placeholder': {
-      'fr': 'Rechercher un événement...',
-      'en': 'Search for an event...'
-    },
-    'event_title_placeholder': {
-      'fr': 'Ex: Webinaire Innovation',
-      'en': 'e.g.: Innovation Webinar'
-    },
-    'describe_event_placeholder': {
-      'fr': 'Décrivez l\'événement...',
-      'en': 'Describe the event...'
-    },
-    'error': {
-      'fr': 'Erreur',
-      'en': 'Error'
-    },
-    'fill_required_fields': {
-      'fr': 'Veuillez remplir tous les champs obligatoires.',
-      'en': 'Please fill in all required fields.'
-    },
-    'required': {
-      'fr': 'obligatoire',
-      'en': 'required'
-    }
+    // Enhanced Dashboard translations
+    'dashboard.welcome': 'Hello {{userName}}',
+    'dashboard.welcome.guest': 'Welcome to the USF Platform',
+    'dashboard.quick.overview': 'Quick Overview',
+    'dashboard.actions.manage.projects': 'Manage Projects',
+    'dashboard.actions.community': 'Community',
+    'dashboard.actions.resources': 'Resources',
+    'dashboard.actions.events': 'Events',
+    'dashboard.actions.analytics': 'Analytics',
+    'dashboard.trends.up': '↗ Trending up',
+    'dashboard.trends.down': '↘ Trending down',
+    'dashboard.trends.stable': '→ Stable',
+    
+    // Common placeholders and forms
+    'placeholder.search.projects': 'Search by name, country or location...',
+    'placeholder.search.organizations': 'Search for an agency or country...',
+    'placeholder.search.users': 'Search by name, email...',
+    'placeholder.message': 'Type your message...',
+    'placeholder.event.title': 'e.g.: Innovation Webinar',
+    'placeholder.topic.description': 'Describe your topic and questions...',
+    
+    // Form validation
+    'form.error': 'Error',
+    'form.fill.required.fields': 'Please fill in all required fields.',
+    'form.required': 'required'
   }
 };
 
