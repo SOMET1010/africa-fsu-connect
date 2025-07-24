@@ -11,6 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import FileUpload from "@/components/shared/FileUpload";
 import ContextualNavigation from "@/components/shared/ContextualNavigation";
 import { useToast } from "@/hooks/use-toast";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const Submit = () => {
   const [selectedType, setSelectedType] = useState("");
@@ -127,24 +130,25 @@ const Submit = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10">
+      {/* Subtle Background Effect */}
+      <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      
+      <PageContainer size="xl" padding="md" className="space-y-6 relative z-10">
         {/* Navigation contextuelle */}
         <ContextualNavigation />
 
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-4">
-            Formulaires de Soumission
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl">
-            Soumettez vos projets, positions communes, propositions réglementaires 
-            ou demandes de financement à la communauté FSU africaine.
-          </p>
-        </div>
+        <ScrollReveal direction="fade" delay={0}>
+          <PageHeader
+            title="Formulaires de Soumission"
+            description="Soumettez vos projets, positions communes, propositions réglementaires ou demandes de financement à la communauté FSU africaine."
+          />
+        </ScrollReveal>
 
         {/* My Submissions */}
-        <Card className="mb-8">
+        <ScrollReveal direction="up" delay={100}>
+          <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle>Mes Soumissions</CardTitle>
             <CardDescription>
@@ -184,17 +188,19 @@ const Submit = () => {
             </div>
           </CardContent>
         </Card>
+        </ScrollReveal>
 
-        <Tabs value={selectedType} onValueChange={setSelectedType} className="space-y-6">
-          {/* Type Selection */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <ScrollReveal direction="fade" delay={200}>
+          <Tabs value={selectedType} onValueChange={setSelectedType} className="space-y-6">
+            {/* Type Selection */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {submissionTypes.map((type) => {
               const Icon = type.icon;
               return (
                 <Card 
                   key={type.id} 
-                  className={`cursor-pointer hover:shadow-lg transition-all ${
-                    selectedType === type.id ? 'ring-2 ring-primary border-primary' : ''
+                  className={`cursor-pointer hover:shadow-xl hover-scale transition-all duration-300 border-0 shadow-lg bg-card/80 backdrop-blur-sm ${
+                    selectedType === type.id ? 'ring-2 ring-primary border-primary bg-primary/5' : ''
                   }`}
                   onClick={() => setSelectedType(type.id)}
                 >
@@ -208,9 +214,9 @@ const Submit = () => {
             })}
           </div>
 
-          {/* Forms */}
-          <TabsContent value="projet" className="space-y-6">
-            <Card>
+            {/* Forms */}
+            <TabsContent value="projet" className="space-y-6">
+              <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle>Fiche Projet FSU</CardTitle>
                 <CardDescription>
@@ -310,8 +316,8 @@ const Submit = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="position" className="space-y-6">
-            <Card>
+            <TabsContent value="position" className="space-y-6">
+              <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle>Position Commune Africaine</CardTitle>
                 <CardDescription>
@@ -365,9 +371,9 @@ const Submit = () => {
             </Card>
           </TabsContent>
 
-          {/* Placeholder content for other tabs */}
-          <TabsContent value="regulation">
-            <Card>
+            {/* Placeholder content for other tabs */}
+            <TabsContent value="regulation">
+              <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
               <CardContent className="pt-6">
                 <div className="text-center py-12">
                   <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
@@ -380,8 +386,8 @@ const Submit = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="financement">
-            <Card>
+            <TabsContent value="financement">
+              <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
               <CardContent className="pt-6">
                 <div className="text-center py-12">
                   <Upload className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
@@ -393,10 +399,12 @@ const Submit = () => {
               </CardContent>
             </Card>
           </TabsContent>
-        </Tabs>
+          </Tabs>
+        </ScrollReveal>
 
         {!selectedType && (
-          <Card className="mt-8">
+          <ScrollReveal direction="fade" delay={300}>
+            <Card className="mt-8 border-0 shadow-lg bg-card/80 backdrop-blur-sm">
             <CardContent className="pt-6">
               <div className="text-center py-12">
                 <Send className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
@@ -407,8 +415,9 @@ const Submit = () => {
               </div>
             </CardContent>
           </Card>
+          </ScrollReveal>
         )}
-      </div>
+      </PageContainer>
     </div>
   );
 };
