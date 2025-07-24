@@ -816,6 +816,39 @@ export type Database = {
         }
         Relationships: []
       }
+      languages: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          is_default: boolean
+          name: string
+          native_name: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name: string
+          native_name: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name?: string
+          native_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       network_security_events: {
         Row: {
           blocked: boolean | null
@@ -1091,6 +1124,90 @@ export type Database = {
             columns: ["connector_id"]
             isOneToOne: false
             referencedRelation: "agency_connectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      translation_namespaces: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      translations: {
+        Row: {
+          approved_by: string | null
+          context: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          is_approved: boolean
+          key: string
+          language_id: string
+          namespace_id: string
+          updated_at: string
+          value: string
+          version: number
+        }
+        Insert: {
+          approved_by?: string | null
+          context?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_approved?: boolean
+          key: string
+          language_id: string
+          namespace_id: string
+          updated_at?: string
+          value: string
+          version?: number
+        }
+        Update: {
+          approved_by?: string | null
+          context?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_approved?: boolean
+          key?: string
+          language_id?: string
+          namespace_id?: string
+          updated_at?: string
+          value?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "translations_language_id_fkey"
+            columns: ["language_id"]
+            isOneToOne: false
+            referencedRelation: "languages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "translations_namespace_id_fkey"
+            columns: ["namespace_id"]
+            isOneToOne: false
+            referencedRelation: "translation_namespaces"
             referencedColumns: ["id"]
           },
         ]
