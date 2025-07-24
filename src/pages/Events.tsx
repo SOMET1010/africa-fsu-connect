@@ -213,11 +213,11 @@ const Events = () => {
                 </div>
                 
                 <h1 id="hero-title" className="text-4xl lg:text-5xl font-bold leading-tight">
-                  Événements & Formations
+                  {t('events.title')}
                 </h1>
                 
                 <p className="text-lg lg:text-xl text-white/90 leading-relaxed">
-                  Découvrez les derniers événements, conférences et formations de la communauté FSU. Restez connecté avec les innovations et opportunités du secteur.
+                  {t('events.description')}
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -232,7 +232,7 @@ const Events = () => {
                     aria-describedby="calendar-button-desc"
                   >
                     <CalendarIcon className="w-5 h-5 mr-2" />
-                    Voir le Calendrier
+                    {t('events.viewCalendar')}
                   </Button>
                   <span id="calendar-button-desc" className="sr-only">
                     Basculer vers la vue calendrier pour naviguer par dates
@@ -246,14 +246,14 @@ const Events = () => {
               <h2 id="stats-heading" className="sr-only">Statistiques des événements</h2>
               <div className="grid grid-cols-2 gap-4">
                 <GradientStatsCard
-                  title="Événements Total"
+                  title={t('events.stats.total')}
                   value={events.length}
                   icon={CalendarIcon}
                   variant="blue"
                   size="sm"
                 />
                 <GradientStatsCard
-                  title="À Venir"
+                  title={t('events.stats.upcoming')}
                   value={upcomingEvents.length}
                   icon={Clock}
                   variant="teal"
@@ -262,14 +262,14 @@ const Events = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <GradientStatsCard
-                  title="Mes Inscriptions"
+                  title={t('events.stats.registered')}
                   value={events.filter(e => e.is_registered).length}
                   icon={User}
                   variant="green"
                   size="sm"
                 />
                 <GradientStatsCard
-                  title="Support"
+                  title={t('events.stats.support')}
                   value="24/7"
                   icon={Users}
                   variant="purple"
@@ -292,7 +292,7 @@ const Events = () => {
                   aria-selected={selectedView === "grid"}
                 >
                   <Grid className="h-4 w-4" />
-                  Grille
+                  {t('events.views.grid')}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="list" 
@@ -301,7 +301,7 @@ const Events = () => {
                   aria-selected={selectedView === "list"}
                 >
                   <List className="h-4 w-4" />
-                  Liste
+                  {t('events.views.list')}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="calendar" 
@@ -310,7 +310,7 @@ const Events = () => {
                   aria-selected={selectedView === "calendar"}
                 >
                   <CalendarIcon className="h-4 w-4" />
-                  Calendrier
+                  {t('events.views.calendar')}
                 </TabsTrigger>
               </TabsList>
 

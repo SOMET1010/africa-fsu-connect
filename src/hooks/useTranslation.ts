@@ -226,40 +226,6 @@ const translations = {
     'projects.stats.completed': 'Projets Terminés',
     'projects.stats.pending': 'En Attente',
 
-    // Events
-    'events.title': 'Agenda des Événements FSU',
-    'events.subtitle': 'Suivez les événements, conférences, webinaires et deadlines importantes de la communauté FSU africaine.',
-    'events.new.event': 'Nouvel Événement',
-    'events.create.event': 'Créer un Nouvel Événement',
-    'events.create.description': 'Organisez un événement pour la communauté FSU',
-    'events.export.calendar': 'Exporter .ics',
-    'events.view.list': 'Liste',
-    'events.view.calendar': 'Calendrier',
-    'events.view.upcoming': 'À venir',
-    'events.event.title': 'Titre de l\'Événement',
-    'events.event.type': 'Type',
-    'events.select.type': 'Sélectionner le type',
-    'events.description': 'Description',
-    'events.description.placeholder': 'Décrivez l\'événement...',
-    'events.date': 'Date',
-    'events.time': 'Heure',
-    'events.duration': 'Durée (heures)',
-    'events.create.button': 'Créer l\'Événement',
-    'events.created.title': 'Événement créé',
-    'events.created.description': 'Votre événement a été créé avec succès.',
-    'events.register': 'S\'inscrire',
-    'events.registered': 'Inscrit',
-    'events.details': 'Détails',
-    'events.participants': 'participants',
-    'events.organized.by': 'Organisé par:',
-    'events.register.success': 'Inscription confirmée',
-    'events.register.description': 'Vous êtes maintenant inscrit à cet événement.',
-    'events.export.success': 'Export calendrier',
-    'events.export.description': 'Le fichier .ics a été généré et téléchargé.',
-    'events.calendar.view': 'Vue Calendrier',
-    'events.calendar.coming': 'La vue calendrier sera implémentée dans la prochaine version',
-    'events.see.list': 'Voir en Liste',
-    'events.general.info': 'Informations Générales',
 
     // Landing page
     'landing.title': 'Plateforme FSU Afrique',
@@ -402,6 +368,51 @@ const translations = {
     'placeholder.event.title': 'Ex: Webinaire Innovation',
     'placeholder.topic.description': 'Décrivez votre sujet et questions...',
     
+    // Events page
+    'events.title': 'Événements & Formations',
+    'events.description': 'Découvrez les derniers événements, conférences et formations de la communauté FSU. Restez connecté avec les innovations et opportunités du secteur.',
+    'events.viewCalendar': 'Voir le Calendrier',
+    'events.newEvent': 'Nouvel événement',
+    'events.search.placeholder': 'Rechercher un événement...',
+    'events.stats.total': 'Événements Total',
+    'events.stats.upcoming': 'À Venir',
+    'events.stats.registered': 'Mes Inscriptions',
+    'events.stats.support': 'Support',
+    'events.views.grid': 'Grille',
+    'events.views.list': 'Liste',
+    'events.views.calendar': 'Calendrier',
+    'events.create.title': 'Créer un Nouvel Événement',
+    'events.create.description': 'Organisez un événement pour la communauté FSU',
+    'events.form.title': 'Titre de l\'Événement',
+    'events.form.title.placeholder': 'Ex: Webinaire Innovation',
+    'events.form.maxAttendees': 'Nombre max de participants',
+    'events.form.description': 'Description',
+    'events.form.description.placeholder': 'Décrivez l\'événement...',
+    'events.form.startDate': 'Date de début',
+    'events.form.endDate': 'Date de fin',
+    'events.form.isVirtual': 'Événement virtuel',
+    'events.form.location': 'Lieu',
+    'events.form.location.placeholder': 'Ex: Salle de conférence A',
+    'events.form.virtualLink': 'Lien de connexion',
+    'events.form.virtualLink.placeholder': 'https://...',
+    'events.form.error.required': 'Veuillez remplir tous les champs obligatoires.',
+    'events.filters.type': 'Type d\'événement',
+    'events.filters.location': 'Lieu',
+    'events.filters.onlyRegistered': 'Mes inscriptions uniquement',
+    'events.filters.clear': 'Effacer les filtres',
+    'events.filters.type.all': 'Tous les types',
+    'events.filters.type.webinar': 'Webinaires',
+    'events.filters.type.conference': 'Conférences',
+    'events.filters.type.workshop': 'Ateliers',
+    'events.filters.type.deadline': 'Échéances',
+    'events.filters.location.all': 'Tous les lieux',
+    'events.filters.location.online': 'En ligne',
+    'events.empty.title': 'Aucun événement trouvé',
+    'events.empty.description': 'Aucun événement ne correspond à vos critères de recherche.',
+    'events.accessibility.skipToContent': 'Aller au contenu principal',
+    'events.accessibility.skipToSearch': 'Aller à la recherche',
+    'events.accessibility.skipToList': 'Aller à la liste des événements',
+
     // Form validation
     'form.error': 'Erreur',
     'form.fill.required.fields': 'Veuillez remplir tous les champs obligatoires.',
@@ -788,104 +799,8 @@ const translations = {
     // Form validation
     'form.error': 'Error',
     'form.fill.required.fields': 'Please fill in all required fields.',
-    'form.required': 'required',
+    'form.required': 'required'
 
-    // Indicators Enrichment
-    enrichment: {
-      title: "Extended USF Indicators Enrichment",
-      classic: "Classic Enrichment",
-      standards: "International Standards",
-      description: "Automated retrieval of the latest USF indicators from major international APIs: World Bank, ITU DataHub, GSMA Intelligence, UN Statistics and African Union.",
-      startButton: "Launch Complete Enrichment",
-      inProgress: "Enrichment in progress...",
-      stats: {
-        indicators: "Indicators",
-        countries: "Countries Covered",
-        sources: "API Sources",
-        dataPoints: "Data Points"
-      },
-      sources: {
-        title: "Configured API Data Sources",
-        rateLimit: "Rate limit",
-        configured: "Configured"
-      },
-      categories: {
-        title: "Available Indicator Categories"
-      },
-      results: {
-        title: "Enrichment Results",
-        totalProcessed: "Total Processed",
-        newIndicators: "New",
-        updated: "Updated",
-        countries: "Countries",
-        errors: "Errors"
-      },
-      log: {
-        title: "Real-Time Enrichment Log",
-        starting: "Starting extended USF indicators enrichment...",
-        configured: "indicator types configured",
-        countriesProcess: "African countries to process",
-        connecting: "Connecting to external APIs:",
-        connected: "Connected",
-        finished: "Enrichment completed successfully!",
-        processed: "indicators processed in total",
-        added: "new indicators added",
-        updatedCount: "indicators updated",
-        countriesCovered: "African countries covered",
-        error: "Error during enrichment:"
-      },
-      progress: {
-        title: "Overall Progress:",
-        description: "Processing data from international APIs..."
-      },
-      toasts: {
-        started: "Extended enrichment started",
-        startedDesc: "Retrieving from World Bank, ITU, GSMA, UN Statistics and African Union...",
-        success: "Enrichment successful!",
-        error: "Error during enrichment",
-        errorDesc: "Check the console for more details"
-      }
-    },
-
-    // Forms and placeholders
-    forms: {
-      search: "Search",
-      searchEvents: "Search for an event...",
-      searchDiscussions: "Search in discussions...",
-      filter: "Filter",
-      allRegions: "All regions",
-      dataStatus: "Data status",
-      selectRegion: "Region",
-      selectCountry: "Select country",
-      selectRole: "Filter by role",
-      selectCategory: "All categories",
-      firstName: "First name",
-      lastName: "Last name",
-      email: "Email",
-      password: "Password",
-      passwordPlaceholder: "At least 6 characters",
-      twoFactorCode: "Enter 6-digit code",
-      customDashboard: "My custom dashboard",
-      customTheme: "My custom theme",
-      projectTitle: "Ex: Connected Villages - Phase 2",
-      projectDescription: "Describe the objectives, scope and beneficiaries of your project...",
-      indicators: "List key indicators for measuring project success...",
-      positionContext: "Describe the context and issues related to this position...",
-      positionProposal: "Clearly formulate the proposed African position...",
-      positionJustification: "Justify this position with arguments and data...",
-      documentDescription: "Describe the content and usefulness of this document...",
-      countryExample: "Ex: Ivory Coast",
-      categoryDescription: "Category description...",
-      objectivesPlaceholder: "Ex: Team coordination, project tracking, information sharing...",
-      newApproachesPlaceholder: "Ex: New approaches for rural connectivity",
-      selectAgency: "Select an agency",
-      eventAddress: "Event address",
-      eventDescription: "Describe the event...",
-      virtualEventLink: "https://...",
-      errorTitle: "Error",
-      errorFillFields: "Please fill in all required fields.",
-      cancel: "Cancel"
-    }
   }
 };
 
