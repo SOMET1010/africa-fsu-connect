@@ -182,7 +182,7 @@ const Index = () => {
             <Button asChild variant="outline" className="hover:bg-gradient-to-r hover:from-primary hover:to-blue-600 hover:text-white transition-all duration-300">
               <Link to="/organizations" className="flex items-center gap-2">
                 <Globe className="h-4 w-4" />
-                Explorer la carte complète
+                <span>Explorer la carte complète</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -225,13 +225,13 @@ const Index = () => {
             {t('cta.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{animationDelay: '200ms'}}>
-            <Button size="lg" className="bg-white text-primary hover:bg-white/90 hover:scale-105 px-8 py-3 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90 hover:scale-105 px-8 py-3 transition-all duration-300 shadow-lg hover:shadow-xl">
               <Link to="/auth" className="flex items-center">
-                {t('common.create.account')}
+                <span>{t('common.create.account')}</span>
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 hover:scale-105 px-8 py-3 transition-all duration-300 backdrop-blur-sm">
+            <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 hover:scale-105 px-8 py-3 transition-all duration-300 backdrop-blur-sm">
               <Link to="/organizations">{t('common.learn.more')}</Link>
             </Button>
           </div>
