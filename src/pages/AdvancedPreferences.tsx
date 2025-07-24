@@ -16,50 +16,50 @@ import {
 
 export default function AdvancedPreferences() {
   return (
-    <div className="container mx-auto py-8 space-y-6">
+    <div className="container mx-auto py-8 space-y-6 animate-fade-in">
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Préférences avancées</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Préférences avancées</h1>
         <p className="text-muted-foreground">
           Personnalisez votre expérience avec l'intelligence artificielle
         </p>
       </div>
 
       <Tabs defaultValue="personalization" className="w-full">
-        <TabsList className="grid grid-cols-6 w-full">
-          <TabsTrigger value="personalization" className="flex items-center gap-2">
+        <TabsList className="grid grid-cols-6 w-full mb-8">
+          <TabsTrigger value="personalization" className="flex items-center gap-2 hover-scale">
             <Brain className="h-4 w-4" />
-            IA
+            <span className="hidden sm:inline">IA</span>
           </TabsTrigger>
-          <TabsTrigger value="themes" className="flex items-center gap-2">
+          <TabsTrigger value="themes" className="flex items-center gap-2 hover-scale">
             <Palette className="h-4 w-4" />
-            Thèmes
+            <span className="hidden sm:inline">Thèmes</span>
           </TabsTrigger>
-          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+          <TabsTrigger value="dashboard" className="flex items-center gap-2 hover-scale">
             <Layout className="h-4 w-4" />
-            Dashboard
+            <span className="hidden sm:inline">Dashboard</span>
           </TabsTrigger>
-          <TabsTrigger value="shortcuts" className="flex items-center gap-2">
+          <TabsTrigger value="shortcuts" className="flex items-center gap-2 hover-scale">
             <Keyboard className="h-4 w-4" />
-            Raccourcis
+            <span className="hidden sm:inline">Raccourcis</span>
           </TabsTrigger>
-          <TabsTrigger value="preferences" className="flex items-center gap-2">
+          <TabsTrigger value="preferences" className="flex items-center gap-2 hover-scale">
             <Settings className="h-4 w-4" />
-            Système
+            <span className="hidden sm:inline">Système</span>
           </TabsTrigger>
-          <TabsTrigger value="profile" className="flex items-center gap-2">
+          <TabsTrigger value="profile" className="flex items-center gap-2 hover-scale">
             <User className="h-4 w-4" />
-            Profil
+            <span className="hidden sm:inline">Profil</span>
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="personalization" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5" />
+        <TabsContent value="personalization" className="space-y-6 animate-fade-in">
+          <Card className="hover-scale transition-all duration-300">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <Brain className="h-5 w-5 text-primary" />
                 Intelligence artificielle personnalisée
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-base">
                 Laissez l'IA apprendre vos habitudes et personnaliser automatiquement votre expérience
               </CardDescription>
             </CardHeader>
@@ -69,14 +69,14 @@ export default function AdvancedPreferences() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="themes" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Palette className="h-5 w-5" />
+        <TabsContent value="themes" className="space-y-6 animate-fade-in">
+          <Card className="hover-scale transition-all duration-300">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <Palette className="h-5 w-5 text-primary" />
                 Personnalisation des thèmes
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-base">
                 Créez et personnalisez vos thèmes visuels avec des couleurs et styles uniques
               </CardDescription>
             </CardHeader>

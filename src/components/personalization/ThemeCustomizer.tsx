@@ -116,6 +116,8 @@ export const ThemeCustomizer = () => {
     root.style.setProperty('--accent', hexToHsl(colors.accent));
     root.style.setProperty('--background', hexToHsl(colors.background));
     root.style.setProperty('--foreground', hexToHsl(colors.foreground));
+    root.style.setProperty('--card', hexToHsl(colors.background));
+    root.style.setProperty('--card-foreground', hexToHsl(colors.foreground));
   };
 
   const handleColorChange = (colorKey: keyof typeof customColors, value: string) => {
@@ -141,6 +143,10 @@ export const ThemeCustomizer = () => {
     root.style.setProperty('--accent', hexToHsl(customColors.accent));
     root.style.setProperty('--background', hexToHsl(customColors.background));
     root.style.setProperty('--foreground', hexToHsl(customColors.foreground));
+    root.style.setProperty('--card', hexToHsl(customColors.background));
+    root.style.setProperty('--card-foreground', hexToHsl(customColors.foreground));
+    root.style.setProperty('--popover', hexToHsl(customColors.background));
+    root.style.setProperty('--popover-foreground', hexToHsl(customColors.foreground));
 
     const profile = createPersonalizationProfile(themeName, {
       theme: {
@@ -172,13 +178,18 @@ export const ThemeCustomizer = () => {
     setThemeName('');
     
     if (previewMode) {
+      // Restaurer les valeurs par défaut du CSS
       const root = document.documentElement;
-      root.style.removeProperty('--primary');
-      root.style.removeProperty('--secondary');
-      root.style.removeProperty('--accent');
-      root.style.removeProperty('--background');
-      root.style.removeProperty('--foreground');
+      root.style.setProperty('--primary', '214 95% 45%');
+      root.style.setProperty('--secondary', '210 20% 96%');
+      root.style.setProperty('--accent', '142 70% 45%');
+      root.style.setProperty('--background', '0 0% 100%');
+      root.style.setProperty('--foreground', '225 15% 20%');
+      root.style.setProperty('--card', '0 0% 100%');
+      root.style.setProperty('--card-foreground', '225 15% 20%');
     }
+    
+    toast.success('Thème réinitialisé aux valeurs par défaut');
   };
 
   return (
