@@ -32,6 +32,7 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import NotificationCenter from "@/components/shared/NotificationCenter";
+import { LanguageSelector } from "@/components/shared/LanguageSelector";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { useUserPreferences } from "@/contexts/UserPreferencesContext";
 import { cn } from "@/lib/utils";
@@ -167,33 +168,7 @@ const ModernHeader = () => {
             {user && (
               <>
                 {/* Sélecteur de langue moderne */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <ModernButton variant="ghost" size="sm" className="h-9 w-9 p-0 hover:scale-110">
-                      <Globe className="h-4 w-4" />
-                    </ModernButton>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="animate-scale-in bg-card/90 backdrop-blur-xl border-border/50">
-                    <DropdownMenuItem 
-                      onClick={() => updatePreferences({ language: 'fr' })}
-                      className={cn(
-                        "transition-all duration-200",
-                        preferences.language === 'fr' && 'bg-primary/10 text-primary'
-                      )}
-                    >
-                      🇫🇷 Français
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={() => updatePreferences({ language: 'en' })}
-                      className={cn(
-                        "transition-all duration-200",
-                        preferences.language === 'en' && 'bg-primary/10 text-primary'
-                      )}
-                    >
-                      🇺🇸 English
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <LanguageSelector variant="ghost" size="sm" showLabel={false} />
                 
                 {/* Centre de notifications moderne */}
                 <div className="relative">
@@ -331,6 +306,14 @@ const ModernHeader = () => {
                   </Link>
                 );
               })}
+            </div>
+            
+            {/* Sélecteur de langue pour mobile */}
+            <div className="mt-4 pt-4 border-t border-border/50">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-muted-foreground">Langue / Language</span>
+                <LanguageSelector variant="outline" size="sm" showLabel={true} />
+              </div>
             </div>
           </GlassCard>
         </div>
