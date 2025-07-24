@@ -58,11 +58,17 @@ const ModernButton = React.forwardRef<HTMLButtonElement, ModernButtonProps>(
         disabled={disabled || loading}
         {...props}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full hover:translate-x-full transition-transform duration-700 ease-out" />
-        <div className="relative z-10 flex items-center gap-2">
-          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-          {loading ? loadingText || children : children}
-        </div>
+        {asChild ? (
+          children
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full hover:translate-x-full transition-transform duration-700 ease-out" />
+            <div className="relative z-10 flex items-center gap-2">
+              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              {loading ? loadingText || children : children}
+            </div>
+          </>
+        )}
       </Comp>
     );
   }
