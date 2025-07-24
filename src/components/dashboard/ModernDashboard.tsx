@@ -17,7 +17,7 @@ export const ModernDashboard = () => {
   const { profile } = useAuth();
   const { stats, loading } = useDashboardStats();
   
-  console.log("ModernDashboard rendering, profile:", profile);
+  
   
   const [dashboardStats, setDashboardStats] = useState([
     {
@@ -157,7 +157,7 @@ export const ModernDashboard = () => {
       {/* Subtle Background Effect */}
       <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       
-      <PageContainer size="xl" padding="md" className="space-y-6 relative z-10 border-4 border-red-500 bg-yellow-100/20">
+      <PageContainer size="xl" padding="md" className="space-y-6 relative z-10">
         
         {/* Hero Section */}
         <ScrollReveal direction="fade" delay={0}>

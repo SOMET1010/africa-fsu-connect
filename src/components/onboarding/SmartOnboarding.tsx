@@ -49,6 +49,14 @@ const WelcomeStep = ({ onNext }: { onNext: (data?: any) => void }) => {
         <p className="text-muted-foreground text-lg">
           Configurons votre espace de travail pour une expérience optimale
         </p>
+        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-700 font-medium">
+            ✨ Configuration requise pour votre première utilisation
+          </p>
+          <p className="text-xs text-blue-600 mt-1">
+            Cette étape personnalisera entièrement votre tableau de bord
+          </p>
+        </div>
       </div>
       
       <div className="bg-gradient-to-r from-primary/10 to-blue-50 rounded-lg p-6">
