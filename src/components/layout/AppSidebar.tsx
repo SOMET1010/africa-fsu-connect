@@ -1,4 +1,5 @@
 
+import React from "react";
 import { useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -13,7 +14,7 @@ import {
   SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { NavLink } from "react-router-dom";
+import { NavLink, NavLinkProps } from "react-router-dom";
 import { 
   Home, 
   FolderOpen, 
@@ -35,6 +36,14 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslation } from "@/hooks/useTranslation";
+
+// Wrapper component to handle forwardRef for NavLink
+const ForwardedNavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
+  (props, ref) => (
+    <NavLink ref={ref} {...props} />
+  )
+);
+ForwardedNavLink.displayName = "ForwardedNavLink";
 
 export function AppSidebar() {
   const location = useLocation();
@@ -138,10 +147,10 @@ export function AppSidebar() {
                 {section.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                       <NavLink to={item.url} className={getNavClassName(item.url)}>
+                       <ForwardedNavLink to={item.url} className={getNavClassName(item.url)}>
                          <item.icon className="h-4 w-4 shrink-0" />
                          {!isCollapsed && item.title}
-                       </NavLink>
+                       </ForwardedNavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -162,10 +171,10 @@ export function AppSidebar() {
                 {adminSection.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                       <NavLink to={item.url} className={getNavClassName(item.url)}>
+                       <ForwardedNavLink to={item.url} className={getNavClassName(item.url)}>
                          <item.icon className="h-4 w-4 shrink-0" />
                          {!isCollapsed && item.title}
-                       </NavLink>
+                       </ForwardedNavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
