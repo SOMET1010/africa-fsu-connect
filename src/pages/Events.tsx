@@ -158,107 +158,114 @@ const Events = () => {
 
   if (loading) {
     return (
-      <GradientLayout variant="blue" fullHeight>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
         <div className="p-6 lg:p-8 space-y-8">
-          <Skeleton className="h-64 w-full rounded-3xl bg-white/10" />
+          <Skeleton className="h-64 w-full rounded-3xl" />
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-32 rounded-2xl bg-white/10" />
+              <Skeleton key={i} className="h-32 rounded-2xl" />
             ))}
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-80 rounded-xl bg-white/10" />
+              <Skeleton key={i} className="h-80 rounded-xl" />
             ))}
           </div>
         </div>
-      </GradientLayout>
+      </div>
     );
   }
 
   return (
-    <GradientLayout variant="blue" fullHeight className="text-white">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="p-6 lg:p-8 space-y-8">
         {/* Hero Section with Stats */}
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <GradientHeroSection
-              title="Événements & Formations"
-              subtitle="Plateforme FSU"
-              description="Découvrez les derniers événements, conférences et formations de la communauté FSU. Restez connecté avec les innovations et opportunités du secteur."
-              variant="custom"
-              className="bg-transparent p-0"
-              actions={[
-                {
-                  label: "Voir le Calendrier",
-                  onClick: () => setSelectedView("calendar"),
-                  variant: "secondary",
-                  icon: CalendarIcon
-                }
-              ]}
-            />
-          </div>
-
-          {/* Stats Grid */}
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <GradientStatsCard
-                title="Événements Total"
-                value={events.length}
-                icon={CalendarIcon}
-                variant="blue"
-                size="sm"
-              />
-              <GradientStatsCard
-                title="À Venir"
-                value={upcomingEvents.length}
-                icon={Clock}
-                variant="teal"
-                size="sm"
-              />
+        <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-y-32 translate-x-32" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-2xl translate-y-16 -translate-x-16" />
+          
+          <div className="relative z-10 grid lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="space-y-6">
+                <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/20">
+                  <span className="text-sm font-medium text-white/90">Plateforme FSU</span>
+                </div>
+                
+                <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
+                  Événements & Formations
+                </h1>
+                
+                <p className="text-lg lg:text-xl text-white/90 leading-relaxed">
+                  Découvrez les derniers événements, conférences et formations de la communauté FSU. Restez connecté avec les innovations et opportunités du secteur.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button
+                    onClick={() => setSelectedView("calendar")}
+                    variant="secondary"
+                    size="lg"
+                    className="font-semibold bg-white text-gray-900 hover:bg-white/90"
+                  >
+                    <CalendarIcon className="w-5 h-5 mr-2" />
+                    Voir le Calendrier
+                  </Button>
+                </div>
+              </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <GradientStatsCard
-                title="Mes Inscriptions"
-                value={events.filter(e => e.is_registered).length}
-                icon={User}
-                variant="green"
-                size="sm"
-              />
-              <GradientStatsCard
-                title="Support"
-                value="24/7"
-                icon={Users}
-                variant="purple"
-                size="sm"
-              />
+
+            {/* Stats Grid */}
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <GradientStatsCard
+                  title="Événements Total"
+                  value={events.length}
+                  icon={CalendarIcon}
+                  variant="blue"
+                  size="sm"
+                />
+                <GradientStatsCard
+                  title="À Venir"
+                  value={upcomingEvents.length}
+                  icon={Clock}
+                  variant="teal"
+                  size="sm"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <GradientStatsCard
+                  title="Mes Inscriptions"
+                  value={events.filter(e => e.is_registered).length}
+                  icon={User}
+                  variant="green"
+                  size="sm"
+                />
+                <GradientStatsCard
+                  title="Support"
+                  value="24/7"
+                  icon={Users}
+                  variant="purple"
+                  size="sm"
+                />
+              </div>
             </div>
           </div>
         </div>
         
         {/* Content Section */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20 p-6 lg:p-8">
+        <div className="bg-card rounded-3xl border border-border p-6 lg:p-8 shadow-lg">
           <Tabs value={selectedView} onValueChange={setSelectedView} className="space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-              <TabsList className="grid w-full lg:w-auto grid-cols-3 bg-white/10 border border-white/20">
-                <TabsTrigger 
-                  value="grid" 
-                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 flex items-center gap-2"
-                >
+              <TabsList className="grid w-full lg:w-auto grid-cols-3">
+                <TabsTrigger value="grid" className="flex items-center gap-2">
                   <Grid className="h-4 w-4" />
                   Grille
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="list"
-                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 flex items-center gap-2"
-                >
+                <TabsTrigger value="list" className="flex items-center gap-2">
                   <List className="h-4 w-4" />
                   Liste
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="calendar"
-                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 flex items-center gap-2"
-                >
+                <TabsTrigger value="calendar" className="flex items-center gap-2">
                   <CalendarIcon className="h-4 w-4" />
                   Calendrier
                 </TabsTrigger>
@@ -266,20 +273,17 @@ const Events = () => {
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     placeholder="Rechercher un événement..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-white/10 border-white/20 text-white placeholder-white/60 focus:border-white/40"
+                    className="pl-10"
                   />
                 </div>
                 <Dialog open={isNewEventOpen} onOpenChange={setIsNewEventOpen}>
                   <DialogTrigger asChild>
-                    <Button 
-                      variant="secondary"
-                      className="bg-white text-blue-700 hover:bg-white/90"
-                    >
+                    <Button className="bg-primary hover:bg-primary/90">
                       <Plus className="h-4 w-4 mr-2" />
                       Nouvel événement
                     </Button>
@@ -396,15 +400,15 @@ const Events = () => {
             <TabsContent value="grid" className="space-y-6">
               {filteredEvents.length === 0 ? (
                 <div className="text-center py-12">
-                  <CalendarIcon className="h-16 w-16 text-white/60 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-white mb-2">Aucun événement trouvé</h3>
-                  <p className="text-white/70 mb-4">
+                  <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">Aucun événement trouvé</h3>
+                  <p className="text-muted-foreground mb-4">
                     {hasActiveFilters 
                       ? "Essayez de modifier vos filtres de recherche" 
                       : "Il n'y a pas d'événements pour le moment"}
                   </p>
                   {hasActiveFilters && (
-                    <Button variant="outline" onClick={handleClearFilters} className="border-white/30 text-white hover:bg-white/10">
+                    <Button variant="outline" onClick={handleClearFilters}>
                       Effacer les filtres
                     </Button>
                   )}
@@ -412,31 +416,28 @@ const Events = () => {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredEvents.map((event) => (
-                    <Card key={event.id} className="bg-white/5 backdrop-blur-sm border border-white/20 hover:bg-white/10 transition-all duration-300 group">
+                    <Card key={event.id} className="hover:shadow-lg transition-all duration-300 group">
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
                           <div className="space-y-2">
-                            <CardTitle className="text-white group-hover:text-white/90 transition-colors">
+                            <CardTitle className="group-hover:text-primary transition-colors">
                               {event.title}
                             </CardTitle>
-                            <div className="flex items-center text-white/70 text-sm">
+                            <div className="flex items-center text-muted-foreground text-sm">
                               <CalendarIcon className="h-4 w-4 mr-1" />
                               {format(new Date(event.start_date), "d MMMM yyyy", { locale: fr })}
                             </div>
                           </div>
-                          <Badge 
-                            variant="secondary"
-                            className="bg-white/20 text-white border-white/30"
-                          >
+                          <Badge variant="secondary">
                             {event.is_virtual ? "Virtuel" : "Présentiel"}
                           </Badge>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
-                        <CardDescription className="text-white/80">
+                        <CardDescription>
                           {event.description || "Aucune description disponible"}
                         </CardDescription>
-                        <div className="flex items-center justify-between text-sm text-white/70">
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
                           <div className="flex items-center">
                             <MapPin className="h-4 w-4 mr-1" />
                             {event.location || "En ligne"}
@@ -449,7 +450,7 @@ const Events = () => {
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className="w-full border-white/30 text-white hover:bg-white/10"
+                          className="w-full"
                           onClick={() => event.is_registered ? handleUnregister(event.id) : handleRegister(event.id)}
                         >
                           {event.is_registered ? "Se désinscrire" : "S'inscrire"}
@@ -464,9 +465,9 @@ const Events = () => {
             <TabsContent value="list" className="space-y-6">
               {filteredEvents.length === 0 ? (
                 <div className="text-center py-12">
-                  <CalendarIcon className="h-16 w-16 text-white/60 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-white mb-2">Aucun événement trouvé</h3>
-                  <p className="text-white/70">
+                  <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">Aucun événement trouvé</h3>
+                  <p className="text-muted-foreground">
                     {hasActiveFilters 
                       ? "Essayez de modifier vos filtres de recherche" 
                       : "Il n'y a pas d'événements pour le moment"}
@@ -475,15 +476,15 @@ const Events = () => {
               ) : (
                 <div className="space-y-4">
                   {filteredEvents.map((event) => (
-                    <Card key={event.id} className="bg-white/5 backdrop-blur-sm border border-white/20 hover:bg-white/10 transition-all duration-300">
+                    <Card key={event.id} className="hover:shadow-md transition-all duration-300">
                       <CardHeader>
                         <div className="flex items-center justify-between">
-                          <CardTitle className="text-white">{event.title}</CardTitle>
-                          <Badge className="bg-white/20 text-white border-white/30">
+                          <CardTitle>{event.title}</CardTitle>
+                          <Badge variant="secondary">
                             {format(new Date(event.start_date), "d MMM", { locale: fr })}
                           </Badge>
                         </div>
-                        <CardDescription className="text-white/80">
+                        <CardDescription>
                           {event.description || "Aucune description disponible"}
                         </CardDescription>
                       </CardHeader>
@@ -496,30 +497,29 @@ const Events = () => {
             <TabsContent value="calendar" className="space-y-6">
               <div className="grid lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-1">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 p-4">
+                  <Card className="p-4">
                     <Calendar
                       mode="single"
                       selected={selectedDate || undefined}
                       onSelect={(date) => setSelectedDate(date || null)}
-                      className="text-white"
                     />
-                  </div>
+                  </Card>
                 </div>
                 <div className="lg:col-span-2">
                   {selectedDate ? (
                     <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-white">
+                      <h3 className="text-lg font-medium">
                         Événements du {selectedDate.toLocaleDateString('fr-FR')}
                       </h3>
                       {filteredEvents.length === 0 ? (
-                        <p className="text-white/70">Aucun événement ce jour</p>
+                        <p className="text-muted-foreground">Aucun événement ce jour</p>
                       ) : (
                         <div className="space-y-4">
                           {filteredEvents.map((event) => (
-                            <Card key={event.id} className="bg-white/5 backdrop-blur-sm border border-white/20">
+                            <Card key={event.id}>
                               <CardHeader>
-                                <CardTitle className="text-white">{event.title}</CardTitle>
-                                <CardDescription className="text-white/80">
+                                <CardTitle>{event.title}</CardTitle>
+                                <CardDescription>
                                   {event.description || "Aucune description disponible"}
                                 </CardDescription>
                               </CardHeader>
@@ -530,9 +530,9 @@ const Events = () => {
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      <CalendarIcon className="h-16 w-16 text-white/60 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-white mb-2">Sélectionnez une date</h3>
-                      <p className="text-white/70">
+                      <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-lg font-medium mb-2">Sélectionnez une date</h3>
+                      <p className="text-muted-foreground">
                         Cliquez sur une date dans le calendrier pour voir les événements
                       </p>
                     </div>
@@ -543,7 +543,7 @@ const Events = () => {
           </Tabs>
         </div>
       </div>
-    </GradientLayout>
+    </div>
   );
 };
 
