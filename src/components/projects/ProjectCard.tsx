@@ -1,4 +1,5 @@
 
+import React, { memo, useMemo, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,8 +21,9 @@ interface ProjectCardProps {
   onView?: (project: Project) => void;
 }
 
-export const ProjectCard = ({ project, onEdit, onDelete, onView }: ProjectCardProps) => {
-  const getStatusColor = (status: string) => {
+const ProjectCard = memo(({ project, onEdit, onDelete, onView }: ProjectCardProps) => {
+  // Mémorisation des fonctions utilitaires
+  const getStatusColor = useCallback((status: string) => {
     switch (status.toLowerCase()) {
       case "complété":
       case "completed": 
@@ -39,30 +41,46 @@ export const ProjectCard = ({ project, onEdit, onDelete, onView }: ProjectCardPr
       default: 
         return "bg-muted text-muted-foreground";
     }
-  };
+  }, []);
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = useCallback((amount: number) => {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     }).format(amount);
-  };
+  }, []);
 
-  const formatDate = (dateString: string | null) => {
+  const formatDate = useCallback((dateString: string | null) => {
     if (!dateString) return 'Non défini';
     return new Date(dateString).toLocaleDateString('fr-FR', {
       year: 'numeric',
       month: 'short'
     });
-  };
+  }, []);
+
+  // Mémorisation des valeurs calculées
+  const statusColorClass = useMemo(() => getStatusColor(project.status), [project.status, getStatusColor]);
+  const formattedBudget = useMemo(() => 
+    project.budget ? formatCurrency(Number(project.budget)) : null, 
+    [project.budget, formatCurrency]
+  );
+  const formattedStartDate = useMemo(() => 
+    formatDate(project.start_date), 
+    [project.start_date, formatDate]
+  );
+
+  // Handlers optimisés
+  const handleView = useCallback(() => onView?.(project), [onView, project]);
+  const handleEdit = useCallback(() => onEdit?.(project), [onEdit, project]);
+  const handleDelete = useCallback(() => onDelete?.(project.id), [onDelete, project.id]);
 
   return (
     <Card className="border-border hover:shadow-lg transition-shadow">
       <CardHeader>
         <div className="flex justify-between items-start mb-2">
-          <Badge className={getStatusColor(project.status)}>
+          <Badge className={statusColorClass}>
             {project.status}
           </Badge>
           {project.agencies && (
@@ -93,7 +111,7 @@ export const ProjectCard = ({ project, onEdit, onDelete, onView }: ProjectCardPr
             <div className="flex items-center">
               <DollarSign className="h-4 w-4 mr-2 text-[hsl(var(--fsu-gold))]" />
               <span className="text-sm font-medium">
-                {formatCurrency(Number(project.budget))}
+                {formattedBudget}
               </span>
             </div>
           )}
@@ -108,7 +126,7 @@ export const ProjectCard = ({ project, onEdit, onDelete, onView }: ProjectCardPr
           <div className="flex items-center col-span-2">
             <Calendar className="h-4 w-4 mr-2 text-[hsl(var(--fsu-blue))]" />
             <span className="text-sm text-muted-foreground">
-              Début: {formatDate(project.start_date)}
+              Début: {formattedStartDate}
             </span>
           </div>
         </div>
@@ -146,7 +164,7 @@ export const ProjectCard = ({ project, onEdit, onDelete, onView }: ProjectCardPr
             variant="outline" 
             size="sm" 
             className="flex-1 flex items-center space-x-2"
-            onClick={() => onView?.(project)}
+            onClick={handleView}
           >
             <Eye className="h-4 w-4" />
             <span>Voir</span>
@@ -155,7 +173,7 @@ export const ProjectCard = ({ project, onEdit, onDelete, onView }: ProjectCardPr
             <Button 
               variant="ghost" 
               size="sm"
-              onClick={() => onEdit(project)}
+              onClick={handleEdit}
             >
               <Edit className="h-4 w-4" />
             </Button>
@@ -164,7 +182,7 @@ export const ProjectCard = ({ project, onEdit, onDelete, onView }: ProjectCardPr
             <Button 
               variant="ghost" 
               size="sm"
-              onClick={() => onDelete(project.id)}
+              onClick={handleDelete}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -173,4 +191,8 @@ export const ProjectCard = ({ project, onEdit, onDelete, onView }: ProjectCardPr
       </CardContent>
     </Card>
   );
-};
+});
+
+ProjectCard.displayName = "ProjectCard";
+
+export { ProjectCard };

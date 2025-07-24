@@ -1,4 +1,5 @@
 
+import React, { memo, useMemo, useCallback } from "react";
 import { Calendar, Clock, MapPin, Users, Video, UserCheck, Eye, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,18 +17,19 @@ interface ModernEventCardProps {
   onGenerateCalendar: (eventId: string) => void;
 }
 
-export const ModernEventCard = ({
+const ModernEventCard = memo(({
   event,
   onViewDetails,
   onRegister,
   onUnregister,
   onGenerateCalendar
 }: ModernEventCardProps) => {
-  const getStatusColor = (event: Event) => {
-    const now = new Date();
-    const startDate = new Date(event.start_date);
-    const isUpcoming = startDate > now;
-    
+  // Mémorisation des valeurs calculées
+  const now = useMemo(() => new Date(), []);
+  const startDate = useMemo(() => new Date(event.start_date), [event.start_date]);
+  const isUpcoming = useMemo(() => startDate > now, [startDate, now]);
+
+  const statusColor = useMemo(() => {
     if (event.is_registered) {
       return "bg-success/10 text-success border-success/20";
     }
@@ -35,32 +37,45 @@ export const ModernEventCard = ({
       return "bg-primary/10 text-primary border-primary/20";
     }
     return "bg-muted text-muted-foreground border-border";
-  };
+  }, [event.is_registered, isUpcoming]);
 
-  const getStatusText = (event: Event) => {
-    const now = new Date();
-    const startDate = new Date(event.start_date);
-    
+  const statusText = useMemo(() => {
     if (event.is_registered) return "Inscrit";
-    if (startDate > now) return "Inscription ouverte";
+    if (isUpcoming) return "Inscription ouverte";
     return "Terminé";
-  };
+  }, [event.is_registered, isUpcoming]);
 
-  const getTypeIcon = (isVirtual: boolean) => {
-    return isVirtual ? <Video className="h-4 w-4" /> : <MapPin className="h-4 w-4" />;
-  };
+  const typeIcon = useMemo(() => {
+    return event.is_virtual ? <Video className="h-4 w-4" /> : <MapPin className="h-4 w-4" />;
+  }, [event.is_virtual]);
 
-  const timeToEvent = formatDistanceToNow(new Date(event.start_date), { 
-    addSuffix: true, 
-    locale: fr 
-  });
+  const timeToEvent = useMemo(() => 
+    formatDistanceToNow(startDate, { addSuffix: true, locale: fr }), 
+    [startDate]
+  );
 
-  const capacity = event.max_attendees ? 
-    `${event.current_attendees}/${event.max_attendees}` : 
-    `${event.current_attendees}`;
+  const capacity = useMemo(() => 
+    event.max_attendees ? 
+      `${event.current_attendees}/${event.max_attendees}` : 
+      `${event.current_attendees}`,
+    [event.current_attendees, event.max_attendees]
+  );
 
-  const capacityPercentage = event.max_attendees ? 
-    (event.current_attendees / event.max_attendees) * 100 : 0;
+  const capacityPercentage = useMemo(() => 
+    event.max_attendees ? (event.current_attendees / event.max_attendees) * 100 : 0,
+    [event.current_attendees, event.max_attendees]
+  );
+
+  const isCapacityFull = useMemo(() => 
+    event.max_attendees ? event.current_attendees >= event.max_attendees : false,
+    [event.current_attendees, event.max_attendees]
+  );
+
+  // Handlers optimisés
+  const handleViewDetails = useCallback(() => onViewDetails(event), [onViewDetails, event]);
+  const handleRegister = useCallback(() => onRegister(event.id), [onRegister, event.id]);
+  const handleUnregister = useCallback(() => onUnregister(event.id), [onUnregister, event.id]);
+  const handleGenerateCalendar = useCallback(() => onGenerateCalendar(event.id), [onGenerateCalendar, event.id]);
 
   return (
     <EnhancedCard 
@@ -74,7 +89,7 @@ export const ModernEventCard = ({
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-3 flex-1">
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-              {getTypeIcon(event.is_virtual)}
+              {typeIcon}
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-lg line-clamp-1 group-hover:text-primary transition-colors">
@@ -83,8 +98,8 @@ export const ModernEventCard = ({
               <p className="text-sm text-muted-foreground">{timeToEvent}</p>
             </div>
           </div>
-          <Badge className={getStatusColor(event)}>
-            {getStatusText(event)}
+          <Badge className={statusColor}>
+            {statusText}
           </Badge>
         </div>
 
@@ -155,7 +170,7 @@ export const ModernEventCard = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onViewDetails(event)}
+            onClick={handleViewDetails}
             className="text-primary hover:text-primary hover:bg-primary/10"
           >
             <Eye className="h-4 w-4 mr-2" />
@@ -166,7 +181,7 @@ export const ModernEventCard = ({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onGenerateCalendar(event.id)}
+              onClick={handleGenerateCalendar}
             >
               <Download className="h-4 w-4" />
             </Button>
@@ -175,7 +190,7 @@ export const ModernEventCard = ({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => onUnregister(event.id)}
+                onClick={handleUnregister}
                 className="border-success text-success hover:bg-success/10"
               >
                 <UserCheck className="h-4 w-4 mr-2" />
@@ -184,8 +199,8 @@ export const ModernEventCard = ({
             ) : (
               <Button
                 size="sm"
-                onClick={() => onRegister(event.id)}
-                disabled={event.max_attendees ? event.current_attendees >= event.max_attendees : false}
+                onClick={handleRegister}
+                disabled={isCapacityFull}
                 className="bg-primary hover:bg-primary/90"
               >
                 S'inscrire
@@ -196,4 +211,8 @@ export const ModernEventCard = ({
       </div>
     </EnhancedCard>
   );
-};
+});
+
+ModernEventCard.displayName = "ModernEventCard";
+
+export { ModernEventCard };
