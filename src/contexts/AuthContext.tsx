@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { Tables } from '@/integrations/supabase/types';
+import { logger } from '@/utils/logger';
+import type { SecurityEventDetails, ApiResponse } from '@/types/common';
 
 export type UserRole = 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur';
 
@@ -10,8 +12,8 @@ interface AuthContextType {
   session: Session | null;
   profile: Tables<'profiles'> | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<ApiResponse>;
+  signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<ApiResponse>;
   signOut: () => Promise<void>;
   isAdmin: () => boolean;
   hasRole: (roles: UserRole[]) => boolean;
@@ -38,26 +40,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         .single();
 
       if (error) {
-        console.error('Error fetching profile:', error);
+        logger.error('Error fetching profile:', error, { component: 'AuthContext', action: 'fetchProfile' });
         return;
       }
 
       setProfile(data);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      logger.error('Error fetching profile:', error, { component: 'AuthContext', action: 'fetchProfile' });
     }
   };
 
-  const logSecurityEvent = async (userId: string, actionType: string, details?: any, success: boolean = true) => {
+  const logSecurityEvent = async (userId: string, actionType: string, details?: SecurityEventDetails, success: boolean = true) => {
     try {
       await supabase.rpc('log_security_event', {
         p_user_id: userId,
         p_action_type: actionType,
-        p_details: details,
+        p_details: details ? JSON.stringify(details) : null,
         p_success: success,
       });
     } catch (error) {
-      console.error('Failed to log security event:', error);
+      logger.error('Failed to log security event:', error, { component: 'AuthContext', action: 'logSecurityEvent' });
     }
   };
 
@@ -151,7 +153,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const { error } = await supabase.auth.signOut();
     if (error) {
-      console.error('Error signing out:', error);
+      logger.error('Error signing out:', error, { component: 'AuthContext', action: 'signOut' });
     }
   };
 

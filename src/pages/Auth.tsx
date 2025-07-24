@@ -44,12 +44,13 @@ const Auth = () => {
       const { error } = await signIn(loginEmail, loginPassword);
       
       if (error) {
-        if (error.message.includes('Invalid login credentials')) {
+        const errorMessage = error && typeof error === 'object' && 'message' in error ? (error as { message: string }).message : String(error);
+        if (errorMessage.includes('Invalid login credentials')) {
           setError('Email ou mot de passe incorrect');
-        } else if (error.message.includes('Email not confirmed')) {
+        } else if (errorMessage.includes('Email not confirmed')) {
           setError('Veuillez confirmer votre email avant de vous connecter');
         } else {
-          setError(error.message);
+          setError(errorMessage);
         }
       } else {
         toast.success('Connexion réussie !');
@@ -71,12 +72,13 @@ const Auth = () => {
       const { error } = await signUp(signupEmail, signupPassword, signupFirstName, signupLastName);
       
       if (error) {
-        if (error.message.includes('User already registered')) {
+        const errorMessage = error && typeof error === 'object' && 'message' in error ? (error as { message: string }).message : String(error);
+        if (errorMessage.includes('User already registered')) {
           setError('Un compte existe déjà avec cette adresse email');
-        } else if (error.message.includes('Password should be at least')) {
+        } else if (errorMessage.includes('Password should be at least')) {
           setError('Le mot de passe doit contenir au moins 6 caractères');
         } else {
-          setError(error.message);
+          setError(errorMessage);
         }
       } else {
         toast.success('Compte créé ! Vérifiez votre email pour confirmer votre inscription.');

@@ -6,11 +6,13 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Globe, TrendingUp, Users, Wifi, Activity, Database, Zap, Globe2, Shield } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { useEnhancedIndicators, useRegionalIndicatorStats, useDataSourceStats } from "@/hooks/useEnhancedIndicators";
+import { logger } from '@/utils/logger';
+import type { TooltipFormatter } from '@/types/common';
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--accent))', 'hsl(var(--muted))'];
 
 export const GlobalIndicatorsWidget = () => {
-  console.log("GlobalIndicatorsWidget component is rendering with enhanced data!");
+  logger.debug("GlobalIndicatorsWidget component rendering", { component: 'GlobalIndicatorsWidget' });
   
   const { data: indicators, isLoading: indicatorsLoading } = useEnhancedIndicators({ year: 2024 });
   const { data: regionalStats, isLoading: regionalLoading } = useRegionalIndicatorStats();
@@ -180,7 +182,7 @@ export const GlobalIndicatorsWidget = () => {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: any, name: any) => [`${value} indicateurs`, 'Total']} />
+                <Tooltip formatter={((value: number, name: string) => [`${value} indicateurs`, 'Total']) as TooltipFormatter} />
               </PieChart>
             </ResponsiveContainer>
             <div className="grid grid-cols-2 gap-2 mt-4">
@@ -218,7 +220,7 @@ export const GlobalIndicatorsWidget = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip formatter={(value: any, name: any) => [`${value?.toFixed(1)}%`, name]} />
+                <Tooltip formatter={((value: number, name: string) => [`${value?.toFixed(1)}%`, name]) as TooltipFormatter} />
                 <Bar dataKey="internet" fill="hsl(var(--primary))" name="Internet %" />
                 <Bar dataKey="mobile" fill="hsl(var(--secondary))" name="Mobile %" />
                 <Bar dataKey="coverage4g" fill="hsl(var(--accent))" name="4G %" />

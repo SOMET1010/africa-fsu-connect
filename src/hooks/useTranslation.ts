@@ -407,7 +407,6 @@ export const useTranslation = () => {
 
   const t = (key: TranslationKey): string => {
     const translation = translations[currentLanguage]?.[key] || translations.fr[key] || key;
-    console.log(`Translation: ${key} -> ${translation} (lang: ${currentLanguage})`);
     return translation;
   };
 

@@ -1,0 +1,75 @@
+/**
+ * Centralized logging utility to replace console.log statements
+ * Provides structured logging with different levels and contexts
+ */
+
+export enum LogLevel {
+  DEBUG = 'debug',
+  INFO = 'info',
+  WARN = 'warn',
+  ERROR = 'error'
+}
+
+export interface LogContext {
+  component?: string;
+  action?: string;
+  userId?: string;
+  metadata?: Record<string, unknown>;
+}
+
+class Logger {
+  private isDevelopment = import.meta.env.DEV;
+
+  private formatMessage(level: LogLevel, message: string, context?: LogContext): string {
+    const timestamp = new Date().toISOString();
+    const contextStr = context ? ` [${Object.entries(context).map(([k, v]) => `${k}:${v}`).join(', ')}]` : '';
+    return `[${timestamp}] ${level.toUpperCase()}${contextStr}: ${message}`;
+  }
+
+  debug(message: string, context?: LogContext): void {
+    if (this.isDevelopment) {
+      console.debug(this.formatMessage(LogLevel.DEBUG, message, context));
+    }
+  }
+
+  info(message: string, context?: LogContext): void {
+    if (this.isDevelopment) {
+      console.info(this.formatMessage(LogLevel.INFO, message, context));
+    }
+  }
+
+  warn(message: string, context?: LogContext): void {
+    console.warn(this.formatMessage(LogLevel.WARN, message, context));
+  }
+
+  error(message: string, error?: Error | unknown, context?: LogContext): void {
+    const fullContext = { ...context, error: error instanceof Error ? error.message : String(error) };
+    console.error(this.formatMessage(LogLevel.ERROR, message, fullContext));
+    
+    // In production, you could send to error tracking service here
+    if (!this.isDevelopment && error) {
+      // TODO: Send to monitoring service (Sentry, LogRocket, etc.)
+    }
+  }
+
+  // Security-specific logging
+  security(action: string, context?: LogContext): void {
+    const securityContext = { ...context, category: 'security' };
+    this.info(`Security action: ${action}`, securityContext);
+  }
+
+  // Performance logging
+  performance(operation: string, duration: number, context?: LogContext): void {
+    const perfContext = { ...context, duration: `${duration}ms`, category: 'performance' };
+    this.info(`Performance: ${operation}`, perfContext);
+  }
+}
+
+export const logger = new Logger();
+
+// Development-only helper for migration
+export const devLog = (message: string, data?: unknown): void => {
+  if (import.meta.env.DEV) {
+    console.log(`[DEV] ${message}`, data);
+  }
+};

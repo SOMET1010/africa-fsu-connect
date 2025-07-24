@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,14 +19,8 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-
-interface OnboardingStep {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ElementType;
-  component: React.ComponentType<{ onNext: (data?: any) => void }>;
-}
+import { logger } from '@/utils/logger';
+import type { StepData, OnboardingStep } from '@/types/common';
 
 interface UserPreferences {
   experience: 'beginner' | 'intermediate' | 'expert';
@@ -37,7 +30,7 @@ interface UserPreferences {
   challenges: string;
 }
 
-const WelcomeStep = ({ onNext }: { onNext: (data?: any) => void }) => {
+const WelcomeStep = ({ onNext }: { onNext: (data?: StepData) => void }) => {
   const { profile } = useAuth();
   
   return (
@@ -78,7 +71,7 @@ const WelcomeStep = ({ onNext }: { onNext: (data?: any) => void }) => {
   );
 };
 
-const ExperienceStep = ({ onNext }: { onNext: (data?: any) => void }) => {
+const ExperienceStep = ({ onNext }: { onNext: (data?: StepData) => void }) => {
   const [experience, setExperience] = useState<string>('');
   
   return (
@@ -136,7 +129,7 @@ const ExperienceStep = ({ onNext }: { onNext: (data?: any) => void }) => {
   );
 };
 
-const GoalsStep = ({ onNext }: { onNext: (data?: any) => void }) => {
+const GoalsStep = ({ onNext }: { onNext: (data?: StepData) => void }) => {
   const [goals, setGoals] = useState<string[]>([]);
   
   const availableGoals = [
@@ -204,7 +197,7 @@ const GoalsStep = ({ onNext }: { onNext: (data?: any) => void }) => {
   );
 };
 
-const WorkStyleStep = ({ onNext }: { onNext: (data?: any) => void }) => {
+const WorkStyleStep = ({ onNext }: { onNext: (data?: StepData) => void }) => {
   const [workStyle, setWorkStyle] = useState<string>('');
   const [challenges, setChallenges] = useState('');
   
@@ -313,7 +306,7 @@ export function SmartOnboarding() {
     }
   ];
   
-  const handleNext = async (stepData?: any) => {
+  const handleNext = async (stepData?: StepData) => {
     if (stepData) {
       setPreferences(prev => ({ ...prev, ...stepData }));
     }
@@ -341,7 +334,7 @@ export function SmartOnboarding() {
       // Rediriger vers le dashboard personnalisé
       window.location.reload(); // Forcer le rechargement pour appliquer les changements
     } catch (error) {
-      console.error('Error completing onboarding:', error);
+      logger.error('Error completing onboarding:', error, { component: 'SmartOnboarding', action: 'completeOnboarding' });
     } finally {
       setIsCompleting(false);
     }
