@@ -726,7 +726,104 @@ const translations = {
     // Form validation
     'form.error': 'Error',
     'form.fill.required.fields': 'Please fill in all required fields.',
-    'form.required': 'required'
+    'form.required': 'required',
+
+    // Indicators Enrichment
+    enrichment: {
+      title: "Extended USF Indicators Enrichment",
+      classic: "Classic Enrichment",
+      standards: "International Standards",
+      description: "Automated retrieval of the latest USF indicators from major international APIs: World Bank, ITU DataHub, GSMA Intelligence, UN Statistics and African Union.",
+      startButton: "Launch Complete Enrichment",
+      inProgress: "Enrichment in progress...",
+      stats: {
+        indicators: "Indicators",
+        countries: "Countries Covered",
+        sources: "API Sources",
+        dataPoints: "Data Points"
+      },
+      sources: {
+        title: "Configured API Data Sources",
+        rateLimit: "Rate limit",
+        configured: "Configured"
+      },
+      categories: {
+        title: "Available Indicator Categories"
+      },
+      results: {
+        title: "Enrichment Results",
+        totalProcessed: "Total Processed",
+        newIndicators: "New",
+        updated: "Updated",
+        countries: "Countries",
+        errors: "Errors"
+      },
+      log: {
+        title: "Real-Time Enrichment Log",
+        starting: "Starting extended USF indicators enrichment...",
+        configured: "indicator types configured",
+        countriesProcess: "African countries to process",
+        connecting: "Connecting to external APIs:",
+        connected: "Connected",
+        finished: "Enrichment completed successfully!",
+        processed: "indicators processed in total",
+        added: "new indicators added",
+        updatedCount: "indicators updated",
+        countriesCovered: "African countries covered",
+        error: "Error during enrichment:"
+      },
+      progress: {
+        title: "Overall Progress:",
+        description: "Processing data from international APIs..."
+      },
+      toasts: {
+        started: "Extended enrichment started",
+        startedDesc: "Retrieving from World Bank, ITU, GSMA, UN Statistics and African Union...",
+        success: "Enrichment successful!",
+        error: "Error during enrichment",
+        errorDesc: "Check the console for more details"
+      }
+    },
+
+    // Forms and placeholders
+    forms: {
+      search: "Search",
+      searchEvents: "Search for an event...",
+      searchDiscussions: "Search in discussions...",
+      filter: "Filter",
+      allRegions: "All regions",
+      dataStatus: "Data status",
+      selectRegion: "Region",
+      selectCountry: "Select country",
+      selectRole: "Filter by role",
+      selectCategory: "All categories",
+      firstName: "First name",
+      lastName: "Last name",
+      email: "Email",
+      password: "Password",
+      passwordPlaceholder: "At least 6 characters",
+      twoFactorCode: "Enter 6-digit code",
+      customDashboard: "My custom dashboard",
+      customTheme: "My custom theme",
+      projectTitle: "Ex: Connected Villages - Phase 2",
+      projectDescription: "Describe the objectives, scope and beneficiaries of your project...",
+      indicators: "List key indicators for measuring project success...",
+      positionContext: "Describe the context and issues related to this position...",
+      positionProposal: "Clearly formulate the proposed African position...",
+      positionJustification: "Justify this position with arguments and data...",
+      documentDescription: "Describe the content and usefulness of this document...",
+      countryExample: "Ex: Ivory Coast",
+      categoryDescription: "Category description...",
+      objectivesPlaceholder: "Ex: Team coordination, project tracking, information sharing...",
+      newApproachesPlaceholder: "Ex: New approaches for rural connectivity",
+      selectAgency: "Select an agency",
+      eventAddress: "Event address",
+      eventDescription: "Describe the event...",
+      virtualEventLink: "https://...",
+      errorTitle: "Error",
+      errorFillFields: "Please fill in all required fields.",
+      cancel: "Cancel"
+    }
   }
 };
 

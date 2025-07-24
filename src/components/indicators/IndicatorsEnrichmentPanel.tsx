@@ -23,8 +23,10 @@ import {
 } from "lucide-react";
 import { indicatorsEnrichmentService, API_SOURCES, INDICATOR_MAPPINGS } from "@/services/indicatorsEnrichmentService";
 import { InternationalStandardsPanel } from "./InternationalStandardsPanel";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export const IndicatorsEnrichmentPanel = () => {
+  const { t } = useTranslation();
   const [isEnriching, setIsEnriching] = useState(false);
   const [progress, setProgress] = useState(0);
   const [enrichmentStats, setEnrichmentStats] = useState({
@@ -51,12 +53,12 @@ export const IndicatorsEnrichmentPanel = () => {
     let progressInterval: NodeJS.Timeout | null = null;
     
     try {
-      addLog("🚀 Démarrage de l'enrichissement étendu des indicateurs FSU...");
-      addLog(`📊 ${INDICATOR_MAPPINGS.length} types d'indicateurs configurés`);
-      addLog(`🌍 54 pays africains à traiter`);
+      addLog(`🚀 ${(t as any)('enrichment.log.starting')}`);
+      addLog(`📊 ${INDICATOR_MAPPINGS.length} ${(t as any)('enrichment.log.configured')}`);
+      addLog(`🌍 54 ${(t as any)('enrichment.log.countriesProcess')}`);
       
-      toast.info("Enrichissement étendu démarré", {
-        description: "Récupération depuis World Bank, ITU, GSMA, UN Statistics et African Union..."
+      toast.info((t as any)('enrichment.toasts.started'), {
+        description: (t as any)('enrichment.toasts.startedDesc')
       });
       
       // Simuler le progrès avec des étapes plus détaillées
@@ -70,12 +72,12 @@ export const IndicatorsEnrichmentPanel = () => {
         });
       }, 800);
       
-      addLog("🌐 Connexion aux APIs externes:");
-      addLog("  • World Bank API - ✅ Connecté");
-      addLog("  • ITU DataHub API - ✅ Connecté");
-      addLog("  • GSMA Intelligence API - ✅ Connecté");
-      addLog("  • UN Statistics API - ✅ Connecté");
-      addLog("  • African Union API - ✅ Connecté");
+      addLog(`🌐 ${(t as any)('enrichment.log.connecting')}`);
+      addLog(`  • World Bank API - ✅ ${(t as any)('enrichment.log.connected')}`);
+      addLog(`  • ITU DataHub API - ✅ ${(t as any)('enrichment.log.connected')}`);
+      addLog(`  • GSMA Intelligence API - ✅ ${(t as any)('enrichment.log.connected')}`);
+      addLog(`  • UN Statistics API - ✅ ${(t as any)('enrichment.log.connected')}`);
+      addLog(`  • African Union API - ✅ ${(t as any)('enrichment.log.connected')}`);
       
       // Lancer l'enrichissement
       const totalEnriched = await indicatorsEnrichmentService.enrichAllAfricanCountries();
@@ -97,21 +99,21 @@ export const IndicatorsEnrichmentPanel = () => {
         countriesProcessed: 54
       });
       
-      addLog(`✅ Enrichissement terminé avec succès!`);
-      addLog(`📈 ${totalEnriched} indicateurs traités au total`);
-      addLog(`🆕 ${newIndicators} nouveaux indicateurs ajoutés`);
-      addLog(`🔄 ${updatedIndicators} indicateurs mis à jour`);
-      addLog(`🌍 54 pays africains couverts`);
+      addLog(`✅ ${(t as any)('enrichment.log.finished')}`);
+      addLog(`📈 ${totalEnriched} ${(t as any)('enrichment.log.processed')}`);
+      addLog(`🆕 ${newIndicators} ${(t as any)('enrichment.log.added')}`);
+      addLog(`🔄 ${updatedIndicators} ${(t as any)('enrichment.log.updatedCount')}`);
+      addLog(`🌍 54 ${(t as any)('enrichment.log.countriesCovered')}`);
       
-      toast.success("Enrichissement réussi!", {
-        description: `${totalEnriched} indicateurs traités sur 54 pays africains`
+      toast.success((t as any)('enrichment.toasts.success'), {
+        description: `${totalEnriched} ${(t as any)('enrichment.log.processed')} sur 54 ${(t as any)('enrichment.log.countriesCovered')}`
       });
       
     } catch (error) {
       console.error("Enrichment error:", error);
-      addLog(`❌ Erreur lors de l'enrichissement: ${error}`);
-      toast.error("Erreur lors de l'enrichissement", {
-        description: "Vérifiez la console pour plus de détails"
+      addLog(`❌ ${(t as any)('enrichment.log.error')} ${error}`);
+      toast.error((t as any)('enrichment.toasts.error'), {
+        description: (t as any)('enrichment.toasts.errorDesc')
       });
       // Clear interval on error
       if (progressInterval) {
@@ -137,11 +139,11 @@ export const IndicatorsEnrichmentPanel = () => {
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="legacy" className="flex items-center gap-2">
           <Database className="h-4 w-4" />
-          Enrichissement Classique
+          {(t as any)('enrichment.classic')}
         </TabsTrigger>
         <TabsTrigger value="standards" className="flex items-center gap-2">
           <Globe2 className="h-4 w-4" />
-          Standards Internationaux
+          {(t as any)('enrichment.standards')}
         </TabsTrigger>
       </TabsList>
       
@@ -151,45 +153,44 @@ export const IndicatorsEnrichmentPanel = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Zap className="h-5 w-5 text-primary" />
-              Enrichissement Étendu des Indicateurs FSU
+              {(t as any)('enrichment.title')}
             </CardTitle>
             <div className="flex flex-wrap gap-2 mt-2">
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Target className="h-3 w-3" />
-                {totalConfiguredIndicators} Indicateurs
+                {totalConfiguredIndicators} {t('enrichment.stats.indicators')}
               </Badge>
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Globe className="h-3 w-3" />
-                54 Pays Africains
+                54 {t('enrichment.stats.countries')}
               </Badge>
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Database className="h-3 w-3" />
-                5 Sources API
+                5 {t('enrichment.stats.sources')}
               </Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Récupération automatisée des derniers indicateurs FSU depuis les APIs internationales 
-              majeures : Banque Mondiale, UIT DataHub, GSMA Intelligence, Statistiques ONU et Union Africaine.
+              {t('enrichment.description')}
             </p>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-muted/30 rounded-lg">
               <div className="text-center">
                 <div className="text-lg font-bold text-primary">{totalConfiguredIndicators}</div>
-                <div className="text-xs text-muted-foreground">Types d'Indicateurs</div>
+                <div className="text-xs text-muted-foreground">{t('enrichment.stats.indicators')}</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold text-secondary">54</div>
-                <div className="text-xs text-muted-foreground">Pays Couverts</div>
+                <div className="text-xs text-muted-foreground">{t('enrichment.stats.countries')}</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold text-accent">5</div>
-                <div className="text-xs text-muted-foreground">Sources API</div>
+                <div className="text-xs text-muted-foreground">{t('enrichment.stats.sources')}</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold text-chart-1">2.7k+</div>
-                <div className="text-xs text-muted-foreground">Points de Données</div>
+                <div className="text-xs text-muted-foreground">{t('enrichment.stats.dataPoints')}</div>
               </div>
             </div>
             
@@ -203,29 +204,29 @@ export const IndicatorsEnrichmentPanel = () => {
                 {isEnriching ? (
                   <>
                     <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                    Enrichissement en cours...
+                    {t('enrichment.inProgress')}
                   </>
                 ) : (
                   <>
                     <Download className="mr-2 h-4 w-4" />
-                    Lancer l'Enrichissement Complet
+                    {t('enrichment.startButton')}
                   </>
                 )}
               </Button>
             </div>
             
-            {isEnriching && (
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Progression Globale:</span>
-                  <span>{progress}%</span>
+              {isEnriching && (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>{t('enrichment.progress.title')}</span>
+                    <span>{progress}%</span>
+                  </div>
+                  <Progress value={progress} className="w-full h-2" />
+                  <div className="text-xs text-muted-foreground text-center">
+                    {t('enrichment.progress.description')}
+                  </div>
                 </div>
-                <Progress value={progress} className="w-full h-2" />
-                <div className="text-xs text-muted-foreground text-center">
-                  Traitement des données depuis les APIs internationales...
-                </div>
-              </div>
-            )}
+              )}
           </CardContent>
         </Card>
 
