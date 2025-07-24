@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface QuickAction {
   id: string;
@@ -29,22 +30,23 @@ interface QuickAction {
 export function QuickActionsCard() {
   const { profile } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const quickActions: QuickAction[] = [
     {
       id: "new-project",
-      title: "Nouveau Projet FSU",
-      description: "Lancer une nouvelle initiative",
+      title: t('actions.new.project'),
+      description: t('actions.new.project.desc'),
       icon: Plus,
       route: "/projects",
       variant: "default",
       roles: ["contributeur", "editeur", "admin_pays", "super_admin"],
-      badge: "Priorité"
+      badge: t('actions.priority')
     },
     {
       id: "documents",
-      title: "Partager Document",
-      description: "Ajouter une ressource",
+      title: t('actions.share.document'),
+      description: t('actions.share.document.desc'),
       icon: FileText,
       route: "/submit",
       variant: "outline",
@@ -52,8 +54,8 @@ export function QuickActionsCard() {
     },
     {
       id: "organizations",
-      title: "Explorer Organisations",
-      description: "Découvrir les partenaires",
+      title: t('actions.explore.organizations'),
+      description: t('actions.explore.organizations.desc'),
       icon: Building2,
       route: "/organizations",
       variant: "outline",
@@ -61,8 +63,8 @@ export function QuickActionsCard() {
     },
     {
       id: "events",
-      title: "Planifier Événement",
-      description: "Organiser une rencontre",
+      title: t('actions.plan.event'),
+      description: t('actions.plan.event.desc'),
       icon: Calendar,
       route: "/events",
       variant: "outline",
@@ -70,8 +72,8 @@ export function QuickActionsCard() {
     },
     {
       id: "forum",
-      title: "Nouvelle Discussion",
-      description: "Démarrer un échange",
+      title: t('actions.new.discussion'),
+      description: t('actions.new.discussion.desc'),
       icon: MessageSquare,
       route: "/forum",
       variant: "outline",
@@ -79,8 +81,8 @@ export function QuickActionsCard() {
     },
     {
       id: "resources",
-      title: "Consulter Ressources",
-      description: "Accéder aux guides",
+      title: t('actions.consult.resources'),
+      description: t('actions.consult.resources.desc'),
       icon: BookOpen,
       route: "/docs",
       variant: "secondary",
@@ -104,10 +106,10 @@ export function QuickActionsCard() {
           <div className="w-6 h-6 bg-primary/20 rounded-md flex items-center justify-center">
             <Plus className="h-4 w-4 text-primary" />
           </div>
-          <span>Actions Rapides</span>
+          <span>{t('actions.title')}</span>
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Accès direct aux fonctionnalités principales
+          {t('actions.subtitle')}
         </p>
       </CardHeader>
       
@@ -154,7 +156,7 @@ export function QuickActionsCard() {
             onClick={() => navigate("/profile")}
           >
             <Users className="h-4 w-4 mr-2" />
-            Personnaliser mes actions
+            {t('actions.customize')}
           </Button>
         </div>
       </CardContent>

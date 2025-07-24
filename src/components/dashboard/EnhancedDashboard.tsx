@@ -10,56 +10,56 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { CommandPalette } from "@/components/ui/command-palette";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export const EnhancedDashboard = () => {
   const { profile } = useAuth();
   const navigate = useNavigate();
-  
-  console.log("EnhancedDashboard rendering, profile:", profile);
+  const { t } = useTranslation();
   
   const [dashboardStats, setDashboardStats] = useState([
     {
-      title: "Projets Actifs",
+      title: t('dashboard.stats.active.projects'),
       value: 12,
       icon: Target,
-      trend: { value: 8, label: "Cette semaine", positive: true },
+      trend: { value: 8, label: t('dashboard.stats.this.week'), positive: true },
       prefix: "",
       suffix: "",
-      description: "Projets en cours de développement"
+      description: t('dashboard.stats.active.projects.desc')
     },
     {
-      title: "Collaborateurs",
+      title: t('dashboard.stats.collaborators'),
       value: 248,
       icon: Users,
-      trend: { value: 12, label: "Ce mois", positive: true },
+      trend: { value: 12, label: t('dashboard.stats.this.month'), positive: true },
       prefix: "",
       suffix: "",
-      description: "Membres actifs de la communauté"
+      description: t('dashboard.stats.collaborators.desc')
     },
     {
-      title: "Documents",
+      title: t('dashboard.stats.documents'),
       value: 89,
       icon: FileText,
-      trend: { value: 15, label: "Documents ajoutés", positive: true },
+      trend: { value: 15, label: t('dashboard.stats.documents.added'), positive: true },
       prefix: "",
       suffix: "",
-      description: "Ressources disponibles"
+      description: t('dashboard.stats.documents.desc')
     },
     {
-      title: "Événements",
+      title: t('dashboard.stats.events'),
       value: 5,
       icon: Calendar,
-      trend: { value: -2, label: "Cette semaine", positive: false },
+      trend: { value: -2, label: t('dashboard.stats.this.week'), positive: false },
       prefix: "",
       suffix: "",
-      description: "Prochaines activités"
+      description: t('dashboard.stats.events.desc')
     }
   ]);
 
   const quickActions = [
     {
-      title: "Nouveau Projet",
-      description: "Lancez une nouvelle initiative FSU",
+      title: t('actions.new.project'),
+      description: t('actions.new.project.description'),
       icon: Target,
       href: "/projects?action=create",
       stats: [
@@ -68,8 +68,8 @@ export const EnhancedDashboard = () => {
       ]
     },
     {
-      title: "Forum Communauté",
-      description: "Participez aux discussions",
+      title: t('actions.community.forum'),
+      description: t('actions.community.forum.description'),
       icon: MessageSquare,
       href: "/forum",
       stats: [
@@ -78,8 +78,8 @@ export const EnhancedDashboard = () => {
       ]
     },
     {
-      title: "Centre de Ressources",
-      description: "Explorez la documentation",
+      title: t('actions.resource.center'),
+      description: t('actions.resource.center.description'),
       icon: FileText,
       href: "/resources",
       stats: [
@@ -88,8 +88,8 @@ export const EnhancedDashboard = () => {
       ]
     },
     {
-      title: "Calendrier Événements",
-      description: "Prochaines activités",
+      title: t('actions.events.calendar'),
+      description: t('actions.events.calendar.description'),
       icon: Calendar,
       href: "/events",
       stats: [
@@ -101,30 +101,30 @@ export const EnhancedDashboard = () => {
 
   const recentActivity = [
     { 
-      action: "Projet créé", 
+      action: t('dashboard.activity.project.created'), 
       title: "Initiative Connectivité Rurale 2024", 
-      time: "Il y a 2h", 
+      time: t('dashboard.activity.ago.2h'), 
       type: "project",
       user: "Marie Kouassi"
     },
     { 
-      action: "Document ajouté", 
+      action: t('dashboard.activity.document.added'), 
       title: "Guide Implementation FSU", 
-      time: "Il y a 4h", 
+      time: t('dashboard.activity.ago.4h'), 
       type: "document",
       user: "Ahmed Diallo"
     },
     { 
-      action: "Discussion créée", 
+      action: t('dashboard.activity.discussion.created'), 
       title: "Stratégies Développement Digital", 
-      time: "Hier", 
+      time: t('dashboard.activity.ago.yesterday'), 
       type: "forum",
       user: "Grace Okonkwo"
     },
     { 
-      action: "Événement planifié", 
+      action: t('dashboard.activity.event.planned'), 
       title: "Webinaire Innovation Télécom", 
-      time: "Il y a 1 jour", 
+      time: t('dashboard.activity.ago.1day'), 
       type: "event",
       user: "Jean Mukendi"
     }
@@ -137,18 +137,21 @@ export const EnhancedDashboard = () => {
         {/* Hero Section */}
         <ScrollReveal direction="fade">
           <HeroSection
-            title={`Bonjour, ${profile?.first_name || 'Collaborateur'} ! 👋`}
-            subtitle="Plateforme FSU"
-            description="Votre espace de travail collaboratif pour le service universel des télécommunications vous attend. Découvrez vos projets, connectez-vous avec la communauté et accédez à vos ressources."
+            title={profile?.first_name ? 
+              t('dashboard.welcome').replace('{name}', profile.first_name) : 
+              t('dashboard.welcome.default')
+            }
+            subtitle={t('dashboard.title')}
+            description={t('dashboard.description')}
             actions={[
               {
-                label: "Actions Rapides",
+                label: t('actions.quick.actions'),
                 onClick: () => navigate("/profile"),
                 icon: <Zap className="h-5 w-5" />,
                 variant: "default"
               },
               {
-                label: "Préférences",
+                label: t('actions.preferences'),
                 onClick: () => navigate("/preferences"),
                 icon: <Settings className="h-4 w-4" />,
                 variant: "outline"
@@ -183,12 +186,12 @@ export const EnhancedDashboard = () => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold font-poppins text-foreground">Actions Rapides</h2>
-                <p className="text-muted-foreground font-inter">Accédez rapidement à vos outils essentiels</p>
+                <h2 className="text-2xl font-bold font-poppins text-foreground">{t('dashboard.quick.actions')}</h2>
+                <p className="text-muted-foreground font-inter">{t('dashboard.quick.actions.desc')}</p>
               </div>
               <Badge variant="secondary" className="hidden sm:flex items-center gap-1">
                 <Target className="h-3 w-3" />
-                4 raccourcis disponibles
+                {t('dashboard.shortcuts.available').replace('{count}', '4')}
               </Badge>
             </div>
             
@@ -220,15 +223,15 @@ export const EnhancedDashboard = () => {
               <div>
                 <h3 className="text-xl font-bold font-poppins flex items-center gap-2 text-foreground">
                   <TrendingUp className="h-5 w-5 text-primary" />
-                  Activité Récente
+                  {t('dashboard.activity.recent')}
                 </h3>
                 <p className="text-sm text-muted-foreground font-inter mt-1">
-                  Les dernières interactions de votre communauté FSU
+                  {t('dashboard.activity.desc')}
                 </p>
               </div>
               <ModernButton variant="outline" size="sm">
                 <Bell className="h-4 w-4 mr-2" />
-                Voir tout
+                {t('dashboard.activity.view.all')}
               </ModernButton>
             </div>
             
@@ -247,12 +250,12 @@ export const EnhancedDashboard = () => {
                     <div className="flex items-center gap-2 mt-1">
                       <p className="text-sm text-muted-foreground">{activity.time}</p>
                       <span className="text-muted-foreground">•</span>
-                      <p className="text-sm font-medium text-muted-foreground">par {activity.user}</p>
+                      <p className="text-sm font-medium text-muted-foreground">{t('dashboard.activity.by')} {activity.user}</p>
                     </div>
                   </div>
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <ModernButton variant="ghost" size="sm">
-                      Voir
+                      {t('dashboard.activity.view')}
                     </ModernButton>
                   </div>
                 </div>
