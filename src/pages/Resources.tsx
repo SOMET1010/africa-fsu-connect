@@ -128,9 +128,9 @@ const ResourcesContent = () => {
         {/* Hero Section */}
         <ScrollReveal direction="fade">
           <HeroSection
-            title="Centre de Ressources FSU"
-            subtitle="Documentation Collaborative"
-            description="Accédez à une bibliothèque complète de documents, guides, rapports et ressources pour le service universel des télécommunications. Partagez vos connaissances et explorez les meilleures pratiques."
+            title={t('resources.title')}
+            subtitle={t('resources.subtitle')}
+            description={t('resources.description')}
             actions={[
               {
                 label: "Ajouter Document",

@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import FileUpload from "@/components/shared/FileUpload";
 import ContextualNavigation from "@/components/shared/ContextualNavigation";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/hooks/useTranslation";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -21,13 +22,14 @@ const Submit = () => {
   const [formData, setFormData] = useState<any>({});
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const submissions = [
     {
       id: 1,
       type: "Projet",
       title: "Extension 4G - Zones Rurales",
-      status: "Brouillon",
+      status: t('submit.status.draft'),
       lastModified: "2024-01-15",
       reviewer: null
     },
@@ -35,7 +37,7 @@ const Submit = () => {
       id: 2,
       type: "Position",
       title: "Harmonisation Réglementaire CEDEAO",
-      status: "En révision",
+      status: t('submit.status.review'),
       lastModified: "2024-01-10",
       reviewer: "Dr. Amina Kone"
     },
@@ -43,7 +45,7 @@ const Submit = () => {
       id: 3,
       type: "Financement",
       title: "Villages Connectés Phase 3",
-      status: "Approuvé",
+      status: t('submit.status.approved'),
       lastModified: "2024-01-05",
       reviewer: "Comité Technique"
     }
@@ -52,29 +54,29 @@ const Submit = () => {
   const submissionTypes = [
     {
       id: "projet",
-      title: "Fiche Projet FSU",
-      description: "Soumettez un nouveau projet pour financement ou partage d'expérience",
+      title: t('submit.type.project'),
+      description: t('submit.type.project.description'),
       icon: FileText,
       fields: ["titre", "description", "budget", "timeline", "kpis", "documents"]
     },
     {
       id: "position",
-      title: "Position Commune",
-      description: "Contribuez à l'élaboration d'une position commune africaine",
+      title: t('submit.type.position'),
+      description: t('submit.type.position.description'),
       icon: User,
       fields: ["sujet", "position", "justification", "impact", "collaborateurs"]
     },
     {
       id: "regulation",
-      title: "Proposition Réglementaire",
-      description: "Proposez des améliorations au cadre réglementaire FSU",
+      title: t('submit.type.regulation'),
+      description: t('submit.type.regulation.description'),
       icon: FileText,
       fields: ["domaine", "proposition", "analyse", "recommandations"]
     },
     {
       id: "financement",
-      title: "Demande de Financement",
-      description: "Demandez un financement pour votre projet FSU",
+      title: t('submit.type.funding'),
+      description: t('submit.type.funding.description'),
       icon: Upload,
       fields: ["projet", "montant", "justification", "plan", "garanties"]
     }
@@ -82,13 +84,13 @@ const Submit = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Brouillon":
+      case t('submit.status.draft'):
         return "bg-gray-100 text-gray-800 border-gray-200";
-      case "En révision":
+      case t('submit.status.review'):
         return "bg-blue-100 text-blue-800 border-blue-200";
-      case "Approuvé":
+      case t('submit.status.approved'):
         return "bg-green-100 text-green-800 border-green-200";
-      case "Rejeté":
+      case t('submit.status.rejected'):
         return "bg-red-100 text-red-800 border-red-200";
       default:
         return "bg-gray-100 text-gray-800 border-gray-200";
@@ -97,11 +99,11 @@ const Submit = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "Brouillon":
+      case t('submit.status.draft'):
         return <Clock className="h-4 w-4" />;
-      case "En révision":
+      case t('submit.status.review'):
         return <AlertCircle className="h-4 w-4" />;
-      case "Approuvé":
+      case t('submit.status.approved'):
         return <CheckCircle className="h-4 w-4" />;
       default:
         return <Clock className="h-4 w-4" />;
@@ -110,23 +112,23 @@ const Submit = () => {
 
   const handleSaveDraft = () => {
     toast({
-      title: "Brouillon sauvegardé",
-      description: "Votre brouillon a été sauvegardé avec succès.",
+      title: t('submit.toast.draft.saved'),
+      description: t('submit.toast.draft.saved.description'),
     });
   };
 
   const handleSubmit = () => {
     toast({
-      title: "Soumission envoyée",
-      description: "Votre soumission a été envoyée pour révision.",
+      title: t('submit.toast.submitted'),
+      description: t('submit.toast.submitted.description'),
     });
   };
 
   const handleFileUpload = (files: File[]) => {
     setUploadedFiles(prev => [...prev, ...files]);
     toast({
-      title: "Fichiers ajoutés",
-      description: `${files.length} fichier(s) ajouté(s) avec succès.`,
+      title: t('submit.toast.files.added'),
+      description: `${files.length}${t('submit.toast.files.added.description')}`,
     });
   };
 
@@ -142,8 +144,8 @@ const Submit = () => {
         {/* Header */}
         <div className="animate-fade-in">
           <PageHeader
-            title="Formulaires de Soumission"
-            description="Soumettez vos projets, positions communes, propositions réglementaires ou demandes de financement à la communauté FSU africaine."
+            title={t('submit.title')}
+            description={t('submit.description')}
           />
         </div>
 
@@ -151,9 +153,9 @@ const Submit = () => {
         <div className="animate-fade-in" style={{ animationDelay: '100ms' }}>
           <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle>Mes Soumissions</CardTitle>
+              <CardTitle>{t('submit.my.submissions')}</CardTitle>
               <CardDescription>
-                Historique de vos soumissions et leur statut
+                {t('submit.my.submissions.description')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -167,11 +169,11 @@ const Submit = () => {
                       <div>
                         <p className="font-medium">{submission.title}</p>
                         <p className="text-sm text-muted-foreground">
-                          {submission.type} • Modifié le {new Date(submission.lastModified).toLocaleDateString('fr-FR')}
+                          {submission.type} • {t('submit.modified')} {new Date(submission.lastModified).toLocaleDateString('fr-FR')}
                         </p>
                         {submission.reviewer && (
                           <p className="text-sm text-muted-foreground">
-                            Réviseur: {submission.reviewer}
+                            {t('submit.reviewer')}: {submission.reviewer}
                           </p>
                         )}
                       </div>
@@ -181,7 +183,7 @@ const Submit = () => {
                         {submission.status}
                       </Badge>
                       <Button variant="outline" size="sm" className="hover-scale">
-                        Voir
+                        {t('submit.action.view')}
                       </Button>
                     </div>
                   </div>
@@ -219,22 +221,22 @@ const Submit = () => {
             <TabsContent value="projet" className="space-y-6">
               <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
                 <CardHeader>
-                  <CardTitle>Fiche Projet FSU</CardTitle>
+                  <CardTitle>{t('submit.project.title')}</CardTitle>
                   <CardDescription>
-                    Remplissez les informations de votre projet FSU pour soumission et évaluation
+                    {t('submit.project.description.detail')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="titre">Titre du Projet</Label>
-                      <Input id="titre" placeholder="Ex: Villages Connectés - Phase 2" />
+                      <Label htmlFor="titre">{t('submit.project.title.field')}</Label>
+                      <Input id="titre" placeholder={t('submit.project.title.placeholder')} />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="pays">Pays</Label>
+                      <Label htmlFor="pays">{t('submit.project.country')}</Label>
                       <Select>
                         <SelectTrigger>
-                          <SelectValue placeholder="Sélectionner le pays" />
+                          <SelectValue placeholder={t('submit.project.country.placeholder')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="ci">Côte d'Ivoire</SelectItem>
@@ -306,11 +308,11 @@ const Submit = () => {
                   <div className="flex gap-4 pt-4">
                     <Button variant="outline" className="flex-1 hover-scale" onClick={handleSaveDraft}>
                       <Save className="h-4 w-4 mr-2" />
-                      Enregistrer en Brouillon
+                      {t('submit.action.save.draft')}
                     </Button>
                     <Button className="flex-1 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover-scale" onClick={handleSubmit}>
                       <Send className="h-4 w-4 mr-2" />
-                      Soumettre pour Révision
+                      {t('submit.action.submit.review')}
                     </Button>
                   </div>
                 </CardContent>
