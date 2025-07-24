@@ -243,15 +243,15 @@ const ModernHeader = () => {
                     </GlassCard>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-border/50" />
-                  <DropdownMenuItem asChild className="cursor-pointer">
-                    <Link to="/profile" className="flex items-center">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <Link to="/profile" className="flex items-center w-full">
                       <User className="mr-2 h-4 w-4" />
                       <span>{t('nav.profile')}</span>
                     </Link>
                   </DropdownMenuItem>
                   {isAdmin() && (
-                    <DropdownMenuItem asChild className="cursor-pointer">
-                      <Link to="/admin" className="flex items-center">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Link to="/admin" className="flex items-center w-full">
                         <Settings className="mr-2 h-4 w-4" />
                         <span>{t('nav.admin')}</span>
                       </Link>
@@ -266,13 +266,13 @@ const ModernHeader = () => {
               </DropdownMenu>
             ) : (
               <div className="flex items-center space-x-2">
-                <ModernButton asChild variant="ghost" size="sm" className="hidden sm:flex">
+                <ModernButton variant="ghost" size="sm" className="hidden sm:flex" asChild>
                   <Link to="/auth">
                     {t('auth.login')}
                   </Link>
                 </ModernButton>
-                <ModernButton asChild size="sm" variant="default">
-                  <Link to="/auth" className="flex items-center space-x-2">
+                <ModernButton size="sm" variant="default" asChild>
+                  <Link to="/auth">
                     <LogIn className="h-4 w-4 mr-1" />
                     <span>{t('nav.start')}</span>
                   </Link>
