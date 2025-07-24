@@ -4,8 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Globe, Users, Target, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PageContainer } from "@/components/layout/PageContainer";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function HeroSection() {
+  const { t } = useTranslation();
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Professional gradient background */}
@@ -28,19 +30,19 @@ export default function HeroSection() {
               className="px-4 py-2 bg-background/80 backdrop-blur-sm border-primary/20 text-primary font-medium"
             >
               <Sparkles className="h-4 w-4 mr-2" />
-              Plateforme de Coopération Digitale
+              {t('hero.badge')}
             </Badge>
           </div>
 
           {/* Main heading with gradient text */}
           <div className="space-y-4">
             <h1 className="text-5xl lg:text-7xl font-bold tracking-tight">
-              <span className="gradient-text">SUTEL</span>
+              <span className="gradient-text">{t('hero.title.line1')}</span>
               <br />
-              <span className="text-foreground">Coopération</span>
+              <span className="text-foreground">{t('hero.title.line2')}</span>
             </h1>
             <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Connecter les institutions africaines pour une transformation digitale collaborative et durable
+              {t('hero.subtitle')}
             </p>
           </div>
 
@@ -51,7 +53,7 @@ export default function HeroSection() {
                 <Globe className="h-6 w-6 text-primary" />
               </div>
               <div className="text-2xl font-bold text-foreground">15+</div>
-              <div className="text-sm text-muted-foreground">Pays connectés</div>
+              <div className="text-sm text-muted-foreground">{t('hero.stats.countries')}</div>
             </div>
             
             <div className="text-center space-y-2">
@@ -59,7 +61,7 @@ export default function HeroSection() {
                 <Users className="h-6 w-6 text-accent" />
               </div>
               <div className="text-2xl font-bold text-foreground">500+</div>
-              <div className="text-sm text-muted-foreground">Organisations</div>
+              <div className="text-sm text-muted-foreground">{t('hero.stats.organizations')}</div>
             </div>
             
             <div className="text-center space-y-2">
@@ -67,7 +69,7 @@ export default function HeroSection() {
                 <Target className="h-6 w-6 text-warning" />
               </div>
               <div className="text-2xl font-bold text-foreground">100+</div>
-              <div className="text-sm text-muted-foreground">Projets actifs</div>
+              <div className="text-sm text-muted-foreground">{t('common.projects')}</div>
             </div>
           </div>
 
@@ -79,7 +81,7 @@ export default function HeroSection() {
               className="px-8 py-4 text-base font-medium shadow-elegant hover:shadow-xl transition-all duration-200"
             >
               <Link to="/auth">
-                Commencer maintenant
+                {t('common.get.started')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
@@ -91,7 +93,7 @@ export default function HeroSection() {
               className="px-8 py-4 text-base font-medium bg-background/80 backdrop-blur-sm border-border hover:bg-muted/50"
             >
               <Link to="/organizations">
-                Explorer la plateforme
+                {t('common.discover')}
               </Link>
             </Button>
           </div>

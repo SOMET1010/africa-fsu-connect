@@ -64,13 +64,13 @@ export const RegionalMapSection = () => {
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4 px-4 py-2 bg-gradient-to-r from-primary/10 to-blue-500/10 border-primary/20">
             <MapPin className="w-4 h-4 mr-2" />
-            Cartographie Interactive
+            {t('sutel.interactive.map')}
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Réseau SUTEL Africain
+            {t('sutel.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Explorez la présence des agences de service universel à travers le continent africain
+            {t('sutel.subtitle')}
           </p>
         </div>
 
@@ -82,7 +82,7 @@ export const RegionalMapSection = () => {
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
                     <Globe className="h-5 w-5 text-primary" />
-                    Carte Interactive SUTEL
+                    {t('sutel.interactive.map')}
                   </CardTitle>
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary">
@@ -91,7 +91,7 @@ export const RegionalMapSection = () => {
                     <Button asChild variant="outline" size="sm">
                       <Link to="/organizations" className="flex items-center gap-1">
                         <Eye className="h-4 w-4" />
-                        Voir tout
+                        {t('common.view')}
                       </Link>
                     </Button>
                   </div>
