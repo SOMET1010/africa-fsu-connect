@@ -53,12 +53,12 @@ export const IndicatorsEnrichmentPanel = () => {
     let progressInterval: NodeJS.Timeout | null = null;
     
     try {
-      addLog(`🚀 ${(t as any)('enrichment.log.starting')}`);
-      addLog(`📊 ${INDICATOR_MAPPINGS.length} ${(t as any)('enrichment.log.configured')}`);
-      addLog(`🌍 54 ${(t as any)('enrichment.log.countriesProcess')}`);
+      addLog(`🚀 ${t('enrichment.log.starting')}`);
+      addLog(`📊 ${INDICATOR_MAPPINGS.length} ${t('enrichment.log.configured')}`);
+      addLog(`🌍 54 ${t('enrichment.log.countries.process')}`);
       
-      toast.info((t as any)('enrichment.toasts.started'), {
-        description: (t as any)('enrichment.toasts.startedDesc')
+      toast.info(t('enrichment.toast.started'), {
+        description: t('enrichment.toast.started.desc')
       });
       
       // Simuler le progrès avec des étapes plus détaillées
@@ -72,12 +72,12 @@ export const IndicatorsEnrichmentPanel = () => {
         });
       }, 800);
       
-      addLog(`🌐 ${(t as any)('enrichment.log.connecting')}`);
-      addLog(`  • World Bank API - ✅ ${(t as any)('enrichment.log.connected')}`);
-      addLog(`  • ITU DataHub API - ✅ ${(t as any)('enrichment.log.connected')}`);
-      addLog(`  • GSMA Intelligence API - ✅ ${(t as any)('enrichment.log.connected')}`);
-      addLog(`  • UN Statistics API - ✅ ${(t as any)('enrichment.log.connected')}`);
-      addLog(`  • African Union API - ✅ ${(t as any)('enrichment.log.connected')}`);
+      addLog(`🌐 ${t('enrichment.log.connecting')}`);
+      addLog(`  • World Bank API - ✅ ${t('enrichment.log.connected')}`);
+      addLog(`  • ITU DataHub API - ✅ ${t('enrichment.log.connected')}`);
+      addLog(`  • GSMA Intelligence API - ✅ ${t('enrichment.log.connected')}`);
+      addLog(`  • UN Statistics API - ✅ ${t('enrichment.log.connected')}`);
+      addLog(`  • African Union API - ✅ ${t('enrichment.log.connected')}`);
       
       // Lancer l'enrichissement
       const totalEnriched = await indicatorsEnrichmentService.enrichAllAfricanCountries();
@@ -99,21 +99,21 @@ export const IndicatorsEnrichmentPanel = () => {
         countriesProcessed: 54
       });
       
-      addLog(`✅ ${(t as any)('enrichment.log.finished')}`);
-      addLog(`📈 ${totalEnriched} ${(t as any)('enrichment.log.processed')}`);
-      addLog(`🆕 ${newIndicators} ${(t as any)('enrichment.log.added')}`);
-      addLog(`🔄 ${updatedIndicators} ${(t as any)('enrichment.log.updatedCount')}`);
-      addLog(`🌍 54 ${(t as any)('enrichment.log.countriesCovered')}`);
+      addLog(`✅ ${t('enrichment.log.finished')}`);
+      addLog(`📈 ${totalEnriched} ${t('enrichment.log.processed')}`);
+      addLog(`🆕 ${newIndicators} ${t('enrichment.log.added')}`);
+      addLog(`🔄 ${updatedIndicators} ${t('enrichment.log.updated.count')}`);
+      addLog(`🌍 54 ${t('enrichment.log.countries.covered')}`);
       
-      toast.success((t as any)('enrichment.toasts.success'), {
-        description: `${totalEnriched} ${(t as any)('enrichment.log.processed')} sur 54 ${(t as any)('enrichment.log.countriesCovered')}`
+      toast.success(t('enrichment.toast.success'), {
+        description: `${totalEnriched} ${t('enrichment.log.processed')} sur 54 ${t('enrichment.log.countries.covered')}`
       });
       
     } catch (error) {
       console.error("Enrichment error:", error);
-      addLog(`❌ ${(t as any)('enrichment.log.error')} ${error}`);
-      toast.error((t as any)('enrichment.toasts.error'), {
-        description: (t as any)('enrichment.toasts.errorDesc')
+      addLog(`❌ ${t('enrichment.log.error')} ${error}`);
+      toast.error(t('enrichment.toast.error'), {
+        description: t('enrichment.toast.error.desc')
       });
       // Clear interval on error
       if (progressInterval) {
@@ -139,11 +139,11 @@ export const IndicatorsEnrichmentPanel = () => {
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="legacy" className="flex items-center gap-2">
           <Database className="h-4 w-4" />
-          {(t as any)('enrichment.classic')}
+          {t('enrichment.classic')}
         </TabsTrigger>
         <TabsTrigger value="standards" className="flex items-center gap-2">
           <Globe2 className="h-4 w-4" />
-          {(t as any)('enrichment.standards')}
+          {t('enrichment.standards')}
         </TabsTrigger>
       </TabsList>
       
