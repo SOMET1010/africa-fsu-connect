@@ -8,6 +8,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { HeroSection } from "@/components/ui/hero-section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { Badge } from "@/components/ui/badge";
+import { PageContainer } from "@/components/layout/PageContainer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDashboardStats } from "@/hooks/useDashboardStats";
 import { Link } from "react-router-dom";
@@ -137,16 +138,16 @@ export const ModernDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="animate-pulse space-y-8">
+        <PageContainer size="xl" padding="md">
+          <div className="animate-pulse space-y-6">
             <div className="h-32 bg-muted/50 rounded-2xl"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="h-40 bg-muted/50 rounded-2xl"></div>
               ))}
             </div>
           </div>
-        </div>
+        </PageContainer>
       </div>
     );
   }
@@ -156,7 +157,7 @@ export const ModernDashboard = () => {
       {/* Subtle Background Effect */}
       <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       
-      <div className="container mx-auto px-4 py-8 space-y-8 relative z-10">
+      <PageContainer size="xl" padding="md" className="space-y-6 relative z-10">
         
         {/* Hero Section */}
         <ScrollReveal direction="fade" delay={0}>
@@ -164,6 +165,7 @@ export const ModernDashboard = () => {
             title={`Bonjour, ${profile?.first_name || 'Collaborateur'} ! 👋`}
             subtitle="Dashboard FSU"
             description="Votre espace de travail collaboratif FSU vous attend"
+            className="py-6"
             actions={[
               {
                 label: "Actions Rapides",
@@ -183,7 +185,7 @@ export const ModernDashboard = () => {
 
         {/* Stats Cards */}
         <ScrollReveal direction="up" delay={200}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {dashboardStats.map((stat, index) => (
               <ScrollReveal key={index} direction="up" delay={300 + index * 100}>
                 <ModernStatsCard
@@ -242,7 +244,7 @@ export const ModernDashboard = () => {
               </Badge>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {quickActions.map((action, index) => (
                 <ScrollReveal key={index} direction="up" delay={900 + index * 100}>
                   <Link to={action.href}>
@@ -323,7 +325,7 @@ export const ModernDashboard = () => {
             </div>
           </GlassCard>
         </ScrollReveal>
-      </div>
+      </PageContainer>
     </div>
   );
 };
