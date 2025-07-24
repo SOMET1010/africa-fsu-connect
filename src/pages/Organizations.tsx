@@ -86,12 +86,12 @@ const Organizations = () => {
           actions={[
             {
               label: "Synchroniser",
-              onClick: () => {},
+              onClick: () => setViewMode('enrichment'),
               icon: <RefreshCw className="h-5 w-5" />,
               variant: "default"
             },
             {
-              label: "Analytics",
+              label: "Analytics", 
               onClick: () => setViewMode('overview'),
               icon: <BarChart3 className="h-5 w-5" />,
               variant: "outline"
