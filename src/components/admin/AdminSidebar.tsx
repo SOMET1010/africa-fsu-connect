@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Users, FileText, Calendar, MessageSquare, Settings, BarChart3, Shield, Bell } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   Sidebar,
   SidebarContent,
@@ -14,61 +15,62 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const adminMenuItems = [
-  {
-    title: "Tableau de Bord",
-    url: "/admin",
-    icon: BarChart3,
-    description: "Vue d'ensemble et statistiques"
-  },
-  {
-    title: "Utilisateurs",
-    url: "/admin/users",
-    icon: Users,
-    description: "Gestion des utilisateurs et rôles"
-  },
-  {
-    title: "Modération Forum",
-    url: "/admin/forum",
-    icon: MessageSquare,
-    description: "Modération des discussions"
-  },
-  {
-    title: "Documents",
-    url: "/admin/documents",
-    icon: FileText,
-    description: "Validation et gestion des documents"
-  },
-  {
-    title: "Événements",
-    url: "/admin/events",
-    icon: Calendar,
-    description: "Gestion des événements"
-  },
-  {
-    title: "Soumissions",
-    url: "/admin/submissions",
-    icon: Shield,
-    description: "Révision des soumissions"
-  },
-  {
-    title: "Notifications",
-    url: "/admin/notifications",
-    icon: Bell,
-    description: "Gestion des notifications"
-  },
-  {
-    title: "Paramètres",
-    url: "/admin/settings",
-    icon: Settings,
-    description: "Configuration système"
-  }
-];
-
 export function AdminSidebar() {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
+
+  const adminMenuItems = [
+    {
+      title: t('admin.dashboard'),
+      url: "/admin",
+      icon: BarChart3,
+      description: t('admin.dashboard.description')
+    },
+    {
+      title: t('admin.users'),
+      url: "/admin/users",
+      icon: Users,
+      description: t('admin.users.description')
+    },
+    {
+      title: t('admin.forum.moderation'),
+      url: "/admin/forum",
+      icon: MessageSquare,
+      description: t('admin.forum.description')
+    },
+    {
+      title: t('admin.documents'),
+      url: "/admin/documents",
+      icon: FileText,
+      description: t('admin.documents.description')
+    },
+    {
+      title: t('admin.events'),
+      url: "/admin/events",
+      icon: Calendar,
+      description: t('admin.events.description')
+    },
+    {
+      title: t('admin.submissions'),
+      url: "/admin/submissions",
+      icon: Shield,
+      description: t('admin.submissions.description')
+    },
+    {
+      title: t('admin.notifications'),
+      url: "/admin/notifications",
+      icon: Bell,
+      description: t('admin.notifications.description')
+    },
+    {
+      title: t('admin.settings'),
+      url: "/admin/settings",
+      icon: Settings,
+      description: t('admin.settings.description')
+    }
+  ];
 
   const isActive = (path: string) => {
     if (path === "/admin") {
@@ -94,7 +96,7 @@ export function AdminSidebar() {
             </div>
             {!collapsed && (
               <div>
-                <h2 className="font-semibold text-sm">Administration</h2>
+                <h2 className="font-semibold text-sm">{t('nav.admin')}</h2>
                 <p className="text-xs text-muted-foreground">Plateforme FSU</p>
               </div>
             )}
@@ -103,7 +105,7 @@ export function AdminSidebar() {
 
         <SidebarGroup className="px-2">
           <SidebarGroupLabel className="px-2 py-2 text-xs font-medium text-muted-foreground">
-            {!collapsed ? "Menu Principal" : ""}
+            {!collapsed ? t('admin.menu.main') : ""}
           </SidebarGroupLabel>
           
           <SidebarGroupContent>
@@ -137,13 +139,13 @@ export function AdminSidebar() {
         {!collapsed && (
           <div className="mt-auto p-4 border-t">
             <div className="bg-muted/50 rounded-lg p-3">
-              <h3 className="font-medium text-sm mb-2">Actions Rapides</h3>
+              <h3 className="font-medium text-sm mb-2">{t('admin.quick.actions')}</h3>
               <div className="space-y-2">
                 <button className="w-full text-left text-xs text-muted-foreground hover:text-foreground">
-                  Envoyer notification globale
+                  {t('admin.send.notification')}
                 </button>
                 <button className="w-full text-left text-xs text-muted-foreground hover:text-foreground">
-                  Exporter données
+                  {t('admin.export.data')}
                 </button>
               </div>
             </div>

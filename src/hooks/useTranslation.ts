@@ -199,6 +199,85 @@ const translations = {
     // Landing page
     'landing.title': 'Plateforme FSU Afrique',
     'landing.subtitle': 'Réseau collaboratif des Fonds de Service Universel africains',
+
+    // Admin Navigation
+    'admin.dashboard': 'Tableau de Bord',
+    'admin.dashboard.description': 'Vue d\'ensemble et statistiques',
+    'admin.users': 'Utilisateurs',
+    'admin.users.description': 'Gestion des utilisateurs et rôles',
+    'admin.forum.moderation': 'Modération Forum',
+    'admin.forum.description': 'Modération des discussions',
+    'admin.documents': 'Documents',
+    'admin.documents.description': 'Validation et gestion des documents',
+    'admin.events': 'Événements',
+    'admin.events.description': 'Gestion des événements',
+    'admin.submissions': 'Soumissions',
+    'admin.submissions.description': 'Révision des soumissions',
+    'admin.notifications': 'Notifications',
+    'admin.notifications.description': 'Gestion des notifications',
+    'admin.settings': 'Paramètres',
+    'admin.settings.description': 'Configuration système',
+    'admin.menu.main': 'Menu Principal',
+    'admin.quick.actions': 'Actions Rapides',
+    'admin.send.notification': 'Envoyer notification globale',
+    'admin.export.data': 'Exporter données',
+
+    // Dashboard Stats
+    'dashboard.stats.active.projects': 'Projets Actifs',
+    'dashboard.stats.collaborators': 'Collaborateurs',
+    'dashboard.stats.documents': 'Documents',
+    'dashboard.stats.events': 'Événements',
+    'dashboard.stats.this.week': 'Cette semaine',
+    'dashboard.stats.this.month': 'Ce mois',
+    'dashboard.stats.documents.added': 'Documents ajoutés',
+    'dashboard.stats.projects.development': 'Projets en cours de développement',
+    'dashboard.stats.active.members': 'Membres actifs de la communauté',
+    'dashboard.stats.available.resources': 'Ressources disponibles',
+    'dashboard.stats.upcoming.activities': 'Prochaines activités',
+
+    // Quick Actions
+    'actions.new.project': 'Nouveau Projet',
+    'actions.new.project.description': 'Lancez une nouvelle initiative FSU',
+    'actions.community.forum': 'Forum Communauté',
+    'actions.community.forum.description': 'Participez aux discussions',
+    'actions.resource.center': 'Centre de Ressources',
+    'actions.resource.center.description': 'Explorez la documentation',
+    'actions.events.calendar': 'Calendrier Événements',
+    'actions.events.calendar.description': 'Prochaines activités',
+    'actions.quick': 'Actions Rapides',
+    'actions.quick.description': 'Accédez rapidement à vos outils essentiels',
+    'actions.shortcuts': 'raccourcis',
+
+    // Recent Activity
+    'activity.recent': 'Activité Récente',
+    'activity.recent.description': 'Les dernières interactions de votre communauté FSU',
+    'activity.project.created': 'Projet créé',
+    'activity.document.added': 'Document ajouté',
+    'activity.discussion.created': 'Discussion créée',
+    'activity.event.planned': 'Événement planifié',
+
+    // Placeholders
+    'placeholder.search': 'Rechercher...',
+    'placeholder.search.events': 'Rechercher des événements...',
+    'placeholder.search.discussions': 'Rechercher dans les discussions...',
+    'placeholder.search.agency': 'Rechercher une agence ou un pays...',
+    'placeholder.search.name.email': 'Rechercher par nom, email...',
+    'placeholder.enter.message': 'Tapez votre message...',
+    'placeholder.describe.event': 'Décrivez l\'événement...',
+    'placeholder.describe.topic': 'Décrivez votre sujet et questions...',
+
+    // Security  
+    'security.system': 'Sécurité du Système',
+    'security.level': 'Niveau',
+    'security.alerts': 'alertes',
+    'security.details': 'Détails',
+    'security.high': 'Élevé',
+
+    // Time expressions
+    'time.minutes.ago': 'Il y a {{count}} minutes',
+    'time.hours.ago': 'Il y a {{count}}h', 
+    'time.days.ago': 'Il y a {{count}} jour',
+    'time.yesterday': 'Hier',
   },
   en: {
     // Navigation and general interface

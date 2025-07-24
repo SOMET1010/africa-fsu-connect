@@ -13,43 +13,45 @@ import { Badge } from "@/components/ui/badge";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDashboardStats } from "@/hooks/useDashboardStats";
+import { useTranslation } from "@/hooks/useTranslation";
 import { Link, useNavigate } from "react-router-dom";
 
 export const ModernDashboard = () => {
   const { profile } = useAuth();
   const { stats, loading } = useDashboardStats();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   
   
   
   const [dashboardStats, setDashboardStats] = useState([
     {
-      title: "Projets Actifs",
+      title: t('dashboard.stats.active.projects'),
       value: stats.totalSubmissions || 12,
       icon: Target,
-      trend: { value: 8, label: "Cette semaine", positive: true },
-      description: "Projets en cours de développement"
+      trend: { value: 8, label: t('dashboard.stats.this.week'), positive: true },
+      description: t('dashboard.stats.projects.development')
     },
     {
-      title: "Collaborateurs",
+      title: t('dashboard.stats.collaborators'),
       value: stats.totalProfiles || 248,
       icon: Users,
-      trend: { value: 12, label: "Ce mois", positive: true },
-      description: "Membres actifs de la communauté"
+      trend: { value: 12, label: t('dashboard.stats.this.month'), positive: true },
+      description: t('dashboard.stats.active.members')
     },
     {
-      title: "Documents",
+      title: t('dashboard.stats.documents'),
       value: stats.totalDocuments || 89,
       icon: FileText,
-      trend: { value: 15, label: "Documents ajoutés", positive: true },
-      description: "Ressources disponibles"
+      trend: { value: 15, label: t('dashboard.stats.documents.added'), positive: true },
+      description: t('dashboard.stats.available.resources')
     },
     {
-      title: "Événements",
+      title: t('dashboard.stats.events'),
       value: stats.totalEvents || 5,
       icon: Calendar,
-      trend: { value: -2, label: "Cette semaine", positive: false },
-      description: "Prochaines activités"
+      trend: { value: -2, label: t('dashboard.stats.this.week'), positive: false },
+      description: t('dashboard.stats.upcoming.activities')
     }
   ]);
 
@@ -64,32 +66,32 @@ export const ModernDashboard = () => {
 
   const quickActions = [
     {
-      title: "Nouveau Projet",
-      description: "Lancez une nouvelle initiative FSU",
+      title: t('actions.new.project'),
+      description: t('actions.new.project.description'),
       icon: Target,
       href: "/projects?action=create",
       color: "from-blue-500/20 to-blue-600/20",
       iconColor: "text-blue-600"
     },
     {
-      title: "Forum Communauté",
-      description: "Participez aux discussions",
+      title: t('actions.community.forum'),
+      description: t('actions.community.forum.description'),
       icon: MessageSquare,
       href: "/forum",
       color: "from-green-500/20 to-green-600/20",
       iconColor: "text-green-600"
     },
     {
-      title: "Centre de Ressources",
-      description: "Explorez la documentation",
+      title: t('actions.resource.center'),
+      description: t('actions.resource.center.description'),
       icon: FileText,
       href: "/resources",
       color: "from-purple-500/20 to-purple-600/20",
       iconColor: "text-purple-600"
     },
     {
-      title: "Calendrier Événements",
-      description: "Prochaines activités",
+      title: t('actions.events.calendar'),
+      description: t('actions.events.calendar.description'),
       icon: Calendar,
       href: "/events",
       color: "from-orange-500/20 to-orange-600/20",
@@ -99,7 +101,7 @@ export const ModernDashboard = () => {
 
   const recentActivity = [
     { 
-      action: "Projet créé", 
+      action: t('activity.project.created'), 
       title: "Initiative Connectivité Rurale 2024", 
       time: "Il y a 2h", 
       type: "success",
@@ -107,7 +109,7 @@ export const ModernDashboard = () => {
       icon: CheckCircle
     },
     { 
-      action: "Document ajouté", 
+      action: t('activity.document.added'), 
       title: "Guide Implementation FSU", 
       time: "Il y a 4h", 
       type: "info",
@@ -115,7 +117,7 @@ export const ModernDashboard = () => {
       icon: FileText
     },
     { 
-      action: "Discussion créée", 
+      action: t('activity.discussion.created'), 
       title: "Stratégies Développement Digital", 
       time: "Hier", 
       type: "info",
@@ -123,7 +125,7 @@ export const ModernDashboard = () => {
       icon: MessageSquare
     },
     { 
-      action: "Événement planifié", 
+      action: t('activity.event.planned'), 
       title: "Webinaire Innovation Télécom", 
       time: "Il y a 1 jour", 
       type: "warning",
@@ -176,13 +178,13 @@ export const ModernDashboard = () => {
             className="py-6"
             actions={[
               {
-                label: "Actions Rapides",
+                label: t('actions.quick'),
                 onClick: () => navigate("/profile"),
                 variant: "default",
                 icon: <Zap className="h-5 w-5" />
               },
               {
-                label: "Préférences",
+                label: t('nav.settings'),
                 onClick: () => navigate("/preferences"),
                 variant: "outline",
                 icon: <Settings className="h-4 w-4" />
@@ -243,12 +245,12 @@ export const ModernDashboard = () => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold font-poppins text-foreground">Actions Rapides</h2>
-                <p className="text-muted-foreground font-inter">Accédez rapidement à vos outils essentiels</p>
+                <h2 className="text-2xl font-bold font-poppins text-foreground">{t('actions.quick')}</h2>
+                <p className="text-muted-foreground font-inter">{t('actions.quick.description')}</p>
               </div>
               <Badge variant="secondary" className="hidden sm:flex items-center gap-1">
                 <Target className="h-3 w-3" />
-                {quickActions.length} raccourcis
+                {quickActions.length} {t('actions.shortcuts')}
               </Badge>
             </div>
             
@@ -290,15 +292,15 @@ export const ModernDashboard = () => {
               <div>
                 <h3 className="text-xl font-bold font-poppins flex items-center gap-2 text-foreground">
                   <TrendingUp className="h-5 w-5 text-primary" />
-                  Activité Récente
+                  {t('activity.recent')}
                 </h3>
                 <p className="text-sm text-muted-foreground font-inter mt-1">
-                  Les dernières interactions de votre communauté FSU
+                  {t('activity.recent.description')}
                 </p>
               </div>
               <ModernButton variant="outline" size="sm">
                 <Bell className="h-4 w-4 mr-2" />
-                Voir tout
+                {t('common.view')} tout
               </ModernButton>
             </div>
             
