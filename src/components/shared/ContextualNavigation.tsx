@@ -56,39 +56,35 @@ export function ContextualNavigation() {
             const isActive = location.pathname === item.path;
             
             return (
-              <div
+              <Button
                 key={item.path}
-                className="group animate-scale-in"
+                variant={isActive ? "default" : "outline"}
+                className={`
+                  w-full h-auto p-4 flex flex-col text-center nav-item hover-lift group animate-scale-in
+                  ${isActive 
+                    ? 'bg-gradient-primary shadow-elegant border-primary/20 text-primary-foreground' 
+                    : 'glass-subtle border-border/50 hover:border-primary/30 hover:shadow-soft hover:bg-gradient-to-br hover:from-primary/5 hover:to-accent/5'
+                  }
+                `}
                 style={{ animationDelay: `${index * 50}ms` }}
+                onClick={() => navigate(item.path)}
               >
-                <Button
-                  variant={isActive ? "default" : "outline"}
-                  className={`
-                    w-full h-auto p-4 flex flex-col text-center nav-item hover-lift
-                    ${isActive 
-                      ? 'bg-gradient-primary shadow-elegant border-primary/20 text-primary-foreground' 
-                      : 'glass-subtle border-border/50 hover:border-primary/30 hover:shadow-soft hover:bg-gradient-to-br hover:from-primary/5 hover:to-accent/5'
-                    }
-                  `}
-                  onClick={() => navigate(item.path)}
-                >
-                  <div className={`p-2 rounded-lg mb-3 transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-white/20' 
-                      : 'bg-muted/50 group-hover:bg-primary/10 group-hover:scale-110'
-                  }`}>
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <span className="text-sm font-medium font-poppins">{item.title}</span>
-                  <span className={`text-xs mt-1 transition-colors ${
-                    isActive 
-                      ? 'text-primary-foreground/80' 
-                      : 'text-muted-foreground group-hover:text-foreground'
-                  }`}>
-                    {item.description}
-                  </span>
-                </Button>
-              </div>
+                <div className={`p-2 rounded-lg mb-3 transition-all duration-300 ${
+                  isActive 
+                    ? 'bg-white/20' 
+                    : 'bg-muted/50 group-hover:bg-primary/10 group-hover:scale-110'
+                }`}>
+                  <Icon className="h-6 w-6" />
+                </div>
+                <span className="text-sm font-medium font-poppins">{item.title}</span>
+                <span className={`text-xs mt-1 transition-colors ${
+                  isActive 
+                    ? 'text-primary-foreground/80' 
+                    : 'text-muted-foreground group-hover:text-foreground'
+                }`}>
+                  {item.description}
+                </span>
+              </Button>
             );
           })}
         </div>
