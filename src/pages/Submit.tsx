@@ -16,6 +16,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const Submit = () => {
+  console.log("🔍 Submit page rendering");
   const [selectedType, setSelectedType] = useState("");
   const [formData, setFormData] = useState<any>({});
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
