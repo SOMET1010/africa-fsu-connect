@@ -25,7 +25,9 @@ import {
   Shield,
   Building2,
   BookOpen,
-  TrendingUp
+  TrendingUp,
+  Settings,
+  MapPin
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -46,6 +48,12 @@ const essentialItems = [
     url: "/profile", 
     icon: User,
     description: "Mes informations"
+  },
+  { 
+    title: "Préférences", 
+    url: "/preferences", 
+    icon: Settings,
+    description: "Mes paramètres"
   }
 ];
 
@@ -91,6 +99,12 @@ const collaborationItems = [
     url: "/events", 
     icon: Calendar,
     description: "Agenda collaboratif"
+  },
+  { 
+    title: "Carte", 
+    url: "/map", 
+    icon: MapPin,
+    description: "Géolocalisation"
   }
 ];
 
@@ -106,6 +120,12 @@ const adminItems = [
     url: "/admin/users", 
     icon: Users,
     description: "Gestion comptes"
+  },
+  { 
+    title: "Modération Forum", 
+    url: "/admin/forum", 
+    icon: MessageSquare,
+    description: "Modération"
   },
   { 
     title: "Sécurité", 
