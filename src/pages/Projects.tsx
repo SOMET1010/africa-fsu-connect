@@ -1,10 +1,12 @@
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ModernButton } from "@/components/ui/modern-button";
 import { Input } from "@/components/ui/input";
 import { HeroSection } from "@/components/ui/hero-section";
 import { ModernStatsCard } from "@/components/ui/modern-stats-card";
+import { VirtualizedList } from "@/components/optimized/VirtualizedList";
+import { usePreloader } from "@/hooks/usePreloader";
 import { 
   Search, 
   Plus,
@@ -41,6 +43,7 @@ const Projects = () => {
   const { t } = useTranslation();
   const { projects, loading, createProject, updateProject, deleteProject } = useProjects();
   const { toast } = useToast();
+  const { handleLinkHover } = usePreloader();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
@@ -48,16 +51,19 @@ const Projects = () => {
   const [editingProject, setEditingProject] = useState(null);
   const [viewMode, setViewMode] = useState<'grid' | 'map' | 'analytics' | 'reports' | 'notifications'>('grid');
 
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.agencies?.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.location?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesRegion = selectedRegion === "all" || project.agencies?.region === selectedRegion;
-    const matchesStatus = selectedStatus === "all" || project.status === selectedStatus;
-    
-    return matchesSearch && matchesRegion && matchesStatus;
-  });
+  // Optimized filtering with useMemo
+  const filteredProjects = useMemo(() => {
+    return projects.filter(project => {
+      const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           project.agencies?.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           project.location?.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesRegion = selectedRegion === "all" || project.agencies?.region === selectedRegion;
+      const matchesStatus = selectedStatus === "all" || project.status === selectedStatus;
+      
+      return matchesSearch && matchesRegion && matchesStatus;
+    });
+  }, [projects, searchTerm, selectedRegion, selectedStatus]);
 
   const handleCreateProject = () => {
     setEditingProject(null);
@@ -275,18 +281,37 @@ const Projects = () => {
               </div>
             </ModernCard>
 
-            {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  onEdit={handleEditProject}
-                  onDelete={handleDeleteProject}
-                  onView={handleViewProject}
-                />
-              ))}
-            </div>
+            {/* Projects Grid - Virtualized for large lists */}
+            {filteredProjects.length > 12 ? (
+              <VirtualizedList
+                items={filteredProjects}
+                itemHeight={280}
+                containerHeight={600}
+                className="rounded-xl border border-border/20"
+                renderItem={(project) => (
+                  <div className="p-3">
+                    <ProjectCard
+                      project={project}
+                      onEdit={handleEditProject}
+                      onDelete={handleDeleteProject}
+                      onView={handleViewProject}
+                    />
+                  </div>
+                )}
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProjects.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    onEdit={handleEditProject}
+                    onDelete={handleDeleteProject}
+                    onView={handleViewProject}
+                  />
+                ))}
+              </div>
+            )}
 
             {filteredProjects.length === 0 && (
               <ModernCard variant="glass" className="p-12 text-center">
