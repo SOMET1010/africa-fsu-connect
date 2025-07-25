@@ -176,7 +176,7 @@ export const Submit = () => {
   };
 
   // Validation logic
-  const validateForm = useCallback(() => {
+  const validateForm = () => {
     const errors: Record<string, string[]> = {};
     
     if (!formData.title?.trim()) {
@@ -200,7 +200,7 @@ export const Submit = () => {
     }
     
     return errors;
-  }, [formData, selectedType]);
+  };
 
   const handleSaveDraft = async () => {
     if (!currentSubmissionId) {
@@ -268,11 +268,15 @@ export const Submit = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  // Update validation when form data changes
+  // Update validation when form data changes (with debounce to prevent excessive updates)
   useEffect(() => {
-    const errors = validateForm();
-    setValidationErrors(errors);
-  }, [validateForm]);
+    const timer = setTimeout(() => {
+      const errors = validateForm();
+      setValidationErrors(errors);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [formData.title, formData.description, formData.budget, formData.start_date, formData.end_date, selectedType]);
 
   // Initialize form when component mounts (remove auto-save trigger)
   useEffect(() => {
