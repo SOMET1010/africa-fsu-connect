@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserPreferences } from "@/contexts/UserPreferencesContext";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useTranslationDb } from "@/hooks/useTranslationDb";
 
 interface AppHeaderProps {
   showSidebar: boolean;
@@ -35,7 +35,7 @@ export function AppHeader({ showSidebar }: AppHeaderProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { preferences, updatePreferences } = useUserPreferences();
-  const { t } = useTranslation();
+  const { t } = useTranslationDb();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSignOut = async () => {

@@ -17,10 +17,10 @@ import {
   Globe,
   Building2
 } from "lucide-react";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useTranslationDb } from "@/hooks/useTranslationDb";
 
 const Index = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslationDb();
 
   const features = [
     {
