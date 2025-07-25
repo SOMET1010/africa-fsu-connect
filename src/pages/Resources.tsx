@@ -39,7 +39,6 @@ const ResourcesContent = () => {
   const navigate = useNavigate();
   
   const [activeTab, setActiveTab] = useState<'simple' | 'advanced'>('simple');
-  const searchBarRef = useRef<SearchBarRef>(null);
   const [previewDoc, setPreviewDoc] = useState<any>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
@@ -90,10 +89,8 @@ const ResourcesContent = () => {
       for (const file of files) {
         await uploadDocument(file, metadata);
       }
-      const params = searchBarRef.current?.getSearchParams();
-      if (params) {
-        performSearch(params.query, params.filters);
-      }
+      // Refresh search results after upload
+      performSearch('', {});
     } catch (error) {
       // Error handled in hook
     }
@@ -109,7 +106,6 @@ const ResourcesContent = () => {
   }, [downloadDocument]);
 
   const handleShowAllDocuments = useCallback(() => {
-    searchBarRef.current?.reset();
     performSearch('', {});
   }, [performSearch]);
 
@@ -196,14 +192,11 @@ const ResourcesContent = () => {
                 </div>
                 <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
                   <div className="flex-1">
-                    <OptimizedSearchBar
-                      ref={searchBarRef}
+                    <input
+                      type="text"
                       placeholder="Rechercher des documents par titre ou description..."
-                      onSearch={performSearch}
-                      filters={searchFilters}
-                      showFilters={true}
-                      initialQuery={state.query}
-                      initialFilters={state.filters}
+                      className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      onChange={(e) => performSearch(e.target.value, {})}
                     />
                   </div>
                 </div>

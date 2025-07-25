@@ -1,28 +1,10 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { Tables } from '@/integrations/supabase/types';
 
-interface DocumentVersion {
-  id: string;
-  document_id: string;
-  version: string;
-  file_url: string;
-  file_name: string;
-  file_size: number;
-  changes_summary: string;
-  uploaded_at: string;
-  uploaded_by: string;
-}
-
-interface DocumentComment {
-  id: string;
-  document_id: string;
-  user_id: string;
-  user_name: string;
-  comment: string;
-  section?: string;
-  created_at: string;
-}
+type DocumentVersion = Tables<'document_versions'>;
+type DocumentComment = Tables<'document_comments'>;
 
 export const useDocumentVersions = () => {
   const [versions, setVersions] = useState<DocumentVersion[]>([]);

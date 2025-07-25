@@ -515,6 +515,88 @@ export type Database = {
         }
         Relationships: []
       }
+      document_comments: {
+        Row: {
+          comment: string
+          created_at: string
+          document_id: string
+          id: string
+          section: string | null
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          document_id: string
+          id?: string
+          section?: string | null
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          document_id?: string
+          id?: string
+          section?: string | null
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_comments_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_versions: {
+        Row: {
+          changes_summary: string
+          document_id: string
+          file_name: string
+          file_size: number
+          file_url: string
+          id: string
+          uploaded_at: string
+          uploaded_by: string
+          version: string
+        }
+        Insert: {
+          changes_summary: string
+          document_id: string
+          file_name: string
+          file_size: number
+          file_url: string
+          id?: string
+          uploaded_at?: string
+          uploaded_by: string
+          version: string
+        }
+        Update: {
+          changes_summary?: string
+          document_id?: string
+          file_name?: string
+          file_size?: number
+          file_url?: string
+          id?: string
+          uploaded_at?: string
+          uploaded_by?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_versions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       documents: {
         Row: {
           country: string | null
@@ -522,6 +604,7 @@ export type Database = {
           description: string | null
           document_type: Database["public"]["Enums"]["document_type"]
           download_count: number
+          featured: boolean | null
           file_name: string | null
           file_size: number | null
           file_url: string | null
@@ -532,6 +615,7 @@ export type Database = {
           title: string
           updated_at: string
           uploaded_by: string
+          view_count: number | null
         }
         Insert: {
           country?: string | null
@@ -539,6 +623,7 @@ export type Database = {
           description?: string | null
           document_type?: Database["public"]["Enums"]["document_type"]
           download_count?: number
+          featured?: boolean | null
           file_name?: string | null
           file_size?: number | null
           file_url?: string | null
@@ -549,6 +634,7 @@ export type Database = {
           title: string
           updated_at?: string
           uploaded_by: string
+          view_count?: number | null
         }
         Update: {
           country?: string | null
@@ -556,6 +642,7 @@ export type Database = {
           description?: string | null
           document_type?: Database["public"]["Enums"]["document_type"]
           download_count?: number
+          featured?: boolean | null
           file_name?: string | null
           file_size?: number | null
           file_url?: string | null
@@ -566,6 +653,7 @@ export type Database = {
           title?: string
           updated_at?: string
           uploaded_by?: string
+          view_count?: number | null
         }
         Relationships: []
       }

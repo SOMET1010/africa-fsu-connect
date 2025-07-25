@@ -59,7 +59,7 @@ export const useEnhancedSearch = () => {
 
       // Apply filters
       if (filters.documentTypes.length > 0) {
-        supabaseQuery = supabaseQuery.in('document_type', filters.documentTypes);
+        supabaseQuery = supabaseQuery.in('document_type', filters.documentTypes as any);
       }
 
       if (filters.countries.length > 0) {
