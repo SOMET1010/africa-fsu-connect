@@ -170,7 +170,7 @@ export class BidirectionalSyncService {
       const data = await response.json();
       
       // Convert to sync operations
-      return this.convertToSyncOperations(data, 'source', config);
+      return this.convertToSyncOperations(data, 'remote', config);
     } catch (error) {
       console.error('Error detecting source changes:', error);
       return [];
@@ -220,14 +220,19 @@ export class BidirectionalSyncService {
     config: BidirectionalSyncConfig
   ): Promise<any | null> {
     try {
+      // Only check conflicts for agency_projects table (skip external_data)
+      if (operation.tableName !== 'agency_projects') {
+        return null;
+      }
+
       // Check if record exists with newer timestamp
       const { data: existingRecord } = await supabase
-        .from(operation.tableName)
+        .from('agency_projects')
         .select('*')
         .eq('id', operation.recordId)
-        .single();
+        .maybeSingle();
 
-      if (existingRecord && existingRecord.updated_at > operation.timestamp) {
+      if (existingRecord && (existingRecord as any).updated_at > operation.timestamp) {
         return {
           record_id: operation.recordId,
           table_name: operation.tableName,
@@ -268,25 +273,27 @@ export class BidirectionalSyncService {
   ): Promise<void> {
     try {
       if (operation.source === 'remote') {
-        // Apply remote changes to local database
-        const mappedData = this.mapData(
-          operation.data,
-          config.bidirectionalMappings.sourceToTarget
-        );
+        // Apply remote changes to local database (only handle agency_projects)
+        if (operation.tableName === 'agency_projects') {
+          const mappedData = this.mapData(
+            operation.data,
+            config.bidirectionalMappings.sourceToTarget
+          );
 
-        if (operation.type === 'create') {
-          await supabase
-            .from(operation.tableName)
-            .insert(mappedData);
-        } else if (operation.type === 'update') {
-          await supabase
-            .from(operation.tableName)
-            .upsert(mappedData);
-        } else if (operation.type === 'delete') {
-          await supabase
-            .from(operation.tableName)
-            .delete()
-            .eq('id', operation.recordId);
+          if (operation.type === 'create') {
+            await supabase
+              .from('agency_projects')
+              .insert(mappedData);
+          } else if (operation.type === 'update') {
+            await supabase
+              .from('agency_projects')
+              .upsert(mappedData);
+          } else if (operation.type === 'delete') {
+            await supabase
+              .from('agency_projects')
+              .delete()
+              .eq('id', operation.recordId);
+          }
         }
       } else {
         // Apply local changes to remote API
