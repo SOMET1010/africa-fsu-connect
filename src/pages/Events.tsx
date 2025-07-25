@@ -19,9 +19,11 @@ import { AccessibleAlert } from "@/components/ui/accessible-alert";
 import { GradientStatsCard } from "@/components/ui/gradient-stats-card";
 import { EventFilters } from "@/components/events/EventFilters";
 import { ModernEventCard } from "@/components/events/ModernEventCard";
+import { EventsHero } from "@/components/events/EventsHero";
 import { Calendar } from "@/components/ui/calendar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
+
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
@@ -123,16 +125,34 @@ const Events = () => {
   const handleRegister = async (eventId: string) => {
     try {
       await registerForEvent(eventId);
+      toast({
+        title: "Inscription réussie",
+        description: "Vous êtes maintenant inscrit à cet événement.",
+      });
     } catch (error) {
       console.error('Registration failed:', error);
+      toast({
+        title: "Erreur d'inscription",
+        description: "Impossible de s'inscrire à l'événement.",
+        variant: "destructive",
+      });
     }
   };
 
   const handleUnregister = async (eventId: string) => {
     try {
       await unregisterFromEvent(eventId);
+      toast({
+        title: "Désinscription réussie",
+        description: "Vous n'êtes plus inscrit à cet événement.",
+      });
     } catch (error) {
       console.error('Unregistration failed:', error);
+      toast({
+        title: "Erreur de désinscription",
+        description: "Impossible de se désinscrire de l'événement.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -159,8 +179,17 @@ const Events = () => {
         virtual_link: "",
         max_attendees: undefined
       });
+      toast({
+        title: "Événement créé",
+        description: "L'événement a été créé avec succès.",
+      });
     } catch (error) {
       console.error('Event creation failed:', error);
+      toast({
+        title: "Erreur de création",
+        description: "Impossible de créer l'événement.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -196,89 +225,13 @@ const Events = () => {
       />
       
       <div className="p-6 lg:p-8 space-y-8">
-        {/* Hero Section with Stats */}
-        <section 
-          aria-labelledby="hero-title"
-          className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden"
-        >
-          {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-y-32 translate-x-32" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-2xl translate-y-16 -translate-x-16" />
-          
-          <div className="relative z-10 grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <div className="space-y-6">
-                <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/20">
-                  <span className="text-sm font-medium text-white/90">Plateforme FSU</span>
-                </div>
-                
-                <h1 id="hero-title" className="text-4xl lg:text-5xl font-bold leading-tight">
-                  {t('events.title')}
-                </h1>
-                
-                <p className="text-lg lg:text-xl text-white/90 leading-relaxed">
-                  {t('events.description')}
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button
-                    onClick={() => {
-                      setSelectedView("calendar");
-                      announceToScreenReader("Vue calendrier activée");
-                    }}
-                    variant="secondary"
-                    size="lg"
-                    className="font-semibold bg-white text-gray-900 hover:bg-white/90 enhanced-focus"
-                    aria-describedby="calendar-button-desc"
-                  >
-                    <CalendarIcon className="w-5 h-5 mr-2" />
-                    {t('events.viewCalendar')}
-                  </Button>
-                  <span id="calendar-button-desc" className="sr-only">
-                    Basculer vers la vue calendrier pour naviguer par dates
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="space-y-4" role="region" aria-labelledby="stats-heading">
-              <h2 id="stats-heading" className="sr-only">Statistiques des événements</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <GradientStatsCard
-                  title={t('events.stats.total')}
-                  value={events.length}
-                  icon={CalendarIcon}
-                  variant="blue"
-                  size="sm"
-                />
-                <GradientStatsCard
-                  title={t('events.stats.upcoming')}
-                  value={upcomingEvents.length}
-                  icon={Clock}
-                  variant="teal"
-                  size="sm"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <GradientStatsCard
-                  title={t('events.stats.registered')}
-                  value={events.filter(e => e.is_registered).length}
-                  icon={User}
-                  variant="green"
-                  size="sm"
-                />
-                <GradientStatsCard
-                  title={t('events.stats.support')}
-                  value="24/7"
-                  icon={Users}
-                  variant="purple"
-                  size="sm"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
+        <EventsHero 
+          totalEvents={events.length}
+          upcomingEvents={upcomingEvents.length}
+          registeredEvents={events.filter(e => e.is_registered).length}
+          onViewChange={setSelectedView}
+          announceToScreenReader={announceToScreenReader}
+        />
         
         {/* Content Section */}
         <main id="main-content" className="bg-card rounded-3xl border border-border p-6 lg:p-8 shadow-lg">

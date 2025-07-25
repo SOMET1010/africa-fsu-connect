@@ -1,96 +1,139 @@
-import { Calendar, Users, MapPin, Clock } from "lucide-react";
-import { useEvents } from "@/hooks/useEvents";
-import { Badge } from "@/components/ui/badge";
+import { CalendarIcon, Clock, Users, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EnhancedCard } from "@/components/ui/enhanced-card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslation } from "@/hooks/useTranslation";
 
-export const EventsHero = () => {
-  const { events, loading, getUpcomingEvents } = useEvents();
-  
-  const upcomingEvents = getUpcomingEvents();
-  const totalEvents = events.length;
-  const registeredEvents = events.filter(e => e.is_registered).length;
+interface EventsHeroProps {
+  totalEvents: number;
+  upcomingEvents: number;
+  registeredEvents: number;
+  onViewChange: (view: string) => void;
+  announceToScreenReader: (message: string) => void;
+}
 
-  if (loading) {
-    return (
-      <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary-dark to-accent rounded-2xl p-8 text-white">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-6">
-            <Skeleton className="h-12 w-3/4 bg-white/20" />
-            <Skeleton className="h-6 w-full bg-white/20" />
-            <div className="flex gap-4">
-              <Skeleton className="h-10 w-32 bg-white/20" />
-              <Skeleton className="h-10 w-32 bg-white/20" />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-20 bg-white/20 rounded-xl" />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+export function EventsHero({
+  totalEvents,
+  upcomingEvents,
+  registeredEvents,
+  onViewChange,
+  announceToScreenReader
+}: EventsHeroProps) {
+  const { t } = useTranslation();
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary-dark to-accent rounded-2xl p-8 text-white">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.05%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+    <section 
+      aria-labelledby="hero-title"
+      className="bg-gradient-to-br from-primary/90 via-primary to-primary/80 rounded-3xl p-8 lg:p-12 text-primary-foreground relative overflow-hidden"
+    >
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-y-32 translate-x-32" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-2xl translate-y-16 -translate-x-16" />
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10" />
       
-      <div className="relative z-10 grid md:grid-cols-2 gap-8 items-center">
-        <div className="space-y-6">
-          <div>
-            <Badge className="bg-white/20 text-white border-white/30 mb-4">
-              Plateforme FSU
-            </Badge>
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4 gradient-text bg-gradient-to-r from-white to-white/80">
-              Événements & Formations
+      <div className="relative z-10 grid lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+          <div className="space-y-6">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/20">
+              <CalendarIcon className="w-4 h-4 mr-2" />
+              <span className="text-sm font-medium text-white/90">Plateforme FSU Events</span>
+            </div>
+            
+            <h1 id="hero-title" className="text-4xl lg:text-6xl font-bold leading-tight tracking-tight">
+              {t('events.title') || 'Événements'}
             </h1>
-            <p className="text-xl text-white/90 leading-relaxed">
-              Découvrez les derniers événements, conférences et formations de la communauté FSU. 
-              Restez connecté avec les innovations et opportunités du secteur.
+            
+            <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl">
+              {t('events.description') || 'Découvrez et participez aux événements organisés par la communauté FSU. Webinaires, conférences, ateliers et plus encore.'}
             </p>
-          </div>
-          
-          <div className="flex flex-wrap gap-4">
-            <Button className="bg-white text-primary hover:bg-white/90 shadow-lg">
-              <Calendar className="mr-2 h-5 w-5" />
-              Voir le Calendrier
-            </Button>
-            <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
-              <Users className="mr-2 h-5 w-5" />
-              Créer un Événement
-            </Button>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                onClick={() => {
+                  onViewChange("calendar");
+                  announceToScreenReader("Vue calendrier activée");
+                }}
+                variant="secondary"
+                size="lg"
+                className="font-semibold bg-white text-primary hover:bg-white/90 enhanced-focus shadow-lg"
+                aria-describedby="calendar-button-desc"
+              >
+                <CalendarIcon className="w-5 h-5 mr-2" />
+                {t('events.viewCalendar') || 'Voir le calendrier'}
+              </Button>
+              <Button
+                onClick={() => {
+                  onViewChange("grid");
+                  announceToScreenReader("Vue grille activée");
+                }}
+                variant="outline"
+                size="lg"
+                className="font-semibold border-white/30 text-white hover:bg-white/10 enhanced-focus"
+              >
+                <Users className="w-5 h-5 mr-2" />
+                Explorer les événements
+              </Button>
+              <span id="calendar-button-desc" className="sr-only">
+                Basculer vers la vue calendrier pour naviguer par dates
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <EnhancedCard variant="glassmorphism" className="bg-white/10 border-white/20 text-center p-6">
-            <div className="text-3xl font-bold text-white">{totalEvents}</div>
-            <div className="text-white/80 text-sm mt-1">Événements Total</div>
-            <Calendar className="h-8 w-8 text-white/60 mx-auto mt-2" />
-          </EnhancedCard>
-          
-          <EnhancedCard variant="glassmorphism" className="bg-white/10 border-white/20 text-center p-6">
-            <div className="text-3xl font-bold text-white">{upcomingEvents.length}</div>
-            <div className="text-white/80 text-sm mt-1">À Venir</div>
-            <Clock className="h-8 w-8 text-white/60 mx-auto mt-2" />
-          </EnhancedCard>
-          
-          <EnhancedCard variant="glassmorphism" className="bg-white/10 border-white/20 text-center p-6">
-            <div className="text-3xl font-bold text-white">{registeredEvents}</div>
-            <div className="text-white/80 text-sm mt-1">Mes Inscriptions</div>
-            <Users className="h-8 w-8 text-white/60 mx-auto mt-2" />
-          </EnhancedCard>
-          
-          <EnhancedCard variant="glassmorphism" className="bg-white/10 border-white/20 text-center p-6">
-            <div className="text-3xl font-bold text-white">24/7</div>
-            <div className="text-white/80 text-sm mt-1">Support</div>
-            <MapPin className="h-8 w-8 text-white/60 mx-auto mt-2" />
-          </EnhancedCard>
+        {/* Stats Grid - Redesigned */}
+        <div className="space-y-4" role="region" aria-labelledby="stats-heading">
+          <h2 id="stats-heading" className="text-lg font-semibold text-white/90 mb-4">
+            Statistiques en temps réel
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-white/20 rounded-lg">
+                  <CalendarIcon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">{totalEvents}</p>
+                  <p className="text-xs text-white/70 font-medium">Total événements</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-emerald-500/30 rounded-lg">
+                  <Clock className="w-5 h-5 text-emerald-200" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">{upcomingEvents}</p>
+                  <p className="text-xs text-white/70 font-medium">À venir</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-500/30 rounded-lg">
+                  <User className="w-5 h-5 text-blue-200" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">{registeredEvents}</p>
+                  <p className="text-xs text-white/70 font-medium">Mes inscriptions</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-500/30 rounded-lg">
+                  <Users className="w-5 h-5 text-purple-200" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">24/7</p>
+                  <p className="text-xs text-white/70 font-medium">Support</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
-};
+}
