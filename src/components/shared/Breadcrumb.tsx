@@ -20,6 +20,7 @@ const Breadcrumb = ({ items = [], className = "" }: BreadcrumbProps) => {
     
     const routeMap: Record<string, string> = {
       'dashboard': 'Tableau de Bord',
+      'analytics': 'Analytics',
       'projects': 'Projets FSU',
       'docs': 'Bibliothèque de Ressources',
       'forum': 'Forum de Discussion',
@@ -29,7 +30,7 @@ const Breadcrumb = ({ items = [], className = "" }: BreadcrumbProps) => {
       'admin': 'Administration',
       'organizations': 'Organisations',
       'training': 'Formation',
-      'analytics': 'Analytiques'
+      'indicators': 'Indicateurs'
     };
 
     const breadcrumbs: BreadcrumbItem[] = [

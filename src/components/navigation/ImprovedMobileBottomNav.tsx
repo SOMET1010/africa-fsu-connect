@@ -7,6 +7,7 @@ import {
   User,
   Globe,
   TrendingUp,
+  BarChart3,
   Palette
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -33,9 +34,9 @@ export function ImprovedMobileBottomNav() {
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
-      to: "/indicators",
-      icon: TrendingUp,
-      label: "Données",
+      to: "/analytics",
+      icon: BarChart3,
+      label: "Analytics",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
@@ -45,15 +46,15 @@ export function ImprovedMobileBottomNav() {
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
-      to: "/docs",
-      icon: BookOpen,
-      label: "Docs",
+      to: "/indicators",
+      icon: TrendingUp,
+      label: "Données",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
-      to: "/preferences/advanced", 
-      icon: Palette,
-      label: "IA",
+      to: "/docs",
+      icon: BookOpen,
+      label: "Docs",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {

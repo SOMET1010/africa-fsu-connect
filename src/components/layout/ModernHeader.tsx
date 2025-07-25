@@ -16,6 +16,7 @@ import {
   LogIn,
   Home,
   BarChart2,
+  BarChart3,
   Rocket,
   BookOpen,
   MessageSquare,
@@ -61,6 +62,7 @@ const ModernHeader = () => {
   const navigation = [
     { name: t('nav.home'), href: "/", icon: Home },
     { name: t('nav.dashboard'), href: "/dashboard", icon: BarChart2 },
+    { name: "Analytics", href: "/analytics", icon: BarChart3 },
     { name: t('nav.projects'), href: "/projects", icon: Rocket },
     { name: t('nav.resources'), href: "/docs", icon: BookOpen },
     { name: t('nav.forum'), href: "/forum", icon: MessageSquare },

@@ -9,11 +9,13 @@ import {
   FileText, 
   MessageSquare, 
   Calendar,
+  BarChart3,
   ArrowLeft
 } from "lucide-react";
 
 const navigationItems = [
   { title: "Tableau de Bord", path: "/dashboard", icon: Home, description: "Vue d'ensemble" },
+  { title: "Analytics", path: "/analytics", icon: BarChart3, description: "Performances & Données" },
   { title: "Indicateurs", path: "/indicators", icon: TrendingUp, description: "Données et métriques" },
   { title: "Organisations", path: "/organizations", icon: Building2, description: "Annuaire FSU" },
   { title: "Projets", path: "/projects", icon: FileText, description: "Initiatives FSU" },
