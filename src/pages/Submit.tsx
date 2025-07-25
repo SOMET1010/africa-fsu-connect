@@ -1,426 +1,606 @@
-import { useState } from "react";
-import { FileText, Upload, Send, Save, User, Clock, CheckCircle, AlertCircle } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import FileUpload from "@/components/shared/FileUpload";
-import ContextualNavigation from "@/components/shared/ContextualNavigation";
-import { useToast } from "@/hooks/use-toast";
-import { useTranslation } from "@/hooks/useTranslation";
-import { PageContainer } from "@/components/layout/PageContainer";
-import { PageHeader } from "@/components/layout/PageHeader";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { CalendarDays, FileText, Clock, CheckCircle, XCircle, AlertCircle, Sparkles, Save } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import FileUpload from '@/components/shared/FileUpload';
+import ContextualNavigation from '@/components/shared/ContextualNavigation';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useAdvancedSubmissions } from '@/hooks/useAdvancedSubmissions';
+import { useAutoSave } from '@/hooks/useAutoSave';
+import { ProgressiveForm } from '@/components/submissions/ProgressiveForm';
+import { AIWritingAssistant } from '@/components/submissions/AIWritingAssistant';
+import { TemplateSelector } from '@/components/submissions/TemplateSelector';
+import { submissionTemplateService, SubmissionTemplate } from '@/services/submissionTemplateService';
 
-const Submit = () => {
-  console.log("🚀 NOUVELLE VERSION DE LA PAGE SUBMIT - MISE À JOUR RÉUSSIE!");
-  const [selectedType, setSelectedType] = useState("");
-  const [formData, setFormData] = useState<any>({});
+export const Submit = () => {
+  const [selectedType, setSelectedType] = useState<'project' | 'position' | 'regulation' | 'funding'>('project');
+  const [formData, setFormData] = useState<Record<string, any>>({});
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<SubmissionTemplate | null>(null);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
   const { toast } = useToast();
-  const { t } = useTranslation();
+  
+  const {
+    submissions,
+    loading: submissionsLoading,
+    createSubmission,
+    updateSubmission,
+    autoSave,
+    submitForReview,
+    uploadAttachment,
+  } = useAdvancedSubmissions();
 
-  const submissions = [
-    {
-      id: 1,
-      type: "Projet",
-      title: "Extension 4G - Zones Rurales",
-      status: t('submit.status.draft'),
-      lastModified: "2024-01-15",
-      reviewer: null
+  // Auto-save functionality
+  const { autoSaveStatus, manualSave } = useAutoSave(formData, {
+    delay: 30000, // 30 seconds
+    onSave: async (data) => {
+      if (currentSubmissionId) {
+        await autoSave(currentSubmissionId, data);
+      }
     },
-    {
-      id: 2,
-      type: "Position",
-      title: "Harmonisation Réglementaire CEDEAO",
-      status: t('submit.status.review'),
-      lastModified: "2024-01-10",
-      reviewer: "Dr. Amina Kone"
+    onSaveSuccess: () => {
+      console.log('Auto-save successful');
     },
-    {
-      id: 3,
-      type: "Financement",
-      title: "Villages Connectés Phase 3",
-      status: t('submit.status.approved'),
-      lastModified: "2024-01-05",
-      reviewer: "Comité Technique"
+    onSaveError: (error) => {
+      console.error('Auto-save failed:', error);
+    },
+  });
+
+  // Form steps configuration
+  const getFormSteps = (type: string) => {
+    const baseSteps = [
+      {
+        id: 'template',
+        title: 'Template',
+        description: 'Choisissez un template pour commencer',
+        required: false,
+        completed: !!selectedTemplate,
+        fields: [],
+      },
+      {
+        id: 'basic',
+        title: 'Informations de base',
+        description: 'Titre et informations générales',
+        required: true,
+        completed: false,
+        fields: ['title', 'country', 'description'],
+      },
+    ];
+
+    if (type === 'project') {
+      return [
+        ...baseSteps,
+        {
+          id: 'project-details',
+          title: 'Détails du projet',
+          description: 'Budget, dates et KPIs',
+          required: true,
+          completed: false,
+          fields: ['budget', 'start_date', 'end_date', 'kpis'],
+        },
+        {
+          id: 'attachments',
+          title: 'Pièces jointes',
+          description: 'Documents et fichiers supportants',
+          required: false,
+          completed: false,
+          fields: ['attachments'],
+        },
+      ];
     }
-  ];
+
+    if (type === 'position') {
+      return [
+        ...baseSteps,
+        {
+          id: 'position-details',
+          title: 'Détails de la position',
+          description: 'Contexte et justification',
+          required: true,
+          completed: false,
+          fields: ['context', 'position', 'justification'],
+        },
+        {
+          id: 'attachments',
+          title: 'Pièces jointes',
+          description: 'Documents et références',
+          required: false,
+          completed: false,
+          fields: ['attachments'],
+        },
+      ];
+    }
+
+    return [
+      ...baseSteps,
+      {
+        id: 'attachments',
+        title: 'Pièces jointes',
+        description: 'Documents supportants',
+        required: false,
+        completed: false,
+        fields: ['attachments'],
+      },
+    ];
+  };
+
+  const formSteps = getFormSteps(selectedType);
 
   const submissionTypes = [
-    {
-      id: "projet",
-      title: t('submit.type.project'),
-      description: t('submit.type.project.description'),
-      icon: FileText,
-      fields: ["titre", "description", "budget", "timeline", "kpis", "documents"]
-    },
-    {
-      id: "position",
-      title: t('submit.type.position'),
-      description: t('submit.type.position.description'),
-      icon: User,
-      fields: ["sujet", "position", "justification", "impact", "collaborateurs"]
-    },
-    {
-      id: "regulation",
-      title: t('submit.type.regulation'),
-      description: t('submit.type.regulation.description'),
-      icon: FileText,
-      fields: ["domaine", "proposition", "analyse", "recommandations"]
-    },
-    {
-      id: "financement",
-      title: t('submit.type.funding'),
-      description: t('submit.type.funding.description'),
-      icon: Upload,
-      fields: ["projet", "montant", "justification", "plan", "garanties"]
-    }
+    { id: 'project' as const, label: 'Projet', icon: '🚀', description: 'Soumission de nouveaux projets' },
+    { id: 'position' as const, label: 'Position', icon: '📝', description: 'Positions officielles et recommandations' },
+    { id: 'regulation' as const, label: 'Réglementation', icon: '⚖️', description: 'Propositions de réglementation' },
+    { id: 'funding' as const, label: 'Financement', icon: '💰', description: 'Demandes de financement' },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case t('submit.status.draft'):
-        return "bg-gray-100 text-gray-800 border-gray-200";
-      case t('submit.status.review'):
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case t('submit.status.approved'):
-        return "bg-green-100 text-green-800 border-green-200";
-      case t('submit.status.rejected'):
-        return "bg-red-100 text-red-800 border-red-200";
+      case 'draft':
+        return 'secondary';
+      case 'submitted':
+        return 'default';
+      case 'under_review':
+        return 'secondary';
+      case 'approved':
+        return 'default';
+      case 'rejected':
+        return 'destructive';
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return 'secondary';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case t('submit.status.draft'):
+      case 'draft':
         return <Clock className="h-4 w-4" />;
-      case t('submit.status.review'):
+      case 'submitted':
         return <AlertCircle className="h-4 w-4" />;
-      case t('submit.status.approved'):
+      case 'under_review':
+        return <AlertCircle className="h-4 w-4" />;
+      case 'approved':
         return <CheckCircle className="h-4 w-4" />;
+      case 'rejected':
+        return <XCircle className="h-4 w-4" />;
       default:
         return <Clock className="h-4 w-4" />;
     }
   };
 
-  const handleSaveDraft = () => {
-    toast({
-      title: t('submit.toast.draft.saved'),
-      description: t('submit.toast.draft.saved.description'),
-    });
+  // Validation logic
+  const validateForm = () => {
+    const errors: Record<string, string[]> = {};
+    
+    if (!formData.title?.trim()) {
+      errors.title = ['Le titre est requis'];
+    }
+    
+    if (!formData.description?.trim()) {
+      errors.description = ['La description est requise'];
+    }
+    
+    if (selectedType === 'project') {
+      if (!formData.budget) {
+        errors.budget = ['Le budget est requis'];
+      }
+      if (!formData.start_date) {
+        errors.start_date = ['La date de début est requise'];
+      }
+      if (!formData.end_date) {
+        errors.end_date = ['La date de fin est requise'];
+      }
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = () => {
-    toast({
-      title: t('submit.toast.submitted'),
-      description: t('submit.toast.submitted.description'),
-    });
+  const handleSaveDraft = async () => {
+    if (!currentSubmissionId) {
+      const submission = await createSubmission({
+        title: formData.title || 'Nouveau brouillon',
+        type: selectedType,
+        content: formData,
+        attachments: uploadedFiles.map(f => f.name),
+      });
+      if (submission) {
+        setCurrentSubmissionId(submission.id);
+      }
+    } else {
+      await updateSubmission(currentSubmissionId, {
+        content: formData,
+      });
+    }
   };
 
-  const handleFileUpload = (files: File[]) => {
+  const handleSubmit = async () => {
+    if (!validateForm()) {
+      toast({
+        title: "Erreurs de validation",
+        description: "Veuillez corriger les erreurs avant de soumettre",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!currentSubmissionId) {
+      await handleSaveDraft();
+    }
+
+    if (currentSubmissionId) {
+      await submitForReview(currentSubmissionId);
+    }
+  };
+
+  const handleFileUpload = async (files: File[]) => {
+    if (currentSubmissionId) {
+      for (const file of files) {
+        await uploadAttachment(file, currentSubmissionId);
+      }
+    }
     setUploadedFiles(prev => [...prev, ...files]);
     toast({
-      title: t('submit.toast.files.added'),
-      description: `${files.length}${t('submit.toast.files.added.description')}`,
+      title: "Fichiers ajoutés",
+      description: `${files.length} fichier(s) ajouté(s) avec succès.`,
     });
   };
 
+  const handleTemplateSelect = (template: SubmissionTemplate) => {
+    setSelectedTemplate(template);
+    setFormData({ ...formData, ...template.content });
+    toast({
+      title: "Template appliqué",
+      description: `Template "${template.name}" appliqué avec succès`,
+    });
+  };
+
+  const updateFormField = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  // Initialize form when component mounts
+  useEffect(() => {
+    if (!currentSubmissionId && selectedType) {
+      // Auto-create a draft when user starts working
+      setTimeout(async () => {
+        if (Object.keys(formData).length > 0) {
+          await handleSaveDraft();
+        }
+      }, 5000);
+    }
+  }, [formData, selectedType]);
+
+  const canSubmit = validateForm() && formSteps.every(step => 
+    !step.required || step.fields.every(field => formData[field])
+  );
+
+  if (submissionsLoading) {
+    return <div className="container mx-auto px-4 py-8">Chargement...</div>;
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10">
-      {/* Subtle Background Effect */}
-      <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+    <div className="container mx-auto px-4 py-8 space-y-6">
+      <ContextualNavigation />
       
-      <PageContainer size="xl" padding="md" className="space-y-6 relative z-10">
-        {/* Navigation contextuelle */}
-        <ContextualNavigation />
-
-        {/* Header */}
-        <div className="animate-fade-in">
-          <PageHeader
-            title={t('submit.title')}
-            description={t('submit.description')}
-          />
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+            <Sparkles className="h-8 w-8 text-primary" />
+            Soumettre un Document
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            Assistant intelligent pour vos soumissions de projets, positions et réglementations
+          </p>
         </div>
-
-        {/* My Submissions */}
-        <div className="animate-fade-in" style={{ animationDelay: '100ms' }}>
-          <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle>{t('submit.my.submissions')}</CardTitle>
-              <CardDescription>
-                {t('submit.my.submissions.description')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {submissions.map((submission) => (
-                  <div key={submission.id} className="flex items-center justify-between p-4 border rounded-lg hover-scale transition-all duration-300">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-primary/10 p-2 rounded">
-                        {getStatusIcon(submission.status)}
-                      </div>
-                      <div>
-                        <p className="font-medium">{submission.title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {submission.type} • {t('submit.modified')} {new Date(submission.lastModified).toLocaleDateString('fr-FR')}
-                        </p>
-                        {submission.reviewer && (
-                          <p className="text-sm text-muted-foreground">
-                            {t('submit.reviewer')}: {submission.reviewer}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Badge className={getStatusColor(submission.status)}>
-                        {submission.status}
-                      </Badge>
-                      <Button variant="outline" size="sm" className="hover-scale">
-                        {t('submit.action.view')}
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        <div className="flex items-center gap-2">
+          <Button onClick={manualSave} variant="outline" size="sm">
+            <Save className="h-4 w-4 mr-2" />
+            Sauvegarder
+          </Button>
         </div>
+      </div>
 
-        <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
-          <Tabs value={selectedType} onValueChange={setSelectedType} className="space-y-6">
-            {/* Type Selection */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {submissionTypes.map((type) => {
-                const Icon = type.icon;
-                return (
-                  <Card 
-                    key={type.id} 
-                    className={`cursor-pointer hover:shadow-xl hover-scale transition-all duration-300 border-0 shadow-lg bg-card/80 backdrop-blur-sm ${
-                      selectedType === type.id ? 'ring-2 ring-primary border-primary bg-primary/5' : ''
-                    }`}
-                    onClick={() => setSelectedType(type.id)}
-                  >
-                    <CardHeader className="text-center">
-                      <Icon className="h-12 w-12 mx-auto text-primary mb-4" />
-                      <CardTitle className="text-lg">{type.title}</CardTitle>
-                      <CardDescription>{type.description}</CardDescription>
-                    </CardHeader>
-                  </Card>
-                );
-              })}
-            </div>
+      {/* Type Selection */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Type de Soumission</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {submissionTypes.map((type) => (
+              <Card
+                key={type.id}
+                className={`cursor-pointer transition-all hover:shadow-md ${
+                  selectedType === type.id ? 'ring-2 ring-primary' : ''
+                }`}
+                onClick={() => setSelectedType(type.id)}
+              >
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl mb-2">{type.icon}</div>
+                  <h3 className="font-semibold">{type.label}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{type.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-            {/* Forms */}
-            <TabsContent value="projet" className="space-y-6">
-              <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle>{t('submit.project.title')}</CardTitle>
-                  <CardDescription>
-                    {t('submit.project.description.detail')}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
+      {/* Progressive Form */}
+      {selectedType && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Form */}
+          <div className="lg:col-span-2">
+            <ProgressiveForm
+              steps={formSteps}
+              currentStep={currentStep}
+              onStepChange={setCurrentStep}
+              onSave={handleSaveDraft}
+              onSubmit={handleSubmit}
+              formData={formData}
+              validationErrors={validationErrors}
+              canSubmit={canSubmit}
+              autoSaveStatus={autoSaveStatus}
+            >
+              {/* Step Content */}
+              {currentStep === 0 && (
+                <TemplateSelector
+                  type={selectedType}
+                  onTemplateSelect={handleTemplateSelect}
+                  selectedTemplateId={selectedTemplate?.id}
+                />
+              )}
+
+              {currentStep === 1 && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="titre">{t('submit.project.title.field')}</Label>
-                      <Input id="titre" placeholder={t('submit.project.title.placeholder')} />
+                      <Label htmlFor="title">Titre *</Label>
+                      <Input
+                        id="title"
+                        placeholder="Titre du document"
+                        value={formData.title || ''}
+                        onChange={(e) => updateFormField('title', e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="pays">{t('submit.project.country')}</Label>
-                      <Select>
+                      <Label htmlFor="country">Pays/Région</Label>
+                      <Select onValueChange={(value) => updateFormField('country', value)}>
                         <SelectTrigger>
-                          <SelectValue placeholder={t('submit.project.country.placeholder')} />
+                          <SelectValue placeholder="Sélectionner un pays" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="ci">Côte d'Ivoire</SelectItem>
-                          <SelectItem value="sn">Sénégal</SelectItem>
-                          <SelectItem value="bf">Burkina Faso</SelectItem>
+                          <SelectItem value="senegal">Sénégal</SelectItem>
+                          <SelectItem value="mali">Mali</SelectItem>
+                          <SelectItem value="burkina">Burkina Faso</SelectItem>
+                          <SelectItem value="niger">Niger</SelectItem>
+                          <SelectItem value="cote-divoire">Côte d'Ivoire</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description">Description du Projet</Label>
-                    <Textarea 
-                      id="description" 
-                      placeholder="Décrivez les objectifs, la portée et les bénéficiaires de votre projet..."
-                      className="min-h-32"
+                    <Label htmlFor="description">Description *</Label>
+                    <Textarea
+                      id="description"
+                      placeholder="Description détaillée"
+                      value={formData.description || ''}
+                      onChange={(e) => updateFormField('description', e.target.value)}
+                      rows={6}
                     />
                   </div>
+                </div>
+              )}
 
-                  <div className="grid md:grid-cols-3 gap-4">
+              {currentStep === 2 && selectedType === 'project' && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="budget">Budget Total (USD)</Label>
-                      <Input id="budget" type="number" placeholder="1000000" />
+                      <Label htmlFor="budget">Budget (USD) *</Label>
+                      <Input
+                        id="budget"
+                        type="number"
+                        placeholder="100000"
+                        value={formData.budget || ''}
+                        onChange={(e) => updateFormField('budget', e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="debut">Date de Début</Label>
-                      <Input id="debut" type="date" />
+                      <Label htmlFor="start_date">Date de début *</Label>
+                      <Input
+                        id="start_date"
+                        type="date"
+                        value={formData.start_date || ''}
+                        onChange={(e) => updateFormField('start_date', e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="fin">Date de Fin</Label>
-                      <Input id="fin" type="date" />
+                      <Label htmlFor="end_date">Date de fin *</Label>
+                      <Input
+                        id="end_date"
+                        type="date"
+                        value={formData.end_date || ''}
+                        onChange={(e) => updateFormField('end_date', e.target.value)}
+                      />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="kpis">Indicateurs de Performance (KPIs)</Label>
-                    <Textarea 
-                      id="kpis" 
-                      placeholder="Listez les indicateurs clés de mesure du succès du projet..."
-                      className="min-h-24"
+                    <Label>KPIs du projet</Label>
+                    <Textarea
+                      placeholder="Listez les indicateurs de performance clés (un par ligne)"
+                      value={Array.isArray(formData.kpis) ? formData.kpis.join('\n') : (formData.kpis || '')}
+                      onChange={(e) => updateFormField('kpis', e.target.value.split('\n').filter(kpi => kpi.trim()))}
+                      rows={4}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 2 && selectedType === 'position' && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="context">Contexte *</Label>
+                    <Textarea
+                      id="context"
+                      placeholder="Contexte et situation actuelle"
+                      value={formData.context || ''}
+                      onChange={(e) => updateFormField('context', e.target.value)}
+                      rows={4}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Documents Justificatifs</Label>
-                    <FileUpload
-                      accept=".pdf,.doc,.docx,.xls,.xlsx"
-                      maxSize={50 * 1024 * 1024}
-                      multiple={true}
-                      onFilesSelected={handleFileUpload}
+                    <Label htmlFor="position">Position proposée *</Label>
+                    <Textarea
+                      id="position"
+                      placeholder="Description de la position officielle"
+                      value={formData.position || ''}
+                      onChange={(e) => updateFormField('position', e.target.value)}
+                      rows={4}
                     />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="justification">Justification *</Label>
+                    <Textarea
+                      id="justification"
+                      placeholder="Arguments et justifications"
+                      value={formData.justification || ''}
+                      onChange={(e) => updateFormField('justification', e.target.value)}
+                      rows={4}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Attachments Step */}
+              {(currentStep === formSteps.length - 1) && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Pièces jointes</Label>
+                    <FileUpload onFilesSelected={handleFileUpload} />
                     {uploadedFiles.length > 0 && (
-                      <div className="mt-4">
-                        <p className="text-sm font-medium mb-2">Fichiers ajoutés:</p>
-                        <div className="space-y-1">
-                          {uploadedFiles.map((file, index) => (
-                            <div key={index} className="flex items-center justify-between p-2 bg-muted rounded text-sm">
-                              <span>{file.name}</span>
-                              <Button variant="ghost" size="sm" className="hover-scale">
-                                Supprimer
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
+                      <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">Fichiers ajoutés :</p>
+                        {uploadedFiles.map((file, index) => (
+                          <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
+                            <span className="text-sm">{file.name}</span>
+                            <Badge variant="secondary">{(file.size / 1024 / 1024).toFixed(2)} MB</Badge>
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>
-
-                  <div className="flex gap-4 pt-4">
-                    <Button variant="outline" className="flex-1 hover-scale" onClick={handleSaveDraft}>
-                      <Save className="h-4 w-4 mr-2" />
-                      {t('submit.action.save.draft')}
-                    </Button>
-                    <Button className="flex-1 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover-scale" onClick={handleSubmit}>
-                      <Send className="h-4 w-4 mr-2" />
-                      {t('submit.action.submit.review')}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="position" className="space-y-6">
-              <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle>Position Commune Africaine</CardTitle>
-                  <CardDescription>
-                    Contribuez à l'élaboration d'une position commune sur les enjeux FSU
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="sujet">Sujet de la Position</Label>
-                    <Input id="sujet" placeholder="Ex: Financement des infrastructures rurales" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="contexte">Contexte et Enjeux</Label>
-                    <Textarea 
-                      id="contexte" 
-                      placeholder="Décrivez le contexte et les enjeux liés à cette position..."
-                      className="min-h-32"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="position-text">Position Proposée</Label>
-                    <Textarea 
-                      id="position-text" 
-                      placeholder="Formulez clairement la position africaine proposée..."
-                      className="min-h-32"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="justification">Justification</Label>
-                    <Textarea 
-                      id="justification" 
-                      placeholder="Justifiez cette position avec des arguments et données..."
-                      className="min-h-24"
-                    />
-                  </div>
-
-                  <div className="flex gap-4 pt-4">
-                    <Button variant="outline" className="flex-1 hover-scale" onClick={handleSaveDraft}>
-                      <Save className="h-4 w-4 mr-2" />
-                      Enregistrer en Brouillon
-                    </Button>
-                    <Button className="flex-1 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover-scale" onClick={handleSubmit}>
-                      <Send className="h-4 w-4 mr-2" />
-                      Soumettre pour Révision
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Placeholder content for other tabs */}
-            <TabsContent value="regulation">
-              <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
-                <CardContent className="pt-6">
-                  <div className="text-center py-12">
-                    <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-medium mb-2">Proposition Réglementaire</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Formulaire en cours de développement
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="financement">
-              <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
-                <CardContent className="pt-6">
-                  <div className="text-center py-12">
-                    <Upload className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-medium mb-2">Demande de Financement</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Formulaire en cours de développement
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        {!selectedType && (
-          <div className="animate-fade-in mt-8" style={{ animationDelay: '300ms' }}>
-            <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
-              <CardContent className="pt-6">
-                <div className="text-center py-12">
-                  <Send className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Sélectionnez un Type de Soumission</h3>
-                  <p className="text-muted-foreground">
-                    Choisissez le type de document que vous souhaitez soumettre ci-dessus
-                  </p>
                 </div>
-              </CardContent>
-            </Card>
+              )}
+            </ProgressiveForm>
           </div>
-        )}
-      </PageContainer>
+
+          {/* Sidebar - AI Assistant */}
+          <div className="lg:col-span-1">
+            <AIWritingAssistant
+              content={formData.description || ''}
+              onContentUpdate={(content) => updateFormField('description', content)}
+              type={selectedType}
+              context={{
+                title: formData.title,
+                description: formData.description,
+                ...formData,
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {!selectedType && (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <div className="text-muted-foreground">
+              <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <h3 className="text-lg font-semibold mb-2">Commencez votre soumission</h3>
+              <p>Sélectionnez un type de document pour bénéficier de l'assistant IA et des templates intelligents.</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* My Submissions */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            Mes Soumissions ({submissions.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {submissions.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <h3 className="text-lg font-semibold mb-2">Aucune soumission</h3>
+                <p>Créez votre première soumission en sélectionnant un type ci-dessus.</p>
+              </div>
+            ) : (
+              submissions.map((submission) => (
+                <div
+                  key={submission.id}
+                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex-1">
+                    <h3 className="font-semibold">{submission.title}</h3>
+                    <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <FileText className="h-4 w-4" />
+                        {submission.type}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <CalendarDays className="h-4 w-4" />
+                        {new Date(submission.created_at).toLocaleDateString()}
+                      </span>
+                      {submission.auto_saved_at && (
+                        <span className="flex items-center gap-1 text-blue-600">
+                          <Clock className="h-4 w-4" />
+                          Auto-sauvegardé
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant={getStatusColor(submission.status)}
+                      className="flex items-center gap-1"
+                    >
+                      {getStatusIcon(submission.status)}
+                      {submission.status}
+                    </Badge>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        setCurrentSubmissionId(submission.id);
+                        setFormData(submission.content);
+                        setSelectedType(submission.type);
+                      }}
+                    >
+                      Continuer
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
