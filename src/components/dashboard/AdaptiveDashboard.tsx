@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { WelcomeWidget } from "../onboarding/WelcomeWidget";
 import { ModernDashboard } from "./ModernDashboard";
+import { ConfigurableDashboard } from "./ConfigurableDashboard";
 import { VirtualAssistant } from "./VirtualAssistant";
 import { SmartOnboarding } from "../onboarding/SmartOnboarding";
 
@@ -27,10 +28,10 @@ export function AdaptiveDashboard() {
     return <SmartOnboarding />;
   }
   
-  // Sinon, afficher le dashboard moderne avec l'assistant virtuel
+  // Sinon, afficher le dashboard intelligent configuré avec l'assistant virtuel
   return (
     <div className="relative">
-      <ModernDashboard />
+      <ConfigurableDashboard />
       <VirtualAssistant />
     </div>
   );

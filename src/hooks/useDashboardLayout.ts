@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export interface DashboardWidget {
   id: string;
-  type: 'stats' | 'regional-progress' | 'recent-activity' | 'quick-actions';
+  type: 'stats' | 'regional-progress' | 'recent-activity' | 'quick-actions' | 'real-time-metrics' | 'custom-metrics';
   enabled: boolean;
   order: number;
   config?: Record<string, any>;
@@ -17,17 +17,24 @@ export interface DashboardLayout {
 const getDefaultLayout = (userRole: string | undefined): DashboardLayout => {
   const baseWidgets: DashboardWidget[] = [
     { id: 'stats', type: 'stats', enabled: true, order: 0 },
+    { id: 'real-time-metrics', type: 'real-time-metrics', enabled: true, order: 1 },
     { id: 'recent-activity', type: 'recent-activity', enabled: true, order: 2 },
     { id: 'quick-actions', type: 'quick-actions', enabled: true, order: 3 }
   ];
 
   // Add regional progress for admins and editors
   if (userRole === 'super_admin' || userRole === 'admin_pays' || userRole === 'editeur') {
-    baseWidgets.splice(1, 0, { 
+    baseWidgets.push({ 
       id: 'regional-progress', 
       type: 'regional-progress', 
       enabled: true, 
-      order: 1 
+      order: 4 
+    });
+    baseWidgets.push({ 
+      id: 'custom-metrics', 
+      type: 'custom-metrics', 
+      enabled: false, 
+      order: 5 
     });
   }
 
