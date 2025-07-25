@@ -70,7 +70,18 @@ const UserPreferencesContext = createContext<UserPreferencesContextType | undefi
 export const UserPreferencesProvider = ({ children }: { children: ReactNode }) => {
   const [preferences, setPreferences] = useState<UserPreferences>(defaultPreferences);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  
+  // Safe auth hook usage with error boundary
+  const auth = (() => {
+    try {
+      return useAuth();
+    } catch (error) {
+      console.warn('Auth context not available, using fallback');
+      return { user: null };
+    }
+  })();
+  
+  const { user } = auth;
 
   useEffect(() => {
     if (user) {
