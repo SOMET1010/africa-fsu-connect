@@ -63,6 +63,39 @@ class Logger {
     const perfContext = { ...context, duration: `${duration}ms`, category: 'performance' };
     this.info(`Performance: ${operation}`, perfContext);
   }
+
+  // Production monitoring
+  monitoring(metric: string, value: number, context?: LogContext): void {
+    const monitoringContext = { ...context, metric, value, category: 'monitoring' };
+    if (!this.isDevelopment) {
+      // En production, envoyer vers service de monitoring
+      this.sendToMonitoringService(metric, value, monitoringContext);
+    }
+    this.info(`Monitoring: ${metric}=${value}`, monitoringContext);
+  }
+
+  private sendToMonitoringService(metric: string, value: number, context?: LogContext): void {
+    // Implémentation future pour service de monitoring (Sentry, DataDog, etc.)
+    try {
+      // Pour l'instant, stocker en localStorage pour développement
+      const monitoringData = {
+        timestamp: Date.now(),
+        metric,
+        value,
+        context,
+        environment: this.isDevelopment ? 'development' : 'production'
+      };
+      
+      const existing = JSON.parse(localStorage.getItem('production-monitoring') || '[]');
+      existing.push(monitoringData);
+      
+      // Garder seulement les 100 dernières entrées
+      const latest = existing.slice(-100);
+      localStorage.setItem('production-monitoring', JSON.stringify(latest));
+    } catch (error) {
+      console.warn('Failed to send monitoring data:', error);
+    }
+  }
 }
 
 export const logger = new Logger();

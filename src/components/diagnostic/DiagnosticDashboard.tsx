@@ -6,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle, AlertTriangle, XCircle, Activity, Database, Shield, Users, FileText, Zap } from 'lucide-react';
 import { useDiagnostic } from '@/hooks/useDiagnostic';
+import { ProductionReadinessPanel } from '@/components/production/ProductionReadinessPanel';
 
 export const DiagnosticDashboard = () => {
   const { 
@@ -75,6 +76,9 @@ export const DiagnosticDashboard = () => {
           {isRunning ? 'Diagnostic en cours...' : 'Lancer le diagnostic'}
         </Button>
       </div>
+
+      {/* Panel de préparation production */}
+      <ProductionReadinessPanel />
 
       {isRunning && (
         <Card>
