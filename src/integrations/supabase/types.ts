@@ -479,6 +479,42 @@ export type Database = {
         }
         Relationships: []
       }
+      data_versions: {
+        Row: {
+          change_type: string
+          created_at: string
+          created_by: string | null
+          data_snapshot: Json
+          id: string
+          record_id: string
+          sync_id: string | null
+          table_name: string
+          version_number: number
+        }
+        Insert: {
+          change_type?: string
+          created_at?: string
+          created_by?: string | null
+          data_snapshot: Json
+          id?: string
+          record_id: string
+          sync_id?: string | null
+          table_name: string
+          version_number: number
+        }
+        Update: {
+          change_type?: string
+          created_at?: string
+          created_by?: string | null
+          data_snapshot?: Json
+          id?: string
+          record_id?: string
+          sync_id?: string | null
+          table_name?: string
+          version_number?: number
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           country: string | null
@@ -1065,6 +1101,62 @@ export type Database = {
         }
         Relationships: []
       }
+      sync_conflicts: {
+        Row: {
+          agency_id: string
+          conflict_type: string
+          created_at: string
+          id: string
+          is_resolved: boolean
+          record_id: string
+          resolution_strategy: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          resolved_data: Json | null
+          source_data: Json
+          table_name: string
+          target_data: Json
+        }
+        Insert: {
+          agency_id: string
+          conflict_type: string
+          created_at?: string
+          id?: string
+          is_resolved?: boolean
+          record_id: string
+          resolution_strategy?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          resolved_data?: Json | null
+          source_data: Json
+          table_name: string
+          target_data: Json
+        }
+        Update: {
+          agency_id?: string
+          conflict_type?: string
+          created_at?: string
+          id?: string
+          is_resolved?: boolean
+          record_id?: string
+          resolution_strategy?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          resolved_data?: Json | null
+          source_data?: Json
+          table_name?: string
+          target_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sync_conflicts_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sync_logs: {
         Row: {
           agency_id: string
@@ -1124,6 +1216,110 @@ export type Database = {
             columns: ["connector_id"]
             isOneToOne: false
             referencedRelation: "agency_connectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sync_sessions: {
+        Row: {
+          agency_id: string
+          conflicts_detected: number | null
+          connector_id: string
+          ended_at: string | null
+          id: string
+          metadata: Json | null
+          records_processed: number | null
+          session_type: string
+          started_at: string
+          status: string
+          websocket_id: string | null
+        }
+        Insert: {
+          agency_id: string
+          conflicts_detected?: number | null
+          connector_id: string
+          ended_at?: string | null
+          id?: string
+          metadata?: Json | null
+          records_processed?: number | null
+          session_type?: string
+          started_at?: string
+          status?: string
+          websocket_id?: string | null
+        }
+        Update: {
+          agency_id?: string
+          conflicts_detected?: number | null
+          connector_id?: string
+          ended_at?: string | null
+          id?: string
+          metadata?: Json | null
+          records_processed?: number | null
+          session_type?: string
+          started_at?: string
+          status?: string
+          websocket_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sync_sessions_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sync_sessions_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "agency_connectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sync_workflows: {
+        Row: {
+          agency_id: string
+          conditions: Json | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean
+          steps: Json
+          updated_at: string
+          workflow_name: string
+        }
+        Insert: {
+          agency_id: string
+          conditions?: Json | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          steps?: Json
+          updated_at?: string
+          workflow_name: string
+        }
+        Update: {
+          agency_id?: string
+          conditions?: Json | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          steps?: Json
+          updated_at?: string
+          workflow_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sync_workflows_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
             referencedColumns: ["id"]
           },
         ]
