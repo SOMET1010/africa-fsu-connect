@@ -11,6 +11,8 @@ import { OrganizationsOverview } from "@/components/organizations/OrganizationsO
 import { OrganizationsMap } from "@/components/organizations/OrganizationsMap";
 import { EnrichedAgencyCard } from "@/components/organizations/EnrichedAgencyCard";
 import { AutoEnrichmentPanel } from "@/components/organizations/AutoEnrichmentPanel";
+import { AgencyComparison } from "@/components/organizations/AgencyComparison";
+import { AdvancedGeolocation } from "@/components/organizations/AdvancedGeolocation";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +26,9 @@ import {
   Filter,
   Download,
   RefreshCw,
-  BarChart3
+  BarChart3,
+  GitCompare,
+  Navigation
 } from "lucide-react";
 import {
   Select,
@@ -40,8 +44,9 @@ const Organizations = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedCountry, setSelectedCountry] = useState("all");
-  const [viewMode, setViewMode] = useState<'grid' | 'map' | 'overview' | 'enrichment'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'map' | 'overview' | 'enrichment' | 'comparison' | 'geolocation'>('grid');
   const [isSyncing, setIsSyncing] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
 
   // Handle sync functionality
   const handleSync = async () => {
@@ -125,6 +130,12 @@ const Organizations = () => {
               onClick: handleAnalytics,
               icon: <BarChart3 className="h-5 w-5" />,
               variant: "outline"
+            },
+            {
+              label: "Comparer",
+              onClick: () => setShowComparison(true),
+              icon: <GitCompare className="h-5 w-5" />,
+              variant: "outline"
             }
           ]}
         />
@@ -201,6 +212,13 @@ const Organizations = () => {
                 >
                   Enrichissement
                 </ModernButton>
+                <ModernButton 
+                  variant={viewMode === 'geolocation' ? 'default' : 'ghost'} 
+                  size="sm"
+                  onClick={() => setViewMode('geolocation')}
+                >
+                  Géolocalisation
+                </ModernButton>
               </div>
             </div>
           </ModernCard>
@@ -223,6 +241,12 @@ const Organizations = () => {
         {viewMode === 'enrichment' && (
           <ScrollReveal delay={600}>
             <AutoEnrichmentPanel agencies={filteredAgencies} onRefresh={() => {}} />
+          </ScrollReveal>
+        )}
+
+        {viewMode === 'geolocation' && (
+          <ScrollReveal delay={600}>
+            <AdvancedGeolocation agencies={filteredAgencies} />
           </ScrollReveal>
         )}
 
@@ -313,6 +337,13 @@ const Organizations = () => {
           </>
         )}
         </div>
+
+        {/* Agency Comparison Modal */}
+        <AgencyComparison
+          agencies={agencies}
+          isOpen={showComparison}
+          onClose={() => setShowComparison(false)}
+        />
       </div>
     </div>
   );
