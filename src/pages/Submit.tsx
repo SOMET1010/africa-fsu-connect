@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -176,7 +176,7 @@ export const Submit = () => {
   };
 
   // Validation logic
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const errors: Record<string, string[]> = {};
     
     if (!formData.title?.trim()) {
@@ -199,9 +199,8 @@ export const Submit = () => {
       }
     }
     
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
+    return errors;
+  }, [formData, selectedType]);
 
   const handleSaveDraft = async () => {
     if (!currentSubmissionId) {
@@ -222,7 +221,10 @@ export const Submit = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateForm()) {
+    const errors = validateForm();
+    setValidationErrors(errors);
+    
+    if (Object.keys(errors).length > 0) {
       toast({
         title: "Erreurs de validation",
         description: "Veuillez corriger les erreurs avant de soumettre",
@@ -266,19 +268,25 @@ export const Submit = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  // Initialize form when component mounts
+  // Update validation when form data changes
   useEffect(() => {
-    if (!currentSubmissionId && selectedType) {
-      // Auto-create a draft when user starts working
-      setTimeout(async () => {
-        if (Object.keys(formData).length > 0) {
-          await handleSaveDraft();
-        }
-      }, 5000);
-    }
-  }, [formData, selectedType]);
+    const errors = validateForm();
+    setValidationErrors(errors);
+  }, [validateForm]);
 
-  const canSubmit = validateForm() && formSteps.every(step => 
+  // Initialize form when component mounts (remove auto-save trigger)
+  useEffect(() => {
+    // Only auto-create draft if user has meaningful content
+    const timer = setTimeout(async () => {
+      if (!currentSubmissionId && selectedType && formData.title?.trim()) {
+        await handleSaveDraft();
+      }
+    }, 10000); // 10 seconds delay
+
+    return () => clearTimeout(timer);
+  }, [selectedType]); // Remove formData from dependency
+
+  const canSubmit = Object.keys(validationErrors).length === 0 && formSteps.every(step => 
     !step.required || step.fields.every(field => formData[field])
   );
 
