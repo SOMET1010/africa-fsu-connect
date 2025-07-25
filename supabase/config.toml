@@ -2,3 +2,6 @@ project_id = "wsbawdvqfbmtjtdtyddy"
 
 [functions.get-mapbox-token]
 verify_jwt = false
+
+[functions.security-ai-anomaly]
+verify_jwt = true
