@@ -437,6 +437,39 @@ export type Database = {
         }
         Relationships: []
       }
+      countries: {
+        Row: {
+          code: string
+          continent: string | null
+          created_at: string
+          id: string
+          name_en: string
+          name_fr: string
+          region: string | null
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          continent?: string | null
+          created_at?: string
+          id?: string
+          name_en: string
+          name_fr: string
+          region?: string | null
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          continent?: string | null
+          created_at?: string
+          id?: string
+          name_en?: string
+          name_fr?: string
+          region?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       data_sources: {
         Row: {
           acronym: string
@@ -936,6 +969,42 @@ export type Database = {
           name?: string
           source_organization?: string | null
           unit?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      indicator_translations: {
+        Row: {
+          category_name: string | null
+          created_at: string
+          description: string | null
+          display_name: string
+          id: string
+          indicator_code: string
+          language_code: string
+          unit_display: string | null
+          updated_at: string
+        }
+        Insert: {
+          category_name?: string | null
+          created_at?: string
+          description?: string | null
+          display_name: string
+          id?: string
+          indicator_code: string
+          language_code: string
+          unit_display?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category_name?: string | null
+          created_at?: string
+          description?: string | null
+          display_name?: string
+          id?: string
+          indicator_code?: string
+          language_code?: string
+          unit_display?: string | null
           updated_at?: string
         }
         Relationships: []
