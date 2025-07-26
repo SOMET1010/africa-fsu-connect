@@ -1,13 +1,12 @@
 
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { GlobalIndicatorsWidget } from "@/components/dashboard/widgets/GlobalIndicatorsWidget";
-import { IndicatorsEnrichmentPanel } from "@/components/indicators/IndicatorsEnrichmentPanel";
 import { HeroSection } from "@/components/ui/hero-section";
 import { ModernCard } from "@/components/ui/modern-card";
-import { ModernButton } from "@/components/ui/modern-button";
 import { ModernStatsCard } from "@/components/ui/modern-stats-card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AdaptiveInterface } from "@/components/layout/AdaptiveInterface";
+import { SimplifiedIndicators } from "@/components/indicators/SimplifiedIndicators";
+import { AdvancedIndicatorsControls } from "@/components/indicators/AdvancedIndicatorsControls";
 import { TrendingUp, Download, Filter, Calendar, Globe, Database, BarChart3, Activity } from "lucide-react";
 
 const Indicators = () => {
@@ -125,66 +124,15 @@ const Indicators = () => {
           </ModernCard>
         </ScrollReveal>
 
-        {/* Main Content with Tabs */}
+        {/* Adaptive Interface */}
         <ScrollReveal delay={600}>
-          <ModernCard variant="glass" className="overflow-hidden">
-            <Tabs defaultValue="dashboard" className="w-full">
-              <div className="border-b border-border/30 px-6 pt-6">
-                <TabsList className="grid w-full max-w-md grid-cols-2 bg-muted/30">
-                  <TabsTrigger value="dashboard" className="flex items-center gap-2 data-[state=active]:bg-background">
-                    <TrendingUp className="h-4 w-4" />
-                    Dashboard
-                  </TabsTrigger>
-                  <TabsTrigger value="enrichment" className="flex items-center gap-2 data-[state=active]:bg-background">
-                    <Database className="h-4 w-4" />
-                    Enrichissement
-                  </TabsTrigger>
-                </TabsList>
-              </div>
-              
-              <TabsContent value="dashboard" className="p-6 mt-0">
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground">Dashboard Indicateurs</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Visualisation interactive des données FSU
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <ModernButton variant="outline" size="sm">
-                        <Filter className="h-4 w-4 mr-2" />
-                        Filtres
-                      </ModernButton>
-                      <ModernButton variant="default" size="sm">
-                        <Download className="h-4 w-4 mr-2" />
-                        Export
-                      </ModernButton>
-                    </div>
-                  </div>
-                  <GlobalIndicatorsWidget />
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="enrichment" className="p-6 mt-0">
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground">Enrichissement des Données</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Outils pour compléter et améliorer les indicateurs
-                      </p>
-                    </div>
-                    <ModernButton variant="outline" size="sm">
-                      <Database className="h-4 w-4 mr-2" />
-                      Sources
-                    </ModernButton>
-                  </div>
-                  <IndicatorsEnrichmentPanel />
-                </div>
-              </TabsContent>
-            </Tabs>
-          </ModernCard>
+          <AdaptiveInterface
+            title="Tableau de Bord des Indicateurs"
+            description="Interface adaptée à votre niveau d'expertise"
+            advancedContent={<AdvancedIndicatorsControls />}
+          >
+            <SimplifiedIndicators />
+          </AdaptiveInterface>
         </ScrollReveal>
       </div>
     </div>
