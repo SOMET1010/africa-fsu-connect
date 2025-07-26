@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { MapPin, Search } from "lucide-react";
+import { CountriesService } from '@/services/countriesService';
 
 interface Agency {
   id: string;
@@ -23,30 +24,6 @@ interface LeafletInteractiveMapProps {
   agencies: Agency[];
 }
 
-// Coordonnées correctes des capitales africaines [latitude, longitude]
-const COUNTRY_COORDINATES: Record<string, [number, number]> = {
-  "Sénégal": [14.6928, -17.4441], // Dakar
-  "Côte d'Ivoire": [5.3600, -4.0305], // Abidjan  
-  "Nigeria": [9.0765, 7.5244], // Abuja
-  "Kenya": [-1.2921, 36.8219], // Nairobi
-  "Ghana": [5.6037, -0.1870], // Accra
-  "Afrique du Sud": [-25.7479, 28.2293], // Johannesburg
-  "Rwanda": [-1.9441, 30.0619], // Kigali
-  "Uganda": [0.3476, 32.5825], // Kampala
-  // Pays supplémentaires pour référence future
-  "Tanzanie": [-6.7924, 39.2083], // Dar es Salaam
-  "Zambie": [-15.3875, 28.2871], // Lusaka
-  "Botswana": [-24.6282, 25.9087], // Gaborone
-  "Namibie": [-22.5609, 17.0658], // Windhoek
-  "Burkina Faso": [12.2383, -1.5616], // Ouagadougou
-  "Mali": [12.6392, -7.9889], // Bamako
-  "Niger": [13.5116, 2.1111], // Niamey
-  "Tchad": [12.1348, 15.0444], // N'Djamena
-  "Cameroun": [3.8480, 11.5174], // Yaoundé
-  "Gabon": [0.4162, 9.4673], // Libreville
-  "Congo": [-4.2634, 15.2662], // Brazzaville
-  "RDC": [-4.4419, 15.2663], // Kinshasa
-};
 
 const SYNC_STATUS_COLORS = {
   'synced': '#10b981', // green
@@ -61,12 +38,27 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
   const markers = useRef<L.Marker[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
+  const [countryCoordinates, setCountryCoordinates] = useState<Record<string, [number, number]>>({});
 
   const filteredAgencies = agencies.filter(agency =>
     agency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     agency.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
     agency.acronym.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Load country coordinates on mount
+  useEffect(() => {
+    const loadCountryCoordinates = async () => {
+      try {
+        const coords = await CountriesService.getCountryCoordinatesMap();
+        setCountryCoordinates(coords);
+      } catch (error) {
+        logger.error('Failed to load country coordinates', error, { component: 'LeafletInteractiveMap' });
+      }
+    };
+
+    loadCountryCoordinates();
+  }, []);
 
   // Clear all existing markers
   const clearMarkers = () => {
@@ -112,7 +104,7 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
     logger.info('Adding markers to map', { count: agenciesToShow.length, component: 'LeafletInteractiveMap' });
     
     agenciesToShow.forEach((agency) => {
-      const coordinates = COUNTRY_COORDINATES[agency.country];
+      const coordinates = countryCoordinates[agency.country];
       if (!coordinates) {
         logger.warn('No coordinates found for country', { country: agency.country, agency: agency.acronym, component: 'LeafletInteractiveMap' });
         return;
@@ -233,12 +225,12 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
 
   // Update markers when filtered agencies change
   useEffect(() => {
-    if (!map.current) return;
+    if (!map.current || Object.keys(countryCoordinates).length === 0) return;
 
     logger.debug('Updating markers for filtered agencies...', { component: 'LeafletInteractiveMap' });
     clearMarkers();
     addMarkersToMap(filteredAgencies);
-  }, [filteredAgencies]);
+  }, [filteredAgencies, countryCoordinates]);
 
   return (
     <Card className="p-6">

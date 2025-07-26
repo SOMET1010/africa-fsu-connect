@@ -15,6 +15,8 @@ import {
   Target
 } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
+import { CountriesService } from '@/services/countriesService';
+import { logger } from '@/utils/logger';
 
 type Agency = Tables<"agencies">;
 
@@ -23,24 +25,6 @@ interface AdvancedGeolocationProps {
   onAgencySelect?: (agency: Agency) => void;
 }
 
-const COUNTRY_COORDINATES: Record<string, [number, number]> = {
-  "Maroc": [31.7917, -7.0926],
-  "Tunisie": [33.8869, 9.5375],
-  "Algérie": [28.0339, 1.6596],
-  "Sénégal": [14.4974, -14.4524],
-  "Mali": [17.5707, -3.9962],
-  "Niger": [17.6078, 8.0817],
-  "Burkina Faso": [12.2383, -1.5616],
-  "Côte d'Ivoire": [7.5400, -5.5471],
-  "Ghana": [7.9465, -1.0232],
-  "Nigeria": [9.0820, 8.6753],
-  "Cameroun": [7.3697, 12.3547],
-  "Kenya": [-0.0236, 37.9062],
-  "Ouganda": [1.3733, 32.2903],
-  "Rwanda": [-1.9403, 29.8739],
-  "Éthiopie": [9.1450, 40.4897],
-  "Afrique du Sud": [-30.5595, 22.9375]
-};
 
 const COVERAGE_LAYERS = {
   population: { name: "Densité de population", color: "#4F46E5" },
@@ -56,11 +40,26 @@ export const AdvancedGeolocation = ({ agencies, onAgencySelect }: AdvancedGeoloc
   const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
   const [coverageData, setCoverageData] = useState<any>({});
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [countryCoordinates, setCountryCoordinates] = useState<Record<string, [number, number]>>({});
 
   const filteredAgencies = agencies.filter(agency =>
     agency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     agency.country.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Load country coordinates on mount
+  useEffect(() => {
+    const loadCountryCoordinates = async () => {
+      try {
+        const coords = await CountriesService.getCountryCoordinatesMap();
+        setCountryCoordinates(coords);
+      } catch (error) {
+        logger.error('Failed to load country coordinates', error, { component: 'AdvancedGeolocation' });
+      }
+    };
+
+    loadCountryCoordinates();
+  }, []);
 
   // Calculate coverage statistics for each agency
   useEffect(() => {

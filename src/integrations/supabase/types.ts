@@ -439,30 +439,39 @@ export type Database = {
       }
       countries: {
         Row: {
+          capital_city: string | null
           code: string
           continent: string | null
           created_at: string
           id: string
+          latitude: number | null
+          longitude: number | null
           name_en: string
           name_fr: string
           region: string | null
           updated_at: string
         }
         Insert: {
+          capital_city?: string | null
           code: string
           continent?: string | null
           created_at?: string
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           name_en: string
           name_fr: string
           region?: string | null
           updated_at?: string
         }
         Update: {
+          capital_city?: string | null
           code?: string
           continent?: string | null
           created_at?: string
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           name_en?: string
           name_fr?: string
           region?: string | null

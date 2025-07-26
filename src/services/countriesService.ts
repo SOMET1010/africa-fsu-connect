@@ -7,6 +7,9 @@ export interface Country {
   name_en: string;
   region: string;
   continent: string;
+  latitude?: number;
+  longitude?: number;
+  capital_city?: string;
 }
 
 export class CountriesService {
@@ -45,6 +48,34 @@ export class CountriesService {
   static async getAfricanCountries(): Promise<Country[]> {
     const countries = await this.getCountries();
     return countries.filter(c => c.continent === 'Afrique');
+  }
+
+  static async getCountryCoordinates(countryName: string): Promise<[number, number] | null> {
+    const countries = await this.getCountries();
+    const country = countries.find(c => 
+      c.name_fr === countryName || 
+      c.name_en === countryName
+    );
+    
+    if (!country || !country.latitude || !country.longitude) return null;
+    
+    return [country.latitude, country.longitude];
+  }
+
+  static async getCountryCoordinatesMap(): Promise<Record<string, [number, number]>> {
+    const countries = await this.getCountries();
+    const coordsMap: Record<string, [number, number]> = {};
+    
+    countries.forEach(country => {
+      if (country.latitude && country.longitude) {
+        coordsMap[country.name_fr] = [country.latitude, country.longitude];
+        if (country.name_en !== country.name_fr) {
+          coordsMap[country.name_en] = [country.latitude, country.longitude];
+        }
+      }
+    });
+    
+    return coordsMap;
   }
   
   static clearCache(): void {

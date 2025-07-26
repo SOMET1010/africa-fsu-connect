@@ -17,17 +17,10 @@ const CONSOLE_REPLACEMENTS = {
   'console.debug': 'logger.debug'
 };
 
-// Fichiers déjà traités manuellement
-const PROCESSED_FILES = new Set([
-  'VirtualAssistant.tsx',
-  'CustomMetricsWidget.tsx', 
-  'IndicatorsEnrichmentPanel.tsx',
-  'InternationalStandardsPanel.tsx',
-  'AutoEnrichmentPanel.tsx',
-  'BidirectionalSyncConfig.tsx',
-  'ProjectDialog.tsx',
-  'ProjectExport.tsx',
-  'SampleProjectData.tsx'
+// Skip test files and specific files that need special handling
+const SKIP_FILES = new Set([
+  'vite-env.d.ts',
+  'loggerMigration.ts' // This file is for migration purposes
 ]);
 
 function getAllTsxFiles(dir: string): string[] {
@@ -55,8 +48,8 @@ function getAllTsxFiles(dir: string): string[] {
 function cleanConsoleInFile(filePath: string): boolean {
   const fileName = filePath.split('/').pop() || '';
   
-  if (PROCESSED_FILES.has(fileName)) {
-    console.log(`⏭️  Skipping ${fileName} (already processed)`);
+  // Skip test files and special files
+  if (fileName.includes('.test.') || fileName.includes('.spec.') || SKIP_FILES.has(fileName)) {
     return false;
   }
   
@@ -80,17 +73,24 @@ function cleanConsoleInFile(filePath: string): boolean {
   }
   
   // Ajouter l'import logger si nécessaire
-  if (needsLoggerImport && !updatedContent.includes('from "@/utils/logger"')) {
+  if (needsLoggerImport && !updatedContent.includes('from "@/utils/logger"') && !updatedContent.includes("from '@/utils/logger'")) {
     // Trouver la position d'insertion pour l'import
-    const importLines = updatedContent.split('\n').filter(line => line.trim().startsWith('import'));
-    if (importLines.length > 0) {
-      const lastImportIndex = updatedContent.lastIndexOf(importLines[importLines.length - 1]);
-      const nextLineIndex = updatedContent.indexOf('\n', lastImportIndex) + 1;
-      
-      updatedContent = updatedContent.slice(0, nextLineIndex) + 
-                      'import { logger } from "@/utils/logger";\n' + 
-                      updatedContent.slice(nextLineIndex);
+    const lines = updatedContent.split('\n');
+    let insertIndex = 0;
+    
+    // Chercher la dernière ligne d'import
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim().startsWith('import ')) {
+        insertIndex = i + 1;
+      } else if (lines[i].trim() === '' && insertIndex > 0) {
+        break;
+      } else if (!lines[i].trim().startsWith('import') && !lines[i].trim().startsWith('//') && lines[i].trim() !== '') {
+        break;
+      }
     }
+    
+    lines.splice(insertIndex, 0, 'import { logger } from "@/utils/logger";');
+    updatedContent = lines.join('\n');
   }
   
   // Écrire le fichier seulement s'il y a des changements
