@@ -72,7 +72,7 @@ export const useABTesting = () => {
         assignments[testId] = variant.id;
         localStorage.setItem('ab-test-assignments', JSON.stringify(assignments));
         
-        logger.info('A/B test assignment', { testId, variantId: variant.id, userId });
+        logger.info('A/B test assignment', { data: { testId, variantId: variant.id, userId } });
         
         return variant;
       }
@@ -103,7 +103,7 @@ export const useABTesting = () => {
     storedResults.push(result);
     localStorage.setItem('ab-test-results', JSON.stringify(storedResults));
 
-    logger.info('A/B test conversion', { testId, variantId: variant.id, userId, metrics });
+    logger.info('A/B test conversion', { data: { testId, variantId: variant.id, userId, metrics } });
   }, [getVariant, getUserId]);
 
   // Create new A/B test
@@ -124,7 +124,7 @@ export const useABTesting = () => {
     storedTests.push(newTest);
     localStorage.setItem('ab-tests', JSON.stringify(storedTests));
 
-    logger.info('A/B test created', { testId: newTest.id, variants: newTest.variants.length });
+    logger.info('A/B test created', { data: { testId: newTest.id, variants: newTest.variants.length } });
   }, []);
 
   // Start test
@@ -135,7 +135,7 @@ export const useABTesting = () => {
         : test
     ));
 
-    logger.info('A/B test started', { testId });
+    logger.info('A/B test started', { data: { testId } });
   }, []);
 
   // Stop test
@@ -146,7 +146,7 @@ export const useABTesting = () => {
         : test
     ));
 
-    logger.info('A/B test stopped', { testId });
+    logger.info('A/B test stopped', { data: { testId } });
   }, []);
 
   // Calculate test statistics

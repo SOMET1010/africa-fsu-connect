@@ -85,9 +85,11 @@ export const useAdvancedAnalytics = () => {
 
     // Analytics logging
     logger.info('User interaction tracked', {
-      type: fullInteraction.type,
-      target: fullInteraction.target,
-      page: fullInteraction.page
+      data: {
+        type: fullInteraction.type,
+        target: fullInteraction.target,
+        page: fullInteraction.page
+      }
     });
   }, []);
 
