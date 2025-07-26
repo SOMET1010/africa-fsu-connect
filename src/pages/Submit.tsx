@@ -176,7 +176,7 @@ export const Submit = () => {
               onSaveDraft={handleSaveDraft}
               onSubmit={handleSubmit}
               canSubmit={canSubmit}
-              autoSaveStatus={typeof autoSaveStatus === 'string' ? autoSaveStatus : 'idle'}
+              autoSaveStatus={autoSaveStatus}
               selectedType={selectedType}
               submissions={submissions}
               onFileUpload={handleFileUpload}

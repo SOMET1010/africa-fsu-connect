@@ -24,7 +24,10 @@ interface AdvancedSubmitControlsProps {
   onSaveDraft: () => void;
   onSubmit: () => void;
   canSubmit: boolean;
-  autoSaveStatus: string;
+  autoSaveStatus: {
+    status: 'idle' | 'saving' | 'saved' | 'error';
+    lastSaved?: Date;
+  };
   selectedType: string;
   submissions: any[];
   onFileUpload: (files: File[]) => void;
@@ -127,7 +130,11 @@ export const AdvancedSubmitControls = ({
                 validationErrors={validationErrors}
                 canSubmit={canSubmit}
                 autoSaveStatus={autoSaveStatus}
-              />
+              >
+                <div className="text-center text-muted-foreground p-8">
+                  Formulaire progressif avancé - Contenu personnalisé
+                </div>
+              </ProgressiveForm>
             </div>
           </TabsContent>
           
@@ -140,8 +147,9 @@ export const AdvancedSubmitControls = ({
                 </p>
               </div>
               <AIWritingAssistant
-                documentType={selectedType}
-                onContentGenerated={(content) => {}}
+                content={formData.description || ''}
+                onContentUpdate={(content) => {}}
+                type={selectedType as 'project' | 'position' | 'regulation' | 'funding'}
                 context={formData}
               />
             </div>
@@ -158,10 +166,10 @@ export const AdvancedSubmitControls = ({
               
               <div className="space-y-4">
                 <FileUpload
-                  onFileUpload={onFileUpload}
-                  maxFiles={10}
-                  acceptedFileTypes={['.pdf', '.doc', '.docx', '.txt', '.jpg', '.png']}
-                  maxFileSize={10 * 1024 * 1024} // 10MB
+                  onFilesSelected={onFileUpload}
+                  accept=".pdf,.doc,.docx,.txt,.jpg,.png"
+                  maxSize={10}
+                  multiple={true}
                 />
                 
                 {uploadedFiles.length > 0 && (

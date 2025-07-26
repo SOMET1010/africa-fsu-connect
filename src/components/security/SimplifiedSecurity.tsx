@@ -20,14 +20,14 @@ export const SimplifiedSecurity = ({
   const basicStats = [
     {
       title: "Sécurité",
-      value: "Élevé",
+      value: 95,
       icon: Shield,
       trend: { value: 95, label: "Score", positive: true },
       description: "Niveau global"
     },
     {
       title: "2FA",
-      value: twoFactorEnabled ? "ON" : "OFF",
+      value: twoFactorEnabled ? 1 : 0,
       icon: Key,
       trend: { value: twoFactorEnabled ? 100 : 0, label: "Protection", positive: twoFactorEnabled },
       description: "Double authentification"
