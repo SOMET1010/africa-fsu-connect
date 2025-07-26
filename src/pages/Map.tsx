@@ -1,195 +1,249 @@
-
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
+import { ModernCard } from "@/components/ui/modern-card";
+import { ModernButton } from "@/components/ui/modern-button";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useAgencies } from "@/hooks/useAgencies";
-import { LeafletInteractiveMap } from "@/components/organizations/LeafletInteractiveMap";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { HeroSection } from "@/components/ui/hero-section";
 import { 
-  Globe, 
   MapPin, 
-  Search,
+  Globe, 
+  Building2, 
+  Zap, 
+  Users,
+  Satellite,
+  Network,
+  Target,
+  TrendingUp,
   Filter,
-  Zap,
-  Building2
+  Layers,
+  Navigation
 } from "lucide-react";
 
-const REGIONS = ["Europe", "Afrique", "Asie", "Amérique", "CEDEAO", "EACO", "SADC", "UMA"];
-
-export default function Map() {
-  const { agencies, loading } = useAgencies();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState<string>("all");
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
-
-  // Filtrer spécifiquement les SUTEL (agences avec metadata.sutel_type)
-  const sutelAgencies = agencies.filter(agency => 
-    agency.metadata && 
-    typeof agency.metadata === 'object' && 
-    'sutel_type' in agency.metadata && 
-    agency.metadata.sutel_type
-  );
-
-  const filteredAgencies = sutelAgencies.filter(agency => {
-    const matchesSearch = agency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         agency.acronym?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         agency.country.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRegion = selectedRegion === "all" || agency.region === selectedRegion;
-    const matchesStatus = selectedStatus === "all" || agency.sync_status === selectedStatus;
-    
-    return matchesSearch && matchesRegion && matchesStatus;
-  });
-
-  if (loading) {
-    return (
-      <div className="container mx-auto py-8">
-        <div className="flex items-center justify-center h-96">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        </div>
-      </div>
-    );
+const INTERACTIVE_REGIONS = {
+  "Afrique de l'Ouest": {
+    position: { top: "45%", left: "20%" },
+    color: "from-emerald-500 via-teal-500 to-green-600",
+    flag: "🌿",
+    countries: ["Sénégal", "Mali", "Burkina Faso", "Niger", "Côte d'Ivoire", "Ghana", "Togo", "Bénin"],
+    organizations: 28,
+    projects: 15,
+    coverage: 85
+  },
+  "Afrique Centrale": {
+    position: { top: "50%", left: "35%" },
+    color: "from-purple-500 via-violet-500 to-indigo-600",
+    flag: "🌺",
+    countries: ["Cameroun", "Tchad", "RCA", "Congo", "RDC", "Gabon"],
+    organizations: 18,
+    projects: 9,
+    coverage: 72
+  },
+  "Afrique de l'Est": {
+    position: { top: "40%", left: "58%" },
+    color: "from-cyan-500 via-blue-500 to-indigo-600",
+    flag: "🌊",
+    countries: ["Kenya", "Tanzanie", "Ouganda", "Rwanda", "Burundi", "Éthiopie"],
+    organizations: 22,
+    projects: 12,
+    coverage: 78
+  },
+  "Afrique Australe": {
+    position: { top: "70%", left: "40%" },
+    color: "from-amber-500 via-orange-500 to-red-600",
+    flag: "🦁",
+    countries: ["Afrique du Sud", "Botswana", "Namibie", "Zimbabwe", "Zambie"],
+    organizations: 16,
+    projects: 8,
+    coverage: 90
+  },
+  "Afrique du Nord": {
+    position: { top: "25%", left: "35%" },
+    color: "from-red-500 via-pink-500 to-rose-600",
+    flag: "🏺",
+    countries: ["Maroc", "Algérie", "Tunisie", "Libye", "Égypte"],
+    organizations: 14,
+    projects: 6,
+    coverage: 95
   }
+};
+
+const Map = () => {
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+  const [mapMode, setMapMode] = useState<'organizations' | 'projects' | 'coverage'>('organizations');
+
+  const globalStats = {
+    totalOrganizations: Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.organizations, 0),
+    totalProjects: Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.projects, 0),
+    averageCoverage: Math.round(Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.coverage, 0) / Object.keys(INTERACTIVE_REGIONS).length),
+    totalCountries: Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.countries.length, 0)
+  };
 
   return (
-    <div className="container mx-auto py-8 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <Globe className="h-8 w-8 text-primary" />
-            Carte Interactive SUTEL
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Visualisation géographique du réseau des agences SUTEL africaines
-          </p>
-        </div>
-        <Badge variant="outline" className="text-lg px-4 py-2">
-          {filteredAgencies.length} agences
-        </Badge>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        
+        {/* Hero Section */}
+        <ScrollReveal direction="fade">
+          <HeroSection
+            title="Carte Interactive SUTEL"
+            subtitle="Réseau Panafricain"
+            description="Explorez la couverture géographique du service universel des télécommunications à travers l'Afrique. Visualisez les organisations, projets et indicateurs de connectivité en temps réel."
+            actions={[
+              {
+                label: "Mode Organisations",
+                onClick: () => setMapMode('organizations'),
+                icon: <Building2 className="h-5 w-5" />,
+                variant: mapMode === 'organizations' ? "default" : "outline"
+              },
+              {
+                label: "Mode Projets",
+                onClick: () => setMapMode('projects'),
+                icon: <Target className="h-5 w-5" />,
+                variant: mapMode === 'projects' ? "default" : "outline"
+              },
+              {
+                label: "Mode Couverture",
+                onClick: () => setMapMode('coverage'),
+                icon: <Network className="h-5 w-5" />,
+                variant: mapMode === 'coverage' ? "default" : "outline"
+              }
+            ]}
+          >
+            <div className="flex gap-2 mt-6">
+              <Badge variant="secondary" className="flex items-center gap-1">
+                <Globe className="h-3 w-3" />
+                {globalStats.totalCountries} Pays
+              </Badge>
+              <Badge variant="secondary" className="flex items-center gap-1">
+                <Building2 className="h-3 w-3" />
+                {globalStats.totalOrganizations} Organisations
+              </Badge>
+              <Badge variant="secondary" className="flex items-center gap-1">
+                <Satellite className="h-3 w-3" />
+                Temps Réel
+              </Badge>
+            </div>
+          </HeroSection>
+        </ScrollReveal>
+
+        {/* Interactive Map Card */}
+        <ScrollReveal delay={400}>
+          <ModernCard variant="glass" className="overflow-hidden">
+            <div className="relative h-[600px] mx-6 my-6 bg-gradient-to-br from-slate-50 via-blue-50 via-indigo-50 to-emerald-50 dark:from-slate-900 dark:via-blue-950 dark:via-indigo-950 dark:to-emerald-950 rounded-3xl overflow-hidden border border-border/50 shadow-inner">
+              
+              {/* Enhanced Africa Continent Shape */}
+              <div className="absolute inset-12">
+                <svg viewBox="0 0 100 120" className="w-full h-full opacity-25">
+                  <path
+                    d="M45 10 C50 8, 55 12, 60 15 L65 20 C70 25, 72 30, 70 35 L68 45 C65 50, 70 55, 75 60 L80 70 C78 75, 75 80, 70 85 L65 95 C60 100, 55 98, 50 95 L45 90 C40 85, 35 80, 30 75 L25 65 C20 60, 18 55, 20 50 L22 40 C25 35, 30 30, 35 25 L40 15 C42 12, 44 10, 45 10 Z"
+                    fill="url(#continentGradient)"
+                    stroke="currentColor"
+                    strokeWidth="0.5"
+                    className="text-primary/40"
+                  />
+                  <defs>
+                    <linearGradient id="continentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="currentColor" stopOpacity="0.1" />
+                      <stop offset="100%" stopColor="currentColor" stopOpacity="0.4" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+
+              {/* Regional Interactive Markers */}
+              {Object.entries(INTERACTIVE_REGIONS).map(([region, data]) => {
+                const isHovered = hoveredRegion === region;
+                
+                return (
+                  <div
+                    key={region}
+                    className="absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-700 cursor-pointer group"
+                    style={{ 
+                      top: data.position.top, 
+                      left: data.position.left,
+                      zIndex: isHovered ? 50 : 20
+                    }}
+                    onMouseEnter={() => setHoveredRegion(region)}
+                    onMouseLeave={() => setHoveredRegion(null)}
+                  >
+                    {/* Pulse Rings */}
+                    <div className="absolute inset-0 animate-ping">
+                      <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${data.color} opacity-20`} />
+                    </div>
+                    
+                    {/* Main Marker */}
+                    <div className={`relative w-16 h-16 rounded-full bg-gradient-to-r ${data.color} shadow-2xl transition-all duration-700 ${
+                      isHovered ? 'scale-150' : 'hover:scale-125'
+                    } border-4 border-white dark:border-gray-800 flex items-center justify-center`}>
+                      <span className="text-2xl animate-bounce">{data.flag}</span>
+                      
+                      {/* Data Badge */}
+                      <div className="absolute -top-4 -right-4 w-10 h-10 bg-white dark:bg-gray-800 text-foreground text-sm rounded-full flex items-center justify-center border-3 border-white dark:border-gray-800 font-bold shadow-lg">
+                        {data.organizations}
+                      </div>
+                    </div>
+
+                    {/* Tooltip */}
+                    <div className={`absolute bottom-20 left-1/2 transform -translate-x-1/2 transition-all duration-700 ${
+                      isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                    }`}>
+                      <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md p-6 rounded-3xl shadow-2xl border border-border min-w-80">
+                        <div className="flex items-center gap-4 mb-4">
+                          <span className="text-4xl">{data.flag}</span>
+                          <div>
+                            <h4 className="font-bold text-xl">{region}</h4>
+                            <p className="text-sm text-muted-foreground">{data.countries.length} pays</p>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="text-center p-3 bg-emerald-500/10 rounded-xl">
+                            <Building2 className="h-6 w-6 text-emerald-500 mx-auto mb-2" />
+                            <p className="font-bold text-lg">{data.organizations}</p>
+                            <p className="text-xs text-muted-foreground">Organisations</p>
+                          </div>
+                          <div className="text-center p-3 bg-blue-500/10 rounded-xl">
+                            <Target className="h-6 w-6 text-blue-500 mx-auto mb-2" />
+                            <p className="font-bold text-lg">{data.projects}</p>
+                            <p className="text-xs text-muted-foreground">Projets</p>
+                          </div>
+                          <div className="text-center p-3 bg-purple-500/10 rounded-xl">
+                            <Network className="h-6 w-6 text-purple-500 mx-auto mb-2" />
+                            <p className="font-bold text-lg">{data.coverage}%</p>
+                            <p className="text-xs text-muted-foreground">Couverture</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Enhanced Legend */}
+              <div className="absolute bottom-8 left-8 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-border">
+                <h5 className="font-bold text-lg mb-4 flex items-center gap-2">
+                  <Navigation className="h-5 w-5 text-primary" />
+                  Légende Interactive
+                </h5>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full shadow-lg" />
+                    <span>Organisations actives</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-primary/20 rounded-full animate-pulse" />
+                    <span>Données temps réel</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ModernCard>
+        </ScrollReveal>
       </div>
-
-      {/* Stats rapides */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <Zap className="h-4 w-4 text-primary" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Total SUTEL</p>
-              <p className="text-2xl font-bold">{sutelAgencies.length}</p>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-              <MapPin className="h-4 w-4 text-green-600" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Pays couverts</p>
-              <p className="text-2xl font-bold">
-                {[...new Set(sutelAgencies.map(a => a.country))].length}
-              </p>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-              <Building2 className="h-4 w-4 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Régions</p>
-              <p className="text-2xl font-bold">
-                {[...new Set(sutelAgencies.map(a => a.region))].length}
-              </p>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
-              <Globe className="h-4 w-4 text-purple-600" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Synchronisées</p>
-              <p className="text-2xl font-bold text-green-600">
-                {sutelAgencies.filter(a => a.sync_status === 'synced').length}
-              </p>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      {/* Filtres */}
-      <Card className="p-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Filter className="h-4 w-4" />
-          <h3 className="font-medium">Filtres de recherche</h3>
-        </div>
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Rechercher une SUTEL par nom, acronyme ou pays..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
-          <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-            <SelectTrigger className="w-full md:w-48">
-              <SelectValue placeholder="Toutes les régions" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Toutes les régions</SelectItem>
-              {REGIONS.map((region) => (
-                <SelectItem key={region} value={region}>{region}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger className="w-full md:w-48">
-              <SelectValue placeholder="État des données" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tous les états</SelectItem>
-              <SelectItem value="synced">Données enrichies</SelectItem>
-              <SelectItem value="pending">Collecte en cours</SelectItem>
-              <SelectItem value="failed">Erreur collecte</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </Card>
-
-      {/* Carte interactive */}
-      <div className="min-h-[600px]">
-        <LeafletInteractiveMap agencies={filteredAgencies} />
-      </div>
-
-      {/* Note informative */}
-      <Card className="p-4 bg-muted/30">
-        <div className="flex items-start gap-3">
-          <MapPin className="h-5 w-5 text-primary mt-0.5" />
-          <div>
-            <h4 className="font-medium text-sm mb-1">À propos de cette carte</h4>
-            <p className="text-xs text-muted-foreground">
-              Cette carte interactive présente la localisation des agences SUTEL (Service Universel des Télécommunications) 
-              à travers l'Afrique. Chaque marqueur représente une agence officiellement reconnue avec pour mission 
-              de réduire la fracture numérique dans son territoire de compétence. Cliquez sur un marqueur pour 
-              obtenir plus d'informations sur l'agence. Cette carte utilise OpenStreetMap, une solution libre et gratuite.
-            </p>
-          </div>
-        </div>
-      </Card>
     </div>
   );
-}
+};
+
+export default Map;
