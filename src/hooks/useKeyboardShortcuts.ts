@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from "react";
+import { logger } from '@/utils/logger';
 
 interface ShortcutConfig {
   key: string;
@@ -72,7 +73,7 @@ export function useGlobalShortcuts() {
       ctrl: true,
       action: () => {
         // This can be customized per page
-        console.log("New item shortcut");
+        logger.debug("New item shortcut triggered", { component: 'KeyboardShortcuts', shortcut: 'new_item' });
       },
       description: "Create new item"
     }

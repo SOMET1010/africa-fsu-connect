@@ -29,6 +29,15 @@ export interface LogContext {
   critical?: boolean;
   url?: string;
   deletedCaches?: number;
+  connectorId?: string;
+  shortcut?: string;
+  messageType?: string;
+  code?: number;
+  reason?: string;
+  namespace?: string;
+  query?: string;
+  filters?: Record<string, any>;
+  role?: string;
 }
 
 class Logger {

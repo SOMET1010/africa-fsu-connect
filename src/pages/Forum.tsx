@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageCircle, Plus, TrendingUp, Clock, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
+import { logger } from '@/utils/logger';
 
 const Forum = () => {
   const { toast } = useToast();
@@ -101,7 +102,7 @@ const Forum = () => {
   }));
 
   const handleSearch = (query: string, filters: Record<string, string>) => {
-    console.log("Search:", query, filters);
+    logger.debug("Forum search executed", { component: 'Forum', query, filters });
     // Implement search logic
   };
 

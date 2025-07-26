@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/utils/logger';
 
 interface RealtimeSyncMessage {
   type: string;
@@ -68,7 +69,7 @@ export const useRealtimeSync = (options: RealtimeSyncOptions): UseRealtimeSyncRe
       wsRef.current = new WebSocket(wsUrl);
 
       wsRef.current.onopen = () => {
-        console.log('WebSocket connected');
+        logger.info('WebSocket connected', { component: 'RealtimeSync', action: 'connect' });
         setIsConnected(true);
         setIsConnecting(false);
         
@@ -98,7 +99,7 @@ export const useRealtimeSync = (options: RealtimeSyncOptions): UseRealtimeSyncRe
       wsRef.current.onmessage = (event) => {
         try {
           const message: RealtimeSyncMessage = JSON.parse(event.data);
-          console.log('Received message:', message);
+          logger.debug('Received WebSocket message', { component: 'RealtimeSync', messageType: message.type });
           
           setLastMessage(message);
           setConnectionStats(prev => ({
@@ -113,7 +114,7 @@ export const useRealtimeSync = (options: RealtimeSyncOptions): UseRealtimeSyncRe
       };
 
       wsRef.current.onclose = (event) => {
-        console.log('WebSocket disconnected:', event.code, event.reason);
+        logger.warn('WebSocket disconnected', { component: 'RealtimeSync', code: event.code, reason: event.reason });
         setIsConnected(false);
         setIsConnecting(false);
         setSessionId(null);
@@ -211,7 +212,7 @@ export const useRealtimeSync = (options: RealtimeSyncOptions): UseRealtimeSyncRe
       
       case 'data_synced':
         // Handle real-time data updates
-        console.log('Data synced:', message.data);
+        logger.info('Data synced successfully', { component: 'RealtimeSync', action: 'sync_data' });
         break;
       
       case 'conflict_detected':
@@ -235,7 +236,7 @@ export const useRealtimeSync = (options: RealtimeSyncOptions): UseRealtimeSyncRe
         break;
       
       default:
-        console.log('Unknown message type:', message.type);
+        logger.warn('Unknown WebSocket message type received', { component: 'RealtimeSync', messageType: message.type });
     }
   }, [toast]);
 

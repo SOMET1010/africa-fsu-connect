@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { ApiConnectorService } from '@/services/apiConnectorService';
+import { logger } from '@/utils/logger';
 
 export interface ScheduledJob {
   id: string;
@@ -219,7 +220,7 @@ export const useConnectorScheduling = () => {
       
       for (const job of dueJobs) {
         if (!syncing.has(job.connectorId)) {
-          console.log(`Exécution automatique de la synchronisation pour ${job.connectorId}`);
+          logger.info(`Exécution automatique de la synchronisation pour ${job.connectorId}`, { component: 'ConnectorScheduling', connectorId: job.connectorId });
           await runSyncNow(job.agencyId, job.connectorId);
         }
       }

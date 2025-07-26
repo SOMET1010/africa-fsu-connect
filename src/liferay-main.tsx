@@ -1,6 +1,7 @@
 
 import { createRoot } from 'react-dom/client';
 import LiferayApp from './LiferayApp';
+import { logger } from '@/utils/logger';
 import './index.css';
 
 // Point d'entrée pour Liferay
@@ -31,7 +32,7 @@ const initPortlet = () => {
       />
     );
     
-    console.log(`React SUTEL Portlet initialized with namespace: ${namespace}`);
+    logger.info(`React SUTEL Portlet initialized`, { component: 'LiferayMain', namespace });
   } else {
     console.error(`Root element not found: ${namespace}-react-sutel-root`);
   }
