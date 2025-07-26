@@ -20,6 +20,7 @@ import {
   Zap,
   Database
 } from "lucide-react";
+import { logger } from "@/utils/logger";
 
 interface AutoEnrichmentPanelProps {
   agencies: any[];
@@ -54,9 +55,9 @@ export function AutoEnrichmentPanel({ agencies, onRefresh }: AutoEnrichmentPanel
         const result = await EnrichmentService.enrichAgencyData(agency.id);
         
         if (result.success) {
-          console.log(`✅ Enrichissement réussi pour ${agency.name}`);
+          logger.info(`Agency enrichment successful`, { agency: agency.name });
         } else {
-          console.warn(`⚠️ Erreur pour ${agency.name}: ${result.error}`);
+          logger.warn(`Agency enrichment failed`, { agency: agency.name, error: result.error });
         }
 
         processed++;

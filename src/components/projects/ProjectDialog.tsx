@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAgencies } from "@/hooks/useAgencies";
 import type { Project, ProjectInsert } from "@/types/projects";
+import { logger } from "@/utils/logger";
 
 interface ProjectDialogProps {
   open: boolean;
@@ -79,7 +80,7 @@ export const ProjectDialog = ({ open, onOpenChange, project, onSave }: ProjectDi
       await onSave(formData as ProjectInsert);
       onOpenChange(false);
     } catch (error) {
-      console.error('Error saving project:', error);
+      logger.error('Failed to save project', error);
     } finally {
       setLoading(false);
     }

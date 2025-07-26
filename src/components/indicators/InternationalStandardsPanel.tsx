@@ -19,6 +19,7 @@ import {
   Target
 } from "lucide-react";
 import { expandedIndicatorsService, INTERNATIONAL_STANDARDS, OFFICIAL_API_SOURCES } from "@/services/expandedIndicatorsService";
+import { logger } from "@/utils/logger";
 
 export const InternationalStandardsPanel = () => {
   const [isEnriching, setIsEnriching] = useState(false);
@@ -67,7 +68,7 @@ export const InternationalStandardsPanel = () => {
       });
       
     } catch (error) {
-      console.error("International enrichment error:", error);
+      logger.error("International standards enrichment failed", error);
       toast.error("Erreur lors de l'enrichissement", {
         description: "Vérifiez la console pour plus de détails"
       });

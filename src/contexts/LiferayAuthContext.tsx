@@ -3,6 +3,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { Tables } from '@/integrations/supabase/types';
 import { useLiferay } from '@/LiferayApp';
+import { logger } from '@/utils/logger';
 
 export type UserRole = 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur';
 
@@ -41,13 +42,13 @@ export const LiferayAuthProvider = ({ children }: LiferayAuthProviderProps) => {
         .single();
 
       if (error) {
-        console.error('Error fetching profile:', error);
+        logger.error('Failed to fetch user profile', error);
         return;
       }
 
       setProfile(data);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      logger.error('Failed to fetch user profile', error);
     }
   };
 
@@ -60,7 +61,7 @@ export const LiferayAuthProvider = ({ children }: LiferayAuthProviderProps) => {
         p_success: success,
       });
     } catch (error) {
-      console.error('Failed to log security event:', error);
+      logger.error('Failed to log security event', error);
     }
   };
 
@@ -167,7 +168,7 @@ export const LiferayAuthProvider = ({ children }: LiferayAuthProviderProps) => {
 
     const { error } = await supabase.auth.signOut();
     if (error) {
-      console.error('Error signing out:', error);
+      logger.error('Failed to sign out', error);
     }
   };
 

@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Download, FileText, Table } from "lucide-react";
 import { useState } from "react";
 import type { Project } from "@/types/projects";
+import { logger } from "@/utils/logger";
 
 interface ProjectExportProps {
   projects: Project[];
@@ -53,7 +54,7 @@ export const ProjectExport = ({ projects }: ProjectExportProps) => {
         description: `Les données ont été exportées au format ${exportFormat.toUpperCase()}`,
       });
     } catch (error) {
-      console.error('Erreur lors de l\'export:', error);
+      logger.error('Project export failed', error);
       toast({
         title: "Erreur",
         description: "Erreur lors de l'export des données",

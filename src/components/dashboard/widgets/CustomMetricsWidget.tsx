@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { logger } from "@/utils/logger";
 
 interface CustomMetricsWidgetProps {
   id: string;
@@ -97,7 +98,7 @@ export const CustomMetricsWidget = ({ id, onRemove }: CustomMetricsWidgetProps) 
       isRemovable
       isConfigurable
       onRemove={onRemove}
-      onConfigure={() => console.log('Configure custom metrics')}
+      onConfigure={() => logger.debug('Configure custom metrics')}
     >
       <div className="space-y-4">
         {/* Add New Metric Button */}

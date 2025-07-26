@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Database, Plus } from "lucide-react";
 import { useState } from "react";
+import { logger } from "@/utils/logger";
 
 export const SampleProjectData = () => {
   const { toast } = useToast();
@@ -129,7 +130,7 @@ export const SampleProjectData = () => {
         description: `${sampleProjects.length} projets de démonstration créés avec succès!`,
       });
     } catch (error) {
-      console.error('Erreur lors de la création des données:', error);
+      logger.error('Failed to create sample project data', error);
       toast({
         title: "Erreur",
         description: "Erreur lors de la création des données de démonstration",

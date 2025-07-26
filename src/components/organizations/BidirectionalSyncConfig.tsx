@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { useBidirectionalSync } from '@/hooks/useBidirectionalSync';
 import type { BidirectionalSyncConfig as SyncConfig } from '@/services/bidirectionalSyncService';
 import { RefreshCw, Settings, ArrowLeftRight, AlertTriangle, CheckCircle } from 'lucide-react';
+import { logger } from '@/utils/logger';
 
 interface SyncConfigProps {
   agencyId: string;
@@ -71,7 +72,7 @@ export const BidirectionalSyncConfig: React.FC<SyncConfigProps> = ({
         onConfigSaved?.();
       }
     } catch (error) {
-      console.error('Error saving bidirectional sync config:', error);
+      logger.error('Failed to save bidirectional sync config', error);
     }
   };
 

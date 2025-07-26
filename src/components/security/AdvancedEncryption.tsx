@@ -19,6 +19,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { SecurityApiService } from '@/features/security/services/securityApi';
 import { EncryptionKey } from '@/features/security/core/types';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 const AdvancedEncryption = () => {
   const { user } = useAuth();
@@ -46,7 +47,7 @@ const AdvancedEncryption = () => {
           setE2eEnabled(prefs.e2e_encryption_enabled);
         }
       } catch (error) {
-        console.error('Error loading encryption data:', error);
+        logger.error('Failed to load encryption data', error);
       } finally {
         setLoading(false);
       }
@@ -64,7 +65,7 @@ const AdvancedEncryption = () => {
       setE2eEnabled(updated.e2e_encryption_enabled);
       toast.success(updated.e2e_encryption_enabled ? 'Chiffrement E2E activé' : 'Chiffrement E2E désactivé');
     } catch (error) {
-      console.error('Error updating E2E setting:', error);
+      logger.error('Failed to update E2E encryption setting', error);
       toast.error('Erreur lors de la mise à jour');
     }
   };
@@ -75,7 +76,7 @@ const AdvancedEncryption = () => {
       setKeys([...keys, newKey]);
       toast.success('Nouvelle clé de chiffrement générée');
     } catch (error) {
-      console.error('Error generating key:', error);
+      logger.error('Failed to generate encryption key', error);
       toast.error('Erreur lors de la génération de la clé');
     }
   };

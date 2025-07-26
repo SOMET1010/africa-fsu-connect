@@ -21,6 +21,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { SecurityApiService } from '@/features/security/services/securityApi';
 import { WebAuthnCredential } from '@/features/security/core/types';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 const EnhancedWebAuthn = () => {
   const { user } = useAuth();
@@ -53,7 +54,7 @@ const EnhancedWebAuthn = () => {
       const webauthnCreds = await SecurityApiService.getWebAuthnCredentials(user!.id);
       setCredentials(webauthnCreds);
     } catch (error) {
-      console.error('Error loading WebAuthn credentials:', error);
+      logger.error('Failed to load WebAuthn credentials', error);
       toast.error('Erreur lors du chargement des clés de sécurité');
     } finally {
       setLoading(false);
@@ -114,12 +115,12 @@ const EnhancedWebAuthn = () => {
         toast.success('Clé de sécurité enregistrée avec succès');
         
       } catch (webauthnError) {
-        console.error('WebAuthn registration failed:', webauthnError);
+        logger.error('WebAuthn registration failed', webauthnError);
         throw new Error('Échec de l\'enregistrement WebAuthn: ' + (webauthnError as Error).message);
       }
       
     } catch (error) {
-      console.error('Error registering credential:', error);
+      logger.error('Failed to register WebAuthn credential', error);
       toast.error((error as Error).message || 'Erreur lors de l\'enregistrement');
     } finally {
       setIsRegistering(false);
@@ -152,7 +153,7 @@ const EnhancedWebAuthn = () => {
       setCredentials(credentials.filter(cred => cred.id !== credentialId));
       toast.success('Clé de sécurité supprimée');
     } catch (error) {
-      console.error('Error deleting credential:', error);
+      logger.error('Failed to delete WebAuthn credential', error);
       toast.error('Erreur lors de la suppression');
     }
   };
@@ -162,7 +163,7 @@ const EnhancedWebAuthn = () => {
       // In a real implementation, this would test the credential
       toast.success('Test de la clé de sécurité réussi');
     } catch (error) {
-      console.error('Error testing credential:', error);
+      logger.error('Failed to test WebAuthn credential', error);
       toast.error('Échec du test de la clé de sécurité');
     }
   };

@@ -24,6 +24,7 @@ import {
 import { indicatorsEnrichmentService, API_SOURCES, INDICATOR_MAPPINGS } from "@/services/indicatorsEnrichmentService";
 import { InternationalStandardsPanel } from "./InternationalStandardsPanel";
 import { useTranslation } from "@/hooks/useTranslation";
+import { logger } from "@/utils/logger";
 
 export const IndicatorsEnrichmentPanel = () => {
   const { t } = useTranslation();
@@ -110,7 +111,7 @@ export const IndicatorsEnrichmentPanel = () => {
       });
       
     } catch (error) {
-      console.error("Enrichment error:", error);
+      logger.error("Indicators enrichment failed", error);
       addLog(`❌ ${t('enrichment.log.error')} ${error}`);
       toast.error(t('enrichment.toast.error'), {
         description: t('enrichment.toast.error.desc')

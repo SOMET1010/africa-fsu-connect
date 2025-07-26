@@ -20,6 +20,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Link } from "react-router-dom";
+import { logger } from "@/utils/logger";
 
 interface Message {
   id: string;
@@ -228,7 +229,7 @@ export function VirtualAssistant() {
       setIsOpen(false);
     } else if (suggestion.action.type === 'search') {
       // Implémenter la recherche
-      console.log('Search:', suggestion.action.target);
+      logger.debug('Virtual assistant search triggered', { component: 'VirtualAssistant' });
     } else if (suggestion.action.type === 'help') {
       // Ajouter une réponse d'aide contextuelle
       const helpMessage: Message = {
