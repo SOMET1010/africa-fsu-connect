@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAgencies } from "@/hooks/useAgencies";
 import { AdaptiveInterface } from "@/components/layout/AdaptiveInterface";
+import { SimplifiedOrganizations } from "@/components/organizations/SimplifiedOrganizations";
+import { AdvancedOrganizationsControls } from "@/components/organizations/AdvancedOrganizationsControls";
 import { HeroSection } from "@/components/ui/hero-section";
 import { ModernStatsCard } from "@/components/ui/modern-stats-card";
 import { ModernCard } from "@/components/ui/modern-card";
@@ -179,172 +181,35 @@ const Organizations = () => {
           </div>
         </ScrollReveal>
 
-        {/* View Mode Toggle */}
-        <ScrollReveal delay={400}>
-          <ModernCard variant="glass" className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-foreground">Vue des Organisations</h2>
-              <div className="flex border border-border/50 rounded-xl p-1 bg-muted/30">
-                <ModernButton 
-                  variant={viewMode === 'grid' ? 'default' : 'ghost'} 
-                  size="sm"
-                  onClick={() => setViewMode('grid')}
-                >
-                  Grille
-                </ModernButton>
-                <ModernButton 
-                  variant={viewMode === 'map' ? 'default' : 'ghost'} 
-                  size="sm"
-                  onClick={() => setViewMode('map')}
-                >
-                  Carte
-                </ModernButton>
-                <ModernButton 
-                  variant={viewMode === 'overview' ? 'default' : 'ghost'} 
-                  size="sm"
-                  onClick={() => setViewMode('overview')}
-                >
-                  Vue d'ensemble
-                </ModernButton>
-                <ModernButton 
-                  variant={viewMode === 'enrichment' ? 'default' : 'ghost'} 
-                  size="sm"
-                  onClick={() => setViewMode('enrichment')}
-                >
-                  Enrichissement
-                </ModernButton>
-                <ModernButton 
-                  variant={viewMode === 'geolocation' ? 'default' : 'ghost'} 
-                  size="sm"
-                  onClick={() => setViewMode('geolocation')}
-                >
-                  Géolocalisation
-                </ModernButton>
-              </div>
-            </div>
-          </ModernCard>
-        </ScrollReveal>
-
-        {/* View-specific content */}
-        <div data-view-content>
-        {viewMode === 'map' && (
-          <ScrollReveal delay={600}>
-            <OrganizationsMap agencies={filteredAgencies} />
-          </ScrollReveal>
-        )}
-        
-        {viewMode === 'overview' && (
-          <ScrollReveal delay={600}>
-            <OrganizationsOverview agencies={filteredAgencies} />
-          </ScrollReveal>
-        )}
-        
-        {viewMode === 'enrichment' && (
-          <ScrollReveal delay={600}>
-            <AutoEnrichmentPanel agencies={filteredAgencies} onRefresh={() => {}} />
-          </ScrollReveal>
-        )}
-
-        {viewMode === 'geolocation' && (
-          <ScrollReveal delay={600}>
-            <AdvancedGeolocation agencies={filteredAgencies} />
-          </ScrollReveal>
-        )}
-
-        {/* Filters and Grid - only show for grid view */}
-        {viewMode === 'grid' && (
-          <>
-            <ScrollReveal delay={600}>
-              <ModernCard variant="glass" className="p-6">
-                <div className="flex items-center gap-2 mb-6">
-                  <Filter className="h-5 w-5 text-primary" />
-                  <h3 className="text-lg font-semibold">Filtres et Recherche</h3>
-                </div>
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Rechercher par nom, acronyme ou pays..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 h-12 rounded-xl border-border/50 bg-background/50"
-                    />
-                  </div>
-                  <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                    <SelectTrigger className="w-full md:w-48 h-12 rounded-xl border-border/50 bg-background/50">
-                      <SelectValue placeholder="Région" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Toutes les régions</SelectItem>
-                      {regions.map((region) => (
-                        <SelectItem key={region} value={region}>
-                          {region}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-                    <SelectTrigger className="w-full md:w-48 h-12 rounded-xl border-border/50 bg-background/50">
-                      <SelectValue placeholder="Pays" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Tous les pays</SelectItem>
-                      {countries.map((country) => (
-                        <SelectItem key={country} value={country}>
-                          {country}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </ModernCard>
-            </ScrollReveal>
-
-            {/* Organizations Grid */}
-            <ScrollReveal delay={800}>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredAgencies.map((agency, index) => (
-                  <ScrollReveal key={agency.id} delay={100 * (index % 6)} direction="up">
-                    <EnrichedAgencyCard agency={agency} onViewProfile={() => {}} />
-                  </ScrollReveal>
-                ))}
-              </div>
-            </ScrollReveal>
-
-            {filteredAgencies.length === 0 && (
-              <ScrollReveal delay={600}>
-                <ModernCard variant="glass" className="p-12 text-center">
-                  <Building2 className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">
-                    Aucune organisation trouvée
-                  </h3>
-                  <p className="text-muted-foreground mb-6">
-                    Essayez de modifier vos critères de recherche ou filtres.
-                  </p>
-                  <ModernButton 
-                    onClick={() => {
-                      setSearchTerm("");
-                      setSelectedRegion("all");
-                      setSelectedCountry("all");
-                    }}
-                    size="lg"
-                  >
-                    <Filter className="h-4 w-4 mr-2" />
-                    Réinitialiser les filtres
-                  </ModernButton>
-                </ModernCard>
-              </ScrollReveal>
-            )}
-          </>
-        )}
-        </div>
-
-        {/* Agency Comparison Modal */}
-        <AgencyComparison
-          agencies={agencies}
-          isOpen={showComparison}
-          onClose={() => setShowComparison(false)}
-        />
+        {/* Adaptive Interface */}
+        <AdaptiveInterface
+          title="Gestion des Organisations"
+          description="Interface adaptée à votre niveau d'expertise"
+          advancedContent={
+            <AdvancedOrganizationsControls
+              agencies={agencies}
+              filteredAgencies={filteredAgencies}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              selectedRegion={selectedRegion}
+              setSelectedRegion={setSelectedRegion}
+              selectedCountry={selectedCountry}
+              setSelectedCountry={setSelectedCountry}
+              regions={regions}
+              countries={countries}
+              showComparison={showComparison}
+              setShowComparison={setShowComparison}
+            />
+          }
+        >
+          <SimplifiedOrganizations
+            agencies={agencies}
+            loading={loading}
+            onSync={handleSync}
+            onAnalytics={handleAnalytics}
+            isSyncing={isSyncing}
+          />
+        </AdaptiveInterface>
       </div>
     </div>
   );

@@ -3,7 +3,8 @@ import { useOptimizedDocuments } from "@/hooks/useOptimizedDocuments";
 import { useEnhancedSearch } from "@/hooks/useEnhancedSearch";
 import { SearchProvider, useSearch } from "@/contexts/SearchContext";
 import { AdaptiveInterface } from "@/components/layout/AdaptiveInterface";
-import { AdvancedSearch } from "@/components/resources/AdvancedSearch";
+import { SimplifiedResources } from "@/components/resources/SimplifiedResources";
+import { AdvancedResourcesControls } from "@/components/resources/AdvancedResourcesControls";
 import ResourceStats from "@/components/resources/ResourceStats";
 import DocumentCard from "@/components/resources/DocumentCard";
 import DocumentUploadDialog from "@/pages/resources/components/DocumentUploadDialog";
@@ -164,109 +165,37 @@ const ResourcesContent = () => {
           </div>
         </ScrollReveal>
 
-        {/* Enhanced Search Section */}
-        <ScrollReveal delay={400}>
-          <Tabs value={activeTab} onValueChange={(value: any) => setActiveTab(value)}>
-            <div className="flex items-center justify-between mb-4">
-              <TabsList>
-                <TabsTrigger value="simple" className="flex items-center gap-2">
-                  <Search className="h-4 w-4" />
-                  Recherche Simple
-                </TabsTrigger>
-                <TabsTrigger value="advanced" className="flex items-center gap-2">
-                  <Zap className="h-4 w-4" />
-                  Recherche Avancée
-                </TabsTrigger>
-              </TabsList>
-              <DocumentUploadDialog 
-                onUpload={handleFileUpload} 
-                isOpen={isUploadDialogOpen}
-                onClose={() => setIsUploadDialogOpen(false)}
-              />
-            </div>
-
-            <TabsContent value="simple">
-              <ModernCard variant="glass" className="p-6">
-                <div className="flex items-center gap-2 mb-6">
-                  <Search className="h-5 w-5 text-primary" />
-                  <h3 className="text-lg font-semibold">Recherche Simple</h3>
-                </div>
-                <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      placeholder="Rechercher des documents par titre ou description..."
-                      className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                      onChange={(e) => performSearch(e.target.value, {})}
-                    />
-                  </div>
-                </div>
-              </ModernCard>
-            </TabsContent>
-
-            <TabsContent value="advanced">
-              <AdvancedSearch
-                onSearch={performAdvancedSearch}
-                availableTags={availableFilters.tags}
-                availableCountries={availableFilters.countries}
-                availableDocumentTypes={availableFilters.documentTypes}
-              />
-            </TabsContent>
-          </Tabs>
-        </ScrollReveal>
-
-        {/* Documents Section */}
-        <ScrollReveal delay={600}>
-          <div className="space-y-6">
-            {(state.loading || searchLoading) ? (
-              <div className="grid gap-6">
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <div key={index} className="animate-pulse">
-                    <ModernCard className="h-64 bg-muted/30" />
-                  </div>
-                ))}
-              </div>
-            ) : (activeTab === 'advanced' ? results.documents.length === 0 : state.documents.length === 0) ? (
-              <EmptyDocumentsState onShowAll={handleShowAllDocuments} />
-            ) : (
-              <>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-foreground">Documents Disponibles</h2>
-                    <p className="text-muted-foreground">
-                      {activeTab === 'advanced' 
-                        ? `${results.totalCount} document${results.totalCount > 1 ? 's' : ''} trouvé${results.totalCount > 1 ? 's' : ''}`
-                        : `${state.documents.length} document${state.documents.length > 1 ? 's' : ''} trouvé${state.documents.length > 1 ? 's' : ''}`
-                      }
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <ModernButton variant="outline" size="sm">
-                      <Grid className="h-4 w-4 mr-2" />
-                      Vue grille
-                    </ModernButton>
-                    <ModernButton variant="outline" size="sm">
-                      <Download className="h-4 w-4 mr-2" />
-                      Télécharger tout
-                    </ModernButton>
-                  </div>
-                </div>
-                
-                <div className="grid gap-6">
-                  {(activeTab === 'advanced' ? results.documents : state.documents).map((doc, index) => (
-                    <ScrollReveal key={doc.id} delay={100 * (index % 6)} direction="up">
-                      <DocumentCard
-                        document={doc}
-                        onPreview={handlePreview}
-                        onDownload={handleDownload}
-                      />
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        </ScrollReveal>
+        {/* Adaptive Interface */}
+        <AdaptiveInterface
+          title="Gestion des Ressources"
+          description="Interface adaptée à votre niveau d'expertise"
+          advancedContent={
+            <AdvancedResourcesControls
+              documents={state.documents}
+              results={results}
+              loading={state.loading}
+              searchLoading={searchLoading}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              performSearch={performSearch}
+              performAdvancedSearch={performAdvancedSearch}
+              availableFilters={availableFilters}
+              onPreview={handlePreview}
+              onDownload={handleDownload}
+              onOpenUploadDialog={handleOpenUploadDialog}
+            />
+          }
+        >
+          <SimplifiedResources
+            documents={state.documents}
+            loading={state.loading}
+            onOpenUploadDialog={handleOpenUploadDialog}
+            onAnalytics={handleAnalytics}
+            onPreview={handlePreview}
+            onDownload={handleDownload}
+            fetchInitialDocuments={fetchInitialDocuments}
+          />
+        </AdaptiveInterface>
 
         {/* Document Preview Dialog */}
         <DocumentPreviewDialog
@@ -274,6 +203,13 @@ const ResourcesContent = () => {
           isOpen={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
           onDownload={handleDownload}
+        />
+
+        {/* Document Upload Dialog */}
+        <DocumentUploadDialog 
+          onUpload={handleFileUpload} 
+          isOpen={isUploadDialogOpen}
+          onClose={() => setIsUploadDialogOpen(false)}
         />
       </div>
     </div>
