@@ -1,5 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
+import { logger } from '@/utils/logger';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Card } from "@/components/ui/card";
@@ -75,7 +76,7 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
       }
     });
     markers.current = [];
-    console.log('Cleared all markers');
+    logger.debug('Cleared all markers', { component: 'LeafletInteractiveMap' });
   };
 
   // Create custom marker icon
@@ -104,19 +105,19 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
   // Add markers to the map
   const addMarkersToMap = (agenciesToShow: Agency[]) => {
     if (!map.current) {
-      console.log('Map not initialized yet');
+      logger.warn('Map not initialized yet', { component: 'LeafletInteractiveMap' });
       return;
     }
 
-    console.log(`Adding ${agenciesToShow.length} markers to map`);
+    logger.info('Adding markers to map', { count: agenciesToShow.length, component: 'LeafletInteractiveMap' });
     
     agenciesToShow.forEach((agency) => {
       const coordinates = COUNTRY_COORDINATES[agency.country];
       if (!coordinates) {
-        console.log(`❌ No coordinates found for country: ${agency.country}`);
+        logger.warn('No coordinates found for country', { country: agency.country, agency: agency.acronym, component: 'LeafletInteractiveMap' });
         return;
       }
-      console.log(`✅ Adding marker for ${agency.acronym} at coordinates:`, coordinates);
+      logger.debug('Adding marker for agency', { agency: agency.acronym, coordinates, component: 'LeafletInteractiveMap' });
 
       const color = SYNC_STATUS_COLORS[agency.sync_status as keyof typeof SYNC_STATUS_COLORS] || SYNC_STATUS_COLORS.inactive;
       const isPulsing = agency.sync_status === 'synced';
@@ -162,11 +163,11 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
         });
 
       } catch (markerError) {
-        console.error(`Error creating marker for ${agency.acronym}:`, markerError);
+        logger.error(`Error creating marker for ${agency.acronym}`, markerError, { agency: agency.acronym, component: 'LeafletInteractiveMap' });
       }
     });
 
-    console.log(`Successfully added ${markers.current.length} markers`);
+    logger.info('Successfully added markers', { count: markers.current.length, component: 'LeafletInteractiveMap' });
   };
 
   // Initialize map
@@ -174,7 +175,7 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
     if (!mapContainer.current || map.current) return;
 
     try {
-      console.log('Initializing Leaflet map...');
+      logger.info('Initializing Leaflet map...', { component: 'LeafletInteractiveMap' });
       
       // Create map centered on Africa
       map.current = L.map(mapContainer.current, {
@@ -192,11 +193,11 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
         maxZoom: 18,
       }).addTo(map.current);
 
-      console.log('Map initialized successfully');
+      logger.info('Map initialized successfully', { component: 'LeafletInteractiveMap' });
 
       // Add initial markers after map is ready
       const markerTimeout = setTimeout(() => {
-        console.log('Adding initial markers...');
+        logger.info('Adding initial markers...', { component: 'LeafletInteractiveMap' });
         addMarkersToMap(filteredAgencies);
       }, 100);
 
@@ -206,13 +207,13 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
       };
 
     } catch (error) {
-      console.error('Error initializing Leaflet map:', error);
+      logger.error('Error initializing Leaflet map', error, { component: 'LeafletInteractiveMap' });
     }
 
     // Cleanup function to prevent memory leaks
     return () => {
       if (map.current) {
-        console.log('Cleaning up map...');
+        logger.debug('Cleaning up map...', { component: 'LeafletInteractiveMap' });
         try {
           // Clear all markers first
           clearMarkers();
@@ -223,7 +224,7 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
           // Remove the map instance
           map.current.remove();
         } catch (cleanupError) {
-          console.warn('Error during cleanup:', cleanupError);
+          logger.warn('Error during cleanup', { error: cleanupError, component: 'LeafletInteractiveMap' });
         }
         map.current = null;
       }
@@ -234,7 +235,7 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
   useEffect(() => {
     if (!map.current) return;
 
-    console.log('Updating markers for filtered agencies...');
+    logger.debug('Updating markers for filtered agencies...', { component: 'LeafletInteractiveMap' });
     clearMarkers();
     addMarkersToMap(filteredAgencies);
   }, [filteredAgencies]);

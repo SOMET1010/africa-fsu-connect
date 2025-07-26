@@ -14,6 +14,16 @@ export interface LogContext {
   component?: string;
   action?: string;
   userId?: string;
+  count?: number;
+  componentStack?: string;
+  errorBoundary?: boolean;
+  data?: any;
+  agency?: string;
+  country?: string;
+  coordinates?: any;
+  error?: any;
+  updates?: string[];
+  changes?: string[];
   metadata?: Record<string, unknown>;
 }
 

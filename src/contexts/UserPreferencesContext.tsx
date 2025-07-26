@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
+import { logger } from '@/utils/logger';
 
 export interface UserPreferences {
   theme: 'light' | 'dark' | 'system';
@@ -76,7 +77,7 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
     try {
       return useAuth();
     } catch (error) {
-      console.warn('Auth context not available, using fallback');
+      logger.warn('Auth context not available, using fallback', { component: 'UserPreferencesProvider' });
       return { user: null };
     }
   })();
@@ -93,7 +94,7 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
         try {
           setPreferences({ ...defaultPreferences, ...JSON.parse(stored) });
         } catch (error) {
-          console.error('Error parsing stored preferences:', error);
+          logger.error('Error parsing stored preferences', error, { component: 'UserPreferencesProvider' });
         }
       }
       setLoading(false);
@@ -118,7 +119,7 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
         setPreferences({ ...defaultPreferences, ...(data as any).preferences });
       }
     } catch (error) {
-      console.error('Error loading preferences:', error);
+      logger.error('Error loading preferences', error, { component: 'UserPreferencesProvider' });
     } finally {
       setLoading(false);
     }
@@ -141,7 +142,7 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
 
         if (error) throw error;
       } catch (error) {
-        console.error('Error saving preferences:', error);
+        logger.error('Error saving preferences', error, { component: 'UserPreferencesProvider' });
         // Revert on error
         setPreferences(preferences);
         throw error;
@@ -164,7 +165,7 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
 
         if (error) throw error;
       } catch (error) {
-        console.error('Error resetting preferences:', error);
+        logger.error('Error resetting preferences', error, { component: 'UserPreferencesProvider' });
         throw error;
       }
     } else {
