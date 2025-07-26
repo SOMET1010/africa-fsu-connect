@@ -31,7 +31,8 @@ import {
   ShieldCheck,
   Building2,
   TrendingUp,
-  Palette
+  Palette,
+  PlayCircle
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -85,6 +86,7 @@ export function AppSidebar() {
       { title: "Vue d'ensemble", url: "/admin", icon: BarChart3 },
       { title: "Utilisateurs", url: "/admin/users", icon: Users },
       { title: "Modération Forum", url: "/admin/forum", icon: ShieldCheck },
+      { title: "Guide Demo", url: "/demo-guide", icon: PlayCircle },
     ]
   };
   
