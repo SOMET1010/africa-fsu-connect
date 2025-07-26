@@ -39,7 +39,7 @@ export const auditLogSchema = z.object({
   actionType: z.string(),
   resourceType: z.string().nullable(),
   resourceId: z.string().nullable(),
-  details: z.record(z.unknown()).nullable(),
+  details: z.record(z.string(), z.unknown()).nullable(),
   ipAddress: z.string().nullable(),
   userAgent: z.string().nullable(),
   success: z.boolean(),
@@ -75,11 +75,11 @@ export const validateData = <T>(schema: z.ZodSchema<T>, data: unknown): T => {
     return schema.parse(data);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const firstError = error.errors[0];
+      const firstError = error.issues[0];
       throw new ValidationError(
         `Validation error: ${firstError.message}`,
         firstError.path.join('.'),
-        firstError.received
+        String(firstError.input || 'unknown')
       );
     }
     throw error;
@@ -95,7 +95,7 @@ export const validatePartialData = <T>(schema: z.ZodSchema<T>, data: unknown): P
       throw new ValidationError(
         `Validation error: ${firstError.message}`,
         firstError.path.join('.'),
-        firstError.received
+        String(firstError.input || 'unknown')
       );
     }
     throw error;
@@ -110,8 +110,8 @@ export const safeValidateData = <T>(schema: z.ZodSchema<T>, data: unknown) => {
   } else {
     return { 
       success: false, 
-      error: result.error.errors[0]?.message || 'Validation failed',
-      field: result.error.errors[0]?.path.join('.'),
+      error: result.error.issues[0]?.message || 'Validation failed',
+      field: result.error.issues[0]?.path.join('.'),
     };
   }
 };

@@ -24,7 +24,15 @@ export const useContextualIntelligence = () => {
   const [suggestions, setSuggestions] = useState<ContextualSuggestion[]>([]);
   const [activities, setActivities] = useState<UserActivity[]>([]);
   const [loading, setLoading] = useState(false);
-  const { user, profile } = useAuth();
+  // Safe auth usage with fallback
+  const auth = (() => {
+    try {
+      return useAuth();
+    } catch (error) {
+      return { user: null, profile: null };
+    }
+  })();
+  const { user, profile } = auth;
 
   // Track user activity
   const trackActivity = useCallback((activity: Omit<UserActivity, 'timestamp'>) => {
