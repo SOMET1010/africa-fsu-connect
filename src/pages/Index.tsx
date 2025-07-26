@@ -126,20 +126,6 @@ const Index = () => {
       <section className="py-20 relative z-10">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            {/* Debug button - temporary */}
-            <Button 
-              onClick={() => {
-                forceCompleteTranslationRefresh().then(() => {
-                  refreshTranslations();
-                  window.location.reload();
-                });
-              }}
-              variant="outline" 
-              className="mb-4 mr-4"
-            >
-              🔄 Rafraîchir traductions
-            </Button>
-            
             <Badge variant="outline" className="mb-4 px-4 py-2">
               <Globe className="w-4 h-4 mr-2" />
               {t('features.badge')}
