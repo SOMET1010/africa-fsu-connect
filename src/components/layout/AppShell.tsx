@@ -9,6 +9,8 @@ import { useLocation } from "react-router-dom";
 import { PageTransition } from "@/components/ui/page-transition";
 import { ModernSidebar } from "./ModernSidebar";
 import ModernHeader from "./ModernHeader";
+import { SkipLinks } from "@/components/ui/skip-links";
+import { useAccessibility } from "@/hooks/useAccessibility";
 
 interface AppShellProps {
   children: ReactNode;
@@ -18,6 +20,10 @@ interface AppShellProps {
 export default function AppShell({ children, hideFooter = false }: AppShellProps) {
   const { user } = useAuth();
   const location = useLocation();
+  const { manageFocus } = useAccessibility({
+    enableSkipLinks: true,
+    enableFocusManagement: true
+  });
   
   // Special handling for auth page
   if (location.pathname === '/auth') {
@@ -34,14 +40,32 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
   const sidebarOpenPages = ['/submit', '/dashboard', '/indicators', '/organizations'];
   const shouldSidebarBeOpen = sidebarOpenPages.includes(location.pathname);
 
+  // Skip links configuration
+  const skipLinks = [
+    { href: "#main-content", label: "Aller au contenu principal" },
+    ...(user ? [
+      { href: "#app-navigation", label: "Aller à la navigation" },
+      { href: "#app-sidebar", label: "Aller au menu latéral" }
+    ] : [])
+  ];
+
   return (
     <SidebarProvider defaultCollapsed={!shouldSidebarBeOpen}>
+      {/* Skip Links pour l'accessibilité */}
+      <SkipLinks links={skipLinks} />
+      
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 flex w-full">
-        {user && <ModernSidebar />}
+        {user && (
+          <div id="app-sidebar">
+            <ModernSidebar />
+          </div>
+        )}
         
         <div className="flex flex-col flex-1 min-w-0">
-          <ModernHeader />
-          <main className="flex-1 relative">
+          <div id="app-navigation">
+            <ModernHeader />
+          </div>
+          <main id="main-content" className="flex-1 relative" tabIndex={-1}>
             <PageTransition variant="fade" duration="normal">
               {children}
             </PageTransition>

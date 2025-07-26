@@ -215,15 +215,6 @@ const Events = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      {/* Skip Links for Accessibility */}
-      <SkipLinks 
-        links={[
-          { href: "#main-content", label: "Aller au contenu principal" },
-          { href: "#search-events", label: "Aller à la recherche" },
-          { href: "#events-grid", label: "Aller à la liste des événements" }
-        ]}
-      />
-      
       <div className="p-6 lg:p-8 space-y-8">
         <EventsHero 
           totalEvents={events.length}
@@ -234,7 +225,7 @@ const Events = () => {
         />
         
         {/* Content Section */}
-        <main id="main-content" className="bg-card rounded-3xl border border-border p-6 lg:p-8 shadow-lg">
+        <div className="bg-card rounded-3xl border border-border p-6 lg:p-8 shadow-lg">
           <Tabs value={selectedView} onValueChange={setSelectedView} className="space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <TabsList className="grid w-full lg:w-auto grid-cols-3" role="tablist" aria-label="Vues des événements">
@@ -597,7 +588,7 @@ const Events = () => {
               </div>
             </TabsContent>
           </Tabs>
-        </main>
+        </div>
       </div>
     </div>
   );

@@ -25,21 +25,29 @@ test.describe('Accessibility Tests', () => {
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
-  test('keyboard navigation', async ({ page }) => {
+  test('keyboard navigation and skip links', async ({ page }) => {
     await page.goto('/');
     
-    // Test tab navigation
+    // Test skip links functionality
     await page.keyboard.press('Tab');
-    const focusedElement = await page.locator(':focus').textContent();
-    expect(focusedElement).toBeTruthy();
+    const skipLink = page.getByText('Aller au contenu principal');
+    expect(await skipLink.isVisible()).toBe(true);
     
-    // Test skip links
+    // Test skip link navigation
+    await skipLink.click();
+    const mainContent = page.locator('#main-content');
+    expect(await mainContent.isVisible()).toBe(true);
+    
+    // Test that main content receives focus
+    const focusedElement = await page.locator(':focus');
+    expect(await focusedElement.getAttribute('id')).toBe('main-content');
+    
+    // Test additional skip links for authenticated users
+    await page.goto('/dashboard');
     await page.keyboard.press('Tab');
-    const skipLink = page.getByText('Skip to main content');
-    if (await skipLink.isVisible()) {
-      await skipLink.click();
-      const mainContent = await page.locator('main').isVisible();
-      expect(mainContent).toBe(true);
+    const navigationSkipLink = page.getByText('Aller à la navigation');
+    if (await navigationSkipLink.count() > 0) {
+      expect(await navigationSkipLink.isVisible()).toBe(true);
     }
   });
 

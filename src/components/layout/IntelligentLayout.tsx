@@ -31,15 +31,6 @@ const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Skip navigation for accessibility */}
-      <a 
-        href="#main-content" 
-        className="skip-link"
-        tabIndex={0}
-      >
-        Aller au contenu principal
-      </a>
-
       {/* Collaboration presence indicator */}
       <div className="fixed top-4 right-4 z-50">
         <CollaborationPresence 
@@ -48,8 +39,8 @@ const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
         />
       </div>
 
-      {/* Main content with conditional animations */}
-      <main id="main-content" className="relative">
+      {/* Content with conditional animations - no main element as it's handled by AppShell */}
+      <div className="relative">
         {animationsEnabled ? (
           <AnimatedPage>
             {children}
@@ -57,7 +48,7 @@ const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
         ) : (
           children
         )}
-      </main>
+      </div>
 
       {/* Smart suggestions sidebar */}
       <div className="fixed bottom-4 right-4 w-80 max-w-[calc(100vw-2rem)] z-40">
