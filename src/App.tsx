@@ -32,6 +32,7 @@ const AdvancedPreferences = lazy(() => import("./pages/AdvancedPreferences"));
 const Security = lazy(() => import("./pages/Security"));
 const Map = lazy(() => import("./pages/Map"));
 const Analytics = lazy(() => import("./pages/Analytics"));
+const DemoGuide = lazy(() => import("./pages/DemoGuide"));
 
 // Admin components (separate chunk)
 const Admin = lazy(() => import("./pages/Admin"));
@@ -185,6 +186,15 @@ const AppContent = () => {
           <AppShell>
             <Suspense fallback={<PageLoadingFallback />}>
               <Analytics />
+            </Suspense>
+          </AppShell>
+        </ProtectedRoute>
+      } />
+      <Route path="/demo-guide" element={
+        <ProtectedRoute>
+          <AppShell>
+            <Suspense fallback={<PageLoadingFallback />}>
+              <DemoGuide />
             </Suspense>
           </AppShell>
         </ProtectedRoute>
