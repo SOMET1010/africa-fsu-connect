@@ -4,8 +4,10 @@ import { useAuth } from './AuthContext';
 import { logger } from '@/utils/logger';
 
 export interface UserPreferences {
+  // Interface et navigation
   theme: 'light' | 'dark' | 'system';
   language: 'fr' | 'en';
+  navigation_level: 'beginner' | 'standard' | 'expert';
   notifications: {
     email: boolean;
     push: boolean;
@@ -33,7 +35,8 @@ export interface UserPreferences {
 
 const defaultPreferences: UserPreferences = {
   theme: 'system',
-  language: 'en',
+  language: 'fr',
+  navigation_level: 'beginner',
   notifications: {
     email: true,
     push: true,
