@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAgencies } from "@/hooks/useAgencies";
+import { AdaptiveInterface } from "@/components/layout/AdaptiveInterface";
 import { HeroSection } from "@/components/ui/hero-section";
 import { ModernStatsCard } from "@/components/ui/modern-stats-card";
 import { ModernCard } from "@/components/ui/modern-card";

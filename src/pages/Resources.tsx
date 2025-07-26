@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo, useRef } from "react";
 import { useOptimizedDocuments } from "@/hooks/useOptimizedDocuments";
 import { useEnhancedSearch } from "@/hooks/useEnhancedSearch";
 import { SearchProvider, useSearch } from "@/contexts/SearchContext";
+import { AdaptiveInterface } from "@/components/layout/AdaptiveInterface";
 import { AdvancedSearch } from "@/components/resources/AdvancedSearch";
 import ResourceStats from "@/components/resources/ResourceStats";
 import DocumentCard from "@/components/resources/DocumentCard";
