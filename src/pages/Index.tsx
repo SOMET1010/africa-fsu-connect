@@ -18,9 +18,15 @@ import {
   Building2
 } from "lucide-react";
 import { useTranslationDb } from "@/hooks/useTranslationDb";
+import { useEffect } from "react";
 
 const Index = () => {
-  const { t } = useTranslationDb();
+  const { t, refreshTranslations } = useTranslationDb();
+  
+  // Force refresh translations on component mount to ensure latest data
+  useEffect(() => {
+    refreshTranslations();
+  }, []);
 
   const features = [
     {

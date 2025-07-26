@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 
@@ -24,6 +24,7 @@ const translationCache = new Map<string, Record<string, string>>();
 export const useTranslationDb = () => {
   const { preferences } = useUserPreferences();
   const currentLanguage = preferences.language;
+  const queryClient = useQueryClient();
 
   // Fetch available languages
   const { data: languages } = useQuery({
@@ -134,18 +135,35 @@ export const useTranslationDb = () => {
     return key;
   };
 
+  // Enhanced cache clearing function
+  const clearCache = () => {
+    translationCache.clear();
+    queryClient.invalidateQueries({ queryKey: ['translations'] });
+    queryClient.invalidateQueries({ queryKey: ['languages'] });
+  };
+
+  // Force refresh translations immediately
+  const refreshTranslations = () => {
+    clearCache();
+    queryClient.refetchQueries({ queryKey: ['translations', currentLanguage] });
+    if (currentLanguage !== 'fr') {
+      queryClient.refetchQueries({ queryKey: ['translations', 'fr'] });
+    }
+  };
+
   return {
     t,
     currentLanguage,
     languages: languages || [],
     isLoading,
-    // Utility to clear cache when needed
-    clearCache: () => translationCache.clear(),
+    clearCache,
+    refreshTranslations,
   };
 };
 
 // Admin hooks for translation management
 export const useTranslationAdmin = () => {
+  const queryClient = useQueryClient();
   // Add translation
   const addTranslation = async (
     languageCode: string,
@@ -184,8 +202,9 @@ export const useTranslationAdmin = () => {
     
     if (error) throw error;
     
-    // Clear cache to force refresh
+    // Clear cache and invalidate queries to force refresh
     translationCache.clear();
+    queryClient.invalidateQueries({ queryKey: ['translations'] });
   };
 
   // Update translation
@@ -198,8 +217,9 @@ export const useTranslationAdmin = () => {
     
     if (error) throw error;
     
-    // Clear cache to force refresh
+    // Clear cache and invalidate queries to force refresh
     translationCache.clear();
+    queryClient.invalidateQueries({ queryKey: ['translations'] });
   };
 
   // Get missing translations
