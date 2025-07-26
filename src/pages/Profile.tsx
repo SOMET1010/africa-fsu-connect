@@ -12,12 +12,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const Profile = () => {
-  const { user, profile, updateProfile, loading } = useAuth();
+  const { user, profile, loading } = useAuth();
+  const { updateProfile } = useProfile();
   const { toast } = useToast();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
