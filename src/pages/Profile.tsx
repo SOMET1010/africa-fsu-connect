@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { User, Mail, Phone, MapPin, Building, Camera, Save, Edit3, Shield, Bell, Globe } from "lucide-react";
+import { useState, useEffect } from "react";
+import { User, Mail, Phone, MapPin, Building, Camera, Save, Edit3, Shield, Bell, Globe, Settings, ChevronDown, CheckCircle, AlertCircle } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ModernButton } from "@/components/ui/modern-button";
@@ -11,14 +11,17 @@ import { ModernLoadingSpinner } from "@/components/ui/modern-loading-states";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAutoSave } from "@/hooks/useAutoSave";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Profile = () => {
-  const { user, profile } = useAuth();
-  const { loading, updating, updateProfile } = useProfile();
-  const [isEditing, setIsEditing] = useState(false);
+  const { user, profile, updateProfile, loading } = useAuth();
+  const { toast } = useToast();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [uploading, setUploading] = useState(false);
   
   const [formData, setFormData] = useState({
     first_name: profile?.first_name || "",
@@ -29,24 +32,76 @@ const Profile = () => {
     bio: profile?.bio || ""
   });
 
-  const [preferences, setPreferences] = useState({
-    email_notifications: true,
-    push_notifications: true,
-    marketing_emails: false,
-    newsletter: true,
-    language: "fr",
-    timezone: "Africa/Dakar",
-    theme: "system"
+  // Update form data when profile changes
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        first_name: profile.first_name || "",
+        last_name: profile.last_name || "",
+        email: user?.email || "",
+        organization: profile.organization || "",
+        country: profile.country || "",
+        bio: profile.bio || ""
+      });
+    }
+  }, [profile, user]);
+
+  const handleProfileUpdate = async (data: any) => {
+    if (!profile || !updateProfile) return;
+    try {
+      await updateProfile(data);
+      toast({
+        title: "Profil mis à jour",
+        description: "Vos informations ont été sauvegardées automatiquement"
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de sauvegarder les modifications",
+        variant: "destructive"
+      });
+      throw error;
+    }
+  };
+
+  const { autoSaveStatus } = useAutoSave(formData, {
+    onSave: handleProfileUpdate,
+    delay: 2000
   });
 
-  const handleSave = async () => {
-    if (!profile) return;
-    
+  const handleAvatarUpload = async (file: File) => {
+    if (!user) return;
+
     try {
-      await updateProfile(formData);
-      setIsEditing(false);
+      setUploading(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/avatar.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('user-avatars')
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from('user-avatars')
+        .getPublicUrl(fileName);
+
+      await handleProfileUpdate({ avatar_url: data.publicUrl });
+      setShowAvatarModal(false);
+      
+      toast({
+        title: "Avatar mis à jour",
+        description: "Votre photo de profil a été mise à jour avec succès"
+      });
     } catch (error) {
-      console.error("Erreur lors de la mise à jour:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de mettre à jour l'avatar",
+        variant: "destructive"
+      });
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -98,35 +153,35 @@ const Profile = () => {
         badge="Personnel"
         gradient
         actions={
-          <>
-            {isEditing ? (
-              <>
-                <ModernButton 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setIsEditing(false)}
-                >
-                  Annuler
-                </ModernButton>
-                <ModernButton 
-                  size="sm"
-                  onClick={handleSave}
-                  loading={updating}
-                >
-                  <Save className="mr-2 h-4 w-4" />
-                  Enregistrer
-                </ModernButton>
-              </>
-            ) : (
-              <ModernButton 
-                size="sm"
-                onClick={() => setIsEditing(true)}
-              >
-                <Edit3 className="mr-2 h-4 w-4" />
-                Modifier
-              </ModernButton>
+          <div className="flex items-center gap-2">
+            {autoSaveStatus.status === 'saving' && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                Sauvegarde...
+              </div>
             )}
-          </>
+            {autoSaveStatus.status === 'saved' && (
+              <div className="flex items-center gap-2 text-sm text-green-600">
+                <CheckCircle className="h-4 w-4" />
+                Sauvegardé
+              </div>
+            )}
+            {autoSaveStatus.status === 'error' && (
+              <div className="flex items-center gap-2 text-sm text-red-600">
+                <AlertCircle className="h-4 w-4" />
+                Erreur
+              </div>
+            )}
+            <ModernButton 
+              variant="outline" 
+              size="sm"
+              onClick={() => setShowAdvanced(!showAdvanced)}
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              {showAdvanced ? "Masquer" : "Plus d'options"}
+              <ChevronDown className={`ml-2 h-4 w-4 transition-transform ${showAdvanced ? "rotate-180" : ""}`} />
+            </ModernButton>
+          </div>
         }
       />
       
@@ -186,9 +241,8 @@ const Profile = () => {
           {/* Contenu principal */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="profile" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="profile">Profil</TabsTrigger>
-                <TabsTrigger value="preferences">Préférences</TabsTrigger>
                 <TabsTrigger value="security">Sécurité</TabsTrigger>
               </TabsList>
 
@@ -201,7 +255,6 @@ const Profile = () => {
                       label="Prénom"
                       value={formData.first_name}
                       onChange={(value) => setFormData({...formData, first_name: value})}
-                      disabled={!isEditing}
                       required
                     />
                     
@@ -209,7 +262,6 @@ const Profile = () => {
                       label="Nom"
                       value={formData.last_name}
                       onChange={(value) => setFormData({...formData, last_name: value})}
-                      disabled={!isEditing}
                       required
                     />
                     
@@ -221,19 +273,10 @@ const Profile = () => {
                       description="L'email ne peut pas être modifié"
                     />
                     
-                    
-                    <ModernInput
-                      label="Organisation"
-                      value={formData.organization}
-                      onChange={(value) => setFormData({...formData, organization: value})}
-                      disabled={!isEditing}
-                    />
-                    
                     <ModernSelect
                       label="Pays"
                       value={formData.country}
                       onChange={(value) => setFormData({...formData, country: value})}
-                      disabled={!isEditing}
                       options={[
                         { value: "sn", label: "Sénégal" },
                         { value: "cm", label: "Cameroun" },
@@ -244,79 +287,30 @@ const Profile = () => {
                       ]}
                     />
                   </div>
-                  
-                  
-                  <div className="mt-6">
-                    <ModernTextarea
-                      label="Biographie"
-                      value={formData.bio}
-                      onChange={(value) => setFormData({...formData, bio: value})}
-                      disabled={!isEditing}
-                      rows={4}
-                      description="Présentez-vous brièvement"
-                    />
-                  </div>
+
+                  {showAdvanced && (
+                    <>
+                      <div className="grid grid-cols-1 gap-6 pt-6 border-t border-border/50">
+                        <ModernInput
+                          label="Organisation"
+                          value={formData.organization}
+                          onChange={(value) => setFormData({...formData, organization: value})}
+                        />
+                        
+                        <ModernTextarea
+                          label="Biographie"
+                          value={formData.bio}
+                          onChange={(value) => setFormData({...formData, bio: value})}
+                          rows={4}
+                          description="Présentez-vous brièvement"
+                        />
+                      </div>
+                    </>
+                  )}
                 </GlassCard>
 
               </TabsContent>
 
-              <TabsContent value="preferences" className="space-y-6">
-                <GlassCard variant="default" className="p-6">
-                  <h3 className="text-lg font-semibold mb-6">Notifications</h3>
-                  
-                  <div className="space-y-6">
-                    <ModernSwitch
-                      label="Notifications par email"
-                      description="Recevez des notifications importantes par email"
-                      checked={preferences.email_notifications}
-                      onChange={(checked) => setPreferences({...preferences, email_notifications: checked})}
-                    />
-                    
-                    <ModernSwitch
-                      label="Notifications push"
-                      description="Recevez des notifications dans votre navigateur"
-                      checked={preferences.push_notifications}
-                      onChange={(checked) => setPreferences({...preferences, push_notifications: checked})}
-                    />
-                    
-                    <ModernSwitch
-                      label="Newsletter"
-                      description="Recevez notre newsletter mensuelle"
-                      checked={preferences.newsletter}
-                      onChange={(checked) => setPreferences({...preferences, newsletter: checked})}
-                    />
-                  </div>
-                </GlassCard>
-
-                <GlassCard variant="default" className="p-6">
-                  <h3 className="text-lg font-semibold mb-6">Préférences régionales</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <ModernSelect
-                      label="Langue"
-                      value={preferences.language}
-                      onChange={(value) => setPreferences({...preferences, language: value})}
-                      options={[
-                        { value: "fr", label: "Français" },
-                        { value: "en", label: "English" },
-                        { value: "ar", label: "العربية" }
-                      ]}
-                    />
-                    
-                    <ModernSelect
-                      label="Fuseau horaire"
-                      value={preferences.timezone}
-                      onChange={(value) => setPreferences({...preferences, timezone: value})}
-                      options={[
-                        { value: "Africa/Dakar", label: "Dakar (GMT+0)" },
-                        { value: "Africa/Casablanca", label: "Casablanca (GMT+1)" },
-                        { value: "Africa/Cairo", label: "Le Caire (GMT+2)" },
-                        { value: "Africa/Abidjan", label: "Abidjan (GMT+0)" }
-                      ]}
-                    />
-                  </div>
-                </GlassCard>
-              </TabsContent>
 
               <TabsContent value="security" className="space-y-6">
                 <GlassCard variant="default" className="p-6">
@@ -378,19 +372,30 @@ const Profile = () => {
           </div>
           
           <div className="text-center">
-            <ModernButton variant="outline" className="w-full">
-              <Camera className="mr-2 h-4 w-4" />
-              Sélectionner une image
-            </ModernButton>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleAvatarUpload(file);
+              }}
+              className="hidden"
+              id="avatar-upload"
+            />
+            <label htmlFor="avatar-upload">
+              <ModernButton variant="outline" className="w-full cursor-pointer" asChild>
+                <span>
+                  <Camera className="mr-2 h-4 w-4" />
+                  {uploading ? "Upload en cours..." : "Sélectionner une image"}
+                </span>
+              </ModernButton>
+            </label>
           </div>
         </div>
         
         <ModernModalFooter>
           <ModernButton variant="outline" onClick={() => setShowAvatarModal(false)}>
-            Annuler
-          </ModernButton>
-          <ModernButton onClick={() => setShowAvatarModal(false)}>
-            Enregistrer
+            Fermer
           </ModernButton>
         </ModernModalFooter>
       </ModernModal>
