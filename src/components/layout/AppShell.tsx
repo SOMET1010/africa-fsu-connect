@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Header from "./Header";
+import ModernHeader from "./ModernHeader";
 import Footer from "./Footer";
 import { FloatingMapButton } from "@/components/shared/FloatingMapButton";
 import ImprovedMobileBottomNav from "@/components/navigation/ImprovedMobileBottomNav";
@@ -8,7 +8,6 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { useLocation } from "react-router-dom";
 import { PageTransition } from "@/components/ui/page-transition";
 import { ModernSidebar } from "./ModernSidebar";
-import ModernHeader from "./ModernHeader";
 import { SkipLinks } from "@/components/ui/skip-links";
 import { useAccessibility } from "@/hooks/useAccessibility";
 

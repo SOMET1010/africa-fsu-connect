@@ -1,10 +1,8 @@
 
 import { useEffect, useState } from "react";
-import { WelcomeWidget } from "../onboarding/WelcomeWidget";
-import { ModernDashboard } from "./ModernDashboard";
-import { ConfigurableDashboard } from "./ConfigurableDashboard";
+import { UserFirstDashboard } from "./UserFirstDashboard";
 import { VirtualAssistant } from "./VirtualAssistant";
-import { SmartOnboarding } from "../onboarding/SmartOnboarding";
+import { SimpleOnboarding } from "../onboarding/SimpleOnboarding";
 
 export function AdaptiveDashboard() {
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean | null>(null);
@@ -23,15 +21,15 @@ export function AdaptiveDashboard() {
     );
   }
   
-  // Si l'onboarding n'est pas terminé, afficher l'onboarding intelligent
+  // Si l'onboarding n'est pas terminé, afficher l'onboarding simplifié
   if (!onboardingCompleted) {
-    return <SmartOnboarding />;
+    return <SimpleOnboarding />;
   }
   
-  // Sinon, afficher le dashboard intelligent configuré avec l'assistant virtuel
+  // Sinon, afficher le dashboard simplifié "Users First"
   return (
     <div className="relative">
-      <ConfigurableDashboard />
+      <UserFirstDashboard />
       <VirtualAssistant />
     </div>
   );

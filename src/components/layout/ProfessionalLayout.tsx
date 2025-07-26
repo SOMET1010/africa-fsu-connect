@@ -2,7 +2,7 @@
 import { ReactNode } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sidebar, SidebarContent, SidebarProvider, useSidebar } from "@/components/ui/sidebar";
-import Header from "./Header";
+import ModernHeader from "./ModernHeader";
 import Footer from "./Footer";
 import AppNavigation from "@/components/navigation/AppNavigation";
 import { cn } from "@/lib/utils";
@@ -30,7 +30,7 @@ export const ProfessionalLayout = ({
   return (
     <SidebarProvider defaultCollapsed={true}>
       <div className="min-h-screen bg-background flex flex-col">
-        <Header />
+        <ModernHeader />
         
         <div className="flex flex-1 w-full">
           {shouldShowSidebar && <SideNavigation />}

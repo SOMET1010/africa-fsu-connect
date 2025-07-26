@@ -32,9 +32,9 @@ const FormSkeleton = () => (
 );
 
 // Lazy components avec default exports
-export const LazyEnhancedDashboard = lazy(() => 
-  import('@/components/dashboard/EnhancedDashboard').then(module => ({
-    default: module.EnhancedDashboard
+export const LazyUserFirstDashboard = lazy(() => 
+  import('@/components/dashboard/UserFirstDashboard').then(module => ({
+    default: module.UserFirstDashboard
   }))
 );
 
@@ -70,7 +70,7 @@ export const LazyAdminUsers = lazy(() =>
 
 // Preloader utilities
 export const componentPreloaders = {
-  dashboard: () => import('@/components/dashboard/EnhancedDashboard'),
+  dashboard: () => import('@/components/dashboard/UserFirstDashboard'),
   projects: () => import('@/components/projects/ProjectDialog'),
   events: () => import('@/components/events/EventFilters'),
   organizations: () => import('@/components/organizations/OrganizationsMap'),
