@@ -324,7 +324,7 @@ const ModernHeader = () => {
       {/* Breadcrumb moderne */}
       <div className={cn(
         "container mx-auto px-4 transition-all duration-300",
-        scrolled ? "opacity-0 h-0 py-0 overflow-hidden" : "opacity-100 py-2"
+        scrolled ? "opacity-0 py-0" : "opacity-100 py-2"
       )}>
         <GlassCard variant="subtle" className="p-2">
           <Breadcrumb />
