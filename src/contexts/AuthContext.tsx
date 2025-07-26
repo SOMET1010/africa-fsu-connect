@@ -15,6 +15,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<ApiResponse>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<ApiResponse>;
   signOut: () => Promise<void>;
+  updateProfile: (updates: Partial<Tables<'profiles'>>) => Promise<void>;
   isAdmin: () => boolean;
   hasRole: (roles: UserRole[]) => boolean;
 }
@@ -157,6 +158,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const updateProfile = async (updates: Partial<Tables<'profiles'>>) => {
+    if (!user || !profile) return;
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('user_id', user.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    setProfile(data);
+  };
+
   const isAdmin = () => {
     if (!profile) return false;
     return ['super_admin', 'admin_pays', 'editeur'].includes(profile.role);
@@ -176,6 +191,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       signIn,
       signUp,
       signOut,
+      updateProfile,
       isAdmin,
       hasRole
     }}>
