@@ -25,6 +25,10 @@ export interface LogContext {
   updates?: string[];
   changes?: string[];
   metadata?: Record<string, unknown>;
+  interval?: string;
+  critical?: boolean;
+  url?: string;
+  deletedCaches?: number;
 }
 
 class Logger {
