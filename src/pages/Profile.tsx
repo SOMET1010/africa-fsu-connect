@@ -5,7 +5,7 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ModernButton } from "@/components/ui/modern-button";
 import { GlassCard } from "@/components/ui/glass-card";
-import { ModernInput, ModernTextarea, ModernSelect, ModernSwitch } from "@/components/forms/ModernFormFields";
+import { ModernInput, ModernTextarea, ModernSelect, ModernSwitch } from "@/components/forms";
 import { ModernModal, ModernModalFooter } from "@/components/ui/modern-modal";
 import { ModernLoadingSpinner } from "@/components/ui/modern-loading-states";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

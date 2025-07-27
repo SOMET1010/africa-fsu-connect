@@ -7,7 +7,7 @@ import { ModernButton } from "@/components/ui/modern-button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ModernDataTable } from "@/components/system/ModernDataTable";
 import { ModernModal, ModernModalFooter } from "@/components/ui/modern-modal";
-import { ModernInput, ModernSelect, ModernTextarea } from "@/components/forms/ModernFormFields";
+import { ModernInput, ModernSelect, ModernTextarea } from "@/components/forms";
 import { ModernCardSkeleton } from "@/components/ui/modern-loading-states";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
