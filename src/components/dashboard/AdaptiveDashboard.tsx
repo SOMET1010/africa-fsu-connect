@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { UserFirstDashboard } from "./UserFirstDashboard";
 import { VirtualAssistant } from "./VirtualAssistant";
+import { TelecomIndicatorsWidget } from "./widgets/TelecomIndicatorsWidget";
 import { SimpleOnboarding } from "../onboarding/SimpleOnboarding";
 
 export function AdaptiveDashboard() {
@@ -29,7 +30,10 @@ export function AdaptiveDashboard() {
   // Sinon, afficher le dashboard simplifié "Users First"
   return (
     <div className="relative">
-      <UserFirstDashboard />
+      <div className="space-y-8">
+        <TelecomIndicatorsWidget />
+        <UserFirstDashboard />
+      </div>
       <VirtualAssistant />
     </div>
   );
