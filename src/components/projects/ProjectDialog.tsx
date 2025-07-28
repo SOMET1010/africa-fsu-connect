@@ -24,6 +24,15 @@ const PROJECT_STATUSES = [
   { value: 'suspended', label: 'Suspendu' }
 ];
 
+const DEPLOYMENT_TECHNOLOGIES = [
+  { value: '2G', label: '2G' },
+  { value: '3G', label: '3G' },
+  { value: '4G', label: '4G' },
+  { value: '5G', label: '5G' },
+  { value: 'Mixed', label: 'Mixte (Multi-technologie)' },
+  { value: 'Other', label: 'Autre' }
+];
+
 export const ProjectDialog = ({ open, onOpenChange, project, onSave }: ProjectDialogProps) => {
   const { agencies } = useAgencies();
   const [loading, setLoading] = useState(false);
@@ -37,7 +46,8 @@ export const ProjectDialog = ({ open, onOpenChange, project, onSave }: ProjectDi
     end_date: null,
     location: '',
     completion_percentage: 0,
-    tags: []
+    tags: [],
+    deployment_technology: undefined
   });
 
   useEffect(() => {
@@ -53,7 +63,8 @@ export const ProjectDialog = ({ open, onOpenChange, project, onSave }: ProjectDi
         location: project.location,
         completion_percentage: project.completion_percentage,
         tags: project.tags,
-        agency_id: project.agency_id
+        agency_id: project.agency_id,
+        deployment_technology: project.deployment_technology
       });
     } else {
       setFormData({
@@ -66,7 +77,8 @@ export const ProjectDialog = ({ open, onOpenChange, project, onSave }: ProjectDi
         end_date: null,
         location: '',
         completion_percentage: 0,
-        tags: []
+        tags: [],
+        deployment_technology: undefined
       });
     }
   }, [project, open]);
@@ -141,7 +153,7 @@ export const ProjectDialog = ({ open, onOpenChange, project, onSave }: ProjectDi
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <Label htmlFor="status">Statut</Label>
               <Select
@@ -155,6 +167,24 @@ export const ProjectDialog = ({ open, onOpenChange, project, onSave }: ProjectDi
                   {PROJECT_STATUSES.map((status) => (
                     <SelectItem key={status.value} value={status.value}>
                       {status.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="deployment_technology">Technologie de déploiement</Label>
+              <Select
+                value={formData.deployment_technology || ''}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, deployment_technology: value as any }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner une technologie" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DEPLOYMENT_TECHNOLOGIES.map((tech) => (
+                    <SelectItem key={tech.value} value={tech.value}>
+                      {tech.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
