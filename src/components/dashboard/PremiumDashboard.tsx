@@ -56,14 +56,14 @@ export const PremiumDashboard = () => {
       </div>
 
       <PageContainer>
-        <div className="space-y-8 animate-fade-in">
+        <div className="space-y-6 animate-fade-in">
           {/* Indicateurs Télécoms - Section Premium */}
           <div className="animate-slide-up">
             <TelecomIndicatorsWidget />
           </div>
 
           {/* Première rangée - Métriques principales */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <div className="premium-card p-6">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Statistiques Principales</h3>
@@ -97,7 +97,7 @@ export const PremiumDashboard = () => {
           </div>
 
           {/* Deuxième rangée - Widgets interactifs */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             <div className="premium-card p-6">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Activité Récente</h3>

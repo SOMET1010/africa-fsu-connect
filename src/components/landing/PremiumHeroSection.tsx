@@ -9,7 +9,7 @@ export default function PremiumHeroSection() {
   const { t } = useTranslation();
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       {/* Premium animated background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
@@ -22,7 +22,7 @@ export default function PremiumHeroSection() {
       </div>
 
       <PageContainer size="full" className="relative z-10">
-        <div className="text-center space-y-8 animate-fade-in">
+        <div className="text-center space-y-6 animate-fade-in">
           {/* Premium badge */}
           <div className="flex justify-center">
             <Badge 
@@ -34,7 +34,7 @@ export default function PremiumHeroSection() {
           </div>
 
           {/* Main heading with sophisticated typography */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             <h1 className="text-6xl lg:text-8xl font-bold tracking-tight leading-none">
               <span className="gradient-text animate-shimmer bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto]">
                 {t('hero.title.line1')}
@@ -50,7 +50,7 @@ export default function PremiumHeroSection() {
           </div>
 
           {/* Premium stats with advanced animations */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto py-8">
             {[
               { icon: Globe, value: "15+", label: t('hero.stats.countries'), color: "primary" },
               { icon: Users, value: "500+", label: t('hero.stats.organizations'), color: "accent" },
@@ -88,7 +88,7 @@ export default function PremiumHeroSection() {
           </div>
 
           {/* Premium CTA buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
               asChild 
               size="lg" 
@@ -113,7 +113,7 @@ export default function PremiumHeroSection() {
           </div>
 
           {/* Premium trust indicators */}
-          <div className="pt-16 border-t border-border/30 mt-16">
+          <div className="pt-8 border-t border-border/30 mt-8">
             <p className="text-sm text-muted-foreground mb-8 font-medium">
               {t('hero.trust.supported')}
             </p>

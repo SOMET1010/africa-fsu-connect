@@ -113,7 +113,7 @@ const Index = () => {
       <RegionalMapSection />
 
       {/* Features Section */}
-      <section className="py-20 relative z-10">
+      <section className="py-12 relative z-10">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-4 px-4 py-2">
@@ -128,7 +128,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index} className="group border-border/50 hover:shadow-xl transition-all duration-500 hover:scale-[1.03] bg-card/80 backdrop-blur-sm hover:bg-card/90 animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
                 <CardHeader className="pb-4">
@@ -167,7 +167,7 @@ const Index = () => {
       </section>
 
       {/* Enhanced Regional Overview Section */}
-      <section className="py-20 bg-gradient-to-r from-muted/20 via-muted/10 to-muted/20 backdrop-blur-sm relative z-10">
+      <section className="py-12 bg-gradient-to-r from-muted/20 via-muted/10 to-muted/20 backdrop-blur-sm relative z-10">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4 px-4 py-2 bg-gradient-to-r from-primary/10 to-blue-500/10 border-primary/20">
@@ -215,7 +215,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary via-blue-600 to-blue-800 text-white relative z-10 overflow-hidden">
+      <section className="py-12 bg-gradient-to-r from-primary via-blue-600 to-blue-800 text-white relative z-10 overflow-hidden">
         <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-r from-white/5 to-transparent rounded-full blur-3xl" />
         <div className="container mx-auto px-4 text-center relative z-10">
