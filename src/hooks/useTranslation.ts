@@ -1,4 +1,5 @@
 
+// Unified translation system - static dictionary only
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 
 // Dictionnaire de traductions
