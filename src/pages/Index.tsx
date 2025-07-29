@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import HeroSection from "@/components/landing/HeroSection";
+import PremiumHeroSection from "@/components/landing/PremiumHeroSection";
 import { RegionalMapSection } from "@/components/landing/RegionalMapSection";
 import { 
   Target, 
@@ -117,7 +117,7 @@ const Index = () => {
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
       
       {/* Hero Section */}
-      <HeroSection />
+      <PremiumHeroSection />
 
       {/* Regional Map Section */}
       <RegionalMapSection />

@@ -9,44 +9,44 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Core color palette - Professional SUTEL theme */
+    /* Core sophisticated color palette - Premium SUTEL theme */
     --background: 0 0% 100%;
-    --foreground: 225 15% 20%;
+    --foreground: 222 15% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 225 15% 20%;
+    --card-foreground: 222 15% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 225 15% 20%;
+    --popover-foreground: 222 15% 15%;
     
-    /* Primary colors - Professional blue */
-    --primary: 214 95% 45%;
-    --primary-light: 214 95% 60%;
-    --primary-dark: 214 95% 30%;
-    --primary-foreground: 0 0% 98%;
+    /* Premium primary colors - Deep elegant blue */
+    --primary: 222 84% 55%;
+    --primary-light: 222 84% 65%;
+    --primary-dark: 222 84% 45%;
+    --primary-foreground: 0 0% 100%;
     
-    /* Secondary colors - Warm professional tone */
-    --secondary: 210 20% 96%;
-    --secondary-light: 210 20% 98%;
-    --secondary-foreground: 225 15% 25%;
+    /* Sophisticated secondary colors */
+    --secondary: 210 30% 97%;
+    --secondary-light: 210 30% 99%;
+    --secondary-foreground: 222 15% 20%;
     
-    /* Accent colors - Professional green for success */
-    --accent: 142 70% 45%;
-    --accent-light: 142 70% 60%;
-    --accent-foreground: 0 0% 98%;
+    /* Premium accent colors - Vibrant teal */
+    --accent: 170 95% 45%;
+    --accent-light: 170 95% 55%;
+    --accent-foreground: 0 0% 100%;
     
-    /* Neutral tones - Professional grays */
-    --muted: 210 15% 96%;
-    --muted-foreground: 215 15% 45%;
-    --border: 214 20% 90%;
-    --input: 214 20% 94%;
-    --ring: 214 95% 45%;
+    /* Refined neutral tones */
+    --muted: 215 25% 97%;
+    --muted-foreground: 220 15% 50%;
+    --border: 215 25% 92%;
+    --input: 215 25% 95%;
+    --ring: 222 84% 55%;
     
-    /* Status colors - Professional palette */
-    --destructive: 0 75% 55%;
-    --destructive-foreground: 0 0% 98%;
-    --success: 142 70% 45%;
-    --success-foreground: 0 0% 98%;
-    --warning: 43 90% 55%;
-    --warning-foreground: 0 0% 15%;
+    /* Premium status colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 0 0% 10%;
     
     /* Chart colors - Professional palette */
     --chart-1: 214 95% 45%;
@@ -55,20 +55,23 @@ All colors MUST be HSL.
     --chart-4: 280 70% 55%;
     --chart-5: 0 75% 55%;
     
-    /* Professional gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(214 95% 45%), hsl(214 95% 60%));
-    --gradient-secondary: linear-gradient(135deg, hsl(210 20% 96%), hsl(210 20% 98%));
-    --gradient-hero: linear-gradient(135deg, hsl(214 95% 45%), hsl(214 95% 30%), hsl(142 70% 45%));
-    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(210 20% 98%));
+    /* Premium sophisticated gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(222 84% 55%) 0%, hsl(222 84% 65%) 50%, hsl(170 95% 45%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(210 30% 97%) 0%, hsl(210 30% 99%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(222 84% 55%) 0%, hsl(222 84% 45%) 35%, hsl(170 95% 45%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(215 25% 98%) 100%);
+    --gradient-mesh: radial-gradient(circle at 20% 80%, hsl(222 84% 55% / 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, hsl(170 95% 45% / 0.15) 0%, transparent 50%);
     
-    /* Professional shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(225 15% 20% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(225 15% 20% / 0.08), 0 2px 4px -2px hsl(225 15% 20% / 0.06);
-    --shadow-lg: 0 10px 15px -3px hsl(225 15% 20% / 0.10), 0 4px 6px -4px hsl(225 15% 20% / 0.08);
-    --shadow-xl: 0 20px 25px -5px hsl(225 15% 20% / 0.12), 0 8px 10px -6px hsl(225 15% 20% / 0.10);
-    --shadow-elegant: 0 8px 32px hsl(214 95% 45% / 0.12);
-    --shadow-soft: 0 4px 16px hsl(225 15% 20% / 0.08);
-    --shadow-subtle: 0 2px 8px hsl(225 15% 20% / 0.06);
+    /* Premium elevation shadows */
+    --shadow-sm: 0 1px 3px hsl(222 15% 20% / 0.08), 0 1px 2px hsl(222 15% 20% / 0.06);
+    --shadow-md: 0 4px 6px -1px hsl(222 15% 20% / 0.1), 0 2px 4px -1px hsl(222 15% 20% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(222 15% 20% / 0.1), 0 4px 6px -2px hsl(222 15% 20% / 0.05);
+    --shadow-xl: 0 20px 25px -5px hsl(222 15% 20% / 0.1), 0 10px 10px -5px hsl(222 15% 20% / 0.04);
+    --shadow-elegant: 0 10px 40px hsl(222 84% 55% / 0.15), 0 4px 15px hsl(222 84% 55% / 0.1);
+    --shadow-soft: 0 6px 20px hsl(222 15% 20% / 0.08), 0 2px 8px hsl(222 15% 20% / 0.04);
+    --shadow-subtle: 0 2px 8px hsl(222 15% 20% / 0.06), 0 1px 3px hsl(222 15% 20% / 0.04);
+    --shadow-glow: 0 0 30px hsl(222 84% 55% / 0.3), 0 0 60px hsl(170 95% 45% / 0.2);
+    --shadow-inner: inset 0 2px 4px hsl(222 15% 20% / 0.06);
     
     --radius: 0.75rem;
 
@@ -174,8 +177,12 @@ All colors MUST be HSL.
   
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1, "kern" 1;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    background-image: var(--gradient-mesh);
+    background-attachment: fixed;
   }
   
   /* Modern typography scale with Google Fonts */
@@ -224,21 +231,34 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* Professional page layouts */
+  /* Premium layout system */
   .page-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
   
   .page-header {
-    @apply border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-40;
+    @apply border-b border-border/60 bg-background/85 backdrop-blur-xl sticky top-0 z-40;
+    background-image: linear-gradient(135deg, hsl(var(--background) / 0.95) 0%, hsl(var(--muted) / 0.5) 100%);
   }
   
   .section-card {
-    @apply bg-card border border-border rounded-xl shadow-soft;
+    @apply bg-card border border-border/60 rounded-2xl shadow-lg backdrop-blur-sm;
+    background-image: var(--gradient-card);
+  }
+  
+  .premium-card {
+    @apply bg-card border border-border/40 rounded-3xl shadow-elegant backdrop-blur-md relative overflow-hidden;
+    background-image: var(--gradient-card);
+  }
+  
+  .premium-card::before {
+    @apply absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none;
+    content: '';
   }
   
   .action-bar {
-    @apply flex items-center justify-between gap-4 p-4 bg-muted/30 border-t border-border;
+    @apply flex items-center justify-between gap-4 p-4 bg-muted/40 border-t border-border/60 backdrop-blur-sm;
+    background-image: var(--gradient-secondary);
   }
   
   /* Font family utilities */
@@ -337,6 +357,16 @@ All colors MUST be HSL.
 
   .gentle-glow {
     animation: gentle-glow 2s ease-in-out infinite;
+  }
+
+  /* Premium animations */
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background-size: 200% auto;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
   }
 
   /* Improved focus states */

@@ -1,8 +1,8 @@
 
-import { AdaptiveDashboard } from "@/components/dashboard/AdaptiveDashboard";
+import { PremiumDashboard } from "@/components/dashboard/PremiumDashboard";
 
 const Dashboard = () => {
-  return <AdaptiveDashboard />;
+  return <PremiumDashboard />;
 };
 
 export default Dashboard;
