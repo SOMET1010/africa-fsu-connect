@@ -57,6 +57,10 @@ export default {
 					DEFAULT: 'hsl(var(--warning))',
 					foreground: 'hsl(var(--warning-foreground))'
 				},
+				info: {
+					DEFAULT: 'hsl(var(--info))',
+					foreground: 'hsl(var(--info-foreground))'
+				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',
 					foreground: 'hsl(var(--muted-foreground))'
@@ -78,13 +82,28 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Telecoms-specific colors
+				'signal-excellent': 'hsl(var(--signal-excellent))',
+				'signal-good': 'hsl(var(--signal-good))',
+				'signal-average': 'hsl(var(--signal-average))',
+				'signal-poor': 'hsl(var(--signal-poor))',
+				'coverage-5g': 'hsl(var(--coverage-5g))',
+				'coverage-4g': 'hsl(var(--coverage-4g))',
+				'coverage-3g': 'hsl(var(--coverage-3g))',
+				'coverage-2g': 'hsl(var(--coverage-2g))'
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-secondary': 'var(--gradient-secondary)',
 				'gradient-hero': 'var(--gradient-hero)',
-				'gradient-card': 'var(--gradient-card)'
+				'gradient-card': 'var(--gradient-card)',
+				'gradient-success': 'var(--gradient-success)',
+				'gradient-warning': 'var(--gradient-warning)',
+				'gradient-info': 'var(--gradient-info)',
+				'gradient-glass': 'var(--gradient-glass)',
+				'gradient-border': 'var(--gradient-border)',
+				'gradient-telecom': 'var(--gradient-telecom)'
 			},
 			boxShadow: {
 				'elegant': 'var(--shadow-lg)',
