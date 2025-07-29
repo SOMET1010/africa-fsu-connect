@@ -43,10 +43,13 @@ const translations = {
     'common.explore.projects': 'Explorer les projets',
     'common.countries': 'pays',
     'common.projects': 'projets',
+    'common.user': 'Utilisateur',
+    'common.explore.map': 'Explorer la carte',
 
     // Dashboard
-    'dashboard.welcome': 'Bonjour, {name} ! 👋',
+    'dashboard.welcome': 'Bienvenue {name}, voici votre tableau de bord',
     'dashboard.welcome.default': 'Bonjour, Collaborateur ! 👋',
+    'dashboard.realtime': 'Temps Réel',
     'dashboard.title': 'Plateforme FSU',
     'dashboard.description': 'Votre espace de travail collaboratif pour le service universel des télécommunications vous attend. Découvrez vos projets, connectez-vous avec la communauté et accédez à vos ressources.',
     'dashboard.stats.active.projects': 'Projets Actifs',
@@ -130,6 +133,8 @@ const translations = {
     'hero.stats.projects': 'Projets',
     'hero.stats.organizations': 'Organisations',
     'hero.stats.beneficiaries': 'Bénéficiaires',
+    'hero.trust.supported': 'Soutenu par les principales institutions africaines',
+    'hero.scroll.discover': 'Découvrir plus',
 
     // Landing page - Features
     'features.badge': 'Écosystème Intégré',
@@ -554,10 +559,13 @@ const translations = {
     'common.explore.projects': 'Explore Projects',
     'common.countries': 'countries',
     'common.projects': 'projects',
+    'common.user': 'User',
+    'common.explore.map': 'Explore Map',
 
     // Dashboard
-    'dashboard.welcome': 'Hello, {name}! 👋',
+    'dashboard.welcome': 'Welcome {name}, here is your dashboard',
     'dashboard.welcome.default': 'Hello, Collaborator! 👋',
+    'dashboard.realtime': 'Real Time',
     'dashboard.title': 'USF Platform',
     'dashboard.description': 'Your collaborative workspace for universal telecommunications service awaits. Discover your projects, connect with the community and access your resources.',
     'dashboard.stats.active.projects': 'Active Projects',
@@ -641,6 +649,8 @@ const translations = {
     'hero.stats.projects': 'Projects',
     'hero.stats.organizations': 'Organizations',
     'hero.stats.beneficiaries': 'Beneficiaries',
+    'hero.trust.supported': 'Supported by major African institutions',
+    'hero.scroll.discover': 'Discover more',
 
     // Landing page - Features
     'features.badge': 'Integrated Ecosystem',
@@ -1003,8 +1013,16 @@ export const useTranslation = () => {
   const { preferences } = useUserPreferences();
   const currentLanguage = preferences.language;
 
-  const t = (key: TranslationKey): string => {
-    const translation = translations[currentLanguage]?.[key] || translations.fr[key] || key;
+  const t = (key: TranslationKey, params?: Record<string, string>): string => {
+    let translation = translations[currentLanguage]?.[key] || translations.fr[key] || key;
+    
+    // Simple string interpolation for {param} patterns
+    if (params) {
+      Object.entries(params).forEach(([param, value]) => {
+        translation = translation.replace(new RegExp(`{${param}}`, 'g'), value);
+      });
+    }
+    
     return translation;
   };
 

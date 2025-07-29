@@ -30,11 +30,11 @@ export const PremiumDashboard = () => {
               </h1>
               <Badge className="bg-primary/10 text-primary border-primary/20">
                 <TrendingUp className="h-3 w-3 mr-1" />
-                Temps Réel
+                {t('dashboard.realtime')}
               </Badge>
             </div>
             <p className="text-muted-foreground text-lg">
-              Bienvenue {profile?.first_name || 'Utilisateur'}, voici votre tableau de bord
+              {t('dashboard.welcome', { name: profile?.first_name || 'Utilisateur' })}
             </p>
           </div>
           

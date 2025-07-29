@@ -183,7 +183,7 @@ const Index = () => {
             <Button asChild variant="outline" className="hover:bg-gradient-to-r hover:from-primary hover:to-blue-600 hover:text-white transition-all duration-300">
               <Link to="/organizations" className="flex items-center gap-2">
                 <Globe className="h-4 w-4" />
-                <span>Explorer la carte</span>
+                <span>{t('common.explore.map')}</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>

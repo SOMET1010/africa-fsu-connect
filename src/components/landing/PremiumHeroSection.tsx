@@ -64,8 +64,16 @@ export default function PremiumHeroSection() {
                   style={{ animationDelay: `${0.2 + index * 0.1}s` }}
                 >
                   <div className="premium-card p-8 text-center transition-all duration-500 hover:shadow-glow hover:-translate-y-2">
-                    <div className={`w-16 h-16 bg-${stat.color}/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`h-8 w-8 text-${stat.color}`} />
+                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 ${
+                    stat.color === 'primary' ? 'bg-primary/10' : 
+                    stat.color === 'accent' ? 'bg-accent/10' : 
+                    'bg-warning/10'
+                  }`}>
+                    <Icon className={`h-8 w-8 ${
+                      stat.color === 'primary' ? 'text-primary' : 
+                      stat.color === 'accent' ? 'text-accent' : 
+                      'text-warning'
+                    }`} />
                     </div>
                     <div className="text-4xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                       {stat.value}
@@ -107,7 +115,7 @@ export default function PremiumHeroSection() {
           {/* Premium trust indicators */}
           <div className="pt-16 border-t border-border/30 mt-16">
             <p className="text-sm text-muted-foreground mb-8 font-medium">
-              Soutenu par les principales institutions africaines
+              {t('hero.trust.supported')}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12 opacity-70 hover:opacity-100 transition-opacity duration-500">
               {["Union Africaine", "CEDEAO", "SADC", "EAC"].map((org, index) => (
@@ -128,7 +136,7 @@ export default function PremiumHeroSection() {
           {/* Scroll indicator */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in">
             <div className="flex flex-col items-center text-muted-foreground animate-bounce-subtle">
-              <span className="text-xs font-medium mb-2">Découvrir plus</span>
+              <span className="text-xs font-medium mb-2">{t('hero.scroll.discover')}</span>
               <ChevronDown className="h-5 w-5" />
             </div>
           </div>
