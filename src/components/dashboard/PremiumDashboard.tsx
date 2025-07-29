@@ -11,10 +11,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Settings, Download, Bell, TrendingUp } from "lucide-react";
 import { useEnhancedDashboardStats } from "@/hooks/useEnhancedDashboardStats";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export const PremiumDashboard = () => {
   const { profile } = useAuth();
   const { stats, loading } = useEnhancedDashboardStats();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
@@ -24,7 +26,7 @@ export const PremiumDashboard = () => {
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <h1 className="text-4xl font-bold gradient-text">
-                Tableau de Bord Premium
+                {t('nav.dashboard')} Premium
               </h1>
               <Badge className="bg-primary/10 text-primary border-primary/20">
                 <TrendingUp className="h-3 w-3 mr-1" />
@@ -32,7 +34,7 @@ export const PremiumDashboard = () => {
               </Badge>
             </div>
             <p className="text-muted-foreground text-lg">
-              Bienvenue, {profile?.first_name || 'Utilisateur'}. Voici un aperçu de vos métriques.
+              Bienvenue {profile?.first_name || 'Utilisateur'}, voici votre tableau de bord
             </p>
           </div>
           
@@ -68,7 +70,7 @@ export const PremiumDashboard = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-primary">{stats.totalProjects}</div>
-                    <div className="text-sm text-muted-foreground">Projets</div>
+                    <div className="text-sm text-muted-foreground">{t('common.projects')}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-accent">{stats.totalAgencies}</div>
@@ -135,7 +137,7 @@ export const PremiumDashboard = () => {
                 </div>
                 <h3 className="text-2xl font-bold">Analyses Avancées</h3>
                 <p className="text-muted-foreground max-w-md mx-auto">
-                  Accédez à des insights approfondis et des analyses prédictives pour optimiser vos performances.
+                  Accédez à des insights approfondis pour optimiser vos performances
                 </p>
                 <Button className="mt-4">
                   Voir les Analyses
