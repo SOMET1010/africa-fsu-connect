@@ -36,7 +36,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useTranslationDb } from "@/hooks/useTranslationDb";
+import { useTranslation } from "@/hooks/useTranslation";
 
 // Wrapper component to handle forwardRef for NavLink
 const ForwardedNavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
@@ -50,7 +50,7 @@ export function AppSidebar() {
   const location = useLocation();
   const { user, profile } = useAuth();
   const { state, collapsed } = useSidebar();
-  const { t } = useTranslationDb();
+  const { t } = useTranslation();
   
   const currentPath = location.pathname;
   const isCollapsed = collapsed;

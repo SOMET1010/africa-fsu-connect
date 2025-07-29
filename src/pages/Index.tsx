@@ -17,21 +17,10 @@ import {
   Globe,
   Building2
 } from "lucide-react";
-import { useTranslationDb } from "@/hooks/useTranslationDb";
-import { useEffect } from "react";
-import { forceCompleteTranslationRefresh } from "@/utils/forceTranslationRefresh";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const Index = () => {
-  const { t, refreshTranslations } = useTranslationDb();
-  
-  // Force complete refresh of translations on component mount
-  useEffect(() => {
-    const refreshAll = async () => {
-      await forceCompleteTranslationRefresh();
-      refreshTranslations();
-    };
-    refreshAll();
-  }, []);
+  const { t } = useTranslation();
 
   const features = [
     {
@@ -193,7 +182,7 @@ const Index = () => {
             <Button asChild variant="outline" className="hover:bg-gradient-to-r hover:from-primary hover:to-blue-600 hover:text-white transition-all duration-300">
               <Link to="/organizations" className="flex items-center gap-2">
                 <Globe className="h-4 w-4" />
-                <span>{t('common.explore.map')}</span>
+                <span>Explorer la carte</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
