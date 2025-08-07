@@ -42,7 +42,7 @@ export const AppNavigation = () => {
     { name: t('nav.map'), path: '/map', icon: MapPin },
     { name: t('nav.projects'), path: '/projects', icon: Rocket },
     { name: t('nav.organizations'), path: '/organizations', icon: Building2 },
-    { name: t('nav.resources'), path: '/docs', icon: BookOpen },
+    { name: t('nav.resources'), path: '/resources', icon: BookOpen },
     { name: t('nav.forum'), path: '/forum', icon: MessageSquare },
     { name: t('nav.submit'), path: '/submit', icon: FileText },
     { name: t('nav.events'), path: '/events', icon: Calendar },

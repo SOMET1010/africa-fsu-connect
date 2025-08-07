@@ -109,7 +109,7 @@ const AppContent = () => {
           </AppShell>
         </ProtectedRoute>
       } />
-      <Route path="/docs" element={
+      <Route path="/resources" element={
         <ProtectedRoute>
           <AppShell>
             <Suspense fallback={<PageLoadingFallback />}>
