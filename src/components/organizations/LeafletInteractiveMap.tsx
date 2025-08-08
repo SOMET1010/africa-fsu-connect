@@ -36,6 +36,12 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const markers = useRef<L.Marker[]>([]);
+  const loggedCountries = useRef<Set<string>>(new Set());
+  const isValidCoordinates = (coords?: [number, number]) => {
+    if (!coords || !Array.isArray(coords) || coords.length !== 2) return false;
+    const [lat, lng] = coords;
+    return Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+  };
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
   const [countryCoordinates, setCountryCoordinates] = useState<Record<string, [number, number]>>({});
@@ -105,8 +111,11 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
     
     agenciesToShow.forEach((agency) => {
       const coordinates = countryCoordinates[agency.country];
-      if (!coordinates) {
-        logger.warn('No coordinates found for country', { country: agency.country, agency: agency.acronym, component: 'LeafletInteractiveMap' });
+      if (!isValidCoordinates(coordinates)) {
+        if (!loggedCountries.current.has(agency.country)) {
+          logger.warn('Invalid or missing coordinates for country', { country: agency.country, agency: agency.acronym, component: 'LeafletInteractiveMap' });
+          loggedCountries.current.add(agency.country);
+        }
         return;
       }
       logger.debug('Adding marker for agency', { agency: agency.acronym, coordinates, component: 'LeafletInteractiveMap' });

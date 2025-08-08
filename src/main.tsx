@@ -2,6 +2,7 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
+import './utils/loggerMigration'
 
 // PERFECTION - Production optimizations
 import { preloadCriticalRoutes } from '@/utils/codeSpitting'

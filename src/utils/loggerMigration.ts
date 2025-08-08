@@ -41,23 +41,60 @@ export const devConsole = {
   info: (message: string, data?: any) => logger.info(message, { data }),
 };
 
-// Production-safe replacements
-if (import.meta.env.DEV) {
-  // In development, allow console but also log to structured logger
-  const originalConsole = { ...console };
-  
-  console.log = (...args) => {
-    originalConsole.log(...args);
-    logger.debug(args.join(' '));
-  };
-  
-  console.error = (...args) => {
-    originalConsole.error(...args);
-    logger.error(args.join(' '));
-  };
-  
-  console.warn = (...args) => {
-    originalConsole.warn(...args);
-    logger.warn(args.join(' '));
-  };
-}
+// Global console override to route to structured logger
+const originalConsole = { ...console };
+
+const serialize = (arg: any) => {
+  if (typeof arg === 'string') return arg;
+  try { return JSON.stringify(arg); } catch { return String(arg); }
+};
+
+console.log = (...args: any[]) => {
+  if (import.meta.env.DEV) originalConsole.log(...args);
+  const [first, second, ...rest] = args;
+  if (typeof first === 'string') {
+    logger.debug(first, rest.length ? { data: [second, ...rest] } : undefined);
+  } else {
+    logger.debug(args.map(serialize).join(' '));
+  }
+};
+
+console.info = (...args: any[]) => {
+  if (import.meta.env.DEV) originalConsole.info(...args);
+  const [first, ...rest] = args;
+  if (typeof first === 'string') {
+    logger.info(first, rest.length ? { data: rest } : undefined);
+  } else {
+    logger.info(args.map(serialize).join(' '));
+  }
+};
+
+console.warn = (...args: any[]) => {
+  if (import.meta.env.DEV) originalConsole.warn(...args);
+  const [first, ...rest] = args;
+  if (typeof first === 'string') {
+    logger.warn(first, rest.length ? { data: rest } : undefined);
+  } else {
+    logger.warn(args.map(serialize).join(' '));
+  }
+};
+
+console.error = (...args: any[]) => {
+  if (import.meta.env.DEV) originalConsole.error(...args);
+  const [messageLike, errorLike, ...rest] = args;
+  if (typeof messageLike === 'string') {
+    logger.error(messageLike, errorLike, rest.length ? { data: rest } : undefined);
+  } else {
+    logger.error(args.map(serialize).join(' '));
+  }
+};
+
+console.debug = (...args: any[]) => {
+  if (import.meta.env.DEV) originalConsole.debug(...args);
+  const [first, ...rest] = args;
+  if (typeof first === 'string') {
+    logger.debug(first, rest.length ? { data: rest } : undefined);
+  } else {
+    logger.debug(args.map(serialize).join(' '));
+  }
+};
