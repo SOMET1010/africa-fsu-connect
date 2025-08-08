@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/utils/logger';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -42,7 +43,7 @@ const AnomalyDetection = () => {
         setAlerts(anomalyAlerts);
         setSettings(anomalySettings);
       } catch (error) {
-        console.error('Error loading anomaly data:', error);
+        logger.error('Error loading anomaly data:', error);
       } finally {
         setLoading(false);
       }
@@ -56,7 +57,7 @@ const AnomalyDetection = () => {
       const updated = await SecurityApiService.updateAnomalySettings(user!.id, newSettings);
       setSettings(updated);
     } catch (error) {
-      console.error('Error updating settings:', error);
+      logger.error('Error updating settings:', error);
     }
   };
 

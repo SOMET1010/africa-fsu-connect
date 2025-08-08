@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/utils/logger';
 
 interface SearchFilters {
   documentTypes: string[];
@@ -141,7 +142,7 @@ export const useEnhancedSearch = () => {
       }
 
     } catch (error) {
-      console.error('Error performing advanced search:', error);
+      logger.error('Error performing advanced search:', error);
       toast({
         title: "Erreur de recherche",
         description: "Impossible d'effectuer la recherche",
@@ -183,7 +184,7 @@ export const useEnhancedSearch = () => {
         tags: {} // To be implemented when tags are added to the schema
       };
     } catch (error) {
-      console.error('Error calculating facets:', error);
+      logger.error('Error calculating facets:', error);
       return {
         documentTypes: {},
         countries: {},
@@ -204,7 +205,7 @@ export const useEnhancedSearch = () => {
 
       return data?.map(doc => doc.title) || [];
     } catch (error) {
-      console.error('Error getting suggestions:', error);
+      logger.error('Error getting suggestions:', error);
       return [];
     }
   }, []);

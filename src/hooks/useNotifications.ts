@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/utils/logger";
 
 export interface Notification {
   id: string;
@@ -59,7 +60,7 @@ export const useNotifications = () => {
         )
       );
     } catch (err: any) {
-      console.error('Failed to mark notification as read:', err);
+      logger.error('Failed to mark notification as read:', err);
     }
   };
 
@@ -81,7 +82,7 @@ export const useNotifications = () => {
         prev.map(notif => ({ ...notif, is_read: true }))
       );
     } catch (err: any) {
-      console.error('Failed to mark all notifications as read:', err);
+      logger.error('Failed to mark all notifications as read:', err);
     }
   };
 
@@ -110,7 +111,7 @@ export const useNotifications = () => {
       if (error) throw error;
       return data;
     } catch (err: any) {
-      console.error('Failed to create notification:', err);
+      logger.error('Failed to create notification:', err);
       throw err;
     }
   };

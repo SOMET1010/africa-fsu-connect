@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { logger } from "@/utils/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -69,7 +70,7 @@ export function SimpleOnboarding() {
       localStorage.setItem('onboardingCompleted', 'true');
       window.location.reload();
     } catch (error) {
-      console.error('Error completing onboarding:', error);
+      logger.error('Error completing onboarding:', error);
     } finally {
       setIsCompleting(false);
     }

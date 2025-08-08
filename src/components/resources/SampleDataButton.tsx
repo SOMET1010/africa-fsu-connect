@@ -1,4 +1,5 @@
 
+import { logger } from '@/utils/logger';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Database, Loader2 } from 'lucide-react';
@@ -106,7 +107,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
 
       onDataAdded();
     } catch (error) {
-      console.error('Error adding sample data:', error);
+      logger.error('Error adding sample data:', error);
       toast({
         title: "Erreur",
         description: "Impossible d'ajouter les données d'exemple",

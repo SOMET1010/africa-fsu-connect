@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 export interface UserPreferences {
   experience: 'beginner' | 'intermediate' | 'expert';
   primaryGoals: string[];
@@ -12,7 +13,7 @@ export class UserPreferencesService {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(preferences));
     } catch (error) {
-      console.error('Error saving user preferences:', error);
+      logger.error('Error saving user preferences:', error);
     }
   }
 
@@ -21,7 +22,7 @@ export class UserPreferencesService {
       const saved = localStorage.getItem(this.STORAGE_KEY);
       return saved ? JSON.parse(saved) : null;
     } catch (error) {
-      console.error('Error loading user preferences:', error);
+      logger.error('Error loading user preferences:', error);
       return null;
     }
   }
@@ -30,7 +31,7 @@ export class UserPreferencesService {
     try {
       localStorage.removeItem(this.STORAGE_KEY);
     } catch (error) {
-      console.error('Error clearing user preferences:', error);
+      logger.error('Error clearing user preferences:', error);
     }
   }
 

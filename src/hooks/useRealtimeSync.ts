@@ -109,7 +109,7 @@ export const useRealtimeSync = (options: RealtimeSyncOptions): UseRealtimeSyncRe
 
           handleMessage(message);
         } catch (error) {
-          console.error('Error parsing WebSocket message:', error);
+          logger.error('Error parsing WebSocket message:', error);
         }
       };
 
@@ -141,7 +141,7 @@ export const useRealtimeSync = (options: RealtimeSyncOptions): UseRealtimeSyncRe
       };
 
       wsRef.current.onerror = (error) => {
-        console.error('WebSocket error:', error);
+        logger.error('WebSocket error:', error);
         toast({
           title: "Erreur de connexion",
           description: "Erreur de connexion WebSocket",
@@ -150,7 +150,7 @@ export const useRealtimeSync = (options: RealtimeSyncOptions): UseRealtimeSyncRe
       };
 
     } catch (error) {
-      console.error('Error creating WebSocket connection:', error);
+      logger.error('Error creating WebSocket connection:', error);
       setIsConnecting(false);
       toast({
         title: "Erreur de connexion",

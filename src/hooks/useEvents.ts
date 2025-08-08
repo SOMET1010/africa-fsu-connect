@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/utils/logger";
 
 export interface Event {
   id: string;
@@ -103,7 +104,7 @@ export const useEvents = () => {
       if (error) throw error;
       setRegistrations(data || []);
     } catch (err: any) {
-      console.error('Failed to fetch registrations:', err);
+      logger.error('Failed to fetch registrations:', err);
     }
   };
 

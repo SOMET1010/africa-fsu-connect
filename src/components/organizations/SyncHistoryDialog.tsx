@@ -1,4 +1,5 @@
 
+import { logger } from '@/utils/logger';
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -49,13 +50,13 @@ export function SyncHistoryDialog({ open, onOpenChange, agencyId, agencyName }: 
         .limit(50);
 
       if (error) {
-        console.error('Error fetching sync logs:', error);
+        logger.error('Error fetching sync logs:', error);
         return;
       }
 
       setLogs(data || []);
     } catch (error) {
-      console.error('Error fetching sync logs:', error);
+      logger.error('Error fetching sync logs:', error);
     } finally {
       setLoading(false);
     }

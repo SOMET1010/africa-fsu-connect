@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/utils/logger';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -27,7 +28,7 @@ const NetworkSecurity = () => {
         const networkEvents = await SecurityApiService.getNetworkSecurityEvents();
         setEvents(networkEvents);
       } catch (error) {
-        console.error('Error loading network events:', error);
+        logger.error('Error loading network events:', error);
       } finally {
         setLoading(false);
       }

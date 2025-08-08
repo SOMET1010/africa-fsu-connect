@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/utils/logger';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -112,7 +113,7 @@ const SecurityAnalytics = () => {
       setThreatActivity(Array.from(threatMap.values()));
       
     } catch (error) {
-      console.error('Error loading security analytics:', error);
+      logger.error('Error loading security analytics:', error);
       toast.error('Erreur lors du chargement des analyses de sécurité');
     } finally {
       setLoading(false);
@@ -142,7 +143,7 @@ const SecurityAnalytics = () => {
       await loadSecurityAnalytics();
       
     } catch (error) {
-      console.error('Error running security analysis:', error);
+      logger.error('Error running security analysis:', error);
       toast.error('Erreur lors de l\'analyse de sécurité');
     } finally {
       setAnalyzing(false);

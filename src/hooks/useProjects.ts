@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import type { Project, ProjectInsert, ProjectUpdate } from '@/types/projects';
+import { logger } from '@/utils/logger';
 
 interface UseProjectsOptions {
   pageSize?: number;
@@ -56,7 +57,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
       setTotalCount(count || 0);
       setCurrentPage(page);
     } catch (err) {
-      console.error("Error fetching projects:", err);
+      logger.error("Error fetching projects:", err);
       const errorMessage = err instanceof Error ? err.message : "Erreur inconnue";
       setError(errorMessage);
       toast({
@@ -118,7 +119,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
       
       return data;
     } catch (err) {
-      console.error("Error creating project:", err);
+      logger.error("Error creating project:", err);
       const errorMessage = err instanceof Error ? err.message : "Erreur lors de la création";
       setError(errorMessage);
       toast({
@@ -174,7 +175,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
       
       return data;
     } catch (err) {
-      console.error("Error updating project:", err);
+      logger.error("Error updating project:", err);
       const errorMessage = err instanceof Error ? err.message : "Erreur lors de la mise à jour";
       setError(errorMessage);
       toast({
@@ -213,7 +214,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
         description: "Projet supprimé avec succès",
       });
     } catch (err) {
-      console.error("Error deleting project:", err);
+      logger.error("Error deleting project:", err);
       const errorMessage = err instanceof Error ? err.message : "Erreur lors de la suppression";
       setError(errorMessage);
       toast({

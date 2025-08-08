@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/utils/logger';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -34,7 +35,7 @@ const WebAuthnManager = () => {
         const webauthnCreds = await SecurityApiService.getWebAuthnCredentials(user.id);
         setCredentials(webauthnCreds);
       } catch (error) {
-        console.error('Error loading WebAuthn credentials:', error);
+        logger.error('Error loading WebAuthn credentials:', error);
       } finally {
         setLoading(false);
       }
@@ -56,7 +57,7 @@ const WebAuthnManager = () => {
       setCredentials([...credentials, newCred]);
       toast.success('Nouvelle authentification WebAuthn enregistrée');
     } catch (error) {
-      console.error('Error registering credential:', error);
+      logger.error('Error registering credential:', error);
       toast.error('Erreur lors de l\'enregistrement');
     }
   };

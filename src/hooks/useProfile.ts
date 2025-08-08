@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import type { Tables } from '@/integrations/supabase/types';
+import { logger } from '@/utils/logger';
 
 type Profile = Tables<'profiles'>;
 
@@ -27,7 +28,7 @@ export const useProfile = () => {
       if (error) throw error;
       setProfile(data);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      logger.error('Error fetching profile:', error);
       toast({
         title: "Erreur",
         description: "Impossible de charger le profil",
@@ -60,7 +61,7 @@ export const useProfile = () => {
       
       return data;
     } catch (error) {
-      console.error('Error updating profile:', error);
+      logger.error('Error updating profile:', error);
       toast({
         title: "Erreur",
         description: "Impossible de mettre à jour le profil",
@@ -93,7 +94,7 @@ export const useProfile = () => {
       
       return data.publicUrl;
     } catch (error) {
-      console.error('Error uploading avatar:', error);
+      logger.error('Error uploading avatar:', error);
       toast({
         title: "Erreur",
         description: "Impossible d'uploader l'avatar",

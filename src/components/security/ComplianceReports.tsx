@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/utils/logger';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -32,7 +33,7 @@ const ComplianceReports = () => {
         const complianceReports = await SecurityApiService.getComplianceReports(user.id);
         setReports(complianceReports);
       } catch (error) {
-        console.error('Error loading compliance reports:', error);
+        logger.error('Error loading compliance reports:', error);
       } finally {
         setLoading(false);
       }
@@ -46,7 +47,7 @@ const ComplianceReports = () => {
       const newReport = await SecurityApiService.generateComplianceReport(user!.id, type as any, `${type.toUpperCase()} Report ${new Date().toLocaleDateString()}`);
       setReports([newReport, ...reports]);
     } catch (error) {
-      console.error('Error generating report:', error);
+      logger.error('Error generating report:', error);
     }
   };
 
