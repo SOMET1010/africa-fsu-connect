@@ -1,5 +1,6 @@
 import FirecrawlApp from '@mendable/firecrawl-js';
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/utils/logger';
 
 export interface CrawlResult {
   success: boolean;
@@ -34,7 +35,7 @@ export class FirecrawlService {
       if (error) throw error;
       return data?.key || null;
     } catch (error) {
-      console.error('Error getting Firecrawl API key:', error);
+      logger.error('Error getting Firecrawl API key:', error as any);
       return null;
     }
   }
@@ -46,13 +47,13 @@ export class FirecrawlService {
       });
 
       if (error) {
-        console.error('Crawl error:', error);
-        return { success: false, error: error.message };
+        logger.error('Crawl error:', error as any);
+        return { success: false, error: (error as any).message };
       }
 
       return data;
     } catch (error) {
-      console.error('Error crawling agency data:', error);
+      logger.error('Error crawling agency data:', error as any);
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Unknown error occurred' 
@@ -70,7 +71,7 @@ export class FirecrawlService {
 
       return data;
     } catch (error) {
-      console.error('Error in batch sync:', error);
+      logger.error('Error in batch sync:', error as any);
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Batch sync failed' 
@@ -83,7 +84,7 @@ export class FirecrawlService {
       const { data } = await supabase.functions.invoke('test-firecrawl');
       return data?.success || false;
     } catch (error) {
-      console.error('Error testing Firecrawl connection:', error);
+      logger.error('Error testing Firecrawl connection:', error as any);
       return false;
     }
   }

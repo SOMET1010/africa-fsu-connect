@@ -69,7 +69,7 @@ export const useConnectorScheduling = () => {
 
       setScheduledJobs(jobs);
     } catch (error) {
-      console.error('Erreur lors du chargement des tâches:', error);
+      logger.error('Erreur lors du chargement des tâches:', error as any);
       toast({
         title: "Erreur",
         description: "Impossible de charger les tâches programmées",

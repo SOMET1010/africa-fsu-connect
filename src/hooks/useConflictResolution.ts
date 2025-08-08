@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ConflictResolutionService, type ConflictData, type ConflictResolutionStrategy } from '@/services/conflictResolutionService';
 import { useToast } from '@/hooks/use-toast';
 import type { Tables } from '@/integrations/supabase/types';
+import { logger } from '@/utils/logger';
 
 interface UseConflictResolutionReturn {
   conflicts: ConflictData[];
@@ -42,7 +43,7 @@ export const useConflictResolution = (agencyId: string): UseConflictResolutionRe
       setConflicts(conflictData);
       setResolutionStats(stats);
     } catch (error) {
-      console.error('Error refreshing conflicts:', error);
+      logger.error('Error refreshing conflicts:', error);
       toast({
         title: "Erreur",
         description: "Impossible de charger les conflits de synchronisation",
@@ -77,7 +78,7 @@ export const useConflictResolution = (agencyId: string): UseConflictResolutionRe
       
       return success;
     } catch (error) {
-      console.error('Error resolving conflict:', error);
+      logger.error('Error resolving conflict:', error);
       toast({
         title: "Erreur",
         description: "Erreur lors de la résolution du conflit",
@@ -103,7 +104,7 @@ export const useConflictResolution = (agencyId: string): UseConflictResolutionRe
       await refreshConflicts();
       return result;
     } catch (error) {
-      console.error('Error auto-resolving conflicts:', error);
+      logger.error('Error auto-resolving conflicts:', error);
       toast({
         title: "Erreur",
         description: "Erreur lors de la résolution automatique",
@@ -119,7 +120,7 @@ export const useConflictResolution = (agencyId: string): UseConflictResolutionRe
     try {
       return await ConflictResolutionService.getConflictHistory(agencyId);
     } catch (error) {
-      console.error('Error fetching conflict history:', error);
+      logger.error('Error fetching conflict history:', error);
       toast({
         title: "Erreur",
         description: "Impossible de charger l'historique des conflits",

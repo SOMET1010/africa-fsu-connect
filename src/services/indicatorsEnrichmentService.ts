@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/utils/logger';
 
 export interface APISource {
   name: string;
@@ -320,7 +321,7 @@ export class IndicatorsEnrichmentService {
       for (const tryYear of [year, year - 1, year - 2]) {
         const url = `https://api.worldbank.org/v2/country/${countryCode}/indicator/${indicatorCode}?format=json&date=${tryYear}&per_page=1`;
         
-        console.log(`🌍 World Bank API call: ${url}`);
+        logger.info(`🌍 World Bank API call: ${url}`);
         const response = await fetch(url);
         if (!response.ok) continue;
         
@@ -341,7 +342,7 @@ export class IndicatorsEnrichmentService {
       
       return null;
     } catch (error) {
-      console.error(`❌ Error fetching World Bank data for ${countryCode}/${indicatorCode}:`, error);
+      logger.error(`❌ Error fetching World Bank data for ${countryCode}/${indicatorCode}:`, error as any);
       return null;
     }
   }
@@ -351,7 +352,7 @@ export class IndicatorsEnrichmentService {
       // ITU DataHub API structure (hypothétique - nécessite clé API)
       const url = `https://datahub.itu.int/api/indicators/${indicatorCode}/countries/${countryCode}?year=${year}`;
       
-      console.log(`📡 ITU API call: ${url}`);
+      logger.info(`📡 ITU API call: ${url}`);
       
       // Pour l'instant, simuler des données réalistes basées sur des statistiques connues
       const simulatedData = this.generateSimulatedITUData(countryCode, indicatorCode, year);
@@ -364,7 +365,7 @@ export class IndicatorsEnrichmentService {
       
       return null;
     } catch (error) {
-      console.error(`❌ Error fetching ITU data for ${countryCode}/${indicatorCode}:`, error);
+      logger.error(`❌ Error fetching ITU data for ${countryCode}/${indicatorCode}:`, error as any);
       return null;
     }
   }
@@ -374,7 +375,7 @@ export class IndicatorsEnrichmentService {
       // GSMA Intelligence API structure (nécessite authentification commerciale)
       const url = `https://api.gsmaintelligence.com/v2/indicators/${indicatorCode}/countries/${countryCode}?year=${year}`;
       
-      console.log(`📱 GSMA API call: ${url}`);
+      logger.info(`📱 GSMA API call: ${url}`);
       
       // Pour l'instant, simuler des données réalistes
       const simulatedData = this.generateSimulatedGSMAData(countryCode, indicatorCode, year);
@@ -386,7 +387,7 @@ export class IndicatorsEnrichmentService {
       
       return null;
     } catch (error) {
-      console.error(`❌ Error fetching GSMA data for ${countryCode}/${indicatorCode}:`, error);
+      logger.error(`❌ Error fetching GSMA data for ${countryCode}/${indicatorCode}:`, error as any);
       return null;
     }
   }
@@ -395,7 +396,7 @@ export class IndicatorsEnrichmentService {
     try {
       const url = `https://unstats.un.org/SDGAPI/v1/sdg/Indicator/Data?indicator=${indicatorCode}&areaCode=${this.getUNCountryCode(countryCode)}&timePeriod=${year}`;
       
-      console.log(`🌐 UN Statistics API call: ${url}`);
+      logger.info(`🌐 UN Statistics API call: ${url}`);
       
       const simulatedData = this.generateSimulatedUNData(countryCode, indicatorCode, year);
       
@@ -406,7 +407,7 @@ export class IndicatorsEnrichmentService {
       
       return null;
     } catch (error) {
-      console.error(`❌ Error fetching UN data for ${countryCode}/${indicatorCode}:`, error);
+      logger.error(`❌ Error fetching UN data for ${countryCode}/${indicatorCode}:`, error as any);
       return null;
     }
   }
@@ -482,7 +483,7 @@ export class IndicatorsEnrichmentService {
   }
 
   async enrichIndicatorsForCountry(countryCode: string, year: number = 2024) {
-    console.log(`🔄 Enriching indicators for ${countryCode} (${year})...`);
+    logger.info(`🔄 Enriching indicators for ${countryCode} (${year})...`);
     
     const enrichedData = [];
     let processedCount = 0;
@@ -547,23 +548,23 @@ export class IndicatorsEnrichmentService {
         await new Promise(resolve => setTimeout(resolve, 200));
         
       } catch (error) {
-        console.error(`❌ Error processing ${mapping.source}/${mapping.sourceCode}:`, error);
+        logger.error(`❌ Error processing ${mapping.source}/${mapping.sourceCode}:`, error as any);
       }
     }
     
-    console.log(`✅ Processed ${processedCount} indicators for ${countryCode}`);
+    logger.info(`✅ Processed ${processedCount} indicators for ${countryCode}`);
     return enrichedData;
   }
 
   async enrichAllAfricanCountries() {
-    console.log("🌍 Starting enrichment for all African countries...");
+    logger.info("🌍 Starting enrichment for all African countries...");
     
     let totalEnriched = 0;
     let countriesProcessed = 0;
     
     for (const countryCode of AFRICAN_COUNTRIES) {
       try {
-        console.log(`🔄 Processing ${countryCode} (${countriesProcessed + 1}/${AFRICAN_COUNTRIES.length})`);
+        logger.info(`🔄 Processing ${countryCode} (${countriesProcessed + 1}/${AFRICAN_COUNTRIES.length})`);
         
         const enrichedData = await this.enrichIndicatorsForCountry(countryCode);
         
@@ -577,10 +578,10 @@ export class IndicatorsEnrichmentService {
             });
             
           if (error) {
-            console.error(`❌ Error inserting data for ${countryCode}:`, error);
+            logger.error(`❌ Error inserting data for ${countryCode}:`, error as any);
           } else {
             totalEnriched += enrichedData.length;
-            console.log(`✅ ${enrichedData.length} indicators enriched for ${countryCode}`);
+            logger.info(`✅ ${enrichedData.length} indicators enriched for ${countryCode}`);
           }
         }
         
@@ -590,11 +591,11 @@ export class IndicatorsEnrichmentService {
         await new Promise(resolve => setTimeout(resolve, 1000));
         
       } catch (error) {
-        console.error(`❌ Error enriching ${countryCode}:`, error);
+        logger.error(`❌ Error enriching ${countryCode}:`, error as any);
       }
     }
     
-    console.log(`🎉 Enrichment completed! ${totalEnriched} total indicators added/updated for ${countriesProcessed} countries`);
+    logger.info(`🎉 Enrichment completed! ${totalEnriched} total indicators added/updated for ${countriesProcessed} countries`);
     return totalEnriched;
   }
 

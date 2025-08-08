@@ -124,7 +124,7 @@ const Forum = () => {
       setNewPostCategory("");
       refetch();
     } catch (error) {
-      console.error("Error creating post:", error);
+      logger.error("Error creating post:", error as any);
     }
   };
 

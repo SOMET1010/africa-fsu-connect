@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/utils/logger';
 
 interface DiagnosticCheck {
   name: string;
@@ -446,7 +447,7 @@ export const useDiagnostic = () => {
       });
 
     } catch (error) {
-      console.error('Erreur lors du diagnostic:', error);
+      logger.error('Erreur lors du diagnostic:', error as any);
       toast({
         title: "Erreur",
         description: "Impossible de terminer le diagnostic",

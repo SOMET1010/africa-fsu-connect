@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 export type TimeRange = '24h' | '7d' | '30d' | '90d' | '1y';
 
 interface EnhancedDashboardStats {
@@ -303,7 +304,7 @@ export const useEnhancedDashboardStats = (timeRange: TimeRange = '30d') => {
         }
       });
     } catch (error) {
-      console.error('Error fetching enhanced dashboard stats:', error);
+      logger.error('Error fetching enhanced dashboard stats:', error as any);
       setError('Erreur lors du chargement des statistiques');
     } finally {
       setLoading(false);

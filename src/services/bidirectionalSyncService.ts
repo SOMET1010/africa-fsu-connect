@@ -1,6 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { ApiConnectorService } from './apiConnectorService';
 import type { Tables } from '@/integrations/supabase/types';
+import { logger } from '@/utils/logger';
 
 export interface BidirectionalSyncConfig {
   agencyId: string;
@@ -79,7 +80,7 @@ export class BidirectionalSyncService {
         syncSessionId: session.id
       };
     } catch (error) {
-      console.error('Bidirectional sync failed:', error);
+      logger.error('Bidirectional sync failed:', error as any);
       return {
         success: false,
         operationsProcessed: 0,
@@ -125,7 +126,7 @@ export class BidirectionalSyncService {
             operationsProcessed++;
           }
         } catch (error) {
-          console.error('Error processing operation:', error);
+          logger.error('Error processing operation:', error as any);
         }
       }
 
@@ -139,7 +140,7 @@ export class BidirectionalSyncService {
         errors: []
       };
     } catch (error) {
-      console.error('Bidirectional sync error:', error);
+      logger.error('Bidirectional sync error:', error as any);
       return {
         success: false,
         operationsProcessed,
@@ -172,7 +173,7 @@ export class BidirectionalSyncService {
       // Convert to sync operations
       return this.convertToSyncOperations(data, 'remote', config);
     } catch (error) {
-      console.error('Error detecting source changes:', error);
+      logger.error('Error detecting source changes:', error as any);
       return [];
     }
   }
@@ -194,7 +195,7 @@ export class BidirectionalSyncService {
       // Convert to sync operations
       return this.convertToSyncOperations(localData || [], 'local', config);
     } catch (error) {
-      console.error('Error detecting target changes:', error);
+      logger.error('Error detecting target changes:', error as any);
       return [];
     }
   }
@@ -244,7 +245,7 @@ export class BidirectionalSyncService {
 
       return null;
     } catch (error) {
-      console.error('Error detecting conflicts:', error);
+      logger.error('Error detecting conflicts:', error as any);
       return null;
     }
   }
@@ -262,7 +263,7 @@ export class BidirectionalSyncService {
           conflict_type: conflict.conflict_type
         });
     } catch (error) {
-      console.error('Error storing conflict:', error);
+      logger.error('Error storing conflict:', error as any);
     }
   }
 
@@ -316,7 +317,7 @@ export class BidirectionalSyncService {
         }
       }
     } catch (error) {
-      console.error('Error applying operation:', error);
+      logger.error('Error applying operation:', error as any);
       throw error;
     }
   }
@@ -353,7 +354,7 @@ export class BidirectionalSyncService {
           .insert(versions);
       }
     } catch (error) {
-      console.error('Error creating data versions:', error);
+      logger.error('Error creating data versions:', error as any);
     }
   }
 
@@ -369,7 +370,7 @@ export class BidirectionalSyncService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching active sync sessions:', error);
+      logger.error('Error fetching active sync sessions:', error as any);
       return [];
     }
   }
@@ -386,7 +387,7 @@ export class BidirectionalSyncService {
 
       return !error;
     } catch (error) {
-      console.error('Error stopping sync session:', error);
+      logger.error('Error stopping sync session:', error as any);
       return false;
     }
   }

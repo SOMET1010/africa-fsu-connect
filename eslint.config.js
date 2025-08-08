@@ -24,7 +24,15 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "@typescript-eslint/no-unused-vars": "off",
-      "no-console": ["warn", { allow: ["warn", "error"] }],
+      // Blocking rule in CI: disallow all console.* except warn/error
+      "no-console": ["error", { allow: ["warn", "error"] }],
+    },
+  },
+  // Overrides: allow console in our logger implementation files
+  {
+    files: ["src/utils/logger.ts", "src/utils/loggerMigration.ts"],
+    rules: {
+      "no-console": "off",
     },
   }
 );

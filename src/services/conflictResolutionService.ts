@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import type { Tables } from '@/integrations/supabase/types';
+import { logger } from '@/utils/logger';
 
 export interface ConflictResolutionStrategy {
   type: 'last_write_wins' | 'merge' | 'manual';
@@ -67,7 +68,7 @@ export class ConflictResolutionService {
         )
       }));
     } catch (error) {
-      console.error('Error fetching unresolved conflicts:', error);
+      logger.error('Error fetching unresolved conflicts:', error as any);
       return [];
     }
   }
@@ -108,7 +109,7 @@ export class ConflictResolutionService {
 
       return true;
     } catch (error) {
-      console.error('Error resolving conflict:', error);
+      logger.error('Error resolving conflict:', error as any);
       return false;
     }
   }
@@ -138,14 +139,14 @@ export class ConflictResolutionService {
             failed++;
           }
         } catch (error) {
-          console.error('Error auto-resolving conflict:', error);
+          logger.error('Error auto-resolving conflict:', error as any);
           failed++;
         }
       }
 
       return { resolved, failed };
     } catch (error) {
-      console.error('Error in auto-resolve conflicts:', error);
+      logger.error('Error in auto-resolve conflicts:', error as any);
       return { resolved: 0, failed: 0 };
     }
   }
@@ -326,7 +327,7 @@ export class ConflictResolutionService {
           updated_at: new Date().toISOString()
         });
     } catch (error) {
-      console.error('Error applying resolved data:', error);
+      logger.error('Error applying resolved data:', error as any);
       throw error;
     }
   }
@@ -343,7 +344,7 @@ export class ConflictResolutionService {
           change_type: 'conflict_resolution'
         });
     } catch (error) {
-      console.error('Error creating resolution version:', error);
+      logger.error('Error creating resolution version:', error as any);
     }
   }
 
@@ -359,7 +360,7 @@ export class ConflictResolutionService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching conflict history:', error);
+      logger.error('Error fetching conflict history:', error as any);
       return [];
     }
   }
@@ -387,7 +388,7 @@ export class ConflictResolutionService {
 
       return { total, resolved, pending, autoResolved };
     } catch (error) {
-      console.error('Error fetching resolution stats:', error);
+      logger.error('Error fetching resolution stats:', error as any);
       return { total: 0, resolved: 0, pending: 0, autoResolved: 0 };
     }
   }

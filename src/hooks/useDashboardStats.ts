@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 
 interface DashboardStats {
   totalProfiles: number;
@@ -66,7 +67,7 @@ export const useDashboardStats = () => {
         eventsThisMonth: eventsThisMonth || 0
       });
     } catch (error) {
-      console.error('Error fetching dashboard stats:', error);
+      logger.error('Error fetching dashboard stats:', error as any);
     } finally {
       setLoading(false);
     }

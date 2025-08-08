@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 
 export interface ContextualSuggestion {
   id: string;
@@ -55,7 +56,7 @@ export const useContextualIntelligence = () => {
         }));
         setActivities(parsed);
       } catch (error) {
-        console.error('Error loading stored activities:', error);
+        logger.error('Error loading stored activities:', error as any);
       }
     }
   }, []);

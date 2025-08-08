@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/utils/logger';
 
 export interface ForumCategory {
   id: string;
@@ -229,7 +230,7 @@ export const useForum = () => {
       if (error) throw error;
     } catch (err: any) {
       // Silent fail for view count update
-      console.error('Failed to update view count:', err);
+      logger.error('Failed to update view count:', err as any);
     }
   };
 

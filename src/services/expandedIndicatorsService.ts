@@ -1,6 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { IndicatorMetadata } from "@/types/indicators";
+import { logger } from '@/utils/logger';
 
 // Configuration des nouveaux standards internationaux
 export const INTERNATIONAL_STANDARDS = {
@@ -106,14 +107,14 @@ export const OFFICIAL_API_SOURCES = [
 export class ExpandedIndicatorsService {
   
   async enrichWithInternationalStandards(countryCode: string) {
-    console.log(`🌍 Starting international standards enrichment for ${countryCode}`);
+    logger.info(`🌍 Starting international standards enrichment for ${countryCode}`);
     
     const enrichedData = [];
     let processedCount = 0;
     
     // Process each theme
     for (const [theme, indicators] of Object.entries(INTERNATIONAL_STANDARDS)) {
-      console.log(`📊 Processing theme: ${theme}`);
+      logger.info(`📊 Processing theme: ${theme}`);
       
       for (const indicatorCode of indicators) {
         try {
@@ -146,12 +147,12 @@ export class ExpandedIndicatorsService {
           await new Promise(resolve => setTimeout(resolve, 100));
           
         } catch (error) {
-          console.error(`❌ Error processing ${indicatorCode}:`, error);
+          logger.error(`❌ Error processing ${indicatorCode}:`, error as any);
         }
       }
     }
     
-    console.log(`✅ Processed ${processedCount} international standard indicators for ${countryCode}`);
+    logger.info(`✅ Processed ${processedCount} international standard indicators for ${countryCode}`);
     return enrichedData;
   }
   
@@ -305,7 +306,7 @@ export class ExpandedIndicatorsService {
   }
   
   async enrichAllAfricanCountriesWithStandards() {
-    console.log("🌍 Starting comprehensive international standards enrichment...");
+    logger.info("🌍 Starting comprehensive international standards enrichment...");
     
     const AFRICAN_COUNTRIES = [
       "DZ", "AO", "BJ", "BW", "BF", "BI", "CM", "CV", "CF", "TD", "KM", "CG", "CD", 
@@ -320,7 +321,7 @@ export class ExpandedIndicatorsService {
     
     for (const countryCode of AFRICAN_COUNTRIES) {
       try {
-        console.log(`🔄 Processing ${countryCode} with international standards (${countriesProcessed + 1}/${AFRICAN_COUNTRIES.length})`);
+        logger.info(`🔄 Processing ${countryCode} with international standards (${countriesProcessed + 1}/${AFRICAN_COUNTRIES.length})`);
         
         const enrichedData = await this.enrichWithInternationalStandards(countryCode);
         
@@ -334,10 +335,10 @@ export class ExpandedIndicatorsService {
             });
             
           if (error) {
-            console.error(`❌ Error inserting data for ${countryCode}:`, error);
+            logger.error(`❌ Error inserting data for ${countryCode}:`, error as any);
           } else {
             totalEnriched += enrichedData.length;
-            console.log(`✅ ${enrichedData.length} international standard indicators enriched for ${countryCode}`);
+            logger.info(`✅ ${enrichedData.length} international standard indicators enriched for ${countryCode}`);
           }
         }
         
@@ -347,11 +348,11 @@ export class ExpandedIndicatorsService {
         await new Promise(resolve => setTimeout(resolve, 800));
         
       } catch (error) {
-        console.error(`❌ Error enriching ${countryCode} with international standards:`, error);
+        logger.error(`❌ Error enriching ${countryCode} with international standards:`, error as any);
       }
     }
     
-    console.log(`🎉 International standards enrichment completed! ${totalEnriched} total indicators added/updated for ${countriesProcessed} countries`);
+    logger.info(`🎉 International standards enrichment completed! ${totalEnriched} total indicators added/updated for ${countriesProcessed} countries`);
     return totalEnriched;
   }
 }

@@ -106,6 +106,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 225 15% 25%;
     --sidebar-border: 214 20% 90%;
     --sidebar-ring: 214 95% 45%;
+
+    /* Layering tokens for overlays (z-index) */
+    --z-overlay: 70;
+    --z-modal: 80;
+    --z-popover: 60;
+    --z-tooltip: 90;
+    --z-toast: 100;
   }
 
   .dark {

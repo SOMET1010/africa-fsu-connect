@@ -73,7 +73,7 @@ export const useDashboardLayout = () => {
         localStorage.setItem(storageKey, JSON.stringify(defaultLayout));
       }
     } catch (error) {
-      console.error('Error loading dashboard layout:', error);
+      logger.error('Error loading dashboard layout:', error as any);
       const defaultLayout = getDefaultLayout(profile.role);
       setLayout(defaultLayout);
     }
@@ -94,7 +94,7 @@ export const useDashboardLayout = () => {
       try {
         localStorage.setItem(storageKey, JSON.stringify(updatedLayout));
       } catch (error) {
-        console.error('Error saving dashboard layout:', error);
+        logger.error('Error saving dashboard layout:', error as any);
       }
     }
   };

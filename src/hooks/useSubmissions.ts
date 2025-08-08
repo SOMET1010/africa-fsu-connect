@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/utils/logger';
 
 export interface Submission {
   id: string;
@@ -182,7 +183,7 @@ export const useSubmissions = () => {
           }
         });
       } catch (notifError) {
-        console.error('Failed to send notification:', notifError);
+        logger.error('Failed to send notification:', notifError as any);
       }
 
       toast({

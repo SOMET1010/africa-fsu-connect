@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/utils/logger';
 import type { Tables } from '@/integrations/supabase/types';
 
 type DocumentVersion = Tables<'document_versions'>;
@@ -24,7 +25,7 @@ export const useDocumentVersions = () => {
       if (error) throw error;
       setVersions(data || []);
     } catch (error) {
-      console.error('Error fetching versions:', error);
+      logger.error('Error fetching versions:', error as any);
       toast({
         title: "Erreur",
         description: "Impossible de charger les versions du document",
@@ -47,7 +48,7 @@ export const useDocumentVersions = () => {
       if (error) throw error;
       setComments(data || []);
     } catch (error) {
-      console.error('Error fetching comments:', error);
+      logger.error('Error fetching comments:', error as any);
       toast({
         title: "Erreur",
         description: "Impossible de charger les commentaires",
@@ -90,7 +91,7 @@ export const useDocumentVersions = () => {
         description: "Commentaire ajouté avec succès",
       });
     } catch (error) {
-      console.error('Error adding comment:', error);
+      logger.error('Error adding comment:', error as any);
       toast({
         title: "Erreur",
         description: "Impossible d'ajouter le commentaire",
@@ -161,7 +162,7 @@ export const useDocumentVersions = () => {
 
       return data;
     } catch (error) {
-      console.error('Error uploading new version:', error);
+      logger.error('Error uploading new version:', error as any);
       toast({
         title: "Erreur",
         description: "Impossible d'uploader la nouvelle version",
@@ -188,7 +189,7 @@ export const useDocumentVersions = () => {
         description: `Version ${version.version} en cours de téléchargement`,
       });
     } catch (error) {
-      console.error('Error downloading version:', error);
+      logger.error('Error downloading version:', error as any);
       toast({
         title: "Erreur",
         description: "Impossible de télécharger cette version",
