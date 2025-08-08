@@ -108,9 +108,11 @@ All colors MUST be HSL.
     --sidebar-ring: 214 95% 45%;
 
     /* Layering tokens for overlays (z-index) */
+    --z-sidebar: 30;
+    --z-header: 40; 
+    --z-popover: 60;
     --z-overlay: 70;
     --z-modal: 80;
-    --z-popover: 60;
     --z-tooltip: 90;
     --z-toast: 100;
   }

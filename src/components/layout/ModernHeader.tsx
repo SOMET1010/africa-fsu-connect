@@ -109,7 +109,7 @@ const ModernHeader = () => {
   return (
     <header 
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
+        "sticky top-0 w-full transition-all duration-300 z-header",
         scrolled 
           ? "bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-lg shadow-black/5" 
           : "bg-background/60 backdrop-blur-md border-b border-border/30"

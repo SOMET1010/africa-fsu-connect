@@ -111,6 +111,15 @@ export default {
 				'subtle': 'var(--shadow-sm)',
 				'dramatic': 'var(--shadow-xl)'
 			},
+			zIndex: {
+				'sidebar': 'var(--z-sidebar)',
+				'header': 'var(--z-header)',
+				'popover': 'var(--z-popover)',
+				'overlay': 'var(--z-overlay)',
+				'modal': 'var(--z-modal)',
+				'tooltip': 'var(--z-tooltip)',
+				'toast': 'var(--z-toast)',
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
