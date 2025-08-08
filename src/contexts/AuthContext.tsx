@@ -15,6 +15,8 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<ApiResponse>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<ApiResponse>;
   signOut: () => Promise<void>;
+  requestPasswordReset: (email: string) => Promise<ApiResponse>;
+  updatePassword: (newPassword: string) => Promise<ApiResponse>;
   updateProfile: (updates: Partial<Tables<'profiles'>>) => Promise<void>;
   isAdmin: () => boolean;
   hasRole: (roles: UserRole[]) => boolean;
@@ -157,6 +159,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       logger.error('Error signing out:', error, { component: 'AuthContext', action: 'signOut' });
     }
   };
+  
+  const requestPasswordReset = async (email: string) => {
+    const redirectUrl = `${window.location.origin}/auth?reset=true`;
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: redirectUrl,
+    });
+    if (error) {
+      logger.error('Error requesting password reset:', error, { component: 'AuthContext', action: 'requestPasswordReset' });
+    }
+    return { error };
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+    if (user) {
+      await logSecurityEvent(user.id, error ? 'password_reset_failed' : 'password_reset', undefined, !error);
+    }
+    if (error) {
+      logger.error('Error updating password:', error, { component: 'AuthContext', action: 'updatePassword' });
+    }
+    return { error };
+  };
 
   const updateProfile = async (updates: Partial<Tables<'profiles'>>) => {
     if (!user || !profile) return;
@@ -191,6 +215,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       signIn,
       signUp,
       signOut,
+      requestPasswordReset,
+      updatePassword,
       updateProfile,
       isAdmin,
       hasRole

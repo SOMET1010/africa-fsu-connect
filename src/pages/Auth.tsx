@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { ModernButton } from '@/components/ui/modern-button';
 import { Input } from '@/components/ui/input';
@@ -11,7 +11,7 @@ import { Loader2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Auth = () => {
-  const { signIn, signUp, user, loading } = useAuth();
+  const { signIn, signUp, user, loading, requestPasswordReset, updatePassword } = useAuth();
   const navigate = useNavigate();
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,12 +28,27 @@ const Auth = () => {
   const [signupFirstName, setSignupFirstName] = useState('');
   const [signupLastName, setSignupLastName] = useState('');
 
+  // Password reset state
+  const [forgotMode, setForgotMode] = useState(false);
+  const [resetMode, setResetMode] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+
   // Redirect authenticated users
   useEffect(() => {
     if (user) {
       navigate('/dashboard');
     }
   }, [user, navigate]);
+
+  // Detect reset mode from URL
+  useEffect(() => {
+    const isReset = searchParams.get('reset') === 'true';
+    setResetMode(isReset);
+    if (isReset) setForgotMode(false);
+  }, [searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,6 +104,49 @@ const Auth = () => {
       setIsSubmitting(false);
     }
   };
+  const handleRequestReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsSubmitting(true);
+    try {
+      const { error } = await requestPasswordReset(resetEmail);
+      if (error) {
+        const msg = (error as any)?.message || 'Une erreur est survenue';
+        setError(msg);
+      } else {
+        toast.success('Si un compte existe, un email de réinitialisation a été envoyé.');
+        setForgotMode(false);
+      }
+    } catch (err) {
+      setError('Une erreur inattendue s\'est produite');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (newPassword !== confirmPassword) {
+      setError('Les mots de passe ne correspondent pas');
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const { error } = await updatePassword(newPassword);
+      if (error) {
+        const msg = (error as any)?.message || 'Impossible de mettre à jour le mot de passe';
+        setError(msg);
+      } else {
+        toast.success('Mot de passe mis à jour.');
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      setError('Une erreur inattendue s\'est produite');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -137,74 +195,187 @@ const Auth = () => {
               </TabsTrigger>
             </TabsList>
 
-            {/* Login Tab */}
             <TabsContent value="login" className="p-8 space-y-6">
               <div className="text-center space-y-2">
-                <h2 className="text-2xl font-bold text-foreground font-poppins">Se connecter</h2>
+                <h2 className="text-2xl font-bold text-foreground font-poppins">
+                  {resetMode ? 'Définir un nouveau mot de passe' : forgotMode ? 'Réinitialiser votre mot de passe' : 'Se connecter'}
+                </h2>
                 <p className="text-muted-foreground font-inter">
-                  Accédez à votre compte FSU
+                  {resetMode
+                    ? 'Choisissez un nouveau mot de passe pour votre compte'
+                    : forgotMode
+                      ? 'Entrez votre email pour recevoir un lien de réinitialisation'
+                      : 'Accédez à votre compte FSU'}
                 </p>
               </div>
-              
-              <form onSubmit={handleLogin} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="login-email" className="font-medium">Email</Label>
-                  <Input
-                    id="login-email"
-                    type="email"
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    placeholder="votre@email.com"
-                    required
-                    className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="login-password" className="font-medium">Mot de passe</Label>
-                  <div className="relative">
+
+              {resetMode ? (
+                <form onSubmit={handleUpdatePassword} className="space-y-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="new-password" className="font-medium">Nouveau mot de passe</Label>
                     <Input
-                      id="login-password"
-                      type={showPassword ? "text" : "password"}
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      placeholder="Votre mot de passe"
+                      id="new-password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Votre nouveau mot de passe"
                       required
+                      minLength={6}
                       className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary pr-12"
                     />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirm-password" className="font-medium">Confirmer le mot de passe</Label>
+                    <Input
+                      id="confirm-password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirmez le mot de passe"
+                      required
+                      minLength={6}
+                      className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary pr-12"
+                    />
+                  </div>
+
+                  {error && (
+                    <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 backdrop-blur-sm">
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="flex items-center justify-between">
                     <ModernButton
                       type="button"
                       variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => { setResetMode(false); setSearchParams({}); }}
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
+                      Retour à la connexion
+                    </ModernButton>
+                    <ModernButton
+                      type="submit"
+                      className="h-12"
+                      variant="default"
+                      disabled={isSubmitting}
+                      loading={isSubmitting}
+                      loadingText="Mise à jour..."
+                    >
+                      Mettre à jour
                     </ModernButton>
                   </div>
-                </div>
+                </form>
+              ) : forgotMode ? (
+                <form onSubmit={handleRequestReset} className="space-y-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="reset-email" className="font-medium">Email</Label>
+                    <Input
+                      id="reset-email"
+                      type="email"
+                      value={resetEmail}
+                      onChange={(e) => setResetEmail(e.target.value)}
+                      placeholder="votre@email.com"
+                      required
+                      className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary"
+                    />
+                  </div>
 
-                {error && (
-                  <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 backdrop-blur-sm">
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
+                  {error && (
+                    <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 backdrop-blur-sm">
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
 
-                <ModernButton 
-                  type="submit" 
-                  className="w-full h-12"
-                  variant="default"
-                  disabled={isSubmitting}
-                  loading={isSubmitting}
-                  loadingText="Connexion en cours..."
-                >
-                  Se connecter
-                </ModernButton>
-              </form>
+                  <div className="flex items-center justify-between">
+                    <ModernButton
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setForgotMode(false)}
+                    >
+                      Retour à la connexion
+                    </ModernButton>
+                    <ModernButton 
+                      type="submit" 
+                      className="h-12"
+                      variant="default"
+                      disabled={isSubmitting}
+                      loading={isSubmitting}
+                      loadingText="Envoi..."
+                    >
+                      Envoyer le lien
+                    </ModernButton>
+                  </div>
+                </form>
+              ) : (
+                <form onSubmit={handleLogin} className="space-y-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="login-email" className="font-medium">Email</Label>
+                    <Input
+                      id="login-email"
+                      type="email"
+                      value={loginEmail}
+                      onChange={(e) => setLoginEmail(e.target.value)}
+                      placeholder="votre@email.com"
+                      required
+                      className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="login-password" className="font-medium">Mot de passe</Label>
+                    <div className="relative">
+                      <Input
+                        id="login-password"
+                        type={showPassword ? 'text' : 'password'}
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        placeholder="Votre mot de passe"
+                        required
+                        className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary pr-12"
+                      />
+                      <ModernButton
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </ModernButton>
+                    </div>
+                  </div>
+
+                  {error && (
+                    <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 backdrop-blur-sm">
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <ModernButton 
+                    type="submit" 
+                    className="w-full h-12"
+                    variant="default"
+                    disabled={isSubmitting}
+                    loading={isSubmitting}
+                    loadingText="Connexion en cours..."
+                  >
+                    Se connecter
+                  </ModernButton>
+
+                  <div className="text-right">
+                    <button
+                      type="button"
+                      className="text-sm text-primary hover:underline"
+                      onClick={() => { setForgotMode(true); setError(null); }}
+                    >
+                      Mot de passe oublié ?
+                    </button>
+                  </div>
+                </form>
+              )}
             </TabsContent>
 
             {/* Signup Tab */}
