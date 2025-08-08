@@ -34,7 +34,7 @@ const initPortlet = () => {
     
     logger.info(`React SUTEL Portlet initialized`, { component: 'LiferayMain', namespace });
   } else {
-    console.error(`Root element not found: ${namespace}-react-sutel-root`);
+    logger.error(`Root element not found: ${namespace}-react-sutel-root`);
   }
 };
 

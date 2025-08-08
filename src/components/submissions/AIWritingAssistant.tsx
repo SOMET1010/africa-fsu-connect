@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Loader2, Wand2, CheckCircle, XCircle, Lightbulb, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 
 interface AIWritingAssistantProps {
   content: string;
@@ -50,7 +51,7 @@ export const AIWritingAssistant: React.FC<AIWritingAssistantProps> = ({
       const response = data as AIResponse;
       return response.suggestion;
     } catch (error) {
-      console.error('AI Assistant error:', error);
+      logger.error('AI Assistant error:', error);
       toast({
         title: "Erreur IA",
         description: "Impossible de contacter l'assistant IA",

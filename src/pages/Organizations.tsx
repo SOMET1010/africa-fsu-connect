@@ -33,13 +33,7 @@ import {
   GitCompare,
   Navigation
 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { logger } from '@/utils/logger';
 
 const Organizations = () => {
   const { t } = useTranslation();
@@ -58,7 +52,7 @@ const Organizations = () => {
       await refetch(); // Refresh the agencies data
       setViewMode('enrichment'); // Switch to enrichment view
     } catch (error) {
-      console.error('Sync failed:', error);
+      logger.error('Sync failed', error);
     } finally {
       setIsSyncing(false);
     }
@@ -70,7 +64,7 @@ const Organizations = () => {
     // Scroll to the content area
     setTimeout(() => {
       const element = document.querySelector('[data-view-content]');
-      console.log('Analytics scroll element found:', element);
+      logger.debug('Analytics scroll element found', { data: element });
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {

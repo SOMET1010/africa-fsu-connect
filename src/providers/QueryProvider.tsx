@@ -1,6 +1,7 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { logger } from '@/utils/logger';
 
 // Configuration optimisée pour React Query
 const queryClient = new QueryClient({
@@ -52,7 +53,7 @@ if (typeof window !== 'undefined') {
       if (event?.query?.state?.dataUpdatedAt) {
         const duration = Date.now() - event.query.state.dataUpdatedAt;
         if (duration > 2000) {
-          console.warn(`Slow query detected: ${JSON.stringify(event.query.queryKey)} took ${duration}ms`);
+          logger.warn(`Slow query detected: ${JSON.stringify(event.query.queryKey)} took ${duration}ms`);
         }
       }
     });

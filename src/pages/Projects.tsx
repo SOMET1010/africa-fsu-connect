@@ -23,6 +23,7 @@ import { ProjectDialog } from "@/components/projects/ProjectDialog";
 import { SampleProjectData } from "@/components/projects/SampleProjectData";
 import { useToast } from "@/hooks/use-toast";
 import { ModernCard } from "@/components/ui/modern-card";
+import { logger } from "@/utils/logger";
 
 const Projects = () => {
   const { t } = useTranslation();
@@ -74,7 +75,7 @@ const Projects = () => {
         await createProject(projectData);
       }
     } catch (error) {
-      console.error('Error saving project:', error);
+      logger.error('Error saving project:', error);
     }
   };
 

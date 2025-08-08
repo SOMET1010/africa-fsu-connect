@@ -23,6 +23,7 @@ import { EventsHero } from "@/components/events/EventsHero";
 import { Calendar } from "@/components/ui/calendar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/utils/logger";
 
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -130,7 +131,7 @@ const Events = () => {
         description: "Vous êtes maintenant inscrit à cet événement.",
       });
     } catch (error) {
-      console.error('Registration failed:', error);
+      logger.error('Registration failed', error);
       toast({
         title: "Erreur d'inscription",
         description: "Impossible de s'inscrire à l'événement.",
@@ -147,7 +148,7 @@ const Events = () => {
         description: "Vous n'êtes plus inscrit à cet événement.",
       });
     } catch (error) {
-      console.error('Unregistration failed:', error);
+      logger.error('Unregistration failed', error);
       toast({
         title: "Erreur de désinscription",
         description: "Impossible de se désinscrire de l'événement.",
@@ -184,7 +185,7 @@ const Events = () => {
         description: "L'événement a été créé avec succès.",
       });
     } catch (error) {
-      console.error('Event creation failed:', error);
+      logger.error('Event creation failed', error);
       toast({
         title: "Erreur de création",
         description: "Impossible de créer l'événement.",

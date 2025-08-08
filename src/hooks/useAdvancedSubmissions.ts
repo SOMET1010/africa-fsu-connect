@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { logger } from '@/utils/logger';
 
 export interface AdvancedSubmission {
   id: string;
@@ -107,7 +108,7 @@ export const useAdvancedSubmissions = () => {
         )
       );
     } catch (err) {
-      console.error('Auto-save failed:', err);
+      logger.error('Auto-save failed:', err);
     }
   }, []);
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { BidirectionalSyncService, type BidirectionalSyncConfig, type SyncResult } from '@/services/bidirectionalSyncService';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/utils/logger';
 import type { Tables } from '@/integrations/supabase/types';
 
 interface UseBidirectionalSyncReturn {
@@ -26,7 +27,7 @@ export const useBidirectionalSync = (agencyId: string): UseBidirectionalSyncRetu
       const sessions = await BidirectionalSyncService.getActiveSyncSessions(agencyId);
       setActiveSessions(sessions);
     } catch (error) {
-      console.error('Error refreshing sync sessions:', error);
+      logger.error('Error refreshing sync sessions:', error);
       toast({
         title: "Erreur",
         description: "Impossible de charger les sessions de synchronisation",
@@ -100,7 +101,7 @@ export const useBidirectionalSync = (agencyId: string): UseBidirectionalSyncRetu
       
       return success;
     } catch (error) {
-      console.error('Error stopping sync session:', error);
+      logger.error('Error stopping sync session:', error);
       toast({
         title: "Erreur",
         description: "Erreur lors de l'arrêt de la session",

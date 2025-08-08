@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/utils/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, FileText, Clock, CheckCircle, XCircle, AlertCircle, Sparkles, Save } from 'lucide-react';
@@ -39,8 +40,8 @@ export const Submit = () => {
         await autoSave(currentSubmissionId, data);
       }
     },
-    onSaveSuccess: () => console.log('Auto-save successful'),
-    onSaveError: (error) => console.error('Auto-save failed:', error),
+    onSaveSuccess: () => logger.info('Auto-save successful'),
+    onSaveError: (error) => logger.error('Auto-save failed', error),
   });
 
   const submissionTypes = [

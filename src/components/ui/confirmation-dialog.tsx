@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, Info, CheckCircle, XCircle } from "lucide-react";
+import { logger } from '@/utils/logger';
 
 interface ConfirmationDialogProps {
   open: boolean;
@@ -83,7 +84,7 @@ export function ConfirmationDialog({
       await onConfirm();
       onOpenChange(false);
     } catch (error) {
-      console.error("Confirmation action failed:", error);
+      logger.error("Confirmation action failed:", error);
     } finally {
       setIsProcessing(false);
     }
