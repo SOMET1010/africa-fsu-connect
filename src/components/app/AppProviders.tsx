@@ -5,7 +5,6 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
 import { IntelligentLayout } from "@/components/layout/IntelligentLayout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { logger } from "@/utils/logger";
 
@@ -46,7 +45,6 @@ export function AppProviders({ children }: AppProvidersProps) {
     >
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <Toaster />
           <Sonner />
           <BrowserRouter>
             <ErrorBoundary

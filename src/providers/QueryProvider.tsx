@@ -7,30 +7,24 @@ import { logger } from '@/utils/logger';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // Cache pendant 5 minutes par défaut
-      staleTime: 5 * 60 * 1000,
-      // Garde en cache pendant 10 minutes
-      gcTime: 10 * 60 * 1000,
-      // Retry intelligent
+      // Optimized cache times
+      staleTime: 10 * 60 * 1000, // 10 minutes for stable data
+      gcTime: 30 * 60 * 1000, // 30 minutes in memory
+      // Smart retry logic
       retry: (failureCount, error: any) => {
-        // Ne pas retry pour les erreurs 404, 401, 403
-        if (error?.status === 404 || error?.status === 401 || error?.status === 403) {
-          return false;
+        if (error?.status >= 400 && error?.status < 500) {
+          return false; // Don't retry client errors
         }
-        // Retry jusqu'à 3 fois pour les autres erreurs
-        return failureCount < 3;
+        return failureCount < 2; // Reduce retries for faster fail
       },
-      // Retry delay exponentiel avec jitter
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-      // Refetch automatique
+      retryDelay: (attemptIndex) => Math.min(500 * 2 ** attemptIndex, 5000),
+      // Optimized refetch behavior
       refetchOnWindowFocus: false,
-      refetchOnReconnect: true,
+      refetchOnReconnect: 'always',
       refetchOnMount: true,
     },
     mutations: {
-      // Retry pour les mutations importantes
-      retry: 1,
-      retryDelay: 1000,
+      retry: false, // No retry for mutations to avoid side effects
     },
   },
 });

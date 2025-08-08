@@ -16,7 +16,7 @@ export const useEnhancedIndicators = (filters?: {
     queryFn: async () => {
       let query = supabase
         .from("universal_service_indicators")
-        .select("*")
+        .select("id, country_code, region, year, indicator_code, indicator_name, value, unit, data_source, metadata, last_updated_at")
         .order("year", { ascending: false })
         .order("last_updated_at", { ascending: false });
 

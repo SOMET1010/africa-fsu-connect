@@ -5,7 +5,7 @@ import { ModernButton } from "@/components/ui/modern-button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { Badge } from "@/components/ui/badge";
-import OptimizedSearchBar from "@/components/shared/OptimizedSearchBar";
+import { OptimizedSearchBar } from "@/components/shared/OptimizedSearchBar";
 import { cn } from "@/lib/utils";
 
 interface ModernForumHeaderProps {
@@ -153,9 +153,7 @@ export function ModernForumHeader({
           <div className="flex-1 w-full">
             <OptimizedSearchBar
               placeholder="Rechercher dans les discussions..."
-              onSearch={onSearch}
-              filters={filterOptions}
-              showFilters={true}
+              onSearch={(query) => onSearch(query, searchFilters)}
               className="w-full"
             />
           </div>

@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
+import { LazyPieChart, LazyBarChart } from "./LazyChartComponents";
 import { Globe, TrendingUp, Users, Wifi, Activity, Database, Zap, Globe2, Shield } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { useEnhancedIndicators, useRegionalIndicatorStats, useDataSourceStats } from "@/hooks/useEnhancedIndicators";
@@ -167,24 +167,7 @@ export const GlobalIndicatorsWidget = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie
-                  data={regionData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {regionData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={((value: number, name: string) => [`${value} indicateurs`, 'Total']) as TooltipFormatter} />
-              </PieChart>
-            </ResponsiveContainer>
+            <LazyPieChart data={regionData} height={200} />
             <div className="grid grid-cols-2 gap-2 mt-4">
               {regionData.map((item, index) => (
                 <div key={index} className="flex items-center gap-2">
@@ -215,17 +198,7 @@ export const GlobalIndicatorsWidget = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={countryComparisonData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip formatter={((value: number, name: string) => [`${value?.toFixed(1)}%`, name]) as TooltipFormatter} />
-                <Bar dataKey="internet" fill="hsl(var(--primary))" name="Internet %" />
-                <Bar dataKey="mobile" fill="hsl(var(--secondary))" name="Mobile %" />
-                <Bar dataKey="coverage4g" fill="hsl(var(--accent))" name="4G %" />
-              </BarChart>
-            </ResponsiveContainer>
+            <LazyBarChart data={countryComparisonData} height={300} />
           </CardContent>
         </Card>
       </ScrollReveal>

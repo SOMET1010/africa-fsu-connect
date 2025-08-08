@@ -33,10 +33,10 @@ export const useDashboardStats = () => {
         { count: eventsCount },
         { count: submissionsCount }
       ] = await Promise.all([
-        supabase.from('profiles').select('*', { count: 'exact', head: true }),
-        supabase.from('documents').select('*', { count: 'exact', head: true }),
-        supabase.from('events').select('*', { count: 'exact', head: true }),
-        supabase.from('submissions').select('*', { count: 'exact', head: true })
+        supabase.from('profiles').select('id', { count: 'exact', head: true }),
+        supabase.from('documents').select('id', { count: 'exact', head: true }),
+        supabase.from('events').select('id', { count: 'exact', head: true }),
+        supabase.from('submissions').select('id', { count: 'exact', head: true })
       ]);
 
       // Fetch this month's counts
@@ -50,11 +50,11 @@ export const useDashboardStats = () => {
       ] = await Promise.all([
         supabase
           .from('documents')
-          .select('*', { count: 'exact', head: true })
+          .select('id', { count: 'exact', head: true })
           .gte('created_at', startOfMonth.toISOString()),
         supabase
           .from('events')
-          .select('*', { count: 'exact', head: true })
+          .select('id', { count: 'exact', head: true })
           .gte('created_at', startOfMonth.toISOString())
       ]);
 

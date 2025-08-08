@@ -48,7 +48,7 @@ export const useUniversalServiceIndicators = (filters?: {
     queryFn: async () => {
       let query = supabase
         .from("universal_service_indicators")
-        .select("*")
+        .select("id, country_code, region, year, indicator_code, indicator_name, value, unit, data_source, last_updated_at")
         .order("year", { ascending: false });
 
       if (filters?.country_code) {
@@ -77,7 +77,7 @@ export const useIndicatorDefinitions = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("indicator_definitions")
-        .select("*")
+        .select("id, code, name, category, description, unit, source_organization")
         .order("category", { ascending: true });
 
       if (error) throw error;
@@ -92,7 +92,7 @@ export const useDataSources = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("data_sources")
-        .select("*")
+        .select("id, name, acronym, description, website_url, update_frequency, is_active")
         .eq("is_active", true)
         .order("name", { ascending: true });
 
