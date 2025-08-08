@@ -40,10 +40,7 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
   // Skip links configuration
   const skipLinks = [
     { href: "#main-content", label: "Aller au contenu principal" },
-    ...(user ? [
-      { href: "#app-navigation", label: "Aller à la navigation" },
-      { href: "#app-sidebar", label: "Aller au menu latéral" }
-    ] : [])
+    { href: "#app-navigation", label: "Aller à la navigation" }
   ];
 
   return (
@@ -53,11 +50,9 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
       
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 flex w-full">
         <div className="flex flex-col flex-1 min-w-0">
-          {user && (
             <div id="app-navigation">
               <ModernHeader />
             </div>
-          )}
           <main id="main-content" className="flex-1 relative" tabIndex={-1}>
             <PageTransition variant="fade" duration="normal">
               {children}
