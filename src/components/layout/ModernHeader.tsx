@@ -39,7 +39,6 @@ import { useUserPreferences } from "@/contexts/UserPreferencesContext";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "@/hooks/useTranslation";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const ModernHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -120,10 +119,6 @@ const ModernHeader = () => {
         <div className="flex items-center justify-between h-16">
           {/* Premium Logo with sophisticated design */}
           <div className="flex items-center space-x-4">
-            {/* Sidebar trigger for authenticated users on desktop */}
-            {user && !isMobile && (
-              <SidebarTrigger className="h-8 w-8" />
-            )}
             <Link to="/" className="flex items-center space-x-3 group transition-all duration-500">
               <div className="relative">
                 <div className="premium-card p-3 group-hover:scale-110 transition-all duration-500 shadow-glow">
