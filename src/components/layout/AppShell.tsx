@@ -4,10 +4,8 @@ import Footer from "./Footer";
 import { FloatingMapButton } from "@/components/shared/FloatingMapButton";
 import ImprovedMobileBottomNav from "@/components/navigation/ImprovedMobileBottomNav";
 import { useAuth } from "@/contexts/AuthContext";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { useLocation } from "react-router-dom";
 import { PageTransition } from "@/components/ui/page-transition";
-import { ModernSidebar } from "./ModernSidebar";
 import { SkipLinks } from "@/components/ui/skip-links";
 import { useAccessibility } from "@/hooks/useAccessibility";
 
@@ -49,21 +47,17 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
   ];
 
   return (
-    <SidebarProvider defaultCollapsed={!shouldSidebarBeOpen}>
+    <>
       {/* Skip Links pour l'accessibilité */}
       <SkipLinks links={skipLinks} />
       
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 flex w-full">
-        {user && (
-          <div id="app-sidebar">
-            <ModernSidebar />
-          </div>
-        )}
-        
         <div className="flex flex-col flex-1 min-w-0">
-          <div id="app-navigation">
-            <ModernHeader />
-          </div>
+          {user && (
+            <div id="app-navigation">
+              <ModernHeader />
+            </div>
+          )}
           <main id="main-content" className="flex-1 relative" tabIndex={-1}>
             <PageTransition variant="fade" duration="normal">
               {children}
@@ -80,6 +74,6 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
           </>
         )}
       </div>
-    </SidebarProvider>
+    </>
   );
 }
