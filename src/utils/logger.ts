@@ -42,6 +42,14 @@ export interface LogContext {
 
 class Logger {
   private isDevelopment = import.meta.env.DEV;
+  
+  // Use original console methods to avoid recursion
+  private originalConsole = {
+    debug: console.debug.bind(console),
+    info: console.info.bind(console), 
+    warn: console.warn.bind(console),
+    error: console.error.bind(console)
+  };
 
   private formatMessage(level: LogLevel, message: string, context?: LogContext): string {
     const timestamp = new Date().toISOString();
@@ -51,23 +59,23 @@ class Logger {
 
   debug(message: string, context?: LogContext): void {
     if (this.isDevelopment) {
-      console.debug(this.formatMessage(LogLevel.DEBUG, message, context));
+      this.originalConsole.debug(this.formatMessage(LogLevel.DEBUG, message, context));
     }
   }
 
   info(message: string, context?: LogContext): void {
     if (this.isDevelopment) {
-      console.info(this.formatMessage(LogLevel.INFO, message, context));
+      this.originalConsole.info(this.formatMessage(LogLevel.INFO, message, context));
     }
   }
 
   warn(message: string, context?: LogContext): void {
-    console.warn(this.formatMessage(LogLevel.WARN, message, context));
+    this.originalConsole.warn(this.formatMessage(LogLevel.WARN, message, context));
   }
 
   error(message: string, error?: Error | unknown, context?: LogContext): void {
     const fullContext = { ...context, error: error instanceof Error ? error.message : String(error) };
-    console.error(this.formatMessage(LogLevel.ERROR, message, fullContext));
+    this.originalConsole.error(this.formatMessage(LogLevel.ERROR, message, fullContext));
     
     // In production, you could send to error tracking service here
     if (!this.isDevelopment && error) {
@@ -116,7 +124,7 @@ class Logger {
       const latest = existing.slice(-100);
       localStorage.setItem('production-monitoring', JSON.stringify(latest));
     } catch (error) {
-      console.warn('Failed to send monitoring data:', error);
+      this.originalConsole.warn('Failed to send monitoring data:', error);
     }
   }
 }
@@ -126,6 +134,7 @@ export const logger = new Logger();
 // Development-only helper for migration
 export const devLog = (message: string, data?: unknown): void => {
   if (import.meta.env.DEV) {
-    console.log(`[DEV] ${message}`, data);
+    const originalLog = console.log.bind(console);
+    originalLog(`[DEV] ${message}`, data);
   }
 };
