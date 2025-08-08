@@ -26,7 +26,7 @@ const MainContent = ({ children, hideFooter, shouldShowSidebar }: {
   return (
     <div className={cn(
       "flex-1 flex flex-col min-h-screen transition-all duration-300",
-      shouldShowSidebar ? (collapsed ? "ml-16" : "ml-64") : "ml-0"
+      shouldShowSidebar ? (collapsed ? "pl-16" : "pl-64") : "pl-0"
     )}>
       <ModernHeader />
       
@@ -76,16 +76,8 @@ export const ProfessionalLayout = ({
 };
 
 const SideNavigation = () => {
-  const { collapsed } = useSidebar();
-  
   return (
-    <Sidebar
-      className={cn(
-        "fixed left-0 top-0 h-screen transition-all duration-300 border-r border-border",
-        "z-sidebar bg-sidebar shadow-lg",
-        collapsed ? "w-16" : "w-64"
-      )}
-    >
+    <Sidebar>
       <SidebarContent className="h-full">
         <AppNavigation />
       </SidebarContent>

@@ -106,39 +106,14 @@ export function Sidebar({
   ...props
 }: SidebarProps) {
   const sidebarContext = useContext(SidebarContext)
-  const [collapsed, setCollapsed] = useState(defaultCollapsed)
 
-  const isControlled = collapsedProp !== undefined
-  const _collapsed = isControlled ? collapsedProp : collapsed
-
-  // If we're inside a SidebarProvider, use its context
-  const contextCollapsed = sidebarContext?.collapsed
-
-  // Final collapsed state is either controlled prop, internal state, or context state
-  const finalCollapsed = isControlled
-    ? collapsedProp
-    : sidebarContext
-    ? contextCollapsed
-    : _collapsed
-
-  const handleToggle = () => {
-    if (!collapsible) return
-    
-    if (isControlled && onCollapsedChange) {
-      onCollapsedChange(!collapsedProp)
-    } else if (!isControlled) {
-      setCollapsed(!collapsed)
-    }
-    
-    if (sidebarContext) {
-      sidebarContext.toggle()
-    }
-  }
+  // Use context collapsed state if available, otherwise use prop or default
+  const finalCollapsed = sidebarContext ? sidebarContext.collapsed : (collapsedProp ?? defaultCollapsed)
 
   return (
     <aside
       className={cn(
-        "sidebar flex flex-col border-r border-border h-screen sticky top-0 bg-card",
+        "sidebar flex flex-col border-r border-sidebar-border h-screen fixed top-0 left-0 z-sidebar bg-sidebar-background text-sidebar-foreground",
         "transition-all duration-300 ease-in-out",
         finalCollapsed ? "w-16" : "w-64",
         className
