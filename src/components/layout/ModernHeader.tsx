@@ -67,6 +67,7 @@ const ModernHeader = () => {
     { name: t('nav.resources'), href: "/docs", icon: BookOpen },
     { name: t('nav.forum'), href: "/forum", icon: MessageSquare },
     { name: t('nav.submit'), href: "/submit", icon: FileText },
+    { name: "Note conceptuelle", href: "/concept-note", icon: FileText },
     { name: t('nav.events'), href: "/events", icon: Calendar },
   ];
 

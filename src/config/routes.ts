@@ -47,6 +47,7 @@ const Security = lazy(() => import('@/pages/Security'));
 const Map = lazy(() => import('@/pages/Map'));
 const Analytics = lazy(() => import('@/pages/Analytics'));
 const DemoGuide = lazy(() => import('@/pages/DemoGuide'));
+const ConceptNote = lazy(() => import('@/pages/ConceptNote'));
 
 // Admin components (separate chunk)
 const Admin = lazy(() => import('@/pages/Admin'));
@@ -143,6 +144,17 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: false,
     category: 'management',
+  },
+  {
+    path: '/concept-note',
+    component: ConceptNote,
+    title: 'Note conceptuelle',
+    description: 'Rédigez une note conceptuelle structurée',
+    icon: FileText,
+    isProtected: true,
+    showInSidebar: false,
+    showInMobileNav: false,
+    category: 'main',
   },
   {
     path: '/events',

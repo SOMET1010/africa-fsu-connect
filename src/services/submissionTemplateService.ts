@@ -1,7 +1,7 @@
 export interface SubmissionTemplate {
   id: string;
   name: string;
-  type: 'project' | 'position' | 'regulation' | 'funding';
+  type: 'project' | 'position' | 'regulation' | 'funding' | 'concept_note';
   description: string;
   content: Record<string, any>;
   category: string;
@@ -149,6 +149,55 @@ export const defaultTemplates: SubmissionTemplate[] = [
         'Plan de maintenance préventive',
         'Formation de techniciens locaux'
       ]
+    },
+    isDefault: true,
+  },
+  {
+    id: 'concept-note-default',
+    name: 'Note conceptuelle - Modèle SUTEL',
+    type: 'concept_note',
+    description: 'Structure standard pour rédiger une note conceptuelle',
+    category: 'Outils',
+    tags: ['note conceptuelle', 'présentation', 'outil'],
+    content: {
+      title: 'Amélioration de la connectivité et des services numériques',
+      subject: 'Accélérer l\'accès équitable aux services numériques pour les populations prioritaires',
+      context: 'Le développement des services numériques est un levier de croissance... ',
+      objectives: [
+        'Réduire la fracture numérique dans les zones rurales',
+        'Améliorer la qualité de service (QoS) des opérateurs',
+        'Renforcer les capacités des usagers et administrations'
+      ],
+      audience: 'Décideurs SUTEL, partenaires techniques et financiers, ministères sectoriels',
+      scope: [
+        'Couverture réseau 4G/5G zones prioritaires',
+        'Inclusion et alphabétisation numérique',
+        'Interopérabilité et services publics numériques'
+      ],
+      budget: 'Estimation préliminaire: 1,2 milliard FCFA (CAPEX/OPEX)',
+      outcomes: [
+        'Hausse de 20% de la couverture dans 12 mois',
+        'Création de 50 centres d\'accès communautaires',
+        'Amélioration de 30% des indicateurs de QoS'
+      ],
+      indicators: [
+        'Taux de couverture',
+        'Temps de latence',
+        'Taux d\'adoption des services',
+        'Nombre de bénéficiaires'
+      ],
+      timeline: [
+        'T1: cadrage et études',
+        'T2: pilotes et partenariats',
+        'T3: déploiement',
+        'T4: évaluation et passage à l\'échelle'
+      ],
+      risks: [
+        'Retards d\'approvisionnement',
+        'Contraintes réglementaires',
+        'Adhésion communautaire variable'
+      ],
+      decisions: 'Validation du périmètre, arbitrage budgétaire, mandat pour partenariats',
     },
     isDefault: true,
   }

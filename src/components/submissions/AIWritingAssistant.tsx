@@ -11,7 +11,7 @@ import { logger } from '@/utils/logger';
 interface AIWritingAssistantProps {
   content: string;
   onContentUpdate: (content: string) => void;
-  type: 'project' | 'position' | 'regulation' | 'funding';
+  type: 'project' | 'position' | 'regulation' | 'funding' | 'concept_note';
   context?: {
     title?: string;
     description?: string;
