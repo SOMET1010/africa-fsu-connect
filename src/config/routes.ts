@@ -48,6 +48,7 @@ const Map = lazy(() => import('@/pages/Map'));
 const Analytics = lazy(() => import('@/pages/Analytics'));
 const DemoGuide = lazy(() => import('@/pages/DemoGuide'));
 const ConceptNote = lazy(() => import('@/pages/ConceptNote'));
+const Presentation = lazy(() => import('@/pages/Presentation'));
 
 // Admin components (separate chunk)
 const Admin = lazy(() => import('@/pages/Admin'));
@@ -235,6 +236,17 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: false,
     showInMobileNav: false,
     category: 'personal',
+  },
+  {
+    path: '/presentation',
+    component: Presentation,
+    title: 'Présentation SUTEL',
+    description: 'Présentation stratégique de la plateforme SUTEL',
+    icon: PlayCircle,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    category: 'main',
   },
 
   // Routes admin (chunk séparé)
