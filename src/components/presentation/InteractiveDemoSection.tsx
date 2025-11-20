@@ -125,7 +125,10 @@ export function InteractiveDemoSection() {
           <Card className="p-8">
             <div className="flex items-start gap-6 mb-6">
               <div className="p-4 rounded-lg bg-primary/10">
-                <selectedModule!.icon className="h-12 w-12 text-primary" />
+                {selectedModule && (() => {
+                  const IconComponent = selectedModule.icon;
+                  return <IconComponent className="h-12 w-12 text-primary" />;
+                })()}
               </div>
               <div className="flex-1">
                 <h3 className="text-3xl font-bold mb-2">{selectedModule!.title}</h3>
