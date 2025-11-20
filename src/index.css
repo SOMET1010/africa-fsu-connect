@@ -175,6 +175,43 @@ All colors MUST be HSL.
   }
 }
 
+/* Print styles for PDF export */
+@media print {
+  @page {
+    size: landscape;
+    margin: 1cm;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Hide navigation elements */
+  nav,
+  .no-print,
+  button:not(.print-visible) {
+    display: none !important;
+  }
+
+  /* Ensure sections are visible */
+  .space-y-8 > * {
+    page-break-inside: avoid;
+    margin-bottom: 2cm;
+  }
+
+  /* Charts should be visible */
+  .recharts-wrapper {
+    page-break-inside: avoid;
+  }
+
+  /* Card styling for print */
+  .card {
+    border: 1px solid #e5e7eb;
+    page-break-inside: avoid;
+  }
+}
+
 /* Professional accessibility improvements */
 .high-contrast {
   --primary: 214 100% 25%;

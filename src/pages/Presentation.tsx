@@ -11,6 +11,7 @@ import { SocialProofSection } from "@/components/presentation/SocialProofSection
 import { SecurityComplianceSection } from "@/components/presentation/SecurityComplianceSection";
 import { CallToActionSection } from "@/components/presentation/CallToActionSection";
 import { PresentationControls } from "@/components/presentation/PresentationControls";
+import { usePresentationKeyboard } from "@/hooks/usePresentationKeyboard";
 import { 
   Presentation as PresentationIcon, 
   Users, 
@@ -104,6 +105,16 @@ export default function Presentation() {
     }
   ];
 
+  // Keyboard navigation (after sections is defined)
+  usePresentationKeyboard({
+    onNext: () => setCurrentSection(Math.min(sections.length - 1, currentSection + 1)),
+    onPrevious: () => setCurrentSection(Math.max(0, currentSection - 1)),
+    onToggleFullscreen: () => setIsFullscreen(!isFullscreen),
+    isFullscreen,
+    currentSection,
+    totalSections: sections.length
+  });
+
   const CurrentComponent = sections[currentSection]?.component;
 
   return (
@@ -124,6 +135,7 @@ export default function Presentation() {
           totalSections={sections.length}
           onPrevious={() => setCurrentSection(Math.max(0, currentSection - 1))}
           onNext={() => setCurrentSection(Math.min(sections.length - 1, currentSection + 1))}
+          sections={sections}
         />
 
         <motion.div

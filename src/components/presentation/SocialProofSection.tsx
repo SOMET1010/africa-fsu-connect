@@ -12,8 +12,11 @@ import {
   Building2,
   Shield
 } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, AreaChart, Area } from "recharts";
+import { useRealRegionalStats } from "@/hooks/useRealRegionalStats";
 
 export function SocialProofSection() {
+  const { data: statsData } = useRealRegionalStats();
   const testimonials = [
     {
       name: "Dr. Amadou Diallo",
@@ -47,21 +50,21 @@ export function SocialProofSection() {
   const achievements = [
     {
       icon: Users,
-      metric: "2.8M+",
+      metric: `${((statsData?.globalStats.users || 0) / 1000).toFixed(1)}K+`,
       label: "Utilisateurs Actifs",
       description: "Professionnels des télécoms",
       color: "bg-blue-500"
     },
     {
       icon: Building2,
-      metric: "850+",
+      metric: `${statsData?.globalStats.agencies || 0}+`,
       label: "Organisations",
       description: "SUTELs et agences partenaires",
       color: "bg-green-500"
     },
     {
       icon: Globe,
-      metric: "55+",
+      metric: `${statsData?.globalStats.countries || 0}+`,
       label: "Pays Couverts",
       description: "Présence continentale",
       color: "bg-purple-500"
@@ -229,6 +232,36 @@ export function SocialProofSection() {
               </motion.div>
             ))}
           </div>
+
+          {/* Growth Chart */}
+          <Card className="p-6">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              Croissance de la Plateforme
+            </h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <AreaChart
+                data={[
+                  { month: 'Jan', users: 12000, projects: 450 },
+                  { month: 'Fév', users: 18000, projects: 580 },
+                  { month: 'Mar', users: 24000, projects: 720 },
+                  { month: 'Avr', users: 31000, projects: 890 },
+                  { month: 'Mai', users: 39000, projects: 1020 },
+                  { month: 'Juin', users: 48000, projects: 1180 }
+                ]}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                />
+                <Legend />
+                <Area type="monotone" dataKey="users" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Utilisateurs" />
+                <Area type="monotone" dataKey="projects" stackId="2" stroke="#22c55e" fill="#22c55e" fillOpacity={0.6} name="Projets" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </Card>
 
           {/* Statut de confiance */}
           <div className="flex justify-center gap-6 pt-6 border-t">

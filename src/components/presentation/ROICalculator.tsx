@@ -14,6 +14,7 @@ import {
   CheckCircle,
   AlertCircle
 } from "lucide-react";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface ROIMetrics {
   currentCosts: number;
@@ -171,6 +172,61 @@ export function ROICalculator() {
 
             {showResults && (
               <div className="space-y-6">
+                {/* Charts */}
+                <div className="space-y-6">
+                  {/* Cost Comparison Chart */}
+                  <div>
+                    <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                      <DollarSign className="h-4 w-4" />
+                      Comparaison des Coûts
+                    </h4>
+                    <ResponsiveContainer width="100%" height={200}>
+                      <BarChart
+                        data={[
+                          { name: 'Système actuel', value: metrics.currentCosts },
+                          { name: 'Avec SUTEL', value: metrics.newCosts }
+                        ]}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip 
+                          formatter={(value: number) => `$${value.toLocaleString()}`}
+                          contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                        />
+                        <Bar dataKey="value" fill="#3b82f6" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  {/* ROI Timeline */}
+                  <div>
+                    <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4" />
+                      Évolution du ROI sur 3 ans
+                    </h4>
+                    <ResponsiveContainer width="100%" height={200}>
+                      <LineChart
+                        data={[
+                          { year: 'Année 0', savings: -25000, cumulative: -25000 },
+                          { year: 'Année 1', savings: metrics.annualSavings, cumulative: metrics.annualSavings - 25000 },
+                          { year: 'Année 2', savings: metrics.annualSavings, cumulative: (metrics.annualSavings * 2) - 25000 },
+                          { year: 'Année 3', savings: metrics.annualSavings, cumulative: (metrics.annualSavings * 3) - 25000 }
+                        ]}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="year" />
+                        <YAxis />
+                        <Tooltip 
+                          formatter={(value: number) => `$${value.toLocaleString()}`}
+                          contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                        />
+                        <Legend />
+                        <Line type="monotone" dataKey="cumulative" stroke="#22c55e" name="Cumul des économies" strokeWidth={2} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
                 {/* ROI Principal */}
                 <div className="text-center p-6 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg text-white">
                   <div className="text-4xl font-bold mb-2">{metrics.roi}%</div>
