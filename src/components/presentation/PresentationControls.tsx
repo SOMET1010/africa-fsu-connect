@@ -11,7 +11,11 @@ import {
   FileJson
 } from "lucide-react";
 import { exportToPDF, exportToMarkdown, exportToJSON, copyPresentationLink } from "@/lib/presentation-export";
+import { exportToPDFAdvanced } from "@/lib/advanced-presentation-export";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Progress } from "@/components/ui/progress";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,8 +44,11 @@ export function PresentationControls({
   sections = []
 }: PresentationControlsProps) {
   const { toast } = useToast();
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportProgress, setExportProgress] = useState(0);
+  const [exportStatus, setExportStatus] = useState('');
 
-  const handleExport = (format: 'pdf' | 'markdown' | 'json') => {
+  const handleExport = async (format: 'pdf' | 'pdf-advanced' | 'markdown' | 'json') => {
     try {
       switch (format) {
         case 'pdf':
@@ -49,6 +56,22 @@ export function PresentationControls({
           toast({
             title: "Export PDF",
             description: "Utilisez la fenêtre d'impression pour sauvegarder en PDF",
+          });
+          break;
+        case 'pdf-advanced':
+          setIsExporting(true);
+          setExportProgress(0);
+          setExportStatus('Démarrage...');
+          
+          await exportToPDFAdvanced((progress) => {
+            setExportProgress((progress.current / progress.total) * 100);
+            setExportStatus(progress.status);
+          });
+          
+          setIsExporting(false);
+          toast({
+            title: "Export PDF réussi",
+            description: "Votre présentation a été téléchargée avec succès",
           });
           break;
         case 'markdown':
@@ -67,6 +90,7 @@ export function PresentationControls({
           break;
       }
     } catch (error) {
+      setIsExporting(false);
       toast({
         title: "Erreur d'export",
         description: "Impossible d'exporter la présentation",
@@ -100,7 +124,26 @@ export function PresentationControls({
   };
 
   return (
-    <div className={`${isFullscreen ? 'fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50' : 'sticky top-20 z-30'} bg-card/95 backdrop-blur-sm border rounded-lg p-3 shadow-lg`}>
+    <>
+      {/* Export Progress Dialog */}
+      <Dialog open={isExporting} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Export PDF en cours</DialogTitle>
+            <DialogDescription>
+              Génération de votre présentation PDF professionnelle...
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Progress value={exportProgress} className="w-full" />
+            <p className="text-sm text-muted-foreground text-center">
+              {exportStatus}
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <div className={`${isFullscreen ? 'fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50' : 'sticky top-20 z-30'} bg-card/95 backdrop-blur-sm border rounded-lg p-3 shadow-lg`}>
       <div className="flex items-center justify-between gap-4">
         {/* Navigation */}
         <div className="flex items-center gap-2">
@@ -158,9 +201,13 @@ export function PresentationControls({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleExport('pdf-advanced')}>
+                <FileText className="h-4 w-4 mr-2" />
+                Export PDF (Haute Qualité)
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport('pdf')}>
                 <FileText className="h-4 w-4 mr-2" />
-                Export PDF
+                Export PDF (Navigateur)
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport('markdown')}>
                 <FileText className="h-4 w-4 mr-2" />
@@ -202,6 +249,7 @@ export function PresentationControls({
           </span>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

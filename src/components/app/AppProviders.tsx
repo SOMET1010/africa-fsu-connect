@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
+import { DemoModeProvider } from "@/contexts/DemoModeContext";
 import { IntelligentLayout } from "@/components/layout/IntelligentLayout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -63,9 +64,11 @@ export function AppProviders({ children }: AppProvidersProps) {
                   }}
                 >
                   <UserPreferencesProvider>
-                    <IntelligentLayout>
-                      {children}
-                    </IntelligentLayout>
+                    <DemoModeProvider>
+                      <IntelligentLayout>
+                        {children}
+                      </IntelligentLayout>
+                    </DemoModeProvider>
                   </UserPreferencesProvider>
                 </ErrorBoundary>
               </AuthProvider>
