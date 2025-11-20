@@ -133,10 +133,40 @@ export default function Presentation() {
           transition={{ duration: 0.5 }}
           className="space-y-8"
         >
-        {CurrentComponent && currentSection === 0 ? (
-          <HeroSection {...sections[currentSection].props} />
-        ) : CurrentComponent ? (
-          <CurrentComponent {...sections[currentSection].props} />
+        {currentSection === 0 ? (
+          <HeroSection 
+            title="SUTEL Platform : L'Avenir des Télécommunications Africaines"
+            subtitle="Une Solution Révolutionnaire"
+            description="La plateforme qui connecte 55+ pays, gère 1100+ projets et transforme l'industrie des télécommunications en Afrique. Rejoignez la révolution numérique qui unit notre continent."
+            actions={[
+              {
+                label: "Commencer la Demo",
+                onClick: () => setCurrentSection(1),
+                variant: "default" as const,
+                icon: <Zap className="h-4 w-4" />
+              },
+              {
+                label: "Calculer ROI",
+                onClick: () => setCurrentSection(2),
+                variant: "outline" as const,
+                icon: <TrendingUp className="h-4 w-4" />
+              }
+            ]}
+          />
+        ) : currentSection === 1 ? (
+          <RegionalImpactSection />
+        ) : currentSection === 2 ? (
+          <ROICalculator />
+        ) : currentSection === 3 ? (
+          <InteractiveDemoSection />
+        ) : currentSection === 4 ? (
+          <TechnicalArchitecture />
+        ) : currentSection === 5 ? (
+          <SocialProofSection />
+        ) : currentSection === 6 ? (
+          <SecurityComplianceSection />
+        ) : currentSection === 7 ? (
+          <CallToActionSection />
         ) : null}
         </motion.div>
       </main>
