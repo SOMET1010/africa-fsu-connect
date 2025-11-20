@@ -7,9 +7,18 @@ import {
   Minimize, 
   Download,
   Share2,
-  Play,
-  Pause
+  FileText,
+  FileJson
 } from "lucide-react";
+import { exportToPDF, exportToMarkdown, exportToJSON, copyPresentationLink } from "@/lib/presentation-export";
+import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface PresentationControlsProps {
   isFullscreen: boolean;
@@ -18,6 +27,7 @@ interface PresentationControlsProps {
   totalSections: number;
   onPrevious: () => void;
   onNext: () => void;
+  sections?: any[];
 }
 
 export function PresentationControls({
@@ -26,23 +36,66 @@ export function PresentationControls({
   currentSection,
   totalSections,
   onPrevious,
-  onNext
+  onNext,
+  sections = []
 }: PresentationControlsProps) {
-  const handleExport = () => {
-    // Logique d'export PDF/PowerPoint
-    console.log("Export presentation");
+  const { toast } = useToast();
+
+  const handleExport = (format: 'pdf' | 'markdown' | 'json') => {
+    try {
+      switch (format) {
+        case 'pdf':
+          exportToPDF();
+          toast({
+            title: "Export PDF",
+            description: "Utilisez la fenêtre d'impression pour sauvegarder en PDF",
+          });
+          break;
+        case 'markdown':
+          exportToMarkdown(sections);
+          toast({
+            title: "Export Markdown",
+            description: "Fichier téléchargé avec succès",
+          });
+          break;
+        case 'json':
+          exportToJSON(sections, currentSection);
+          toast({
+            title: "Export JSON",
+            description: "Données exportées avec succès",
+          });
+          break;
+      }
+    } catch (error) {
+      toast({
+        title: "Erreur d'export",
+        description: "Impossible d'exporter la présentation",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleShare = () => {
-    // Logique de partage
-    if (navigator.share) {
-      navigator.share({
-        title: 'SUTEL Platform Presentation',
-        text: 'Découvrez la plateforme qui transforme les télécommunications africaines',
-        url: window.location.href,
-      });
-    } else {
-      navigator.clipboard.writeText(window.location.href);
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'SUTEL Platform Presentation',
+          text: 'Découvrez la plateforme qui transforme les télécommunications africaines',
+          url: window.location.href,
+        });
+        toast({
+          title: "Partagé",
+          description: "Lien partagé avec succès",
+        });
+      } else {
+        await copyPresentationLink(currentSection);
+        toast({
+          title: "Lien copié",
+          description: "Le lien de la présentation a été copié dans le presse-papier",
+        });
+      }
+    } catch (error) {
+      // User cancelled or error occurred
     }
   };
 
@@ -97,14 +150,29 @@ export function PresentationControls({
             <span className="hidden sm:inline ml-1">Partager</span>
           </Button>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExport}
-          >
-            <Download className="h-4 w-4" />
-            <span className="hidden sm:inline ml-1">Export</span>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4" />
+                <span className="hidden sm:inline ml-1">Export</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleExport('pdf')}>
+                <FileText className="h-4 w-4 mr-2" />
+                Export PDF
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport('markdown')}>
+                <FileText className="h-4 w-4 mr-2" />
+                Export Markdown
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleExport('json')}>
+                <FileJson className="h-4 w-4 mr-2" />
+                Export JSON (Data)
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <Button
             variant="outline"
@@ -130,7 +198,7 @@ export function PresentationControls({
       {isFullscreen && (
         <div className="text-xs text-muted-foreground text-center mt-2 opacity-70">
           <span className="hidden md:inline">
-            Utilisez ← → pour naviguer • Échap pour quitter • F pour plein écran
+            ← → pour naviguer • Échap pour quitter • F pour plein écran • Espace pour avancer
           </span>
         </div>
       )}

@@ -11,9 +11,16 @@ import {
   Network,
   Zap
 } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell } from "recharts";
+import { useRealRegionalStats } from "@/hooks/useRealRegionalStats";
+import { InteractiveRegionalMap } from "./InteractiveRegionalMap";
+
+const COLORS = ['#3b82f6', '#22c55e', '#a855f7', '#f97316', '#ef4444'];
 
 export function RegionalImpactSection() {
-  const regions = [
+  const { data: statsData, isLoading } = useRealRegionalStats();
+  
+  const regions = statsData?.regions || [
     {
       name: "CEDEAO",
       countries: 15,
@@ -60,19 +67,19 @@ export function RegionalImpactSection() {
     {
       icon: Globe,
       label: "Pays Connectés",
-      value: "55+",
+      value: statsData?.globalStats.countries || 0,
       description: "Couvrant tout le continent"
     },
     {
       icon: Rocket,
       label: "Projets Actifs",
-      value: "1,100+",
+      value: statsData?.globalStats.projects || 0,
       description: "En cours de réalisation"
     },
     {
       icon: Users,
       label: "Utilisateurs",
-      value: "2.8M+",
+      value: `${((statsData?.globalStats.users || 0) / 1000).toFixed(1)}K+`,
       description: "Professionnels connectés"
     },
     {
@@ -82,6 +89,22 @@ export function RegionalImpactSection() {
       description: "Cette année"
     }
   ];
+
+  if (isLoading) {
+    return (
+      <div className="space-y-8">
+        <div className="text-center">
+          <div className="h-8 bg-muted animate-pulse rounded w-64 mx-auto mb-4" />
+          <div className="h-6 bg-muted animate-pulse rounded w-96 mx-auto" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="h-40 bg-muted animate-pulse rounded" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -172,6 +195,61 @@ export function RegionalImpactSection() {
           ))}
         </div>
       </Card>
+
+      {/* Interactive Map */}
+      <InteractiveRegionalMap />
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Projects by Region Bar Chart */}
+        <Card className="p-6">
+          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <Rocket className="h-5 w-5 text-primary" />
+            Projets par Région
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={regions}>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+              <XAxis dataKey="name" className="text-xs" />
+              <YAxis />
+              <Tooltip 
+                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+              />
+              <Legend />
+              <Bar dataKey="projects" fill="#3b82f6" name="Projets" />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+
+        {/* Coverage by Region Pie Chart */}
+        <Card className="p-6">
+          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <Network className="h-5 w-5 text-primary" />
+            Couverture par Région
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={regions}
+                dataKey="coverage"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                label={(entry) => `${entry.name}: ${entry.coverage}%`}
+              >
+                {regions.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </Card>
+      </div>
 
       {/* Avantages Concurrentiels */}
       <Card className="p-8 bg-gradient-to-br from-primary/5 to-primary/10">
