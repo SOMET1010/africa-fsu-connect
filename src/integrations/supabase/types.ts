@@ -3540,6 +3540,60 @@ export type Database = {
         }
         Relationships: []
       }
+      presentation_sessions: {
+        Row: {
+          completed: boolean | null
+          completion_rate: number | null
+          country: string | null
+          created_at: string | null
+          device_type: string | null
+          ended_at: string | null
+          id: string
+          interactions: Json | null
+          screen_resolution: string | null
+          section_durations: Json | null
+          sections_visited: number[] | null
+          session_id: string
+          started_at: string | null
+          total_duration: number | null
+          user_agent: string | null
+        }
+        Insert: {
+          completed?: boolean | null
+          completion_rate?: number | null
+          country?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          ended_at?: string | null
+          id?: string
+          interactions?: Json | null
+          screen_resolution?: string | null
+          section_durations?: Json | null
+          sections_visited?: number[] | null
+          session_id: string
+          started_at?: string | null
+          total_duration?: number | null
+          user_agent?: string | null
+        }
+        Update: {
+          completed?: boolean | null
+          completion_rate?: number | null
+          country?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          ended_at?: string | null
+          id?: string
+          interactions?: Json | null
+          screen_resolution?: string | null
+          section_durations?: Json | null
+          sections_visited?: number[] | null
+          session_id?: string
+          started_at?: string | null
+          total_duration?: number | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

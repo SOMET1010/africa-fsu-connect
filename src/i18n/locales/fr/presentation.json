@@ -1,0 +1,107 @@
+{
+  "hero": {
+    "title": "SUTEL Platform : L'Avenir des Télécommunications Africaines",
+    "subtitle": "Une Solution Révolutionnaire",
+    "description": "La plateforme qui connecte 55+ pays, gère 1100+ projets et transforme l'industrie des télécommunications en Afrique. Rejoignez la révolution numérique qui unit notre continent.",
+    "cta": {
+      "demo": "Commencer la Demo",
+      "roi": "Calculer ROI"
+    }
+  },
+  "regional": {
+    "title": "Impact Régional",
+    "description": "Une présence panafricaine qui transforme les télécommunications",
+    "stats": {
+      "countries": "Pays Couverts",
+      "projects": "Projets Actifs",
+      "agencies": "Agences Partenaires"
+    }
+  },
+  "roi": {
+    "title": "Calculateur ROI",
+    "description": "Estimez vos économies et gains avec SUTEL",
+    "inputs": {
+      "currentCost": "Coût Actuel Mensuel (€)",
+      "employees": "Nombre d'Employés",
+      "projects": "Projets Annuels"
+    },
+    "results": {
+      "savings": "Économies Annuelles",
+      "efficiency": "Gain d'Efficacité",
+      "roi": "ROI sur 3 ans"
+    }
+  },
+  "demo": {
+    "title": "Démonstration Interactive",
+    "description": "Explorez les fonctionnalités clés de SUTEL",
+    "modules": {
+      "dashboard": "Tableau de Bord",
+      "analytics": "Analytics Avancés",
+      "collaboration": "Collaboration Temps Réel",
+      "security": "Sécurité & Conformité"
+    }
+  },
+  "architecture": {
+    "title": "Architecture Technique",
+    "description": "Une infrastructure moderne et scalable",
+    "features": {
+      "cloud": "Cloud Native",
+      "api": "API REST & GraphQL",
+      "realtime": "Temps Réel",
+      "security": "Sécurité Enterprise"
+    }
+  },
+  "socialProof": {
+    "title": "Preuves & Résultats",
+    "description": "Nos clients témoignent de leur succès",
+    "stats": {
+      "satisfaction": "Satisfaction Client",
+      "uptime": "Disponibilité",
+      "response": "Temps de Réponse"
+    }
+  },
+  "security": {
+    "title": "Sécurité & Conformité",
+    "description": "Protection maximale de vos données",
+    "features": {
+      "encryption": "Chiffrement E2E",
+      "compliance": "ISO 27001",
+      "backup": "Backup Automatique",
+      "audit": "Audit Trail Complet"
+    }
+  },
+  "cta": {
+    "title": "Rejoignez-Nous",
+    "description": "Transformez vos télécommunications dès aujourd'hui",
+    "buttons": {
+      "contact": "Nous Contacter",
+      "trial": "Essai Gratuit"
+    }
+  },
+  "controls": {
+    "previous": "Précédent",
+    "next": "Suivant",
+    "export": "Export",
+    "share": "Partager",
+    "fullscreen": "Plein Écran",
+    "exitFullscreen": "Quitter Plein Écran",
+    "presenter": "Mode Présentateur",
+    "record": "Enregistrer",
+    "stopRecording": "Arrêter",
+    "pauseRecording": "Pause",
+    "resumeRecording": "Reprendre"
+  },
+  "export": {
+    "pdf": "Export PDF",
+    "markdown": "Export Markdown",
+    "json": "Export JSON",
+    "progress": "Génération en cours..."
+  },
+  "presenter": {
+    "notes": "Notes du Présentateur",
+    "currentSection": "Section Actuelle",
+    "nextSection": "Section Suivante",
+    "timer": "Temps Restant",
+    "shortcuts": "Raccourcis Clavier"
+  }
+}

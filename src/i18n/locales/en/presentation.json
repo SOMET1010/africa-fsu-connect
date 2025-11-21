@@ -1,0 +1,107 @@
+{
+  "hero": {
+    "title": "SUTEL Platform: The Future of African Telecommunications",
+    "subtitle": "A Revolutionary Solution",
+    "description": "The platform that connects 55+ countries, manages 1100+ projects and transforms the telecommunications industry in Africa. Join the digital revolution uniting our continent.",
+    "cta": {
+      "demo": "Start Demo",
+      "roi": "Calculate ROI"
+    }
+  },
+  "regional": {
+    "title": "Regional Impact",
+    "description": "A pan-African presence transforming telecommunications",
+    "stats": {
+      "countries": "Countries Covered",
+      "projects": "Active Projects",
+      "agencies": "Partner Agencies"
+    }
+  },
+  "roi": {
+    "title": "ROI Calculator",
+    "description": "Estimate your savings and gains with SUTEL",
+    "inputs": {
+      "currentCost": "Current Monthly Cost (€)",
+      "employees": "Number of Employees",
+      "projects": "Annual Projects"
+    },
+    "results": {
+      "savings": "Annual Savings",
+      "efficiency": "Efficiency Gain",
+      "roi": "3-Year ROI"
+    }
+  },
+  "demo": {
+    "title": "Interactive Demo",
+    "description": "Explore SUTEL's key features",
+    "modules": {
+      "dashboard": "Dashboard",
+      "analytics": "Advanced Analytics",
+      "collaboration": "Real-Time Collaboration",
+      "security": "Security & Compliance"
+    }
+  },
+  "architecture": {
+    "title": "Technical Architecture",
+    "description": "A modern and scalable infrastructure",
+    "features": {
+      "cloud": "Cloud Native",
+      "api": "REST & GraphQL APIs",
+      "realtime": "Real-Time",
+      "security": "Enterprise Security"
+    }
+  },
+  "socialProof": {
+    "title": "Proof & Results",
+    "description": "Our clients testify to their success",
+    "stats": {
+      "satisfaction": "Client Satisfaction",
+      "uptime": "Uptime",
+      "response": "Response Time"
+    }
+  },
+  "security": {
+    "title": "Security & Compliance",
+    "description": "Maximum protection for your data",
+    "features": {
+      "encryption": "E2E Encryption",
+      "compliance": "ISO 27001",
+      "backup": "Automatic Backup",
+      "audit": "Complete Audit Trail"
+    }
+  },
+  "cta": {
+    "title": "Join Us",
+    "description": "Transform your telecommunications today",
+    "buttons": {
+      "contact": "Contact Us",
+      "trial": "Free Trial"
+    }
+  },
+  "controls": {
+    "previous": "Previous",
+    "next": "Next",
+    "export": "Export",
+    "share": "Share",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit Fullscreen",
+    "presenter": "Presenter Mode",
+    "record": "Record",
+    "stopRecording": "Stop",
+    "pauseRecording": "Pause",
+    "resumeRecording": "Resume"
+  },
+  "export": {
+    "pdf": "Export PDF",
+    "markdown": "Export Markdown",
+    "json": "Export JSON",
+    "progress": "Generating..."
+  },
+  "presenter": {
+    "notes": "Presenter Notes",
+    "currentSection": "Current Section",
+    "nextSection": "Next Section",
+    "timer": "Time Remaining",
+    "shortcuts": "Keyboard Shortcuts"
+  }
+}
