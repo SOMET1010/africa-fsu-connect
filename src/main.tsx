@@ -2,6 +2,7 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
+import './i18n/config'
 // Removed loggerMigration import to prevent recursion
 
 // PERFECTION - Production optimizations

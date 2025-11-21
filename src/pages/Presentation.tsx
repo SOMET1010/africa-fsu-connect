@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useTranslation } from "react-i18next";
 import { HeroSection } from "@/components/ui/hero-section";
 import { PresentationNavigation } from "@/components/presentation/PresentationNavigation";
 import { RegionalImpactSection } from "@/components/presentation/RegionalImpactSection";
@@ -12,6 +12,8 @@ import { SecurityComplianceSection } from "@/components/presentation/SecurityCom
 import { CallToActionSection } from "@/components/presentation/CallToActionSection";
 import { PresentationControls } from "@/components/presentation/PresentationControls";
 import { usePresentationKeyboard } from "@/hooks/usePresentationKeyboard";
+import { usePresentationTracking } from "@/hooks/usePresentationTracking";
+import { SlideTransitions, type TransitionType } from "@/components/presentation/SlideTransitions";
 import { 
   Presentation as PresentationIcon, 
   Users, 
@@ -24,9 +26,15 @@ import {
 } from "lucide-react";
 
 export default function Presentation() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('presentation');
   const [currentSection, setCurrentSection] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [transitionType] = useState<TransitionType>('fade');
+  const { trackSectionView, trackExport, trackShare } = usePresentationTracking();
+
+  useEffect(() => {
+    trackSectionView(currentSection);
+  }, [currentSection, trackSectionView]);
 
   const sections = [
     {
@@ -136,15 +144,12 @@ export default function Presentation() {
           onPrevious={() => setCurrentSection(Math.max(0, currentSection - 1))}
           onNext={() => setCurrentSection(Math.min(sections.length - 1, currentSection + 1))}
           sections={sections}
+          onTrackExport={trackExport}
+          onTrackShare={trackShare}
         />
 
-        <motion.div
-          key={currentSection}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-8"
-        >
+        <SlideTransitions transitionType={transitionType}>
+          <div className="space-y-8">
         {currentSection === 0 ? (
           <HeroSection 
             title="SUTEL Platform : L'Avenir des Télécommunications Africaines"
@@ -180,7 +185,8 @@ export default function Presentation() {
         ) : currentSection === 7 ? (
           <CallToActionSection />
         ) : null}
-        </motion.div>
+          </div>
+        </SlideTransitions>
       </main>
     </div>
   );

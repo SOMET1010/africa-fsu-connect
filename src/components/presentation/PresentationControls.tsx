@@ -8,7 +8,9 @@ import {
   Download,
   Share2,
   FileText,
-  FileJson
+  FileJson,
+  Video,
+  Presentation
 } from "lucide-react";
 import { exportToPDF, exportToMarkdown, exportToJSON, copyPresentationLink } from "@/lib/presentation-export";
 import { exportToPDFAdvanced } from "@/lib/advanced-presentation-export";
@@ -16,6 +18,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
+import { VideoRecorder } from "./VideoRecorder";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +37,9 @@ interface PresentationControlsProps {
   onPrevious: () => void;
   onNext: () => void;
   sections?: any[];
+  onPresenterMode?: () => void;
+  onTrackExport?: (format: string) => void;
+  onTrackShare?: () => void;
 }
 
 export function PresentationControls({
@@ -41,15 +49,22 @@ export function PresentationControls({
   totalSections,
   onPrevious,
   onNext,
-  sections = []
+  sections = [],
+  onPresenterMode,
+  onTrackExport,
+  onTrackShare
 }: PresentationControlsProps) {
   const { toast } = useToast();
+  const { t } = useTranslation('presentation');
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState(0);
   const [exportStatus, setExportStatus] = useState('');
+  const [isRecorderOpen, setIsRecorderOpen] = useState(false);
 
   const handleExport = async (format: 'pdf' | 'pdf-advanced' | 'markdown' | 'json') => {
     try {
+      onTrackExport?.(format);
+      
       switch (format) {
         case 'pdf':
           exportToPDF();
@@ -61,7 +76,7 @@ export function PresentationControls({
         case 'pdf-advanced':
           setIsExporting(true);
           setExportProgress(0);
-          setExportStatus('Démarrage...');
+          setExportStatus(t('export.progress'));
           
           await exportToPDFAdvanced((progress) => {
             setExportProgress((progress.current / progress.total) * 100);
@@ -101,6 +116,8 @@ export function PresentationControls({
 
   const handleShare = async () => {
     try {
+      onTrackShare?.();
+      
       if (navigator.share) {
         await navigator.share({
           title: 'SUTEL Platform Presentation',
@@ -154,7 +171,7 @@ export function PresentationControls({
             disabled={currentSection === 0}
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="hidden sm:inline ml-1">Précédent</span>
+            <span className="hidden sm:inline ml-1">{t('controls.previous')}</span>
           </Button>
 
           <Badge variant="secondary" className="px-3 py-1">
@@ -167,7 +184,7 @@ export function PresentationControls({
             onClick={onNext}
             disabled={currentSection === totalSections - 1}
           >
-            <span className="hidden sm:inline mr-1">Suivant</span>
+            <span className="hidden sm:inline mr-1">{t('controls.next')}</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
@@ -184,13 +201,35 @@ export function PresentationControls({
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          
+          {onPresenterMode && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onPresenterMode}
+            >
+              <Presentation className="h-4 w-4" />
+              <span className="hidden sm:inline ml-1">{t('controls.presenter')}</span>
+            </Button>
+          )}
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsRecorderOpen(true)}
+          >
+            <Video className="h-4 w-4" />
+            <span className="hidden sm:inline ml-1">{t('controls.record')}</span>
+          </Button>
+          
           <Button
             variant="outline"
             size="sm"
             onClick={handleShare}
           >
             <Share2 className="h-4 w-4" />
-            <span className="hidden sm:inline ml-1">Partager</span>
+            <span className="hidden sm:inline ml-1">{t('controls.share')}</span>
           </Button>
 
           <DropdownMenu>
@@ -203,20 +242,20 @@ export function PresentationControls({
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => handleExport('pdf-advanced')}>
                 <FileText className="h-4 w-4 mr-2" />
-                Export PDF (Haute Qualité)
+                {t('export.pdf')} (HQ)
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport('pdf')}>
                 <FileText className="h-4 w-4 mr-2" />
-                Export PDF (Navigateur)
+                {t('export.pdf')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport('markdown')}>
                 <FileText className="h-4 w-4 mr-2" />
-                Export Markdown
+                {t('export.markdown')}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => handleExport('json')}>
                 <FileJson className="h-4 w-4 mr-2" />
-                Export JSON (Data)
+                {t('export.json')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -229,12 +268,12 @@ export function PresentationControls({
             {isFullscreen ? (
               <>
                 <Minimize className="h-4 w-4" />
-                <span className="hidden sm:inline ml-1">Réduire</span>
+                <span className="hidden sm:inline ml-1">{t('controls.exitFullscreen')}</span>
               </>
             ) : (
               <>
                 <Maximize className="h-4 w-4" />
-                <span className="hidden sm:inline ml-1">Plein écran</span>
+                <span className="hidden sm:inline ml-1">{t('controls.fullscreen')}</span>
               </>
             )}
           </Button>
@@ -250,6 +289,9 @@ export function PresentationControls({
         </div>
       )}
       </div>
+      
+      {/* Video Recorder Dialog */}
+      <VideoRecorder isOpen={isRecorderOpen} onClose={() => setIsRecorderOpen(false)} />
     </>
   );
 }
