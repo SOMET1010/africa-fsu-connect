@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { ModernButton } from '@/components/ui/modern-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { GlassCard } from '@/components/ui/glass-card';
+// GlassCard removed - using solid white card for better contrast
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
@@ -157,40 +157,55 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Subtle Background Effect */}
-      <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+    <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#0F4C6D] to-[#1F7A63] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Dynamic Background Glow Effects */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#1F7A63]/30 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#0B3C5D]/40 rounded-full blur-3xl" />
       
       <div className="w-full max-w-md relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center text-white hover:text-white/80 mb-6 transition-all duration-200 hover:scale-105">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+          <Link 
+            to="/" 
+            className="inline-flex items-center gap-2 text-white/90 hover:text-white bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm transition-all hover:bg-white/20 mb-6"
+          >
+            <ArrowLeft className="h-4 w-4" />
             Retour à l'accueil
           </Link>
           
           <div className="flex items-center justify-center mb-6">
-            <div className="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-3xl flex items-center justify-center border border-white/30 shadow-2xl">
-              <span className="text-2xl font-black text-white font-poppins">SUTEL</span>
+            <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center shadow-2xl">
+              <span className="text-2xl font-black bg-gradient-to-r from-[#0B3C5D] to-[#1F7A63] bg-clip-text text-transparent font-poppins">
+                SUTEL
+              </span>
             </div>
           </div>
           
           <h1 className="text-3xl font-black text-white mb-2 font-poppins tracking-tight">
             Plateforme SUTEL
           </h1>
-          <p className="text-white/80 font-inter">
-            UAT - ANSUT • Fonds du Service Universel
+          <p className="text-white/90 font-medium text-lg font-inter">
+            Plateforme panafricaine du Service Universel
+          </p>
+          <p className="text-white/70 text-sm mt-1 font-inter">
+            UAT - ANSUT
           </p>
         </div>
 
-        {/* Auth Forms */}
-        <GlassCard variant="strong" className="p-0 overflow-hidden border-0 shadow-dramatic">
+        {/* Auth Forms - Solid White Card */}
+        <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.25)] overflow-hidden">
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-muted/20 backdrop-blur-sm border-0 rounded-none">
-              <TabsTrigger value="login" className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary font-semibold">
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100 p-1.5 rounded-none border-b border-gray-200">
+              <TabsTrigger 
+                value="login" 
+                className="rounded-lg py-3 font-semibold transition-all data-[state=active]:bg-white data-[state=active]:text-[#0B3C5D] data-[state=active]:shadow-md data-[state=inactive]:text-gray-500"
+              >
                 Connexion
               </TabsTrigger>
-              <TabsTrigger value="signup" className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary font-semibold">
+              <TabsTrigger 
+                value="signup" 
+                className="rounded-lg py-3 font-semibold transition-all data-[state=active]:bg-white data-[state=active]:text-[#0B3C5D] data-[state=active]:shadow-md data-[state=inactive]:text-gray-500"
+              >
                 Inscription
               </TabsTrigger>
             </TabsList>
@@ -356,8 +371,7 @@ const Auth = () => {
 
                   <ModernButton 
                     type="submit" 
-                    className="w-full h-12"
-                    variant="default"
+                    className="w-full h-12 bg-gradient-to-r from-[#0B3C5D] to-[#1F7A63] hover:from-[#0A3350] hover:to-[#1A6B56] transform hover:-translate-y-0.5 transition-all duration-200 shadow-lg hover:shadow-xl text-white"
                     disabled={isSubmitting}
                     loading={isSubmitting}
                     loadingText="Connexion en cours..."
@@ -463,8 +477,7 @@ const Auth = () => {
 
                 <ModernButton 
                   type="submit" 
-                  className="w-full h-12"
-                  variant="default"
+                  className="w-full h-12 bg-gradient-to-r from-[#0B3C5D] to-[#1F7A63] hover:from-[#0A3350] hover:to-[#1A6B56] transform hover:-translate-y-0.5 transition-all duration-200 shadow-lg hover:shadow-xl text-white"
                   disabled={isSubmitting}
                   loading={isSubmitting}
                   loadingText="Création en cours..."
@@ -474,7 +487,7 @@ const Auth = () => {
               </form>
             </TabsContent>
           </Tabs>
-        </GlassCard>
+        </div>
 
         {/* Footer */}
         <div className="text-center mt-8 text-white/80 text-sm font-inter">
