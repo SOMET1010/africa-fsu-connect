@@ -299,7 +299,7 @@ export function SutelDashboard() {
                 {[
                   { label: "Base de Données FSU", icon: FolderOpen, href: "/projects", color: "bg-blue-500" },
                   { label: "Carte Interactive", icon: MapPin, href: "/map", color: "bg-green-500" },
-                  { label: "Bibliothèque", icon: FileText, href: "/docs", color: "bg-purple-500" },
+                  { label: "Bibliothèque", icon: FileText, href: "/resources", color: "bg-purple-500" },
                   { label: "Forum", icon: Users, href: "/forum", color: "bg-orange-500" },
                   { label: "E-Learning", icon: Globe, href: "/elearning", color: "bg-pink-500" },
                   { label: "Événements", icon: Calendar, href: "/events", color: "bg-cyan-500" },

@@ -44,7 +44,7 @@ const NotificationCenter = () => {
       message: "Votre document 'Cadre Réglementaire FSU' a été approuvé et publié",
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4 hours ago
       read: true,
-      actionUrl: "/docs"
+      actionUrl: "/resources"
     },
     {
       id: "4",

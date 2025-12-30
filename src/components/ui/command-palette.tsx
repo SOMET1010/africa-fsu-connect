@@ -85,7 +85,7 @@ export const CommandPalette = () => {
       description: "Consulter les documents",
       category: "Navigation",
       action: () => {
-        navigate("/docs");
+        navigate("/resources");
         setOpen(false);
       },
       keywords: ["resources", "ressources", "documents", "docs"]

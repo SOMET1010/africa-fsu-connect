@@ -16,6 +16,15 @@ import {
   PlayCircle,
 } from 'lucide-react';
 
+// UX Universe types for organized navigation
+export type UniversType = 
+  | 'pilotage'      // Impact & Pilotage
+  | 'projets'       // Projets & Financements
+  | 'territoires'   // Territoires
+  | 'communaute'    // Communauté
+  | 'capacites'     // Capacités & Intelligence
+  | 'admin';        // Administration
+
 // Types pour la configuration des routes
 export interface RouteConfig {
   path: string;
@@ -29,6 +38,7 @@ export interface RouteConfig {
   showInSidebar?: boolean;
   showInMobileNav?: boolean;
   category?: 'main' | 'management' | 'personal' | 'admin';
+  univers?: UniversType;
 }
 
 // Lazy loaded components avec route-based splitting
@@ -78,6 +88,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: true,
     category: 'main',
+    univers: 'pilotage',
   },
   {
     path: '/indicators',
@@ -89,6 +100,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: true,
     category: 'main',
+    univers: 'pilotage',
   },
   {
     path: '/map',
@@ -100,6 +112,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: true,
     category: 'main',
+    univers: 'territoires',
   },
   {
     path: '/organizations',
@@ -111,6 +124,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: false,
     category: 'management',
+    univers: 'projets',
   },
   {
     path: '/projects',
@@ -122,6 +136,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: false,
     category: 'management',
+    univers: 'projets',
   },
   {
     path: '/resources',
@@ -133,6 +148,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: true,
     category: 'main',
+    univers: 'communaute',
   },
   {
     path: '/forum',
@@ -144,6 +160,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: true,
     category: 'main',
+    univers: 'communaute',
   },
   {
     path: '/submit',
@@ -155,6 +172,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: false,
     category: 'management',
+    univers: 'projets',
   },
   {
     path: '/concept-note',
@@ -166,6 +184,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: false,
     showInMobileNav: false,
     category: 'main',
+    univers: 'projets',
   },
   {
     path: '/events',
@@ -177,6 +196,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: true,
     category: 'main',
+    univers: 'communaute',
   },
 
   // Routes personnelles
@@ -190,6 +210,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: false,
     showInMobileNav: false,
     category: 'personal',
+    univers: 'pilotage',
   },
   {
     path: '/preferences',
@@ -201,6 +222,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: false,
     showInMobileNav: false,
     category: 'personal',
+    univers: 'pilotage',
   },
   {
     path: '/preferences/advanced',
@@ -213,6 +235,7 @@ export const ROUTES: RouteConfig[] = [
     showInMobileNav: false,
     hideFromNav: true,
     category: 'personal',
+    univers: 'pilotage',
   },
   {
     path: '/security',
@@ -224,6 +247,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: false,
     showInMobileNav: false,
     category: 'personal',
+    univers: 'admin',
   },
   {
     path: '/analytics',
@@ -235,6 +259,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: false,
     showInMobileNav: false,
     category: 'management',
+    univers: 'pilotage',
   },
   {
     path: '/demo-guide',
@@ -270,6 +295,7 @@ export const ROUTES: RouteConfig[] = [
     showInMobileNav: false,
     hideFromNav: true,
     category: 'admin',
+    univers: 'admin',
   },
 
   // New SUTEL modules
@@ -283,6 +309,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: false,
     category: 'main',
+    univers: 'capacites',
   },
   {
     path: '/watch',
@@ -294,6 +321,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: false,
     category: 'management',
+    univers: 'capacites',
   },
   {
     path: '/coauthoring',
@@ -305,6 +333,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: false,
     category: 'management',
+    univers: 'capacites',
   },
   {
     path: '/public-dashboard',
@@ -316,6 +345,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: false,
     category: 'main',
+    univers: 'pilotage',
   },
   {
     path: '/assistant',
@@ -327,6 +357,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: true,
     showInMobileNav: true,
     category: 'main',
+    univers: 'capacites',
   },
   {
     path: '/about',
@@ -363,6 +394,7 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: false,
     showInMobileNav: false,
     category: 'admin',
+    univers: 'admin',
   },
   {
     path: '/admin/users',
@@ -376,6 +408,7 @@ export const ROUTES: RouteConfig[] = [
     showInMobileNav: false,
     hideFromNav: true,
     category: 'admin',
+    univers: 'admin',
   },
   {
     path: '/admin/forum',
@@ -389,6 +422,7 @@ export const ROUTES: RouteConfig[] = [
     showInMobileNav: false,
     hideFromNav: true,
     category: 'admin',
+    univers: 'admin',
   },
 ];
 
