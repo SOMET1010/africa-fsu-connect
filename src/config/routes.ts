@@ -14,6 +14,7 @@ import {
   Settings,
   Shield,
   PlayCircle,
+  Flag,
 } from 'lucide-react';
 
 // UX Universe types for organized navigation
@@ -74,6 +75,7 @@ const PublicDashboard = lazy(() => import('@/pages/PublicDashboard'));
 const SutaAssistant = lazy(() => import('@/pages/SutaAssistant'));
 const About = lazy(() => import('@/pages/About'));
 const Roadmap = lazy(() => import('@/pages/Roadmap'));
+const MyCountry = lazy(() => import('@/pages/MyCountry'));
 
 // Configuration centralisée des routes
 export const ROUTES: RouteConfig[] = [
@@ -99,6 +101,18 @@ export const ROUTES: RouteConfig[] = [
     isProtected: true,
     showInSidebar: true,
     showInMobileNav: true,
+    category: 'main',
+    univers: 'pilotage',
+  },
+  {
+    path: '/my-country',
+    component: MyCountry,
+    title: 'Mon Pays',
+    description: 'Vue privée de mon Fonds du Service Universel',
+    icon: Flag,
+    isProtected: true,
+    showInSidebar: true,
+    showInMobileNav: false,
     category: 'main',
     univers: 'pilotage',
   },
