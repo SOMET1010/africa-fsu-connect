@@ -109,11 +109,11 @@ const translations = {
     'auth.logout.goodbye': 'À bientôt !',
     'auth.logout.error': 'Impossible de se déconnecter',
 
-    // SUTEL
-    'sutel.title': 'Réseau SUTEL Africain',
-    'sutel.subtitle': 'Agences spécialisées dans le Service Universel des Télécommunications en Afrique',
-    'sutel.interactive.map': 'Carte Interactive SUTEL - Aperçu rapide',
-    'sutel.fullscreen': 'Voir en plein écran',
+    // NEXUS
+    'nexus.title': 'Réseau NEXUS Africain',
+    'nexus.subtitle': 'Agences spécialisées dans le Service Universel des Télécommunications en Afrique',
+    'nexus.interactive.map': 'Carte Interactive NEXUS - Aperçu rapide',
+    'nexus.fullscreen': 'Voir en plein écran',
 
     // Resources/Docs
     'resources.title': 'Bibliothèque de Ressources',
@@ -205,7 +205,7 @@ const translations = {
     'forum.start.discussion': 'Commencer une discussion',
 
     // Projects
-    'projects.title': 'Projets FSU/SUTEL',
+    'projects.title': 'Projets FSU/NEXUS',
     'projects.subtitle': 'Gestion et suivi des projets de service universel en Afrique',
     'projects.description': 'Découvrez, gérez et suivez tous les projets de fonds de service universel des télécommunications à travers l\'Afrique.',
     'projects.new.project': 'Nouveau Projet',

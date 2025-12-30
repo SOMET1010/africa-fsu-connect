@@ -64,13 +64,13 @@ export const RegionalMapSection = () => {
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4 px-4 py-2 bg-gradient-to-r from-primary/10 to-blue-500/10 border-primary/20">
             <MapPin className="w-4 h-4 mr-2" />
-            {t('sutel.interactive.map')}
+            {t('nexus.interactive.map')}
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            {t('sutel.title')}
+            {t('nexus.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            {t('sutel.subtitle')}
+            {t('nexus.subtitle')}
           </p>
         </div>
 
@@ -82,7 +82,7 @@ export const RegionalMapSection = () => {
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
                     <Globe className="h-5 w-5 text-primary" />
-                    {t('sutel.interactive.map')}
+                    {t('nexus.interactive.map')}
                   </CardTitle>
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary">

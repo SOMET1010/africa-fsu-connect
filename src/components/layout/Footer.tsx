@@ -18,11 +18,11 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center space-x-3 group">
               <div className="relative w-12 h-12 bg-gradient-to-br from-primary via-primary to-fsu-blue rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-primary-foreground font-bold text-sm">SUTEL</span>
+                <span className="text-primary-foreground font-bold text-sm">NEXUS</span>
                 <Sparkles className="absolute -top-1 -right-1 h-3 w-3 text-primary opacity-60" />
               </div>
               <div>
-                <h3 className="font-bold text-foreground text-lg leading-tight">Plateforme SUTEL</h3>
+                <h3 className="font-bold text-foreground text-lg leading-tight">Plateforme NEXUS</h3>
                 <p className="text-xs text-primary/80 font-medium">UAT • ANSUT</p>
               </div>
             </div>
@@ -183,7 +183,7 @@ const Footer = () => {
         <div className="border-t border-border/50 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
             <div className="text-sm text-muted-foreground text-center md:text-left">
-              © {currentYear} Plateforme SUTEL - UAT & ANSUT. Tous droits réservés.
+              © {currentYear} Plateforme NEXUS - UAT & ANSUT. Tous droits réservés.
             </div>
             <div className="flex flex-wrap justify-center md:justify-end gap-6 text-sm">
               <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">

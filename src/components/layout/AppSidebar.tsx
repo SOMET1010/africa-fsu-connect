@@ -123,7 +123,7 @@ export function AppSidebar() {
       <SidebarHeader className="border-b border-sidebar-border p-4">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-[hsl(var(--fsu-blue))] rounded-lg flex items-center justify-center shrink-0">
-            <span className="text-primary-foreground font-bold text-xs">SUTEL</span>
+            <span className="text-primary-foreground font-bold text-xs">NEXUS</span>
           </div>
           {!isCollapsed && (
             <div className="min-w-0">
@@ -200,7 +200,7 @@ export function AppSidebar() {
                 {getUserDisplayName()}
               </p>
               <p className="text-xs text-sidebar-foreground/70 truncate">
-                {profile?.organization || "SUTEL"}
+                {profile?.organization || "NEXUS"}
               </p>
             </div>
           )}

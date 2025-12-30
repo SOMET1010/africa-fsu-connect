@@ -1,7 +1,7 @@
-import { SutelDashboard } from "@/components/dashboard/SutelDashboard";
+import { NexusDashboard } from "@/components/dashboard/NexusDashboard";
 
 const Dashboard = () => {
-  return <SutelDashboard />;
+  return <NexusDashboard />;
 };
 
 export default Dashboard;
