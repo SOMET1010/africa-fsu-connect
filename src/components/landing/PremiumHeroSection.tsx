@@ -1,10 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Globe, Users, Target, Sparkles, ChevronDown } from "lucide-react";
+import { ArrowRight, Globe, Sparkles, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { useTranslation } from "@/hooks/useTranslation";
+import { PresenceIndicator } from "@/components/network/PresenceIndicator";
 
+/**
+ * PremiumHeroSection - Couche 1 compliant
+ * 
+ * UX RULES (Blueprint):
+ * - NO KPIs or hard numbers
+ * - NO rankings
+ * - Max 2 CTAs above the fold
+ * - Narrative text only (1 sentence per block)
+ * - Network presence as visual bar (no numbers)
+ */
 export default function PremiumHeroSection() {
   const { t } = useTranslation();
 
@@ -22,7 +33,7 @@ export default function PremiumHeroSection() {
       </div>
 
       <PageContainer size="full" className="relative z-10">
-        <div className="text-center space-y-6 animate-fade-in">
+        <div className="text-center space-y-8 animate-fade-in">
           {/* Premium badge */}
           <div className="flex justify-center">
             <Badge 
@@ -33,9 +44,9 @@ export default function PremiumHeroSection() {
             </Badge>
           </div>
 
-          {/* Main heading with sophisticated typography */}
-          <div className="space-y-4">
-            <h1 className="text-6xl lg:text-8xl font-bold tracking-tight leading-none">
+          {/* Main heading with narrative focus - NO STATS */}
+          <div className="space-y-6">
+            <h1 className="text-5xl lg:text-7xl font-bold tracking-tight leading-tight">
               <span className="gradient-text animate-shimmer bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto]">
                 {t('hero.title.line1')}
               </span>
@@ -44,70 +55,30 @@ export default function PremiumHeroSection() {
                 {t('hero.title.line2')}
               </span>
             </h1>
-            <p className="text-xl lg:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light">
+            <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-light">
               {t('hero.subtitle')}
             </p>
           </div>
 
-          {/* Premium stats with advanced animations - Updated per PDF specs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto py-8">
-            {[
-              { icon: Globe, value: "54", label: "Pays Africains", color: "primary", trend: "+3 cette année", trendUp: true },
-              { icon: Target, value: "127", label: "Projets Actifs", color: "accent", trend: "+12 en cours", trendUp: true },
-              { icon: Users, value: "89", label: "Nouveaux Documents", color: "warning", trend: "+8 ce mois", trendUp: true },
-              { icon: Sparkles, value: "12", label: "Événements à Venir", color: "primary", trend: "Mise à jour trimestrielle", trendUp: null }
-            ].map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <div
-                  key={stat.label}
-                  className="group animate-fade-in"
-                  style={{ animationDelay: `${0.2 + index * 0.1}s` }}
-                >
-                  <div className="premium-card p-6 text-center transition-all duration-500 hover:shadow-glow hover:-translate-y-2">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 ${
-                    stat.color === 'primary' ? 'bg-primary/10' : 
-                    stat.color === 'accent' ? 'bg-accent/10' : 
-                    'bg-warning/10'
-                  }`}>
-                    <Icon className={`h-7 w-7 ${
-                      stat.color === 'primary' ? 'text-primary' : 
-                      stat.color === 'accent' ? 'text-accent' : 
-                      'text-warning'
-                    }`} />
-                    </div>
-                    <div className="text-3xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
-                      {stat.value}
-                    </div>
-                    <div className="text-xs text-muted-foreground font-medium">
-                      {stat.label}
-                    </div>
-                    {/* Micro-indicateur d'évolution */}
-                    <div className={`text-[10px] mt-2 flex items-center justify-center gap-1 ${
-                      stat.trendUp === true ? 'text-green-600' : 
-                      stat.trendUp === false ? 'text-red-500' : 
-                      'text-muted-foreground/60'
-                    }`}>
-                      {stat.trendUp === true && <span>▲</span>}
-                      {stat.trendUp === false && <span>▼</span>}
-                      {stat.trendUp === null && <span>●</span>}
-                      {stat.trend}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          {/* Network Presence - Visual indicator, NO numbers */}
+          <div className="flex justify-center py-6">
+            <div className="text-center space-y-3">
+              <PresenceIndicator level={7} maxLevel={10} size="lg" />
+              <p className="text-sm text-muted-foreground font-medium">
+                Forte activité ce mois
+              </p>
+            </div>
           </div>
 
-          {/* Premium CTA buttons - Orientés usage réel */}
+          {/* Premium CTA buttons - Max 2 per Blueprint */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
               asChild 
               size="lg" 
               className="px-10 py-6 text-lg font-medium rounded-2xl shadow-elegant hover:shadow-glow transition-all duration-300 hover:scale-105 bg-gradient-to-r from-primary to-primary-dark"
             >
-              <Link to="/auth">
-                {t('common.get.started')}
+              <Link to="/network">
+                Découvrir le réseau
                 <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
@@ -119,23 +90,23 @@ export default function PremiumHeroSection() {
               className="px-10 py-6 text-lg font-medium rounded-2xl bg-card/60 backdrop-blur-md border-border/50 hover:bg-card/80 hover:shadow-md transition-all duration-300 hover:scale-105"
             >
               <Link to="/projects">
-                {t('common.discover')}
+                Explorer les projets
               </Link>
             </Button>
           </div>
 
-          {/* Premium trust indicators - Updated with 5 African regions */}
+          {/* Trust indicators - Regions égalitaires, NO project counts */}
           <div className="pt-8 border-t border-border/30 mt-8">
             <p className="text-sm text-muted-foreground mb-8 font-medium">
               {t('hero.trust.supported')}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-8 opacity-70 hover:opacity-100 transition-opacity duration-500">
               {[
-                { name: "CEDEAO", countries: 15, color: "bg-blue-500/20" },
-                { name: "SADC", countries: 16, color: "bg-green-500/20" },
-                { name: "EACO", countries: 8, color: "bg-purple-500/20" },
-                { name: "ECCAS", countries: 11, color: "bg-orange-500/20" },
-                { name: "UMA", countries: 5, color: "bg-red-500/20" }
+                { name: "CEDEAO", color: "bg-blue-500/20" },
+                { name: "SADC", color: "bg-green-500/20" },
+                { name: "EACO", color: "bg-purple-500/20" },
+                { name: "ECCAS", color: "bg-orange-500/20" },
+                { name: "UMA", color: "bg-red-500/20" }
               ].map((org, index) => (
                 <div 
                   key={org.name} 
@@ -147,9 +118,6 @@ export default function PremiumHeroSection() {
                   </div>
                   <div className="text-xs text-muted-foreground font-medium group-hover:text-foreground transition-colors">
                     {org.name}
-                  </div>
-                  <div className="text-xs text-muted-foreground/60">
-                    {org.countries} pays
                   </div>
                 </div>
               ))}
