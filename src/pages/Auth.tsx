@@ -158,24 +158,24 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#0F4C6D] to-[#1F7A63] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Dynamic Background Glow Effects */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#1F7A63]/30 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#0B3C5D]/40 rounded-full blur-3xl" />
+      {/* Dynamic Background Glow Effects - Soft emerald/cyan */}
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl animate-pulse" />
       
       <div className="w-full max-w-md relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
           <Link 
             to="/" 
-            className="inline-flex items-center gap-2 text-white/90 hover:text-white bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm transition-all hover:bg-white/20 mb-6"
+            className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm transition-colors mb-6"
           >
             <ArrowLeft className="h-4 w-4" />
             Retour à l'accueil
           </Link>
           
           <div className="flex items-center justify-center mb-6">
-            <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center shadow-2xl">
-              <span className="text-2xl font-black bg-gradient-to-r from-[#0B3C5D] to-[#1F7A63] bg-clip-text text-transparent font-poppins">
+            <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl flex items-center justify-center border border-white/50">
+              <span className="text-xl font-extrabold tracking-widest bg-gradient-to-r from-[#0B3C5D] to-[#1F7A63] bg-clip-text text-transparent">
                 SUTEL
               </span>
             </div>
@@ -188,14 +188,14 @@ const Auth = () => {
             Plateforme panafricaine du Service Universel
           </p>
           <p className="text-white/70 text-sm mt-1 font-inter">
-            UAT - ANSUT
+            UAT • ANSUT • Fonds du Service Universel
           </p>
         </div>
 
-        {/* Auth Forms - Solid White Card */}
-        <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.25)] overflow-hidden">
+        {/* Auth Forms - Glass Card with solid readability */}
+        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-gray-100 p-1.5 rounded-none border-b border-gray-200">
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100/80 p-1.5 m-4 w-[calc(100%-2rem)] rounded-xl">
               <TabsTrigger 
                 value="login" 
                 className="rounded-lg py-3 font-semibold transition-all data-[state=active]:bg-white data-[state=active]:text-[#0B3C5D] data-[state=active]:shadow-md data-[state=inactive]:text-gray-500"
@@ -321,9 +321,9 @@ const Auth = () => {
                   </div>
                 </form>
               ) : (
-                <form onSubmit={handleLogin} className="space-y-5">
+              <form onSubmit={handleLogin} className="space-y-5">
                   <div className="space-y-2">
-                    <Label htmlFor="login-email" className="font-medium">Email</Label>
+                    <Label htmlFor="login-email" className="font-medium text-gray-700">Email</Label>
                     <Input
                       id="login-email"
                       type="email"
@@ -331,12 +331,12 @@ const Auth = () => {
                       onChange={(e) => setLoginEmail(e.target.value)}
                       placeholder="votre@email.com"
                       required
-                      className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary"
+                      className="h-12 bg-gray-50 border-gray-200 focus:border-[#0B3C5D] focus:ring-2 focus:ring-[#0B3C5D]/20 transition-all"
                     />
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="login-password" className="font-medium">Mot de passe</Label>
+                    <Label htmlFor="login-password" className="font-medium text-gray-700">Mot de passe</Label>
                     <div className="relative">
                       <Input
                         id="login-password"
@@ -345,7 +345,7 @@ const Auth = () => {
                         onChange={(e) => setLoginPassword(e.target.value)}
                         placeholder="Votre mot de passe"
                         required
-                        className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary pr-12"
+                        className="h-12 bg-gray-50 border-gray-200 focus:border-[#0B3C5D] focus:ring-2 focus:ring-[#0B3C5D]/20 transition-all pr-12"
                       />
                       <ModernButton
                         type="button"
@@ -379,10 +379,10 @@ const Auth = () => {
                     Se connecter
                   </ModernButton>
 
-                  <div className="text-right">
+                  <div className="text-center">
                     <button
                       type="button"
-                      className="text-sm text-primary hover:underline"
+                      className="text-sm text-[#0B3C5D] hover:text-[#1F7A63] hover:underline transition-colors"
                       onClick={() => { setForgotMode(true); setError(null); }}
                     >
                       Mot de passe oublié ?
@@ -390,6 +390,11 @@ const Auth = () => {
                   </div>
                 </form>
               )}
+
+              {/* Footer note */}
+              <p className="text-center text-gray-400 text-xs mt-4 pb-2">
+                En vous connectant, vous acceptez les conditions d'utilisation.
+              </p>
             </TabsContent>
 
             {/* Signup Tab */}
