@@ -1,175 +1,137 @@
+// NEXUS_LAYER1_GUARD
+// - max 2 CTA visibles
+// - pas de KPI cards
+// - pas d'alertes rouges
+// - pas de ranking
+// - 1 message principal par écran
+// - animations lentes uniquement (fade/slide)
+// - couleurs : nx-brand + nx-coop uniquement
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Globe, 
-  Users, 
-  ArrowRight, 
-  Rocket,
-  MessageSquare,
-  Calendar,
-  FileText,
-  Sparkles
-} from "lucide-react";
-import { useTranslation } from "@/hooks/useTranslation";
-import { PresenceIndicator } from "@/components/network/PresenceIndicator";
-import { ActivityTimeline } from "@/components/network/ActivityTimeline";
+import { Users, FolderOpen, MessageSquare, Calendar, BookOpen } from "lucide-react";
 import { RegionCards } from "@/components/network/RegionCards";
+import { ActivityTimeline } from "@/components/network/ActivityTimeline";
+import { PresenceIndicator } from "@/components/network/PresenceIndicator";
+import { NexusActionCard } from "@/components/ui/nexus-card";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const NetworkView = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10">
-      {/* Hero Section - Ultra Light */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto max-w-5xl text-center space-y-6">
-          {/* Badge */}
-          <Badge 
-            variant="outline" 
-            className="px-4 py-2 bg-primary/5 border-primary/20"
-          >
-            <Globe className="w-4 h-4 mr-2" />
-            {t('network.badge') || 'Réseau SUTEL'}
-          </Badge>
-
-          {/* Message narratif unique */}
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
-            {t('network.hero.title') || '54 pays construisent ensemble'}
-            <br />
-            <span className="text-primary">
-              {t('network.hero.subtitle') || "l'avenir du Service Universel"}
-            </span>
-          </h1>
-
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            {t('network.hero.narrative') || 
-              "Une communauté panafricaine de partage et de coopération. Chaque pays apporte ses expériences, ses projets et ses apprentissages."}
-          </p>
-
-          {/* Présence réseau - barre visuelle, pas de chiffres */}
-          <div className="py-6">
-            <PresenceIndicator 
-              level={6} 
-              maxLevel={7}
-              label={t('network.presence.label') || 'Présence réseau'}
-              description={t('network.presence.description') || 'Forte activité ce mois'}
-            />
-          </div>
-
-          {/* 2 CTAs maximum */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Button asChild size="lg" className="px-8">
-              <Link to="/members">
-                <Users className="mr-2 h-5 w-5" />
-                {t('network.cta.members') || 'Voir les pays membres'}
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="px-8">
-              <Link to="/projects">
-                <Rocket className="mr-2 h-5 w-5" />
-                {t('network.cta.projects') || 'Explorer les projets'}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+    <div className="min-h-screen bg-[hsl(var(--nx-bg))]">
+      {/* Hero Section - Calme et institutionnel */}
+      <section className="py-16 md:py-20">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center space-y-6">
+            {/* Badge discret */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(var(--nx-surface))] border border-[hsl(var(--nx-border))] shadow-[var(--nx-shadow-sm)]">
+              <PresenceIndicator />
+            </div>
+            
+            {/* Titre principal - max 32px selon Blueprint */}
+            <h1 className="text-[28px] md:text-[32px] font-semibold text-[hsl(var(--nx-text-900))] leading-tight max-w-3xl mx-auto">
+              {t('network.hero.title') || 'Le réseau des agences africaines du service universel'}
+            </h1>
+            
+            {/* Description narrative - une seule idée */}
+            <p className="text-base md:text-lg text-[hsl(var(--nx-text-500))] max-w-2xl mx-auto leading-relaxed">
+              {t('network.hero.narrative') || 'Un espace de coopération et de partage entre les agences nationales pour réduire la fracture numérique en Afrique.'}
+            </p>
+            
+            {/* 2 CTAs maximum - Règle Layer 1 */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+              <Button 
+                asChild 
+                className="bg-[hsl(var(--nx-brand-900))] hover:bg-[hsl(var(--nx-brand-700))] text-white rounded-[var(--nx-radius-md)] px-6 py-2.5 transition-all duration-[var(--nx-dur-2)] ease-[var(--nx-ease)]"
+              >
+                <Link to="/members" className="inline-flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  {t('network.cta.members') || 'Voir les pays membres'}
+                </Link>
+              </Button>
+              <Button 
+                variant="outline" 
+                asChild
+                className="border-[hsl(var(--nx-border))] text-[hsl(var(--nx-text-700))] hover:bg-[hsl(var(--nx-surface))] hover:border-[hsl(var(--nx-brand-500))] rounded-[var(--nx-radius-md)] px-6 py-2.5 transition-all duration-[var(--nx-dur-2)] ease-[var(--nx-ease)]"
+              >
+                <Link to="/projects" className="inline-flex items-center gap-2">
+                  <FolderOpen className="w-4 h-4" />
+                  {t('network.cta.projects') || 'Explorer les projets'}
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Régions du réseau - carte égalitaire */}
-      <section className="py-12 bg-muted/30">
-        <div className="container mx-auto px-4">
+      {/* Section Régions - Fond légèrement différent */}
+      <section className="py-12 bg-[hsl(var(--nx-surface))]">
+        <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-2">
-              {t('network.regions.title') || 'Régions du réseau'}
+            <h2 className="text-xl font-medium text-[hsl(var(--nx-text-900))]">
+              {t('network.regions.title') || 'Les régions du réseau'}
             </h2>
-            <p className="text-muted-foreground">
-              {t('network.regions.subtitle') || 'Tous les pays membres, par région'}
+            <p className="text-sm text-[hsl(var(--nx-text-500))] mt-2">
+              {t('network.regions.subtitle') || 'Cliquez sur une région pour découvrir ses membres'}
             </p>
           </div>
           <RegionCards />
         </div>
       </section>
 
-      {/* Activité récente - timeline, pas d'alertes punitives */}
+      {/* Section Activité - Timeline narrative */}
       <section className="py-12">
-        <div className="container mx-auto px-4 max-w-4xl">
+        <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-2">
-              {t('network.activity.title') || 'Activité récente du réseau'}
+            <h2 className="text-xl font-medium text-[hsl(var(--nx-text-900))]">
+              {t('network.activity.title') || 'Activité récente'}
             </h2>
-            <p className="text-muted-foreground">
-              {t('network.activity.subtitle') || 'Ce qui se passe dans la communauté'}
+            <p className="text-sm text-[hsl(var(--nx-text-500))] mt-2">
+              {t('network.activity.subtitle') || 'Les dernières contributions du réseau'}
             </p>
           </div>
-          <ActivityTimeline />
+          <ActivityTimeline maxItems={5} />
         </div>
       </section>
 
-      {/* Actions secondaires */}
-      <section className="py-12 bg-gradient-to-r from-primary/5 to-accent/5">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border/50">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <MessageSquare className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-semibold mb-2">
-                  {t('network.action.discuss') || 'Échanger'}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {t('network.action.discuss.desc') || 'Rejoindre les discussions'}
-                </p>
-                <Button asChild variant="ghost" size="sm">
-                  <Link to="/forum">
-                    {t('common.discover') || 'Découvrir'}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border/50">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Calendar className="h-6 w-6 text-accent" />
-                </div>
-                <h3 className="font-semibold mb-2">
-                  {t('network.action.events') || 'Participer'}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {t('network.action.events.desc') || 'Événements à venir'}
-                </p>
-                <Button asChild variant="ghost" size="sm">
-                  <Link to="/events">
-                    {t('common.discover') || 'Découvrir'}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border/50">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <FileText className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-semibold mb-2">
-                  {t('network.action.resources') || 'Apprendre'}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {t('network.action.resources.desc') || 'Guides et ressources'}
-                </p>
-                <Button asChild variant="ghost" size="sm">
-                  <Link to="/resources">
-                    {t('common.discover') || 'Découvrir'}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+      {/* Section Actions secondaires - NexusActionCard */}
+      <section className="py-12 bg-[hsl(var(--nx-surface))]">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="grid md:grid-cols-3 gap-6">
+            <NexusActionCard
+              icon={MessageSquare}
+              title={t('network.action.discuss') || 'Échanger'}
+              description={t('network.action.discuss.desc') || 'Participez aux discussions entre pairs du réseau.'}
+              accent="brand"
+              primaryAction={{
+                label: t('common.discover') || 'Découvrir',
+                href: '/forum'
+              }}
+            />
+            
+            <NexusActionCard
+              icon={Calendar}
+              title={t('network.action.events') || 'Participer'}
+              description={t('network.action.events.desc') || 'Rejoignez les événements et ateliers du réseau.'}
+              accent="coop"
+              primaryAction={{
+                label: t('common.discover') || 'Découvrir',
+                href: '/events'
+              }}
+            />
+            
+            <NexusActionCard
+              icon={BookOpen}
+              title={t('network.action.resources') || 'Apprendre'}
+              description={t('network.action.resources.desc') || 'Accédez aux ressources partagées par le réseau.'}
+              accent="brand"
+              primaryAction={{
+                label: t('common.discover') || 'Découvrir',
+                href: '/resources'
+              }}
+            />
           </div>
         </div>
       </section>

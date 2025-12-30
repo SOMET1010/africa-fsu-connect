@@ -1,15 +1,17 @@
+// NEXUS_COMPONENT
+// Timeline narrative avec palette 2 couleurs (brand + coop)
+// Pas de ranking, pas de chiffres
+
+import { FileText, Users, MessageCircle, Calendar, FolderOpen } from "lucide-react";
+import { NexusCard } from "@/components/ui/nexus-card";
 import { useTranslation } from "@/hooks/useTranslation";
-import { 
-  Rocket, 
-  FileText, 
-  Calendar, 
-  MessageSquare,
-  Users
-} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+type ActivityType = 'project' | 'collaboration' | 'document' | 'event' | 'discussion';
 
 interface ActivityItem {
   id: string;
-  type: 'project' | 'document' | 'event' | 'discussion' | 'collaboration';
+  type: ActivityType;
   country: string;
   flag: string;
   action: string;
@@ -17,7 +19,7 @@ interface ActivityItem {
   timeAgo: string;
 }
 
-// Mock data - en production, viendrait de l'API
+// Données de démonstration
 const mockActivities: ActivityItem[] = [
   {
     id: '1',
@@ -93,78 +95,74 @@ const mockActivities: ActivityItem[] = [
   },
 ];
 
-const getIcon = (type: ActivityItem['type']) => {
-  switch (type) {
-    case 'project': return Rocket;
-    case 'document': return FileText;
-    case 'event': return Calendar;
-    case 'discussion': return MessageSquare;
-    case 'collaboration': return Users;
-    default: return Rocket;
-  }
+// Palette NEXUS : 2 couleurs uniquement
+const getIcon = (type: ActivityType): LucideIcon => {
+  const icons: Record<ActivityType, LucideIcon> = {
+    project: FolderOpen,
+    collaboration: Users,
+    document: FileText,
+    event: Calendar,
+    discussion: MessageCircle
+  };
+  return icons[type];
 };
 
-const getIconColor = (type: ActivityItem['type']) => {
-  switch (type) {
-    case 'project': return 'text-primary bg-primary/10';
-    case 'document': return 'text-blue-500 bg-blue-500/10';
-    case 'event': return 'text-amber-500 bg-amber-500/10';
-    case 'discussion': return 'text-purple-500 bg-purple-500/10';
-    case 'collaboration': return 'text-green-500 bg-green-500/10';
-    default: return 'text-primary bg-primary/10';
+// Couleurs NEXUS : brand (bleu) pour info, coop (vert) pour action
+const getIconStyle = (type: ActivityType): string => {
+  // Actions collaboratives → vert coopération
+  if (type === 'project' || type === 'collaboration') {
+    return 'bg-[hsl(var(--nx-coop-600)/0.1)] text-[hsl(var(--nx-coop-600))]';
   }
+  // Info/ressources → bleu institutionnel
+  return 'bg-[hsl(var(--nx-brand-900)/0.1)] text-[hsl(var(--nx-brand-900))]';
 };
 
 interface ActivityTimelineProps {
   maxItems?: number;
 }
 
-/**
- * ActivityTimeline - Couche 1 compliant
- * 
- * UX RULES (Blueprint):
- * - NO punitive alerts
- * - Timeline-style activity feed
- * - Proof of network life
- * - Narrative focus (country did action)
- */
 export const ActivityTimeline = ({ maxItems = 5 }: ActivityTimelineProps) => {
   const { t } = useTranslation();
-  const activities = mockActivities.slice(0, maxItems);
+  const displayActivities = mockActivities.slice(0, maxItems);
 
   return (
-    <div className="space-y-4">
-      {activities.map((activity, index) => {
+    <div className="space-y-3">
+      {displayActivities.map((activity, index) => {
         const Icon = getIcon(activity.type);
-        const iconColorClass = getIconColor(activity.type);
+        const iconStyle = getIconStyle(activity.type);
         
         return (
-          <div 
+          <NexusCard 
             key={activity.id}
-            className="flex items-start gap-4 p-4 rounded-lg bg-card/50 border border-border/50 hover:bg-card/80 transition-colors animate-fade-in"
-            style={{ animationDelay: `${index * 100}ms` }}
+            variant="flat"
+            padding="sm"
+            hover="subtle"
+            className="animate-fade-in"
+            style={{ animationDelay: `${index * 80}ms` }}
           >
-            {/* Icône */}
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${iconColorClass}`}>
-              <Icon className="h-5 w-5" />
-            </div>
+            <div className="flex items-start gap-4">
+              {/* Icône avec style NEXUS */}
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${iconStyle}`}>
+                <Icon className="w-5 h-5" />
+              </div>
+              
+              {/* Contenu narratif */}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-[hsl(var(--nx-text-900))]">
+                  <span className="font-medium">{activity.flag} {activity.country}</span>
+                  <span className="text-[hsl(var(--nx-text-500))]"> {activity.action} </span>
+                </p>
+                <p className="text-[hsl(var(--nx-text-900))] font-medium mt-0.5 truncate">
+                  {activity.title}
+                </p>
+              </div>
 
-            {/* Contenu */}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm">
-                <span className="font-medium">{activity.flag} {activity.country}</span>
-                <span className="text-muted-foreground"> {activity.action}</span>
-              </p>
-              <p className="text-foreground font-medium mt-1 truncate">
-                {activity.title}
-              </p>
+              {/* Temps */}
+              <span className="text-xs text-[hsl(var(--nx-text-500))] flex-shrink-0">
+                {activity.timeAgo}
+              </span>
             </div>
-
-            {/* Temps */}
-            <span className="text-xs text-muted-foreground flex-shrink-0">
-              {activity.timeAgo}
-            </span>
-          </div>
+          </NexusCard>
         );
       })}
     </div>
