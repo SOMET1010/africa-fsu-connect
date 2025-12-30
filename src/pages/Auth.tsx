@@ -171,15 +171,15 @@ const Auth = () => {
           
           <div className="flex items-center justify-center mb-6">
             <div className="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-3xl flex items-center justify-center border border-white/30 shadow-2xl">
-              <span className="text-3xl font-black text-white font-poppins">FSU</span>
+              <span className="text-2xl font-black text-white font-poppins">SUTEL</span>
             </div>
           </div>
           
           <h1 className="text-3xl font-black text-white mb-2 font-poppins tracking-tight">
-            Plateforme FSU Afrique
+            Plateforme SUTEL
           </h1>
           <p className="text-white/80 font-inter">
-            Union Africaine des Télécommunications
+            UAT - ANSUT • Fonds du Service Universel
           </p>
         </div>
 
@@ -205,7 +205,7 @@ const Auth = () => {
                     ? 'Choisissez un nouveau mot de passe pour votre compte'
                     : forgotMode
                       ? 'Entrez votre email pour recevoir un lien de réinitialisation'
-                      : 'Accédez à votre compte FSU'}
+                      : 'Accédez à votre compte SUTEL'}
                 </p>
               </div>
 
@@ -383,7 +383,7 @@ const Auth = () => {
               <div className="text-center space-y-2">
                 <h2 className="text-2xl font-bold text-foreground font-poppins">Créer un compte</h2>
                 <p className="text-muted-foreground font-inter">
-                  Rejoignez la communauté FSU Afrique
+                  Rejoignez la communauté SUTEL
                 </p>
               </div>
               
