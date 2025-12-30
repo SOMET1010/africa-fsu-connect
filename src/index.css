@@ -1,3 +1,6 @@
+/* NEXUS Design System Tokens */
+@import './styles/nexus-tokens.css';
+@import './styles/nexus-utilities.css';
 
 @tailwind base;
 @tailwind components;
