@@ -1,0 +1,41 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="nexus-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B3C5D"/>
+      <stop offset="100%" stop-color="#1F7A63"/>
+    </linearGradient>
+    <linearGradient id="nexus-gradient-light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B3C5D" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#1F7A63" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Hexagone de fond -->
+  <path 
+    d="M32 6 L54 18 L54 46 L32 58 L10 46 L10 18 Z" 
+    stroke="url(#nexus-gradient)" 
+    stroke-width="2" 
+    fill="url(#nexus-gradient-light)"
+  />
+  
+  <!-- Lignes de connexion -->
+  <path d="M32 6 L32 58" stroke="url(#nexus-gradient)" stroke-width="1.5" opacity="0.5"/>
+  <path d="M10 18 L54 46" stroke="url(#nexus-gradient)" stroke-width="1.5" opacity="0.5"/>
+  <path d="M54 18 L10 46" stroke="url(#nexus-gradient)" stroke-width="1.5" opacity="0.5"/>
+  
+  <!-- Connexions vers le centre -->
+  <path d="M32 6 L32 32 M54 18 L32 32 M54 46 L32 32 M32 58 L32 32 M10 46 L32 32 M10 18 L32 32" 
+    stroke="url(#nexus-gradient)" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Nœuds périphériques -->
+  <circle cx="32" cy="6" r="4" fill="#0B3C5D"/>
+  <circle cx="54" cy="18" r="4" fill="#0D4560"/>
+  <circle cx="54" cy="46" r="4" fill="#156B56"/>
+  <circle cx="32" cy="58" r="4" fill="#1F7A63"/>
+  <circle cx="10" cy="46" r="4" fill="#156B56"/>
+  <circle cx="10" cy="18" r="4" fill="#0D4560"/>
+  
+  <!-- Nœud central -->
+  <circle cx="32" cy="32" r="7" fill="url(#nexus-gradient)"/>
+  <circle cx="32" cy="32" r="3" fill="white" opacity="0.9"/>
+</svg>
