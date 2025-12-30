@@ -179,12 +179,12 @@ export function SimplifiedSidebar() {
       <SidebarHeader className="border-b border-border p-4">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center shrink-0 shadow-md">
-            <span className="text-white font-bold text-xs">SUTEL</span>
+            <span className="text-white font-bold text-xs">NEXUS</span>
           </div>
           {!isCollapsed && (
             <div className="min-w-0">
               <h2 className="font-bold text-foreground text-base leading-tight">
-                Plateforme SUTEL
+                Plateforme NEXUS
               </h2>
               <p className="text-xs text-muted-foreground">UAT • ANSUT</p>
             </div>
@@ -304,7 +304,7 @@ export function SimplifiedSidebar() {
                 )}
               </div>
               <p className="text-xs text-muted-foreground truncate mt-1">
-                {profile?.organization || "SUTEL"}
+                {profile?.organization || "NEXUS"}
               </p>
             </div>
           )}

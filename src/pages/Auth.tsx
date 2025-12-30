@@ -176,13 +176,13 @@ const Auth = () => {
           <div className="flex items-center justify-center mb-6">
             <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl flex items-center justify-center border border-white/50">
               <span className="text-xl font-extrabold tracking-widest bg-gradient-to-r from-[#0B3C5D] to-[#1F7A63] bg-clip-text text-transparent">
-                SUTEL
+                NEXUS
               </span>
             </div>
           </div>
           
           <h1 className="text-3xl font-black text-white mb-2 font-poppins tracking-tight">
-            Plateforme SUTEL
+            Plateforme NEXUS
           </h1>
           <p className="text-white/90 font-medium text-lg font-inter">
             Plateforme panafricaine du Service Universel
@@ -220,7 +220,7 @@ const Auth = () => {
                     ? 'Choisissez un nouveau mot de passe pour votre compte'
                     : forgotMode
                       ? 'Entrez votre email pour recevoir un lien de réinitialisation'
-                      : 'Accédez à votre compte SUTEL'}
+                      : 'Accédez à votre compte NEXUS'}
                 </p>
               </div>
 
@@ -402,7 +402,7 @@ const Auth = () => {
               <div className="text-center space-y-2">
                 <h2 className="text-2xl font-bold text-foreground font-poppins">Créer un compte</h2>
                 <p className="text-muted-foreground font-inter">
-                  Rejoignez la communauté SUTEL
+                  Rejoignez la communauté NEXUS
                 </p>
               </div>
               

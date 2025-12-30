@@ -108,7 +108,7 @@ const recentActivities = [
   }
 ];
 
-export function SutelDashboard() {
+export function NexusDashboard() {
   const { profile } = useAuth();
   const { t, currentLanguage } = useTranslation();
 
@@ -120,7 +120,7 @@ export function SutelDashboard() {
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <h1 className="text-4xl font-bold gradient-text">
-                Tableau de Bord SUTEL
+                Tableau de Bord NEXUS
               </h1>
               <Badge className="bg-primary/10 text-primary border-primary/20">
                 <Activity className="h-3 w-3 mr-1" />

@@ -69,7 +69,7 @@ const About = () => {
       <div className="text-center max-w-4xl mx-auto space-y-6">
         <Badge variant="outline" className="px-4 py-2">
           <Building2 className="h-4 w-4 mr-2" />
-          À Propos de SUTEL
+          À Propos de NEXUS
         </Badge>
         <h1 className="text-4xl md:text-5xl font-bold">
           La Première Plateforme Africaine pour le
@@ -88,7 +88,7 @@ const About = () => {
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">Notre Mission</h2>
               <p className="text-muted-foreground leading-relaxed">
-                La Plateforme SUTEL vise à créer un guichet unique panafricain pour la collaboration, 
+                La Plateforme NEXUS vise à créer un guichet unique panafricain pour la collaboration,
                 l'innovation et la mutualisation des ressources dans le domaine du Service Universel 
                 des Télécommunications.
               </p>
@@ -144,7 +144,7 @@ const About = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
-              Comité de Pilotage SUTEL
+              Comité de Pilotage NEXUS
             </CardTitle>
             <CardDescription>
               Structure de gouvernance et prise de décision

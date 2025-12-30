@@ -4,7 +4,7 @@
  */
 
 // PDF export function using browser print
-export const exportToPDF = (presentationTitle: string = "SUTEL Platform Presentation") => {
+export const exportToPDF = (presentationTitle: string = "NEXUS Platform Presentation") => {
   // Set document title for PDF
   const originalTitle = document.title;
   document.title = presentationTitle;
@@ -21,7 +21,7 @@ export const exportToPDF = (presentationTitle: string = "SUTEL Platform Presenta
 // Export presentation data as JSON
 export const exportToJSON = (sections: any[], currentSection: number) => {
   const exportData = {
-    title: "SUTEL Platform Presentation",
+    title: "NEXUS Platform Presentation",
     exportDate: new Date().toISOString(),
     currentSection,
     totalSections: sections.length,
@@ -35,7 +35,7 @@ export const exportToJSON = (sections: any[], currentSection: number) => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `sutel-presentation-${Date.now()}.json`;
+  a.download = `nexus-presentation-${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
 };
@@ -54,7 +54,7 @@ export const copyPresentationLink = (section?: number) => {
 
 // Generate presentation summary as Markdown
 export const exportToMarkdown = (sections: any[]) => {
-  let markdown = '# SUTEL Platform - Présentation Executive\n\n';
+  let markdown = '# NEXUS Platform - Présentation Executive\n\n';
   markdown += `*Généré le ${new Date().toLocaleDateString('fr-FR')}*\n\n`;
   markdown += '---\n\n';
   
@@ -71,16 +71,16 @@ export const exportToMarkdown = (sections: any[]) => {
   });
   
   markdown += '## Contact\n\n';
-  markdown += 'Pour plus d\'informations sur SUTEL Platform:\n\n';
-  markdown += '- **Email:** contact@sutel-platform.com\n';
-  markdown += '- **Site Web:** https://sutel-platform.com\n';
-  markdown += '- **Demander une démo:** [Cliquez ici](https://sutel-platform.com/demo)\n';
+  markdown += 'Pour plus d\'informations sur NEXUS Platform:\n\n';
+  markdown += '- **Email:** contact@nexus-platform.com\n';
+  markdown += '- **Site Web:** https://nexus-platform.com\n';
+  markdown += '- **Demander une démo:** [Cliquez ici](https://nexus-platform.com/demo)\n';
   
   const blob = new Blob([markdown], { type: 'text/markdown' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `sutel-presentation-${Date.now()}.md`;
+  a.download = `nexus-presentation-${Date.now()}.md`;
   a.click();
   URL.revokeObjectURL(url);
 };

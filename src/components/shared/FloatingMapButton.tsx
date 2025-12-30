@@ -40,7 +40,7 @@ export const FloatingMapButton = () => {
             <DialogTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                {t('sutel.interactive.map')}
+                {t('nexus.interactive.map')}
               </div>
               <div className="flex items-center gap-2">
                 <Link 
@@ -48,7 +48,7 @@ export const FloatingMapButton = () => {
                   onClick={() => setIsOpen(false)}
                   className="text-sm text-primary hover:underline"
                 >
-                  {t('sutel.fullscreen')} →
+                  {t('nexus.fullscreen')} →
                 </Link>
                 <Button 
                   variant="ghost" 
