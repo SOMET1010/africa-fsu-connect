@@ -81,6 +81,8 @@ const MyCountry = lazy(() => import('@/pages/MyCountry'));
 const NetworkView = lazy(() => import('@/pages/NetworkView'));
 const MembersDirectory = lazy(() => import('@/pages/MembersDirectory'));
 const CountryProfile = lazy(() => import('@/pages/CountryProfile'));
+const NetworkActivity = lazy(() => import('@/pages/NetworkActivity'));
+const AdvancedMode = lazy(() => import('@/pages/AdvancedMode'));
 
 // Configuration centralisée des routes
 export const ROUTES: RouteConfig[] = [
@@ -121,6 +123,33 @@ export const ROUTES: RouteConfig[] = [
     hideFromNav: true,
     category: 'main',
     univers: 'pilotage',
+  },
+  // Network Activity (Couche 1)
+  {
+    path: '/activity',
+    component: NetworkActivity,
+    title: 'Activité récente',
+    description: 'Timeline des activités du réseau SUTEL',
+    icon: BarChart3,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    category: 'main',
+    univers: 'pilotage',
+  },
+  // Advanced Mode (Couche 3)
+  {
+    path: '/advanced',
+    component: AdvancedMode,
+    title: 'Mode avancé',
+    description: 'Données techniques et administration',
+    icon: Shield,
+    isProtected: true,
+    requiredRoles: ['super_admin', 'admin_pays'],
+    showInSidebar: false,
+    showInMobileNav: false,
+    category: 'admin',
+    univers: 'admin',
   },
   // Legacy route redirect
   {
