@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { ROUTES, getProtectedRoutes, getAdminRoutes } from "@/config/routes";
 import AppShell from "@/components/layout/AppShell";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -12,7 +12,13 @@ import { useEffect } from "react";
 // Eager loaded components (critical pour le rendu initial)
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
+import Presentation from "@/pages/Presentation";
 import NotFound from "@/pages/NotFound";
+
+// Lazy loaded presentation analytics
+const PresentationAnalytics = lazy(() => 
+  import('@/components/presentation/PresentationAnalytics').then(m => ({ default: m.PresentationAnalytics }))
+);
 
 export function AppRoutes() {
   useCriticalPreloader();
@@ -41,9 +47,29 @@ export function AppRoutes() {
         } 
       />
       
+      {/* Presentation route - public, without AppShell for fullscreen */}
+      <Route 
+        path="/presentation" 
+        element={<Presentation />} 
+      />
+      
+      {/* Presentation analytics - admin only */}
+      <Route 
+        path="/presentation/analytics" 
+        element={
+          <ProtectedRoute requiredRoles={['super_admin', 'admin_pays']}>
+            <AppShell>
+              <Suspense fallback={<PageLoadingFallback />}>
+                <PresentationAnalytics />
+              </Suspense>
+            </AppShell>
+          </ProtectedRoute>
+        } 
+      />
+      
       {/* Routes protégées normales */}
       {getProtectedRoutes()
-        .filter(route => !route.requiredRoles?.length)
+        .filter(route => !route.requiredRoles?.length && route.path !== '/presentation')
         .map(({ path, component: Component, title }) => (
           <Route 
             key={path}
@@ -61,21 +87,23 @@ export function AppRoutes() {
         ))}
       
       {/* Routes admin (chunk séparé) */}
-      {getAdminRoutes().map(({ path, component: Component, requiredRoles, title }) => (
-        <Route 
-          key={path}
-          path={path} 
-          element={
-            <ProtectedRoute requiredRoles={requiredRoles}>
-              <AppShell>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Component />
-                </Suspense>
-              </AppShell>
-            </ProtectedRoute>
-          } 
-        />
-      ))}
+      {getAdminRoutes()
+        .filter(route => route.path !== '/presentation/analytics')
+        .map(({ path, component: Component, requiredRoles, title }) => (
+          <Route 
+            key={path}
+            path={path} 
+            element={
+              <ProtectedRoute requiredRoles={requiredRoles}>
+                <AppShell>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Component />
+                  </Suspense>
+                </AppShell>
+              </ProtectedRoute>
+            } 
+          />
+        ))}
       
       {/* Route catch-all */}
       <Route 
