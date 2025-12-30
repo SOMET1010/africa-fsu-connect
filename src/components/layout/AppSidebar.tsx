@@ -58,7 +58,7 @@ export function AppSidebar() {
   
   const menuSections = [
     {
-      label: "Personnel",
+      label: "Pilotage",
       items: [
         { title: t('nav.dashboard'), url: "/dashboard", icon: Home },
         { title: t('nav.profile'), url: "/profile", icon: User },
@@ -68,14 +68,14 @@ export function AppSidebar() {
       ]
     },
     {
-      label: "Collaboration",
+      label: "Projets & Communauté",
       items: [
         { title: "Indicateurs", url: "/indicators", icon: TrendingUp },
         { title: t('nav.organizations'), url: "/organizations", icon: Building2 },
         { title: t('nav.projects'), url: "/projects", icon: FolderOpen },
         { title: t('nav.resources'), url: "/resources", icon: BookOpen },
         { title: t('nav.forum'), url: "/forum", icon: MessageSquare },
-        { title: "Soumettre", url: "/submit", icon: Send },
+        { title: t('nav.submit'), url: "/submit", icon: Send },
         { title: t('nav.events'), url: "/events", icon: Calendar },
       ]
     }

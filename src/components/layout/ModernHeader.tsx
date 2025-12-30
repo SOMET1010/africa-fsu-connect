@@ -10,20 +10,11 @@ import { NexusLogo } from "@/components/shared/NexusLogo";
 import { 
   Menu, 
   X, 
-  Globe, 
   User, 
   LogOut,
   Settings,
   LogIn,
-  Home,
-  BarChart2,
-  BarChart3,
-  Rocket,
-  BookOpen,
-  MessageSquare,
-  FileText,
-  Calendar,
-  Bell
+  ChevronDown
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -40,6 +31,7 @@ import { useUserPreferences } from "@/contexts/UserPreferencesContext";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "@/hooks/useTranslation";
+import { mainNavigation } from "@/config/navigation";
 
 const ModernHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,19 +52,9 @@ const ModernHeader = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navigation = [
-    { name: t('nav.home'), href: "/", icon: Home },
-    { name: t('nav.dashboard'), href: "/dashboard", icon: BarChart2 },
-    { name: "Analytics", href: "/analytics", icon: BarChart3 },
-    { name: t('nav.projects'), href: "/projects", icon: Rocket },
-    { name: t('nav.resources'), href: "/resources", icon: BookOpen },
-    { name: t('nav.forum'), href: "/forum", icon: MessageSquare },
-    { name: t('nav.submit'), href: "/submit", icon: FileText },
-    { name: "Note conceptuelle", href: "/concept-note", icon: FileText },
-    { name: t('nav.events'), href: "/events", icon: Calendar },
-  ];
-
   const isActive = (path: string) => location.pathname === path;
+  const isInSubmenu = (submenu?: { href: string }[]) => 
+    submenu?.some(item => location.pathname === item.href);
 
   const handleSignOut = async () => {
     await signOut();
@@ -126,21 +108,92 @@ const ModernHeader = () => {
             </Link>
           </div>
 
-          {/* Navigation Desktop avec effets modernes */}
+          {/* Navigation Desktop avec sous-menus - 5 items max */}
           <nav className="hidden lg:flex items-center space-x-1">
-            {navigation.map((item) => {
-              const active = isActive(item.href);
+            {mainNavigation.map((item) => {
               const Icon = item.icon;
+              const hasSubmenu = item.submenu && item.submenu.length > 0;
+              const active = item.href ? isActive(item.href) : isInSubmenu(item.submenu);
               
+              // Item avec sous-menu
+              if (hasSubmenu) {
+                return (
+                  <DropdownMenu key={item.id}>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className={cn(
+                          "flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 relative group overflow-hidden",
+                          active
+                            ? "bg-gradient-to-r from-primary/20 to-primary/10 text-primary shadow-lg shadow-primary/10"
+                            : "text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-muted/50 hover:to-muted/30",
+                          item.highlight && !active && "font-semibold text-foreground"
+                        )}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <Icon className={cn(
+                          "h-4 w-4 mr-2 transition-all duration-300",
+                          active ? "text-primary scale-110" : "group-hover:scale-105"
+                        )} />
+                        <span className="relative z-10">{item.label}</span>
+                        <ChevronDown className="h-3 w-3 ml-1 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                        {active && (
+                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full animate-scale-in" />
+                        )}
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent 
+                      align="start" 
+                      className="w-64 animate-scale-in bg-card/95 backdrop-blur-xl border-border/50 p-2"
+                    >
+                      {item.submenu?.map((subItem) => {
+                        const SubIcon = subItem.icon;
+                        const subActive = isActive(subItem.href);
+                        return (
+                          <DropdownMenuItem key={subItem.href} asChild className="p-0">
+                            <Link 
+                              to={subItem.href}
+                              className={cn(
+                                "flex items-start gap-3 p-3 rounded-lg transition-all duration-200 w-full cursor-pointer",
+                                subActive 
+                                  ? "bg-primary/10 text-primary" 
+                                  : "hover:bg-muted/50"
+                              )}
+                            >
+                              <div className={cn(
+                                "p-2 rounded-lg shrink-0",
+                                subActive ? "bg-primary/20" : "bg-muted/50"
+                              )}>
+                                <SubIcon className="h-4 w-4" />
+                              </div>
+                              <div className="flex flex-col min-w-0">
+                                <span className="font-medium text-sm">
+                                  {subItem.label}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {subItem.description}
+                                </span>
+                              </div>
+                            </Link>
+                          </DropdownMenuItem>
+                        );
+                      })}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                );
+              }
+              
+              // Item simple (lien direct)
               return (
                 <Link
-                  key={item.name}
-                  to={item.href}
+                  key={item.id}
+                  to={item.href || '/'}
                   className={cn(
                     "flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 relative group overflow-hidden",
                     active
                       ? "bg-gradient-to-r from-primary/20 to-primary/10 text-primary shadow-lg shadow-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-muted/50 hover:to-muted/30"
+                      : item.id === 'home' 
+                        ? "text-muted-foreground/80 hover:text-foreground hover:bg-gradient-to-r hover:from-muted/50 hover:to-muted/30"
+                        : "text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-muted/50 hover:to-muted/30"
                   )}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -148,7 +201,7 @@ const ModernHeader = () => {
                     "h-4 w-4 mr-2 transition-all duration-300",
                     active ? "text-primary scale-110" : "group-hover:scale-105"
                   )} />
-                  <span className="relative z-10">{item.name}</span>
+                  <span className="relative z-10">{item.label}</span>
                   {active && (
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full animate-scale-in" />
                   )}
@@ -264,7 +317,7 @@ const ModernHeader = () => {
           </div>
         </div>
 
-        {/* Navigation mobile moderne */}
+        {/* Navigation mobile moderne avec structure groupée */}
         <div 
           className={cn(
             "lg:hidden overflow-hidden transition-all duration-300 ease-in-out",
@@ -273,14 +326,51 @@ const ModernHeader = () => {
         >
           <GlassCard variant="subtle" className="mt-4 p-4">
             <div className="space-y-2">
-              {navigation.map((item) => {
-                const active = isActive(item.href);
+              {mainNavigation.map((item) => {
                 const Icon = item.icon;
+                const hasSubmenu = item.submenu && item.submenu.length > 0;
+                const active = item.href ? isActive(item.href) : isInSubmenu(item.submenu);
+                
+                if (hasSubmenu) {
+                  return (
+                    <div key={item.id} className="space-y-1">
+                      <div className={cn(
+                        "flex items-center px-3 py-2 rounded-xl text-sm font-medium",
+                        active ? "text-primary" : "text-muted-foreground"
+                      )}>
+                        <Icon className="h-4 w-4 mr-2" />
+                        <span className="font-semibold">{item.label}</span>
+                      </div>
+                      <div className="pl-6 space-y-1">
+                        {item.submenu?.map((subItem) => {
+                          const SubIcon = subItem.icon;
+                          const subActive = isActive(subItem.href);
+                          return (
+                            <Link
+                              key={subItem.href}
+                              to={subItem.href}
+                              className={cn(
+                                "flex items-center px-3 py-2 rounded-xl text-sm transition-all group",
+                                subActive
+                                  ? "bg-gradient-to-r from-primary/20 to-primary/10 text-primary"
+                                  : "text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-muted/50 hover:to-muted/30"
+                              )}
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              <SubIcon className="h-4 w-4 mr-2" />
+                              <span>{subItem.label}</span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                }
                 
                 return (
                   <Link
-                    key={item.name}
-                    to={item.href}
+                    key={item.id}
+                    to={item.href || '/'}
                     className={cn(
                       "flex items-center px-3 py-2 rounded-xl text-sm font-medium transition-all group",
                       active
@@ -293,7 +383,7 @@ const ModernHeader = () => {
                       "h-4 w-4 mr-2 transition-all duration-300",
                       active ? "text-primary scale-110" : "group-hover:scale-105"
                     )} />
-                    <span>{item.name}</span>
+                    <span>{item.label}</span>
                     {active && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-primary animate-scale-in" />
                     )}
