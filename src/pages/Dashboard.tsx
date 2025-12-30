@@ -1,7 +1,7 @@
-import { NexusDashboard } from "@/components/dashboard/NexusDashboard";
+import { ImpactDashboard } from "@/components/dashboard/ImpactDashboard";
 
 const Dashboard = () => {
-  return <NexusDashboard />;
+  return <ImpactDashboard />;
 };
 
 export default Dashboard;
