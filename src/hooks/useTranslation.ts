@@ -366,6 +366,21 @@ const translations = {
     'time.days.ago': 'Il y a {{count}} jour',
     'time.yesterday': 'Hier',
     
+    // My Country translations
+    'my.country.title': 'Mon espace pays',
+    'my.country.subtitle': 'Vue privée de mon Fonds du Service Universel',
+    'nav.my.country': 'Mon pays',
+
+    // Welcome message translations (NEXUS network promise)
+    'welcome.title': 'Bienvenue dans NEXUS',
+    'welcome.message': 'Vous faites partie d\'un réseau de pays qui construisent ensemble l\'avenir du Service Universel en Afrique.',
+    'welcome.subtitle': 'Explorez, partagez, collaborez — chaque contribution renforce notre communauté.',
+    'welcome.cta': 'Découvrir le réseau',
+
+    // Compare widget translations
+    'compare.title': 'Me situer dans le réseau',
+    'compare.description': 'Comparez vos indicateurs avec des pays aux profils similaires.',
+    
     // Submit
     'submit.title': 'Formulaires de Soumission',
     'submit.description': 'Soumettez vos projets, positions communes, propositions réglementaires ou demandes de financement à la communauté FSU africaine.',

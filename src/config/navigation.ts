@@ -11,6 +11,7 @@ import {
   Plus,
   Users,
   LayoutDashboard,
+  Flag,
   LucideIcon
 } from "lucide-react";
 
@@ -50,11 +51,18 @@ export const mainNavigation: NavItem[] = [
     highlight: true,
     submenu: [
       { 
-        label: "Vue d'impact", 
+        label: "Vue réseau", 
         labelKey: 'nav.impact.view',
         href: '/dashboard', 
         icon: LayoutDashboard, 
-        description: 'Tableau de pilotage' 
+        description: 'Coordination collective' 
+      },
+      { 
+        label: 'Mon pays', 
+        labelKey: 'nav.my.country',
+        href: '/my-country', 
+        icon: Flag, 
+        description: 'Vue privée de mon FSU' 
       },
       { 
         label: 'Analytics', 
