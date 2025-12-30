@@ -136,10 +136,10 @@ const translations = {
     'resources.upload.success': 'Document téléchargé avec succès',
 
     // Landing page - Hero Section
-    'hero.badge': 'Plateforme Collaborative Africaine',
+    'hero.badge': 'Plateforme panafricaine du Service Universel',
     'hero.title.line1': 'Le NEXUS des Fonds',
     'hero.title.line2': 'du Service Universel en Afrique',
-    'hero.subtitle': 'Connecter les Fonds, coordonner les projets, mesurer l\'impact du Service Universel en Afrique.',
+    'hero.subtitle': 'Connecter les Fonds, coordonner les projets et piloter l\'impact du Service Universel en Afrique.',
     'hero.stats.countries': 'Pays',
     'hero.stats.projects': 'Projets',
     'hero.stats.organizations': 'Organisations',
