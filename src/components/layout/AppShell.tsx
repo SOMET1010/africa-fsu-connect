@@ -3,6 +3,7 @@ import ModernHeader from "./ModernHeader";
 import Footer from "./Footer";
 import { FloatingMapButton } from "@/components/shared/FloatingMapButton";
 import ImprovedMobileBottomNav from "@/components/navigation/ImprovedMobileBottomNav";
+import { SutaChatbot } from "@/components/assistant/SutaChatbot";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "react-router-dom";
 import { PageTransition } from "@/components/ui/page-transition";
@@ -68,6 +69,9 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
             <FloatingMapButton />
           </>
         )}
+        
+        {/* Chatbot SUTA - Global */}
+        <SutaChatbot />
       </div>
     </>
   );

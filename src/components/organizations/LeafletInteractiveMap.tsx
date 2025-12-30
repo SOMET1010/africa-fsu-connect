@@ -6,7 +6,8 @@ import 'leaflet/dist/leaflet.css';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { MapPin, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MapPin, Search, Layers, Filter, Radio, Satellite, Wifi, Building2 } from "lucide-react";
 import { CountriesService } from '@/services/countriesService';
 
 interface Agency {
@@ -24,6 +25,33 @@ interface LeafletInteractiveMapProps {
   agencies: Agency[];
 }
 
+// Technology filters from PDF specifications
+const TECHNOLOGY_FILTERS = [
+  { id: "4g", label: "4G LTE", icon: Radio, color: "#3b82f6" },
+  { id: "5g", label: "5G", icon: Wifi, color: "#8b5cf6" },
+  { id: "satellite", label: "Satellite", icon: Satellite, color: "#f59e0b" },
+  { id: "fiber", label: "Fibre", icon: Building2, color: "#10b981" }
+];
+
+// Zone filters from PDF
+const ZONE_FILTERS = [
+  { id: "rural", label: "Rural" },
+  { id: "urban", label: "Urbain" }
+];
+
+// Funding filters from PDF
+const FUNDING_FILTERS = [
+  { id: "usf", label: "USF/FSU" },
+  { id: "ppp", label: "PPP" },
+  { id: "government", label: "Gouvernement" }
+];
+
+// Status filters from PDF
+const STATUS_FILTERS = [
+  { id: "active", label: "Actif", color: "#10b981" },
+  { id: "planned", label: "Planifié", color: "#f59e0b" },
+  { id: "completed", label: "Terminé", color: "#3b82f6" }
+];
 
 const SYNC_STATUS_COLORS = {
   'synced': '#10b981', // green
@@ -31,6 +59,14 @@ const SYNC_STATUS_COLORS = {
   'failed': '#ef4444', // red
   'inactive': '#6b7280' // gray
 };
+
+// Layer types from PDF
+const MAP_LAYERS = [
+  { id: "schools", label: "Écoles", icon: "🏫" },
+  { id: "health", label: "Centres Santé", icon: "🏥" },
+  { id: "backbone", label: "Backbone", icon: "🔗" },
+  { id: "infrastructure", label: "Infrastructure", icon: "📡" }
+];
 
 export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -241,16 +277,35 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
     addMarkersToMap(filteredAgencies);
   }, [filteredAgencies, countryCoordinates]);
 
+  // Active filters state
+  const [activeTech, setActiveTech] = useState<string[]>([]);
+  const [activeZone, setActiveZone] = useState<string | null>(null);
+  const [activeStatus, setActiveStatus] = useState<string | null>(null);
+  const [activeLayers, setActiveLayers] = useState<string[]>(["infrastructure"]);
+
+  const toggleTech = (id: string) => {
+    setActiveTech(prev => 
+      prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
+    );
+  };
+
+  const toggleLayer = (id: string) => {
+    setActiveLayers(prev => 
+      prev.includes(id) ? prev.filter(l => l !== id) : [...prev, id]
+    );
+  };
+
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <MapPin className="h-5 w-5" />
-          <h3 className="text-lg font-semibold">Carte interactive des agences SUTEL</h3>
+          <MapPin className="h-5 w-5 text-primary" />
+          <h3 className="text-lg font-semibold">Carte Interactive SUTEL</h3>
         </div>
-        <Badge variant="outline">{filteredAgencies.length} agences</Badge>
+        <Badge variant="outline">{filteredAgencies.length} agences • 54 pays</Badge>
       </div>
 
+      {/* Search */}
       <div className="mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -260,6 +315,77 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
           />
+        </div>
+      </div>
+
+      {/* Filters Row - From PDF specifications */}
+      <div className="mb-4 space-y-3">
+        {/* Technology Filters */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground">Technologie:</span>
+          {TECHNOLOGY_FILTERS.map((tech) => (
+            <Button
+              key={tech.id}
+              variant={activeTech.includes(tech.id) ? "default" : "outline"}
+              size="sm"
+              onClick={() => toggleTech(tech.id)}
+              className="gap-1 text-xs"
+            >
+              <tech.icon className="h-3 w-3" />
+              {tech.label}
+            </Button>
+          ))}
+        </div>
+
+        {/* Zone & Status Filters */}
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-muted-foreground">Zone:</span>
+            {ZONE_FILTERS.map((zone) => (
+              <Button
+                key={zone.id}
+                variant={activeZone === zone.id ? "default" : "outline"}
+                size="sm"
+                onClick={() => setActiveZone(activeZone === zone.id ? null : zone.id)}
+                className="text-xs"
+              >
+                {zone.label}
+              </Button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-muted-foreground">Statut:</span>
+            {STATUS_FILTERS.map((status) => (
+              <Button
+                key={status.id}
+                variant={activeStatus === status.id ? "default" : "outline"}
+                size="sm"
+                onClick={() => setActiveStatus(activeStatus === status.id ? null : status.id)}
+                className="text-xs"
+                style={activeStatus === status.id ? { backgroundColor: status.color } : {}}
+              >
+                {status.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Layer Toggles */}
+        <div className="flex flex-wrap items-center gap-2">
+          <Layers className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs font-medium text-muted-foreground">Couches:</span>
+          {MAP_LAYERS.map((layer) => (
+            <Button
+              key={layer.id}
+              variant={activeLayers.includes(layer.id) ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => toggleLayer(layer.id)}
+              className="text-xs gap-1"
+            >
+              <span>{layer.icon}</span>
+              {layer.label}
+            </Button>
+          ))}
         </div>
       </div>
 
@@ -283,6 +409,24 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
                 <span className="text-xs text-muted-foreground capitalize">{status}</span>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Stats Overlay */}
+        <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 border border-border shadow-lg">
+          <div className="text-xs space-y-1">
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">Sites BTS:</span>
+              <span className="font-medium">2,450</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">Couverture:</span>
+              <span className="font-medium text-green-600">73%</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">Population:</span>
+              <span className="font-medium">850M</span>
+            </div>
           </div>
         </div>
       </div>

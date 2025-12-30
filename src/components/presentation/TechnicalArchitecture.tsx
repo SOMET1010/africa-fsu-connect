@@ -15,34 +15,42 @@ import {
 } from "lucide-react";
 
 export function TechnicalArchitecture() {
+  // Updated according to PDF specifications
   const architectureComponents = [
     {
-      layer: "Frontend",
+      layer: "Front Office",
       icon: Globe,
-      technologies: ["React 18", "TypeScript", "Tailwind CSS", "Vite"],
-      description: "Interface moderne et responsive",
+      technologies: ["React.js", "TypeScript", "Tailwind CSS", "i18n Ready"],
+      description: "Interface responsive multilingue",
       color: "bg-blue-500"
     },
     {
-      layer: "Backend",
+      layer: "Backend / API",
       icon: Server,
-      technologies: ["Supabase", "PostgreSQL", "Edge Functions", "Real-time"],
-      description: "Infrastructure scalable et sécurisée",
+      technologies: ["API Gateway", "Auth Service (SSO, JWT, 2FA)", "PostgreSQL", "Edge Functions"],
+      description: "Infrastructure API sécurisée",
       color: "bg-green-500"
     },
     {
-      layer: "Sécurité", 
+      layer: "IA & NLP", 
+      icon: Zap,
+      technologies: ["SUTA AI Engine", "NLP Multilingue", "Traduction Auto", "Assistant Virtuel"],
+      description: "Intelligence artificielle intégrée",
+      color: "bg-purple-500"
+    },
+    {
+      layer: "Sécurité",
       icon: Shield,
-      technologies: ["RLS", "JWT", "2FA", "Encryption"],
+      technologies: ["HTTPS/TLS 1.3", "RLS", "Conformité RGPD", "Chiffrement E2E"],
       description: "Sécurité de niveau enterprise",
       color: "bg-red-500"
     },
     {
-      layer: "DevOps",
-      icon: Cloud,
-      technologies: ["CI/CD", "Docker", "Monitoring", "Auto-scaling"],
-      description: "Déploiement et monitoring automatisés",
-      color: "bg-purple-500"
+      layer: "Intégrations",
+      icon: Network,
+      technologies: ["ETL Hub", "APIs UIT", "GSMA Intelligence", "World Bank Data"],
+      description: "Connecteurs données externes",
+      color: "bg-orange-500"
     }
   ];
 
