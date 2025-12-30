@@ -52,10 +52,10 @@ export default function PremiumHeroSection() {
           {/* Premium stats with advanced animations - Updated per PDF specs */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto py-8">
             {[
-              { icon: Globe, value: "54", label: "Pays Africains", color: "primary" },
-              { icon: Target, value: "127", label: "Projets Actifs", color: "accent" },
-              { icon: Users, value: "89", label: "Nouveaux Documents", color: "warning" },
-              { icon: Sparkles, value: "12", label: "Événements à Venir", color: "primary" }
+              { icon: Globe, value: "54", label: "Pays Africains", color: "primary", trend: "+3 cette année", trendUp: true },
+              { icon: Target, value: "127", label: "Projets Actifs", color: "accent", trend: "+12 en cours", trendUp: true },
+              { icon: Users, value: "89", label: "Nouveaux Documents", color: "warning", trend: "+8 ce mois", trendUp: true },
+              { icon: Sparkles, value: "12", label: "Événements à Venir", color: "primary", trend: "Mise à jour trimestrielle", trendUp: null }
             ].map((stat, index) => {
               const Icon = stat.icon;
               return (
@@ -82,9 +82,16 @@ export default function PremiumHeroSection() {
                     <div className="text-xs text-muted-foreground font-medium">
                       {stat.label}
                     </div>
-                    {/* Légende KPI */}
-                    <div className="text-[10px] text-muted-foreground/60 mt-2">
-                      Données consolidées
+                    {/* Micro-indicateur d'évolution */}
+                    <div className={`text-[10px] mt-2 flex items-center justify-center gap-1 ${
+                      stat.trendUp === true ? 'text-green-600' : 
+                      stat.trendUp === false ? 'text-red-500' : 
+                      'text-muted-foreground/60'
+                    }`}>
+                      {stat.trendUp === true && <span>▲</span>}
+                      {stat.trendUp === false && <span>▼</span>}
+                      {stat.trendUp === null && <span>●</span>}
+                      {stat.trend}
                     </div>
                   </div>
                 </div>
