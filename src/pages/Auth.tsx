@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
+import { NexusLogo } from '@/components/shared/NexusLogo';
 
 const Auth = () => {
   const { signIn, signUp, user, loading, requestPasswordReset, updatePassword } = useAuth();
@@ -174,21 +175,19 @@ const Auth = () => {
           </Link>
           
           <div className="flex items-center justify-center mb-6">
-            <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl flex items-center justify-center border border-white/50">
-              <span className="text-xl font-extrabold tracking-widest bg-gradient-to-r from-[#0B3C5D] to-[#1F7A63] bg-clip-text text-transparent">
-                NEXUS
-              </span>
+            <div className="w-24 h-24 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl flex items-center justify-center border border-white/50">
+              <NexusLogo size="lg" variant="icon" animated={false} />
             </div>
           </div>
           
-          <h1 className="text-3xl font-black text-white mb-2 font-poppins tracking-tight">
-            Plateforme NEXUS
+          <h1 className="text-4xl font-black text-white mb-2 font-poppins tracking-tight">
+            NEXUS
           </h1>
           <p className="text-white/90 font-medium text-lg font-inter">
             Plateforme panafricaine du Service Universel
           </p>
-          <p className="text-white/70 text-sm mt-1 font-inter">
-            UAT • ANSUT • Fonds du Service Universel
+          <p className="text-white/70 text-sm mt-2 font-inter tracking-wide">
+            UAT • ANSUT • Réseau SUTEL
           </p>
         </div>
 

@@ -6,6 +6,7 @@ import { ModernButton } from "@/components/ui/modern-button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { GlassCard } from "@/components/ui/glass-card";
+import { NexusLogo } from "@/components/shared/NexusLogo";
 import { 
   Menu, 
   X, 
@@ -121,20 +122,7 @@ const ModernHeader = () => {
           {/* Premium Logo with sophisticated design - NEXUS branding */}
           <div className="flex items-center space-x-4">
             <Link to="/" className="flex items-center space-x-3 group transition-all duration-500">
-              <div className="relative">
-                <div className="premium-card p-2 group-hover:scale-110 transition-all duration-500 shadow-glow">
-                  <div className="w-11 h-11 bg-gradient-to-br from-primary via-primary-light to-accent rounded-xl flex items-center justify-center shadow-elegant">
-                    <span className="text-white font-bold text-xs">NEXUS</span>
-                  </div>
-                </div>
-                <div className="absolute -inset-1 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-              <div className="hidden md:block">
-                <h1 className="font-bold text-lg bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto] group-hover:from-accent group-hover:to-primary transition-all duration-500">
-                  Plateforme NEXUS
-                </h1>
-                <p className="text-xs text-muted-foreground font-medium tracking-wide">UAT • ANSUT</p>
-              </div>
+              <NexusLogo size="md" variant="full" showSubtext={false} />
             </Link>
           </div>
 
