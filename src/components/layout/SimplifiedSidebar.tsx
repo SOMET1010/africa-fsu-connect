@@ -30,6 +30,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { NexusLogo } from "@/components/shared/NexusLogo";
 
 const essentialItems = [
   { 
@@ -178,16 +179,10 @@ export function SimplifiedSidebar() {
     >
       <SidebarHeader className="border-b border-border p-4">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center shrink-0 shadow-md">
-            <span className="text-white font-bold text-xs">NEXUS</span>
-          </div>
-          {!isCollapsed && (
-            <div className="min-w-0">
-              <h2 className="font-bold text-foreground text-base leading-tight">
-                Plateforme NEXUS
-              </h2>
-              <p className="text-xs text-muted-foreground">UAT • ANSUT</p>
-            </div>
+          {isCollapsed ? (
+            <NexusLogo size="sm" variant="icon" animated={false} />
+          ) : (
+            <NexusLogo size="sm" variant="full" />
           )}
         </div>
       </SidebarHeader>

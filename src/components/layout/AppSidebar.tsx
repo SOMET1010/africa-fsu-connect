@@ -37,6 +37,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslation } from "@/hooks/useTranslation";
+import { NexusLogo } from "@/components/shared/NexusLogo";
 
 // Wrapper component to handle forwardRef for NavLink
 const ForwardedNavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
@@ -122,16 +123,10 @@ export function AppSidebar() {
     >
       <SidebarHeader className="border-b border-sidebar-border p-4">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-[hsl(var(--fsu-blue))] rounded-lg flex items-center justify-center shrink-0">
-            <span className="text-primary-foreground font-bold text-xs">NEXUS</span>
-          </div>
-          {!isCollapsed && (
-            <div className="min-w-0">
-              <h2 className="font-bold text-sidebar-foreground text-sm leading-tight">
-                {t('landing.title')}
-              </h2>
-              <p className="text-xs text-sidebar-foreground/70">Afrique</p>
-            </div>
+          {isCollapsed ? (
+            <NexusLogo size="sm" variant="icon" animated={false} />
+          ) : (
+            <NexusLogo size="sm" variant="full" />
           )}
         </div>
       </SidebarHeader>
