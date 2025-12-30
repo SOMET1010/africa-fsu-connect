@@ -13,7 +13,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import { Link } from "react-router-dom";
 /* ========================================
    BASE NEXUS CARD
    ======================================== */
@@ -220,7 +220,7 @@ const NexusActionCard = React.forwardRef<HTMLDivElement, NexusActionCardProps>(
                 asChild={!!primaryAction.href}
               >
                 {primaryAction.href ? (
-                  <a href={primaryAction.href}>{primaryAction.label}</a>
+                  <Link to={primaryAction.href}>{primaryAction.label}</Link>
                 ) : (
                   primaryAction.label
                 )}
@@ -235,7 +235,7 @@ const NexusActionCard = React.forwardRef<HTMLDivElement, NexusActionCardProps>(
                 asChild={!!secondaryAction.href}
               >
                 {secondaryAction.href ? (
-                  <a href={secondaryAction.href}>{secondaryAction.label}</a>
+                  <Link to={secondaryAction.href}>{secondaryAction.label}</Link>
                 ) : (
                   secondaryAction.label
                 )}
@@ -301,9 +301,9 @@ const NexusListCard = React.forwardRef<HTMLDivElement, NexusListCardProps>(
             return (
               <li key={index}>
                 {item.href ? (
-                  <a href={item.href} className="block">
+                  <Link to={item.href} className="block">
                     {content}
-                  </a>
+                  </Link>
                 ) : (
                   content
                 )}
