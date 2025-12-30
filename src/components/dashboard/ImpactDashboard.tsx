@@ -4,16 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
-  BarChart3, 
   Users, 
   FolderKanban, 
   Globe2,
   Download,
   RefreshCw,
   Calendar,
-  Bell,
-  Wallet,
-  Activity
+  Handshake,
+  Activity,
+  Lightbulb
 } from "lucide-react";
 import { 
   Select, 
@@ -30,79 +29,78 @@ import { ImpactKPICard } from "./components/ImpactKPICard";
 import { TrendSparklines } from "./components/TrendSparklines";
 import { DashboardMapWidget } from "./widgets/DashboardMapWidget";
 import { RecentActivityWidget } from "./widgets/RecentActivityWidget";
+import { LearningWidget } from "./widgets/LearningWidget";
 
-// Generate mock alerts based on stats
+// Generate collaborative alerts (network-oriented)
 const generateAlerts = (stats: any): Alert[] => {
   const alerts: Alert[] = [];
   
-  // Critical: Low coverage
+  // Collaboration opportunity (not punitive)
   if (stats.coveragePercentage < 50) {
     alerts.push({
-      id: "coverage-low",
+      id: "collaboration-opportunity",
       level: "critical",
-      title: "Couverture insuffisante",
-      description: `Le taux de couverture actuel (${stats.coveragePercentage}%) est en dessous de l'objectif minimum de 50%.`,
-      action: { label: "Voir les projets", href: "/projects" },
+      title: "Opportunité de collaboration",
+      description: `${Math.round(50 - stats.coveragePercentage)}% de progression possible avec l'appui du réseau. Des pays membres peuvent partager leur expérience.`,
+      action: { label: "Explorer les bonnes pratiques", href: "/projects?filter=inspiring" },
       timestamp: "Maintenant"
     });
   }
 
-  // Warning: Projects needing attention
+  // Coordination point (not warning)
   if (stats.projectsThisPeriod < 5 && stats.totalProjects > 0) {
     alerts.push({
-      id: "projects-slow",
+      id: "coordination-point",
       level: "warning",
-      title: "Ralentissement des nouveaux projets",
-      description: `Seulement ${stats.projectsThisPeriod} nouveaux projets ce mois. Objectif: 10 projets/mois.`,
-      project: "Tous projets",
-      action: { label: "Soumettre un projet", href: "/submit" },
+      title: "Point de coordination réseau",
+      description: `${stats.projectsThisPeriod} nouveau(x) projet(s) partagé(s) ce mois. Le réseau peut aider à identifier de nouvelles initiatives.`,
+      action: { label: "Partager un projet", href: "/submit" },
       timestamp: "Cette semaine"
     });
   }
 
-  // Info: New documents
+  // Good news from the network
   if (stats.documentsThisPeriod > 0) {
     alerts.push({
-      id: "new-docs",
+      id: "new-resources",
       level: "info",
-      title: "Nouvelles ressources disponibles",
-      description: `${stats.documentsThisPeriod} nouveau(x) document(s) ajouté(s) à la bibliothèque.`,
+      title: "Nouvelles ressources partagées",
+      description: `${stats.documentsThisPeriod} ressource(s) partagée(s) par des pays membres du réseau.`,
       action: { label: "Consulter", href: "/resources" },
       timestamp: "Récemment"
     });
   }
 
-  // Warning: Events coming soon
+  // Network events
   if (stats.eventsThisPeriod > 0) {
     alerts.push({
-      id: "events-soon",
+      id: "network-events",
       level: "info",
-      title: "Événements à venir",
-      description: `${stats.eventsThisPeriod} événement(s) prévu(s) prochainement.`,
+      title: "Rencontres du réseau",
+      description: `${stats.eventsThisPeriod} événement(s) de partage d'expériences prévu(s).`,
       action: { label: "Voir le calendrier", href: "/events" },
-      timestamp: "Cette semaine"
+      timestamp: "À venir"
     });
   }
 
   return alerts;
 };
 
-// Generate trend data for sparklines
+// Generate trend data for sparklines (network-focused labels)
 const generateTrendData = (stats: any) => {
-  // Simulate historical data based on current values
   const generateSeries = (current: number, variance: number = 0.2) => {
     const data: number[] = [];
     for (let i = 0; i < 12; i++) {
       const factor = 0.7 + (i / 12) * 0.3 + (Math.random() - 0.5) * variance;
       data.push(Math.round(current * factor));
     }
-    data[11] = current; // Last value is current
+    data[11] = current;
     return data;
   };
 
   return [
     {
-      label: "Couverture",
+      label: "Progression collective",
       data: generateSeries(stats.coveragePercentage, 0.1),
       currentValue: stats.coveragePercentage,
       previousValue: Math.round(stats.coveragePercentage * 0.92),
@@ -110,14 +108,14 @@ const generateTrendData = (stats: any) => {
       color: "hsl(var(--primary))"
     },
     {
-      label: "Projets actifs",
+      label: "Projets partagés",
       data: generateSeries(stats.totalProjects, 0.15),
       currentValue: stats.totalProjects,
       previousValue: Math.round(stats.totalProjects * 0.88),
       color: "hsl(var(--success))"
     },
     {
-      label: "Population couverte",
+      label: "Population bénéficiaire",
       data: generateSeries(stats.populationCovered / 1e6, 0.1),
       currentValue: Math.round(stats.populationCovered / 1e6),
       previousValue: Math.round(stats.populationCovered / 1e6 * 0.95),
@@ -143,12 +141,12 @@ export const ImpactDashboard = () => {
   const alerts = generateAlerts(stats);
   const trends = generateTrendData(stats);
 
-  // Calculate targets
+  // Network-oriented targets
   const targets = {
-    coverage: 95,
+    members: 54, // All African countries
     projects: 150,
     population: 1.2e9,
-    agencies: 60
+    bestPractices: 50
   };
 
   if (loading) {
@@ -186,9 +184,11 @@ export const ImpactDashboard = () => {
     );
   }
 
+  const collaborationCount = alerts.filter(a => a.level === 'critical').length;
+
   return (
     <div className="space-y-6 p-4 md:p-6">
-      {/* Header */}
+      {/* Header - Network-oriented */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -196,10 +196,10 @@ export const ImpactDashboard = () => {
       >
         <div>
           <h1 className="text-2xl md:text-3xl font-bold gradient-text">
-            Vue d'impact
+            Vue Réseau SUTEL
           </h1>
           <p className="text-muted-foreground mt-1">
-            Pilotage du réseau FSU africain
+            Coordination collective des Fonds du Service Universel
           </p>
         </div>
 
@@ -228,16 +228,16 @@ export const ImpactDashboard = () => {
             Exporter
           </Button>
 
-          {alerts.filter(a => a.level === 'critical').length > 0 && (
-            <Badge variant="destructive" className="gap-1 animate-pulse">
-              <Bell className="h-3 w-3" />
-              {alerts.filter(a => a.level === 'critical').length} alerte(s)
+          {collaborationCount > 0 && (
+            <Badge className="bg-primary text-primary-foreground gap-1">
+              <Handshake className="h-3 w-3" />
+              {collaborationCount} opportunité(s)
             </Badge>
           )}
         </div>
       </motion.div>
 
-      {/* Executive Summary */}
+      {/* Executive Summary - Peer-to-peer narrative */}
       <ExecutiveSummary 
         stats={{
           totalProjects: stats.totalProjects,
@@ -250,61 +250,71 @@ export const ImpactDashboard = () => {
         periodLabel={periodLabels[timeRange]}
       />
 
-      {/* Main Grid: Alerts + KPIs */}
+      {/* Main Grid: Coordination + KPIs */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {/* Alerts Panel */}
+        {/* Coordination Panel (was Alerts) */}
         <div className="lg:col-span-1">
           <AlertsPanel alerts={alerts} />
         </div>
 
-        {/* KPI Cards */}
+        {/* Network KPI Cards */}
         <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <ImpactKPICard
-            title="Couverture"
-            value={stats.coveragePercentage}
-            target={targets.coverage}
-            trend={stats.profilesGrowth}
+            title="Pays membres actifs"
+            value={stats.totalAgencies}
+            target={targets.members}
+            trend={8}
             icon={Globe2}
             color="primary"
-            format="percentage"
+            targetLabel="Objectif continental"
+            trendLabel="de participation"
             delay={0}
           />
           <ImpactKPICard
-            title="Projets actifs"
+            title="Projets partagés"
             value={stats.totalProjects}
             target={targets.projects}
             trend={stats.submissionsGrowth || 12}
             icon={FolderKanban}
             color="success"
+            targetLabel="Objectif réseau"
             delay={1}
           />
           <ImpactKPICard
-            title="Population couverte"
+            title="Population bénéficiaire"
             value={stats.populationCovered}
             target={targets.population}
             trend={5}
             icon={Users}
             color="accent"
             format="population"
+            targetLabel="Objectif 2030"
             delay={2}
           />
           <ImpactKPICard
-            title="Agences FSU"
-            value={stats.totalAgencies}
-            target={targets.agencies}
-            trend={8}
-            icon={BarChart3}
-            color="info"
+            title="Bonnes pratiques"
+            value={24}
+            target={targets.bestPractices}
+            trend={15}
+            icon={Lightbulb}
+            color="warning"
+            targetLabel="Objectif partage"
+            trendLabel="ce trimestre"
             delay={3}
           />
         </div>
       </div>
 
-      {/* Map + Trends */}
+      {/* Map + Learning Widget */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <DashboardMapWidget compact />
-        <TrendSparklines trends={trends} />
+        <div className="lg:col-span-2">
+          <DashboardMapWidget compact />
+        </div>
+        <LearningWidget maxItems={4} />
       </div>
+
+      {/* Trends */}
+      <TrendSparklines trends={trends} />
 
       {/* Recent Activity */}
       <RecentActivityWidget 

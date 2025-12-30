@@ -3,12 +3,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
-  AlertTriangle, 
-  AlertCircle, 
-  Info, 
+  Handshake, 
+  MessageCircle, 
+  Sparkles, 
   ChevronRight,
   Clock,
-  MapPin
+  MapPin,
+  Users
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -30,38 +31,40 @@ interface AlertsPanelProps {
   maxHeight?: string;
 }
 
+// Collaborative tone configuration
 const alertConfig = {
   critical: {
-    icon: AlertTriangle,
-    bgClass: "bg-destructive/10 border-destructive/30",
-    iconClass: "text-destructive",
-    badgeClass: "bg-destructive text-destructive-foreground",
-    label: "Critique",
-    pulseClass: "animate-pulse",
-  },
-  warning: {
-    icon: AlertCircle,
-    bgClass: "bg-warning/10 border-warning/30",
-    iconClass: "text-warning",
-    badgeClass: "bg-warning text-warning-foreground",
-    label: "Attention",
+    icon: Handshake,
+    bgClass: "bg-primary/10 border-primary/30",
+    iconClass: "text-primary",
+    badgeClass: "bg-primary text-primary-foreground",
+    label: "Collaboration",
     pulseClass: "",
   },
-  info: {
-    icon: Info,
+  warning: {
+    icon: MessageCircle,
     bgClass: "bg-info/10 border-info/30",
     iconClass: "text-info",
     badgeClass: "bg-info text-info-foreground",
-    label: "Info",
+    label: "Coordination",
+    pulseClass: "",
+  },
+  info: {
+    icon: Sparkles,
+    bgClass: "bg-success/10 border-success/30",
+    iconClass: "text-success",
+    badgeClass: "bg-success text-success-foreground",
+    label: "Bonne nouvelle",
     pulseClass: "",
   },
 };
 
 export const AlertsPanel = ({ alerts, maxHeight = "320px" }: AlertsPanelProps) => {
-  const criticalCount = alerts.filter(a => a.level === 'critical').length;
-  const warningCount = alerts.filter(a => a.level === 'warning').length;
+  const collaborationCount = alerts.filter(a => a.level === 'critical').length;
+  const coordinationCount = alerts.filter(a => a.level === 'warning').length;
+  const goodNewsCount = alerts.filter(a => a.level === 'info').length;
 
-  // Sort alerts by severity
+  // Sort alerts by type
   const sortedAlerts = [...alerts].sort((a, b) => {
     const order = { critical: 0, warning: 1, info: 2 };
     return order[a.level] - order[b.level];
@@ -72,18 +75,18 @@ export const AlertsPanel = ({ alerts, maxHeight = "320px" }: AlertsPanelProps) =
       <Card className="premium-card">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-success" />
-            Alertes
+            <Users className="h-5 w-5 text-success" />
+            Coordination
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <div className="p-3 rounded-full bg-success/10 mb-3">
-              <AlertCircle className="h-6 w-6 text-success" />
+              <Sparkles className="h-6 w-6 text-success" />
             </div>
-            <p className="text-sm font-medium text-success">Aucune alerte</p>
+            <p className="text-sm font-medium text-success">Réseau en harmonie</p>
             <p className="text-xs text-muted-foreground mt-1">
-              Tous les projets sont dans les délais
+              Tous les pays membres avancent au rythme prévu
             </p>
           </div>
         </CardContent>
@@ -96,21 +99,23 @@ export const AlertsPanel = ({ alerts, maxHeight = "320px" }: AlertsPanelProps) =
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
-            <AlertTriangle className={cn(
-              "h-5 w-5",
-              criticalCount > 0 ? "text-destructive animate-pulse" : "text-warning"
-            )} />
-            Alertes prioritaires
+            <Users className="h-5 w-5 text-primary" />
+            Coordination
           </CardTitle>
-          <div className="flex gap-2">
-            {criticalCount > 0 && (
-              <Badge variant="destructive" className="text-xs">
-                {criticalCount} critique{criticalCount > 1 ? 's' : ''}
+          <div className="flex gap-1.5 flex-wrap">
+            {collaborationCount > 0 && (
+              <Badge className="bg-primary text-primary-foreground text-[10px] px-1.5">
+                {collaborationCount} collab.
               </Badge>
             )}
-            {warningCount > 0 && (
-              <Badge className="bg-warning text-warning-foreground text-xs">
-                {warningCount} attention
+            {coordinationCount > 0 && (
+              <Badge className="bg-info text-info-foreground text-[10px] px-1.5">
+                {coordinationCount} coord.
+              </Badge>
+            )}
+            {goodNewsCount > 0 && (
+              <Badge className="bg-success text-success-foreground text-[10px] px-1.5">
+                {goodNewsCount} ✨
               </Badge>
             )}
           </div>
@@ -130,7 +135,7 @@ export const AlertsPanel = ({ alerts, maxHeight = "320px" }: AlertsPanelProps) =
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
                   className={cn(
-                    "p-3 rounded-xl border transition-all",
+                    "p-3 rounded-xl border transition-all hover:shadow-sm",
                     config.bgClass,
                     config.pulseClass
                   )}
