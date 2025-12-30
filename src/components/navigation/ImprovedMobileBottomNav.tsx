@@ -30,31 +30,25 @@ export function ImprovedMobileBottomNav() {
     {
       to: "/dashboard",
       icon: Home,
-      label: "Accueil",
+      label: "Pilotage",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
-      to: "/analytics",
-      icon: BarChart3,
-      label: "Analytics",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
-    },
-    {
-      to: "/organizations",
-      icon: Building2,
-      label: "Orgs",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
-    },
-    {
-      to: "/indicators",
-      icon: TrendingUp,
-      label: "Données",
+      to: "/projects",
+      icon: FolderOpen,
+      label: "Projets",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
       to: "/resources",
       icon: BookOpen,
-      label: "Ressources",
+      label: "Biblio",
+      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+    },
+    {
+      to: "/forum",
+      icon: Building2,
+      label: "Communauté",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {

@@ -21,25 +21,25 @@ const MobileBottomNav = () => {
     {
       to: "/dashboard",
       icon: Home,
-      label: "Accueil",
+      label: "Pilotage",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
-      to: "/indicators",
-      icon: TrendingUp,
-      label: "Indicateurs",
+      to: "/projects",
+      icon: FolderOpen,
+      label: "Projets",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
       to: "/resources",
-      icon: FolderOpen,
-      label: "Ressources",
+      icon: TrendingUp,
+      label: "Biblio",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
       to: "/forum",
       icon: MessageSquare,
-      label: "Forum",
+      label: "Communauté",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {

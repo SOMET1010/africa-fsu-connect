@@ -82,13 +82,17 @@ export default function PremiumHeroSection() {
                     <div className="text-xs text-muted-foreground font-medium">
                       {stat.label}
                     </div>
+                    {/* Légende KPI */}
+                    <div className="text-[10px] text-muted-foreground/60 mt-2">
+                      Données consolidées
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
 
-          {/* Premium CTA buttons */}
+          {/* Premium CTA buttons - Orientés usage réel */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
               asChild 
@@ -107,7 +111,7 @@ export default function PremiumHeroSection() {
               size="lg"
               className="px-10 py-6 text-lg font-medium rounded-2xl bg-card/60 backdrop-blur-md border-border/50 hover:bg-card/80 hover:shadow-md transition-all duration-300 hover:scale-105"
             >
-              <Link to="/organizations">
+              <Link to="/projects">
                 {t('common.discover')}
               </Link>
             </Button>

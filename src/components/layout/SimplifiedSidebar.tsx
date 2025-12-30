@@ -34,10 +34,10 @@ import { NexusLogo } from "@/components/shared/NexusLogo";
 
 const essentialItems = [
   { 
-    title: "Tableau de Bord", 
+    title: "Vue d'impact", 
     url: "/dashboard", 
     icon: Home,
-    description: "Vue d'ensemble"
+    description: "Tableau de pilotage"
   },
   { 
     title: "Mon Profil", 
@@ -61,28 +61,28 @@ const collaborationItems = [
     description: "Répertoire FSU"
   },
   { 
-    title: "Projets", 
+    title: "Projets FSU", 
     url: "/projects", 
     icon: FileText,
     description: "Initiatives FSU"
   },
   { 
-    title: "Ressources", 
+    title: "Bibliothèque", 
     url: "/resources",
     icon: BookOpen,
     description: "Guides & documents"
   },
   { 
-    title: "Forum", 
+    title: "Communauté", 
     url: "/forum", 
     icon: MessageSquare,
     description: "Discussions"
   },
   { 
-    title: "Soumettre", 
+    title: "Soumettre un projet", 
     url: "/submit", 
     icon: FileText,
-    description: "Envoi de données"
+    description: "Nouvelle initiative"
   },
   { 
     title: "Événements", 
