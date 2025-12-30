@@ -136,11 +136,35 @@ const translations = {
     'auth.logout.goodbye': 'À bientôt !',
     'auth.logout.error': 'Impossible de se déconnecter',
 
-    // NEXUS
-    'nexus.title': 'Réseau NEXUS Africain',
-    'nexus.subtitle': 'Agences spécialisées dans le Service Universel des Télécommunications en Afrique',
-    'nexus.interactive.map': 'Carte Interactive NEXUS - Aperçu rapide',
+    // NEXUS - Network-centric
+    'nexus.title': 'Réseau NEXUS',
+    'nexus.subtitle': 'Une communauté de pays qui partagent projets, expériences et infrastructures.',
+    'nexus.interactive.map': 'Carte du Réseau SUTEL',
     'nexus.fullscreen': 'Voir en plein écran',
+    
+    // Map - Network-centric translations
+    'map.title': 'Carte du Réseau SUTEL',
+    'map.subtitle': '54 pays membres - 127 projets partagés',
+    'map.search.placeholder': 'Rechercher un pays ou un projet...',
+    'map.kpi.members': 'Pays membres',
+    'map.kpi.active': 'Actifs ce trimestre',
+    'map.kpi.projects': 'Projets partagés',
+    'map.kpi.practices': 'Bonnes pratiques',
+    'map.filter.participation': 'Participation réseau',
+    'map.filter.active': 'Pays actif',
+    'map.filter.member': 'Pays membre',
+    'map.filter.joining': 'En adhésion',
+    'map.filter.project.type': 'Type de projets',
+    'map.tooltip.member': 'Pays membre du réseau SUTEL',
+    'map.tooltip.projects': 'projets partagés',
+    'map.tooltip.contact': 'Contacter le point focal',
+    'map.tooltip.view': 'Voir la fiche pays',
+    'map.activity.title': 'Activité récente du réseau',
+    'map.legend.active': 'Pays actifs dans le réseau',
+    'map.dynamics.title': 'Dynamiques régionales',
+    'map.actions.members': 'Voir les pays membres',
+    'map.actions.projects': 'Explorer les projets partagés',
+    'map.actions.network': 'Accéder à la Vue Réseau',
 
     // Resources/Docs
     'resources.title': 'Bibliothèque de Ressources',
