@@ -52,9 +52,9 @@ export function ImprovedMobileBottomNav() {
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {
-      to: "/docs",
+      to: "/resources",
       icon: BookOpen,
-      label: "Docs",
+      label: "Ressources",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     },
     {

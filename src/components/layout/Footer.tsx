@@ -41,7 +41,7 @@ const Footer = () => {
             <h4 className="font-semibold text-foreground text-lg">Modules Principaux</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/database" className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300">
+                <Link to="/projects" className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300">
                   <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-3 mr-0 group-hover:mr-2"></span>
                   Base de Données FSU
                 </Link>
@@ -53,7 +53,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/library" className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300">
+                <Link to="/resources" className="group flex items-center text-muted-foreground hover:text-primary transition-all duration-300">
                   <span className="w-1 h-0 bg-primary rounded-full transition-all duration-300 group-hover:h-3 mr-0 group-hover:mr-2"></span>
                   Bibliothèque Collaborative
                 </Link>

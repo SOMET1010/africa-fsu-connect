@@ -9,28 +9,28 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Settings, Download, Bell, TrendingUp } from "lucide-react";
+import { Settings, Download, Bell, TrendingUp, Activity } from "lucide-react";
 import { useEnhancedDashboardStats } from "@/hooks/useEnhancedDashboardStats";
 import { useTranslation } from "@/hooks/useTranslation";
 
-export const PremiumDashboard = () => {
+export const PilotingDashboard = () => {
   const { profile } = useAuth();
   const { stats, loading } = useEnhancedDashboardStats();
   const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
-      {/* Premium Header */}
-      <div className="premium-card m-6 p-8">
+      {/* Dashboard Header - Institutional tone */}
+      <div className="glass-card m-6 p-8 border border-border/50">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <h1 className="text-4xl font-bold gradient-text">
-                {t('nav.dashboard')} Premium
+                Tableau de Bord – Pilotage
               </h1>
               <Badge className="bg-primary/10 text-primary border-primary/20">
-                <TrendingUp className="h-3 w-3 mr-1" />
-                {t('dashboard.realtime')}
+                <Activity className="h-3 w-3 mr-1" />
+                Temps Réel
               </Badge>
             </div>
             <p className="text-muted-foreground text-lg">
@@ -57,14 +57,14 @@ export const PremiumDashboard = () => {
 
       <PageContainer>
         <div className="space-y-6 animate-fade-in">
-          {/* Indicateurs Télécoms - Section Premium */}
+          {/* Indicateurs Télécoms - Section Principale */}
           <div className="animate-slide-up">
             <TelecomIndicatorsWidget />
           </div>
 
           {/* Première rangée - Métriques principales */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            <div className="premium-card p-6">
+            <Card className="glass-card p-6 border border-border/50">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Statistiques Principales</h3>
                 <div className="grid grid-cols-2 gap-4">
@@ -78,8 +78,8 @@ export const PremiumDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="premium-card p-6">
+            </Card>
+            <Card className="glass-card p-6 border border-border/50">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Métriques Télécoms</h3>
                 <div className="grid grid-cols-2 gap-4">
@@ -93,20 +93,20 @@ export const PremiumDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Deuxième rangée - Widgets interactifs */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <div className="premium-card p-6">
+            <Card className="glass-card p-6 border border-border/50">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Activité Récente</h3>
                 <div className="text-center py-8">
                   <div className="text-muted-foreground">Aucune activité récente</div>
                 </div>
               </div>
-            </div>
-            <div className="premium-card p-6">
+            </Card>
+            <Card className="glass-card p-6 border border-border/50">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Actions Rapides</h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -116,8 +116,8 @@ export const PremiumDashboard = () => {
                   <Button variant="outline" size="sm">Export</Button>
                 </div>
               </div>
-            </div>
-            <div className="premium-card p-6">
+            </Card>
+            <Card className="glass-card p-6 border border-border/50">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Couverture Population</h3>
                 <div className="text-center">
@@ -125,12 +125,12 @@ export const PremiumDashboard = () => {
                   <div className="text-sm text-muted-foreground">Population Couverte</div>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Section analytique avancée */}
           <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
-            <Card className="premium-card p-8">
+            <Card className="glass-card p-8 border border-border/50">
               <div className="text-center space-y-4">
                 <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl mx-auto flex items-center justify-center">
                   <TrendingUp className="h-12 w-12 text-primary" />

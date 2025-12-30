@@ -72,7 +72,7 @@ export function AppSidebar() {
         { title: "Indicateurs", url: "/indicators", icon: TrendingUp },
         { title: t('nav.organizations'), url: "/organizations", icon: Building2 },
         { title: t('nav.projects'), url: "/projects", icon: FolderOpen },
-        { title: t('nav.resources'), url: "/docs", icon: BookOpen },
+        { title: t('nav.resources'), url: "/resources", icon: BookOpen },
         { title: t('nav.forum'), url: "/forum", icon: MessageSquare },
         { title: "Soumettre", url: "/submit", icon: Send },
         { title: t('nav.events'), url: "/events", icon: Calendar },
@@ -123,7 +123,7 @@ export function AppSidebar() {
       <SidebarHeader className="border-b border-sidebar-border p-4">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-[hsl(var(--fsu-blue))] rounded-lg flex items-center justify-center shrink-0">
-            <span className="text-primary-foreground font-bold text-sm">FSU</span>
+            <span className="text-primary-foreground font-bold text-xs">SUTEL</span>
           </div>
           {!isCollapsed && (
             <div className="min-w-0">
@@ -200,7 +200,7 @@ export function AppSidebar() {
                 {getUserDisplayName()}
               </p>
               <p className="text-xs text-sidebar-foreground/70 truncate">
-                {profile?.organization || "FSU Afrique"}
+                {profile?.organization || "SUTEL"}
               </p>
             </div>
           )}

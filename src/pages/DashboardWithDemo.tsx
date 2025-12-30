@@ -1,4 +1,4 @@
-import { PremiumDashboard } from "@/components/dashboard/PremiumDashboard";
+import { PilotingDashboard } from "@/components/dashboard/PilotingDashboard";
 import { DemoOverlay } from "@/components/demo/DemoOverlay";
 import { useDemoMode } from "@/contexts/DemoModeContext";
 
@@ -7,7 +7,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <PremiumDashboard />
+      <PilotingDashboard />
       {isDemoMode && <DemoOverlay />}
     </>
   );

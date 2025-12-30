@@ -84,7 +84,7 @@ export function QuickActionsCard() {
       title: t('actions.consult.resources'),
       description: t('actions.consult.resources.desc'),
       icon: BookOpen,
-      route: "/docs",
+      route: "/resources",
       variant: "secondary",
       roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
     }

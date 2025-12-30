@@ -39,7 +39,7 @@ const Index = () => {
       icon: BookOpen,
       title: t('features.shared.resources'),
       description: t('features.shared.resources.desc'),
-      link: "/docs",
+      link: "/resources",
       highlights: [
         t('features.shared.resources.highlight1'), 
         t('features.shared.resources.highlight2'), 

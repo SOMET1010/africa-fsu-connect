@@ -67,7 +67,7 @@ const collaborationItems = [
   },
   { 
     title: "Ressources", 
-    url: "/docs", 
+    url: "/resources",
     icon: BookOpen,
     description: "Guides & documents"
   },
@@ -179,14 +179,14 @@ export function SimplifiedSidebar() {
       <SidebarHeader className="border-b border-border p-4">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center shrink-0 shadow-md">
-            <span className="text-white font-bold text-sm">FSU</span>
+            <span className="text-white font-bold text-xs">SUTEL</span>
           </div>
           {!isCollapsed && (
             <div className="min-w-0">
               <h2 className="font-bold text-foreground text-base leading-tight">
-                FSU Afrique
+                Plateforme SUTEL
               </h2>
-              <p className="text-xs text-muted-foreground">Plateforme collaborative</p>
+              <p className="text-xs text-muted-foreground">UAT • ANSUT</p>
             </div>
           )}
         </div>
@@ -304,7 +304,7 @@ export function SimplifiedSidebar() {
                 )}
               </div>
               <p className="text-xs text-muted-foreground truncate mt-1">
-                {profile?.organization || "FSU Afrique"}
+                {profile?.organization || "SUTEL"}
               </p>
             </div>
           )}
