@@ -118,22 +118,22 @@ const ModernHeader = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Premium Logo with sophisticated design */}
+          {/* Premium Logo with sophisticated design - SUTEL branding */}
           <div className="flex items-center space-x-4">
             <Link to="/" className="flex items-center space-x-3 group transition-all duration-500">
               <div className="relative">
-                <div className="premium-card p-3 group-hover:scale-110 transition-all duration-500 shadow-glow">
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary via-primary-light to-accent rounded-xl flex items-center justify-center shadow-elegant">
-                    <span className="text-white font-bold text-lg">FSU</span>
+                <div className="premium-card p-2 group-hover:scale-110 transition-all duration-500 shadow-glow">
+                  <div className="w-11 h-11 bg-gradient-to-br from-primary via-primary-light to-accent rounded-xl flex items-center justify-center shadow-elegant">
+                    <span className="text-white font-bold text-xs">SUTEL</span>
                   </div>
                 </div>
                 <div className="absolute -inset-1 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
               <div className="hidden md:block">
-                <h1 className="font-bold text-xl bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto] group-hover:from-accent group-hover:to-primary transition-all duration-500">
-                  {t('landing.title')}
+                <h1 className="font-bold text-lg bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto] group-hover:from-accent group-hover:to-primary transition-all duration-500">
+                  Plateforme SUTEL
                 </h1>
-                <p className="text-xs text-muted-foreground font-medium tracking-wide">UAT • ANSUT • Premium</p>
+                <p className="text-xs text-muted-foreground font-medium tracking-wide">UAT • ANSUT</p>
               </div>
             </Link>
           </div>

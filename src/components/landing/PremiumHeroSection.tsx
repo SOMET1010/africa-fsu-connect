@@ -49,12 +49,13 @@ export default function PremiumHeroSection() {
             </p>
           </div>
 
-          {/* Premium stats with advanced animations */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto py-8">
+          {/* Premium stats with advanced animations - Updated per PDF specs */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto py-8">
             {[
-              { icon: Globe, value: "15+", label: t('hero.stats.countries'), color: "primary" },
-              { icon: Users, value: "500+", label: t('hero.stats.organizations'), color: "accent" },
-              { icon: Target, value: "100+", label: t('common.projects'), color: "warning" }
+              { icon: Globe, value: "54", label: "Pays Africains", color: "primary" },
+              { icon: Target, value: "127", label: "Projets Actifs", color: "accent" },
+              { icon: Users, value: "89", label: "Nouveaux Documents", color: "warning" },
+              { icon: Sparkles, value: "12", label: "Événements à Venir", color: "primary" }
             ].map((stat, index) => {
               const Icon = stat.icon;
               return (
@@ -63,22 +64,22 @@ export default function PremiumHeroSection() {
                   className="group animate-fade-in"
                   style={{ animationDelay: `${0.2 + index * 0.1}s` }}
                 >
-                  <div className="premium-card p-8 text-center transition-all duration-500 hover:shadow-glow hover:-translate-y-2">
-                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 ${
+                  <div className="premium-card p-6 text-center transition-all duration-500 hover:shadow-glow hover:-translate-y-2">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 ${
                     stat.color === 'primary' ? 'bg-primary/10' : 
                     stat.color === 'accent' ? 'bg-accent/10' : 
                     'bg-warning/10'
                   }`}>
-                    <Icon className={`h-8 w-8 ${
+                    <Icon className={`h-7 w-7 ${
                       stat.color === 'primary' ? 'text-primary' : 
                       stat.color === 'accent' ? 'text-accent' : 
                       'text-warning'
                     }`} />
                     </div>
-                    <div className="text-4xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                    <div className="text-3xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
                       {stat.value}
                     </div>
-                    <div className="text-sm text-muted-foreground font-medium">
+                    <div className="text-xs text-muted-foreground font-medium">
                       {stat.label}
                     </div>
                   </div>
@@ -112,21 +113,32 @@ export default function PremiumHeroSection() {
             </Button>
           </div>
 
-          {/* Premium trust indicators */}
+          {/* Premium trust indicators - Updated with 5 African regions */}
           <div className="pt-8 border-t border-border/30 mt-8">
             <p className="text-sm text-muted-foreground mb-8 font-medium">
               {t('hero.trust.supported')}
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-12 opacity-70 hover:opacity-100 transition-opacity duration-500">
-              {["Union Africaine", "CEDEAO", "SADC", "EAC"].map((org, index) => (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 opacity-70 hover:opacity-100 transition-opacity duration-500">
+              {[
+                { name: "CEDEAO", countries: 15, color: "bg-blue-500/20" },
+                { name: "SADC", countries: 16, color: "bg-green-500/20" },
+                { name: "EACO", countries: 8, color: "bg-purple-500/20" },
+                { name: "ECCAS", countries: 11, color: "bg-orange-500/20" },
+                { name: "UMA", countries: 5, color: "bg-red-500/20" }
+              ].map((org, index) => (
                 <div 
-                  key={org} 
+                  key={org.name} 
                   className="text-center group animate-fade-in"
                   style={{ animationDelay: `${0.8 + index * 0.1}s` }}
                 >
-                  <div className="w-20 h-20 bg-muted/40 rounded-2xl mx-auto mb-3 group-hover:bg-muted/60 transition-all duration-300 group-hover:scale-110" />
+                  <div className={`w-16 h-16 ${org.color} rounded-2xl mx-auto mb-3 group-hover:scale-110 transition-all duration-300 flex items-center justify-center`}>
+                    <span className="font-bold text-foreground text-sm">{org.name[0]}</span>
+                  </div>
                   <div className="text-xs text-muted-foreground font-medium group-hover:text-foreground transition-colors">
-                    {org}
+                    {org.name}
+                  </div>
+                  <div className="text-xs text-muted-foreground/60">
+                    {org.countries} pays
                   </div>
                 </div>
               ))}
