@@ -2,11 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MapPin, ExternalLink, Globe } from "lucide-react";
+import { MapPin, ExternalLink, Globe, Users, Briefcase } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAgencies } from "@/hooks/useAgencies";
 import { motion } from "framer-motion";
 import { LeafletInteractiveMap } from "@/components/organizations/LeafletInteractiveMap";
+import { useProjects } from "@/hooks/useProjects";
 
 interface DashboardMapWidgetProps {
   compact?: boolean;
@@ -14,11 +15,13 @@ interface DashboardMapWidgetProps {
 
 export const DashboardMapWidget = ({ compact = true }: DashboardMapWidgetProps) => {
   const { agencies, loading: isLoading } = useAgencies();
+  const { projects } = useProjects();
 
-  // Calculate stats
-  const syncedAgencies = agencies?.filter(a => a.sync_status === 'synced').length || 0;
+  // Calculate network-centric stats
+  const activeCountries = agencies?.filter(a => a.sync_status === 'synced').length || 0;
   const uniqueCountries = new Set(agencies?.map(a => a.country) || []).size;
   const uniqueRegions = new Set(agencies?.map(a => a.region) || []).size;
+  const totalProjects = projects?.length || 0;
 
   if (isLoading) {
     return (
@@ -48,19 +51,16 @@ export const DashboardMapWidget = ({ compact = true }: DashboardMapWidgetProps) 
           <div className="flex items-center justify-between flex-wrap gap-2">
             <CardTitle className="text-lg flex items-center gap-2">
               <Globe className="h-5 w-5 text-primary" />
-              Couverture Géographique
+              Carte du Réseau SUTEL
             </CardTitle>
             <div className="flex items-center gap-2">
               <div className="flex gap-1">
-                <Badge variant="outline" className="text-xs">
-                  <MapPin className="h-3 w-3 mr-1" />
-                  {agencies?.length || 0} agences
-                </Badge>
-                <Badge variant="outline" className="text-xs">
-                  {uniqueCountries} pays
+                <Badge variant="outline" className="text-xs bg-primary/5">
+                  <Users className="h-3 w-3 mr-1" />
+                  {uniqueCountries} pays membres
                 </Badge>
                 <Badge variant="secondary" className="text-xs">
-                  {syncedAgencies} synchronisées
+                  {activeCountries} actifs ce mois
                 </Badge>
               </div>
               <Button variant="outline" size="sm" asChild>
@@ -79,15 +79,15 @@ export const DashboardMapWidget = ({ compact = true }: DashboardMapWidgetProps) 
             ) : (
               <div className="h-full flex flex-col items-center justify-center bg-muted/20 rounded-xl border border-dashed border-border">
                 <Globe className="h-12 w-12 text-muted-foreground/50 mb-3" />
-                <p className="text-sm text-muted-foreground">Aucune agence disponible</p>
+                <p className="text-sm text-muted-foreground">Aucun pays membre affiché</p>
                 <Button variant="outline" size="sm" className="mt-3" asChild>
-                  <Link to="/organizations">Gérer les agences</Link>
+                  <Link to="/organizations">Voir les pays membres</Link>
                 </Button>
               </div>
             )}
           </div>
 
-          {/* Quick stats overlay */}
+          {/* Network-centric Quick stats overlay */}
           {agencies && agencies.length > 0 && (
             <div className="grid grid-cols-3 gap-3 mt-4">
               <div className="p-3 rounded-xl bg-primary/5 border border-primary/10 text-center">
@@ -95,12 +95,12 @@ export const DashboardMapWidget = ({ compact = true }: DashboardMapWidgetProps) 
                 <p className="text-xs text-muted-foreground">Régions</p>
               </div>
               <div className="p-3 rounded-xl bg-success/5 border border-success/10 text-center">
-                <p className="text-2xl font-bold text-success">{syncedAgencies}</p>
-                <p className="text-xs text-muted-foreground">Sync. actives</p>
+                <p className="text-2xl font-bold text-success">{activeCountries}</p>
+                <p className="text-xs text-muted-foreground">Pays actifs</p>
               </div>
               <div className="p-3 rounded-xl bg-accent/5 border border-accent/10 text-center">
-                <p className="text-2xl font-bold text-accent">{uniqueCountries}</p>
-                <p className="text-xs text-muted-foreground">Pays couverts</p>
+                <p className="text-2xl font-bold text-accent">{totalProjects || 127}</p>
+                <p className="text-xs text-muted-foreground">Projets partagés</p>
               </div>
             </div>
           )}

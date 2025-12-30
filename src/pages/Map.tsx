@@ -1,23 +1,17 @@
 import { useState } from "react";
 import { ModernCard } from "@/components/ui/modern-card";
-import { ModernButton } from "@/components/ui/modern-button";
 import { Badge } from "@/components/ui/badge";
-import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { HeroSection } from "@/components/ui/hero-section";
 import { 
-  MapPin, 
   Globe, 
   Building2, 
-  Zap, 
   Users,
-  Satellite,
   Network,
   Target,
-  TrendingUp,
-  Filter,
-  Layers,
-  Navigation
+  Navigation,
+  Briefcase,
+  TrendingUp
 } from "lucide-react";
 
 const INTERACTIVE_REGIONS = {
@@ -26,57 +20,56 @@ const INTERACTIVE_REGIONS = {
     color: "from-emerald-500 via-teal-500 to-green-600",
     flag: "🌿",
     countries: ["Sénégal", "Mali", "Burkina Faso", "Niger", "Côte d'Ivoire", "Ghana", "Togo", "Bénin"],
-    organizations: 28,
+    members: 28,
     projects: 15,
-    coverage: 85
+    activeThisMonth: 22
   },
   "Afrique Centrale": {
     position: { top: "50%", left: "35%" },
     color: "from-purple-500 via-violet-500 to-indigo-600",
     flag: "🌺",
     countries: ["Cameroun", "Tchad", "RCA", "Congo", "RDC", "Gabon"],
-    organizations: 18,
+    members: 18,
     projects: 9,
-    coverage: 72
+    activeThisMonth: 14
   },
   "Afrique de l'Est": {
     position: { top: "40%", left: "58%" },
     color: "from-cyan-500 via-blue-500 to-indigo-600",
     flag: "🌊",
     countries: ["Kenya", "Tanzanie", "Ouganda", "Rwanda", "Burundi", "Éthiopie"],
-    organizations: 22,
+    members: 22,
     projects: 12,
-    coverage: 78
+    activeThisMonth: 18
   },
   "Afrique Australe": {
     position: { top: "70%", left: "40%" },
     color: "from-amber-500 via-orange-500 to-red-600",
     flag: "🦁",
     countries: ["Afrique du Sud", "Botswana", "Namibie", "Zimbabwe", "Zambie"],
-    organizations: 16,
+    members: 16,
     projects: 8,
-    coverage: 90
+    activeThisMonth: 12
   },
   "Afrique du Nord": {
     position: { top: "25%", left: "35%" },
     color: "from-red-500 via-pink-500 to-rose-600",
     flag: "🏺",
     countries: ["Maroc", "Algérie", "Tunisie", "Libye", "Égypte"],
-    organizations: 14,
+    members: 14,
     projects: 6,
-    coverage: 95
+    activeThisMonth: 10
   }
 };
 
 const Map = () => {
-  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
-  const [mapMode, setMapMode] = useState<'organizations' | 'projects' | 'coverage'>('organizations');
+  const [mapMode, setMapMode] = useState<'members' | 'projects' | 'trends'>('members');
 
   const globalStats = {
-    totalOrganizations: Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.organizations, 0),
+    totalMembers: Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.members, 0),
     totalProjects: Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.projects, 0),
-    averageCoverage: Math.round(Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.coverage, 0) / Object.keys(INTERACTIVE_REGIONS).length),
+    activeThisMonth: Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.activeThisMonth, 0),
     totalCountries: Object.values(INTERACTIVE_REGIONS).reduce((sum, region) => sum + region.countries.length, 0)
   };
 
@@ -84,45 +77,45 @@ const Map = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="container mx-auto px-4 py-8 space-y-8">
         
-        {/* Hero Section */}
+        {/* Hero Section - Network-centric */}
         <ScrollReveal direction="fade">
           <HeroSection
-            title="Carte Interactive SUTEL"
-            subtitle="Réseau Panafricain"
-            description="Explorez la couverture géographique du service universel des télécommunications à travers l'Afrique. Visualisez les organisations, projets et indicateurs de connectivité en temps réel."
+            title="Réseau NEXUS"
+            subtitle="Fonds du Service Universel en Afrique"
+            description="Une communauté de pays qui partagent projets, expériences et infrastructures. Explorez le réseau panafricain des FSU en temps réel."
             actions={[
               {
-                label: "Mode Organisations",
-                onClick: () => setMapMode('organizations'),
-                icon: <Building2 className="h-5 w-5" />,
-                variant: mapMode === 'organizations' ? "default" : "outline"
+                label: "Pays membres",
+                onClick: () => setMapMode('members'),
+                icon: <Users className="h-5 w-5" />,
+                variant: mapMode === 'members' ? "default" : "outline"
               },
               {
-                label: "Mode Projets",
+                label: "Projets partagés",
                 onClick: () => setMapMode('projects'),
-                icon: <Target className="h-5 w-5" />,
+                icon: <Briefcase className="h-5 w-5" />,
                 variant: mapMode === 'projects' ? "default" : "outline"
               },
               {
-                label: "Mode Couverture",
-                onClick: () => setMapMode('coverage'),
-                icon: <Network className="h-5 w-5" />,
-                variant: mapMode === 'coverage' ? "default" : "outline"
+                label: "Tendances réseau",
+                onClick: () => setMapMode('trends'),
+                icon: <TrendingUp className="h-5 w-5" />,
+                variant: mapMode === 'trends' ? "default" : "outline"
               }
             ]}
           >
             <div className="flex gap-2 mt-6">
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Globe className="h-3 w-3" />
-                {globalStats.totalCountries} Pays
+                {globalStats.totalCountries} Pays membres
               </Badge>
               <Badge variant="secondary" className="flex items-center gap-1">
-                <Building2 className="h-3 w-3" />
-                {globalStats.totalOrganizations} Organisations
+                <Briefcase className="h-3 w-3" />
+                {globalStats.totalProjects} Projets partagés
               </Badge>
               <Badge variant="secondary" className="flex items-center gap-1">
-                <Satellite className="h-3 w-3" />
-                Temps Réel
+                <Users className="h-3 w-3" />
+                {globalStats.activeThisMonth} Actifs ce mois
               </Badge>
             </div>
           </HeroSection>
@@ -155,6 +148,9 @@ const Map = () => {
               {/* Regional Interactive Markers */}
               {Object.entries(INTERACTIVE_REGIONS).map(([region, data]) => {
                 const isHovered = hoveredRegion === region;
+                const displayValue = mapMode === 'members' ? data.members : 
+                                     mapMode === 'projects' ? data.projects : 
+                                     data.activeThisMonth;
                 
                 return (
                   <div
@@ -181,11 +177,11 @@ const Map = () => {
                       
                       {/* Data Badge */}
                       <div className="absolute -top-4 -right-4 w-10 h-10 bg-white dark:bg-gray-800 text-foreground text-sm rounded-full flex items-center justify-center border-3 border-white dark:border-gray-800 font-bold shadow-lg">
-                        {data.organizations}
+                        {displayValue}
                       </div>
                     </div>
 
-                    {/* Tooltip */}
+                    {/* Tooltip - Network-centric */}
                     <div className={`absolute bottom-20 left-1/2 transform -translate-x-1/2 transition-all duration-700 ${
                       isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
                     }`}>
@@ -194,25 +190,25 @@ const Map = () => {
                           <span className="text-4xl">{data.flag}</span>
                           <div>
                             <h4 className="font-bold text-xl">{region}</h4>
-                            <p className="text-sm text-muted-foreground">{data.countries.length} pays</p>
+                            <p className="text-sm text-muted-foreground">{data.countries.length} pays membres</p>
                           </div>
                         </div>
                         
                         <div className="grid grid-cols-3 gap-3">
                           <div className="text-center p-3 bg-emerald-500/10 rounded-xl">
-                            <Building2 className="h-6 w-6 text-emerald-500 mx-auto mb-2" />
-                            <p className="font-bold text-lg">{data.organizations}</p>
-                            <p className="text-xs text-muted-foreground">Organisations</p>
+                            <Users className="h-6 w-6 text-emerald-500 mx-auto mb-2" />
+                            <p className="font-bold text-lg">{data.members}</p>
+                            <p className="text-xs text-muted-foreground">Pays membres</p>
                           </div>
                           <div className="text-center p-3 bg-blue-500/10 rounded-xl">
-                            <Target className="h-6 w-6 text-blue-500 mx-auto mb-2" />
+                            <Briefcase className="h-6 w-6 text-blue-500 mx-auto mb-2" />
                             <p className="font-bold text-lg">{data.projects}</p>
-                            <p className="text-xs text-muted-foreground">Projets</p>
+                            <p className="text-xs text-muted-foreground">Projets partagés</p>
                           </div>
                           <div className="text-center p-3 bg-purple-500/10 rounded-xl">
-                            <Network className="h-6 w-6 text-purple-500 mx-auto mb-2" />
-                            <p className="font-bold text-lg">{data.coverage}%</p>
-                            <p className="text-xs text-muted-foreground">Couverture</p>
+                            <Target className="h-6 w-6 text-purple-500 mx-auto mb-2" />
+                            <p className="font-bold text-lg">{data.activeThisMonth}</p>
+                            <p className="text-xs text-muted-foreground">Actifs ce mois</p>
                           </div>
                         </div>
                       </div>
@@ -221,7 +217,7 @@ const Map = () => {
                 );
               })}
 
-              {/* Enhanced Legend */}
+              {/* Enhanced Legend - Network-centric */}
               <div className="absolute bottom-8 left-8 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-border">
                 <h5 className="font-bold text-lg mb-4 flex items-center gap-2">
                   <Navigation className="h-5 w-5 text-primary" />
@@ -230,7 +226,7 @@ const Map = () => {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center gap-3">
                     <div className="w-5 h-5 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full shadow-lg" />
-                    <span>Organisations actives</span>
+                    <span>Pays actifs dans le réseau</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-5 h-5 bg-primary/20 rounded-full animate-pulse" />
