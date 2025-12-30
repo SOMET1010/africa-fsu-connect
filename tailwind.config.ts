@@ -91,7 +91,30 @@ export default {
 				'coverage-5g': 'hsl(var(--coverage-5g))',
 				'coverage-4g': 'hsl(var(--coverage-4g))',
 				'coverage-3g': 'hsl(var(--coverage-3g))',
-				'coverage-2g': 'hsl(var(--coverage-2g))'
+				'coverage-2g': 'hsl(var(--coverage-2g))',
+				// NEXUS Design System colors
+				nx: {
+					bg: 'hsl(var(--nx-bg))',
+					surface: 'hsl(var(--nx-surface))',
+					border: 'hsl(var(--nx-border))',
+					text: {
+						900: 'hsl(var(--nx-text-900))',
+						700: 'hsl(var(--nx-text-700))',
+						500: 'hsl(var(--nx-text-500))',
+					},
+					brand: {
+						900: 'hsl(var(--nx-brand-900))',
+						700: 'hsl(var(--nx-brand-700))',
+						500: 'hsl(var(--nx-brand-500))',
+					},
+					coop: {
+						600: 'hsl(var(--nx-coop-600))',
+						500: 'hsl(var(--nx-coop-500))',
+					},
+					info: 'hsl(var(--nx-info-500))',
+					warn: 'hsl(var(--nx-warn-500))',
+					success: 'hsl(var(--nx-success-500))',
+				}
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
@@ -109,7 +132,10 @@ export default {
 				'elegant': 'var(--shadow-lg)',
 				'soft': 'var(--shadow-md)',
 				'subtle': 'var(--shadow-sm)',
-				'dramatic': 'var(--shadow-xl)'
+				'dramatic': 'var(--shadow-xl)',
+				// NEXUS shadows
+				'nxsm': 'var(--nx-shadow-sm)',
+				'nxmd': 'var(--nx-shadow-md)',
 			},
 			zIndex: {
 				'sidebar': 'var(--z-sidebar)',
@@ -123,7 +149,11 @@ export default {
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				// NEXUS radius tokens
+				nxsm: 'var(--nx-radius-sm)',
+				nxmd: 'var(--nx-radius-md)',
+				nxlg: 'var(--nx-radius-lg)',
 			},
 			keyframes: {
 				'accordion-down': {

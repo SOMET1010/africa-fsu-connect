@@ -1,0 +1,131 @@
+/**
+ * NEXUS DESIGN SYSTEM — Design Tokens
+ * 
+ * Plateforme panafricaine de coopération
+ * ADN visuel : calme, institutionnel, égalitaire
+ * 
+ * Principes :
+ * - Calme visuel avant information
+ * - Blanc comme espace politique
+ * - Couleur = sens, pas décoration
+ * - Mouvement lent, jamais agressif
+ */
+
+:root {
+  /* ========================================
+     BASE COLORS — Calme institutionnel
+     ======================================== */
+  
+  /* Ivoire clair — Neutralité, espace */
+  --nx-bg: 150 12% 97%;
+  
+  /* Blanc pur — Surface propre */
+  --nx-surface: 0 0% 100%;
+  
+  /* Bordure douce — Séparation subtile */
+  --nx-border: 150 8% 91%;
+
+  /* ========================================
+     TEXT COLORS — Lisibilité avant tout
+     ======================================== */
+  
+  /* Texte primaire — Forte lisibilité */
+  --nx-text-900: 222 47% 11%;
+  
+  /* Texte secondaire — Hiérarchie visuelle */
+  --nx-text-700: 215 19% 35%;
+  
+  /* Texte muted — Informations tertiaires */
+  --nx-text-500: 215 16% 47%;
+
+  /* ========================================
+     BRAND — Bleu profond institutionnel
+     Confiance, institution, réseau
+     ======================================== */
+  
+  /* Principal */
+  --nx-brand-900: 200 73% 20%;
+  
+  /* Hover / Active */
+  --nx-brand-700: 200 68% 26%;
+  
+  /* Light accent */
+  --nx-brand-500: 197 57% 35%;
+
+  /* ========================================
+     COOPÉRATION — Vert doux
+     Progression, collaboration, égalité
+     ======================================== */
+  
+  /* Principal */
+  --nx-coop-600: 160 56% 42%;
+  
+  /* Light variant */
+  --nx-coop-500: 160 49% 48%;
+
+  /* ========================================
+     SEMANTIC — Sans agressivité
+     Couche 1 : PAS de rouge
+     ======================================== */
+  
+  /* Information — Bleu clair */
+  --nx-info-500: 217 91% 60%;
+  
+  /* Attention — Ambre doux (jamais punitif) */
+  --nx-warn-500: 40 85% 55%;
+  
+  /* Succès — Vert coopération */
+  --nx-success-500: 160 56% 42%;
+
+  /* ========================================
+     RADIUS — Arrondi moderne mais sobre
+     ======================================== */
+  
+  --nx-radius-sm: 10px;
+  --nx-radius-md: 12px;
+  --nx-radius-lg: 16px;
+
+  /* ========================================
+     SHADOWS — Soft, jamais dramatiques
+     Élévation subtile, pas spectacle
+     ======================================== */
+  
+  /* Légère — Cartes standard */
+  --nx-shadow-sm: 0 8px 20px hsl(222 15% 20% / 0.06);
+  
+  /* Moyenne — CTAs, hover states */
+  --nx-shadow-md: 0 12px 28px hsl(222 15% 20% / 0.10);
+
+  /* ========================================
+     MOTION — Lent, apaisant, jamais agressif
+     ======================================== */
+  
+  /* Easing doux */
+  --nx-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+  /* Durées (minimum 180ms) */
+  --nx-dur-1: 180ms;
+  --nx-dur-2: 240ms;
+  --nx-dur-3: 300ms;
+}
+
+/* Dark mode NEXUS — Maintenir le calme */
+.dark {
+  --nx-bg: 222 20% 10%;
+  --nx-surface: 222 18% 14%;
+  --nx-border: 222 15% 22%;
+  
+  --nx-text-900: 210 40% 96%;
+  --nx-text-700: 215 20% 75%;
+  --nx-text-500: 215 15% 55%;
+  
+  --nx-brand-900: 200 60% 55%;
+  --nx-brand-700: 200 65% 48%;
+  --nx-brand-500: 197 55% 42%;
+  
+  --nx-coop-600: 160 50% 50%;
+  --nx-coop-500: 160 45% 55%;
+  
+  --nx-shadow-sm: 0 8px 20px hsl(0 0% 0% / 0.25);
+  --nx-shadow-md: 0 12px 28px hsl(0 0% 0% / 0.35);
+}

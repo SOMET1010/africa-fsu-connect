@@ -1,0 +1,183 @@
+/**
+ * NEXUS DESIGN SYSTEM — Utility Classes
+ * 
+ * Classes utilitaires pour le design calme et institutionnel
+ * Utilisation : className="nx-card nx-transition"
+ */
+
+/* ========================================
+   PAGE CONTAINER — Fond apaisant
+   ======================================== */
+
+.nx-page {
+  background: hsl(var(--nx-bg));
+  color: hsl(var(--nx-text-900));
+  min-height: 100vh;
+}
+
+/* ========================================
+   CARD — Base pour toutes les cartes NEXUS
+   ======================================== */
+
+.nx-card {
+  background: hsl(var(--nx-surface));
+  border: 1px solid hsl(var(--nx-border));
+  border-radius: var(--nx-radius-lg);
+  box-shadow: var(--nx-shadow-sm);
+}
+
+.nx-card-flat {
+  background: hsl(var(--nx-surface));
+  border: 1px solid hsl(var(--nx-border));
+  border-radius: var(--nx-radius-lg);
+  box-shadow: none;
+}
+
+/* ========================================
+   TEXT UTILITIES — Hiérarchie claire
+   ======================================== */
+
+.nx-text-primary { color: hsl(var(--nx-text-900)); }
+.nx-text-secondary { color: hsl(var(--nx-text-700)); }
+.nx-text-muted { color: hsl(var(--nx-text-500)); }
+
+.nx-text-brand { color: hsl(var(--nx-brand-900)); }
+.nx-text-coop { color: hsl(var(--nx-coop-600)); }
+
+/* ========================================
+   GRADIENT TEXT — 1 max par écran
+   ======================================== */
+
+.nx-gradient-text {
+  background: linear-gradient(90deg, hsl(var(--nx-brand-900)), hsl(var(--nx-coop-600)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ========================================
+   TRANSITIONS — Toujours douces
+   ======================================== */
+
+.nx-transition {
+  transition: all var(--nx-dur-2) var(--nx-ease);
+}
+
+.nx-transition-fast {
+  transition: all var(--nx-dur-1) var(--nx-ease);
+}
+
+.nx-transition-slow {
+  transition: all var(--nx-dur-3) var(--nx-ease);
+}
+
+/* ========================================
+   HOVER EFFECTS — Subtils, jamais agressifs
+   ======================================== */
+
+/* Lift doux (max -2px, pas -3 ou -4) */
+.nx-hover-lift {
+  transition: all var(--nx-dur-2) var(--nx-ease);
+}
+
+.nx-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--nx-shadow-md);
+}
+
+/* Glow subtil */
+.nx-hover-glow:hover {
+  box-shadow: var(--nx-shadow-md), 0 0 20px hsl(var(--nx-brand-900) / 0.1);
+}
+
+/* ========================================
+   BACKGROUNDS — Institutionnels
+   ======================================== */
+
+.nx-bg-surface { background: hsl(var(--nx-surface)); }
+.nx-bg-muted { background: hsl(var(--nx-bg)); }
+
+.nx-bg-brand { background: hsl(var(--nx-brand-900)); }
+.nx-bg-brand-light { background: hsl(var(--nx-brand-500) / 0.1); }
+
+.nx-bg-coop { background: hsl(var(--nx-coop-600)); }
+.nx-bg-coop-light { background: hsl(var(--nx-coop-600) / 0.1); }
+
+/* ========================================
+   BORDERS — Douces et subtiles
+   ======================================== */
+
+.nx-border { border: 1px solid hsl(var(--nx-border)); }
+.nx-border-brand { border: 1px solid hsl(var(--nx-brand-900) / 0.2); }
+.nx-border-coop { border: 1px solid hsl(var(--nx-coop-600) / 0.2); }
+
+/* ========================================
+   ANIMATIONS — Lentes et apaisantes
+   ======================================== */
+
+@keyframes nx-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nx-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nx-animate-fade-in {
+  animation: nx-fade-in var(--nx-dur-3) var(--nx-ease) forwards;
+}
+
+.nx-animate-slide-up {
+  animation: nx-slide-up var(--nx-dur-3) var(--nx-ease) forwards;
+}
+
+/* Stagger animations */
+.nx-stagger-1 { animation-delay: 50ms; }
+.nx-stagger-2 { animation-delay: 100ms; }
+.nx-stagger-3 { animation-delay: 150ms; }
+.nx-stagger-4 { animation-delay: 200ms; }
+
+/* ========================================
+   FOCUS STATES — Accessibilité
+   ======================================== */
+
+.nx-focus:focus-visible {
+  outline: 2px solid hsl(var(--nx-brand-500));
+  outline-offset: 2px;
+}
+
+/* ========================================
+   SPACING HELPERS — Cohérence
+   ======================================== */
+
+.nx-section-padding {
+  padding: 2rem;
+}
+
+.nx-card-padding {
+  padding: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .nx-section-padding {
+    padding: 3rem;
+  }
+  
+  .nx-card-padding {
+    padding: 1.5rem;
+  }
+}
