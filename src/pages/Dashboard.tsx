@@ -1,8 +1,7 @@
-
-import { PremiumDashboard } from "@/components/dashboard/PremiumDashboard";
+import { SutelDashboard } from "@/components/dashboard/SutelDashboard";
 
 const Dashboard = () => {
-  return <PremiumDashboard />;
+  return <SutelDashboard />;
 };
 
 export default Dashboard;
