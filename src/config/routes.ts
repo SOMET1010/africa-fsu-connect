@@ -49,6 +49,7 @@ const Analytics = lazy(() => import('@/pages/Analytics'));
 const DemoGuide = lazy(() => import('@/pages/DemoGuide'));
 const ConceptNote = lazy(() => import('@/pages/ConceptNote'));
 const Presentation = lazy(() => import('@/pages/Presentation'));
+const PresentationAnalytics = lazy(() => import('@/components/presentation/PresentationAnalytics').then(m => ({ default: m.PresentationAnalytics })));
 
 // Admin components (separate chunk)
 const Admin = lazy(() => import('@/pages/Admin'));
@@ -247,6 +248,19 @@ export const ROUTES: RouteConfig[] = [
     showInSidebar: false,
     showInMobileNav: false,
     category: 'main',
+  },
+  {
+    path: '/presentation/analytics',
+    component: PresentationAnalytics,
+    title: 'Analytics Présentation',
+    description: 'Statistiques et analyses des présentations',
+    icon: BarChart3,
+    isProtected: true,
+    requiredRoles: ['super_admin', 'admin_pays'],
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'admin',
   },
 
   // Routes admin (chunk séparé)
