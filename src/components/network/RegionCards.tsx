@@ -1,5 +1,9 @@
+// NEXUS_COMPONENT
+// Régions avec couleur égalitaire (pas de hiérarchie visuelle)
+// Toutes les régions ont la même importance visuelle
+
 import { Link } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
+import { NexusCard } from "@/components/ui/nexus-card";
 import { useTranslation } from "@/hooks/useTranslation";
 
 interface Region {
@@ -7,15 +11,15 @@ interface Region {
   name: string;
   code: string;
   countriesCount: number;
-  color: string;
 }
 
+// Toutes les régions ont la même couleur (égalité)
 const regions: Region[] = [
-  { id: '1', name: 'Afrique de l\'Ouest', code: 'west', countriesCount: 15, color: 'bg-blue-500' },
-  { id: '2', name: 'Afrique Centrale', code: 'central', countriesCount: 9, color: 'bg-green-500' },
-  { id: '3', name: 'Afrique de l\'Est', code: 'east', countriesCount: 13, color: 'bg-purple-500' },
-  { id: '4', name: 'Afrique du Nord', code: 'north', countriesCount: 6, color: 'bg-orange-500' },
-  { id: '5', name: 'Afrique Australe', code: 'south', countriesCount: 11, color: 'bg-teal-500' },
+  { id: '1', name: 'Afrique de l\'Ouest', code: 'west', countriesCount: 15 },
+  { id: '2', name: 'Afrique Centrale', code: 'central', countriesCount: 9 },
+  { id: '3', name: 'Afrique de l\'Est', code: 'east', countriesCount: 13 },
+  { id: '4', name: 'Afrique du Nord', code: 'north', countriesCount: 6 },
+  { id: '5', name: 'Afrique Australe', code: 'south', countriesCount: 11 },
 ];
 
 export const RegionCards = () => {
@@ -23,26 +27,33 @@ export const RegionCards = () => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-      {regions.map((region) => (
-        <Link key={region.id} to={`/members?region=${encodeURIComponent(region.name)}`}>
-          <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border/50 cursor-pointer">
-            <CardContent className="p-6 text-center">
-              {/* Indicateur de région - pas de classement */}
-              <div className={`w-12 h-12 ${region.color} rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                <span className="text-white font-bold text-lg">
-                  {region.name[0]}
-                </span>
-              </div>
-              
-              <h3 className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors">
-                {region.name}
-              </h3>
-              
-              <p className="text-xs text-muted-foreground">
-                {region.countriesCount} {t('common.countries') || 'pays'}
-              </p>
-            </CardContent>
-          </Card>
+      {regions.map((region, index) => (
+        <Link 
+          key={region.id} 
+          to={`/members?region=${encodeURIComponent(region.name)}`}
+          className="block group"
+          style={{ animationDelay: `${index * 50}ms` }}
+        >
+          <NexusCard 
+            hover="subtle" 
+            padding="sm"
+            className="h-full text-center animate-fade-in"
+          >
+            {/* Indicateur de région - couleur égalitaire */}
+            <div className="w-12 h-12 bg-[hsl(var(--nx-brand-900))] rounded-xl mx-auto mb-3 flex items-center justify-center transition-transform duration-[var(--nx-dur-2)] ease-[var(--nx-ease)] group-hover:scale-105">
+              <span className="text-white font-semibold text-lg">
+                {region.name[0]}
+              </span>
+            </div>
+            
+            <h3 className="font-medium text-sm text-[hsl(var(--nx-text-900))] mb-1">
+              {region.name}
+            </h3>
+            
+            <p className="text-xs text-[hsl(var(--nx-text-500))]">
+              {region.countriesCount} {t('common.countries') || 'pays'}
+            </p>
+          </NexusCard>
         </Link>
       ))}
     </div>
