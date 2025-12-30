@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Minus, Sparkles } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Users, Handshake } from "lucide-react";
 import type { Alert } from "./AlertsPanel";
 
 interface ExecutiveSummaryProps {
@@ -21,33 +21,33 @@ export const ExecutiveSummary = ({
   alerts, 
   periodLabel = "ce trimestre" 
 }: ExecutiveSummaryProps) => {
-  const criticalAlerts = alerts.filter(a => a.level === 'critical').length;
-  const warningAlerts = alerts.filter(a => a.level === 'warning').length;
+  const collaborationOpportunities = alerts.filter(a => a.level === 'critical').length;
+  const discussionPoints = alerts.filter(a => a.level === 'warning').length;
 
-  // Generate narrative based on stats
-  const getCoverageStatus = () => {
-    if (stats.coveragePercentage >= 80) return "progresse excellemment";
-    if (stats.coveragePercentage >= 60) return "avance régulièrement";
-    if (stats.coveragePercentage >= 40) return "se développe";
-    return "nécessite une accélération";
+  // Network-oriented narrative (peer-to-peer)
+  const getNetworkDynamic = () => {
+    if (stats.coveragePercentage >= 80) return "est en forte dynamique collective";
+    if (stats.coveragePercentage >= 60) return "progresse ensemble";
+    if (stats.coveragePercentage >= 40) return "construit ses synergies";
+    return "renforce ses liens";
   };
 
   const getGrowthDescription = () => {
-    if (stats.projectsGrowth > 15) return "forte croissance";
-    if (stats.projectsGrowth > 5) return "croissance soutenue";
-    if (stats.projectsGrowth > 0) return "légère progression";
-    if (stats.projectsGrowth === 0) return "stabilité";
-    return "baisse";
+    if (stats.projectsGrowth > 15) return "forte dynamique de partage";
+    if (stats.projectsGrowth > 5) return "collaboration soutenue";
+    if (stats.projectsGrowth > 0) return "échanges réguliers";
+    if (stats.projectsGrowth === 0) return "stabilité du réseau";
+    return "consolidation en cours";
   };
 
-  const getAlertPhrase = () => {
-    if (criticalAlerts > 0) {
-      return `${criticalAlerts} projet${criticalAlerts > 1 ? 's' : ''} nécessite${criticalAlerts > 1 ? 'nt' : ''} une attention immédiate.`;
+  const getCollaborationPhrase = () => {
+    if (collaborationOpportunities > 0) {
+      return `${collaborationOpportunities} opportunité${collaborationOpportunities > 1 ? 's' : ''} de collaboration identifiée${collaborationOpportunities > 1 ? 's' : ''}.`;
     }
-    if (warningAlerts > 0) {
-      return `${warningAlerts} point${warningAlerts > 1 ? 's' : ''} de vigilance à surveiller.`;
+    if (discussionPoints > 0) {
+      return `${discussionPoints} point${discussionPoints > 1 ? 's' : ''} de coordination à explorer ensemble.`;
     }
-    return "Tous les projets sont dans les délais prévus.";
+    return "Tous les pays membres avancent au rythme prévu.";
   };
 
   const formatPopulation = (pop: number) => {
@@ -58,7 +58,7 @@ export const ExecutiveSummary = ({
 
   const getTrendIcon = () => {
     if (stats.projectsGrowth > 0) return <TrendingUp className="h-4 w-4 text-success" />;
-    if (stats.projectsGrowth < 0) return <TrendingDown className="h-4 w-4 text-destructive" />;
+    if (stats.projectsGrowth < 0) return <TrendingDown className="h-4 w-4 text-warning" />;
     return <Minus className="h-4 w-4 text-muted-foreground" />;
   };
 
@@ -72,12 +72,12 @@ export const ExecutiveSummary = ({
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
             <div className="p-2 rounded-xl bg-primary/10">
-              <Sparkles className="h-5 w-5 text-primary" />
+              <Handshake className="h-5 w-5 text-primary" />
             </div>
             <div className="flex-1 space-y-3">
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-lg font-semibold text-foreground">
-                  Synthèse exécutive
+                  Synthèse Réseau
                 </h2>
                 <Badge variant="outline" className="text-xs">
                   {periodLabel}
@@ -87,30 +87,31 @@ export const ExecutiveSummary = ({
 
               <div className="space-y-2">
                 <p className="text-base leading-relaxed text-foreground/90">
-                  Le réseau FSU africain <strong className="text-primary">{getCoverageStatus()}</strong> avec{" "}
-                  <strong>{stats.totalProjects} projets actifs</strong> répartis sur{" "}
-                  <strong>{stats.totalAgencies} agences</strong>, couvrant{" "}
-                  <strong className="text-accent">{stats.coveragePercentage}%</strong> de la population cible
-                  soit environ <strong>{formatPopulation(stats.populationCovered)} de personnes</strong>.
+                  Le réseau SUTEL <strong className="text-primary">{getNetworkDynamic()}</strong> : {" "}
+                  <strong>{stats.totalAgencies} pays membres</strong> partagent{" "}
+                  <strong>{stats.totalProjects} projets</strong>, bénéficiant à{" "}
+                  <strong className="text-accent">{formatPopulation(stats.populationCovered)} de personnes</strong>.
                 </p>
 
                 <p className="text-sm text-muted-foreground">
-                  Tendance : <span className={stats.projectsGrowth >= 0 ? "text-success font-medium" : "text-destructive font-medium"}>
+                  Dynamique : <span className={stats.projectsGrowth >= 0 ? "text-success font-medium" : "text-warning font-medium"}>
                     {getGrowthDescription()} ({stats.projectsGrowth > 0 ? "+" : ""}{stats.projectsGrowth}% {periodLabel})
-                  </span>. {getAlertPhrase()}
+                  </span>. {getCollaborationPhrase()}
                 </p>
               </div>
 
-              {(criticalAlerts > 0 || warningAlerts > 0) && (
+              {(collaborationOpportunities > 0 || discussionPoints > 0) && (
                 <div className="flex gap-2 pt-1">
-                  {criticalAlerts > 0 && (
-                    <Badge variant="destructive" className="text-xs animate-pulse">
-                      {criticalAlerts} alerte{criticalAlerts > 1 ? 's' : ''} critique{criticalAlerts > 1 ? 's' : ''}
+                  {collaborationOpportunities > 0 && (
+                    <Badge className="bg-primary/90 text-primary-foreground text-xs">
+                      <Handshake className="h-3 w-3 mr-1" />
+                      {collaborationOpportunities} opportunité{collaborationOpportunities > 1 ? 's' : ''} de collaboration
                     </Badge>
                   )}
-                  {warningAlerts > 0 && (
-                    <Badge className="bg-warning text-warning-foreground text-xs">
-                      {warningAlerts} point{warningAlerts > 1 ? 's' : ''} d'attention
+                  {discussionPoints > 0 && (
+                    <Badge className="bg-info text-info-foreground text-xs">
+                      <Users className="h-3 w-3 mr-1" />
+                      {discussionPoints} point{discussionPoints > 1 ? 's' : ''} de coordination
                     </Badge>
                   )}
                 </div>
