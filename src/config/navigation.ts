@@ -1,17 +1,18 @@
 import {
-  Home,
-  BarChart2,
-  BarChart3,
-  Rocket,
-  FolderOpen,
-  BookOpen,
-  MessageSquare,
-  FileText,
-  Calendar,
-  Plus,
+  Globe,
   Users,
-  LayoutDashboard,
-  Flag,
+  Handshake,
+  Rocket,
+  Lightbulb,
+  Plus,
+  MessageSquare,
+  GraduationCap,
+  BookOpen,
+  Calendar,
+  Video,
+  Info,
+  Map,
+  Activity,
   LucideIcon
 } from "lucide-react";
 
@@ -33,117 +34,146 @@ export interface NavItem {
   submenu?: NavSubItem[];
 }
 
-// Navigation principale simplifiée (5 items max)
+// ============================================================
+// NOUVELLE NAVIGATION PAR COUCHES - ARCHITECTURE UX REFONDÉE
+// ============================================================
+// Principe : 1 couche = 1 intention utilisateur
+// Couche 1 : RÉSEAU (visible par défaut)
+// Couche 2 : COLLABORATION (sur intention)
+// Couche 3 : OPÉRATIONNEL (isolée, mode avancé)
+// ============================================================
+
 export const mainNavigation: NavItem[] = [
   { 
-    id: 'home',
-    label: 'Accueil', 
-    labelKey: 'nav.home',
-    href: '/', 
-    icon: Home,
-    highlight: false 
-  },
-  { 
-    id: 'piloting',
-    label: 'Pilotage', 
-    labelKey: 'nav.piloting',
-    icon: BarChart2,
+    id: 'network',
+    label: 'Réseau', 
+    labelKey: 'nav.network',
+    icon: Globe,
     highlight: true,
     submenu: [
       { 
-        label: "Vue réseau", 
-        labelKey: 'nav.impact.view',
-        href: '/dashboard', 
-        icon: LayoutDashboard, 
-        description: 'Coordination collective' 
+        label: 'Vue Réseau', 
+        labelKey: 'nav.network.view',
+        href: '/network', 
+        icon: Globe, 
+        description: 'Coordination collective SUTEL' 
       },
       { 
-        label: 'Mon pays', 
-        labelKey: 'nav.my.country',
-        href: '/my-country', 
-        icon: Flag, 
-        description: 'Vue privée de mon FSU' 
+        label: 'Pays membres', 
+        labelKey: 'nav.network.members',
+        href: '/members', 
+        icon: Users, 
+        description: 'Annuaire du réseau' 
       },
       { 
-        label: 'Analytics', 
-        labelKey: 'nav.analytics',
-        href: '/analytics', 
-        icon: BarChart3, 
-        description: 'Analyses détaillées' 
+        label: 'Carte du réseau', 
+        labelKey: 'nav.network.map',
+        href: '/map', 
+        icon: Map, 
+        description: 'Visualisation géographique' 
+      },
+      { 
+        label: 'Activité récente', 
+        labelKey: 'nav.network.activity',
+        href: '/activity', 
+        icon: Activity, 
+        description: 'Ce qui se passe dans le réseau' 
       },
     ]
   },
   { 
-    id: 'projects',
-    label: 'Projets FSU', 
-    labelKey: 'nav.projects.fsu',
-    icon: Rocket,
+    id: 'collaborate',
+    label: 'Collaborer', 
+    labelKey: 'nav.collaborate',
+    icon: Handshake,
     highlight: false,
     submenu: [
       { 
-        label: 'Tous les projets', 
-        labelKey: 'nav.all.projects',
+        label: 'Projets inspirants', 
+        labelKey: 'nav.collaborate.projects',
         href: '/projects', 
-        icon: FolderOpen, 
-        description: 'Explorer les projets' 
+        icon: Rocket, 
+        description: 'Découvrir ce qui marche' 
       },
       { 
-        label: 'Soumettre un projet', 
-        labelKey: 'nav.submit.project',
+        label: 'Bonnes pratiques', 
+        labelKey: 'nav.collaborate.practices',
+        href: '/practices', 
+        icon: Lightbulb, 
+        description: 'Partage d\'expériences' 
+      },
+      { 
+        label: 'Proposer un projet', 
+        labelKey: 'nav.collaborate.submit',
         href: '/submit', 
         icon: Plus, 
-        description: 'Nouvelle initiative' 
+        description: 'Partager une initiative' 
       },
       { 
-        label: 'Note conceptuelle', 
-        labelKey: 'nav.concept.note',
-        href: '/concept-note', 
-        icon: FileText, 
-        description: 'Préparer une note' 
+        label: 'Discussions', 
+        labelKey: 'nav.collaborate.discussions',
+        href: '/forum', 
+        icon: MessageSquare, 
+        description: 'Échanger avec le réseau' 
       },
     ]
   },
   { 
-    id: 'community',
-    label: 'Communauté', 
-    labelKey: 'nav.community',
-    icon: Users,
+    id: 'learn',
+    label: 'Apprendre', 
+    labelKey: 'nav.learn',
+    icon: GraduationCap,
     highlight: false,
     submenu: [
       { 
-        label: 'Discussions', 
-        labelKey: 'nav.discussions',
-        href: '/forum', 
-        icon: MessageSquare, 
-        description: "Forum d'échange" 
+        label: 'E-Learning', 
+        labelKey: 'nav.learn.elearning',
+        href: '/elearning', 
+        icon: BookOpen, 
+        description: 'Formations en ligne' 
       },
       { 
         label: 'Événements', 
-        labelKey: 'nav.events',
+        labelKey: 'nav.learn.events',
         href: '/events', 
         icon: Calendar, 
         description: 'Agenda collaboratif' 
       },
+      { 
+        label: 'Webinaires', 
+        labelKey: 'nav.learn.webinars',
+        href: '/webinars', 
+        icon: Video, 
+        description: 'Sessions en direct' 
+      },
     ]
   },
   { 
-    id: 'resources',
+    id: 'library',
     label: 'Bibliothèque', 
     labelKey: 'nav.library',
     href: '/resources', 
     icon: BookOpen,
     highlight: false 
   },
+  { 
+    id: 'about',
+    label: 'À propos', 
+    labelKey: 'nav.about',
+    href: '/about', 
+    icon: Info,
+    highlight: false 
+  },
 ];
 
-// Labels de navigation modernisés pour les sidebars
+// Labels de navigation pour les sidebars
 export const sidebarLabels = {
-  dashboard: "Vue d'impact",
-  projects: "Projets FSU",
+  network: "Réseau SUTEL",
+  members: "Pays membres",
+  projects: "Projets inspirants",
   resources: "Bibliothèque",
-  forum: "Communauté",
-  submit: "Soumettre un projet",
+  forum: "Discussions",
+  submit: "Proposer un projet",
   events: "Événements",
-  indicators: "Indicateurs",
-  organizations: "Organisations",
+  elearning: "E-Learning",
 };

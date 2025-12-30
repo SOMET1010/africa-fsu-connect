@@ -1,0 +1,130 @@
+import { useTranslation } from "@/hooks/useTranslation";
+import { 
+  Rocket, 
+  FileText, 
+  Calendar, 
+  MessageSquare,
+  Users
+} from "lucide-react";
+
+interface ActivityItem {
+  id: string;
+  type: 'project' | 'document' | 'event' | 'discussion' | 'collaboration';
+  country: string;
+  flag: string;
+  action: string;
+  title: string;
+  timeAgo: string;
+}
+
+// Mock data - en production, viendrait de l'API
+const mockActivities: ActivityItem[] = [
+  {
+    id: '1',
+    type: 'project',
+    country: 'Mali',
+    flag: '🇲🇱',
+    action: 'a partagé un projet',
+    title: 'Connectivité rurale dans la région de Mopti',
+    timeAgo: 'il y a 2 heures'
+  },
+  {
+    id: '2',
+    type: 'document',
+    country: 'Kenya',
+    flag: '🇰🇪',
+    action: 'a documenté une bonne pratique',
+    title: 'Méthodologie de suivi des bénéficiaires',
+    timeAgo: 'il y a 5 heures'
+  },
+  {
+    id: '3',
+    type: 'event',
+    country: 'Réseau SUTEL',
+    flag: '🌍',
+    action: 'organise un webinaire',
+    title: 'Financement innovant des FSU',
+    timeAgo: 'demain à 14h'
+  },
+  {
+    id: '4',
+    type: 'collaboration',
+    country: 'Sénégal',
+    flag: '🇸🇳',
+    action: 'et Côte d\'Ivoire collaborent sur',
+    title: 'Partage d\'infrastructures backbone',
+    timeAgo: 'il y a 1 jour'
+  },
+  {
+    id: '5',
+    type: 'discussion',
+    country: 'Ghana',
+    flag: '🇬🇭',
+    action: 'a lancé une discussion',
+    title: 'Harmonisation des indicateurs régionaux',
+    timeAgo: 'il y a 2 jours'
+  }
+];
+
+const getIcon = (type: ActivityItem['type']) => {
+  switch (type) {
+    case 'project': return Rocket;
+    case 'document': return FileText;
+    case 'event': return Calendar;
+    case 'discussion': return MessageSquare;
+    case 'collaboration': return Users;
+    default: return Rocket;
+  }
+};
+
+const getIconColor = (type: ActivityItem['type']) => {
+  switch (type) {
+    case 'project': return 'text-primary bg-primary/10';
+    case 'document': return 'text-blue-500 bg-blue-500/10';
+    case 'event': return 'text-amber-500 bg-amber-500/10';
+    case 'discussion': return 'text-purple-500 bg-purple-500/10';
+    case 'collaboration': return 'text-green-500 bg-green-500/10';
+    default: return 'text-primary bg-primary/10';
+  }
+};
+
+export const ActivityTimeline = () => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="space-y-4">
+      {mockActivities.map((activity) => {
+        const Icon = getIcon(activity.type);
+        const iconColorClass = getIconColor(activity.type);
+        
+        return (
+          <div 
+            key={activity.id}
+            className="flex items-start gap-4 p-4 rounded-lg bg-card/50 border border-border/50 hover:bg-card/80 transition-colors"
+          >
+            {/* Icône */}
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${iconColorClass}`}>
+              <Icon className="h-5 w-5" />
+            </div>
+
+            {/* Contenu */}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm">
+                <span className="font-medium">{activity.flag} {activity.country}</span>
+                <span className="text-muted-foreground"> {activity.action}</span>
+              </p>
+              <p className="text-foreground font-medium mt-1 truncate">
+                {activity.title}
+              </p>
+            </div>
+
+            {/* Temps */}
+            <span className="text-xs text-muted-foreground flex-shrink-0">
+              {activity.timeAgo}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+};

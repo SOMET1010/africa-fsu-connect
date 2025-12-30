@@ -77,9 +77,52 @@ const About = lazy(() => import('@/pages/About'));
 const Roadmap = lazy(() => import('@/pages/Roadmap'));
 const MyCountry = lazy(() => import('@/pages/MyCountry'));
 
+// New network pages (3-layer architecture)
+const NetworkView = lazy(() => import('@/pages/NetworkView'));
+const MembersDirectory = lazy(() => import('@/pages/MembersDirectory'));
+const CountryProfile = lazy(() => import('@/pages/CountryProfile'));
+
 // Configuration centralisée des routes
 export const ROUTES: RouteConfig[] = [
-  // Routes principales
+  // COUCHE 1 - RÉSEAU (visible par défaut)
+  {
+    path: '/network',
+    component: NetworkView,
+    title: 'Vue Réseau',
+    description: 'Coordination collective du réseau SUTEL',
+    icon: Home,
+    isProtected: false,
+    showInSidebar: true,
+    showInMobileNav: true,
+    category: 'main',
+    univers: 'pilotage',
+  },
+  {
+    path: '/members',
+    component: MembersDirectory,
+    title: 'Pays membres',
+    description: 'Annuaire des pays du réseau NEXUS',
+    icon: Building2,
+    isProtected: false,
+    showInSidebar: true,
+    showInMobileNav: false,
+    category: 'main',
+    univers: 'pilotage',
+  },
+  {
+    path: '/country/:code',
+    component: CountryProfile,
+    title: 'Fiche Pays',
+    description: 'Profil d\'un pays membre',
+    icon: Building2,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'main',
+    univers: 'pilotage',
+  },
+  // Legacy route redirect
   {
     path: '/dashboard',
     component: Dashboard,
@@ -87,8 +130,8 @@ export const ROUTES: RouteConfig[] = [
     description: 'Vue d\'ensemble de vos activités et indicateurs clés',
     icon: Home,
     isProtected: true,
-    showInSidebar: true,
-    showInMobileNav: true,
+    showInSidebar: false,
+    showInMobileNav: false,
     category: 'main',
     univers: 'pilotage',
   },
