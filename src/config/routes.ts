@@ -56,6 +56,15 @@ const Admin = lazy(() => import('@/pages/Admin'));
 const AdminUsers = lazy(() => import('@/pages/AdminUsers'));
 const AdminForum = lazy(() => import('@/pages/AdminForum'));
 
+// New SUTEL modules
+const ELearning = lazy(() => import('@/pages/ELearning'));
+const StrategicWatch = lazy(() => import('@/pages/StrategicWatch'));
+const Coauthoring = lazy(() => import('@/pages/Coauthoring'));
+const PublicDashboard = lazy(() => import('@/pages/PublicDashboard'));
+const SutaAssistant = lazy(() => import('@/pages/SutaAssistant'));
+const About = lazy(() => import('@/pages/About'));
+const Roadmap = lazy(() => import('@/pages/Roadmap'));
+
 // Configuration centralisée des routes
 export const ROUTES: RouteConfig[] = [
   // Routes principales
@@ -261,6 +270,85 @@ export const ROUTES: RouteConfig[] = [
     showInMobileNav: false,
     hideFromNav: true,
     category: 'admin',
+  },
+
+  // New SUTEL modules
+  {
+    path: '/elearning',
+    component: ELearning,
+    title: 'E-Learning',
+    description: 'Formation et parcours métiers',
+    icon: BookOpen,
+    isProtected: true,
+    showInSidebar: true,
+    showInMobileNav: false,
+    category: 'main',
+  },
+  {
+    path: '/watch',
+    component: StrategicWatch,
+    title: 'Veille Stratégique',
+    description: 'Actualités et opportunités de financement',
+    icon: BarChart3,
+    isProtected: true,
+    showInSidebar: true,
+    showInMobileNav: false,
+    category: 'management',
+  },
+  {
+    path: '/coauthoring',
+    component: Coauthoring,
+    title: 'Co-rédaction',
+    description: 'Édition collaborative de documents',
+    icon: FileText,
+    isProtected: true,
+    showInSidebar: true,
+    showInMobileNav: false,
+    category: 'management',
+  },
+  {
+    path: '/public-dashboard',
+    component: PublicDashboard,
+    title: 'Tableau de Bord Public',
+    description: 'Indicateurs agrégés et progrès régional',
+    icon: BarChart3,
+    isProtected: false,
+    showInSidebar: true,
+    showInMobileNav: false,
+    category: 'main',
+  },
+  {
+    path: '/assistant',
+    component: SutaAssistant,
+    title: 'Assistant SUTA',
+    description: 'Assistant IA multilingue',
+    icon: MessageSquare,
+    isProtected: true,
+    showInSidebar: true,
+    showInMobileNav: true,
+    category: 'main',
+  },
+  {
+    path: '/about',
+    component: About,
+    title: 'À Propos',
+    description: 'Gouvernance et mission SUTEL',
+    icon: Building2,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    category: 'main',
+  },
+  {
+    path: '/roadmap',
+    component: Roadmap,
+    title: 'Feuille de Route',
+    description: 'Roadmap 2025-2026',
+    icon: Rocket,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    category: 'main',
   },
 
   // Routes admin (chunk séparé)
