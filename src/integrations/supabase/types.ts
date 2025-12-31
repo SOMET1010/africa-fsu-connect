@@ -952,8 +952,11 @@ export type Database = {
           longitude: number | null
           name_en: string
           name_fr: string
+          official_language: string | null
           region: string | null
+          sutel_community: string | null
           updated_at: string
+          working_languages: string[] | null
         }
         Insert: {
           capital_city?: string | null
@@ -965,8 +968,11 @@ export type Database = {
           longitude?: number | null
           name_en: string
           name_fr: string
+          official_language?: string | null
           region?: string | null
+          sutel_community?: string | null
           updated_at?: string
+          working_languages?: string[] | null
         }
         Update: {
           capital_city?: string | null
@@ -978,8 +984,11 @@ export type Database = {
           longitude?: number | null
           name_en?: string
           name_fr?: string
+          official_language?: string | null
           region?: string | null
+          sutel_community?: string | null
           updated_at?: string
+          working_languages?: string[] | null
         }
         Relationships: []
       }

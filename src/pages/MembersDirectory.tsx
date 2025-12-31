@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,14 +12,17 @@ import {
 import { Search, Globe, Users } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useMembersDirectory } from "@/hooks/useMembersDirectory";
-import { MemberCountryCard } from "@/components/members/MemberCountryCard";
 import { RegionSection } from "@/components/members/RegionSection";
+import { LANGUAGE_LABELS } from "@/services/countriesService";
 
 const MembersDirectory = () => {
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
+  const [searchParams] = useSearchParams();
+  
   const { 
     countriesByRegion, 
-    regions, 
+    regions,
+    languages,
     isLoading,
     searchTerm,
     setSearchTerm,
@@ -27,8 +30,18 @@ const MembersDirectory = () => {
     setSelectedRegion,
     selectedStatus,
     setSelectedStatus,
+    selectedLanguage,
+    setSelectedLanguage,
     filteredCount
   } = useMembersDirectory();
+
+  // Appliquer le filtre langue depuis l'URL
+  useEffect(() => {
+    const langParam = searchParams.get('language');
+    if (langParam && languages.includes(langParam)) {
+      setSelectedLanguage(langParam);
+    }
+  }, [searchParams, languages, setSelectedLanguage]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10">
@@ -92,6 +105,25 @@ const MembersDirectory = () => {
                   <SelectItem value="active">{t('members.filter.status.active') || "Actif"}</SelectItem>
                   <SelectItem value="member">{t('members.filter.status.member') || "Membre"}</SelectItem>
                   <SelectItem value="joining">{t('members.filter.status.joining') || "En adhésion"}</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Filtre langue */}
+              <Select value={selectedLanguage || "all"} onValueChange={(v) => setSelectedLanguage(v === "all" ? null : v)}>
+                <SelectTrigger className="w-44">
+                  <SelectValue placeholder={currentLanguage === 'en' ? "Language" : "Langue"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{currentLanguage === 'en' ? "All languages" : "Toutes les langues"}</SelectItem>
+                  {languages.map((lang) => {
+                    const labelInfo = LANGUAGE_LABELS[lang];
+                    const label = labelInfo 
+                      ? `${labelInfo.flag} ${currentLanguage === 'en' ? labelInfo.en : labelInfo.fr}`
+                      : lang.toUpperCase();
+                    return (
+                      <SelectItem key={lang} value={lang}>{label}</SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
 
