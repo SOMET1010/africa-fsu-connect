@@ -61,8 +61,18 @@ describe('Critical Core Tests', () => {
       const validPrefs = {
         theme: 'light',
         language: 'fr',
-        dashboardLayout: 'grid',
-        notifications: true
+        notifications: true,
+        layout: 'comfortable',
+        accessibility: {
+          highContrast: false,
+          fontSize: 'medium',
+          reduceMotion: false,
+        },
+        dashboard: {
+          layout: ['stats', 'charts'],
+          autoRefresh: true,
+          refreshInterval: 30000,
+        },
       };
       
       expect(() => validateData(userPreferencesSchema, validPrefs)).not.toThrow();
