@@ -7,6 +7,9 @@ export interface MemberCountry {
   flag: string;
   region: string;
   status: 'active' | 'member' | 'joining';
+  official_language?: string;
+  working_languages?: string[];
+  sutel_community?: string;
 }
 
 // Génère un drapeau emoji à partir du code pays
@@ -34,6 +37,7 @@ export const useMembersDirectory = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
   useEffect(() => {
     const loadCountries = async () => {
@@ -47,6 +51,9 @@ export const useMembersDirectory = () => {
           flag: getCountryFlag(c.code),
           region: c.region || 'Afrique',
           status: simulateMemberStatus(c.code),
+          official_language: c.official_language,
+          working_languages: c.working_languages,
+          sutel_community: c.sutel_community,
         }));
         
         setCountries(memberCountries);
@@ -66,6 +73,15 @@ export const useMembersDirectory = () => {
     return uniqueRegions.sort();
   }, [countries]);
 
+  // Langues uniques
+  const languages = useMemo(() => {
+    const uniqueLangs = new Set<string>();
+    countries.forEach(c => {
+      if (c.official_language) uniqueLangs.add(c.official_language);
+    });
+    return Array.from(uniqueLangs).sort();
+  }, [countries]);
+
   // Filtrage
   const filteredCountries = useMemo(() => {
     return countries.filter(country => {
@@ -81,9 +97,15 @@ export const useMembersDirectory = () => {
       if (selectedStatus && country.status !== selectedStatus) {
         return false;
       }
+      // Filtre langue
+      if (selectedLanguage) {
+        const hasLanguage = country.official_language === selectedLanguage || 
+                           country.working_languages?.includes(selectedLanguage);
+        if (!hasLanguage) return false;
+      }
       return true;
     });
-  }, [countries, searchTerm, selectedRegion, selectedStatus]);
+  }, [countries, searchTerm, selectedRegion, selectedStatus, selectedLanguage]);
 
   // Grouper par région
   const countriesByRegion = useMemo(() => {
@@ -109,6 +131,7 @@ export const useMembersDirectory = () => {
     filteredCountries,
     countriesByRegion,
     regions,
+    languages,
     isLoading,
     searchTerm,
     setSearchTerm,
@@ -116,6 +139,8 @@ export const useMembersDirectory = () => {
     setSelectedRegion,
     selectedStatus,
     setSelectedStatus,
+    selectedLanguage,
+    setSelectedLanguage,
     filteredCount: filteredCountries.length,
   };
 };

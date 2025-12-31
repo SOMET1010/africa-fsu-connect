@@ -14,6 +14,8 @@ import { RegionCards } from "@/components/network/RegionCards";
 import { ActivityTimeline } from "@/components/network/ActivityTimeline";
 import { PresenceIndicator } from "@/components/network/PresenceIndicator";
 import { NexusActionCard } from "@/components/ui/nexus-card";
+import { UATCoordinationSection } from "@/components/network/UATCoordinationSection";
+import { LinguisticCommunitiesSection } from "@/components/network/LinguisticCommunitiesSection";
 import { useTranslation } from "@/hooks/useTranslation";
 
 const NetworkView = () => {
@@ -65,6 +67,12 @@ const NetworkView = () => {
           </div>
         </div>
       </section>
+
+      {/* Section UAT - Coordination du réseau */}
+      <UATCoordinationSection />
+
+      {/* Section Communautés linguistiques */}
+      <LinguisticCommunitiesSection />
 
       {/* Section Régions - Fond légèrement différent */}
       <section className="py-12 bg-[hsl(var(--nx-surface))]">

@@ -67,6 +67,23 @@ export function AppRoutes() {
         } 
       />
       
+      {/* Routes publiques (non protégées) */}
+      {ROUTES
+        .filter(route => route.isProtected === false && route.path !== '/presentation')
+        .map(({ path, component: Component, title }) => (
+          <Route 
+            key={path}
+            path={path} 
+            element={
+              <AppShell>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <Component />
+                </Suspense>
+              </AppShell>
+            } 
+          />
+        ))}
+      
       {/* Routes protégées normales */}
       {getProtectedRoutes()
         .filter(route => !route.requiredRoles?.length && route.path !== '/presentation')
