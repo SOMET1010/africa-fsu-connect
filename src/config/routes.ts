@@ -66,7 +66,7 @@ const PresentationAnalytics = lazy(() => import('@/components/presentation/Prese
 const Admin = lazy(() => import('@/pages/Admin'));
 const AdminUsers = lazy(() => import('@/pages/AdminUsers'));
 const AdminForum = lazy(() => import('@/pages/AdminForum'));
-
+const AdminResources = lazy(() => import('@/pages/admin/AdminResources'));
 // New SUTEL modules
 const ELearning = lazy(() => import('@/pages/ELearning'));
 const StrategicWatch = lazy(() => import('@/pages/StrategicWatch'));
@@ -502,6 +502,20 @@ export const ROUTES: RouteConfig[] = [
     title: 'Administration du forum',
     description: 'Modération et administration du forum',
     icon: MessageSquare,
+    isProtected: true,
+    requiredRoles: ['super_admin', 'admin_pays', 'editeur'],
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'admin',
+    univers: 'admin',
+  },
+  {
+    path: '/admin/resources',
+    component: AdminResources,
+    title: 'Administration des ressources',
+    description: 'Gestion et analytics des ressources de la bibliothèque',
+    icon: BookOpen,
     isProtected: true,
     requiredRoles: ['super_admin', 'admin_pays', 'editeur'],
     showInSidebar: false,

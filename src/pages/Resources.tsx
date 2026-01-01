@@ -1,81 +1,81 @@
-import React, { useState, useCallback, useMemo, useRef } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useOptimizedDocuments } from "@/hooks/useOptimizedDocuments";
-import { useEnhancedSearch } from "@/hooks/useEnhancedSearch";
 import { SearchProvider, useSearch } from "@/contexts/SearchContext";
-import { AdaptiveInterface } from "@/components/layout/AdaptiveInterface";
-import { SimplifiedResources } from "@/components/resources/SimplifiedResources";
-import { AdvancedResourcesControls } from "@/components/resources/AdvancedResourcesControls";
-import ResourceStats from "@/components/resources/ResourceStats";
-import DocumentCard from "@/components/resources/DocumentCard";
+import { LibraryHero } from "@/components/resources/LibraryHero";
+import { ResourceFilters, ResourceFilterValues } from "@/components/resources/ResourceFilters";
+import { FeaturedResources } from "@/components/resources/FeaturedResources";
+import { ResourceGrid } from "@/components/resources/ResourceGrid";
+import { ShareResourceCTA } from "@/components/resources/ShareResourceCTA";
 import DocumentUploadDialog from "@/pages/resources/components/DocumentUploadDialog";
 import DocumentPreviewDialog from "@/pages/resources/components/DocumentPreviewDialog";
-import EmptyDocumentsState from "@/pages/resources/components/EmptyDocumentsState";
 import SampleDataButton from "@/components/resources/SampleDataButton";
-import { HeroSection } from "@/components/ui/hero-section";
-import { ModernCard } from "@/components/ui/modern-card";
-import { ModernButton } from "@/components/ui/modern-button";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { useTranslation } from "@/hooks/useTranslation";
-import { useNavigate } from "react-router-dom";
-import { 
-  FileText, 
-  Upload, 
-  Download, 
-  Search, 
-  Filter,
-  Database,
-  Plus,
-  BarChart3,
-  Zap,
-  Grid
-} from "lucide-react";
 
+/**
+ * Resources Page - NEXUS Layer 2 (Learning/Collaboration)
+ * 
+ * Single intention: "Explore, share and learn from SUTEL network resources"
+ * 
+ * Design principles:
+ * - Clean, calm library aesthetic
+ * - No KPIs or analytics (moved to /admin/resources)
+ * - No admin tools visible
+ * - Focus on discovery and learning
+ */
 const ResourcesContent = () => {
   const { state, performSearch, fetchInitialDocuments } = useSearch();
   const { uploadDocument, downloadDocument } = useOptimizedDocuments();
-  const { results, loading: searchLoading, performAdvancedSearch, availableFilters } = useEnhancedSearch();
   const { toast } = useToast();
-  const { t } = useTranslation();
-  const navigate = useNavigate();
   
-  const [activeTab, setActiveTab] = useState<'simple' | 'advanced'>('simple');
   const [previewDoc, setPreviewDoc] = useState<any>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState<ResourceFilterValues>({});
 
-  const searchFilters = useMemo(() => [
-    {
-      id: "document_type",
-      label: "Type de Document",
-      options: [
-        { value: "guide", label: "Guide" },
-        { value: "rapport", label: "Rapport" },
-        { value: "presentation", label: "Présentation" },
-        { value: "formulaire", label: "Formulaire" },
-        { value: "autre", label: "Autre" }
-      ]
-    },
-    {
-      id: "country",
-      label: "Pays",
-      options: [
-        { value: "ci", label: "Côte d'Ivoire" },
-        { value: "sn", label: "Sénégal" },
-        { value: "za", label: "Afrique du Sud" },
-        { value: "ng", label: "Nigéria" },
-        { value: "gh", label: "Ghana" },
-        { value: "ke", label: "Kenya" },
-        { value: "tz", label: "Tanzanie" },
-        { value: "ug", label: "Ouganda" }
-      ]
-    }
-  ], []);
-
+  // Fetch documents on mount
   React.useEffect(() => {
     fetchInitialDocuments();
   }, [fetchInitialDocuments]);
+
+  // Filter documents based on search and filters
+  const filteredDocuments = useMemo(() => {
+    let docs = state.documents;
+
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      docs = docs.filter(doc => 
+        doc.title?.toLowerCase().includes(query) ||
+        doc.description?.toLowerCase().includes(query)
+      );
+    }
+
+    // Type filter
+    if (filters.type) {
+      docs = docs.filter(doc => doc.document_type === filters.type);
+    }
+
+    // Country filter
+    if (filters.country) {
+      docs = docs.filter(doc => doc.country?.toLowerCase() === filters.country);
+    }
+
+    return docs;
+  }, [state.documents, searchQuery, filters]);
+
+  // Featured documents (marked as featured or first 3)
+  const featuredDocuments = useMemo(() => {
+    return state.documents.filter(doc => doc.featured).slice(0, 3);
+  }, [state.documents]);
+
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
+
+  const handleFilterChange = useCallback((newFilters: ResourceFilterValues) => {
+    setFilters(newFilters);
+  }, []);
 
   const handleFileUpload = useCallback(async (files: File[], metadata: any) => {
     if (!metadata.title.trim()) {
@@ -91,12 +91,12 @@ const ResourcesContent = () => {
       for (const file of files) {
         await uploadDocument(file, metadata);
       }
-      // Refresh search results after upload
-      performSearch('', {});
-    } catch (error) {
+      fetchInitialDocuments();
+      setIsUploadDialogOpen(false);
+    } catch {
       // Error handled in hook
     }
-  }, [uploadDocument, performSearch, toast]);
+  }, [uploadDocument, fetchInitialDocuments, toast]);
 
   const handlePreview = useCallback((doc: any) => {
     setPreviewDoc(doc);
@@ -107,95 +107,50 @@ const ResourcesContent = () => {
     downloadDocument(doc);
   }, [downloadDocument]);
 
-  const handleShowAllDocuments = useCallback(() => {
-    performSearch('', {});
-  }, [performSearch]);
-
   const handleOpenUploadDialog = useCallback(() => {
     setIsUploadDialogOpen(true);
   }, []);
 
-  const handleAnalytics = useCallback(() => {
-    // Scroll to the ResourceStats section
-    setTimeout(() => {
-      const element = document.querySelector('[data-analytics-section]');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
-  }, []);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 space-y-8">
         
-        {/* Hero Section */}
-        <ScrollReveal direction="fade">
-          <HeroSection
-            title={t('resources.title')}
-            subtitle={t('resources.subtitle')}
-            description={t('resources.description')}
-            actions={[
-              {
-                label: "Ajouter Document",
-                onClick: handleOpenUploadDialog,
-                icon: <Upload className="h-5 w-5" />,
-                variant: "default"
-              },
-              {
-                label: "Analytics",
-                onClick: handleAnalytics,
-                icon: <BarChart3 className="h-5 w-5" />,
-                variant: "outline"
-              }
-            ]}
-          >
-            {state.documents.length === 0 && !state.loading && (
-              <div className="mt-6">
-                <SampleDataButton onDataAdded={fetchInitialDocuments} />
-              </div>
-            )}
-          </HeroSection>
-        </ScrollReveal>
+        {/* Hero - Clean and focused */}
+        <LibraryHero onShareResource={handleOpenUploadDialog} />
 
-        {/* Resource Stats */}
-        <ScrollReveal delay={200}>
-          <div data-analytics-section>
-            <ResourceStats documents={state.documents} loading={state.loading} />
+        {/* Sample data button (only when empty) */}
+        {state.documents.length === 0 && !state.loading && (
+          <div className="flex justify-center">
+            <SampleDataButton onDataAdded={fetchInitialDocuments} />
           </div>
-        </ScrollReveal>
+        )}
 
-        {/* Adaptive Interface */}
-        <AdaptiveInterface
-          title="Gestion des Ressources"
-          description="Interface adaptée à votre niveau d'expertise"
-          advancedContent={
-            <AdvancedResourcesControls
-              documents={state.documents}
-              results={results}
-              loading={state.loading}
-              searchLoading={searchLoading}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              performSearch={performSearch}
-              performAdvancedSearch={performAdvancedSearch}
-              availableFilters={availableFilters}
-              onPreview={handlePreview}
-              onDownload={handleDownload}
-              onOpenUploadDialog={handleOpenUploadDialog}
-            />
-          }
-        >
-          <SimplifiedResources
-            documents={state.documents}
-            loading={state.loading}
-            onOpenUploadDialog={handleOpenUploadDialog}
-            onAnalytics={handleAnalytics}
+        {/* Filters - Simple and accessible */}
+        <ResourceFilters
+          onSearch={handleSearch}
+          onFilterChange={handleFilterChange}
+          initialFilters={filters}
+        />
+
+        {/* Featured resources section */}
+        {featuredDocuments.length > 0 && (
+          <FeaturedResources
+            documents={featuredDocuments}
             onPreview={handlePreview}
             onDownload={handleDownload}
-            fetchInitialDocuments={fetchInitialDocuments}
           />
-        </AdaptiveInterface>
+        )}
+
+        {/* All resources grid */}
+        <ResourceGrid
+          documents={filteredDocuments}
+          loading={state.loading}
+          onPreview={handlePreview}
+          onDownload={handleDownload}
+        />
+
+        {/* CTA to share resources */}
+        <ShareResourceCTA onClick={handleOpenUploadDialog} />
 
         {/* Document Preview Dialog */}
         <DocumentPreviewDialog
@@ -216,6 +171,9 @@ const ResourcesContent = () => {
   );
 };
 
+/**
+ * Resources page wrapper with SearchProvider
+ */
 const Resources = () => {
   return (
     <SearchProvider>
