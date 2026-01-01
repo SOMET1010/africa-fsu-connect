@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Users } from "lucide-react";
 import { CountriesService, SUTEL_COMMUNITIES } from "@/services/countriesService";
 import { useTranslation } from "@/hooks/useTranslation";
+import { logger } from "@/utils/logger";
 
 interface CommunityStats {
   code: string;
@@ -39,7 +40,7 @@ export const LinguisticCommunitiesSection = () => {
 
         setCommunities(communityList);
       } catch (error) {
-        console.error('Error loading community stats:', error);
+        logger.error('Error loading community stats', error);
       } finally {
         setIsLoading(false);
       }

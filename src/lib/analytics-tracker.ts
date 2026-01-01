@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/utils/logger';
 
 interface SessionData {
   sessionId: string;
@@ -116,10 +117,10 @@ class PresentationAnalytics {
         });
 
       if (error) {
-        console.error('Failed to save analytics:', error);
+        logger.error('Failed to save analytics', error);
       }
     } catch (error) {
-      console.error('Analytics flush error:', error);
+      logger.error('Analytics flush error', error);
     }
   }
 

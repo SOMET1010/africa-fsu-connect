@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CountriesService } from '@/services/countriesService';
+import { logger } from '@/utils/logger';
 
 export interface CountryProfile {
   code: string;
@@ -141,7 +142,7 @@ export const useCountryProfile = (code: string) => {
         setProjects(mockProjects[code.toUpperCase()] || []);
         setPractices(mockPractices[code.toUpperCase()] || []);
       } catch (error) {
-        console.error('Error loading country profile:', error);
+        logger.error('Error loading country profile', error);
         setCountry(null);
       } finally {
         setIsLoading(false);

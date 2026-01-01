@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Download, TrendingUp, Users, Clock, FileText } from 'lucide-react';
 import { toast } from 'sonner';
-
+import { logger } from '@/utils/logger';
 interface AnalyticsData {
   totalSessions: number;
   completionRate: number;
@@ -104,7 +104,7 @@ export const PresentationAnalytics = () => {
         setDeviceData(deviceChartData);
       }
     } catch (error) {
-      console.error('Failed to fetch analytics:', error);
+      logger.error('Failed to fetch analytics', error);
       toast.error('Erreur lors du chargement des analytics');
     } finally {
       setLoading(false);

@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import RecordRTC from 'recordrtc';
+import { logger } from '@/utils/logger';
 
 interface RecordingOptions {
   includeAudio?: boolean;
@@ -48,7 +49,7 @@ export const useScreenRecording = () => {
         stopRecording();
       });
     } catch (error) {
-      console.error('Failed to start recording:', error);
+      logger.error('Failed to start recording', error);
       throw error;
     }
   }, []);
