@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-interface AutoSaveOptions {
+interface AutoSaveOptions<T> {
   delay?: number;
-  onSave: (data: any) => Promise<void>;
+  onSave: (data: T) => Promise<void>;
   onSaveSuccess?: () => void;
   onSaveError?: (error: Error) => void;
 }
@@ -13,7 +13,7 @@ export interface AutoSaveStatus {
   error?: string;
 }
 
-export const useAutoSave = (data: any, options: AutoSaveOptions) => {
+export function useAutoSave<T>(data: T, options: AutoSaveOptions<T>) {
   const {
     delay = 30000, // 30 seconds default
     onSave,
@@ -25,7 +25,7 @@ export const useAutoSave = (data: any, options: AutoSaveOptions) => {
     status: 'idle',
   });
 
-  const lastSavedData = useRef<any>(null);
+  const lastSavedData = useRef<T | null>(null);
   const saveTimeoutRef = useRef<NodeJS.Timeout>();
   const debouncedData = useDebounce(data, delay);
 
@@ -65,7 +65,7 @@ export const useAutoSave = (data: any, options: AutoSaveOptions) => {
 
   // Auto-save when debounced data changes
   useEffect(() => {
-    if (debouncedData && Object.keys(debouncedData).length > 0) {
+    if (debouncedData && typeof debouncedData === 'object' && Object.keys(debouncedData as object).length > 0) {
       performSave();
     }
   }, [debouncedData, performSave]);
@@ -84,10 +84,10 @@ export const useAutoSave = (data: any, options: AutoSaveOptions) => {
     manualSave,
     resetAutoSaveStatus,
   };
-};
+}
 
 // Custom hook for debouncing values
-const useDebounce = (value: any, delay: number) => {
+function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
@@ -101,4 +101,4 @@ const useDebounce = (value: any, delay: number) => {
   }, [value, delay]);
 
   return debouncedValue;
-};
+}

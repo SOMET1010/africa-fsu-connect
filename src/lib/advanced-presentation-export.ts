@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { logger } from '@/utils/logger';
 
 interface ExportProgress {
   current: number;
@@ -145,7 +146,7 @@ export async function exportToPDFAdvanced(
     pdf.save(`sutel-presentation-${Date.now()}.pdf`);
 
   } catch (error) {
-    console.error('Error generating PDF:', error);
+    logger.error('Error generating PDF', error);
     throw error;
   }
 }

@@ -8,11 +8,11 @@ interface LazyLoadConfig {
   maxConcurrentLoads: number;
 }
 
-interface LazyLoadItem {
+interface LazyLoadItem<T = unknown> {
   id: string;
   priority: number;
-  loader: () => Promise<any>;
-  onLoad?: (result: any) => void;
+  loader: () => Promise<T>;
+  onLoad?: (result: T) => void;
   onError?: (error: Error) => void;
 }
 
@@ -28,7 +28,7 @@ export const useAdvancedLazyLoading = (config: Partial<LazyLoadConfig> = {}) => 
   const [loadingItems, setLoadingItems] = useState<Set<string>>(new Set());
   const [loadedItems, setLoadedItems] = useState<Set<string>>(new Set());
   const [errors, setErrors] = useState<Map<string, Error>>(new Map());
-  const queueRef = useRef<LazyLoadItem[]>([]);
+  const queueRef = useRef<LazyLoadItem<unknown>[]>([]);
   const activeLoadsRef = useRef<Set<string>>(new Set());
 
   const processQueue = useCallback(async () => {
@@ -93,20 +93,20 @@ export const useAdvancedLazyLoading = (config: Partial<LazyLoadConfig> = {}) => 
     }
   }, [fullConfig.maxConcurrentLoads, loadedItems]);
 
-  const addToQueue = useCallback((item: LazyLoadItem) => {
+  const addToQueue = useCallback(<T>(item: LazyLoadItem<T>) => {
     if (loadedItems.has(item.id) || queueRef.current.some(q => q.id === item.id)) {
       return;
     }
 
-    queueRef.current.push(item);
+    queueRef.current.push(item as LazyLoadItem<unknown>);
     processQueue();
   }, [processQueue, loadedItems]);
 
-  const lazyLoad = useCallback((
+  const lazyLoad = useCallback(<T>(
     id: string,
-    loader: () => Promise<any>,
+    loader: () => Promise<T>,
     priority: number = 1,
-    onLoad?: (result: any) => void,
+    onLoad?: (result: T) => void,
     onError?: (error: Error) => void
   ) => {
     addToQueue({ id, priority, loader, onLoad, onError });
@@ -139,7 +139,7 @@ export const useAdvancedLazyLoading = (config: Partial<LazyLoadConfig> = {}) => 
     const id = `image-${url}`;
     lazyLoad(
       id,
-      () => new Promise((resolve, reject) => {
+      () => new Promise<HTMLImageElement>((resolve, reject) => {
         const img = new Image();
         img.onload = () => resolve(img);
         img.onerror = reject;
@@ -155,9 +155,9 @@ export const useAdvancedLazyLoading = (config: Partial<LazyLoadConfig> = {}) => 
     );
   }, [lazyLoad]);
 
-  const preloadData = useCallback((
+  const preloadData = useCallback(<T>(
     key: string,
-    fetcher: () => Promise<any>,
+    fetcher: () => Promise<T>,
     priority: number = 1
   ) => {
     const id = `data-${key}`;

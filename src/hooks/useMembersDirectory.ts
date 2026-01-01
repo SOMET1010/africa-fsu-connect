@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { CountriesService, Country } from '@/services/countriesService';
+import { logger } from '@/utils/logger';
 
 export interface MemberCountry {
   code: string;
@@ -58,7 +59,7 @@ export const useMembersDirectory = () => {
         
         setCountries(memberCountries);
       } catch (error) {
-        console.error('Error loading countries:', error);
+        logger.error('Error loading countries', error);
       } finally {
         setIsLoading(false);
       }

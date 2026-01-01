@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/utils/logger';
 
 interface DualScreenState {
   isSupported: boolean;
@@ -36,7 +37,7 @@ export const useDualScreen = () => {
         return bc;
       }
     } catch (error) {
-      console.error('Failed to open presenter mode:', error);
+      logger.error('Failed to open presenter mode', error);
     }
   }, []);
 
