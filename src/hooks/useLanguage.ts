@@ -1,24 +1,40 @@
 /**
  * Hook unifié pour la gestion des langues
- * Combine UserPreferencesContext et i18next pour une API simple
+ * Utilise i18next comme source de vérité principale
+ * Se synchronise avec UserPreferencesContext quand disponible
  */
-import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { useTranslation as useI18nTranslation } from 'react-i18next';
-import { LANGUAGES, LANGUAGE_LIST, type SupportedLanguage } from '@/i18n/languages';
+import { LANGUAGES, LANGUAGE_LIST, type SupportedLanguage, isValidLanguage } from '@/i18n/languages';
 import { changeLanguage as i18nChangeLanguage } from '@/i18n/config';
+import { useContext } from 'react';
+
+// Safe import of context
+import { UserPreferencesContext } from '@/contexts/UserPreferencesContext';
 
 export const useLanguage = () => {
-  const { preferences, updatePreferences } = useUserPreferences();
   const { t, i18n } = useI18nTranslation();
   
-  const currentLanguage = preferences.language as SupportedLanguage;
+  // Try to use UserPreferencesContext if available (won't throw)
+  const userPrefsContext = useContext(UserPreferencesContext);
+  
+  // Use i18n language as source of truth
+  const i18nLang = i18n.language;
+  const currentLanguage: SupportedLanguage = isValidLanguage(i18nLang) ? i18nLang : 'fr';
   const languageConfig = LANGUAGES[currentLanguage] || LANGUAGES.fr;
   
   const setLanguage = async (lang: SupportedLanguage) => {
-    // Synchroniser i18next
+    // Update i18next (source of truth)
     await i18nChangeLanguage(lang);
-    // Mettre à jour les préférences utilisateur
-    await updatePreferences({ language: lang });
+    
+    // Also update UserPreferencesContext if available
+    if (userPrefsContext && userPrefsContext.updatePreferences) {
+      try {
+        await userPrefsContext.updatePreferences({ language: lang });
+      } catch {
+        // Context update failed, but i18n is already updated
+        console.warn('Failed to sync language with user preferences');
+      }
+    }
   };
   
   return {

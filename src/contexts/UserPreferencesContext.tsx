@@ -70,7 +70,7 @@ interface UserPreferencesContextType {
   loading: boolean;
 }
 
-const UserPreferencesContext = createContext<UserPreferencesContextType | undefined>(undefined);
+export const UserPreferencesContext = createContext<UserPreferencesContextType | undefined>(undefined);
 
 export const UserPreferencesProvider = ({ children }: { children: ReactNode }) => {
   const [preferences, setPreferences] = useState<UserPreferences>(defaultPreferences);
