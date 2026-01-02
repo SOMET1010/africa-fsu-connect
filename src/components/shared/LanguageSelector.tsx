@@ -6,8 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useUserPreferences } from "@/contexts/UserPreferencesContext";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface LanguageSelectorProps {
   variant?: "ghost" | "outline" | "default";
@@ -20,15 +19,7 @@ export const LanguageSelector = ({
   size = "sm", 
   showLabel = false 
 }: LanguageSelectorProps) => {
-  const { preferences, updatePreferences } = useUserPreferences();
-  const { t } = useTranslation();
-
-  const languages = [
-    { code: 'fr', label: 'Français', flag: '🇫🇷' },
-    { code: 'en', label: 'English', flag: '🇺🇸' }
-  ];
-
-  const currentLanguage = languages.find(lang => lang.code === preferences.language);
+  const { currentLanguage, languageConfig, setLanguage, availableLanguages } = useLanguage();
 
   return (
     <DropdownMenu>
@@ -37,21 +28,24 @@ export const LanguageSelector = ({
           <Globe className="h-4 w-4" />
           {showLabel && (
             <>
-              <span className="hidden sm:inline">{currentLanguage?.flag}</span>
-              <span className="hidden md:inline">{currentLanguage?.label}</span>
+              <span className="hidden sm:inline">{languageConfig.flag}</span>
+              <span className="hidden md:inline">{languageConfig.label}</span>
             </>
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="animate-scale-in">
-        {languages.map((language) => (
+      <DropdownMenuContent align="end" className="animate-scale-in bg-popover">
+        {availableLanguages.map((language) => (
           <DropdownMenuItem
             key={language.code}
-            onClick={() => updatePreferences({ language: language.code as 'fr' | 'en' })}
-            className={preferences.language === language.code ? 'bg-accent' : ''}
+            onClick={() => setLanguage(language.code)}
+            className={currentLanguage === language.code ? 'bg-accent' : ''}
           >
             <span className="mr-2">{language.flag}</span>
             {language.label}
+            {language.direction === 'rtl' && (
+              <span className="ml-auto text-xs text-muted-foreground">RTL</span>
+            )}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

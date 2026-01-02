@@ -2,11 +2,12 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 import { logger } from '@/utils/logger';
+import { type SupportedLanguage } from '@/i18n/languages';
 
 export interface UserPreferences {
   // Interface et navigation
   theme: 'light' | 'dark' | 'system';
-  language: 'fr' | 'en';
+  language: SupportedLanguage; // 'fr' | 'en' | 'pt' | 'ar'
   navigation_level: 'beginner' | 'standard' | 'expert';
   notifications: {
     email: boolean;

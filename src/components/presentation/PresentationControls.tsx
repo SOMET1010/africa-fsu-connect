@@ -19,7 +19,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { VideoRecorder } from "./VideoRecorder";
-import { LanguageSwitcher } from "./LanguageSwitcher";
+import { LanguageSelector } from "@/components/shared/LanguageSelector";
 import { useTranslation } from "react-i18next";
 import {
   DropdownMenu,
@@ -201,7 +201,7 @@ export function PresentationControls({
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          <LanguageSwitcher />
+          <LanguageSelector variant="outline" size="sm" showLabel />
           
           {onPresenterMode && (
             <Button
