@@ -16,7 +16,6 @@ import { MapLegend } from "./MapLegend";
 
 export const NexusMapDashboard = () => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [showActivity, setShowActivity] = useState(true);
   const [activeLayer, setActiveLayer] = useState("infrastructure");
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [mode, setMode] = useState<MapMode>("members");
@@ -96,8 +95,8 @@ export const NexusMapDashboard = () => {
         />
       </div>
 
-      {/* 3. SIDE PANEL - Activity */}
-      <ActivityPanel isOpen={showActivity} onToggle={() => setShowActivity(!showActivity)} />
+      {/* 3. BOTTOM SHEET - Activity */}
+      <ActivityPanel />
 
       {/* 4. BOTTOM BAR - Map Controls + Legend */}
       <motion.div 
