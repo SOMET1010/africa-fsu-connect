@@ -36,13 +36,13 @@ export const useRealRegionalStats = () => {
 
       if (countriesError) throw countriesError;
 
-      // Map region names to standardized format
+      // Map region names to standardized format (French names from DB)
       const regionMapping: { [key: string]: string } = {
-        "West Africa": "CEDEAO",
-        "Southern Africa": "SADC",
-        "East Africa": "EAC",
-        "Central Africa": "CEMAC",
-        "North Africa": "COMESA"
+        "Afrique de l'Ouest": "CEDEAO",
+        "Afrique Australe": "SADC",
+        "Afrique de l'Est": "EAC",
+        "Afrique Centrale": "CEMAC",
+        "Afrique du Nord": "COMESA"
       };
 
       // Calculate stats by region
