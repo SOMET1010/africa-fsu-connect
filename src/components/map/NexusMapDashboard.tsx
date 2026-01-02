@@ -140,18 +140,8 @@ export const NexusMapDashboard = () => {
         {/* Center: Visual Legend */}
         <MapLegend />
 
-        {/* Activity Toggle (when closed) */}
-        {!showActivity && (
-          <Button
-            onClick={() => setShowActivity(true)}
-            className="bg-slate-900/80 backdrop-blur-xl border border-white/10 text-white hover:bg-slate-800 gap-2"
-          >
-            <Activity className="h-4 w-4" />
-            Activité
-          </Button>
-        )}
-        
-        {showActivity && <div />}
+        {/* Spacer pour équilibrer le layout */}
+        <div className="w-24" />
       </motion.div>
 
       {/* 5. COUNTRY SHEET */}
