@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Lightbulb, Share2, Search } from "lucide-react";
+import { Share2, Search } from "lucide-react";
 
 interface PracticesHeroProps {
   searchQuery: string;
@@ -9,22 +9,20 @@ interface PracticesHeroProps {
 
 export function PracticesHero({ searchQuery, onSearchChange }: PracticesHeroProps) {
   return (
-    <div className="mb-8">
-      <div className="flex items-center gap-3 mb-3">
-        <div className="p-2.5 rounded-xl bg-primary/10">
-          <Lightbulb className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold">
-            Bonnes Pratiques du Réseau
-          </h1>
-          <p className="text-muted-foreground">
-            Découvrez ce qui fonctionne concrètement dans les pays NEXUS.
-          </p>
-        </div>
-      </div>
+    <div className="py-10">
+      {/* Titre éditorial - aligné à gauche */}
+      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+        Bonnes Pratiques du Réseau
+      </h1>
+      
+      {/* Description incarnée - voix humaine */}
+      <p className="text-lg text-muted-foreground max-w-2xl mb-8">
+        Ce sont des projets réels, portés par des pays africains, 
+        qui ont déjà fait leurs preuves sur le terrain.
+      </p>
 
-      <div className="flex flex-col sm:flex-row gap-3 mt-6">
+      {/* Recherche + CTA sur la même ligne */}
+      <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -34,8 +32,8 @@ export function PracticesHero({ searchQuery, onSearchChange }: PracticesHeroProp
             className="pl-10"
           />
         </div>
-        <Button>
-          <Share2 className="h-4 w-4 mr-2" />
+        <Button className="group">
+          <Share2 className="h-4 w-4 mr-2 transition-transform group-hover:scale-110" />
           Partager une pratique
         </Button>
       </div>
