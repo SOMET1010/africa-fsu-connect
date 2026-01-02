@@ -1,10 +1,42 @@
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
 interface NexusAfricaMapProps {
   className?: string;
   animated?: boolean;
 }
+
+// ============================================================================
+// HOOK: useMouseTilt - Effet de survol 3D fluide
+// ============================================================================
+function useMouseTilt(enabled: boolean, stiffness = 150, damping = 20) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // Lissage des mouvements pour éviter l'effet "robotique"
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), { stiffness, damping });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), { stiffness, damping });
+
+  useEffect(() => {
+    if (!enabled) return;
+    
+    const handleMouseMove = (event: MouseEvent) => {
+      // Normalisation de la position de la souris entre -0.5 et 0.5
+      x.set(event.clientX / window.innerWidth - 0.5);
+      y.set(event.clientY / window.innerHeight - 0.5);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [enabled, x, y]);
+
+  return { rotateX, rotateY };
+}
+
+// ============================================================================
+// DATA: Nodes et connexions du réseau africain
+// ============================================================================
 
 // Points représentant les 54 pays africains (positions approximatives sur une grille normalisée 0-100)
 const countryNodes = [
@@ -109,25 +141,83 @@ const connections = [
   { from: 43, to: 42 },  // Mozambique → Malawi
 ];
 
+// IDs des hubs principaux (pour effet radar)
+const MAIN_HUB_IDS = [5, 7, 20, 28, 33, 36, 52]; // Égypte, Sénégal, Nigeria, RDC, Éthiopie, Kenya, Afrique du Sud
+
+// ============================================================================
+// COMPONENT: NexusAfricaMap
+// ============================================================================
+
 export function NexusAfricaMap({ className, animated = true }: NexusAfricaMapProps) {
+  // Vérification de prefers-reduced-motion
+  const prefersReducedMotion = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }, []);
+  
+  const shouldAnimate = animated && !prefersReducedMotion;
+  const { rotateX, rotateY } = useMouseTilt(shouldAnimate);
+
+  // Variantes pour l'animation d'entrée
+  const containerVariants = {
+    hidden: { opacity: 0, scale: 0.85, rotateZ: -3 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      rotateZ: 0,
+      transition: { duration: 1.2, ease: "easeOut" as const }
+    }
+  };
+
+  const lineVariant = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: (i: number) => ({
+      pathLength: 1,
+      opacity: 0.5,
+      transition: {
+        pathLength: { delay: i * 0.04, duration: 0.8, ease: "easeInOut" as const },
+        opacity: { delay: i * 0.04, duration: 0.3 }
+      }
+    })
+  };
+
   return (
-    <div className={cn("absolute inset-0 flex items-center justify-center", className)}>
-      <svg
+    <div 
+      className={cn("absolute inset-0 flex items-center justify-center", className)}
+      style={{ perspective: 1000 }}
+    >
+      <motion.svg
         viewBox="0 0 100 100"
         className="w-full h-full max-w-[800px] max-h-[800px]"
         preserveAspectRatio="xMidYMid meet"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        style={{ 
+          rotateX: shouldAnimate ? rotateX : 0, 
+          rotateY: shouldAnimate ? rotateY : 0,
+          transformStyle: "preserve-3d"
+        }}
       >
         <defs>
-          {/* Gradient pour les lignes */}
+          {/* Gradient pour les lignes de base */}
           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(var(--nx-network))" stopOpacity="0.6" />
-            <stop offset="50%" stopColor="hsl(var(--nx-gold))" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="hsl(var(--nx-network))" stopOpacity="0.6" />
+            <stop offset="0%" stopColor="hsl(var(--nx-network))" stopOpacity="0.4" />
+            <stop offset="50%" stopColor="hsl(var(--nx-cyan))" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="hsl(var(--nx-network))" stopOpacity="0.4" />
+          </linearGradient>
+          
+          {/* Gradient pour le flux de données (paquet lumineux) */}
+          <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="hsl(var(--nx-gold))" stopOpacity="0" />
+            <stop offset="40%" stopColor="hsl(var(--nx-gold))" stopOpacity="1" />
+            <stop offset="60%" stopColor="hsl(var(--nx-gold))" stopOpacity="1" />
+            <stop offset="100%" stopColor="hsl(var(--nx-gold))" stopOpacity="0" />
           </linearGradient>
           
           {/* Glow effect pour les nœuds */}
           <filter id="nodeGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="0.8" result="blur" />
+            <feGaussianBlur stdDeviation="0.6" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -136,17 +226,28 @@ export function NexusAfricaMap({ className, animated = true }: NexusAfricaMapPro
           
           {/* Glow fort pour les nœuds principaux */}
           <filter id="strongGlow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="1.2" result="blur" />
+            <feGaussianBlur stdDeviation="1" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+
+          {/* Glow pour les flux de données */}
+          <filter id="flowGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="0.8" result="blur" />
+            <feFlood floodColor="hsl(var(--nx-gold))" floodOpacity="0.6" />
+            <feComposite in2="blur" operator="in" />
+            <feMerge>
+              <feMergeNode />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
 
-        {/* Lignes de connexion avec animation "respiration" */}
-        <g className="connections">
+        {/* ===== LAYER 1: Lignes de connexion de base ===== */}
+        <g className="connections-base">
           {connections.map((conn, index) => {
             const fromNode = countryNodes.find(n => n.id === conn.from);
             const toNode = countryNodes.find(n => n.id === conn.to);
@@ -154,82 +255,146 @@ export function NexusAfricaMap({ className, animated = true }: NexusAfricaMapPro
             
             return (
               <motion.line
-                key={`conn-${index}`}
+                key={`base-${index}`}
                 x1={fromNode.x}
                 y1={fromNode.y}
                 x2={toNode.x}
                 y2={toNode.y}
                 stroke="url(#lineGradient)"
-                strokeWidth="0.3"
+                strokeWidth="0.25"
                 strokeLinecap="round"
-                initial={{ opacity: 0.3 }}
-                animate={animated ? {
-                  opacity: [0.3, 0.7, 0.3],
-                } : { opacity: 0.4 }}
-                transition={{
-                  duration: 4 + Math.random() * 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: index * 0.1,
-                }}
+                custom={index}
+                variants={lineVariant}
+                initial="hidden"
+                animate="visible"
               />
             );
           })}
         </g>
 
-        {/* Nœuds pays avec animation pulse */}
+        {/* ===== LAYER 2: Flux de données animés ===== */}
+        {shouldAnimate && (
+          <g className="connections-flow">
+            {connections.map((conn, index) => {
+              const fromNode = countryNodes.find(n => n.id === conn.from);
+              const toNode = countryNodes.find(n => n.id === conn.to);
+              if (!fromNode || !toNode) return null;
+              
+              // Calculer la longueur approximative pour ajuster l'animation
+              const dx = toNode.x - fromNode.x;
+              const dy = toNode.y - fromNode.y;
+              const length = Math.sqrt(dx * dx + dy * dy);
+              const dashArray = `${length * 0.15} ${length * 0.85}`;
+              
+              return (
+                <motion.line
+                  key={`flow-${index}`}
+                  x1={fromNode.x}
+                  y1={fromNode.y}
+                  x2={toNode.x}
+                  y2={toNode.y}
+                  stroke="url(#flowGradient)"
+                  strokeWidth="0.4"
+                  strokeLinecap="round"
+                  strokeDasharray={dashArray}
+                  filter="url(#flowGlow)"
+                  initial={{ strokeDashoffset: 0 }}
+                  animate={{ strokeDashoffset: -length }}
+                  transition={{
+                    duration: 2 + Math.random() * 1.5,
+                    ease: "linear",
+                    repeat: Infinity,
+                    delay: index * 0.15,
+                  }}
+                />
+              );
+            })}
+          </g>
+        )}
+
+        {/* ===== LAYER 3: Nœuds pays ===== */}
         <g className="nodes">
           {countryNodes.map((node, index) => {
-            const isMainNode = [5, 7, 20, 28, 33, 36, 52].includes(node.id); // Nœuds principaux
-            const nodeSize = isMainNode ? 1.2 : 0.7;
-            const nodeColor = isMainNode ? "hsl(var(--nx-gold))" : "hsl(var(--nx-cyan))";
+            const isMainHub = MAIN_HUB_IDS.includes(node.id);
+            const nodeSize = isMainHub ? 1.4 : 0.7;
+            const nodeColor = isMainHub ? "hsl(var(--nx-gold))" : "hsl(var(--nx-cyan))";
             
             return (
-              <motion.g key={node.id}>
-                {/* Halo externe */}
+              <motion.g 
+                key={node.id}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ 
+                  delay: 0.5 + index * 0.02, 
+                  type: "spring", 
+                  stiffness: 200,
+                  damping: 15
+                }}
+              >
+                {/* Effet radar (uniquement pour les hubs principaux) */}
+                {isMainHub && shouldAnimate && (
+                  <motion.circle
+                    cx={node.x}
+                    cy={node.y}
+                    fill="none"
+                    stroke={nodeColor}
+                    strokeWidth="0.2"
+                    initial={{ r: nodeSize, opacity: 0.8 }}
+                    animate={{
+                      r: [nodeSize, nodeSize * 6],
+                      opacity: [0.7, 0],
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      repeat: Infinity,
+                      ease: "easeOut",
+                      delay: index * 0.2,
+                    }}
+                  />
+                )}
+
+                {/* Halo externe (respiration) */}
                 <motion.circle
                   cx={node.x}
                   cy={node.y}
-                  r={nodeSize * 2}
+                  r={nodeSize * 2.5}
                   fill={nodeColor}
-                  opacity={0.15}
-                  initial={{ scale: 1 }}
-                  animate={animated ? {
-                    scale: [1, 1.5, 1],
-                    opacity: [0.1, 0.25, 0.1],
+                  opacity={0.1}
+                  animate={shouldAnimate ? {
+                    scale: [1, 1.3, 1],
+                    opacity: [0.08, 0.18, 0.08],
                   } : {}}
                   transition={{
                     duration: 3 + Math.random(),
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.08,
+                    delay: index * 0.05,
                   }}
                 />
                 
-                {/* Point principal */}
+                {/* Point central (pulse) */}
                 <motion.circle
                   cx={node.x}
                   cy={node.y}
                   r={nodeSize}
                   fill={nodeColor}
-                  filter={isMainNode ? "url(#strongGlow)" : "url(#nodeGlow)"}
-                  initial={{ scale: 1, opacity: 0.7 }}
-                  animate={animated ? {
-                    scale: [1, 1.3, 1],
-                    opacity: [0.7, 1, 0.7],
-                  } : { opacity: 0.8 }}
+                  filter={isMainHub ? "url(#strongGlow)" : "url(#nodeGlow)"}
+                  animate={shouldAnimate ? {
+                    scale: [1, 1.2, 1],
+                    opacity: [0.8, 1, 0.8],
+                  } : { opacity: 0.9 }}
                   transition={{
-                    duration: 3,
+                    duration: 2.5,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.05,
+                    delay: index * 0.03,
                   }}
                 />
               </motion.g>
             );
           })}
         </g>
-      </svg>
+      </motion.svg>
     </div>
   );
 }
