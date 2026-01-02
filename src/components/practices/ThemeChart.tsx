@@ -1,7 +1,9 @@
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { ThemeIcon, ThemeType } from "@/components/shared/ThemeIllustration";
 import { cn } from "@/lib/utils";
+import type { Practice } from "@/types/practice";
 
 interface ThemeDataItem {
   name: ThemeType;
@@ -9,7 +11,8 @@ interface ThemeDataItem {
   color: string;
 }
 
-const themeData: ThemeDataItem[] = [
+// Default static data (fallback)
+const defaultThemeData: ThemeDataItem[] = [
   { name: "Connectivité", value: 35, color: "hsl(230 55% 45%)" },
   { name: "E-Santé", value: 25, color: "hsl(18 76% 55%)" },
   { name: "Éducation", value: 20, color: "hsl(140 65% 40%)" },
@@ -17,13 +20,46 @@ const themeData: ThemeDataItem[] = [
   { name: "Agriculture", value: 8, color: "hsl(150 45% 35%)" },
 ];
 
+const themeColors: Record<string, string> = {
+  "Connectivité": "hsl(230 55% 45%)",
+  "connectivity": "hsl(230 55% 45%)",
+  "Éducation": "hsl(140 65% 40%)",
+  "education": "hsl(140 65% 40%)",
+  "E-Santé": "hsl(18 76% 55%)",
+  "ehealth": "hsl(18 76% 55%)",
+  "Agriculture": "hsl(150 45% 35%)",
+  "agriculture": "hsl(150 45% 35%)",
+  "Gouvernance": "hsl(25 80% 55%)",
+  "governance": "hsl(25 80% 55%)",
+};
+
 interface ThemeChartProps {
+  practices?: Practice[];
   onThemeClick?: (theme: ThemeType) => void;
   selectedTheme?: string;
   className?: string;
 }
 
-export function ThemeChart({ onThemeClick, selectedTheme, className }: ThemeChartProps) {
+export function ThemeChart({ practices, onThemeClick, selectedTheme, className }: ThemeChartProps) {
+  // Compute theme data from practices if provided, otherwise use defaults
+  const themeData = useMemo(() => {
+    if (!practices || practices.length === 0) return defaultThemeData;
+    
+    const counts: Record<string, number> = {};
+    practices.forEach((p) => {
+      const theme = p.theme as string;
+      counts[theme] = (counts[theme] || 0) + 1;
+    });
+
+    return Object.entries(counts)
+      .map(([name, value]) => ({
+        name: name as ThemeType,
+        value,
+        color: themeColors[name] || "hsl(var(--primary))",
+      }))
+      .sort((a, b) => b.value - a.value);
+  }, [practices]);
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -108,7 +144,25 @@ export function ThemeChart({ onThemeClick, selectedTheme, className }: ThemeChar
 }
 
 // Simpler horizontal bar version
-export function ThemeBarChart({ className }: { className?: string }) {
+export function ThemeBarChart({ practices, className }: { practices?: Practice[]; className?: string }) {
+  const themeData = useMemo(() => {
+    if (!practices || practices.length === 0) return defaultThemeData;
+    
+    const counts: Record<string, number> = {};
+    practices.forEach((p) => {
+      const theme = p.theme as string;
+      counts[theme] = (counts[theme] || 0) + 1;
+    });
+
+    return Object.entries(counts)
+      .map(([name, value]) => ({
+        name: name as ThemeType,
+        value,
+        color: themeColors[name] || "hsl(var(--primary))",
+      }))
+      .sort((a, b) => b.value - a.value);
+  }, [practices]);
+
   const total = themeData.reduce((sum, item) => sum + item.value, 0);
 
   return (
