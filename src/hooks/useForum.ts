@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/utils/logger';
+import { getErrorMessage } from '@/types/sync.types';
 
 export interface ForumCategory {
   id: string;
@@ -72,8 +73,9 @@ export const useForum = () => {
 
       if (error) throw error;
       setCategories(data || []);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
         description: "Impossible de charger les catégories.",
@@ -102,8 +104,9 @@ export const useForum = () => {
       const formattedPosts = data || [];
 
       setPosts(formattedPosts);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
         description: "Impossible de charger les discussions.",
@@ -127,8 +130,9 @@ export const useForum = () => {
 
       setReplies(formattedReplies);
       return formattedReplies;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
         description: "Impossible de charger les réponses.",
@@ -165,11 +169,12 @@ export const useForum = () => {
       // Refresh posts
       await fetchPosts();
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -205,11 +210,12 @@ export const useForum = () => {
       // Refresh posts to update reply count
       await fetchPosts();
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -228,9 +234,9 @@ export const useForum = () => {
         .eq('id', postId);
 
       if (error) throw error;
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Silent fail for view count update
-      logger.error('Failed to update view count:', err as any);
+      logger.error('Failed to update view count:', getErrorMessage(err));
     }
   };
 
@@ -250,11 +256,12 @@ export const useForum = () => {
       });
 
       await fetchPosts();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -285,11 +292,12 @@ export const useForum = () => {
       });
 
       await fetchPosts();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -311,11 +319,12 @@ export const useForum = () => {
       });
 
       await fetchPosts();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -347,11 +356,12 @@ export const useForum = () => {
 
       await fetchCategories();
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -373,11 +383,12 @@ export const useForum = () => {
       });
 
       await fetchCategories();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -409,11 +420,12 @@ export const useForum = () => {
       });
 
       await fetchCategories();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;

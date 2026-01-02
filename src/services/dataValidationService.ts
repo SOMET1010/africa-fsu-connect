@@ -1,10 +1,11 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
+import { type CustomValidationFunction, type ValidationRuleValue } from '@/types/sync.types';
 
 export interface ValidationRule {
   field: string;
   type: 'required' | 'format' | 'length' | 'range' | 'custom' | 'unique';
-  value?: any;
+  value?: ValidationRuleValue | string | CustomValidationFunction;
   message: string;
   severity: 'error' | 'warning' | 'info';
 }
@@ -23,7 +24,7 @@ export interface ValidationResult {
 
 export interface ValidationError {
   field: string;
-  value: any;
+  value: unknown;
   message: string;
   severity: 'error' | 'warning' | 'info';
   recordIndex?: number;
@@ -41,6 +42,16 @@ export interface DataTransformation {
   };
 }
 
+interface LengthConfig {
+  min?: number;
+  max?: number;
+}
+
+interface RangeConfig {
+  min?: number;
+  max?: number;
+}
+
 export class DataValidationService {
   private static ajv = new Ajv({ allErrors: true });
   
@@ -48,7 +59,11 @@ export class DataValidationService {
     addFormats(this.ajv);
   }
 
-  static validateData(data: any[], schema?: object, rules: ValidationRule[] = []): ValidationResult {
+  static validateData<T extends Record<string, unknown>>(
+    data: T[], 
+    schema?: object, 
+    rules: ValidationRule[] = []
+  ): ValidationResult {
     const errors: ValidationError[] = [];
     const warnings: ValidationError[] = [];
     let validRecords = 0;
@@ -80,8 +95,8 @@ export class DataValidationService {
     };
   }
 
-  private static validateRecord(
-    record: any, 
+  private static validateRecord<T extends Record<string, unknown>>(
+    record: T, 
     schema?: object, 
     rules: ValidationRule[] = [], 
     recordIndex?: number
@@ -119,7 +134,11 @@ export class DataValidationService {
     return errors;
   }
 
-  private static validateRule(rule: ValidationRule, value: any, recordIndex?: number): ValidationError | null {
+  private static validateRule(
+    rule: ValidationRule, 
+    value: unknown, 
+    recordIndex?: number
+  ): ValidationError | null {
     switch (rule.type) {
       case 'required':
         if (value === undefined || value === null || value === '') {
@@ -134,7 +153,7 @@ export class DataValidationService {
         break;
 
       case 'format':
-        if (value && !this.validateFormat(value, rule.value)) {
+        if (value && !this.validateFormat(value, rule.value as string)) {
           return {
             field: rule.field,
             value,
@@ -146,7 +165,7 @@ export class DataValidationService {
         break;
 
       case 'length':
-        if (value && !this.validateLength(value, rule.value)) {
+        if (value && !this.validateLength(value, rule.value as LengthConfig)) {
           return {
             field: rule.field,
             value,
@@ -158,7 +177,7 @@ export class DataValidationService {
         break;
 
       case 'range':
-        if (value !== undefined && !this.validateRange(value, rule.value)) {
+        if (value !== undefined && !this.validateRange(value, rule.value as RangeConfig)) {
           return {
             field: rule.field,
             value,
@@ -171,7 +190,8 @@ export class DataValidationService {
 
       case 'custom':
         if (rule.value && typeof rule.value === 'function') {
-          const isValid = rule.value(value);
+          const customValidator = rule.value as CustomValidationFunction;
+          const isValid = customValidator(value);
           if (!isValid) {
             return {
               field: rule.field,
@@ -188,21 +208,22 @@ export class DataValidationService {
     return null;
   }
 
-  private static validateFormat(value: any, format: string): boolean {
+  private static validateFormat(value: unknown, format: string): boolean {
+    const strValue = String(value);
     switch (format) {
       case 'email':
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(strValue);
       case 'url':
         try {
-          new URL(value);
+          new URL(strValue);
           return true;
         } catch {
           return false;
         }
       case 'phone':
-        return /^[\+]?[1-9][\d]{0,15}$/.test(value.replace(/[\s\-\(\)]/g, ''));
+        return /^[\+]?[1-9][\d]{0,15}$/.test(strValue.replace(/[\s\-\(\)]/g, ''));
       case 'date':
-        return !isNaN(Date.parse(value));
+        return !isNaN(Date.parse(strValue));
       case 'number':
         return !isNaN(Number(value));
       default:
@@ -210,14 +231,14 @@ export class DataValidationService {
     }
   }
 
-  private static validateLength(value: any, config: { min?: number; max?: number }): boolean {
+  private static validateLength(value: unknown, config: LengthConfig): boolean {
     const length = String(value).length;
     if (config.min !== undefined && length < config.min) return false;
     if (config.max !== undefined && length > config.max) return false;
     return true;
   }
 
-  private static validateRange(value: any, config: { min?: number; max?: number }): boolean {
+  private static validateRange(value: unknown, config: RangeConfig): boolean {
     const num = Number(value);
     if (isNaN(num)) return false;
     if (config.min !== undefined && num < config.min) return false;
@@ -225,25 +246,40 @@ export class DataValidationService {
     return true;
   }
 
-  private static getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((current, key) => current?.[key], obj);
+  private static getNestedValue(obj: Record<string, unknown>, path: string): unknown {
+    return path.split('.').reduce<unknown>((current, key) => {
+      if (current && typeof current === 'object' && key in current) {
+        return (current as Record<string, unknown>)[key];
+      }
+      return undefined;
+    }, obj);
   }
 
-  static transformData(data: any[], transformations: DataTransformation[]): any[] {
+  static transformData<T extends Record<string, unknown>>(
+    data: T[], 
+    transformations: DataTransformation[]
+  ): T[] {
     return data.map(record => {
-      const transformedRecord = { ...record };
+      const transformedRecord = { ...record } as T;
 
       transformations.forEach(transformation => {
         const value = this.getNestedValue(transformedRecord, transformation.field);
         const transformedValue = this.applyTransformation(value, transformation);
-        this.setNestedValue(transformedRecord, transformation.field, transformedValue);
+        this.setNestedValue(
+          transformedRecord as Record<string, unknown>, 
+          transformation.field, 
+          transformedValue
+        );
       });
 
       return transformedRecord;
     });
   }
 
-  private static applyTransformation(value: any, transformation: DataTransformation): any {
+  private static applyTransformation(
+    value: unknown, 
+    transformation: DataTransformation
+  ): unknown {
     switch (transformation.transformationType) {
       case 'normalize':
         return this.normalizeValue(value, transformation.config);
@@ -260,14 +296,14 @@ export class DataValidationService {
     }
   }
 
-  private static normalizeValue(value: any, config: any): any {
+  private static normalizeValue(value: unknown, config: Record<string, unknown>): unknown {
     if (typeof value === 'string') {
       return value.trim().toLowerCase();
     }
     return value;
   }
 
-  private static formatValue(value: any, format: string): any {
+  private static formatValue(value: unknown, format: string): unknown {
     switch (format) {
       case 'uppercase':
         return String(value).toUpperCase();
@@ -285,7 +321,7 @@ export class DataValidationService {
     }
   }
 
-  private static convertValue(value: any, from: string, to: string): any {
+  private static convertValue(value: unknown, from: string, to: string): unknown {
     if (from === 'string' && to === 'number') {
       return Number(value);
     }
@@ -293,12 +329,12 @@ export class DataValidationService {
       return String(value);
     }
     if (from === 'string' && to === 'date') {
-      return new Date(value);
+      return new Date(value as string);
     }
     return value;
   }
 
-  private static cleanValue(value: any, rules: string[]): any {
+  private static cleanValue(value: unknown, rules: string[]): unknown {
     let cleaned = String(value);
     
     rules.forEach(rule => {
@@ -321,18 +357,24 @@ export class DataValidationService {
     return cleaned;
   }
 
-  private static enrichValue(value: any, source: string): any {
+  private static enrichValue(value: unknown, source: string): unknown {
     // Placeholder pour l'enrichissement de données
     // Pourrait faire appel à des APIs externes ou des bases de données
     return value;
   }
 
-  private static setNestedValue(obj: any, path: string, value: any): void {
+  private static setNestedValue(
+    obj: Record<string, unknown>, 
+    path: string, 
+    value: unknown
+  ): void {
     const keys = path.split('.');
     const lastKey = keys.pop()!;
-    const target = keys.reduce((current, key) => {
-      if (!current[key]) current[key] = {};
-      return current[key];
+    const target = keys.reduce<Record<string, unknown>>((current, key) => {
+      if (!current[key] || typeof current[key] !== 'object') {
+        current[key] = {};
+      }
+      return current[key] as Record<string, unknown>;
     }, obj);
     target[lastKey] = value;
   }
@@ -350,7 +392,7 @@ export class DataValidationService {
       report += `=== Erreurs (${errors.length}) ===\n`;
       errors.forEach((error, index) => {
         report += `${index + 1}. Champ: ${error.field}\n`;
-        report += `   Valeur: ${error.value}\n`;
+        report += `   Valeur: ${String(error.value)}\n`;
         report += `   Message: ${error.message}\n`;
         if (error.recordIndex !== undefined) {
           report += `   Enregistrement: ${error.recordIndex + 1}\n`;
@@ -363,7 +405,7 @@ export class DataValidationService {
       report += `=== Avertissements (${warnings.length}) ===\n`;
       warnings.forEach((warning, index) => {
         report += `${index + 1}. Champ: ${warning.field}\n`;
-        report += `   Valeur: ${warning.value}\n`;
+        report += `   Valeur: ${String(warning.value)}\n`;
         report += `   Message: ${warning.message}\n`;
         if (warning.recordIndex !== undefined) {
           report += `   Enregistrement: ${warning.recordIndex + 1}\n`;

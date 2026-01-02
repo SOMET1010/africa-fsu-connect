@@ -1,7 +1,13 @@
 import { supabase } from '@/integrations/supabase/client';
-import { ApiConnectorService } from './apiConnectorService';
-import type { Tables } from '@/integrations/supabase/types';
+import { ApiConnectorService, type ApiConnector } from './apiConnectorService';
+import type { Tables, Json } from '@/integrations/supabase/types';
 import { logger } from '@/utils/logger';
+import { 
+  type SyncRecordData, 
+  type SyncConflict, 
+  getErrorMessage,
+  toJson 
+} from '@/types/sync.types';
 
 export interface BidirectionalSyncConfig {
   agencyId: string;
@@ -21,10 +27,10 @@ export interface SyncOperation {
   type: 'create' | 'update' | 'delete';
   tableName: string;
   recordId: string;
-  data: any;
+  data: SyncRecordData;
   timestamp: string;
   source: 'local' | 'remote';
-  conflicts?: any[];
+  conflicts?: SyncConflict[];
 }
 
 export interface SyncResult {
@@ -46,7 +52,7 @@ export class BidirectionalSyncService {
           connector_id: config.connectorId,
           session_type: 'bidirectional',
           status: 'active',
-          metadata: config as any
+          metadata: toJson(config)
         })
         .select()
         .single();
@@ -80,12 +86,12 @@ export class BidirectionalSyncService {
         syncSessionId: session.id
       };
     } catch (error) {
-      logger.error('Bidirectional sync failed:', error as any);
+      logger.error('Bidirectional sync failed:', getErrorMessage(error));
       return {
         success: false,
         operationsProcessed: 0,
         conflictsDetected: 0,
-        errors: [error instanceof Error ? error.message : 'Unknown error'],
+        errors: [getErrorMessage(error)],
         syncSessionId: ''
       };
     }
@@ -93,11 +99,11 @@ export class BidirectionalSyncService {
 
   private static async performBidirectionalSync(
     config: BidirectionalSyncConfig,
-    connector: any,
+    connector: ApiConnector,
     sessionId: string
   ): Promise<Omit<SyncResult, 'syncSessionId'>> {
     const operations: SyncOperation[] = [];
-    const conflicts: any[] = [];
+    const conflicts: SyncConflict[] = [];
     let operationsProcessed = 0;
 
     try {
@@ -126,7 +132,7 @@ export class BidirectionalSyncService {
             operationsProcessed++;
           }
         } catch (error) {
-          logger.error('Error processing operation:', error as any);
+          logger.error('Error processing operation:', getErrorMessage(error));
         }
       }
 
@@ -140,26 +146,26 @@ export class BidirectionalSyncService {
         errors: []
       };
     } catch (error) {
-      logger.error('Bidirectional sync error:', error as any);
+      logger.error('Bidirectional sync error:', getErrorMessage(error));
       return {
         success: false,
         operationsProcessed,
         conflictsDetected: conflicts.length,
-        errors: [error instanceof Error ? error.message : 'Unknown error']
+        errors: [getErrorMessage(error)]
       };
     }
   }
 
   private static async detectSourceChanges(
     config: BidirectionalSyncConfig,
-    connector: any
+    connector: ApiConnector
   ): Promise<SyncOperation[]> {
     try {
       // Fetch recent changes from source API
       const response = await fetch(config.sourceEndpoint, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${connector.auth_config?.token}`,
+          'Authorization': `Bearer ${connector.authConfig?.bearerToken ?? ''}`,
           'Content-Type': 'application/json'
         }
       });
@@ -168,19 +174,19 @@ export class BidirectionalSyncService {
         throw new Error(`Source API error: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: SyncRecordData[] = await response.json();
       
       // Convert to sync operations
       return this.convertToSyncOperations(data, 'remote', config);
     } catch (error) {
-      logger.error('Error detecting source changes:', error as any);
+      logger.error('Error detecting source changes:', getErrorMessage(error));
       return [];
     }
   }
 
   private static async detectTargetChanges(
     config: BidirectionalSyncConfig,
-    connector: any
+    connector: ApiConnector
   ): Promise<SyncOperation[]> {
     try {
       // Fetch recent changes from target (usually our local database)
@@ -195,23 +201,23 @@ export class BidirectionalSyncService {
       // Convert to sync operations
       return this.convertToSyncOperations(localData || [], 'local', config);
     } catch (error) {
-      logger.error('Error detecting target changes:', error as any);
+      logger.error('Error detecting target changes:', getErrorMessage(error));
       return [];
     }
   }
 
   private static convertToSyncOperations(
-    data: any[],
+    data: SyncRecordData[],
     source: 'local' | 'remote',
     config: BidirectionalSyncConfig
   ): SyncOperation[] {
     return data.map((item, index) => ({
       id: `${source}_${index}_${Date.now()}`,
-      type: 'update',
+      type: 'update' as const,
       tableName: source === 'local' ? 'agency_projects' : 'external_data',
-      recordId: item.id || item.external_id || `temp_${index}`,
+      recordId: (item.id ?? item.external_id ?? `temp_${index}`) as string,
       data: item,
-      timestamp: item.updated_at || new Date().toISOString(),
+      timestamp: (item.updated_at ?? new Date().toISOString()) as string,
       source
     }));
   }
@@ -219,7 +225,7 @@ export class BidirectionalSyncService {
   private static async detectConflicts(
     operation: SyncOperation,
     config: BidirectionalSyncConfig
-  ): Promise<any | null> {
+  ): Promise<SyncConflict | null> {
     try {
       // Only check conflicts for agency_projects table (skip external_data)
       if (operation.tableName !== 'agency_projects') {
@@ -233,24 +239,24 @@ export class BidirectionalSyncService {
         .eq('id', operation.recordId)
         .maybeSingle();
 
-      if (existingRecord && (existingRecord as any).updated_at > operation.timestamp) {
+      if (existingRecord && existingRecord.updated_at > operation.timestamp) {
         return {
           record_id: operation.recordId,
           table_name: operation.tableName,
-          source_data: operation.data,
-          target_data: existingRecord,
+          source_data: operation.data as Record<string, unknown>,
+          target_data: existingRecord as unknown as Record<string, unknown>,
           conflict_type: 'timestamp_conflict'
         };
       }
 
       return null;
     } catch (error) {
-      logger.error('Error detecting conflicts:', error as any);
+      logger.error('Error detecting conflicts:', getErrorMessage(error));
       return null;
     }
   }
 
-  private static async storeConflict(conflict: any, agencyId: string): Promise<void> {
+  private static async storeConflict(conflict: SyncConflict, agencyId: string): Promise<void> {
     try {
       await supabase
         .from('sync_conflicts')
@@ -258,19 +264,19 @@ export class BidirectionalSyncService {
           agency_id: agencyId,
           table_name: conflict.table_name,
           record_id: conflict.record_id,
-          source_data: conflict.source_data,
-          target_data: conflict.target_data,
+          source_data: conflict.source_data as Json,
+          target_data: conflict.target_data as Json,
           conflict_type: conflict.conflict_type
         });
     } catch (error) {
-      logger.error('Error storing conflict:', error as any);
+      logger.error('Error storing conflict:', getErrorMessage(error));
     }
   }
 
   private static async applyOperation(
     operation: SyncOperation,
     config: BidirectionalSyncConfig,
-    connector: any
+    connector: ApiConnector
   ): Promise<void> {
     try {
       if (operation.source === 'remote') {
@@ -284,11 +290,11 @@ export class BidirectionalSyncService {
           if (operation.type === 'create') {
             await supabase
               .from('agency_projects')
-              .insert(mappedData);
+              .insert([mappedData] as never);
           } else if (operation.type === 'update') {
             await supabase
               .from('agency_projects')
-              .upsert(mappedData);
+              .upsert([mappedData] as never);
           } else if (operation.type === 'delete') {
             await supabase
               .from('agency_projects')
@@ -306,7 +312,7 @@ export class BidirectionalSyncService {
         const response = await fetch(config.targetEndpoint, {
           method: operation.type === 'delete' ? 'DELETE' : 'POST',
           headers: {
-            'Authorization': `Bearer ${connector.auth_config?.token}`,
+            'Authorization': `Bearer ${connector.authConfig?.bearerToken ?? ''}`,
             'Content-Type': 'application/json'
           },
           body: operation.type !== 'delete' ? JSON.stringify(mappedData) : undefined
@@ -317,13 +323,16 @@ export class BidirectionalSyncService {
         }
       }
     } catch (error) {
-      logger.error('Error applying operation:', error as any);
+      logger.error('Error applying operation:', getErrorMessage(error));
       throw error;
     }
   }
 
-  private static mapData(data: any, mapping: Record<string, string>): any {
-    const mappedData: any = {};
+  private static mapData(
+    data: SyncRecordData, 
+    mapping: Record<string, string>
+  ): Record<string, unknown> {
+    const mappedData: Record<string, unknown> = {};
     
     for (const [sourceField, targetField] of Object.entries(mapping)) {
       if (data[sourceField] !== undefined) {
@@ -343,7 +352,7 @@ export class BidirectionalSyncService {
         table_name: op.tableName,
         record_id: op.recordId,
         version_number: 1, // This should be incremented based on existing versions
-        data_snapshot: op.data,
+        data_snapshot: op.data as Json,
         sync_id: sessionId,
         change_type: op.type
       }));
@@ -354,7 +363,7 @@ export class BidirectionalSyncService {
           .insert(versions);
       }
     } catch (error) {
-      logger.error('Error creating data versions:', error as any);
+      logger.error('Error creating data versions:', getErrorMessage(error));
     }
   }
 
@@ -370,7 +379,7 @@ export class BidirectionalSyncService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      logger.error('Error fetching active sync sessions:', error as any);
+      logger.error('Error fetching active sync sessions:', getErrorMessage(error));
       return [];
     }
   }
@@ -387,7 +396,7 @@ export class BidirectionalSyncService {
 
       return !error;
     } catch (error) {
-      logger.error('Error stopping sync session:', error as any);
+      logger.error('Error stopping sync session:', getErrorMessage(error));
       return false;
     }
   }
