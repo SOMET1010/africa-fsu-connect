@@ -186,5 +186,31 @@
   "presentation.controls.previous": "السابق",
   "presentation.controls.next": "التالي",
   "presentation.controls.fullscreen": "ملء الشاشة",
-  "presentation.controls.exitFullscreen": "الخروج من ملء الشاشة"
+  "presentation.controls.exitFullscreen": "الخروج من ملء الشاشة",
+
+  "home.hero.badge": "شبكة SUTEL الأفريقية",
+  "home.hero.subtitle.prefix": "مستقبل",
+  "home.hero.subtitle.highlight": "الخدمة الشاملة",
+  "home.hero.subtitle.suffix": "في أفريقيا",
+  "home.hero.cta.explore": "استكشاف الشبكة",
+  "home.hero.cta.member": "مساحة الأعضاء",
+  "home.hero.microtext": "وصول عام للموارد • الوضع المتقدم للأعضاء فقط",
+  "home.hero.scroll": "اكتشف",
+  "home.cta.kicker": "انضم إلينا",
+  "home.cta.title": "انضم إلى شبكة SUTEL",
+  "home.cta.subtitle": "شارك في البناء الجماعي للخدمة الشاملة في أفريقيا",
+  "common.create.account": "إنشاء حساب",
+  "common.learn.more": "معرفة المزيد",
+
+  "nav.network.view.desc": "التنسيق الجماعي SUTEL",
+  "nav.network.members.desc": "دليل الدول الأعضاء",
+  "nav.network.map.desc": "تصور تفاعلي",
+  "nav.network.activity.desc": "أخبار الشبكة",
+  "nav.collaborate.projects.desc": "المشاريع المشتركة",
+  "nav.collaborate.practices.desc": "أفضل الممارسات الموثقة",
+  "nav.collaborate.submit.desc": "اقتراح مبادرة",
+  "nav.collaborate.discussions.desc": "تبادلات بين الأعضاء",
+  "nav.learn.elearning.desc": "وحدات التدريب",
+  "nav.learn.events.desc": "تقويم الفعاليات",
+  "nav.learn.webinars.desc": "جلسات عبر الإنترنت"
 }

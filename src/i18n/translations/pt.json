@@ -186,5 +186,31 @@
   "presentation.controls.previous": "Anterior",
   "presentation.controls.next": "Seguinte",
   "presentation.controls.fullscreen": "Ecrã Inteiro",
-  "presentation.controls.exitFullscreen": "Sair do Ecrã Inteiro"
+  "presentation.controls.exitFullscreen": "Sair do Ecrã Inteiro",
+
+  "home.hero.badge": "Rede Pan-Africana SUTEL",
+  "home.hero.subtitle.prefix": "o futuro do",
+  "home.hero.subtitle.highlight": "Serviço Universal",
+  "home.hero.subtitle.suffix": "em África",
+  "home.hero.cta.explore": "Explorar a rede",
+  "home.hero.cta.member": "Área de Membro",
+  "home.hero.microtext": "Acesso público aos recursos • Modo avançado reservado a membros",
+  "home.hero.scroll": "Descobrir",
+  "home.cta.kicker": "Junte-se a nós",
+  "home.cta.title": "Junte-se à rede SUTEL",
+  "home.cta.subtitle": "Participe na construção coletiva do Serviço Universal em África",
+  "common.create.account": "Criar Conta",
+  "common.learn.more": "Saber Mais",
+
+  "nav.network.view.desc": "Coordenação coletiva SUTEL",
+  "nav.network.members.desc": "Diretório de países membros",
+  "nav.network.map.desc": "Visualização interativa",
+  "nav.network.activity.desc": "Notícias da rede",
+  "nav.collaborate.projects.desc": "Projetos partilhados pela rede",
+  "nav.collaborate.practices.desc": "Boas práticas documentadas",
+  "nav.collaborate.submit.desc": "Propor uma iniciativa",
+  "nav.collaborate.discussions.desc": "Trocas entre membros",
+  "nav.learn.elearning.desc": "Módulos de formação",
+  "nav.learn.events.desc": "Calendário de eventos",
+  "nav.learn.webinars.desc": "Sessões online"
 }

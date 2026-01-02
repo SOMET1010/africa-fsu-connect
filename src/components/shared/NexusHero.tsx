@@ -8,6 +8,7 @@ import nexusHeroImage from "@/assets/nexus-hero-africa.png";
 import { cn } from "@/lib/utils";
 import { NexusAfricaMap } from "./NexusAfricaMap";
 import { useDirection } from "@/hooks/useDirection";
+import { useTranslation } from "@/hooks/useTranslation";
 
 // --- Types & Constants ---
 
@@ -111,6 +112,7 @@ export function NexusHero({
   const isLanding = variant === "landing";
   const isMinimal = variant === "minimal";
   const { isRTL } = useDirection();
+  const { t } = useTranslation();
   
   // Check for reduced motion preference
   const prefersReducedMotion = typeof window !== 'undefined' 
@@ -240,7 +242,7 @@ export function NexusHero({
               )}
             >
               <Globe className={cn("h-4 w-4 text-nx-gold/80", isRTL ? "ml-2" : "mr-2")} />
-              Réseau panafricain SUTEL
+              {t('home.hero.badge')}
             </Badge>
           </motion.div>
 
@@ -273,22 +275,22 @@ export function NexusHero({
             >
               {subtitle || (
                 <>
-                  l'avenir du{" "}
+                  {t('home.hero.subtitle.prefix')}{" "}
                   <span className="relative inline-block">
                     <span 
                       className="bg-gradient-to-r from-nx-gold via-amber-400 to-nx-gold bg-clip-text text-transparent"
                     >
-                      Service Universel
+                      {t('home.hero.subtitle.highlight')}
                     </span>
                     {/* Glow effect behind text */}
                     <span 
                       className="absolute inset-0 bg-gradient-to-r from-nx-gold via-amber-400 to-nx-gold bg-clip-text text-transparent blur-xl opacity-50 pointer-events-none"
                       aria-hidden="true"
                     >
-                      Service Universel
+                      {t('home.hero.subtitle.highlight')}
                     </span>
                   </span>
-                  {" "}en Afrique
+                  {" "}{t('home.hero.subtitle.suffix')}
                 </>
               )}
             </motion.h1>
@@ -324,7 +326,7 @@ export function NexusHero({
                   className="group bg-gradient-to-r from-white via-white to-white/95 text-nx-night hover:from-white/95 hover:to-white shadow-xl shadow-black/25 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300 font-semibold px-8 py-6"
                 >
                   <Link to="/network">
-                    Explorer le réseau
+                    {t('home.hero.cta.explore')}
                     <ArrowRight className={cn(
                       "h-5 w-5 transition-transform",
                       isRTL 
@@ -341,7 +343,7 @@ export function NexusHero({
                   className="border border-white/40 bg-white/[0.08] backdrop-blur-md text-white hover:bg-white/15 hover:border-white/60 transition-all duration-300 font-medium px-8 py-6"
                 >
                   <Link to="/auth">
-                    Espace Membre
+                    {t('home.hero.cta.member')}
                   </Link>
                 </Button>
               </div>
@@ -356,7 +358,7 @@ export function NexusHero({
                   isRTL ? "text-right" : "text-center sm:text-left"
                 )}
               >
-                Accès public aux ressources • Mode avancé réservé aux membres
+                {t('home.hero.microtext')}
               </motion.p>
             </motion.div>
           )}
@@ -374,7 +376,7 @@ export function NexusHero({
           transition={{ duration: 0.6, delay: 1.5 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/60"
         >
-          <span className="text-xs font-medium mb-2 tracking-wide uppercase">Découvrir</span>
+          <span className="text-xs font-medium mb-2 tracking-wide uppercase">{t('home.hero.scroll')}</span>
           <motion.div
             animate={shouldAnimate ? { y: [0, 8, 0] } : undefined}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}

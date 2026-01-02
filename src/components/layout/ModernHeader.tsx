@@ -168,7 +168,7 @@ const ModernHeader = () => {
                             isRTL ? "ml-2" : "mr-2",
                             active ? "text-[hsl(var(--nx-gold))]" : "group-hover:text-[hsl(var(--nx-gold))]"
                           )} />
-                          <span className="relative z-10">{item.label}</span>
+                          <span className="relative z-10">{item.labelKey ? t(item.labelKey) : item.label}</span>
                           <ChevronDown className={cn(
                             "h-3 w-3 transition-transform duration-200 group-data-[state=open]:rotate-180",
                             isRTL ? "mr-1" : "ml-1"
@@ -202,10 +202,10 @@ const ModernHeader = () => {
                                 </div>
                                 <div className={cn("flex flex-col min-w-0", isRTL && "text-right")}>
                                   <span className="font-medium text-sm">
-                                    {subItem.label}
+                                    {subItem.labelKey ? t(subItem.labelKey) : subItem.label}
                                   </span>
                                   <span className="text-xs text-white/50">
-                                    {subItem.description}
+                                    {subItem.descriptionKey ? t(subItem.descriptionKey) : subItem.description}
                                   </span>
                                 </div>
                               </Link>
@@ -252,7 +252,7 @@ const ModernHeader = () => {
                       isRTL ? "ml-2" : "mr-2",
                       active ? "text-[hsl(var(--nx-gold))]" : "group-hover:text-[hsl(var(--nx-gold))]"
                     )} />
-                    <span className="relative z-10">{item.label}</span>
+                    <span className="relative z-10">{item.labelKey ? t(item.labelKey) : item.label}</span>
                   </Link>
                 );
               })}

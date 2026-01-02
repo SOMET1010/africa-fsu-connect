@@ -705,5 +705,29 @@
   "presentation.controls.record": "Enregistrer",
   "presentation.controls.stopRecording": "Arrêter",
   "presentation.controls.pauseRecording": "Pause",
-  "presentation.controls.resumeRecording": "Reprendre"
+  "presentation.controls.resumeRecording": "Reprendre",
+
+  "home.hero.badge": "Réseau panafricain SUTEL",
+  "home.hero.subtitle.prefix": "l'avenir du",
+  "home.hero.subtitle.highlight": "Service Universel",
+  "home.hero.subtitle.suffix": "en Afrique",
+  "home.hero.cta.explore": "Explorer le réseau",
+  "home.hero.cta.member": "Espace Membre",
+  "home.hero.microtext": "Accès public aux ressources • Mode avancé réservé aux membres",
+  "home.hero.scroll": "Découvrir",
+  "home.cta.kicker": "Rejoignez-nous",
+  "home.cta.title": "Rejoignez le réseau SUTEL",
+  "home.cta.subtitle": "Participez à la construction collective du Service Universel en Afrique",
+
+  "nav.network.view.desc": "Coordination collective SUTEL",
+  "nav.network.members.desc": "Annuaire des pays membres",
+  "nav.network.map.desc": "Visualisation interactive",
+  "nav.network.activity.desc": "Actualités du réseau",
+  "nav.collaborate.projects.desc": "Projets partagés par le réseau",
+  "nav.collaborate.practices.desc": "Bonnes pratiques documentées",
+  "nav.collaborate.submit.desc": "Proposer une initiative",
+  "nav.collaborate.discussions.desc": "Échanges entre membres",
+  "nav.learn.elearning.desc": "Modules de formation",
+  "nav.learn.events.desc": "Agenda des événements",
+  "nav.learn.webinars.desc": "Sessions en ligne"
 }

@@ -718,5 +718,29 @@
   "presentation.controls.record": "Record",
   "presentation.controls.stopRecording": "Stop",
   "presentation.controls.pauseRecording": "Pause",
-  "presentation.controls.resumeRecording": "Resume"
+  "presentation.controls.resumeRecording": "Resume",
+
+  "home.hero.badge": "Pan-African SUTEL Network",
+  "home.hero.subtitle.prefix": "the future of",
+  "home.hero.subtitle.highlight": "Universal Service",
+  "home.hero.subtitle.suffix": "in Africa",
+  "home.hero.cta.explore": "Explore the network",
+  "home.hero.cta.member": "Member Area",
+  "home.hero.microtext": "Public access to resources • Advanced mode for members only",
+  "home.hero.scroll": "Discover",
+  "home.cta.kicker": "Join us",
+  "home.cta.title": "Join the SUTEL Network",
+  "home.cta.subtitle": "Participate in building Universal Service collectively in Africa",
+
+  "nav.network.view.desc": "Collective SUTEL coordination",
+  "nav.network.members.desc": "Member countries directory",
+  "nav.network.map.desc": "Interactive visualization",
+  "nav.network.activity.desc": "Network news",
+  "nav.collaborate.projects.desc": "Projects shared by the network",
+  "nav.collaborate.practices.desc": "Documented best practices",
+  "nav.collaborate.submit.desc": "Propose an initiative",
+  "nav.collaborate.discussions.desc": "Exchanges between members",
+  "nav.learn.elearning.desc": "Training modules",
+  "nav.learn.events.desc": "Events calendar",
+  "nav.learn.webinars.desc": "Online sessions"
 }

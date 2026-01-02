@@ -1167,7 +1167,8 @@ const translations = {
   }
 };
 
-export type TranslationKey = keyof typeof translations.fr;
+// Allow any string key for flexibility with JSON files
+export type TranslationKey = string;
 
 export const useTranslation = () => {
   const { t: i18nT, i18n } = useI18nTranslation();
@@ -1179,7 +1180,7 @@ export const useTranslation = () => {
 
   const currentLanguage = normalize(i18n.resolvedLanguage || i18n.language);
 
-  const t = (key: TranslationKey, params?: Record<string, string>): string => {
+  const t = (key: string, params?: Record<string, string | number>): string => {
     // Prefer i18next resources (fr/en/pt/ar JSON files)
     const raw = i18nT(key, params as any);
     const translated = typeof raw === 'string' ? raw : '';
@@ -1188,12 +1189,12 @@ export const useTranslation = () => {
     if (translated && translated !== key) return translated;
 
     // Fallback to legacy inline dictionary (mostly fr/en)
-    let fallback = translations[currentLanguage]?.[key] || translations.fr[key] || key;
+    let fallback = (translations[currentLanguage] as Record<string, string>)?.[key] || (translations.fr as Record<string, string>)[key] || key;
 
     // Simple string interpolation for {param} patterns
     if (params) {
       Object.entries(params).forEach(([param, value]) => {
-        fallback = fallback.replace(new RegExp(`{${param}}`, 'g'), value);
+        fallback = fallback.replace(new RegExp(`{${param}}`, 'g'), String(value));
       });
     }
 
