@@ -152,11 +152,14 @@ const containerVariants = {
 export function NexusActivityFeed() {
   const { t } = useTranslation();
   const { isRTL } = useDirection();
-  const { data, isLoading, isError } = useAfricaNews();
+  // Temporarily disabled API to use translated demo data
+  // const { data, isLoading, isError } = useAfricaNews();
+  const data = null;
+  const isLoading = false;
+  const isError = false;
   
-  const activities = data?.news 
-    ? transformToActivityItems(data.news)
-    : FALLBACK_ACTIVITIES;
+  // Always use FALLBACK_ACTIVITIES for now (supports i18n)
+  const activities = FALLBACK_ACTIVITIES;
 
   // RTL-aware animation variants (defined inside component to access isRTL)
   const itemVariants = {
