@@ -4,6 +4,7 @@ import { PracticeFilters } from "@/components/practices/PracticeFilters";
 import { FeaturedPractices } from "@/components/practices/FeaturedPractices";
 import { PracticeGrid } from "@/components/practices/PracticeGrid";
 import { SharePracticeCTA } from "@/components/practices/SharePracticeCTA";
+import { AfricanSection, AfricanDivider } from "@/components/shared/AfricanPattern";
 
 export default function Practices() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,23 +16,25 @@ export default function Practices() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero - fond neutre */}
-      <div className="container mx-auto px-4 max-w-6xl">
-        <PracticesHero 
-          searchQuery={searchQuery} 
-          onSearchChange={setSearchQuery} 
-        />
-      </div>
+      {/* Hero - fond avec pattern subtil */}
+      <AfricanSection variant="premium" className="py-4">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <PracticesHero 
+            searchQuery={searchQuery} 
+            onSearchChange={setSearchQuery} 
+          />
+        </div>
+      </AfricanSection>
 
-      {/* Featured - fond chaud (ivoire) */}
-      <div className="nx-section-warm py-10">
+      {/* Featured - fond chaud africain */}
+      <AfricanSection variant="warm" className="py-12">
         <div className="container mx-auto px-4 max-w-6xl">
           <FeaturedPractices />
         </div>
-      </div>
+      </AfricanSection>
 
-      {/* Filtres + Grid - fond frais (bleu très léger) */}
-      <div className="nx-section-cool py-10">
+      {/* Filtres + Grid - fond frais */}
+      <AfricanSection variant="cool" className="py-12">
         <div className="container mx-auto px-4 max-w-6xl">
           <PracticeFilters 
             filters={filters} 
@@ -42,10 +45,11 @@ export default function Practices() {
             filters={filters} 
           />
         </div>
-      </div>
+      </AfricanSection>
 
-      {/* CTA - fond neutre */}
-      <div className="container mx-auto px-4 py-10 max-w-6xl">
+      {/* CTA */}
+      <div className="container mx-auto px-4 py-12 max-w-6xl">
+        <AfricanDivider variant="default" className="mb-10" />
         <SharePracticeCTA />
       </div>
     </div>
