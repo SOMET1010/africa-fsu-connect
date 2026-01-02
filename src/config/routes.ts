@@ -11,6 +11,7 @@ import {
   Rocket,
   BookOpen,
   User,
+  Users,
   Settings,
   Shield,
   PlayCircle,
@@ -83,6 +84,7 @@ const MyCountry = lazy(() => import('@/pages/MyCountry'));
 // New network pages (3-layer architecture)
 const NetworkView = lazy(() => import('@/pages/NetworkView'));
 const MembersDirectory = lazy(() => import('@/pages/MembersDirectory'));
+const Community = lazy(() => import('@/pages/Community'));
 const CountryProfile = lazy(() => import('@/pages/CountryProfile'));
 const NetworkActivity = lazy(() => import('@/pages/NetworkActivity'));
 const AdvancedMode = lazy(() => import('@/pages/AdvancedMode'));
@@ -118,6 +120,18 @@ export const ROUTES: RouteConfig[] = [
     showInMobileNav: false,
     category: 'main',
     univers: 'pilotage',
+  },
+  {
+    path: '/community',
+    component: Community,
+    title: 'Communautés linguistiques',
+    description: 'Les 4 communautés linguistiques du réseau SUTEL',
+    icon: Users,
+    isProtected: false,
+    showInSidebar: true,
+    showInMobileNav: false,
+    category: 'main',
+    univers: 'communaute',
   },
   {
     path: '/country/:code',
