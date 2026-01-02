@@ -17,6 +17,7 @@ import { NexusActionCard } from "@/components/ui/nexus-card";
 import { UATCoordinationSection } from "@/components/network/UATCoordinationSection";
 import { LinguisticCommunitiesSection } from "@/components/network/LinguisticCommunitiesSection";
 import { useTranslation } from "@/hooks/useTranslation";
+import { NexusSectionHero } from "@/components/shared/NexusSectionHero";
 
 const NetworkView = () => {
   const { t } = useTranslation();
