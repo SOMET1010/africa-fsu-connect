@@ -22,6 +22,7 @@ interface ActivityItem {
   titleKey: string;
   descKey: string;
   timeKey: string;
+  timeCount?: number;
   icon: LucideIcon;
   color: string;
   bg: string;
@@ -38,7 +39,8 @@ const FALLBACK_ACTIVITIES: ActivityItem[] = [
     type: "project",
     titleKey: "feed.demo.mali.title",
     descKey: "feed.demo.mali.desc",
-    timeKey: "feed.time.recent",
+    timeKey: "time.ago.hours",
+    timeCount: 2,
     icon: FolderGit2,
     color: "text-emerald-400",
     bg: "bg-emerald-400/10",
@@ -52,7 +54,8 @@ const FALLBACK_ACTIVITIES: ActivityItem[] = [
     type: "doc",
     titleKey: "feed.demo.kenya.title",
     descKey: "feed.demo.kenya.desc",
-    timeKey: "feed.time.recent",
+    timeKey: "time.ago.hours",
+    timeCount: 5,
     icon: FileText,
     color: "text-blue-400",
     bg: "bg-blue-400/10",
@@ -66,7 +69,8 @@ const FALLBACK_ACTIVITIES: ActivityItem[] = [
     type: "event",
     titleKey: "feed.demo.sutel.title",
     descKey: "feed.demo.sutel.desc",
-    timeKey: "feed.time.soon",
+    timeKey: "time.future.hours",
+    timeCount: 3,
     icon: Calendar,
     color: "text-[hsl(var(--nx-gold))]",
     bg: "bg-[hsl(var(--nx-gold))]/10",
@@ -80,7 +84,8 @@ const FALLBACK_ACTIVITIES: ActivityItem[] = [
     type: "collab",
     titleKey: "feed.demo.collab.title",
     descKey: "feed.demo.collab.desc",
-    timeKey: "feed.time.recent",
+    timeKey: "time.ago.days",
+    timeCount: 1,
     icon: Users,
     color: "text-purple-400",
     bg: "bg-purple-400/10",
@@ -127,6 +132,7 @@ function transformToActivityItems(news: NewsItem[]): ActivityItem[] {
       titleKey: item.title, // Raw text from API
       descKey: item.desc, // Raw text from API
       timeKey: "feed.time.recent",
+      timeCount: undefined,
       isTranslationKey: false, // API data is raw text, not translation keys
       ...config
     };
@@ -277,7 +283,9 @@ export function NexusActivityFeed() {
                           {item.isTranslationKey ? t(item.countryKey) : item.countryKey}
                         </span>
                         <span className={cn("text-white/40 text-xs", isRTL ? "mr-auto" : "ml-auto")}>
-                          {t(item.timeKey)}
+                          {item.timeCount !== undefined 
+                            ? t(item.timeKey, { count: item.timeCount })
+                            : t(item.timeKey)}
                         </span>
                       </div>
 
