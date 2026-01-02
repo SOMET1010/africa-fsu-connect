@@ -6,6 +6,14 @@
  */
 
 /* ========================================
+   SECTION BACKGROUNDS — Alternance émotionnelle
+   ======================================== */
+
+.nx-section-warm { background: hsl(var(--nx-section-warm)); }
+.nx-section-cool { background: hsl(var(--nx-section-cool)); }
+.nx-section-brand { background: hsl(var(--nx-section-brand)); }
+
+/* ========================================
    PAGE CONTAINER — Fond apaisant
    ======================================== */
 
@@ -88,6 +96,52 @@
 /* Glow subtil */
 .nx-hover-glow:hover {
   box-shadow: var(--nx-shadow-md), 0 0 20px hsl(var(--nx-brand-900) / 0.1);
+}
+
+/* ========================================
+   MICRO-MOTION — Vie subtile
+   ======================================== */
+
+/* Icon bounce on parent hover */
+.nx-icon-bounce {
+  transition: transform var(--nx-dur-2) var(--nx-ease);
+}
+.group:hover .nx-icon-bounce {
+  transform: translateY(-2px);
+}
+
+/* Button slide effect */
+.nx-btn-slide {
+  transition: all var(--nx-dur-2) var(--nx-ease);
+}
+.nx-btn-slide:hover {
+  padding-left: 1.25rem;
+}
+
+/* Scale on hover */
+.nx-hover-scale {
+  transition: transform var(--nx-dur-2) var(--nx-ease);
+}
+.group:hover .nx-hover-scale {
+  transform: scale(1.05);
+}
+
+/* ========================================
+   NARRATIVE TYPOGRAPHY
+   ======================================== */
+
+.nx-quote {
+  font-style: italic;
+  color: hsl(var(--nx-text-700));
+  border-left: 2px solid hsl(var(--nx-coop-600) / 0.4);
+  padding-left: 0.75rem;
+}
+
+.nx-impact-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: hsl(var(--nx-coop-600));
+  line-height: 1;
 }
 
 /* ========================================
