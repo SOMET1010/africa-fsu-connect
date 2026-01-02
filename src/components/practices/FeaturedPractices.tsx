@@ -4,7 +4,9 @@ import { Sparkles } from "lucide-react";
 const featuredPractices = [
   {
     title: "Connectivité rurale par satellite en zones isolées",
-    description: "Déploiement de solutions satellite low-cost pour connecter 150 villages isolés du nord du pays, avec formation des communautés locales.",
+    description: "150 villages enfin connectés malgré l'isolement géographique.",
+    impact: { value: "150", label: "villages connectés" },
+    agency: "Agence FSU Côte d'Ivoire",
     country: "Côte d'Ivoire",
     countryFlag: "🇨🇮",
     theme: "Connectivité",
@@ -12,7 +14,9 @@ const featuredPractices = [
   },
   {
     title: "Télémédecine villageoise intégrée",
-    description: "Mise en place de centres de télémédecine dans 80 villages, permettant des consultations à distance avec des spécialistes urbains.",
+    description: "Des consultations spécialisées accessibles partout.",
+    impact: { value: "80", label: "centres de santé reliés" },
+    agency: "Agence de l'Informatique de l'État du Sénégal",
     country: "Sénégal",
     countryFlag: "🇸🇳",
     theme: "E-Santé",
@@ -22,17 +26,21 @@ const featuredPractices = [
 
 export function FeaturedPractices() {
   return (
-    <section className="mb-10">
-      <div className="flex items-center gap-2 mb-5">
+    <section>
+      <div className="flex items-center gap-2 mb-6">
         <Sparkles className="h-5 w-5 text-amber-500" />
-        <h2 className="text-lg font-semibold">
+        <h2 className="text-xl font-semibold">
           Pratiques inspirantes ce mois-ci
         </h2>
       </div>
       
-      <div className="grid md:grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-2 gap-6">
         {featuredPractices.map((practice, index) => (
-          <PracticeCard key={index} {...practice} />
+          <PracticeCard 
+            key={index} 
+            {...practice} 
+            featured={true}
+          />
         ))}
       </div>
     </section>

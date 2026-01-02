@@ -3,7 +3,9 @@ import { PracticeCard } from "./PracticeCard";
 const allPractices = [
   {
     title: "École numérique mobile",
-    description: "Bus équipés de matériel informatique et connexion internet pour dispenser des cours numériques dans les zones rurales.",
+    description: "Des salles de classe itinérantes connectées pour les zones rurales.",
+    impact: { value: "45", label: "écoles équipées" },
+    agency: "Ministère de l'Éducation Numérique",
     country: "Cameroun",
     countryFlag: "🇨🇲",
     theme: "Éducation",
@@ -11,7 +13,9 @@ const allPractices = [
   },
   {
     title: "Registre foncier numérique",
-    description: "Digitalisation complète des titres fonciers avec blockchain pour sécuriser les transactions immobilières.",
+    description: "Sécurisation des transactions immobilières par blockchain.",
+    impact: { value: "12k", label: "titres numérisés" },
+    agency: "Direction du Cadastre National",
     country: "Burkina Faso",
     countryFlag: "🇧🇫",
     theme: "Gouvernance",
@@ -19,7 +23,9 @@ const allPractices = [
   },
   {
     title: "Plateforme agricole connectée",
-    description: "Application mobile connectant les agriculteurs aux marchés locaux et fournissant des alertes météo en temps réel.",
+    description: "Connexion directe entre agriculteurs et marchés locaux.",
+    impact: { value: "8k", label: "agriculteurs actifs" },
+    agency: "Office National Agricole",
     country: "Mali",
     countryFlag: "🇲🇱",
     theme: "Agriculture",
@@ -27,7 +33,9 @@ const allPractices = [
   },
   {
     title: "Système d'alerte précoce inondations",
-    description: "Réseau de capteurs IoT pour la prévention des catastrophes naturelles dans les zones à risque.",
+    description: "Prévention des catastrophes grâce aux capteurs IoT.",
+    impact: { value: "200", label: "capteurs déployés" },
+    agency: "Agence Nationale de Météorologie",
     country: "Sénégal",
     countryFlag: "🇸🇳",
     theme: "Résilience",
@@ -35,7 +43,9 @@ const allPractices = [
   },
   {
     title: "E-administration communale",
-    description: "Portail numérique permettant aux citoyens d'effectuer leurs démarches administratives en ligne.",
+    description: "Démarches administratives accessibles en ligne pour tous.",
+    impact: { value: "35", label: "communes connectées" },
+    agency: "Agence FSU Côte d'Ivoire",
     country: "Côte d'Ivoire",
     countryFlag: "🇨🇮",
     theme: "Gouvernance",
@@ -43,7 +53,9 @@ const allPractices = [
   },
   {
     title: "Formation digitale des enseignants",
-    description: "Programme de certification en ligne pour 5000 enseignants sur les outils pédagogiques numériques.",
+    description: "Certification en ligne sur les outils pédagogiques numériques.",
+    impact: { value: "5k", label: "enseignants certifiés" },
+    agency: "Institut de Formation Continue",
     country: "Cameroun",
     countryFlag: "🇨🇲",
     theme: "Éducation",
@@ -90,9 +102,9 @@ export function PracticeGrid({ searchQuery = "", filters }: PracticeGridProps) {
   });
 
   return (
-    <section>
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="text-lg font-semibold">
+    <section className="mt-8">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-semibold">
           Toutes les pratiques
         </h2>
         <span className="text-sm text-muted-foreground">
@@ -101,9 +113,15 @@ export function PracticeGrid({ searchQuery = "", filters }: PracticeGridProps) {
       </div>
       
       {filteredPractices.length > 0 ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPractices.map((practice, index) => (
-            <PracticeCard key={index} {...practice} />
+            <div 
+              key={index} 
+              className="animate-fade-in"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
+              <PracticeCard {...practice} />
+            </div>
           ))}
         </div>
       ) : (
