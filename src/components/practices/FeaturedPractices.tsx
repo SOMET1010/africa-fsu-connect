@@ -1,4 +1,5 @@
 import { PracticeCard } from "./PracticeCard";
+import { Sparkles } from "lucide-react";
 
 const featuredPractices = [
   {
@@ -17,26 +18,21 @@ const featuredPractices = [
     theme: "E-Santé",
     date: "Nov 2025",
   },
-  {
-    title: "École numérique mobile",
-    description: "Bus équipés de matériel informatique et connexion internet pour dispenser des cours numériques dans les zones rurales.",
-    country: "Cameroun",
-    countryFlag: "🇨🇲",
-    theme: "Éducation",
-    date: "Oct 2025",
-  },
 ];
 
 export function FeaturedPractices() {
   return (
-    <section className="mb-12">
-      <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-        ⭐ Pratiques mises en avant
-      </h2>
+    <section className="mb-10">
+      <div className="flex items-center gap-2 mb-5">
+        <Sparkles className="h-5 w-5 text-amber-500" />
+        <h2 className="text-lg font-semibold">
+          Pratiques inspirantes ce mois-ci
+        </h2>
+      </div>
       
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-5">
         {featuredPractices.map((practice, index) => (
-          <PracticeCard key={index} {...practice} featured />
+          <PracticeCard key={index} {...practice} />
         ))}
       </div>
     </section>
