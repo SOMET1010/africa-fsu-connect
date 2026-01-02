@@ -1,12 +1,20 @@
 // Simulated activity data - will be replaced by real data from database
+export type ActivityLevel = 'high' | 'medium' | 'emerging' | 'joining';
+export type MapMode = 'members' | 'projects' | 'trends';
+
 export interface CountryActivity {
   contributions: number;
-  level: 'high' | 'medium' | 'emerging';
+  projects: number;
+  resources: number;
+  trendScore: number; // 0-100
+  level: ActivityLevel;
+  status: 'active' | 'member' | 'emerging' | 'joining';
+  lastActivity: string;
   recentActions: string[];
 }
 
 // Activity level configuration with semantic colors
-export const ACTIVITY_LEVELS = {
+export const ACTIVITY_LEVELS: Record<ActivityLevel, { color: string; label: string; threshold: number }> = {
   high: { 
     color: '#10B981', // Green - très actif
     label: 'Très actif', 
@@ -20,6 +28,11 @@ export const ACTIVITY_LEVELS = {
   emerging: { 
     color: '#F59E0B', // Amber - émergent
     label: 'Émergent', 
+    threshold: 3 
+  },
+  joining: { 
+    color: '#9CA3AF', // Gray - en adhésion
+    label: 'En adhésion', 
     threshold: 0 
   },
 } as const;
@@ -29,7 +42,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   // Très actifs
   SN: { 
     contributions: 14, 
+    projects: 5,
+    resources: 3,
+    trendScore: 85,
     level: 'high',
+    status: 'active',
+    lastActivity: 'il y a 2 jours',
     recentActions: [
       "Projet fibre rurale partagé",
       "Participation atelier régional",
@@ -38,7 +56,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   },
   CI: { 
     contributions: 22, 
+    projects: 8,
+    resources: 4,
+    trendScore: 92,
     level: 'high',
+    status: 'active',
+    lastActivity: 'il y a 1 jour',
     recentActions: [
       "Lancement programme écoles connectées",
       "Best practice télémédecine",
@@ -47,7 +70,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   },
   KE: { 
     contributions: 18, 
+    projects: 6,
+    resources: 5,
+    trendScore: 88,
     level: 'high',
+    status: 'active',
+    lastActivity: 'il y a 3 jours',
     recentActions: [
       "Initiative mobile money",
       "Partage données couverture",
@@ -56,7 +84,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   },
   MA: { 
     contributions: 16, 
+    projects: 4,
+    resources: 6,
+    trendScore: 78,
     level: 'high',
+    status: 'active',
+    lastActivity: 'il y a 4 jours',
     recentActions: [
       "Programme villages connectés",
       "Formation en ligne partagée",
@@ -67,7 +100,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   // Actifs
   CM: { 
     contributions: 11, 
+    projects: 3,
+    resources: 2,
+    trendScore: 65,
     level: 'medium',
+    status: 'member',
+    lastActivity: 'il y a 5 jours',
     recentActions: [
       "Projet backbone national",
       "Participation groupe de travail"
@@ -75,7 +113,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   },
   GH: { 
     contributions: 9, 
+    projects: 2,
+    resources: 3,
+    trendScore: 58,
     level: 'medium',
+    status: 'member',
+    lastActivity: 'il y a 6 jours',
     recentActions: [
       "Programme inclusion numérique",
       "Documentation partagée"
@@ -83,7 +126,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   },
   RW: { 
     contributions: 10, 
+    projects: 4,
+    resources: 1,
+    trendScore: 72,
     level: 'medium',
+    status: 'member',
+    lastActivity: 'il y a 4 jours',
     recentActions: [
       "Initiative smart villages",
       "Partage d'expérience 4G"
@@ -91,7 +139,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   },
   TZ: { 
     contributions: 12, 
+    projects: 3,
+    resources: 2,
+    trendScore: 62,
     level: 'medium',
+    status: 'member',
+    lastActivity: 'il y a 7 jours',
     recentActions: [
       "Projet zones rurales",
       "Collaboration régionale"
@@ -99,7 +152,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   },
   ZA: { 
     contributions: 13, 
+    projects: 5,
+    resources: 4,
+    trendScore: 70,
     level: 'medium',
+    status: 'member',
+    lastActivity: 'il y a 3 jours',
     recentActions: [
       "Infrastructure partagée",
       "Formation technique"
@@ -107,7 +165,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   },
   NG: { 
     contributions: 14, 
+    projects: 4,
+    resources: 3,
+    trendScore: 68,
     level: 'medium',
+    status: 'member',
+    lastActivity: 'il y a 5 jours',
     recentActions: [
       "Expansion réseau rural",
       "Partenariat public-privé"
@@ -115,7 +178,12 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   },
   EG: { 
     contributions: 11, 
+    projects: 3,
+    resources: 2,
+    trendScore: 55,
     level: 'medium',
+    status: 'member',
+    lastActivity: 'il y a 8 jours',
     recentActions: [
       "Projet câble sous-marin",
       "Hub régional data"
@@ -125,157 +193,292 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
   // Émergents
   ML: { 
     contributions: 5, 
+    projects: 1,
+    resources: 1,
+    trendScore: 35,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Première contribution réseau"
     ]
   },
   BF: { 
     contributions: 4, 
+    projects: 1,
+    resources: 0,
+    trendScore: 28,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Demande d'adhésion active"
     ]
   },
   TN: { 
     contributions: 6, 
+    projects: 2,
+    resources: 1,
+    trendScore: 42,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 10 jours',
     recentActions: [
       "Participation forum régional"
     ]
   },
   DZ: { 
     contributions: 5, 
+    projects: 1,
+    resources: 1,
+    trendScore: 38,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Projet pilote en cours"
     ]
   },
   ET: { 
     contributions: 7, 
+    projects: 2,
+    resources: 1,
+    trendScore: 45,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 1 semaine',
     recentActions: [
       "Initiative télécoms rurales"
     ]
   },
   UG: { 
     contributions: 6, 
+    projects: 1,
+    resources: 2,
+    trendScore: 40,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 12 jours',
     recentActions: [
       "Programme villages connectés"
     ]
   },
   NE: { 
     contributions: 3, 
+    projects: 0,
+    resources: 1,
+    trendScore: 22,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 1 mois',
     recentActions: [
       "Évaluation besoins en cours"
     ]
   },
   TD: { 
     contributions: 2, 
-    level: 'emerging',
+    projects: 0,
+    resources: 0,
+    trendScore: 15,
+    level: 'joining',
+    status: 'joining',
+    lastActivity: 'il y a 6 semaines',
     recentActions: [
       "Contact initial établi"
     ]
   },
   CG: { 
     contributions: 4, 
+    projects: 1,
+    resources: 0,
+    trendScore: 30,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Projet fibre en discussion"
     ]
   },
   CD: { 
     contributions: 3, 
+    projects: 0,
+    resources: 1,
+    trendScore: 25,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 1 mois',
     recentActions: [
       "Participation observation"
     ]
   },
   GA: { 
     contributions: 5, 
+    projects: 1,
+    resources: 1,
+    trendScore: 32,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Intérêt pour best practices"
     ]
   },
   BJ: { 
     contributions: 6, 
+    projects: 2,
+    resources: 1,
+    trendScore: 38,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 10 jours',
     recentActions: [
       "Projet écoles connectées"
     ]
   },
   TG: { 
     contributions: 4, 
+    projects: 1,
+    resources: 0,
+    trendScore: 28,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Demande de collaboration"
     ]
   },
   ZM: { 
     contributions: 5, 
+    projects: 1,
+    resources: 1,
+    trendScore: 35,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Programme backbone rural"
     ]
   },
   ZW: { 
     contributions: 4, 
+    projects: 1,
+    resources: 0,
+    trendScore: 30,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Initiative numérique"
     ]
   },
   MZ: { 
     contributions: 3, 
+    projects: 0,
+    resources: 1,
+    trendScore: 22,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 1 mois',
     recentActions: [
       "Évaluation en cours"
     ]
   },
   AO: { 
     contributions: 5, 
+    projects: 1,
+    resources: 1,
+    trendScore: 33,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Projet infrastructure"
     ]
   },
   NA: { 
     contributions: 4, 
+    projects: 1,
+    resources: 0,
+    trendScore: 28,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Partenariat régional"
     ]
   },
   BW: { 
     contributions: 6, 
+    projects: 2,
+    resources: 1,
+    trendScore: 40,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 10 jours',
     recentActions: [
       "Smart villages initiative"
     ]
   },
   MG: { 
     contributions: 3, 
+    projects: 0,
+    resources: 1,
+    trendScore: 20,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 1 mois',
     recentActions: [
       "Connectivité îles"
     ]
   },
   MU: { 
     contributions: 7, 
+    projects: 2,
+    resources: 2,
+    trendScore: 48,
     level: 'emerging',
+    status: 'emerging',
+    lastActivity: 'il y a 1 semaine',
     recentActions: [
       "Hub numérique régional"
+    ]
+  },
+  // En adhésion (joining)
+  SO: { 
+    contributions: 1, 
+    projects: 0,
+    resources: 0,
+    trendScore: 10,
+    level: 'joining',
+    status: 'joining',
+    lastActivity: 'il y a 2 mois',
+    recentActions: [
+      "Demande d'adhésion soumise"
+    ]
+  },
+  ER: { 
+    contributions: 1, 
+    projects: 0,
+    resources: 0,
+    trendScore: 8,
+    level: 'joining',
+    status: 'joining',
+    lastActivity: 'il y a 2 mois',
+    recentActions: [
+      "Premier contact établi"
     ]
   },
 };
 
 // Default activity for countries not in the list
 const DEFAULT_ACTIVITY: CountryActivity = {
-  contributions: 2,
-  level: 'emerging',
+  contributions: 1,
+  projects: 0,
+  resources: 0,
+  trendScore: 5,
+  level: 'joining',
+  status: 'joining',
+  lastActivity: 'En cours d\'intégration',
   recentActions: ["En cours d'intégration au réseau"]
 };
 
@@ -283,12 +486,39 @@ export const getCountryActivity = (countryCode: string): CountryActivity => {
   return COUNTRY_ACTIVITY_DATA[countryCode.toUpperCase()] || DEFAULT_ACTIVITY;
 };
 
-export const getActivityColor = (level: 'high' | 'medium' | 'emerging'): string => {
+export const getActivityColor = (level: ActivityLevel): string => {
   return ACTIVITY_LEVELS[level].color;
 };
 
-export const getActivityLabel = (level: 'high' | 'medium' | 'emerging'): string => {
+export const getActivityLabel = (level: ActivityLevel): string => {
   return ACTIVITY_LEVELS[level].label;
+};
+
+export const getStatusLabel = (status: CountryActivity['status']): string => {
+  const labels: Record<CountryActivity['status'], string> = {
+    active: 'Membre actif',
+    member: 'Membre',
+    emerging: 'Émergent',
+    joining: 'En adhésion'
+  };
+  return labels[status];
+};
+
+// Get display value based on map mode
+export const getValueByMode = (activity: CountryActivity, mode: MapMode): number => {
+  switch (mode) {
+    case 'projects': return activity.projects;
+    case 'trends': return activity.trendScore;
+    default: return activity.contributions;
+  }
+};
+
+export const getLabelByMode = (mode: MapMode): string => {
+  switch (mode) {
+    case 'projects': return 'projets partagés';
+    case 'trends': return '% dynamique';
+    default: return 'contributions';
+  }
 };
 
 // Calculate global stats from activity data
@@ -297,14 +527,50 @@ export const getGlobalStats = () => {
   const totalContributions = Object.values(COUNTRY_ACTIVITY_DATA).reduce(
     (sum, data) => sum + data.contributions, 0
   );
+  const totalProjects = Object.values(COUNTRY_ACTIVITY_DATA).reduce(
+    (sum, data) => sum + data.projects, 0
+  );
   const activeCountries = countries.filter(
-    code => COUNTRY_ACTIVITY_DATA[code].level !== 'emerging'
+    code => COUNTRY_ACTIVITY_DATA[code].level === 'high' || COUNTRY_ACTIVITY_DATA[code].level === 'medium'
   ).length;
+  const avgTrendScore = Math.round(
+    Object.values(COUNTRY_ACTIVITY_DATA).reduce((sum, data) => sum + data.trendScore, 0) / countries.length
+  );
   
   return {
     totalCountries: countries.length,
     totalContributions,
+    totalProjects,
     activeCountries,
-    emergingCountries: countries.length - activeCountries
+    emergingCountries: countries.length - activeCountries,
+    avgTrendScore
   };
+};
+
+// Get stats by mode
+export const getStatsByMode = (mode: MapMode) => {
+  const stats = getGlobalStats();
+  switch (mode) {
+    case 'projects':
+      return {
+        primary: stats.totalProjects,
+        primaryLabel: 'projets partagés',
+        secondary: stats.activeCountries,
+        secondaryLabel: 'pays contributeurs'
+      };
+    case 'trends':
+      return {
+        primary: stats.avgTrendScore,
+        primaryLabel: '% dynamique moyenne',
+        secondary: 15,
+        secondaryLabel: '% vs mois dernier'
+      };
+    default:
+      return {
+        primary: stats.totalContributions,
+        primaryLabel: 'contributions',
+        secondary: stats.totalCountries,
+        secondaryLabel: 'pays actifs'
+      };
+  }
 };
