@@ -15,6 +15,8 @@ import {
   Shield,
   PlayCircle,
   Flag,
+  Lightbulb,
+  Video,
 } from 'lucide-react';
 
 // UX Universe types for organized navigation
@@ -84,6 +86,10 @@ const MembersDirectory = lazy(() => import('@/pages/MembersDirectory'));
 const CountryProfile = lazy(() => import('@/pages/CountryProfile'));
 const NetworkActivity = lazy(() => import('@/pages/NetworkActivity'));
 const AdvancedMode = lazy(() => import('@/pages/AdvancedMode'));
+
+// Collaboration pages
+const Practices = lazy(() => import('@/pages/Practices'));
+const Webinars = lazy(() => import('@/pages/Webinars'));
 
 // Configuration centralisée des routes
 export const ROUTES: RouteConfig[] = [
@@ -236,6 +242,30 @@ export const ROUTES: RouteConfig[] = [
     showInMobileNav: true,
     category: 'main',
     univers: 'communaute',
+  },
+  {
+    path: '/practices',
+    component: Practices,
+    title: 'Bonnes pratiques',
+    description: 'Partage d\'expériences du réseau',
+    icon: Lightbulb,
+    isProtected: true,
+    showInSidebar: true,
+    showInMobileNav: false,
+    category: 'main',
+    univers: 'communaute',
+  },
+  {
+    path: '/webinars',
+    component: Webinars,
+    title: 'Webinaires',
+    description: 'Sessions en direct et replays',
+    icon: Video,
+    isProtected: true,
+    showInSidebar: false,
+    showInMobileNav: false,
+    category: 'main',
+    univers: 'capacites',
   },
   {
     path: '/forum',
