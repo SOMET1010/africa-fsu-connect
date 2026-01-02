@@ -16,71 +16,76 @@ import { useDirection } from "@/hooks/useDirection";
 
 interface ActivityItem {
   id: number;
-  country: string;
+  countryKey: string;
   code: string;
   type: 'project' | 'doc' | 'event' | 'collab';
-  title: string;
-  desc: string;
-  time: string;
+  titleKey: string;
+  descKey: string;
+  timeKey: string;
   icon: LucideIcon;
   color: string;
   bg: string;
   border: string;
+  isTranslationKey: boolean;
 }
 
-// Fallback data when API unavailable
+// Fallback data when API unavailable - using translation keys
 const FALLBACK_ACTIVITIES: ActivityItem[] = [
   {
     id: 1,
-    country: "Mali",
+    countryKey: "feed.demo.mali.country",
     code: "ML",
     type: "project",
-    title: "Connectivité rurale dans la région de Mopti",
-    desc: "Le Mali a partagé un nouveau projet d'infrastructure.",
-    time: "Récent",
+    titleKey: "feed.demo.mali.title",
+    descKey: "feed.demo.mali.desc",
+    timeKey: "feed.time.recent",
     icon: FolderGit2,
     color: "text-emerald-400",
     bg: "bg-emerald-400/10",
-    border: "border-emerald-400/20"
+    border: "border-emerald-400/20",
+    isTranslationKey: true
   },
   {
     id: 2,
-    country: "Kenya",
+    countryKey: "feed.demo.kenya.country",
     code: "KE",
     type: "doc",
-    title: "Méthodologie de suivi des bénéficiaires",
-    desc: "Documentation d'une bonne pratique pour les FSU.",
-    time: "Récent",
+    titleKey: "feed.demo.kenya.title",
+    descKey: "feed.demo.kenya.desc",
+    timeKey: "feed.time.recent",
     icon: FileText,
     color: "text-blue-400",
     bg: "bg-blue-400/10",
-    border: "border-blue-400/20"
+    border: "border-blue-400/20",
+    isTranslationKey: true
   },
   {
     id: 3,
-    country: "Réseau SUTEL",
+    countryKey: "feed.demo.sutel.country",
     code: "NET",
     type: "event",
-    title: "Financement innovant des FSU",
-    desc: "Webinaire organisé pour les membres du réseau.",
-    time: "Bientôt",
+    titleKey: "feed.demo.sutel.title",
+    descKey: "feed.demo.sutel.desc",
+    timeKey: "feed.time.soon",
     icon: Calendar,
     color: "text-[hsl(var(--nx-gold))]",
     bg: "bg-[hsl(var(--nx-gold))]/10",
-    border: "border-[hsl(var(--nx-gold))]/20"
+    border: "border-[hsl(var(--nx-gold))]/20",
+    isTranslationKey: true
   },
   {
     id: 4,
-    country: "Sénégal & CI",
+    countryKey: "feed.demo.collab.country",
     code: "SN/CI",
     type: "collab",
-    title: "Partage d'infrastructures backbone",
-    desc: "Collaboration bilatérale initiée sur la gestion transfrontalière.",
-    time: "Récent",
+    titleKey: "feed.demo.collab.title",
+    descKey: "feed.demo.collab.desc",
+    timeKey: "feed.time.recent",
     icon: Users,
     color: "text-purple-400",
     bg: "bg-purple-400/10",
-    border: "border-purple-400/20"
+    border: "border-purple-400/20",
+    isTranslationKey: true
   }
 ];
 
@@ -116,12 +121,13 @@ function transformToActivityItems(news: NewsItem[]): ActivityItem[] {
     const config = typeConfig[item.type] || typeConfig.project;
     return {
       id: index + 1,
-      country: item.country,
+      countryKey: item.country, // Raw text from API
       code: item.code || item.country.slice(0, 2).toUpperCase(),
       type: item.type,
-      title: item.title,
-      desc: item.desc,
-      time: "Récent",
+      titleKey: item.title, // Raw text from API
+      descKey: item.desc, // Raw text from API
+      timeKey: "feed.time.recent",
+      isTranslationKey: false, // API data is raw text, not translation keys
       ...config
     };
   });
@@ -268,10 +274,10 @@ export function NexusActivityFeed() {
                           {item.code}
                         </Badge>
                         <span className="text-white/80 text-sm font-medium">
-                          {item.country}
+                          {item.isTranslationKey ? t(item.countryKey) : item.countryKey}
                         </span>
                         <span className={cn("text-white/40 text-xs", isRTL ? "mr-auto" : "ml-auto")}>
-                          {item.time}
+                          {t(item.timeKey)}
                         </span>
                       </div>
 
@@ -279,11 +285,11 @@ export function NexusActivityFeed() {
                         "text-white font-medium group-hover:text-[hsl(var(--nx-gold))] transition-colors duration-300 mb-1",
                         isRTL && "text-right"
                       )}>
-                        {item.title}
+                        {item.isTranslationKey ? t(item.titleKey) : item.titleKey}
                       </h4>
 
                       <p className={cn("text-white/50 text-sm", isRTL && "text-right")}>
-                        {item.desc}
+                        {item.isTranslationKey ? t(item.descKey) : item.descKey}
                       </p>
                     </div>
 
