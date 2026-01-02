@@ -67,6 +67,7 @@ const Admin = lazy(() => import('@/pages/Admin'));
 const AdminUsers = lazy(() => import('@/pages/AdminUsers'));
 const AdminForum = lazy(() => import('@/pages/AdminForum'));
 const AdminResources = lazy(() => import('@/pages/admin/AdminResources'));
+const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 // New SUTEL modules
 const ELearning = lazy(() => import('@/pages/ELearning'));
 const StrategicWatch = lazy(() => import('@/pages/StrategicWatch'));
@@ -518,6 +519,20 @@ export const ROUTES: RouteConfig[] = [
     icon: BookOpen,
     isProtected: true,
     requiredRoles: ['super_admin', 'admin_pays', 'editeur'],
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'admin',
+    univers: 'admin',
+  },
+  {
+    path: '/admin/dashboard',
+    component: AdminDashboard,
+    title: 'Tableau de Pilotage',
+    description: 'Indicateurs de performance et outils d\'administration',
+    icon: BarChart3,
+    isProtected: true,
+    requiredRoles: ['super_admin', 'admin_pays'],
     showInSidebar: false,
     showInMobileNav: false,
     hideFromNav: true,

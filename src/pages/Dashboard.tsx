@@ -1,7 +1,7 @@
-import { ImpactDashboard } from "@/components/dashboard/ImpactDashboard";
+import { NetworkDashboard } from "@/components/dashboard/NetworkDashboard";
 
 const Dashboard = () => {
-  return <ImpactDashboard />;
+  return <NetworkDashboard />;
 };
 
 export default Dashboard;
