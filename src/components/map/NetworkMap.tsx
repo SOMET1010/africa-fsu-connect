@@ -232,21 +232,7 @@ export const NetworkMap = ({
         className="h-[500px] rounded-2xl overflow-hidden border border-border shadow-inner"
       />
       
-      {/* Legend */}
-      <div className="absolute bottom-4 left-4 bg-background/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-border z-[1000]">
-        <h5 className="font-semibold text-sm mb-3">Niveau d'activité</h5>
-        <div className="space-y-2">
-          {Object.entries(ACTIVITY_LEVELS).map(([key, config]) => (
-            <div key={key} className="flex items-center gap-2 text-sm">
-              <div 
-                className="w-3 h-3 rounded-full" 
-                style={{ backgroundColor: config.color }}
-              />
-              <span className="text-muted-foreground">{config.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Legend removed - now in MapNarrative only */}
 
       {/* Custom CSS for markers */}
       <style>{`

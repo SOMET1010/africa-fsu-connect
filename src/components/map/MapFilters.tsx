@@ -12,7 +12,6 @@ import { ActivityLevel } from "./activityData";
 export interface MapFiltersState {
   region: string | null;
   activityLevel: ActivityLevel | null;
-  period: 'month' | 'quarter' | 'year';
 }
 
 interface MapFiltersProps {
@@ -37,17 +36,11 @@ const ACTIVITY_FILTERS = [
   { value: 'joining', label: 'En adhésion' },
 ];
 
-const PERIODS = [
-  { value: 'month', label: 'Ce mois' },
-  { value: 'quarter', label: '3 derniers mois' },
-  { value: 'year', label: 'Cette année' },
-];
-
 export const MapFilters = ({ filters, onFilterChange }: MapFiltersProps) => {
-  const hasActiveFilters = filters.region !== null || filters.activityLevel !== null || filters.period !== 'month';
+  const hasActiveFilters = filters.region !== null || filters.activityLevel !== null;
 
   const resetFilters = () => {
-    onFilterChange({ region: null, activityLevel: null, period: 'month' });
+    onFilterChange({ region: null, activityLevel: null });
   };
 
   const getRegionLabel = () => {
@@ -58,11 +51,6 @@ export const MapFilters = ({ filters, onFilterChange }: MapFiltersProps) => {
   const getActivityLabel = () => {
     const found = ACTIVITY_FILTERS.find(a => a.value === filters.activityLevel);
     return found?.label || 'Activité';
-  };
-
-  const getPeriodLabel = () => {
-    const found = PERIODS.find(p => p.value === filters.period);
-    return found?.label || 'Période';
   };
 
   return (
@@ -116,35 +104,6 @@ export const MapFilters = ({ filters, onFilterChange }: MapFiltersProps) => {
             {ACTIVITY_FILTERS.map((activity) => (
               <DropdownMenuRadioItem key={activity.label} value={activity.value || ''}>
                 {activity.label}
-              </DropdownMenuRadioItem>
-            ))}
-          </DropdownMenuRadioGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      {/* Period Filter */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button 
-            variant={filters.period !== 'month' ? "default" : "outline"} 
-            size="sm" 
-            className="gap-1"
-          >
-            {getPeriodLabel()}
-            <ChevronDown className="h-3 w-3" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuRadioGroup 
-            value={filters.period} 
-            onValueChange={(value) => onFilterChange({ 
-              ...filters, 
-              period: value as MapFiltersState['period'] 
-            })}
-          >
-            {PERIODS.map((period) => (
-              <DropdownMenuRadioItem key={period.value} value={period.value}>
-                {period.label}
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuRadioGroup>
