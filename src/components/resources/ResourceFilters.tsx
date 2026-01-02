@@ -19,11 +19,13 @@ export interface ResourceFilterValues {
 }
 
 const DOCUMENT_TYPES = [
-  { value: 'guide', labelFr: 'Guide', labelEn: 'Guide' },
-  { value: 'rapport', labelFr: 'Rapport', labelEn: 'Report' },
-  { value: 'presentation', labelFr: 'Présentation', labelEn: 'Presentation' },
-  { value: 'formulaire', labelFr: 'Formulaire', labelEn: 'Form' },
-  { value: 'autre', labelFr: 'Autre', labelEn: 'Other' },
+  { value: 'guide', labelFr: 'Guide', labelEn: 'Guide', icon: '📘' },
+  { value: 'rapport', labelFr: 'Rapport', labelEn: 'Report', icon: '📊' },
+  { value: 'note-conceptuelle', labelFr: 'Note conceptuelle', labelEn: 'Concept Note', icon: '💡' },
+  { value: 'bonne-pratique', labelFr: 'Bonne pratique', labelEn: 'Best Practice', icon: '✨' },
+  { value: 'modele', labelFr: 'Modèle / Template', labelEn: 'Template', icon: '📝' },
+  { value: 'presentation', labelFr: 'Présentation', labelEn: 'Presentation', icon: '📽️' },
+  { value: 'autre', labelFr: 'Autre', labelEn: 'Other', icon: '📄' },
 ];
 
 const THEMES = [

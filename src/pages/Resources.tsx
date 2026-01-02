@@ -137,7 +137,6 @@ const ResourcesContent = () => {
           <FeaturedResources
             documents={featuredDocuments}
             onPreview={handlePreview}
-            onDownload={handleDownload}
           />
         )}
 
