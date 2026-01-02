@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { NetworkHero } from "./components/NetworkHero";
+import { DashboardHero } from "./components/DashboardHero";
 import { NetworkSummary } from "./components/NetworkSummary";
 import { InspiringProjects } from "./components/InspiringProjects";
 import { RecentResources } from "./components/RecentResources";
 import { UpcomingEvents } from "./components/UpcomingEvents";
 import { NetworkActivityWidget } from "./widgets/NetworkActivityWidget";
 import { DashboardMapWidget } from "./widgets/DashboardMapWidget";
+import { NexusLayout } from "@/components/layout/NexusLayout";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -32,7 +33,6 @@ export function NetworkDashboard() {
   };
 
   const handleContactCountry = (country: string) => {
-    // TODO: Implement contact modal
     console.log('Contact country:', country);
   };
 
@@ -45,10 +45,10 @@ export function NetworkDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <NexusLayout>
       <div className="container mx-auto px-4 py-6 space-y-6">
         {/* Hero de bienvenue réseau */}
-        <NetworkHero />
+        <DashboardHero />
         
         {/* Synthèse narrative du réseau */}
         <NetworkSummary 
@@ -81,7 +81,7 @@ export function NetworkDashboard() {
           />
         </div>
       </div>
-    </div>
+    </NexusLayout>
   );
 }
 

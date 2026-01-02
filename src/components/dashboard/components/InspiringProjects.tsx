@@ -1,7 +1,7 @@
 import { Rocket, ArrowRight, MessageCircle } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 
 interface InspiringProject {
   id: string;
@@ -55,28 +55,41 @@ export function InspiringProjects({
   onContactCountry
 }: InspiringProjectsProps) {
   return (
-    <div className="space-y-4">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.25 }}
+      className="space-y-4"
+    >
       <div className="flex items-center gap-2">
-        <Rocket className="h-5 w-5 text-primary" />
-        <h2 className="text-lg font-semibold text-foreground">
+        <Rocket className="h-5 w-5 text-[hsl(var(--nx-gold))]" />
+        <h2 className="text-lg font-semibold text-white">
           Projets inspirants du réseau
         </h2>
       </div>
       
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {projects.slice(0, 3).map((project) => (
-          <GlassCard key={project.id} className="p-5 hover:shadow-lg transition-shadow">
-            <div className="space-y-3">
+          <div 
+            key={project.id} 
+            className="group relative p-5 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-[hsl(var(--nx-gold))]/30 transition-all duration-300"
+          >
+            {/* Glow effect on hover */}
+            <div className="absolute inset-0 rounded-2xl bg-[hsl(var(--nx-gold))]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            
+            <div className="relative space-y-3">
               <div className="flex items-start justify-between">
                 <span className="text-2xl">{project.themeIcon}</span>
-                <Badge variant="outline" className="text-xs">
+                <Badge className="text-xs bg-white/10 text-white/70 border-white/20">
                   {project.countryFlag} {project.country}
                 </Badge>
               </div>
               
               <div>
-                <h3 className="font-semibold text-foreground">{project.title}</h3>
-                <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                <h3 className="font-semibold text-white group-hover:text-[hsl(var(--nx-gold))] transition-colors">
+                  {project.title}
+                </h3>
+                <p className="text-sm text-white/50 mt-1 line-clamp-2">
                   {project.description}
                 </p>
               </div>
@@ -85,7 +98,7 @@ export function InspiringProjects({
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="flex-1 gap-1"
+                  className="flex-1 gap-1 text-white/70 hover:text-white hover:bg-white/10"
                   onClick={() => onViewProject?.(project.id)}
                 >
                   S'inspirer
@@ -94,7 +107,7 @@ export function InspiringProjects({
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className="gap-1"
+                  className="gap-1 border-white/20 text-white/70 hover:bg-white/10 hover:text-white"
                   onClick={() => onContactCountry?.(project.country)}
                 >
                   <MessageCircle className="h-3.5 w-3.5" />
@@ -102,9 +115,9 @@ export function InspiringProjects({
                 </Button>
               </div>
             </div>
-          </GlassCard>
+          </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
