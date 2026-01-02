@@ -116,10 +116,11 @@ export const shouldShowAdminUI = (pathname: string): boolean => {
 };
 
 /**
- * ⚠️ GARDE-FOU : Les suggestions intelligentes ne s'affichent PAS sur Layer 1
+ * ⚠️ GARDE-FOU C-LOCK : Les suggestions intelligentes ne s'affichent QUE sur Layer 3
+ * Conforme à la directive : éviter tout élément technique sur Layer 1 et 2
  */
 export const shouldShowSuggestions = (pathname: string): boolean => {
-  return !isNetworkLayer(pathname);
+  return isAdvancedLayer(pathname);
 };
 
 /**
@@ -136,6 +137,15 @@ export const shouldShowKPIs = (pathname: string): boolean => {
 export const shouldShowAdminLinks = (pathname: string): boolean => {
   return isAdvancedLayer(pathname);
 };
+
+// ============================================================================
+// ALIASES C-LOCK POUR COMPATIBILITÉ
+// ============================================================================
+
+export const allowAdminUI = shouldShowAdminUI;
+export const allowSmartSuggestions = shouldShowSuggestions;
+export const allowKPIs = shouldShowKPIs;
+export const allowAdminLinks = shouldShowAdminLinks;
 
 // ============================================================================
 // EXPORTS POUR TESTS ET DOCUMENTATION

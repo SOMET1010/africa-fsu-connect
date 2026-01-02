@@ -6,6 +6,7 @@ import { CollaborationPresence } from '@/components/collaboration/CollaborationP
 import { UserPreferencesProvider } from '@/contexts/UserPreferencesContext';
 import { useContextualIntelligence } from '@/hooks/useContextualIntelligence';
 import { useAccessibilityPreferences } from '@/hooks/useAccessibilityPreferences';
+import { allowSmartSuggestions } from '@/config/blueprintGuards';
 
 interface IntelligentLayoutProps {
   children: React.ReactNode;
@@ -20,10 +21,8 @@ const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
   const { trackActivity } = useContextualIntelligence();
   const { animationsEnabled } = useAccessibilityPreferences();
 
-  // ✅ Afficher les suggestions uniquement dans la couche opérationnelle (Advanced/Admin)
-  const shouldShowSuggestions = 
-    location.pathname.startsWith('/advanced') || 
-    location.pathname.startsWith('/admin');
+  // ✅ C-LOCK: Utilise blueprintGuards.ts comme source unique de vérité
+  const shouldShowSuggestions = allowSmartSuggestions(location.pathname);
 
   // Track page visits for contextual intelligence
   useEffect(() => {
