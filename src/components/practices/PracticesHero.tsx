@@ -4,7 +4,7 @@ import { Share2, Search, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { ThemeIllustration } from "@/components/shared/ThemeIllustration";
 import { AfricaMapMini } from "./AfricaMapMini";
-import { ThemeBarChart } from "./ThemeChart";
+import { NexusNetworkPattern } from "@/components/shared/NexusNetworkPattern";
 
 interface PracticesHeroProps {
   searchQuery: string;
@@ -13,8 +13,11 @@ interface PracticesHeroProps {
 
 export function PracticesHero({ searchQuery, onSearchChange }: PracticesHeroProps) {
   return (
-    <div className="py-10 md:py-16">
-      <div className="grid lg:grid-cols-2 gap-10 items-center">
+    <div className="py-10 md:py-16 relative">
+      {/* Subtle NEXUS network pattern background */}
+      <NexusNetworkPattern variant="subtle" />
+      
+      <div className="grid lg:grid-cols-2 gap-10 items-center relative z-10">
         {/* Left: Text content */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -93,14 +96,14 @@ export function PracticesHero({ searchQuery, onSearchChange }: PracticesHeroProp
           transition={{ duration: 0.5, delay: 0.2 }}
           className="relative hidden lg:block"
         >
-          {/* Decorative theme illustrations floating around */}
-          <div className="absolute -top-4 -left-4 opacity-30">
+          {/* Decorative theme illustrations floating around - reduced opacity */}
+          <div className="absolute -top-4 -left-4 opacity-15">
             <ThemeIllustration theme="Connectivité" size="md" />
           </div>
-          <div className="absolute top-10 -right-4 opacity-30">
+          <div className="absolute top-10 -right-4 opacity-15">
             <ThemeIllustration theme="E-Santé" size="sm" />
           </div>
-          <div className="absolute -bottom-4 left-10 opacity-30">
+          <div className="absolute -bottom-4 left-10 opacity-15">
             <ThemeIllustration theme="Éducation" size="sm" />
           </div>
 
