@@ -288,10 +288,11 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
         dragging: true
       });
 
-      // Add OpenStreetMap tiles
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 18,
+      // Add CartoDB Positron tiles (clean, institutional style)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
       }).addTo(map.current);
 
       logger.info('Map initialized successfully', { component: 'LeafletInteractiveMap' });
