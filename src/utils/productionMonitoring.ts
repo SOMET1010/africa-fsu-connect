@@ -6,6 +6,13 @@ import { logger } from './logger';
 import { performanceMonitor } from './performanceOptimizer';
 import Environment from './environment';
 
+// Web Vitals metric interface
+interface WebVitalMetric {
+  name: string;
+  value: number;
+  id: string;
+}
+
 // === WEB VITALS MONITORING ===
 export const monitorWebVitals = () => {
   if (!Environment.isProduction) return;
@@ -14,23 +21,23 @@ export const monitorWebVitals = () => {
   try {
     // @ts-ignore - web-vitals types
     import('web-vitals').then(({ onCLS, onFID, onFCP, onLCP, onTTFB }) => {
-      onCLS((metric: any) => {
+      onCLS((metric: WebVitalMetric) => {
         logger.monitoring('web-vital-cls', metric.value, { data: 'cls' });
       });
       
-      onFID((metric: any) => {
+      onFID((metric: WebVitalMetric) => {
         logger.monitoring('web-vital-fid', metric.value, { data: 'fid' });
       });
       
-      onFCP((metric: any) => {
+      onFCP((metric: WebVitalMetric) => {
         logger.monitoring('web-vital-fcp', metric.value, { data: 'fcp' });
       });
       
-      onLCP((metric: any) => {
+      onLCP((metric: WebVitalMetric) => {
         logger.monitoring('web-vital-lcp', metric.value, { data: 'lcp' });
       });
       
-      onTTFB((metric: any) => {
+      onTTFB((metric: WebVitalMetric) => {
         logger.monitoring('web-vital-ttfb', metric.value, { data: 'ttfb' });
       });
     }).catch(() => {
@@ -83,8 +90,13 @@ export const runHealthChecks = async (): Promise<{
   };
 };
 
+// Error info from React error boundaries
+interface ErrorBoundaryInfo {
+  componentStack?: string;
+}
+
 // === ERROR BOUNDARIES ===
-export const reportCriticalError = (error: Error, errorInfo: any) => {
+export const reportCriticalError = (error: Error, errorInfo: ErrorBoundaryInfo) => {
   logger.error('Critical application error', error, {
     component: 'ErrorBoundary',
     componentStack: errorInfo.componentStack,
@@ -119,7 +131,7 @@ export const checkPerformanceThresholds = () => {
 };
 
 // === MONITORING SERVICE ===
-const sendToMonitoringService = (event: string, data: any) => {
+const sendToMonitoringService = (event: string, data: Record<string, unknown>) => {
   try {
     // Store in localStorage for now, replace with actual service
     const monitoringData = {

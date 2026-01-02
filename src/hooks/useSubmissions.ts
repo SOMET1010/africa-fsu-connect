@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/utils/logger';
 import { toErrorMessage } from '@/utils/errors';
+import { JsonValue } from '@/types/safeJson';
 
 export interface Submission {
   id: string;
@@ -13,7 +14,7 @@ export interface Submission {
   submitted_by: string;
   reviewed_by?: string;
   review_notes?: string;
-  attachments?: any;
+  attachments?: JsonValue;
   submitted_at?: string;
   reviewed_at?: string;
   created_at: string;
@@ -36,7 +37,7 @@ export interface CreateSubmissionData {
   title: string;
   description?: string;
   content?: string;
-  attachments?: any;
+  attachments?: JsonValue;
 }
 
 export const useSubmissions = () => {
