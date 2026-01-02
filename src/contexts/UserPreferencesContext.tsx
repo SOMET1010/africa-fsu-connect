@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 import { logger } from '@/utils/logger';
 import { type SupportedLanguage } from '@/i18n/languages';
+import { changeLanguage as i18nChangeLanguage } from '@/i18n/config';
 
 export interface UserPreferences {
   // Interface et navigation
@@ -132,6 +133,12 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
   const updatePreferences = async (updates: Partial<UserPreferences>) => {
     const newPreferences = { ...preferences, ...updates };
     setPreferences(newPreferences);
+
+    // Synchronize language with i18next if language is updated
+    if (updates.language) {
+      console.log('[UserPreferences] Syncing language to i18next:', updates.language);
+      await i18nChangeLanguage(updates.language);
+    }
 
     if (user) {
       try {
