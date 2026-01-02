@@ -1,8 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MapPin, ExternalLink, Globe, Users, Briefcase } from "lucide-react";
+import { ExternalLink, Globe, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAgencies } from "@/hooks/useAgencies";
 import { motion } from "framer-motion";
@@ -25,17 +24,13 @@ export const DashboardMapWidget = ({ compact = true }: DashboardMapWidgetProps) 
 
   if (isLoading) {
     return (
-      <Card className="premium-card col-span-1 lg:col-span-2">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <Skeleton className="h-6 w-48" />
-            <Skeleton className="h-8 w-24" />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="h-[300px] w-full rounded-xl" />
-        </CardContent>
-      </Card>
+      <div className="col-span-1 lg:col-span-2 p-5 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10">
+        <div className="flex items-center justify-between pb-3">
+          <Skeleton className="h-6 w-48 bg-white/10" />
+          <Skeleton className="h-8 w-24 bg-white/10" />
+        </div>
+        <Skeleton className="h-[300px] w-full rounded-xl bg-white/10" />
+      </div>
     );
   }
 
@@ -43,69 +38,76 @@ export const DashboardMapWidget = ({ compact = true }: DashboardMapWidgetProps) 
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
+      transition={{ duration: 0.4, delay: 0.15 }}
       className="col-span-1 lg:col-span-2"
     >
-      <Card className="premium-card h-full">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Globe className="h-5 w-5 text-primary" />
-              Carte du Réseau SUTEL
-            </CardTitle>
-            <div className="flex items-center gap-2">
-              <div className="flex gap-1">
-                <Badge variant="outline" className="text-xs bg-primary/5">
-                  <Users className="h-3 w-3 mr-1" />
-                  {uniqueCountries} pays membres
-                </Badge>
-                <Badge variant="secondary" className="text-xs">
-                  {activeCountries} actifs ce mois
-                </Badge>
-              </div>
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/map" className="gap-1">
-                  Plein écran
-                  <ExternalLink className="h-3 w-3" />
-                </Link>
+      <div className="p-5 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 h-full">
+        <div className="flex items-center justify-between flex-wrap gap-2 pb-3">
+          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+            <Globe className="h-5 w-5 text-[hsl(var(--nx-gold))]" />
+            Carte du Réseau SUTEL
+          </h3>
+          <div className="flex items-center gap-2">
+            <div className="flex gap-1">
+              <Badge className="text-xs bg-[hsl(var(--nx-gold))]/20 text-[hsl(var(--nx-gold))] border border-[hsl(var(--nx-gold))]/30">
+                <Users className="h-3 w-3 mr-1" />
+                {uniqueCountries} pays membres
+              </Badge>
+              <Badge className="text-xs bg-white/10 text-white/70 border-white/20">
+                {activeCountries} actifs ce mois
+              </Badge>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              asChild
+              className="border-white/20 text-white/70 hover:bg-white/10 hover:text-white"
+            >
+              <Link to="/map" className="gap-1">
+                Plein écran
+                <ExternalLink className="h-3 w-3" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+        
+        <div className={compact ? "h-[350px]" : "h-[500px]"}>
+          {agencies && agencies.length > 0 ? (
+            <LeafletInteractiveMap agencies={agencies} />
+          ) : (
+            <div className="h-full flex flex-col items-center justify-center bg-white/5 rounded-xl border border-dashed border-white/20">
+              <Globe className="h-12 w-12 text-white/30 mb-3" />
+              <p className="text-sm text-white/50">Aucun pays membre affiché</p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="mt-3 border-white/20 text-white/70 hover:bg-white/10" 
+                asChild
+              >
+                <Link to="/organizations">Voir les pays membres</Link>
               </Button>
             </div>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className={compact ? "h-[350px]" : "h-[500px]"}>
-            {agencies && agencies.length > 0 ? (
-              <LeafletInteractiveMap agencies={agencies} />
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center bg-muted/20 rounded-xl border border-dashed border-border">
-                <Globe className="h-12 w-12 text-muted-foreground/50 mb-3" />
-                <p className="text-sm text-muted-foreground">Aucun pays membre affiché</p>
-                <Button variant="outline" size="sm" className="mt-3" asChild>
-                  <Link to="/organizations">Voir les pays membres</Link>
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {/* Network-centric Quick stats overlay */}
-          {agencies && agencies.length > 0 && (
-            <div className="grid grid-cols-3 gap-3 mt-4">
-              <div className="p-3 rounded-xl bg-primary/5 border border-primary/10 text-center">
-                <p className="text-2xl font-bold text-primary">{uniqueRegions}</p>
-                <p className="text-xs text-muted-foreground">Régions</p>
-              </div>
-              <div className="p-3 rounded-xl bg-success/5 border border-success/10 text-center">
-                <p className="text-2xl font-bold text-success">{activeCountries}</p>
-                <p className="text-xs text-muted-foreground">Pays actifs</p>
-              </div>
-              <div className="p-3 rounded-xl bg-accent/5 border border-accent/10 text-center">
-                <p className="text-2xl font-bold text-accent">{totalProjects || 127}</p>
-                <p className="text-xs text-muted-foreground">Projets partagés</p>
-              </div>
-            </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Network-centric Quick stats overlay */}
+        {agencies && agencies.length > 0 && (
+          <div className="grid grid-cols-3 gap-3 mt-4">
+            <div className="p-3 rounded-xl bg-[hsl(var(--nx-gold))]/10 border border-[hsl(var(--nx-gold))]/20 text-center">
+              <p className="text-2xl font-bold text-[hsl(var(--nx-gold))]">{uniqueRegions}</p>
+              <p className="text-xs text-white/50">Régions</p>
+            </div>
+            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center">
+              <p className="text-2xl font-bold text-emerald-400">{activeCountries}</p>
+              <p className="text-xs text-white/50">Pays actifs</p>
+            </div>
+            <div className="p-3 rounded-xl bg-[hsl(var(--nx-electric))]/10 border border-[hsl(var(--nx-electric))]/20 text-center">
+              <p className="text-2xl font-bold text-[hsl(var(--nx-electric))]">{totalProjects || 127}</p>
+              <p className="text-xs text-white/50">Projets partagés</p>
+            </div>
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 };
