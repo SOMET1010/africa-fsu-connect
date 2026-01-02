@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.security-ai-anomaly]
 verify_jwt = true
+
+[functions.africa-news]
+verify_jwt = false
