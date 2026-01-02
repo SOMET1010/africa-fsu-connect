@@ -57,12 +57,14 @@ export const setStoredLanguage = (lang: SupportedLanguage): void => {
  * Change the current language
  */
 export const changeLanguage = async (lang: SupportedLanguage): Promise<void> => {
+  console.log('[i18n] Changing language to:', lang);
   setStoredLanguage(lang);
   await i18n.changeLanguage(lang);
   
   // Update document direction for RTL languages
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   document.documentElement.lang = lang;
+  console.log('[i18n] Language changed successfully. Current i18n.language:', i18n.language);
 };
 
 // Initialize i18next

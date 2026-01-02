@@ -1,6 +1,6 @@
 
 // Unified translation system - static dictionary only
-import { useUserPreferences } from '@/contexts/UserPreferencesContext';
+import { useTranslation as useI18nTranslation } from 'react-i18next';
 
 // Dictionnaire de traductions
 const translations = {
@@ -1170,8 +1170,10 @@ const translations = {
 export type TranslationKey = keyof typeof translations.fr;
 
 export const useTranslation = () => {
-  const { preferences } = useUserPreferences();
-  const currentLanguage = preferences.language;
+  const { i18n } = useI18nTranslation();
+  const currentLanguage = (i18n.language === 'en' || i18n.language === 'pt' || i18n.language === 'ar') 
+    ? i18n.language 
+    : 'fr';
 
   const t = (key: TranslationKey, params?: Record<string, string>): string => {
     let translation = translations[currentLanguage]?.[key] || translations.fr[key] || key;
