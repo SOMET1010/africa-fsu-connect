@@ -1,0 +1,341 @@
+/* ============================================
+   AFRICAN PATTERNS - Design System Extension
+   Inspired by Bogolan, Kente, Adinkra motifs
+   ============================================ */
+
+/* African Color Palette Tokens */
+:root {
+  /* Terre & Savane */
+  --african-terracotta: 18 76% 55%;
+  --african-ochre: 38 85% 55%;
+  --african-sienna: 25 70% 45%;
+  --african-sand: 42 40% 80%;
+  
+  /* Forêt Équatoriale */
+  --african-forest: 150 45% 30%;
+  --african-palm: 85 50% 45%;
+  --african-moss: 100 35% 50%;
+  
+  /* Indigo & Textile */
+  --african-indigo: 230 55% 35%;
+  --african-kente-gold: 45 95% 50%;
+  --african-kente-green: 140 65% 35%;
+  --african-kente-red: 5 75% 50%;
+  
+  /* Accents Métalliques */
+  --african-copper: 25 80% 55%;
+  --african-bronze: 35 60% 45%;
+  --african-gold: 45 90% 55%;
+}
+
+/* ============================================
+   BOGOLAN-INSPIRED PATTERNS (Mali Mud Cloth)
+   ============================================ */
+
+.african-pattern-bogolan {
+  background-image: 
+    linear-gradient(45deg, hsl(var(--african-terracotta) / 0.1) 25%, transparent 25%),
+    linear-gradient(-45deg, hsl(var(--african-terracotta) / 0.1) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, hsl(var(--african-terracotta) / 0.1) 75%),
+    linear-gradient(-45deg, transparent 75%, hsl(var(--african-terracotta) / 0.1) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
+}
+
+.african-pattern-bogolan-subtle {
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 8px,
+      hsl(var(--african-ochre) / 0.05) 8px,
+      hsl(var(--african-ochre) / 0.05) 9px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 8px,
+      hsl(var(--african-ochre) / 0.05) 8px,
+      hsl(var(--african-ochre) / 0.05) 9px
+    );
+}
+
+/* ============================================
+   KENTE-INSPIRED PATTERNS (Ghana Weave)
+   ============================================ */
+
+.african-pattern-kente {
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      hsl(var(--african-kente-gold) / 0.15) 0px,
+      hsl(var(--african-kente-gold) / 0.15) 4px,
+      transparent 4px,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      hsl(var(--african-kente-green) / 0.1) 0px,
+      hsl(var(--african-kente-green) / 0.1) 4px,
+      transparent 4px,
+      transparent 8px
+    );
+}
+
+.african-pattern-kente-border {
+  border-image: repeating-linear-gradient(
+    90deg,
+    hsl(var(--african-kente-gold)) 0px,
+    hsl(var(--african-kente-gold)) 10px,
+    hsl(var(--african-kente-green)) 10px,
+    hsl(var(--african-kente-green)) 20px,
+    hsl(var(--african-kente-red)) 20px,
+    hsl(var(--african-kente-red)) 30px
+  ) 1;
+}
+
+/* ============================================
+   ADINKRA-INSPIRED PATTERNS (Ghana Symbols)
+   ============================================ */
+
+.african-pattern-adinkra {
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    hsl(var(--african-indigo) / 0.08) 0%,
+    hsl(var(--african-indigo) / 0.08) 30%,
+    transparent 30%,
+    transparent 100%
+  );
+  background-size: 40px 40px;
+}
+
+/* ============================================
+   DECORATIVE ELEMENTS
+   ============================================ */
+
+/* Section Divider - Wave Pattern */
+.african-divider {
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--african-terracotta)),
+    hsl(var(--african-ochre)),
+    hsl(var(--african-kente-gold)),
+    hsl(var(--african-forest)),
+    hsl(var(--african-indigo))
+  );
+  border-radius: 2px;
+}
+
+.african-divider-subtle {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--african-ochre) / 0.5) 20%,
+    hsl(var(--african-kente-gold) / 0.7) 50%,
+    hsl(var(--african-ochre) / 0.5) 80%,
+    transparent
+  );
+}
+
+/* Decorative Border */
+.african-border-accent {
+  border-left: 4px solid transparent;
+  border-image: linear-gradient(
+    180deg,
+    hsl(var(--african-kente-gold)),
+    hsl(var(--african-terracotta)),
+    hsl(var(--african-forest))
+  ) 1;
+}
+
+/* Card with African Accent */
+.african-card-accent {
+  position: relative;
+  overflow: hidden;
+}
+
+.african-card-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--african-kente-gold)),
+    hsl(var(--african-terracotta)),
+    hsl(var(--african-forest))
+  );
+}
+
+/* Corner Decoration */
+.african-corner-decoration {
+  position: relative;
+}
+
+.african-corner-decoration::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background: 
+    linear-gradient(135deg, transparent 50%, hsl(var(--african-kente-gold) / 0.2) 50%),
+    linear-gradient(135deg, transparent 60%, hsl(var(--african-terracotta) / 0.15) 60%);
+  pointer-events: none;
+}
+
+/* ============================================
+   THEMED BACKGROUNDS
+   ============================================ */
+
+/* Warm Section (Savane) */
+.african-bg-warm {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--african-sand) / 0.3) 0%,
+    hsl(var(--african-ochre) / 0.1) 50%,
+    hsl(var(--african-terracotta) / 0.05) 100%
+  );
+}
+
+/* Cool Section (Forêt) */
+.african-bg-cool {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--african-moss) / 0.1) 0%,
+    hsl(var(--african-forest) / 0.05) 50%,
+    hsl(var(--african-palm) / 0.08) 100%
+  );
+}
+
+/* Premium Gold Accent */
+.african-bg-premium {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--african-kente-gold) / 0.1) 0%,
+    hsl(var(--african-bronze) / 0.05) 50%,
+    transparent 100%
+  );
+}
+
+/* ============================================
+   THEME-SPECIFIC COLORS
+   ============================================ */
+
+.theme-connectivity {
+  --theme-color: var(--african-indigo);
+  --theme-light: 230 55% 55%;
+}
+
+.theme-education {
+  --theme-color: var(--african-kente-green);
+  --theme-light: 140 65% 50%;
+}
+
+.theme-ehealth {
+  --theme-color: var(--african-terracotta);
+  --theme-light: 18 76% 65%;
+}
+
+.theme-agriculture {
+  --theme-color: var(--african-forest);
+  --theme-light: 150 45% 45%;
+}
+
+.theme-governance {
+  --theme-color: var(--african-copper);
+  --theme-light: 25 80% 65%;
+}
+
+/* Theme Pills/Badges */
+.theme-badge-connectivity {
+  background: hsl(var(--african-indigo) / 0.1);
+  color: hsl(var(--african-indigo));
+  border: 1px solid hsl(var(--african-indigo) / 0.2);
+}
+
+.theme-badge-education {
+  background: hsl(var(--african-kente-green) / 0.1);
+  color: hsl(var(--african-kente-green));
+  border: 1px solid hsl(var(--african-kente-green) / 0.2);
+}
+
+.theme-badge-ehealth {
+  background: hsl(var(--african-terracotta) / 0.1);
+  color: hsl(var(--african-terracotta));
+  border: 1px solid hsl(var(--african-terracotta) / 0.2);
+}
+
+.theme-badge-agriculture {
+  background: hsl(var(--african-forest) / 0.1);
+  color: hsl(var(--african-forest));
+  border: 1px solid hsl(var(--african-forest) / 0.2);
+}
+
+.theme-badge-governance {
+  background: hsl(var(--african-copper) / 0.1);
+  color: hsl(var(--african-copper));
+  border: 1px solid hsl(var(--african-copper) / 0.2);
+}
+
+/* ============================================
+   ANIMATIONS FOR PATTERNS
+   ============================================ */
+
+@keyframes pattern-shimmer {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+.african-pattern-animated {
+  animation: pattern-shimmer 30s linear infinite;
+}
+
+/* ============================================
+   ILLUSTRATION BACKGROUNDS BY THEME
+   ============================================ */
+
+.illustration-bg-connectivity {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    hsl(var(--african-indigo) / 0.15) 0%,
+    transparent 70%
+  );
+}
+
+.illustration-bg-education {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    hsl(var(--african-kente-green) / 0.15) 0%,
+    transparent 70%
+  );
+}
+
+.illustration-bg-ehealth {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    hsl(var(--african-terracotta) / 0.15) 0%,
+    transparent 70%
+  );
+}
+
+.illustration-bg-agriculture {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    hsl(var(--african-forest) / 0.15) 0%,
+    transparent 70%
+  );
+}
+
+.illustration-bg-governance {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    hsl(var(--african-copper) / 0.15) 0%,
+    transparent 70%
+  );
+}

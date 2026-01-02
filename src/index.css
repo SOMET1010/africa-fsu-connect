@@ -1,6 +1,7 @@
 /* NEXUS Design System Tokens */
 @import './styles/nexus-tokens.css';
 @import './styles/nexus-utilities.css';
+@import './styles/african-patterns.css';
 
 @tailwind base;
 @tailwind components;

@@ -1,4 +1,6 @@
-import { PracticeCard } from "./PracticeCard";
+import { PracticeCardVisual } from "./PracticeCardVisual";
+import { motion } from "framer-motion";
+import type { ThemeType } from "@/components/shared/ThemeIllustration";
 
 const allPractices = [
   {
@@ -8,7 +10,7 @@ const allPractices = [
     agency: "Ministère de l'Éducation Numérique",
     country: "Cameroun",
     countryFlag: "🇨🇲",
-    theme: "Éducation",
+    theme: "Éducation" as ThemeType,
     date: "Oct 2025",
   },
   {
@@ -18,7 +20,7 @@ const allPractices = [
     agency: "Direction du Cadastre National",
     country: "Burkina Faso",
     countryFlag: "🇧🇫",
-    theme: "Gouvernance",
+    theme: "Gouvernance" as ThemeType,
     date: "Sept 2025",
   },
   {
@@ -28,7 +30,7 @@ const allPractices = [
     agency: "Office National Agricole",
     country: "Mali",
     countryFlag: "🇲🇱",
-    theme: "Agriculture",
+    theme: "Agriculture" as ThemeType,
     date: "Août 2025",
   },
   {
@@ -38,7 +40,7 @@ const allPractices = [
     agency: "Agence Nationale de Météorologie",
     country: "Sénégal",
     countryFlag: "🇸🇳",
-    theme: "Résilience",
+    theme: "Connectivité" as ThemeType,
     date: "Juil 2025",
   },
   {
@@ -48,7 +50,7 @@ const allPractices = [
     agency: "Agence FSU Côte d'Ivoire",
     country: "Côte d'Ivoire",
     countryFlag: "🇨🇮",
-    theme: "Gouvernance",
+    theme: "Gouvernance" as ThemeType,
     date: "Juin 2025",
   },
   {
@@ -58,7 +60,7 @@ const allPractices = [
     agency: "Institut de Formation Continue",
     country: "Cameroun",
     countryFlag: "🇨🇲",
-    theme: "Éducation",
+    theme: "Éducation" as ThemeType,
     date: "Mai 2025",
   },
 ];
@@ -74,7 +76,6 @@ interface PracticeGridProps {
 
 export function PracticeGrid({ searchQuery = "", filters }: PracticeGridProps) {
   const filteredPractices = allPractices.filter((practice) => {
-    // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       const matchesSearch =
@@ -85,7 +86,6 @@ export function PracticeGrid({ searchQuery = "", filters }: PracticeGridProps) {
       if (!matchesSearch) return false;
     }
 
-    // Theme filter (simplified mapping)
     if (filters?.theme && filters.theme !== "all") {
       const themeMap: Record<string, string[]> = {
         connectivity: ["Connectivité"],
@@ -104,9 +104,7 @@ export function PracticeGrid({ searchQuery = "", filters }: PracticeGridProps) {
   return (
     <section className="mt-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold">
-          Toutes les pratiques
-        </h2>
+        <h2 className="text-xl font-semibold">Toutes les pratiques</h2>
         <span className="text-sm text-muted-foreground">
           {filteredPractices.length} résultat{filteredPractices.length > 1 ? "s" : ""}
         </span>
@@ -115,13 +113,14 @@ export function PracticeGrid({ searchQuery = "", filters }: PracticeGridProps) {
       {filteredPractices.length > 0 ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPractices.map((practice, index) => (
-            <div 
-              key={index} 
-              className="animate-fade-in"
-              style={{ animationDelay: `${index * 50}ms` }}
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
             >
-              <PracticeCard {...practice} />
-            </div>
+              <PracticeCardVisual {...practice} />
+            </motion.div>
           ))}
         </div>
       ) : (
