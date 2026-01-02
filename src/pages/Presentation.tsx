@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 
 export default function Presentation() {
-  const { t } = useTranslation('presentation');
+  const { t } = useTranslation();
   const [currentSection, setCurrentSection] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [transitionType] = useState<TransitionType>('fade');
@@ -39,22 +39,22 @@ export default function Presentation() {
   const sections = [
     {
       id: "hero",
-      title: "Vision SUTEL Afrique",
+      title: t('presentation.hero.title'),
       component: HeroSection,
       icon: PresentationIcon,
       props: {
-        title: "SUTEL Platform : L'Avenir des Télécommunications Africaines",
-        subtitle: "Une Solution Révolutionnaire",
-        description: "La plateforme qui connecte 55+ pays, gère 1100+ projets et transforme l'industrie des télécommunications en Afrique. Rejoignez la révolution numérique qui unit notre continent.",
+        title: t('presentation.hero.title'),
+        subtitle: t('presentation.hero.subtitle'),
+        description: t('presentation.hero.description'),
         actions: [
           {
-            label: "Commencer la Demo",
+            label: t('presentation.hero.cta.demo'),
             onClick: () => setCurrentSection(1),
             variant: "default" as const,
             icon: <Zap className="h-4 w-4" />
           },
           {
-            label: "Calculer ROI",
+            label: t('presentation.hero.cta.roi'),
             onClick: () => setCurrentSection(2),
             variant: "outline" as const,
             icon: <TrendingUp className="h-4 w-4" />
@@ -64,49 +64,49 @@ export default function Presentation() {
     },
     {
       id: "regional-impact",
-      title: "Impact Régional",
+      title: t('presentation.regional.title'),
       component: RegionalImpactSection,
       icon: Users,
       props: {}
     },
     {
       id: "roi-calculator",
-      title: "Calculateur ROI",
+      title: t('presentation.roi.title', 'Calculateur ROI'),
       component: ROICalculator,
       icon: TrendingUp,
       props: {}
     },
     {
       id: "interactive-demo",
-      title: "Démonstration Interactive",
+      title: t('presentation.demo.title', 'Démonstration Interactive'),
       component: InteractiveDemoSection,
       icon: Zap,
       props: {}
     },
     {
       id: "technical-architecture",
-      title: "Architecture Technique",
+      title: t('presentation.architecture.title', 'Architecture Technique'),
       component: TechnicalArchitecture,
       icon: Network,
       props: {}
     },
     {
       id: "social-proof",
-      title: "Preuves & Résultats",
+      title: t('presentation.social.title', 'Preuves & Résultats'),
       component: SocialProofSection,
       icon: Award,
       props: {}
     },
     {
       id: "security-compliance",
-      title: "Sécurité & Conformité",
+      title: t('presentation.security.title', 'Sécurité & Conformité'),
       component: SecurityComplianceSection,
       icon: Shield,
       props: {}
     },
     {
       id: "call-to-action",
-      title: "Rejoignez-Nous",
+      title: t('presentation.cta.title', 'Rejoignez-Nous'),
       component: CallToActionSection,
       icon: Rocket,
       props: {}
@@ -152,18 +152,18 @@ export default function Presentation() {
           <div className="space-y-8">
         {currentSection === 0 ? (
           <HeroSection 
-            title="SUTEL Platform : L'Avenir des Télécommunications Africaines"
-            subtitle="Une Solution Révolutionnaire"
-            description="La plateforme qui connecte 55+ pays, gère 1100+ projets et transforme l'industrie des télécommunications en Afrique. Rejoignez la révolution numérique qui unit notre continent."
+            title={t('presentation.hero.title')}
+            subtitle={t('presentation.hero.subtitle')}
+            description={t('presentation.hero.description')}
             actions={[
               {
-                label: "Commencer la Demo",
+                label: t('presentation.hero.cta.demo'),
                 onClick: () => setCurrentSection(1),
                 variant: "default" as const,
                 icon: <Zap className="h-4 w-4" />
               },
               {
-                label: "Calculer ROI",
+                label: t('presentation.hero.cta.roi'),
                 onClick: () => setCurrentSection(2),
                 variant: "outline" as const,
                 icon: <TrendingUp className="h-4 w-4" />
