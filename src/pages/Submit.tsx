@@ -102,8 +102,8 @@ export const Submit = () => {
   // Success state
   if (isSuccess && selectedType) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-12 max-w-2xl">
+      <div className="min-h-screen bg-[hsl(var(--nx-bg))]">
+        <div className="container mx-auto px-4 py-12 max-w-2xl animate-fade-in">
           <ContributionSuccess
             type={selectedType}
             title={formData.title}
@@ -115,27 +115,33 @@ export const Submit = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[hsl(var(--nx-bg))]">
       <div className="container mx-auto px-4 py-8 md:py-12 space-y-8 max-w-3xl">
         
         {/* Hero épuré */}
-        <ShareInitiativeHero />
+        <div className="animate-fade-in">
+          <ShareInitiativeHero />
+        </div>
         
         {/* Choix du type - 3 options narratives */}
-        <InitiativeTypeSelector 
-          selected={selectedType}
-          onSelect={setSelectedType}
-        />
+        <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <InitiativeTypeSelector 
+            selected={selectedType}
+            onSelect={setSelectedType}
+          />
+        </div>
         
         {/* Formulaire simple et guidé */}
-        <SimpleContributionForm
-          type={selectedType}
-          formData={formData}
-          onChange={updateFormField}
-          onSubmit={handleSubmit}
-          onSaveDraft={handleSaveDraft}
-          isSubmitting={isSubmitting}
-        />
+        <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <SimpleContributionForm
+            type={selectedType}
+            formData={formData}
+            onChange={updateFormField}
+            onSubmit={handleSubmit}
+            onSaveDraft={handleSaveDraft}
+            isSubmitting={isSubmitting}
+          />
+        </div>
         
       </div>
     </div>
