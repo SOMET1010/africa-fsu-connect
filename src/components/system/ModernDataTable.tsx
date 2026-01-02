@@ -9,17 +9,22 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { cn } from "@/lib/utils";
 
+// Type-safe data row interface
+interface DataRow {
+  [key: string]: unknown;
+}
+
 interface Column {
   key: string;
   label: string;
   sortable?: boolean;
   filterable?: boolean;
   width?: string;
-  render?: (value: any, row: any) => React.ReactNode;
+  render?: (value: unknown, row: DataRow) => React.ReactNode;
 }
 
 interface ModernDataTableProps {
-  data: any[];
+  data: DataRow[];
   columns: Column[];
   loading?: boolean;
   title?: string;
@@ -221,7 +226,7 @@ export function ModernDataTable({
                         <td key={column.key} className="px-6 py-4 text-sm">
                           {column.render ? 
                             column.render(row[column.key], row) : 
-                            row[column.key]
+                            String(row[column.key] ?? '')
                           }
                         </td>
                       ))}

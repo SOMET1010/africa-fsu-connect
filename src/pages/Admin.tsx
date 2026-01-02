@@ -313,44 +313,50 @@ const Admin = () => {
                 data={recentUsers}
                 columns={userColumns.map(col => ({
                   ...col,
-                  render: col.key === "name" ? (value: string, row: any) => (
-                    <div className="flex items-center space-x-3">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={row.avatar} />
-                        <AvatarFallback>
-                          {row.name.split(' ').map((n: string) => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">{value}</p>
-                        <p className="text-sm text-muted-foreground">{row.country}</p>
+                  render: col.key === "name" ? (value: unknown, row: Record<string, unknown>) => {
+                    const user = row as unknown as AdminSelectedUser;
+                    return (
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={user.avatar} />
+                          <AvatarFallback>
+                            {user.name.split(' ').map((n: string) => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium">{String(value)}</p>
+                          <p className="text-sm text-muted-foreground">{user.country}</p>
+                        </div>
                       </div>
-                    </div>
-                  ) : col.key === "role" ? (value: string) => (
+                    );
+                  } : col.key === "role" ? (value: unknown) => (
                     <Badge variant="outline">
-                      {getRoleLabel(value)}
+                      {getRoleLabel(String(value))}
                     </Badge>
-                  ) : col.key === "status" ? (value: string) => (
-                    getStatusBadge(value)
-                  ) : col.key === "actions" ? (value: any, row: any) => (
-                    <div className="flex items-center space-x-2">
-                      <ModernButton 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => handleUserAction("edit", row)}
-                      >
-                        Modifier
-                      </ModernButton>
-                      {row.status === "pending" && (
+                  ) : col.key === "status" ? (value: unknown) => (
+                    getStatusBadge(String(value))
+                  ) : col.key === "actions" ? (_value: unknown, row: Record<string, unknown>) => {
+                    const user = row as unknown as AdminSelectedUser;
+                    return (
+                      <div className="flex items-center space-x-2">
                         <ModernButton 
-                          size="sm"
-                          onClick={() => handleUserAction("approve", row)}
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleUserAction("edit", user)}
                         >
-                          Approuver
+                          Modifier
                         </ModernButton>
-                      )}
-                    </div>
-                  ) : undefined
+                        {user.status === "pending" && (
+                          <ModernButton 
+                            size="sm"
+                            onClick={() => handleUserAction("approve", user)}
+                          >
+                            Approuver
+                          </ModernButton>
+                        )}
+                      </div>
+                    );
+                  } : undefined
                 }))}
                 title="Gestion des utilisateurs"
                 subtitle="Gérez les comptes utilisateurs et leurs permissions"
@@ -363,34 +369,40 @@ const Admin = () => {
                 data={pendingContent}
                 columns={contentColumns.map(col => ({
                   ...col,
-                  render: col.key === "title" ? (value: string, row: any) => (
-                    <div>
-                      <p className="font-medium">{value}</p>
-                      <p className="text-sm text-muted-foreground">Par {row.author}</p>
-                    </div>
-                  ) : col.key === "type" ? (value: string) => (
+                  render: col.key === "title" ? (value: unknown, row: Record<string, unknown>) => {
+                    const content = row as unknown as AdminSelectedContent;
+                    return (
+                      <div>
+                        <p className="font-medium">{String(value)}</p>
+                        <p className="text-sm text-muted-foreground">Par {content.author}</p>
+                      </div>
+                    );
+                  } : col.key === "type" ? (value: unknown) => (
                     <Badge variant="outline">
-                      {value}
+                      {String(value)}
                     </Badge>
-                  ) : col.key === "status" ? (value: string) => (
-                    getStatusBadge(value)
-                  ) : col.key === "actions" ? (value: any, row: any) => (
-                    <div className="flex items-center space-x-2">
-                      <ModernButton 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => handleContentAction("edit", row)}
-                      >
-                        Réviser
-                      </ModernButton>
-                      <ModernButton 
-                        size="sm"
-                        onClick={() => handleContentAction("approve", row)}
-                      >
-                        Approuver
-                      </ModernButton>
-                    </div>
-                  ) : undefined
+                  ) : col.key === "status" ? (value: unknown) => (
+                    getStatusBadge(String(value))
+                  ) : col.key === "actions" ? (_value: unknown, row: Record<string, unknown>) => {
+                    const content = row as unknown as AdminSelectedContent;
+                    return (
+                      <div className="flex items-center space-x-2">
+                        <ModernButton 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleContentAction("edit", content)}
+                        >
+                          Réviser
+                        </ModernButton>
+                        <ModernButton 
+                          size="sm"
+                          onClick={() => handleContentAction("approve", content)}
+                        >
+                          Approuver
+                        </ModernButton>
+                      </div>
+                    );
+                  } : undefined
                 }))}
                 title="Modération du contenu"
                 subtitle="Révisez et approuvez le contenu soumis par les utilisateurs"
