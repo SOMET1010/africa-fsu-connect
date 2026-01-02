@@ -108,8 +108,8 @@ export function ModernDataTable({
   const getSortIcon = (key: string) => {
     if (sortConfig?.key !== key) return null;
     return sortConfig.direction === 'asc' ? 
-      <ChevronUp className="h-4 w-4" /> : 
-      <ChevronDown className="h-4 w-4" />;
+      <ChevronUp className="h-4 w-4" aria-hidden="true" /> : 
+      <ChevronDown className="h-4 w-4" aria-hidden="true" />;
   };
 
   return (
@@ -181,11 +181,11 @@ export function ModernDataTable({
 
       {/* Table */}
       <ModernCard variant="glass">
-        <div className="overflow-hidden">
+        <div className="overflow-hidden" role="region" aria-label={title || "Data table"}>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full" role="table">
               <thead>
-                <tr className="border-b border-border/50">
+                <tr className="border-b border-border/50" role="row">
                   {columns.map((column) => (
                     <th
                       key={column.key}
@@ -195,6 +195,20 @@ export function ModernDataTable({
                         column.sortable && "cursor-pointer hover:bg-muted/30 transition-colors"
                       )}
                       onClick={() => column.sortable && handleSort(column.key)}
+                      role="columnheader"
+                      scope="col"
+                      aria-sort={
+                        sortConfig?.key === column.key 
+                          ? sortConfig.direction === 'asc' ? 'ascending' : 'descending'
+                          : undefined
+                      }
+                      tabIndex={column.sortable ? 0 : undefined}
+                      onKeyDown={(e) => {
+                        if (column.sortable && (e.key === 'Enter' || e.key === ' ')) {
+                          e.preventDefault();
+                          handleSort(column.key);
+                        }
+                      }}
                     >
                       <div className="flex items-center gap-2">
                         {column.label}

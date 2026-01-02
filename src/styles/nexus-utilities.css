@@ -235,3 +235,113 @@
     padding: 1.5rem;
   }
 }
+
+/* ========================================
+   OVERLAY UTILITIES — Semantic tokens for white/X patterns
+   Replaces magic values like white/5, white/10, etc.
+   ======================================== */
+
+/* Background overlays */
+.bg-overlay-subtle { 
+  background-color: hsl(0 0% 100% / 0.03);
+}
+.dark .bg-overlay-subtle { 
+  background-color: hsl(0 0% 100% / 0.03);
+}
+
+.bg-overlay-light { 
+  background-color: hsl(0 0% 100% / 0.05);
+}
+.dark .bg-overlay-light { 
+  background-color: hsl(0 0% 100% / 0.05);
+}
+
+.bg-overlay-medium { 
+  background-color: hsl(0 0% 100% / 0.10);
+}
+.dark .bg-overlay-medium { 
+  background-color: hsl(0 0% 100% / 0.10);
+}
+
+.bg-overlay-strong { 
+  background-color: hsl(0 0% 100% / 0.20);
+}
+.dark .bg-overlay-strong { 
+  background-color: hsl(0 0% 100% / 0.20);
+}
+
+/* Border overlays */
+.border-overlay-subtle { 
+  border-color: hsl(0 0% 100% / 0.05);
+}
+.dark .border-overlay-subtle { 
+  border-color: hsl(0 0% 100% / 0.05);
+}
+
+.border-overlay-light { 
+  border-color: hsl(0 0% 100% / 0.10);
+}
+.dark .border-overlay-light { 
+  border-color: hsl(0 0% 100% / 0.10);
+}
+
+.border-overlay-medium { 
+  border-color: hsl(0 0% 100% / 0.15);
+}
+.dark .border-overlay-medium { 
+  border-color: hsl(0 0% 100% / 0.15);
+}
+
+.border-overlay-strong { 
+  border-color: hsl(0 0% 100% / 0.20);
+}
+.dark .border-overlay-strong { 
+  border-color: hsl(0 0% 100% / 0.20);
+}
+
+/* Text overlays */
+.text-overlay-muted { 
+  color: hsl(0 0% 100% / 0.50);
+}
+.dark .text-overlay-muted { 
+  color: hsl(0 0% 100% / 0.50);
+}
+
+.text-overlay-subtle { 
+  color: hsl(0 0% 100% / 0.70);
+}
+.dark .text-overlay-subtle { 
+  color: hsl(0 0% 100% / 0.70);
+}
+
+.text-overlay-default { 
+  color: hsl(0 0% 100% / 0.85);
+}
+.dark .text-overlay-default { 
+  color: hsl(0 0% 100% / 0.85);
+}
+
+/* Shadow overlays */
+.shadow-overlay-light {
+  box-shadow: 0 4px 6px -1px hsl(0 0% 0% / 0.05);
+}
+
+.shadow-overlay-medium {
+  box-shadow: 0 10px 15px -3px hsl(0 0% 0% / 0.10);
+}
+
+.shadow-overlay-strong {
+  box-shadow: 0 25px 50px -12px hsl(0 0% 0% / 0.25);
+}
+
+/* ========================================
+   ACCESSIBLE FOCUS UTILITIES
+   ======================================== */
+
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+}
+
+.focus-ring-primary {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
