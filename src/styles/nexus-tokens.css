@@ -64,6 +64,14 @@
   --nx-coop-500: 160 49% 48%;
 
   /* ========================================
+     SECTION BACKGROUNDS — Alternance émotionnelle
+     ======================================== */
+  
+  --nx-section-warm: 40 30% 98%;      /* Ivoire très léger */
+  --nx-section-cool: 210 40% 98%;     /* Bleu presque blanc */
+  --nx-section-brand: 200 73% 97%;    /* Bleu institutionnel très léger */
+
+  /* ========================================
      SEMANTIC — Sans agressivité
      Couche 1 : PAS de rouge
      ======================================== */
