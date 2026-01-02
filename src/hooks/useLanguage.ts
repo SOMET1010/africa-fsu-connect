@@ -17,12 +17,13 @@ export const useLanguage = () => {
   // Try to use UserPreferencesContext if available (won't throw)
   const userPrefsContext = useContext(UserPreferencesContext);
   
-  // Use i18n language as source of truth
-  const i18nLang = i18n.language;
-  const currentLanguage: SupportedLanguage = isValidLanguage(i18nLang) ? i18nLang : 'fr';
+  // Use i18n language as source of truth (normalize e.g. en-US -> en)
+  const baseLang = (i18n.resolvedLanguage || i18n.language).split('-')[0];
+  const currentLanguage: SupportedLanguage = isValidLanguage(baseLang) ? baseLang : 'fr';
   const languageConfig = LANGUAGES[currentLanguage] || LANGUAGES.fr;
   
   const setLanguage = async (lang: SupportedLanguage) => {
+    console.log('[useLanguage] setLanguage:', lang, 'from', i18n.language);
     // Update i18next (source of truth)
     await i18nChangeLanguage(lang);
     
