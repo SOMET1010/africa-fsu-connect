@@ -1,7 +1,7 @@
 
 // Unified translation system - static dictionary only
 import { useTranslation as useI18nTranslation } from 'react-i18next';
-
+import { isValidLanguage, type SupportedLanguage } from '@/i18n/languages';
 // Dictionnaire de traductions
 const translations = {
   fr: {
@@ -1170,22 +1170,34 @@ const translations = {
 export type TranslationKey = keyof typeof translations.fr;
 
 export const useTranslation = () => {
-  const { i18n } = useI18nTranslation();
-  const currentLanguage = (i18n.language === 'en' || i18n.language === 'pt' || i18n.language === 'ar') 
-    ? i18n.language 
-    : 'fr';
+  const { t: i18nT, i18n } = useI18nTranslation();
+
+  const normalize = (lang?: string): SupportedLanguage => {
+    const base = (lang || '').split('-')[0];
+    return isValidLanguage(base) ? base : 'fr';
+  };
+
+  const currentLanguage = normalize(i18n.resolvedLanguage || i18n.language);
 
   const t = (key: TranslationKey, params?: Record<string, string>): string => {
-    let translation = translations[currentLanguage]?.[key] || translations.fr[key] || key;
-    
+    // Prefer i18next resources (fr/en/pt/ar JSON files)
+    const raw = i18nT(key, params as any);
+    const translated = typeof raw === 'string' ? raw : '';
+
+    // If i18next doesn't have that key, it typically returns the key itself.
+    if (translated && translated !== key) return translated;
+
+    // Fallback to legacy inline dictionary (mostly fr/en)
+    let fallback = translations[currentLanguage]?.[key] || translations.fr[key] || key;
+
     // Simple string interpolation for {param} patterns
     if (params) {
       Object.entries(params).forEach(([param, value]) => {
-        translation = translation.replace(new RegExp(`{${param}}`, 'g'), value);
+        fallback = fallback.replace(new RegExp(`{${param}}`, 'g'), value);
       });
     }
-    
-    return translation;
+
+    return fallback;
   };
 
   return { t, currentLanguage };
