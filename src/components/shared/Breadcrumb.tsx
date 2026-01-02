@@ -1,5 +1,6 @@
 import { ChevronRight, Home } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface BreadcrumbItem {
   label: string;
@@ -13,25 +14,36 @@ interface BreadcrumbProps {
 
 const Breadcrumb = ({ items = [], className = "" }: BreadcrumbProps) => {
   const location = useLocation();
-  
+  const { t } = useTranslation();
+
   // Auto-generate breadcrumbs from current path if no items provided
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
     const pathSegments = location.pathname.split('/').filter(Boolean);
-    
+
     const routeMap: Record<string, string> = {
-      'dashboard': 'Tableau de Bord',
-      'analytics': 'Analytics',
-      'projects': 'Projets FSU',
-      'docs': 'Bibliothèque de Ressources',
-      'forum': 'Forum de Discussion',
-      'submit': 'Formulaires de Soumission',
-      'events': 'Agenda des Événements',
-      'profile': 'Profil Utilisateur',
-      'admin': 'Administration',
-      'organizations': 'Organisations',
-      'training': 'Formation',
-      'indicators': 'Indicateurs'
+      dashboard: t('dashboard.title') || 'Tableau de bord',
+      analytics: t('nav.analytics') || 'Analytics',
+      projects: t('nav.projects') || 'Projets',
+      docs: t('nav.library') || 'Bibliothèque',
+      forum: t('nav.forum') || 'Forum',
+      submit: t('nav.submit') || 'Soumettre',
+      events: t('nav.events') || 'Événements',
+      profile: t('nav.profile') || 'Profil',
+      admin: t('nav.admin') || 'Administration',
+      organizations: t('nav.organizations') || 'Organisations',
+      training: t('nav.learn.elearning') || 'Formation',
+      indicators: t('nav.indicators') || 'Indicateurs',
+
+      // Layer 1 (public)
+      network: t('nav.network') || 'Réseau',
+      members: t('nav.network.members') || 'Pays membres',
+      map: t('nav.network.map') || t('nav.map') || 'Carte',
+      community: t('nav.community') || 'Communauté',
+      about: t('nav.about') || 'À propos',
+      activity: t('nav.network.activity') || 'Activité récente',
+      country: t('country.tab.contact') ? 'Pays' : 'Pays',
     };
+
 
     const breadcrumbs: BreadcrumbItem[] = [
       { label: 'Accueil', href: '/' }
