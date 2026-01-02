@@ -1,8 +1,6 @@
-import { Search, Pin, Lock, Trash2 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Search, Pin, Lock, Trash2, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertTriangle } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { PageHero } from "@/components/shared/PageHero";
+import { GlassCard } from "@/components/ui/glass-card";
+import { ModernButton } from "@/components/ui/modern-button";
 
 import { useAdminForumPage } from "./admin-forum/hooks/useAdminForumPage";
 import { ForumStatsCards } from "./admin-forum/components/ForumStatsCards";
@@ -44,39 +45,39 @@ const AdminForum = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Modération Forum</h1>
-          <p className="text-muted-foreground mt-2">
-            Gérez les discussions, modérez le contenu et administrez les catégories du forum.
-          </p>
-        </div>
+        {/* Hero */}
+        <PageHero
+          badge="Modération"
+          badgeIcon={MessageSquare}
+          title="Modération du Forum"
+          subtitle="Gérez les discussions, modérez le contenu et administrez les catégories du forum"
+        />
 
         <ForumStatsCards stats={forumStats} />
 
         <Tabs defaultValue="posts" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="posts">Tous les Posts</TabsTrigger>
-            <TabsTrigger value="reported">Posts Signalés</TabsTrigger>
-            <TabsTrigger value="categories">Catégories</TabsTrigger>
+          <TabsList className="bg-white/5">
+            <TabsTrigger value="posts" className="data-[state=active]:bg-white/10">Tous les Posts</TabsTrigger>
+            <TabsTrigger value="reported" className="data-[state=active]:bg-white/10">Posts Signalés</TabsTrigger>
+            <TabsTrigger value="categories" className="data-[state=active]:bg-white/10">Catégories</TabsTrigger>
           </TabsList>
 
           {/* Posts Management */}
-          <TabsContent value="posts" className="space-y-4">
+          <TabsContent value="posts" className="space-y-4 animate-fade-in">
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40 h-4 w-4" />
                   <Input
                     placeholder="Rechercher dans les posts..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9"
+                    className="pl-9 bg-white/5 border-white/10 text-white placeholder:text-white/40"
                   />
                 </div>
               </div>
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-[200px]">
+                <SelectTrigger className="w-[200px] bg-white/5 border-white/10 text-white">
                   <SelectValue placeholder="Toutes catégories" />
                 </SelectTrigger>
                 <SelectContent>
@@ -89,23 +90,27 @@ const AdminForum = () => {
             </div>
 
             {selectedPosts.length > 0 && (
-              <Card className="border-dashed border-primary">
-                <CardContent className="pt-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">{selectedPosts.length} post(s) sélectionné(s)</span>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => handleBulkAction("Épingler")}><Pin className="h-4 w-4 mr-1" />Épingler</Button>
-                      <Button variant="outline" size="sm" onClick={() => handleBulkAction("Verrouiller")}><Lock className="h-4 w-4 mr-1" />Verrouiller</Button>
-                      <Button variant="destructive" size="sm" onClick={() => handleBulkAction("Supprimer")}><Trash2 className="h-4 w-4 mr-1" />Supprimer</Button>
-                    </div>
+              <GlassCard className="p-4 border-dashed border-[hsl(var(--nx-gold))]">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-white/60">{selectedPosts.length} post(s) sélectionné(s)</span>
+                  <div className="flex gap-2">
+                    <ModernButton variant="outline" size="sm" onClick={() => handleBulkAction("Épingler")}>
+                      <Pin className="h-4 w-4 mr-1" />Épingler
+                    </ModernButton>
+                    <ModernButton variant="outline" size="sm" onClick={() => handleBulkAction("Verrouiller")}>
+                      <Lock className="h-4 w-4 mr-1" />Verrouiller
+                    </ModernButton>
+                    <ModernButton variant="destructive" size="sm" onClick={() => handleBulkAction("Supprimer")}>
+                      <Trash2 className="h-4 w-4 mr-1" />Supprimer
+                    </ModernButton>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </GlassCard>
             )}
 
             <div className="space-y-4">
               {loading ? (
-                <div className="text-center py-8"><div className="text-muted-foreground">Chargement des posts...</div></div>
+                <div className="text-center py-8"><div className="text-white/60">Chargement des posts...</div></div>
               ) : filteredPosts.length > 0 ? (
                 filteredPosts.map((post) => (
                   <ForumPostCard
@@ -117,70 +122,74 @@ const AdminForum = () => {
                   />
                 ))
               ) : (
-                <Card><CardContent className="pt-6"><div className="text-center text-muted-foreground">Aucun post trouvé.</div></CardContent></Card>
+                <GlassCard className="p-6 text-center">
+                  <div className="text-white/60">Aucun post trouvé.</div>
+                </GlassCard>
               )}
             </div>
           </TabsContent>
 
           {/* Reported Posts */}
-          <TabsContent value="reported" className="space-y-4">
+          <TabsContent value="reported" className="space-y-4 animate-fade-in">
             {reportedPosts.length > 0 ? (
               reportedPosts.map((report) => (
-                <Card key={report.id} className="border-destructive/20">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <AlertTriangle className="h-5 w-5 text-destructive" />
-                          <h3 className="text-lg font-semibold">{report.title}</h3>
-                          <Badge variant="destructive">{report.reportCount} signalement(s)</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground mb-2">Auteur: {report.author} • Catégorie: {report.category}</p>
-                        <p className="text-sm text-muted-foreground">Raison: {report.reportReason} • {report.reportedAt}</p>
+                <GlassCard key={report.id} className="p-6 border-red-500/20">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <AlertTriangle className="h-5 w-5 text-red-400" />
+                        <h3 className="text-lg font-semibold text-white">{report.title}</h3>
+                        <Badge variant="destructive">{report.reportCount} signalement(s)</Badge>
                       </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">Approuver</Button>
-                        <Button variant="destructive" size="sm">Supprimer</Button>
-                      </div>
+                      <p className="text-sm text-white/60 mb-2">Auteur: {report.author} • Catégorie: {report.category}</p>
+                      <p className="text-sm text-white/50">Raison: {report.reportReason} • {report.reportedAt}</p>
                     </div>
-                  </CardContent>
-                </Card>
+                    <div className="flex gap-2">
+                      <ModernButton variant="outline" size="sm">Approuver</ModernButton>
+                      <ModernButton variant="destructive" size="sm">Supprimer</ModernButton>
+                    </div>
+                  </div>
+                </GlassCard>
               ))
             ) : (
-              <Card><CardContent className="pt-6"><div className="text-center text-muted-foreground">Aucun post signalé.</div></CardContent></Card>
+              <GlassCard className="p-6 text-center">
+                <div className="text-white/60">Aucun post signalé.</div>
+              </GlassCard>
             )}
           </TabsContent>
 
           {/* Categories Management */}
-          <TabsContent value="categories" className="space-y-4">
+          <TabsContent value="categories" className="space-y-4 animate-fade-in">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-medium">Gestion des Catégories</h3>
+              <h3 className="text-lg font-medium text-white">Gestion des Catégories</h3>
               <Dialog open={isNewCategoryOpen} onOpenChange={setIsNewCategoryOpen}>
-                <DialogTrigger asChild><Button>Nouvelle Catégorie</Button></DialogTrigger>
-                <DialogContent>
+                <DialogTrigger asChild>
+                  <ModernButton>Nouvelle Catégorie</ModernButton>
+                </DialogTrigger>
+                <DialogContent className="bg-[hsl(var(--nx-night))] border-white/10">
                   <DialogHeader>
-                    <DialogTitle>Créer une Nouvelle Catégorie</DialogTitle>
-                    <DialogDescription>Ajoutez une nouvelle catégorie pour organiser les discussions.</DialogDescription>
+                    <DialogTitle className="text-white">Créer une Nouvelle Catégorie</DialogTitle>
+                    <DialogDescription className="text-white/60">Ajoutez une nouvelle catégorie pour organiser les discussions.</DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="category-name">Nom de la catégorie</Label>
-                      <Input id="category-name" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder="Ex: Innovation Technologique" />
+                      <Label htmlFor="category-name" className="text-white/80">Nom de la catégorie</Label>
+                      <Input id="category-name" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder="Ex: Innovation Technologique" className="bg-white/5 border-white/10 text-white" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="category-description">Description</Label>
-                      <Textarea id="category-description" value={newCategoryDescription} onChange={(e) => setNewCategoryDescription(e.target.value)} placeholder="Description de la catégorie..." />
+                      <Label htmlFor="category-description" className="text-white/80">Description</Label>
+                      <Textarea id="category-description" value={newCategoryDescription} onChange={(e) => setNewCategoryDescription(e.target.value)} placeholder="Description de la catégorie..." className="bg-white/5 border-white/10 text-white" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="category-color">Couleur</Label>
+                      <Label htmlFor="category-color" className="text-white/80">Couleur</Label>
                       <div className="flex gap-2">
-                        <Input id="category-color" type="color" value={newCategoryColor} onChange={(e) => setNewCategoryColor(e.target.value)} className="w-16 h-10 p-1" />
-                        <Input value={newCategoryColor} onChange={(e) => setNewCategoryColor(e.target.value)} placeholder="#3B82F6" />
+                        <Input id="category-color" type="color" value={newCategoryColor} onChange={(e) => setNewCategoryColor(e.target.value)} className="w-16 h-10 p-1 bg-white/5 border-white/10" />
+                        <Input value={newCategoryColor} onChange={(e) => setNewCategoryColor(e.target.value)} placeholder="#3B82F6" className="bg-white/5 border-white/10 text-white" />
                       </div>
                     </div>
                     <div className="flex justify-end gap-2">
-                      <Button variant="outline" onClick={() => setIsNewCategoryOpen(false)}>Annuler</Button>
-                      <Button onClick={handleCreateCategory}>Créer</Button>
+                      <ModernButton variant="outline" onClick={() => setIsNewCategoryOpen(false)}>Annuler</ModernButton>
+                      <ModernButton onClick={handleCreateCategory}>Créer</ModernButton>
                     </div>
                   </div>
                 </DialogContent>
@@ -189,15 +198,13 @@ const AdminForum = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {categories.map((category) => (
-                <Card key={category.id}>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: category.color || '#3B82F6' }} />
-                      <h4 className="font-medium">{category.name}</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{category.description || 'Pas de description'}</p>
-                  </CardContent>
-                </Card>
+                <GlassCard key={category.id} className="p-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-4 h-4 rounded-full" style={{ backgroundColor: category.color || '#3B82F6' }} />
+                    <h4 className="font-medium text-white">{category.name}</h4>
+                  </div>
+                  <p className="text-sm text-white/60">{category.description || 'Pas de description'}</p>
+                </GlassCard>
               ))}
             </div>
           </TabsContent>
