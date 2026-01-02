@@ -126,7 +126,7 @@ export default function Presentation() {
   const CurrentComponent = sections[currentSection]?.component;
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-background via-muted/20 to-background ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
+    <div className={`min-h-screen bg-[hsl(var(--nx-bg))] ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
       {!isFullscreen && (
         <PresentationNavigation
           sections={sections}
@@ -135,7 +135,7 @@ export default function Presentation() {
         />
       )}
 
-      <main className="container mx-auto px-4 py-8 space-y-8">
+      <main className="container mx-auto px-4 py-8 space-y-8 animate-fade-in">
         <PresentationControls
           isFullscreen={isFullscreen}
           onFullscreenToggle={() => setIsFullscreen(!isFullscreen)}
