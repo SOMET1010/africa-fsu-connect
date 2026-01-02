@@ -10,7 +10,7 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { cn } from "@/lib/utils";
 
 // Type-safe data row interface
-interface DataRow {
+export interface DataRow {
   [key: string]: unknown;
 }
 
