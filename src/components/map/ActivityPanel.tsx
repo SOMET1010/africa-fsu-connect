@@ -45,17 +45,17 @@ export const ActivityPanel = ({ isOpen, onToggle }: ActivityPanelProps) => (
   <AnimatePresence>
     {isOpen && (
       <motion.div
-        initial={{ x: 300, opacity: 0 }}
+        initial={{ x: 320, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        exit={{ x: 300, opacity: 0 }}
+        exit={{ x: 320, opacity: 0 }}
         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-        className="absolute top-24 right-4 bottom-20 w-72 bg-slate-900/90 backdrop-blur-xl rounded-xl border border-white/10 overflow-hidden z-20"
+        className="absolute top-24 right-4 w-64 max-h-[50vh] bg-slate-900/95 backdrop-blur-xl rounded-xl border border-white/10 overflow-hidden z-30 pointer-events-auto shadow-2xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
+        <div className="flex items-center justify-between p-3 border-b border-white/10">
           <div className="flex items-center gap-2">
             <Activity className="h-4 w-4 text-emerald-400" />
-            <span className="text-sm font-medium text-white">Activité Réseau</span>
+            <span className="text-xs font-medium text-white">Activité Réseau</span>
           </div>
           <Button
             variant="ghost"
@@ -68,8 +68,8 @@ export const ActivityPanel = ({ isOpen, onToggle }: ActivityPanelProps) => (
         </div>
 
         {/* Activity List */}
-        <ScrollArea className="h-[calc(100%-56px)]">
-          <div className="p-3 space-y-2">
+        <ScrollArea className="h-[calc(100%-44px)] max-h-[40vh]">
+          <div className="p-2 space-y-1.5">
             {recentActivities.map((activity, idx) => {
               const Icon = getActivityIcon(activity.type);
               const colorClass = getActivityColor(activity.type);
@@ -80,15 +80,15 @@ export const ActivityPanel = ({ isOpen, onToggle }: ActivityPanelProps) => (
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="flex gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer group"
+                  className="flex gap-2.5 p-2.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer group"
                 >
-                  <div className={cn("h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0", colorClass)}>
-                    <Icon className="h-4 w-4 text-white" />
+                  <div className={cn("h-7 w-7 rounded-lg flex items-center justify-center flex-shrink-0", colorClass)}>
+                    <Icon className="h-3.5 w-3.5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{activity.title}</p>
-                    <p className="text-xs text-white/60 line-clamp-2">{activity.description}</p>
-                    <p className="text-[10px] text-white/40 mt-1">{activity.time}</p>
+                    <p className="text-xs font-medium text-white truncate">{activity.title}</p>
+                    <p className="text-[11px] text-white/60 line-clamp-1">{activity.description}</p>
+                    <p className="text-[10px] text-white/40 mt-0.5">{activity.time}</p>
                   </div>
                 </motion.div>
               );
