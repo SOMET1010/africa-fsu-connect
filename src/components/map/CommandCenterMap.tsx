@@ -34,6 +34,16 @@ const getCountryFlag = (code: string): string => {
   return String.fromCodePoint(...codePoints);
 };
 
+// Variable marker size based on activity level
+const getMarkerSize = (level: string): { size: number; inner: number; flag: number } => {
+  switch (level) {
+    case 'high': return { size: 52, inner: 8, flag: 22 };
+    case 'medium': return { size: 44, inner: 6, flag: 18 };
+    case 'low': return { size: 36, inner: 5, flag: 14 };
+    default: return { size: 44, inner: 6, flag: 18 };
+  }
+};
+
 export const CommandCenterMap = ({ 
   countries, 
   onCountryClick, 
@@ -92,25 +102,28 @@ export const CommandCenterMap = ({
       const displayValue = getValueByMode(activity, mode);
       const displaySuffix = mode === 'trends' ? '%' : '';
 
-      // Create custom marker icon - HUD style
+      // Get variable size based on activity level
+      const markerDims = getMarkerSize(activity.level);
+
+      // Create custom marker icon - HUD style with variable size
       const icon = L.divIcon({
         html: `
           <div class="command-marker" style="
             position: relative;
-            width: 44px;
-            height: 44px;
+            width: ${markerDims.size}px;
+            height: ${markerDims.size}px;
           ">
             <div style="
               position: absolute;
               inset: 0;
               border-radius: 50%;
               border: 2px solid ${color};
-              opacity: 0.4;
-              animation: pulse-ring-hud 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              opacity: 0.5;
+              animation: pulse-ring-hud 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             "></div>
             <div style="
               position: absolute;
-              inset: 6px;
+              inset: ${markerDims.inner}px;
               border-radius: 50%;
               background: linear-gradient(135deg, ${color}33, ${color}66);
               border: 2px solid ${color};
@@ -118,9 +131,9 @@ export const CommandCenterMap = ({
               display: flex;
               align-items: center;
               justify-content: center;
-              box-shadow: 0 0 20px ${color}40, inset 0 0 10px ${color}20;
+              box-shadow: 0 0 40px ${color}50, 0 0 80px ${color}20, inset 0 0 15px ${color}30;
             ">
-              <span style="font-size: 18px; line-height: 1;">${flag}</span>
+              <span style="font-size: ${markerDims.flag}px; line-height: 1;">${flag}</span>
             </div>
             <div style="
               position: absolute;
@@ -142,9 +155,9 @@ export const CommandCenterMap = ({
           </div>
         `,
         className: "command-marker-container",
-        iconSize: [44, 44],
-        iconAnchor: [22, 22],
-        popupAnchor: [0, -24],
+        iconSize: [markerDims.size, markerDims.size],
+        iconAnchor: [markerDims.size / 2, markerDims.size / 2],
+        popupAnchor: [0, -markerDims.size / 2],
       });
 
       const marker = L.marker([country.latitude, country.longitude], { icon });
@@ -246,7 +259,7 @@ export const CommandCenterMap = ({
         ref={mapContainerRef} 
         className="absolute inset-0"
         style={{
-          filter: 'brightness(0.85) contrast(1.1) saturate(0.9)',
+          filter: 'brightness(0.8) contrast(1.15) saturate(0.7)',
         }}
       />
       
@@ -270,9 +283,9 @@ export const CommandCenterMap = ({
       {/* Custom CSS for markers */}
       <style>{`
         @keyframes pulse-ring-hud {
-          0% { transform: scale(1); opacity: 0.4; }
-          50% { transform: scale(1.5); opacity: 0; }
-          100% { transform: scale(1); opacity: 0.4; }
+          0% { transform: scale(1); opacity: 0.5; }
+          50% { transform: scale(1.6); opacity: 0; }
+          100% { transform: scale(1); opacity: 0.5; }
         }
         
         .command-marker-container {
