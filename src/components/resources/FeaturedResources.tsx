@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, ArrowRight, FileText, Download } from 'lucide-react';
+import { Star, Sparkles, BookOpen } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -14,44 +14,47 @@ interface Document {
   country?: string;
   created_at: string;
   featured?: boolean;
+  impact_theme?: string;
 }
 
 interface FeaturedResourcesProps {
   documents: Document[];
   onPreview: (doc: Document) => void;
-  onDownload: (doc: Document) => void;
+  onInspire?: (doc: Document) => void;
 }
 
-const COUNTRY_FLAGS: Record<string, string> = {
-  ci: '🇨🇮',
-  sn: '🇸🇳',
-  za: '🇿🇦',
-  ng: '🇳🇬',
-  gh: '🇬🇭',
-  ke: '🇰🇪',
-  tz: '🇹🇿',
-  ug: '🇺🇬',
-  ml: '🇲🇱',
-  bf: '🇧🇫',
-  bj: '🇧🇯',
-  tg: '🇹🇬',
-  cm: '🇨🇲',
-  cd: '🇨🇩',
-  rw: '🇷🇼',
+const COUNTRY_INFO: Record<string, { flag: string; name: string; nameFr: string }> = {
+  ci: { flag: '🇨🇮', name: 'Ivory Coast', nameFr: 'Côte d\'Ivoire' },
+  sn: { flag: '🇸🇳', name: 'Senegal', nameFr: 'Sénégal' },
+  za: { flag: '🇿🇦', name: 'South Africa', nameFr: 'Afrique du Sud' },
+  ng: { flag: '🇳🇬', name: 'Nigeria', nameFr: 'Nigeria' },
+  gh: { flag: '🇬🇭', name: 'Ghana', nameFr: 'Ghana' },
+  ke: { flag: '🇰🇪', name: 'Kenya', nameFr: 'Kenya' },
+  tz: { flag: '🇹🇿', name: 'Tanzania', nameFr: 'Tanzanie' },
+  ug: { flag: '🇺🇬', name: 'Uganda', nameFr: 'Ouganda' },
+  ml: { flag: '🇲🇱', name: 'Mali', nameFr: 'Mali' },
+  bf: { flag: '🇧🇫', name: 'Burkina Faso', nameFr: 'Burkina Faso' },
+  bj: { flag: '🇧🇯', name: 'Benin', nameFr: 'Bénin' },
+  tg: { flag: '🇹🇬', name: 'Togo', nameFr: 'Togo' },
+  cm: { flag: '🇨🇲', name: 'Cameroon', nameFr: 'Cameroun' },
+  cd: { flag: '🇨🇩', name: 'DRC', nameFr: 'RDC' },
+  rw: { flag: '🇷🇼', name: 'Rwanda', nameFr: 'Rwanda' },
 };
 
-const TYPE_COLORS: Record<string, string> = {
-  guide: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-  rapport: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
-  presentation: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
-  formulaire: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
-  autre: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400',
+const TYPE_LABELS: Record<string, { en: string; fr: string; icon: string }> = {
+  guide: { en: 'Practical guide', fr: 'Guide pratique', icon: '📘' },
+  rapport: { en: 'Strategic report', fr: 'Rapport stratégique', icon: '📊' },
+  'note-conceptuelle': { en: 'Concept note', fr: 'Note conceptuelle', icon: '💡' },
+  'bonne-pratique': { en: 'Best practice', fr: 'Bonne pratique', icon: '✨' },
+  modele: { en: 'Template', fr: 'Modèle', icon: '📝' },
+  presentation: { en: 'Presentation', fr: 'Présentation', icon: '📽️' },
+  autre: { en: 'Resource', fr: 'Ressource', icon: '📄' },
 };
 
 export const FeaturedResources: React.FC<FeaturedResourcesProps> = ({
   documents,
   onPreview,
-  onDownload,
+  onInspire,
 }) => {
   const { currentLanguage } = useTranslation();
   
@@ -76,69 +79,79 @@ export const FeaturedResources: React.FC<FeaturedResourcesProps> = ({
         <div className="flex items-center gap-2">
           <Star className="h-5 w-5 text-amber-500" />
           <h2 className="text-xl font-semibold text-foreground">
-            {currentLanguage === 'en' ? 'Featured Resources' : 'Ressources mises en avant'}
+            {currentLanguage === 'en' 
+              ? 'Featured resources from the network' 
+              : 'Ressources mises en avant du réseau'}
           </h2>
         </div>
 
         {/* Featured cards */}
-        <div className="grid gap-4 md:grid-cols-3">
-          {displayDocs.map((doc) => (
-            <Card
-              key={doc.id}
-              className="group relative overflow-hidden border-border/50 bg-card hover:border-primary/30 hover:shadow-md transition-all duration-300 cursor-pointer"
-              onClick={() => onPreview(doc)}
-            >
-              <div className="p-5">
-                {/* Type badge */}
-                <div className="flex items-center justify-between mb-3">
-                  <Badge 
-                    variant="secondary" 
-                    className={`${TYPE_COLORS[doc.document_type] || TYPE_COLORS.autre} border-0`}
-                  >
-                    {doc.document_type}
-                  </Badge>
-                  {doc.country && (
-                    <span className="text-lg" title={doc.country}>
-                      {COUNTRY_FLAGS[doc.country.toLowerCase()] || '🌍'}
-                    </span>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {displayDocs.map((doc) => {
+            const countryCode = doc.country?.toLowerCase() || '';
+            const countryInfo = COUNTRY_INFO[countryCode];
+            const typeInfo = TYPE_LABELS[doc.document_type] || TYPE_LABELS.autre;
+            
+            return (
+              <Card
+                key={doc.id}
+                className="group relative overflow-hidden border-border/50 bg-card hover:border-primary/30 hover:shadow-md transition-all duration-300"
+              >
+                <div className="p-5 space-y-3">
+                  {/* Icon + Title */}
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl flex-shrink-0">{typeInfo.icon}</span>
+                    <h3 className="font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
+                      {doc.title}
+                    </h3>
+                  </div>
+
+                  {/* Country */}
+                  {countryInfo && (
+                    <p className="text-sm text-muted-foreground">
+                      {countryInfo.flag} {currentLanguage === 'en' ? countryInfo.name : countryInfo.nameFr}
+                    </p>
                   )}
-                </div>
 
-                {/* Title */}
-                <h3 className="font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                  {doc.title}
-                </h3>
-
-                {/* Description */}
-                {doc.description && (
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                    {doc.description}
+                  {/* Type label */}
+                  <p className="text-sm text-muted-foreground">
+                    {currentLanguage === 'en' ? typeInfo.en : typeInfo.fr}
                   </p>
-                )}
 
-                {/* Actions */}
-                <div className="flex items-center justify-between pt-2 border-t border-border/50">
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(doc.created_at).toLocaleDateString(
-                      currentLanguage === 'en' ? 'en-US' : 'fr-FR',
-                      { year: 'numeric', month: 'short' }
+                  {/* Impact theme (if available) */}
+                  {doc.impact_theme && (
+                    <Badge variant="outline" className="text-xs">
+                      Impact : {doc.impact_theme}
+                    </Badge>
+                  )}
+
+                  {/* Collaborative CTAs */}
+                  <div className="flex items-center gap-2 pt-3 border-t border-border/30">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => onPreview(doc)}
+                      className="h-8 px-3 text-sm text-muted-foreground hover:text-foreground"
+                    >
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      {currentLanguage === 'en' ? 'Read' : 'Lire'}
+                    </Button>
+                    {onInspire && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onInspire(doc)}
+                        className="h-8 px-3 text-sm text-muted-foreground hover:text-primary"
+                      >
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        {currentLanguage === 'en' ? 'Get inspired' : 'S\'inspirer'}
+                      </Button>
                     )}
-                  </span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDownload(doc);
-                    }}
-                    className="h-8 px-2 text-muted-foreground hover:text-primary"
-                  >
-                    <Download className="h-4 w-4" />
-                  </Button>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            );
+          })}
         </div>
       </div>
     </ScrollReveal>
