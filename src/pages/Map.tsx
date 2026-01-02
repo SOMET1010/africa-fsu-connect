@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ModernCard } from "@/components/ui/modern-card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -11,7 +11,7 @@ import { NetworkMap } from "@/components/map/NetworkMap";
 import { MapNarrative } from "@/components/map/MapNarrative";
 import { CountrySheet } from "@/components/map/CountrySheet";
 import { MapFilters, MapFiltersState } from "@/components/map/MapFilters";
-import { getGlobalStats, MapMode } from "@/components/map/activityData";
+import { getGlobalStats, getCountryActivity, MapMode } from "@/components/map/activityData";
 
 const Map = () => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
@@ -27,6 +27,23 @@ const Map = () => {
   
   // Filter countries with coordinates
   const countriesWithCoords = countries.filter(c => c.latitude && c.longitude);
+  
+  // Apply filters to countries
+  const filteredCountries = useMemo(() => {
+    return countriesWithCoords.filter(country => {
+      const activity = getCountryActivity(country.code);
+      
+      // Filter by region
+      if (filters.region && country.region !== filters.region) return false;
+      
+      // Filter by activity level
+      if (filters.activityLevel && activity.level !== filters.activityLevel) return false;
+      
+      return true;
+    });
+  }, [countriesWithCoords, filters]);
+  
+  const hasActiveFilters = filters.region || filters.activityLevel;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
@@ -80,6 +97,12 @@ const Map = () => {
             </Tabs>
             
             <MapFilters filters={filters} onFilterChange={setFilters} />
+            
+            {hasActiveFilters && (
+              <Badge variant="secondary" className="ml-2">
+                {filteredCountries.length} pays affichés
+              </Badge>
+            )}
           </div>
         </ScrollReveal>
 
@@ -92,7 +115,7 @@ const Map = () => {
         <ScrollReveal delay={300}>
           <ModernCard variant="glass" className="p-6">
             <NetworkMap 
-              countries={countriesWithCoords}
+              countries={filteredCountries}
               onCountryClick={setSelectedCountry}
               mode={mapMode}
               isLoading={isLoading}
