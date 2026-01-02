@@ -162,7 +162,21 @@ const Forum = () => {
   return (
     <AnimatedPage className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 space-y-8">
-        {/* Header */}
+        {/* 
+          ╔══════════════════════════════════════════════════════════════════╗
+          ║  NEXUS BLUEPRINT - LAYER 2 (COLLABORATION)                       ║
+          ║                                                                  ║
+          ║  Ce header ne doit PAS contenir :                                ║
+          ║  - Compteurs statistiques (totalPosts, totalMembers, activeUsers)║
+          ║  - Badges animés "Live" ou indicateurs temps réel                ║
+          ║  - AnimatedCounter ou métriques type dashboard                   ║
+          ║                                                                  ║
+          ║  Raison : Interface destinée aux représentants institutionnels,  ║
+          ║  pas aux administrateurs - aucun analytics visible.              ║
+          ║                                                                  ║
+          ║  Les statistiques forum appartiennent à /admin/forum (Layer 3)   ║
+          ╚══════════════════════════════════════════════════════════════════╝
+        */}
         <ModernForumHeader
           onNewPost={() => setIsNewPostOpen(true)}
           onSearch={handleSearch}
