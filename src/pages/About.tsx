@@ -64,35 +64,35 @@ const About = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-12">
+    <div className="container mx-auto px-4 py-8 space-y-12 relative z-10">
       {/* Hero */}
       <div className="text-center max-w-4xl mx-auto space-y-6">
-        <Badge variant="outline" className="px-4 py-2">
+        <Badge variant="outline" className="px-4 py-2 bg-white/5 border-white/20 text-white">
           <Building2 className="h-4 w-4 mr-2" />
           À Propos de NEXUS
         </Badge>
-        <h1 className="text-4xl md:text-5xl font-bold">
+        <h1 className="text-4xl md:text-5xl font-bold text-white">
           La Première Plateforme Africaine pour le
-          <span className="text-primary"> Service Universel</span>
+          <span className="text-[hsl(var(--nx-gold))]"> Service Universel</span>
         </h1>
-        <p className="text-xl text-muted-foreground leading-relaxed">
+        <p className="text-xl text-white/70 leading-relaxed">
           Une initiative conjointe de l'Union Africaine des Télécommunications (UAT) 
           et de l'ANSUT Côte d'Ivoire pour réduire la fracture numérique sur le continent africain.
         </p>
       </div>
 
       {/* Mission */}
-      <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
+      <Card className="bg-white/5 backdrop-blur-md border-white/10">
         <CardContent className="p-8">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Notre Mission</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-2xl font-bold text-white">Notre Mission</h2>
+              <p className="text-white/70 leading-relaxed">
                 La Plateforme NEXUS vise à créer un guichet unique panafricain pour la collaboration,
                 l'innovation et la mutualisation des ressources dans le domaine du Service Universel 
                 des Télécommunications.
               </p>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-white/70 leading-relaxed">
                 En connectant les 54 pays africains, nous facilitons le partage des meilleures pratiques, 
                 l'harmonisation des politiques et l'optimisation des investissements pour garantir 
                 l'accès aux services de télécommunications pour tous les citoyens africains.
@@ -105,9 +105,9 @@ const About = () => {
                 { value: "$2.4B", label: "Budget total" },
                 { value: "68%", label: "Couverture" }
               ].map((stat) => (
-                <div key={stat.label} className="text-center p-4 bg-background/50 rounded-xl">
-                  <p className="text-3xl font-bold text-primary">{stat.value}</p>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <div key={stat.label} className="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+                  <p className="text-3xl font-bold text-[hsl(var(--nx-gold))]">{stat.value}</p>
+                  <p className="text-sm text-white/60">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -118,20 +118,20 @@ const About = () => {
       {/* 5 Pillars */}
       <div className="space-y-6">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-2">Les 5 Piliers Fondateurs</h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-2xl font-bold mb-2 text-white">Les 5 Piliers Fondateurs</h2>
+          <p className="text-white/60">
             Notre vision stratégique repose sur cinq piliers essentiels
           </p>
         </div>
         <div className="grid md:grid-cols-5 gap-4">
           {pillars.map((pillar, idx) => (
-            <Card key={idx} className="text-center hover:shadow-lg transition-all duration-300 group">
+            <Card key={idx} className="text-center bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-all duration-300 group">
               <CardContent className="p-6 space-y-4">
-                <div className="w-14 h-14 mx-auto rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <pillar.icon className="h-7 w-7 text-primary" />
+                <div className="w-14 h-14 mx-auto rounded-xl bg-[hsl(var(--nx-gold)/0.2)] flex items-center justify-center group-hover:bg-[hsl(var(--nx-gold)/0.3)] transition-colors">
+                  <pillar.icon className="h-7 w-7 text-[hsl(var(--nx-gold))]" />
                 </div>
-                <h3 className="font-semibold text-sm">{pillar.title}</h3>
-                <p className="text-xs text-muted-foreground">{pillar.description}</p>
+                <h3 className="font-semibold text-sm text-white">{pillar.title}</h3>
+                <p className="text-xs text-white/60">{pillar.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -140,13 +140,13 @@ const About = () => {
 
       {/* Governance */}
       <div className="grid lg:grid-cols-2 gap-8">
-        <Card>
+        <Card className="bg-white/5 backdrop-blur-md border-white/10">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-primary" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Users className="h-5 w-5 text-[hsl(var(--nx-cyan))]" />
               Comité de Pilotage NEXUS
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-white/60">
               Structure de gouvernance et prise de décision
             </CardDescription>
           </CardHeader>
@@ -154,26 +154,26 @@ const About = () => {
             {steeringCommittee.map((member, idx) => (
               <div 
                 key={idx} 
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Badge variant={member.role === "Président" ? "default" : "outline"}>
+                  <Badge variant={member.role === "Président" ? "default" : "outline"} className={member.role === "Président" ? "bg-[hsl(var(--nx-gold))] text-[hsl(var(--nx-night))]" : "border-white/20 text-white/80"}>
                     {member.role}
                   </Badge>
-                  <span className="text-sm">{member.organization}</span>
+                  <span className="text-sm text-white/80">{member.organization}</span>
                 </div>
               </div>
             ))}
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white/5 backdrop-blur-md border-white/10">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Globe className="h-5 w-5 text-primary" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Globe className="h-5 w-5 text-[hsl(var(--nx-cyan))]" />
               Régions Couvertes
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-white/60">
               5 communautés économiques régionales africaines
             </CardDescription>
           </CardHeader>
@@ -181,14 +181,14 @@ const About = () => {
             {regions.map((region) => (
               <div 
                 key={region.name}
-                className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors"
               >
                 <div className={`w-10 h-10 ${region.color} rounded-lg flex items-center justify-center text-white font-bold`}>
                   {region.name[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium">{region.name}</p>
-                  <p className="text-sm text-muted-foreground">{region.countries} pays membres</p>
+                  <p className="font-medium text-white">{region.name}</p>
+                  <p className="text-sm text-white/60">{region.countries} pays membres</p>
                 </div>
               </div>
             ))}
@@ -197,10 +197,10 @@ const About = () => {
       </div>
 
       {/* Partners */}
-      <Card>
+      <Card className="bg-white/5 backdrop-blur-md border-white/10">
         <CardHeader className="text-center">
-          <CardTitle>Nos Partenaires Institutionnels</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-white">Nos Partenaires Institutionnels</CardTitle>
+          <CardDescription className="text-white/60">
             Une coalition d'organisations engagées pour le service universel
           </CardDescription>
         </CardHeader>
@@ -213,10 +213,10 @@ const About = () => {
               { name: "UIT", full: "Union Internationale des Télécommunications" }
             ].map((partner) => (
               <div key={partner.name} className="text-center group">
-                <div className="w-20 h-20 mx-auto mb-3 bg-muted rounded-xl flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                  <span className="font-bold text-lg text-primary">{partner.name}</span>
+                <div className="w-20 h-20 mx-auto mb-3 bg-white/5 rounded-xl flex items-center justify-center group-hover:bg-[hsl(var(--nx-gold)/0.2)] transition-colors border border-white/10">
+                  <span className="font-bold text-lg text-[hsl(var(--nx-gold))]">{partner.name}</span>
                 </div>
-                <p className="text-xs text-muted-foreground">{partner.full}</p>
+                <p className="text-xs text-white/60">{partner.full}</p>
               </div>
             ))}
           </div>
@@ -224,38 +224,38 @@ const About = () => {
       </Card>
 
       {/* Contact */}
-      <Card className="bg-muted/30">
+      <Card className="bg-white/[0.03] backdrop-blur-md border-white/10">
         <CardContent className="p-8">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Contactez-nous</h2>
+              <h2 className="text-2xl font-bold text-white">Contactez-nous</h2>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-primary" />
-                  <a href="mailto:secretariat@atu-uat.org" className="hover:text-primary transition-colors">
+                  <Mail className="h-5 w-5 text-[hsl(var(--nx-cyan))]" />
+                  <a href="mailto:secretariat@atu-uat.org" className="text-white/80 hover:text-[hsl(var(--nx-gold))] transition-colors">
                     secretariat@atu-uat.org
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Globe className="h-5 w-5 text-primary" />
-                  <a href="https://platform.atu-uat.org" className="hover:text-primary transition-colors">
+                  <Globe className="h-5 w-5 text-[hsl(var(--nx-cyan))]" />
+                  <a href="https://platform.atu-uat.org" className="text-white/80 hover:text-[hsl(var(--nx-gold))] transition-colors">
                     platform.atu-uat.org
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  <span>Abidjan, Côte d'Ivoire</span>
+                  <MapPin className="h-5 w-5 text-[hsl(var(--nx-cyan))]" />
+                  <span className="text-white/80">Abidjan, Côte d'Ivoire</span>
                 </div>
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="bg-[hsl(var(--nx-gold))] hover:bg-[hsl(var(--nx-gold)/0.9)] text-[hsl(var(--nx-night))]">
                 <Link to="/auth">
                   Rejoindre la plateforme
                   <ExternalLink className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
-              <Button variant="outline" asChild size="lg">
+              <Button variant="outline" asChild size="lg" className="border-white/20 text-white hover:bg-white/10">
                 <Link to="/roadmap">
                   Voir la feuille de route
                 </Link>

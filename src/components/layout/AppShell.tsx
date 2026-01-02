@@ -49,7 +49,22 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
       {/* Skip Links pour l'accessibilité */}
       <SkipLinks links={skipLinks} />
       
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 flex w-full">
+      <div className="min-h-screen bg-[hsl(var(--nx-night))] text-white flex w-full relative">
+        {/* Noise texture overlay for cinematic effect */}
+        <div 
+          className="fixed inset-0 pointer-events-none z-0 opacity-[0.03]"
+          style={{ 
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat'
+          }}
+          aria-hidden="true"
+        />
+        
+        {/* Ambient glow effects */}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+          <div className="absolute -top-1/2 -left-1/4 w-[800px] h-[800px] rounded-full bg-[hsl(var(--nx-brand-900)/0.15)] blur-[120px]" />
+          <div className="absolute -bottom-1/4 -right-1/4 w-[600px] h-[600px] rounded-full bg-[hsl(var(--nx-coop-600)/0.1)] blur-[100px]" />
+        </div>
         <div className="flex flex-col flex-1 min-w-0">
             <div id="app-navigation">
               <ModernHeader />
