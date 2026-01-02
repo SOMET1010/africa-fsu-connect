@@ -75,8 +75,9 @@ export function FloatingActionButton({
                           setIsExpanded(false);
                         }}
                         disabled={action.disabled}
+                        aria-label={action.label}
                       >
-                        <Icon className="h-5 w-5" />
+                        <Icon className="h-5 w-5" aria-hidden="true" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="left">
@@ -100,11 +101,13 @@ export function FloatingActionButton({
                   isExpanded && "rotate-45"
                 )}
                 onClick={handlePrimaryClick}
+                aria-label={isExpanded ? "Close actions menu" : primaryLabel}
+                aria-expanded={actions.length > 0 ? isExpanded : undefined}
               >
                 {isExpanded && actions.length > 0 ? (
-                  <ChevronUp className="h-6 w-6" />
+                  <ChevronUp className="h-6 w-6" aria-hidden="true" />
                 ) : (
-                  <Plus className="h-6 w-6" />
+                  <Plus className="h-6 w-6" aria-hidden="true" />
                 )}
               </Button>
             </TooltipTrigger>

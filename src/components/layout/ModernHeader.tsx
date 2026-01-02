@@ -147,6 +147,8 @@ const ModernHeader = () => {
                           )}
                           onMouseEnter={() => setHoveredLink(item.id)}
                           onMouseLeave={() => setHoveredLink(null)}
+                          aria-label={`${item.labelKey ? t(item.labelKey) : item.label} menu`}
+                          aria-haspopup="menu"
                         >
                           {/* Glow background animé */}
                           <AnimatePresence>
@@ -276,9 +278,14 @@ const ModernHeader = () => {
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <ModernButton variant="ghost" className="relative h-9 w-9 rounded-full p-0 ring-2 ring-transparent hover:ring-[hsl(var(--nx-gold))]/30 transition-all duration-300">
+                    <ModernButton 
+                      variant="ghost" 
+                      className="relative h-9 w-9 rounded-full p-0 ring-2 ring-transparent hover:ring-[hsl(var(--nx-gold))]/30 transition-all duration-300"
+                      aria-label="User menu"
+                      aria-haspopup="menu"
+                    >
                       <Avatar className="h-9 w-9 transition-transform hover:scale-105">
-                        <AvatarImage src={profile?.avatar_url || ""} alt={profile?.first_name || "User"} />
+                        <AvatarImage src={profile?.avatar_url || ""} alt={profile?.first_name || "User avatar"} />
                         <AvatarFallback className="bg-gradient-to-br from-[hsl(var(--nx-gold))] to-amber-600 text-[hsl(var(--nx-night))] text-xs font-medium">
                           {getUserInitials()}
                         </AvatarFallback>
@@ -286,7 +293,7 @@ const ModernHeader = () => {
                       <div className={cn(
                         "absolute -bottom-1 w-3 h-3 bg-green-500 rounded-full border-2 border-[hsl(var(--nx-night))] animate-pulse",
                         isRTL ? "-left-1" : "-right-1"
-                      )} />
+                      )} aria-hidden="true" />
                     </ModernButton>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align={isRTL ? "start" : "end"} className="w-64 animate-scale-in bg-[hsl(var(--nx-night))]/95 backdrop-blur-2xl border-white/10">
