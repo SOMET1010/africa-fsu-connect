@@ -1,8 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Country } from "@/services/countriesService";
-import { getCountryActivity, getActivityColor, ACTIVITY_LEVELS } from "./activityData";
+import { 
+  getCountryActivity, 
+  getActivityColor, 
+  getValueByMode, 
+  getLabelByMode,
+  ACTIVITY_LEVELS,
+  MapMode 
+} from "./activityData";
 
 // Fix Leaflet default icon paths
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -15,6 +22,7 @@ L.Icon.Default.mergeOptions({
 interface NetworkMapProps {
   countries: Country[];
   onCountryClick: (country: Country) => void;
+  mode?: MapMode;
   isLoading?: boolean;
 }
 
@@ -27,7 +35,12 @@ const getCountryFlag = (code: string): string => {
   return String.fromCodePoint(...codePoints);
 };
 
-export const NetworkMap = ({ countries, onCountryClick, isLoading }: NetworkMapProps) => {
+export const NetworkMap = ({ 
+  countries, 
+  onCountryClick, 
+  mode = 'members',
+  isLoading 
+}: NetworkMapProps) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
@@ -61,12 +74,14 @@ export const NetworkMap = ({ countries, onCountryClick, isLoading }: NetworkMapP
     };
   }, []);
 
-  // Update markers when countries change
+  // Update markers when countries or mode change
   useEffect(() => {
     if (!mapRef.current || !markersRef.current || !countries.length) return;
 
     // Clear existing markers
     markersRef.current.clearLayers();
+
+    const valueLabel = getLabelByMode(mode);
 
     // Add markers for each country with coordinates
     countries.forEach((country) => {
@@ -75,14 +90,16 @@ export const NetworkMap = ({ countries, onCountryClick, isLoading }: NetworkMapP
       const activity = getCountryActivity(country.code);
       const color = getActivityColor(activity.level);
       const flag = getCountryFlag(country.code);
+      const displayValue = getValueByMode(activity, mode);
+      const displaySuffix = mode === 'trends' ? '%' : '';
 
       // Create custom marker icon
       const icon = L.divIcon({
         html: `
           <div class="network-marker" style="
             position: relative;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
           ">
             <div style="
               position: absolute;
@@ -103,16 +120,17 @@ export const NetworkMap = ({ countries, onCountryClick, isLoading }: NetworkMapP
               align-items: center;
               justify-content: center;
             ">
-              <span style="font-size: 14px; line-height: 1;">${flag}</span>
+              <span style="font-size: 16px; line-height: 1;">${flag}</span>
             </div>
             <div style="
               position: absolute;
               top: -8px;
               right: -8px;
               background: white;
-              border-radius: 50%;
-              width: 20px;
-              height: 20px;
+              border-radius: 10px;
+              min-width: 22px;
+              height: 22px;
+              padding: 0 4px;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -120,59 +138,58 @@ export const NetworkMap = ({ countries, onCountryClick, isLoading }: NetworkMapP
               font-weight: bold;
               color: ${color};
               box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            ">${activity.contributions}</div>
+            ">${displayValue}${displaySuffix}</div>
           </div>
         `,
         className: "network-marker-container",
-        iconSize: [36, 36],
-        iconAnchor: [18, 18],
-        popupAnchor: [0, -20],
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+        popupAnchor: [0, -22],
       });
 
       const marker = L.marker([country.latitude, country.longitude], { icon });
 
-      // Create popup content
+      // Create popup content with 3 lines max
       const popupContent = `
         <div style="
           min-width: 180px;
+          max-width: 220px;
           font-family: system-ui, -apple-system, sans-serif;
         ">
           <div style="
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 8px;
           ">
-            <span style="font-size: 28px;">${flag}</span>
-            <div>
-              <strong style="font-size: 14px; display: block;">${country.name_fr}</strong>
-              <span style="font-size: 12px; color: #666;">${country.region || ''}</span>
-            </div>
+            <span style="font-size: 28px; line-height: 1;">${flag}</span>
+            <strong style="font-size: 15px;">${country.name_fr}</strong>
           </div>
           <div style="
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px;
-            background: ${color}15;
+            padding: 8px 10px;
+            background: ${color}12;
             border-radius: 8px;
+            margin-bottom: 6px;
           ">
             <div style="
               width: 8px;
               height: 8px;
               border-radius: 50%;
               background-color: ${color};
+              flex-shrink: 0;
             "></div>
-            <span style="font-size: 13px; color: ${color}; font-weight: 500;">
-              ${activity.contributions} contributions ce mois
+            <span style="font-size: 13px; color: ${color}; font-weight: 600;">
+              ${displayValue}${displaySuffix} ${valueLabel}
             </span>
           </div>
           <p style="
             font-size: 11px;
             color: #888;
-            margin-top: 8px;
-            text-align: center;
-          ">Cliquez pour voir les détails</p>
+            margin: 0;
+          ">Dernière activité : ${activity.lastActivity}</p>
         </div>
       `;
 
@@ -195,7 +212,7 @@ export const NetworkMap = ({ countries, onCountryClick, isLoading }: NetworkMapP
 
       markersRef.current?.addLayer(marker);
     });
-  }, [countries, onCountryClick]);
+  }, [countries, onCountryClick, mode]);
 
   if (isLoading) {
     return (

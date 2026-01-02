@@ -3,18 +3,26 @@ import { ModernCard } from "@/components/ui/modern-card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { HeroSection } from "@/components/ui/hero-section";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Globe, Users, Briefcase, TrendingUp } from "lucide-react";
 import { useAfricanCountries } from "@/hooks/useCountries";
 import { Country } from "@/services/countriesService";
 import { NetworkMap } from "@/components/map/NetworkMap";
 import { MapNarrative } from "@/components/map/MapNarrative";
-import { CountryDetailPanel } from "@/components/map/CountryDetailPanel";
-import { getGlobalStats } from "@/components/map/activityData";
+import { CountrySheet } from "@/components/map/CountrySheet";
+import { MapFilters, MapFiltersState } from "@/components/map/MapFilters";
+import { getGlobalStats, MapMode } from "@/components/map/activityData";
 
 const Map = () => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const { data: countries = [], isLoading } = useAfricanCountries();
+  const [mapMode, setMapMode] = useState<MapMode>('members');
+  const [filters, setFilters] = useState<MapFiltersState>({
+    region: null,
+    activityLevel: null,
+    period: 'month'
+  });
   
+  const { data: countries = [], isLoading } = useAfricanCountries();
   const globalStats = getGlobalStats();
   
   // Filter countries with coordinates
@@ -22,7 +30,7 @@ const Map = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-4 py-8 space-y-8">
+      <div className="container mx-auto px-4 py-8 space-y-6">
         
         {/* Hero Section */}
         <ScrollReveal direction="fade">
@@ -48,30 +56,57 @@ const Map = () => {
           </HeroSection>
         </ScrollReveal>
 
+        {/* Tabs & Filters */}
+        <ScrollReveal delay={100}>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <Tabs value={mapMode} onValueChange={(v) => setMapMode(v as MapMode)}>
+              <TabsList className="grid w-full md:w-auto grid-cols-3">
+                <TabsTrigger value="members" className="gap-2">
+                  <Users className="h-4 w-4" />
+                  <span className="hidden sm:inline">Pays membres</span>
+                  <span className="sm:hidden">Membres</span>
+                </TabsTrigger>
+                <TabsTrigger value="projects" className="gap-2">
+                  <Briefcase className="h-4 w-4" />
+                  <span className="hidden sm:inline">Projets partagés</span>
+                  <span className="sm:hidden">Projets</span>
+                </TabsTrigger>
+                <TabsTrigger value="trends" className="gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  <span className="hidden sm:inline">Tendances</span>
+                  <span className="sm:hidden">Tendances</span>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            
+            <MapFilters filters={filters} onFilterChange={setFilters} />
+          </div>
+        </ScrollReveal>
+
         {/* Micro-Narrative */}
         <ScrollReveal delay={200}>
-          <MapNarrative />
+          <MapNarrative mode={mapMode} />
         </ScrollReveal>
 
         {/* Interactive Map */}
-        <ScrollReveal delay={400}>
+        <ScrollReveal delay={300}>
           <ModernCard variant="glass" className="p-6">
             <NetworkMap 
               countries={countriesWithCoords}
               onCountryClick={setSelectedCountry}
+              mode={mapMode}
               isLoading={isLoading}
             />
           </ModernCard>
         </ScrollReveal>
       </div>
 
-      {/* Country Detail Panel */}
-      {selectedCountry && (
-        <CountryDetailPanel 
-          country={selectedCountry}
-          onClose={() => setSelectedCountry(null)}
-        />
-      )}
+      {/* Country Sheet (shadcn/ui) */}
+      <CountrySheet 
+        country={selectedCountry}
+        onClose={() => setSelectedCountry(null)}
+        mode={mapMode}
+      />
     </div>
   );
 };
