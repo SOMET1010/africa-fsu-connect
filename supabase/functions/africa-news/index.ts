@@ -61,21 +61,26 @@ Chaque actualité doit avoir: country (nom du pays), code (code ISO 2 lettres), 
     const content = data.choices?.[0]?.message?.content;
     const citations = data.citations || [];
 
-    // Parse le JSON depuis la réponse
+    // Parse le JSON depuis la réponse - nettoyer les balises markdown
     let parsedNews;
     try {
-      // Essayer de parser directement
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        parsedNews = JSON.parse(jsonMatch[0]);
+      // Retirer les balises markdown ```json et ```
+      let cleanContent = content
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/\s*```$/i, '')
+        .trim();
+      
+      console.log("Cleaned content:", cleanContent);
+      
+      // Parser le JSON nettoyé
+      const parsed = JSON.parse(cleanContent);
+      
+      // Si c'est un array directement, l'envelopper
+      if (Array.isArray(parsed)) {
+        parsedNews = { news: parsed };
       } else {
-        // Essayer de parser comme array
-        const arrayMatch = content.match(/\[[\s\S]*\]/);
-        if (arrayMatch) {
-          parsedNews = { news: JSON.parse(arrayMatch[0]) };
-        } else {
-          throw new Error("No valid JSON found in response");
-        }
+        parsedNews = parsed;
       }
     } catch (parseError) {
       console.error("JSON parse error:", parseError);
