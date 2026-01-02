@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lightbulb, X, ChevronRight, Brain, Zap, Target, Users } from 'lucide-react';
 import { useContextualIntelligence, ContextualSuggestion } from '@/hooks/useContextualIntelligence';
+import { useNexusLayer } from '@/hooks/useNexusLayer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 interface SmartSuggestionsProps {
@@ -19,10 +19,21 @@ export const SmartSuggestions = ({
   compact = false 
 }: SmartSuggestionsProps) => {
   const { suggestions } = useContextualIntelligence();
+  const { isNetworkLayer, isCollaborationLayer } = useNexusLayer();
   const [dismissedSuggestions, setDismissedSuggestions] = useState<string[]>([]);
   const navigate = useNavigate();
 
-  const visibleSuggestions = suggestions
+  // NEXUS Blueprint: Ne JAMAIS afficher de suggestions admin sur la couche Réseau
+  if (isNetworkLayer) {
+    return null;
+  }
+
+  // Filtrer les suggestions admin sur la couche Collaboration
+  const filteredSuggestions = isCollaborationLayer
+    ? suggestions.filter(s => s.category !== 'administration')
+    : suggestions;
+
+  const visibleSuggestions = filteredSuggestions
     .filter(s => !dismissedSuggestions.includes(s.id))
     .slice(0, maxSuggestions);
 
@@ -71,16 +82,13 @@ export const SmartSuggestions = ({
               onClick={() => handleSuggestionClick(suggestion)}
             >
               <div className="flex items-center gap-3">
-                <Icon className={cn("h-4 w-4", getPriorityColor(suggestion.priority))} />
+                <Icon className="h-4 w-4 text-muted-foreground" />
                 <div className="flex-1">
                   <p className="text-sm font-medium">{suggestion.title}</p>
                   <p className="text-xs text-muted-foreground">{suggestion.description}</p>
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                <Badge variant="outline" className="text-xs">
-                  {suggestion.priority}
-                </Badge>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -127,25 +135,17 @@ export const SmartSuggestions = ({
               <div className="flex-1 space-y-1">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-medium">{suggestion.title}</h4>
-                  <div className="flex items-center gap-1">
-                    <Badge 
-                      variant="outline" 
-                      className={cn("text-xs", getPriorityColor(suggestion.priority))}
-                    >
-                      {suggestion.priority}
-                    </Badge>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDismiss(suggestion.id);
-                      }}
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDismiss(suggestion.id);
+                    }}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
                 </div>
                 
                 <p className="text-xs text-muted-foreground">
@@ -153,9 +153,9 @@ export const SmartSuggestions = ({
                 </p>
                 
                 <div className="flex items-center justify-between">
-                  <Badge variant="secondary" className="text-xs">
+                  <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">
                     {suggestion.category}
-                  </Badge>
+                  </span>
                   <ChevronRight className="h-3 w-3 text-muted-foreground group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
