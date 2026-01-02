@@ -151,7 +151,7 @@ export function NexusRegions() {
           </div>
 
           <Link 
-            to="/network/interactive-map"
+            to="/map"
             className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full 
                        bg-white/5 border border-white/10 hover:border-primary/30 
                        hover:bg-primary/5 transition-all duration-300"
