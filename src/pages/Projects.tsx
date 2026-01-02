@@ -1,43 +1,28 @@
-
 import { useState, useMemo } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
-import { AdaptiveInterface } from '@/components/layout/AdaptiveInterface';
-import { SimplifiedProjects } from '@/components/projects/SimplifiedProjects';
-import { AdvancedProjectsControls } from '@/components/projects/AdvancedProjectsControls';
-import { HeroSection } from "@/components/ui/hero-section";
-import { ModernStatsCard } from "@/components/ui/modern-stats-card";
-import { VirtualizedList } from "@/components/optimized/VirtualizedList";
-import { usePreloader } from "@/hooks/usePreloader";
-import { 
-  Plus,
-  BarChart3,
-  Database,
-  FolderOpen,
-  Users,
-  Clock,
-  CheckCircle
-} from "lucide-react";
 import { useProjects } from "@/hooks/useProjects";
-import { ProjectCard } from "@/components/projects/ProjectCard";
+import { useToast } from "@/hooks/use-toast";
+
+// Nouveaux composants narratifs (Phase B - Blueprint NEXUS)
+import { ProjectsHero } from "@/components/projects/ProjectsHero";
+import { InspiringProjectsGrid } from "@/components/projects/InspiringProjectsGrid";
+import { ProposeProjectCTA } from "@/components/projects/ProposeProjectCTA";
+import { ProjectFilters } from "@/components/projects/ProjectFilters";
 import { ProjectDialog } from "@/components/projects/ProjectDialog";
 import { SampleProjectData } from "@/components/projects/SampleProjectData";
-import { useToast } from "@/hooks/use-toast";
-import { ModernCard } from "@/components/ui/modern-card";
-import { logger } from "@/utils/logger";
 
 const Projects = () => {
   const { t } = useTranslation();
   const { projects, loading, createProject, updateProject, deleteProject } = useProjects();
   const { toast } = useToast();
-  const { handleLinkHover } = usePreloader();
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'map' | 'analytics' | 'reports' | 'notifications'>('grid');
 
-  // Optimized filtering with useMemo
+  // Filtrage optimisé
   const filteredProjects = useMemo(() => {
     return projects.filter(project => {
       const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -51,20 +36,15 @@ const Projects = () => {
     });
   }, [projects, searchTerm, selectedRegion, selectedStatus]);
 
-  const handleCreateProject = () => {
-    setEditingProject(null);
-    setDialogOpen(true);
-  };
+  // Régions et statuts uniques pour les filtres
+  const regions = [...new Set(projects.map(p => p.agencies?.region).filter(Boolean))];
+  const statuses = [...new Set(projects.map(p => p.status))];
 
-  const handleEditProject = (project) => {
-    setEditingProject(project);
-    setDialogOpen(true);
-  };
-
-  const handleDeleteProject = async (projectId: string) => {
-    if (window.confirm(t('projects.delete.confirm'))) {
-      await deleteProject(projectId);
-    }
+  const handleViewProject = (project) => {
+    toast({
+      title: project.title,
+      description: `${project.agencies?.country || 'Pays'} - ${project.status}`,
+    });
   };
 
   const handleSaveProject = async (projectData) => {
@@ -74,27 +54,11 @@ const Projects = () => {
       } else {
         await createProject(projectData);
       }
+      setDialogOpen(false);
     } catch (error) {
-      logger.error('Error saving project:', error);
+      console.error('Error saving project:', error);
     }
   };
-
-  const handleViewProject = (project) => {
-    toast({
-      title: project.title,
-      description: `${t('projects.managed.by')} ${project.agencies?.acronym} - ${project.status}`,
-    });
-  };
-
-  // Get unique regions and statuses for filters
-  const regions = [...new Set(projects.map(p => p.agencies?.region).filter(Boolean))];
-  const statuses = [...new Set(projects.map(p => p.status))];
-
-  // Calculate stats
-  const totalProjects = projects.length;
-  const activeProjects = projects.filter(p => p.status === 'En cours').length;
-  const completedProjects = projects.filter(p => p.status === 'Terminé').length;
-  const pendingProjects = projects.filter(p => p.status === 'En attente').length;
 
   if (loading) {
     return (
@@ -107,73 +71,38 @@ const Projects = () => {
   }
 
   return (
-    <AdaptiveInterface
-      title={t('projects.title')}
-      description={t('projects.subtitle')}
-      advancedContent={
-        <AdvancedProjectsControls
-          projects={projects}
-          filteredProjects={filteredProjects}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        
+        {/* Hero narratif - COUCHE 2 : Collaboration */}
+        <ProjectsHero />
+
+        {/* Bouton données démo si vide */}
+        {projects.length === 0 && <SampleProjectData />}
+
+        {/* Filtres simples */}
+        <ProjectFilters
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
           selectedRegion={selectedRegion}
-          selectedStatus={selectedStatus}
           onRegionChange={setSelectedRegion}
+          selectedStatus={selectedStatus}
           onStatusChange={setSelectedStatus}
           regions={regions}
           statuses={statuses}
         />
-      }
-    >
-      <div className="space-y-6">
-        {/* Demo Data Button - only show if no projects */}
-        {projects.length === 0 && <SampleProjectData />}
 
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <ModernStatsCard
-            title={t('projects.stats.total')}
-            value={totalProjects}
-            icon={FolderOpen}
-            variant="gradient"
-            trend={{ value: 12, label: t('dashboard.stats.this.month'), positive: true }}
-          />
-          <ModernStatsCard
-            title={t('projects.stats.active')}
-            value={activeProjects}
-            icon={Clock}
-            variant="gradient"
-            trend={{ value: 8, label: t('dashboard.stats.this.week'), positive: true }}
-          />
-          <ModernStatsCard
-            title={t('projects.stats.completed')}
-            value={completedProjects}
-            icon={CheckCircle}
-            variant="gradient"
-            trend={{ value: 5, label: t('dashboard.stats.this.month'), positive: true }}
-          />
-          <ModernStatsCard
-            title={t('projects.stats.pending')}
-            value={pendingProjects}
-            icon={Users}
-            variant="gradient"
-            trend={{ value: -2, label: t('dashboard.stats.this.week'), positive: false }}
-          />
-        </div>
-
-        {/* Simplified Projects View */}
-        <SimplifiedProjects
-          projects={projects}
-          filteredProjects={filteredProjects}
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          onCreateProject={handleCreateProject}
-          onEditProject={handleEditProject}
-          onDeleteProject={handleDeleteProject}
+        {/* Grille de projets inspirants */}
+        <InspiringProjectsGrid
+          projects={filteredProjects}
           onViewProject={handleViewProject}
+          loading={loading}
         />
 
-        {/* Project Dialog */}
+        {/* CTA pour proposer un projet */}
+        <ProposeProjectCTA />
+
+        {/* Dialog pour édition (gardé pour admin) */}
         <ProjectDialog
           open={dialogOpen}
           onOpenChange={setDialogOpen}
@@ -181,7 +110,7 @@ const Projects = () => {
           onSave={handleSaveProject}
         />
       </div>
-    </AdaptiveInterface>
+    </div>
   );
 };
 

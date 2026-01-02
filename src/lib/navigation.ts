@@ -1,6 +1,11 @@
 /**
- * Centralized Navigation Utilities
- * Single source of truth for all navigation components
+ * Centralized Navigation Utilities - ALIGNED WITH NEXUS BLUEPRINT
+ * ============================================================
+ * Architecture par couches :
+ * - COUCHE 1 : Réseau (visible par défaut)
+ * - COUCHE 2 : Collaboration / Apprendre (sur intention)
+ * - COUCHE 3 : Opérationnel / Expert (isolée, mode avancé)
+ * ============================================================
  */
 
 import { ROUTES, RouteConfig } from '@/config/routes';
@@ -26,16 +31,16 @@ import {
   Eye,
   Bot,
   PenTool,
+  Globe,
+  Handshake,
+  Lightbulb,
+  Plus,
+  Video,
+  Wrench,
 } from 'lucide-react';
 
-// UX Universe types for organized navigation
-export type UniversType = 
-  | 'pilotage'      // Impact & Pilotage
-  | 'projets'       // Projets & Financements
-  | 'territoires'   // Territoires
-  | 'communaute'    // Communauté
-  | 'capacites'     // Capacités & Intelligence
-  | 'admin';        // Administration
+// Types pour la navigation NEXUS
+export type NexusLayer = 'network' | 'collaboration' | 'learning' | 'advanced';
 
 export interface NavigationItem {
   title: string;
@@ -43,7 +48,7 @@ export interface NavigationItem {
   icon: React.ComponentType<{ className?: string }>;
   description?: string;
   badge?: string;
-  univers?: UniversType;
+  layer?: NexusLayer;
 }
 
 export interface NavigationSection {
@@ -51,176 +56,133 @@ export interface NavigationSection {
   labelKey?: string;
   icon?: React.ComponentType<{ className?: string }>;
   color?: string;
+  layer: NexusLayer;
   items: NavigationItem[];
 }
 
-// Universe configuration with colors and icons
-export const UNIVERS_CONFIG: Record<UniversType, { 
+// Configuration des couches NEXUS
+export const NEXUS_LAYERS: Record<NexusLayer, { 
   label: string; 
   labelFr: string;
   icon: React.ComponentType<{ className?: string }>; 
   color: string;
   bgColor: string;
+  visible: boolean; // Visible par défaut
 }> = {
-  pilotage: {
-    label: 'Impact & Pilotage',
-    labelFr: 'Impact & Pilotage',
-    icon: Target,
+  network: {
+    label: 'Network',
+    labelFr: 'Réseau',
+    icon: Globe,
     color: 'text-blue-600',
     bgColor: 'bg-blue-500/10',
+    visible: true,
   },
-  projets: {
-    label: 'Projects & Funding',
-    labelFr: 'Projets & Financements',
-    icon: Rocket,
+  collaboration: {
+    label: 'Collaborate',
+    labelFr: 'Collaborer',
+    icon: Handshake,
     color: 'text-green-600',
     bgColor: 'bg-green-500/10',
+    visible: true,
   },
-  territoires: {
-    label: 'Territories',
-    labelFr: 'Territoires',
-    icon: MapPin,
-    color: 'text-orange-600',
-    bgColor: 'bg-orange-500/10',
-  },
-  communaute: {
-    label: 'Community',
-    labelFr: 'Communauté',
-    icon: Users,
+  learning: {
+    label: 'Learn',
+    labelFr: 'Apprendre',
+    icon: GraduationCap,
     color: 'text-violet-600',
     bgColor: 'bg-violet-500/10',
+    visible: true,
   },
-  capacites: {
-    label: 'Capabilities & Intelligence',
-    labelFr: 'Capacités & Intelligence',
-    icon: Brain,
-    color: 'text-amber-600',
-    bgColor: 'bg-amber-500/10',
-  },
-  admin: {
-    label: 'Administration',
-    labelFr: 'Administration',
-    icon: Shield,
+  advanced: {
+    label: 'Advanced Mode',
+    labelFr: 'Mode avancé',
+    icon: Wrench,
     color: 'text-gray-600',
     bgColor: 'bg-gray-500/10',
+    visible: false, // Caché par défaut
   },
-};
-
-// Map routes to universes
-const ROUTE_UNIVERS_MAP: Record<string, UniversType> = {
-  '/dashboard': 'pilotage',
-  '/indicators': 'pilotage',
-  '/analytics': 'pilotage',
-  '/public-dashboard': 'pilotage',
-  '/projects': 'projets',
-  '/submit': 'projets',
-  '/organizations': 'projets',
-  '/concept-note': 'projets',
-  '/map': 'territoires',
-  '/forum': 'communaute',
-  '/events': 'communaute',
-  '/resources': 'communaute',
-  '/elearning': 'capacites',
-  '/watch': 'capacites',
-  '/assistant': 'capacites',
-  '/coauthoring': 'capacites',
-  '/admin': 'admin',
-  '/admin/users': 'admin',
-  '/admin/forum': 'admin',
-  '/security': 'admin',
-  '/profile': 'pilotage',
-  '/preferences': 'pilotage',
 };
 
 /**
- * Get navigation items for the header
+ * Get navigation items for the header - ALIGNED WITH mainNavigation
  */
 export const getHeaderNavItems = (t?: (key: string) => string): NavigationItem[] => {
   const translate = t || ((key: string) => key);
   
+  // Navigation header simplifiée - pas d'Analytics/Dashboard exposés
   return [
-    { title: translate('nav.home'), url: '/', icon: Home },
-    { title: translate('nav.dashboard'), url: '/dashboard', icon: Home },
-    { title: 'Analytics', url: '/analytics', icon: BarChart3 },
-    { title: translate('nav.projects'), url: '/projects', icon: Rocket },
-    { title: translate('nav.resources'), url: '/resources', icon: BookOpen },
-    { title: translate('nav.forum'), url: '/forum', icon: MessageSquare },
-    { title: translate('nav.submit'), url: '/submit', icon: FileText },
-    { title: translate('nav.events'), url: '/events', icon: Calendar },
+    { title: translate('nav.home'), url: '/', icon: Home, layer: 'network' },
+    { title: 'Réseau', url: '/network', icon: Globe, layer: 'network' },
+    { title: translate('nav.projects'), url: '/projects', icon: Rocket, layer: 'collaboration' },
+    { title: translate('nav.resources'), url: '/resources', icon: BookOpen, layer: 'collaboration' },
+    { title: translate('nav.forum'), url: '/forum', icon: MessageSquare, layer: 'collaboration' },
+    { title: translate('nav.events'), url: '/events', icon: Calendar, layer: 'learning' },
   ];
 };
 
 /**
- * Get navigation items for the sidebar organized by univers
+ * Get navigation items for the sidebar organized by NEXUS layers
  */
-export const getSidebarNavByUnivers = (
+export const getSidebarNavByLayers = (
   userRole?: UserRole, 
   t?: (key: string) => string
 ): NavigationSection[] => {
   const translate = t || ((key: string) => key);
   
   const sections: NavigationSection[] = [
+    // COUCHE 1 : RÉSEAU
     {
-      label: UNIVERS_CONFIG.pilotage.labelFr,
-      icon: UNIVERS_CONFIG.pilotage.icon,
-      color: UNIVERS_CONFIG.pilotage.color,
+      label: NEXUS_LAYERS.network.labelFr,
+      icon: NEXUS_LAYERS.network.icon,
+      color: NEXUS_LAYERS.network.color,
+      layer: 'network',
       items: [
-        { title: translate('nav.dashboard'), url: '/dashboard', icon: Home, description: 'Vue d\'ensemble' },
-        { title: 'Indicateurs', url: '/indicators', icon: TrendingUp, description: 'Données FSU' },
-        { title: 'Analytics', url: '/analytics', icon: BarChart3, description: 'Analyses détaillées' },
+        { title: 'Accueil', url: '/', icon: Home, description: 'Vue d\'ensemble' },
+        { title: 'Vue Réseau', url: '/network', icon: Globe, description: 'Coordination SUTEL' },
+        { title: 'Pays membres', url: '/members', icon: Users, description: 'Annuaire du réseau' },
+        { title: 'Carte', url: '/map', icon: MapPin, description: 'Visualisation géographique' },
       ],
     },
+    // COUCHE 2 : COLLABORATION
     {
-      label: UNIVERS_CONFIG.projets.labelFr,
-      icon: UNIVERS_CONFIG.projets.icon,
-      color: UNIVERS_CONFIG.projets.color,
+      label: NEXUS_LAYERS.collaboration.labelFr,
+      icon: NEXUS_LAYERS.collaboration.icon,
+      color: NEXUS_LAYERS.collaboration.color,
+      layer: 'collaboration',
       items: [
-        { title: translate('nav.projects'), url: '/projects', icon: Rocket, description: 'Initiatives FSU' },
-        { title: 'Soumettre', url: '/submit', icon: FileText, description: 'Envoi de données' },
-        { title: translate('nav.organizations'), url: '/organizations', icon: Building2, description: 'Répertoire FSU' },
-      ],
-    },
-    {
-      label: UNIVERS_CONFIG.territoires.labelFr,
-      icon: UNIVERS_CONFIG.territoires.icon,
-      color: UNIVERS_CONFIG.territoires.color,
-      items: [
-        { title: 'Carte Interactive', url: '/map', icon: MapPin, description: 'Projets par zone' },
-      ],
-    },
-    {
-      label: UNIVERS_CONFIG.communaute.labelFr,
-      icon: UNIVERS_CONFIG.communaute.icon,
-      color: UNIVERS_CONFIG.communaute.color,
-      items: [
+        { title: translate('nav.projects'), url: '/projects', icon: Rocket, description: 'Initiatives inspirantes' },
+        { title: 'Bonnes pratiques', url: '/practices', icon: Lightbulb, description: 'Partage d\'expériences' },
+        { title: 'Bibliothèque', url: '/resources', icon: BookOpen, description: 'Documents & ressources' },
         { title: translate('nav.forum'), url: '/forum', icon: MessageSquare, description: 'Discussions' },
-        { title: translate('nav.events'), url: '/events', icon: Calendar, description: 'Agenda collaboratif' },
-        { title: 'Ressources', url: '/resources', icon: BookOpen, description: 'Guides & documents' },
+        { title: 'Proposer', url: '/submit', icon: Plus, description: 'Partager une initiative' },
       ],
     },
+    // COUCHE 2 : APPRENDRE
     {
-      label: UNIVERS_CONFIG.capacites.labelFr,
-      icon: UNIVERS_CONFIG.capacites.icon,
-      color: UNIVERS_CONFIG.capacites.color,
+      label: NEXUS_LAYERS.learning.labelFr,
+      icon: NEXUS_LAYERS.learning.icon,
+      color: NEXUS_LAYERS.learning.color,
+      layer: 'learning',
       items: [
         { title: 'E-Learning', url: '/elearning', icon: GraduationCap, description: 'Formations' },
-        { title: 'Veille Stratégique', url: '/watch', icon: Eye, description: 'Actualités & opportunités' },
-        { title: 'Assistant SUTA', url: '/assistant', icon: Bot, description: 'IA multilingue' },
-        { title: 'Co-rédaction', url: '/coauthoring', icon: PenTool, description: 'Édition collaborative' },
+        { title: translate('nav.events'), url: '/events', icon: Calendar, description: 'Agenda collaboratif' },
+        { title: 'Webinaires', url: '/webinars', icon: Video, description: 'Sessions en direct' },
       ],
     },
   ];
 
-  // Add admin section for admin users
-  if (userRole && ['super_admin', 'admin_pays', 'editeur'].includes(userRole)) {
+  // COUCHE 3 : MODE AVANCÉ (admin uniquement)
+  if (userRole && ['super_admin', 'admin_pays'].includes(userRole)) {
     sections.push({
-      label: UNIVERS_CONFIG.admin.labelFr,
-      icon: UNIVERS_CONFIG.admin.icon,
-      color: UNIVERS_CONFIG.admin.color,
+      label: NEXUS_LAYERS.advanced.labelFr,
+      icon: NEXUS_LAYERS.advanced.icon,
+      color: NEXUS_LAYERS.advanced.color,
+      layer: 'advanced',
       items: [
-        { title: 'Administration', url: '/admin', icon: BarChart3, description: 'Gestion système' },
-        { title: 'Utilisateurs', url: '/admin/users', icon: Users, description: 'Gestion comptes' },
-        { title: 'Sécurité', url: '/security', icon: Shield, description: 'Paramètres sécurité' },
+        { title: 'Analytics', url: '/analytics', icon: BarChart3, description: 'Analyses détaillées' },
+        { title: 'Indicateurs', url: '/indicators', icon: TrendingUp, description: 'Données FSU' },
+        { title: 'Organisations', url: '/organizations', icon: Building2, description: 'Répertoire FSU' },
+        { title: 'Administration', url: '/admin', icon: Settings, description: 'Gestion système' },
       ],
     });
   }
@@ -229,25 +191,69 @@ export const getSidebarNavByUnivers = (
 };
 
 /**
- * Get navigation items for mobile bottom nav
+ * Get navigation items for mobile bottom nav - SIMPLIFIED
  */
 export const getMobileNavItems = (userRole?: UserRole): NavigationItem[] => {
+  // Navigation mobile : Réseau, Projets, Bibliothèque, Profil
+  // PAS d'Analytics/Indicateurs
   return [
-    { title: 'Accueil', url: '/dashboard', icon: Home },
-    { title: 'Analytics', url: '/analytics', icon: BarChart3 },
-    { title: 'Orgs', url: '/organizations', icon: Building2 },
-    { title: 'Données', url: '/indicators', icon: TrendingUp },
-    { title: 'Ressources', url: '/resources', icon: BookOpen },
-    { title: 'Profil', url: '/profile', icon: User },
+    { title: 'Accueil', url: '/', icon: Home, layer: 'network' },
+    { title: 'Réseau', url: '/network', icon: Globe, layer: 'network' },
+    { title: 'Projets', url: '/projects', icon: Rocket, layer: 'collaboration' },
+    { title: 'Bibliothèque', url: '/resources', icon: BookOpen, layer: 'collaboration' },
+    { title: 'Profil', url: '/profile', icon: User, layer: 'network' },
   ];
 };
 
 /**
- * Get the univers for a given path
+ * Get advanced mode items (for admin dropdown/page)
  */
-export const getUniversForPath = (path: string): UniversType | undefined => {
-  return ROUTE_UNIVERS_MAP[path];
+export const getAdvancedModeItems = (): NavigationItem[] => {
+  return [
+    { title: 'Analytics', url: '/analytics', icon: BarChart3, description: 'Analyses détaillées' },
+    { title: 'Indicateurs', url: '/indicators', icon: TrendingUp, description: 'Données FSU' },
+    { title: 'Organisations', url: '/organizations', icon: Building2, description: 'Répertoire FSU' },
+    { title: 'Administration', url: '/admin', icon: Settings, description: 'Gestion système' },
+    { title: 'Sécurité', url: '/security', icon: Shield, description: 'Paramètres sécurité' },
+  ];
 };
+
+/**
+ * Get the layer for a given path
+ */
+export const getLayerForPath = (path: string): NexusLayer | undefined => {
+  const layerMap: Record<string, NexusLayer> = {
+    '/': 'network',
+    '/network': 'network',
+    '/members': 'network',
+    '/map': 'network',
+    '/projects': 'collaboration',
+    '/practices': 'collaboration',
+    '/resources': 'collaboration',
+    '/forum': 'collaboration',
+    '/submit': 'collaboration',
+    '/elearning': 'learning',
+    '/events': 'learning',
+    '/webinars': 'learning',
+    '/analytics': 'advanced',
+    '/indicators': 'advanced',
+    '/organizations': 'advanced',
+    '/admin': 'advanced',
+    '/security': 'advanced',
+  };
+  
+  return layerMap[path];
+};
+
+// ============================================================
+// LEGACY EXPORTS (pour compatibilité)
+// ============================================================
+
+// Re-export with old names for backward compatibility
+export type UniversType = NexusLayer;
+export const UNIVERS_CONFIG = NEXUS_LAYERS;
+export const getSidebarNavByUnivers = getSidebarNavByLayers;
+export const getUniversForPath = getLayerForPath;
 
 /**
  * Get flat list of all sidebar routes
@@ -260,6 +266,6 @@ export const getFlatSidebarRoutes = (): NavigationItem[] => {
       url: route.path,
       icon: route.icon || Home,
       description: route.description,
-      univers: ROUTE_UNIVERS_MAP[route.path],
+      layer: getLayerForPath(route.path),
     }));
 };
