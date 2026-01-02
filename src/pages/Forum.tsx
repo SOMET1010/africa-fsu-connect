@@ -159,12 +159,6 @@ const Forum = () => {
     }
   });
 
-  const totalStats = {
-    posts: enhancedPosts.length,
-    members: enhancedCategories.reduce((sum, cat) => sum + cat.memberCount, 0),
-    activeUsers: 47
-  };
-
   return (
     <AnimatedPage className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 space-y-8">
@@ -172,9 +166,6 @@ const Forum = () => {
         <ModernForumHeader
           onNewPost={() => setIsNewPostOpen(true)}
           onSearch={handleSearch}
-          totalPosts={totalStats.posts}
-          totalMembers={totalStats.members}
-          activeUsers={totalStats.activeUsers}
           isAdmin={false}
         />
 

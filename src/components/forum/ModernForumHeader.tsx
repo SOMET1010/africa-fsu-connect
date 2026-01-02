@@ -1,28 +1,19 @@
 
 import { useState } from "react";
-import { Search, Plus, Filter, TrendingUp, Users, MessageSquare, Settings } from "lucide-react";
+import { Plus, Filter, TrendingUp, Settings } from "lucide-react";
 import { ModernButton } from "@/components/ui/modern-button";
 import { GlassCard } from "@/components/ui/glass-card";
-import { AnimatedCounter } from "@/components/ui/animated-counter";
-import { Badge } from "@/components/ui/badge";
 import { OptimizedSearchBar } from "@/components/shared/OptimizedSearchBar";
-import { cn } from "@/lib/utils";
 
 interface ModernForumHeaderProps {
   onNewPost: () => void;
   onSearch: (query: string, filters: Record<string, string>) => void;
-  totalPosts: number;
-  totalMembers: number;
-  activeUsers: number;
   isAdmin?: boolean;
 }
 
 export function ModernForumHeader({
   onNewPost,
   onSearch,
-  totalPosts,
-  totalMembers,
-  activeUsers,
   isAdmin = false
 }: ModernForumHeaderProps) {
   const [searchFilters, setSearchFilters] = useState({
@@ -30,54 +21,6 @@ export function ModernForumHeader({
     author: "",
     dateRange: ""
   });
-
-  const filterOptions = [
-    {
-      id: "category",
-      label: "Catégorie",
-      options: [
-        { value: "cmdt25", label: "CMDT-25" },
-        { value: "financement", label: "Financement" },
-        { value: "regulation", label: "Régulation" },
-        { value: "innovation", label: "Innovation" },
-        { value: "cooperation", label: "Coopération" }
-      ]
-    },
-    {
-      id: "dateRange",
-      label: "Période",
-      options: [
-        { value: "today", label: "Aujourd'hui" },
-        { value: "week", label: "Cette semaine" },
-        { value: "month", label: "Ce mois" },
-        { value: "all", label: "Toute période" }
-      ]
-    }
-  ];
-
-  const stats = [
-    {
-      label: "Discussions",
-      value: totalPosts,
-      icon: MessageSquare,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10"
-    },
-    {
-      label: "Membres",
-      value: totalMembers,
-      icon: Users,
-      color: "text-green-500",
-      bgColor: "bg-green-500/10"
-    },
-    {
-      label: "En ligne",
-      value: activeUsers,
-      icon: TrendingUp,
-      color: "text-orange-500",
-      bgColor: "bg-orange-500/10"
-    }
-  ];
 
   return (
     <div className="space-y-6">
@@ -112,37 +55,6 @@ export function ModernForumHeader({
               </div>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {stats.map((stat, index) => (
-                <GlassCard key={stat.label} variant="subtle" className="p-4">
-                  <div className="flex items-center gap-4">
-                    <div className={cn(
-                      "w-12 h-12 rounded-xl flex items-center justify-center",
-                      stat.bgColor
-                    )}>
-                      <stat.icon className={cn("h-6 w-6", stat.color)} />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <AnimatedCounter 
-                          value={stat.value} 
-                          className="text-2xl font-bold"
-                          duration={1000 + index * 200}
-                        />
-                        {stat.label === "En ligne" && (
-                          <Badge variant="secondary" className="bg-green-500/20 text-green-700 border-green-200/50 animate-pulse">
-                            <div className="w-2 h-2 bg-green-500 rounded-full mr-1" />
-                            Live
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-sm text-muted-foreground">{stat.label}</p>
-                    </div>
-                  </div>
-                </GlassCard>
-              ))}
-            </div>
           </div>
         </GlassCard>
       </div>
