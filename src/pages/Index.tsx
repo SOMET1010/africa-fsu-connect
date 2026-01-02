@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Globe, Sparkles } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { RegionCards } from "@/components/network/RegionCards";
-import { ActivityTimeline } from "@/components/network/ActivityTimeline";
+import { NexusActivityFeed } from "@/components/network/NexusActivityFeed";
 import { NexusHero } from "@/components/shared/NexusHero";
 import { NexusNetworkPattern } from "@/components/shared/NexusNetworkPattern";
 
@@ -14,27 +14,8 @@ const Index = () => {
       {/* Hero Section - NEXUS Africa Network (Infrastructure Vivante) */}
       <NexusHero variant="landing" fullscreen parallax />
 
-      {/* Recent Activity Section - Style NEXUS */}
-      <section className="py-20 relative z-10 bg-[hsl(var(--nx-section-cool))]">
-        <PageContainer>
-          <div className="text-center mb-12">
-            <Badge className="mb-4 px-4 py-2 bg-[hsl(var(--nx-night))]/10 text-[hsl(var(--nx-brand-900))] border-[hsl(var(--nx-brand-500))]/20">
-              <Globe className="w-4 h-4 mr-2" />
-              Activité récente
-            </Badge>
-            <h2 className="text-3xl font-bold text-[hsl(var(--nx-text-900))] mb-4">
-              Ce qui se passe dans le réseau
-            </h2>
-            <p className="text-[hsl(var(--nx-text-500))] max-w-2xl mx-auto">
-              Les dernières contributions et échanges entre pays membres
-            </p>
-          </div>
-          
-          <div className="max-w-3xl mx-auto">
-            <ActivityTimeline maxItems={4} />
-          </div>
-        </PageContainer>
-      </section>
+      {/* Recent Activity Section - Nexus Stream (Dark Mode Continuity) */}
+      <NexusActivityFeed />
 
       {/* Regions Section - Style NEXUS avec pattern */}
       <section className="py-20 bg-[hsl(var(--nx-night))] relative z-10 overflow-hidden">
