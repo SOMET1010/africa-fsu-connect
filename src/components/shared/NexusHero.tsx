@@ -161,7 +161,7 @@ export function NexusHero({
       >
         <img
           src={nexusHeroImage}
-          alt="Carte de l'Afrique connectée"
+          alt={t('home.hero.imageAlt')}
           className="w-full h-[130%] object-cover object-center"
         />
       </motion.div>
@@ -259,7 +259,7 @@ export function NexusHero({
               )}
               style={{ textShadow: '0 2px 20px rgba(0,0,0,0.5)' }}
             >
-              {title || content.title}
+              {title || t('network.hero.title')}
             </motion.h1>
             
             {/* Title - Line 2 (with "Service Universel" gold accent + glow) */}
@@ -297,7 +297,7 @@ export function NexusHero({
           </div>
 
           {/* Description */}
-          {(description || content.description) && !isMinimal && (
+          {!isMinimal && (
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -307,7 +307,7 @@ export function NexusHero({
                 isLanding ? "text-lg md:text-xl" : "text-base md:text-lg"
               )}
             >
-              {description || content.description}
+              {description || t('home.hero.description')}
             </motion.p>
           )}
 
