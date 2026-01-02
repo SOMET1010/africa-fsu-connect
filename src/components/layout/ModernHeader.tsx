@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { GlassCard } from "@/components/ui/glass-card";
 import { NexusLogo } from "@/components/shared/NexusLogo";
+import { NexusNetworkPattern } from "@/components/shared/NexusNetworkPattern";
 import { 
   Menu, 
   X, 
@@ -94,12 +95,14 @@ const ModernHeader = () => {
   return (
     <header 
       className={cn(
-        "sticky top-0 w-full transition-all duration-300 z-header",
+        "sticky top-0 w-full transition-all duration-300 z-header relative overflow-hidden",
         scrolled 
-          ? "bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-lg shadow-black/5" 
-          : "bg-background/60 backdrop-blur-md border-b border-border/30"
+          ? "bg-[hsl(var(--nx-night))]/95 backdrop-blur-xl border-b border-[hsl(var(--nx-gold))]/20 shadow-lg shadow-[hsl(var(--nx-gold))]/5" 
+          : "bg-[hsl(var(--nx-night))]/80 backdrop-blur-md border-b border-[hsl(var(--nx-gold))]/10"
       )}
     >
+      {/* Pattern réseau subtil */}
+      <NexusNetworkPattern variant="subtle" className="opacity-[0.03]" />
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Premium Logo with sophisticated design - NEXUS branding */}
@@ -125,20 +128,20 @@ const ModernHeader = () => {
                         className={cn(
                           "flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 relative group overflow-hidden",
                           active
-                            ? "bg-gradient-to-r from-primary/20 to-primary/10 text-primary shadow-lg shadow-primary/10"
-                            : "text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-muted/50 hover:to-muted/30",
-                          item.highlight && !active && "font-semibold text-foreground"
+                            ? "bg-gradient-to-r from-[hsl(var(--nx-gold))]/20 to-[hsl(var(--nx-gold))]/10 text-[hsl(var(--nx-gold))] shadow-lg shadow-[hsl(var(--nx-gold))]/10"
+                            : "text-white/70 hover:text-[hsl(var(--nx-gold))] hover:bg-white/5",
+                          item.highlight && !active && "font-semibold text-white"
                         )}
                       >
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--nx-gold))]/0 via-[hsl(var(--nx-gold))]/5 to-[hsl(var(--nx-gold))]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         <Icon className={cn(
                           "h-4 w-4 mr-2 transition-all duration-300",
-                          active ? "text-primary scale-110" : "group-hover:scale-105"
+                          active ? "text-[hsl(var(--nx-gold))] scale-110" : "group-hover:scale-105"
                         )} />
                         <span className="relative z-10">{item.label}</span>
                         <ChevronDown className="h-3 w-3 ml-1 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                         {active && (
-                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full animate-scale-in" />
+                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[hsl(var(--nx-gold))] rounded-full animate-scale-in" />
                         )}
                       </button>
                     </DropdownMenuTrigger>
@@ -191,20 +194,18 @@ const ModernHeader = () => {
                   className={cn(
                     "flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 relative group overflow-hidden",
                     active
-                      ? "bg-gradient-to-r from-primary/20 to-primary/10 text-primary shadow-lg shadow-primary/10"
-                      : item.id === 'home' 
-                        ? "text-muted-foreground/80 hover:text-foreground hover:bg-gradient-to-r hover:from-muted/50 hover:to-muted/30"
-                        : "text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-muted/50 hover:to-muted/30"
+                      ? "bg-gradient-to-r from-[hsl(var(--nx-gold))]/20 to-[hsl(var(--nx-gold))]/10 text-[hsl(var(--nx-gold))] shadow-lg shadow-[hsl(var(--nx-gold))]/10"
+                      : "text-white/70 hover:text-[hsl(var(--nx-gold))] hover:bg-white/5"
                   )}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--nx-gold))]/0 via-[hsl(var(--nx-gold))]/5 to-[hsl(var(--nx-gold))]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <Icon className={cn(
                     "h-4 w-4 mr-2 transition-all duration-300",
-                    active ? "text-primary scale-110" : "group-hover:scale-105"
+                    active ? "text-[hsl(var(--nx-gold))] scale-110" : "group-hover:scale-105"
                   )} />
                   <span className="relative z-10">{item.label}</span>
                   {active && (
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full animate-scale-in" />
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[hsl(var(--nx-gold))] rounded-full animate-scale-in" />
                   )}
                 </Link>
               );
