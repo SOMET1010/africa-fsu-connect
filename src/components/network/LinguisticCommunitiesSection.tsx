@@ -82,7 +82,7 @@ export const LinguisticCommunitiesSection = () => {
             <Link
               key={community.code}
               to={`/members?language=${community.code}`}
-              className="group rounded-[var(--nx-radius-md)] border border-[hsl(var(--nx-border))] bg-[hsl(var(--nx-surface))] p-4 hover:border-[hsl(var(--nx-brand-300))] hover:shadow-[var(--nx-shadow-sm)] transition-all duration-[var(--nx-dur-2)]"
+              className="group rounded-[var(--nx-radius-md)] border border-[hsl(var(--nx-border))] bg-[hsl(var(--nx-surface))] p-4 hover:border-[hsl(var(--nx-brand-500))] hover:shadow-[var(--nx-shadow-sm)] transition-all duration-[var(--nx-dur-2)]"
             >
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-2xl">{community.flag}</span>

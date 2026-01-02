@@ -14,7 +14,7 @@ export const UATCoordinationSection = () => {
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Icône */}
             <div className="flex-shrink-0">
-              <div className="w-16 h-16 rounded-full bg-[hsl(var(--nx-brand-100))] flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-[hsl(var(--nx-brand-900)/0.1)] flex items-center justify-center">
                 <Building2 className="w-8 h-8 text-[hsl(var(--nx-brand-700))]" />
               </div>
             </div>
@@ -24,7 +24,7 @@ export const UATCoordinationSection = () => {
               <div className="space-y-2">
                 <Badge 
                   variant="outline" 
-                  className="bg-[hsl(var(--nx-coop-50))] text-[hsl(var(--nx-coop-700))] border-[hsl(var(--nx-coop-200))]"
+                  className="bg-[hsl(var(--nx-coop-600)/0.1)] text-[hsl(var(--nx-coop-600))] border-[hsl(var(--nx-coop-600)/0.3)]"
                 >
                   {currentLanguage === 'en' ? 'Network Secretariat' : 'Secrétariat du Réseau'}
                 </Badge>
@@ -42,7 +42,7 @@ export const UATCoordinationSection = () => {
               
               {/* Langues de travail */}
               <div className="flex items-center gap-3 pt-2">
-                <Globe className="w-4 h-4 text-[hsl(var(--nx-text-400))]" />
+                <Globe className="w-4 h-4 text-[hsl(var(--nx-text-500))]" />
                 <span className="text-sm text-[hsl(var(--nx-text-500))]">
                   {currentLanguage === 'en' ? 'Working languages:' : 'Langues de travail :'}
                 </span>
