@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import { useAfricaNews, type NewsItem } from "@/hooks/useAfricaNews";
-
+import { useTranslation } from "react-i18next";
 interface ActivityItem {
   id: number;
   country: string;
@@ -145,6 +145,7 @@ const itemVariants = {
 };
 
 export function NexusActivityFeed() {
+  const { t } = useTranslation();
   const { data, isLoading, isError } = useAfricaNews();
   
   const activities = data?.news 
@@ -165,7 +166,7 @@ export function NexusActivityFeed() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Badge className="px-4 py-2 bg-white/10 text-white/80 border border-white/20">
               <Activity className="w-3 h-3 mr-2" />
-              Flux en temps réel
+              {t('feed.badge')}
             </Badge>
             {!isLoading && !isError && data?.news && (
               <Badge className="px-3 py-2 bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse">
@@ -175,11 +176,11 @@ export function NexusActivityFeed() {
             )}
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            L'intelligence collective{' '}
-            <span className="text-[hsl(var(--nx-gold))]">en action</span>
+            {t('feed.title')}{' '}
+            <span className="text-[hsl(var(--nx-gold))]">{t('feed.title.highlight')}</span>
           </h2>
           <p className="text-white/60 max-w-2xl mx-auto">
-            Suivez les dernières contributions, projets et collaborations entre les 54 pays membres du réseau NEXUS.
+            {t('feed.subtitle')}
           </p>
         </div>
 
@@ -281,7 +282,7 @@ export function NexusActivityFeed() {
           {/* Citations / Sources */}
           {data?.citations && data.citations.length > 0 && (
             <div className="mt-8 text-center text-white/40 text-xs">
-              Sources:{" "}
+              {t('feed.sources')}:{" "}
               {data.citations.slice(0, 3).map((url, i) => (
                 <a 
                   key={i} 
@@ -304,7 +305,7 @@ export function NexusActivityFeed() {
               className="border-white/20 text-white/70 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all duration-300"
             >
               <Link to="/activity" className="flex items-center gap-2">
-                Voir tout le flux
+                {t('feed.viewAll')}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>

@@ -3,11 +3,12 @@ import { ArrowRight, Map, Signal, Users, ShieldCheck, Zap, Globe, Activity } fro
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useRealRegionalStats } from "@/hooks/useRealRegionalStats";
+import { useTranslation } from "react-i18next";
 
 const regionsConfig = [
   {
     id: "west",
-    name: "Afrique de l'Ouest",
+    nameKey: "regions.west.name",
     slug: "Afrique de l'Ouest",
     dataKey: "CEDEAO",
     color: "text-amber-400",
@@ -16,11 +17,11 @@ const regionsConfig = [
     borderGlow: "group-hover:border-amber-400/30",
     shadowGlow: "group-hover:shadow-amber-400/10",
     icon: Signal,
-    desc: "CEDEAO & Mauritanie"
+    descKey: "regions.west.desc"
   },
   {
     id: "central",
-    name: "Afrique Centrale",
+    nameKey: "regions.central.name",
     slug: "Afrique Centrale",
     dataKey: "CEMAC",
     color: "text-emerald-400",
@@ -29,11 +30,11 @@ const regionsConfig = [
     borderGlow: "group-hover:border-emerald-400/30",
     shadowGlow: "group-hover:shadow-emerald-400/10",
     icon: ShieldCheck,
-    desc: "CEEAC Cluster"
+    descKey: "regions.central.desc"
   },
   {
     id: "east",
-    name: "Afrique de l'Est",
+    nameKey: "regions.east.name",
     slug: "Afrique de l'Est",
     dataKey: "EAC",
     color: "text-cyan-400",
@@ -42,11 +43,11 @@ const regionsConfig = [
     borderGlow: "group-hover:border-cyan-400/30",
     shadowGlow: "group-hover:shadow-cyan-400/10",
     icon: Zap,
-    desc: "EAC Hub Digital"
+    descKey: "regions.east.desc"
   },
   {
     id: "north",
-    name: "Afrique du Nord",
+    nameKey: "regions.north.name",
     slug: "Afrique du Nord",
     dataKey: "COMESA",
     color: "text-blue-400",
@@ -55,11 +56,11 @@ const regionsConfig = [
     borderGlow: "group-hover:border-blue-400/30",
     shadowGlow: "group-hover:shadow-blue-400/10",
     icon: Map,
-    desc: "UMA & Égypte"
+    descKey: "regions.north.desc"
   },
   {
     id: "south",
-    name: "Afrique Australe",
+    nameKey: "regions.south.name",
     slug: "Afrique Australe",
     dataKey: "SADC",
     color: "text-purple-400",
@@ -68,7 +69,7 @@ const regionsConfig = [
     borderGlow: "group-hover:border-purple-400/30",
     shadowGlow: "group-hover:shadow-purple-400/10",
     icon: Users,
-    desc: "SADC Zone"
+    descKey: "regions.south.desc"
   }
 ];
 
@@ -99,6 +100,7 @@ const cardVariants = {
 };
 
 export function NexusRegions() {
+  const { t } = useTranslation();
   const { data: stats, isLoading } = useRealRegionalStats();
 
   const getRegionStats = (dataKey: string) => {
@@ -138,15 +140,14 @@ export function NexusRegions() {
                 <Globe className="w-5 h-5 text-primary" />
               </div>
               <span className="text-sm font-medium text-primary uppercase tracking-wider">
-                Infrastructure
+                {t('regions.badge')}
               </span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Maillage Continental
+              {t('regions.title')}
             </h2>
             <p className="text-white/60 max-w-xl text-base md:text-lg">
-              Une infrastructure de coopération divisée en 5 hubs régionaux stratégiques 
-              pour une couverture optimale du continent.
+              {t('regions.subtitle')}
             </p>
           </div>
 
@@ -158,7 +159,7 @@ export function NexusRegions() {
           >
             <Map className="w-4 h-4 text-white/70 group-hover:text-primary transition-colors" />
             <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">
-              Carte interactive
+              {t('regions.cta.map')}
             </span>
             <ArrowRight className="w-4 h-4 text-white/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
           </Link>
@@ -225,7 +226,7 @@ export function NexusRegions() {
                           )}
                         </div>
                         <div className="text-xs text-white/40 uppercase tracking-wide">
-                          Pays
+                          {t('regions.label.countries')}
                         </div>
                       </div>
                     </div>
@@ -233,10 +234,10 @@ export function NexusRegions() {
                     {/* Content */}
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-white/90 transition-colors">
-                        {region.name}
+                        {t(region.nameKey)}
                       </h3>
                       <p className="text-sm text-white/50">
-                        {region.desc}
+                        {t(region.descKey)}
                       </p>
                     </div>
 
@@ -248,7 +249,7 @@ export function NexusRegions() {
                           {isLoading ? (
                             <span className="inline-block w-12 h-4 rounded bg-white/10 animate-pulse" />
                           ) : (
-                            <>{regionStats.projects} projets</>
+                            <>{regionStats.projects} {t('regions.label.projects')}</>
                           )}
                         </span>
                       </div>
@@ -276,7 +277,7 @@ export function NexusRegions() {
             to="/network/members"
             className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-primary transition-colors"
           >
-            Explorer toutes les régions
+            {t('regions.explore.all')}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

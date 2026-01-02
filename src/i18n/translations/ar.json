@@ -1,11 +1,11 @@
 {
-  "nav.dashboard": "عرض الشبكة",
+  "nav.dashboard": "لوحة القيادة",
   "nav.organizations": "الدول الأعضاء",
   "nav.projects": "المشاريع المشتركة",
   "nav.resources": "المكتبة",
   "nav.events": "الفعاليات",
   "nav.forum": "المجتمع",
-  "nav.map": "شبكة SUTEL",
+  "nav.map": "الخريطة التفاعلية",
   "nav.security": "الأمان",
   "nav.admin": "الإدارة",
   "nav.profile": "الملف الشخصي",
@@ -17,40 +17,67 @@
   "nav.network": "الشبكة",
   "nav.collaborate": "التعاون",
   "nav.learn": "التعلم",
-  "nav.about": "حول",
+  "nav.about": "من نحن",
   "nav.my.country": "بلدي",
 
-  "network.title": "عرض شبكة SUTEL",
-  "network.subtitle": "التنسيق الجماعي لصناديق الخدمة الشاملة",
+  "network.title": "شبكة SUTEL",
+  "network.subtitle": "التنسيق الموحد لصناديق الخدمة الشاملة",
   "network.summary": "شبكتنا تتقدم معاً",
-  "network.kpi.members": "الدول الأعضاء النشطة",
+  "network.kpi.members": "الدول الأعضاء",
   "network.kpi.shared.projects": "المشاريع المشتركة",
-  "network.kpi.beneficiaries": "السكان المستفيدون",
+  "network.kpi.beneficiaries": "المستفيدون",
   "network.kpi.best.practices": "أفضل الممارسات",
   "network.badge": "شبكة SUTEL",
   "network.hero.title": "54 دولة تبني معاً",
   "network.hero.subtitle": "مستقبل الخدمة الشاملة",
-  "network.cta.members": "عرض الدول الأعضاء",
+  "network.cta.members": "استعراض الدول",
   "network.cta.projects": "استكشاف المشاريع",
 
+  "feed.badge": "بث مباشر",
+  "feed.title": "الذكاء الجماعي",
+  "feed.title.highlight": "في العمل",
+  "feed.subtitle": "تابع أحدث المساهمات والمشاريع والتعاون بين الدول الـ 54 الأعضاء.",
+  "feed.viewAll": "عرض كل الأنشطة",
+  "feed.time.recent": "حديث",
+  "feed.time.soon": "قريباً",
+  "feed.sources": "المصادر",
+
+  "regions.badge": "البنية التحتية",
+  "regions.title": "الشبكة القارية",
+  "regions.subtitle": "بنية تحتية للتعاون مقسمة إلى 5 مراكز إقليمية استراتيجية.",
+  "regions.cta.map": "الخريطة التفاعلية",
+  "regions.label.countries": "دولة",
+  "regions.label.projects": "مشروع",
+  "regions.explore.all": "استكشاف جميع المناطق",
+  "regions.west.name": "غرب أفريقيا",
+  "regions.west.desc": "المجموعة الاقتصادية (CEDEAO)",
+  "regions.central.name": "وسط أفريقيا",
+  "regions.central.desc": "تجمع (CEEAC)",
+  "regions.east.name": "شرق أفريقيا",
+  "regions.east.desc": "المركز الرقمي (EAC)",
+  "regions.north.name": "شمال أفريقيا",
+  "regions.north.desc": "اتحاد المغرب العربي ومصر",
+  "regions.south.name": "أفريقيا الجنوبية",
+  "regions.south.desc": "منطقة (SADC)",
+
   "members.badge": "الدليل",
-  "members.title": "الدول الأعضاء في الشبكة",
-  "members.subtitle": "54 دولة تبني معاً مستقبل الخدمة الشاملة في أفريقيا",
+  "members.title": "الدول الأعضاء",
+  "members.subtitle": "54 دولة توحد جهودها لتسريع الشمول الرقمي",
   "members.search.placeholder": "البحث عن دولة...",
   "members.filter.region": "المنطقة",
-  "members.filter.region.all": "جميع المناطق",
+  "members.filter.region.all": "كل المناطق",
   "members.filter.status": "الحالة",
-  "members.filter.status.all": "جميع الحالات",
+  "members.filter.status.all": "كل الحالات",
   "members.filter.status.active": "نشط",
   "members.filter.status.member": "عضو",
-  "members.filter.status.joining": "في طور الانضمام",
+  "members.filter.status.joining": "قيد الانضمام",
   "members.results": "دول",
-  "members.empty": "لا توجد دول تطابق معاييرك",
+  "members.empty": "لا توجد نتائج مطابقة",
 
-  "common.back": "رجوع",
+  "common.back": "عودة",
   "common.loading": "جار التحميل...",
-  "common.error": "خطأ",
-  "common.success": "نجاح",
+  "common.error": "حدث خطأ",
+  "common.success": "تم بنجاح",
   "common.cancel": "إلغاء",
   "common.save": "حفظ",
   "common.delete": "حذف",
@@ -63,71 +90,71 @@
   "common.countries": "دول",
   "common.projects": "مشاريع",
 
-  "dashboard.welcome.default": "مرحباً، متعاون! 👋",
+  "dashboard.welcome.default": "مرحباً بك 👋",
   "dashboard.title": "منصة FSU",
-  "dashboard.stats.active.projects": "المشاريع النشطة",
+  "dashboard.stats.active.projects": "مشاريع نشطة",
   "dashboard.stats.collaborators": "المتعاونون",
   "dashboard.stats.documents": "الوثائق",
   "dashboard.stats.events": "الفعاليات",
-  "dashboard.quick.actions": "إجراءات سريعة",
+  "dashboard.quick.actions": "وصول سريع",
   "dashboard.activity.recent": "النشاط الأخير",
 
   "auth.login": "تسجيل الدخول",
-  "auth.logout.success": "تم تسجيل الخروج بنجاح",
+  "auth.logout.success": "تم الخروج بنجاح",
   "auth.logout.goodbye": "إلى اللقاء!",
-  "auth.logout.error": "تعذر تسجيل الخروج",
+  "auth.logout.error": "فشل تسجيل الخروج",
 
-  "map.title": "خريطة شبكة SUTEL",
-  "map.subtitle": "54 دولة عضو - 127 مشروع مشترك",
-  "map.search.placeholder": "البحث عن دولة أو مشروع...",
+  "map.title": "خريطة SUTEL",
+  "map.subtitle": "54 دولة - 127 مشروع مشترك",
+  "map.search.placeholder": "بحث جغرافي...",
   "map.kpi.members": "الدول الأعضاء",
   "map.kpi.projects": "المشاريع المشتركة",
   "map.filter.region": "المنطقة",
   "map.filter.region.all": "جميع المناطق",
   "map.filter.activity": "النشاط",
   "map.filter.activity.all": "جميع الأنشطة",
-  "map.mode.participation": "المشاركة",
-  "map.mode.projects": "المشاريع",
-  "map.mode.exchanges": "التبادلات",
+  "map.mode.participation": "مشاركة",
+  "map.mode.projects": "مشاريع",
+  "map.mode.exchanges": "تبادلات",
 
-  "resources.title": "مكتبة الموارد",
-  "resources.subtitle": "أدلة وتقارير وأفضل الممارسات",
-  "resources.no.docs": "لم يتم العثور على وثائق",
-  "resources.add.document": "إضافة وثيقة",
-  "resources.search.placeholder": "البحث في الوثائق...",
+  "resources.title": "المكتبة الرقمية",
+  "resources.subtitle": "الأدلة والتقارير وأفضل الممارسات",
+  "resources.no.docs": "لا توجد وثائق",
+  "resources.add.document": "رفع وثيقة",
+  "resources.search.placeholder": "البحث في المصادر...",
 
   "hero.badge": "المنصة الأفريقية للخدمة الشاملة",
   "hero.title.line1": "رابطة صناديق",
   "hero.title.line2": "الخدمة الشاملة في أفريقيا",
-  "hero.subtitle": "ربط الصناديق وتنسيق المشاريع وقيادة تأثير الخدمة الشاملة في أفريقيا.",
-  "hero.stats.countries": "دول",
-  "hero.stats.projects": "مشاريع",
-  "hero.stats.organizations": "منظمات",
-  "hero.stats.beneficiaries": "مستفيدون",
+  "hero.subtitle": "ربط الصناديق وتنسيق المشاريع لقيادة التحول الرقمي في القارة.",
+  "hero.stats.countries": "دولة",
+  "hero.stats.projects": "مشروع",
+  "hero.stats.organizations": "منظمة",
+  "hero.stats.beneficiaries": "مستفيد",
 
-  "forum.title": "منتدى نقاش FSU",
+  "forum.title": "المنتدى",
   "forum.new.discussion": "نقاش جديد",
   "forum.replies": "ردود",
   "forum.views": "مشاهدات",
 
-  "projects.title": "مشاريع FSU/SUTEL",
-  "projects.subtitle": "إدارة ومتابعة مشاريع الخدمة الشاملة في أفريقيا",
-  "projects.new.project": "مشروع جديد",
-  "projects.no.projects": "لم يتم العثور على مشاريع",
+  "projects.title": "مشاريع FSU",
+  "projects.subtitle": "متابعة مشاريع الخدمة الشاملة",
+  "projects.new.project": "أضف مشروعاً",
+  "projects.no.projects": "لا توجد مشاريع حالياً",
 
   "events.title": "الفعاليات والتدريب",
   "events.newEvent": "فعالية جديدة",
-  "events.register": "التسجيل",
+  "events.register": "تسجيل",
   "events.registered": "مسجل",
 
   "form.error": "خطأ",
-  "form.required": "مطلوب",
+  "form.required": "حقل إجباري",
 
   "country.not.found": "الدولة غير موجودة",
   "country.network.member": "عضو في شبكة SUTEL",
   "country.status.active": "نشط",
   "country.status.member": "عضو",
-  "country.status.joining": "في طور الانضمام",
+  "country.status.joining": "قيد الانضمام",
 
   "presentation.hero.title": "منصة SUTEL: مستقبل الاتصالات الأفريقية",
   "presentation.hero.subtitle": "حل ثوري",
