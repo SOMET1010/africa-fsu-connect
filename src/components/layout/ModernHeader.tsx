@@ -100,8 +100,8 @@ const ModernHeader = () => {
         className={cn(
           "fixed top-0 left-0 right-0 w-full transition-all duration-500 ease-out z-header",
           scrolled 
-            ? "bg-[hsl(var(--nx-night))]/85 backdrop-blur-2xl border-b border-white/10 shadow-2xl shadow-black/30" 
-            : "bg-transparent backdrop-blur-none border-b border-transparent"
+            ? "bg-[hsl(var(--nx-night))]/95 backdrop-blur-2xl border-b border-white/10 shadow-2xl shadow-black/30" 
+            : "bg-[hsl(var(--nx-night))]/80 backdrop-blur-xl border-b border-white/5"
         )}
       >
         <div className="container mx-auto px-4">
