@@ -44,6 +44,8 @@
   "members.filter.status.active": "Ativo",
   "members.filter.status.member": "Membro",
   "members.filter.status.joining": "Em adesão",
+  "members.filter.language": "Idioma",
+  "members.filter.language.all": "Todos os idiomas",
   "members.results": "países",
   "members.empty": "Nenhum país corresponde aos seus critérios",
 

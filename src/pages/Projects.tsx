@@ -4,12 +4,14 @@ import { useProjects } from "@/hooks/useProjects";
 import { useToast } from "@/hooks/use-toast";
 
 // Nouveaux composants narratifs (Phase B - Blueprint NEXUS)
-import { ProjectsHero } from "@/components/projects/ProjectsHero";
 import { InspiringProjectsGrid } from "@/components/projects/InspiringProjectsGrid";
 import { ProposeProjectCTA } from "@/components/projects/ProposeProjectCTA";
 import { ProjectFilters } from "@/components/projects/ProjectFilters";
 import { ProjectDialog } from "@/components/projects/ProjectDialog";
 import { SampleProjectData } from "@/components/projects/SampleProjectData";
+import { NexusLayout } from "@/components/layout/NexusLayout";
+import { NexusSectionHero } from "@/components/shared/NexusSectionHero";
+import { Rocket } from "lucide-react";
 
 const Projects = () => {
   const { t } = useTranslation();
@@ -62,25 +64,31 @@ const Projects = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <NexusLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--nx-gold))]"></div>
         </div>
-      </div>
+      </NexusLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 space-y-8">
-        
-        {/* Hero narratif - COUCHE 2 : Collaboration */}
-        <ProjectsHero />
+    <NexusLayout>
+      {/* Hero Section - Premium Dark */}
+      <NexusSectionHero
+        badge={t('projects.badge') || 'Réseau SUTEL'}
+        badgeIcon={Rocket}
+        title={t('projects.hero.title') || 'Découvrez les initiatives inspirantes'}
+        subtitle={t('projects.hero.subtitle') || "Explorez les projets portés par les Fonds du Service Universel africains. Chaque initiative témoigne de l'engagement collectif."}
+        variant="gradient"
+        size="md"
+      />
 
+      <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Bouton données démo si vide */}
         {projects.length === 0 && <SampleProjectData />}
 
-        {/* Filtres simples */}
+        {/* Filtres avec style sombre */}
         <ProjectFilters
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
@@ -90,6 +98,7 @@ const Projects = () => {
           onStatusChange={setSelectedStatus}
           regions={regions}
           statuses={statuses}
+          variant="dark"
         />
 
         {/* Grille de projets inspirants */}
@@ -97,10 +106,11 @@ const Projects = () => {
           projects={filteredProjects}
           onViewProject={handleViewProject}
           loading={loading}
+          variant="dark"
         />
 
         {/* CTA pour proposer un projet */}
-        <ProposeProjectCTA />
+        <ProposeProjectCTA variant="dark" />
 
         {/* Dialog pour édition (gardé pour admin) */}
         <ProjectDialog
@@ -110,7 +120,7 @@ const Projects = () => {
           onSave={handleSaveProject}
         />
       </div>
-    </div>
+    </NexusLayout>
   );
 };
 
