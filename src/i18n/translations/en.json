@@ -86,6 +86,8 @@
   "members.filter.status.active": "Active",
   "members.filter.status.member": "Member",
   "members.filter.status.joining": "Joining",
+  "members.filter.language": "Language",
+  "members.filter.language.all": "All languages",
   "members.results": "countries",
   "members.empty": "No countries match your criteria",
   "members.back": "Back to directory",

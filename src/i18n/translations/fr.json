@@ -86,6 +86,8 @@
   "members.filter.status.active": "Actif",
   "members.filter.status.member": "Membre",
   "members.filter.status.joining": "En adhésion",
+  "members.filter.language": "Langue",
+  "members.filter.language.all": "Toutes les langues",
   "members.results": "pays",
   "members.empty": "Aucun pays ne correspond à vos critères",
   "members.back": "Retour à l'annuaire",

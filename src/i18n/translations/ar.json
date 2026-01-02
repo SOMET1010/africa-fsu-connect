@@ -86,6 +86,8 @@
   "members.filter.status.active": "نشط",
   "members.filter.status.member": "عضو",
   "members.filter.status.joining": "قيد الانضمام",
+  "members.filter.language": "اللغة",
+  "members.filter.language.all": "كل اللغات",
   "members.results": "دول",
   "members.empty": "لا توجد نتائج مطابقة",
 
