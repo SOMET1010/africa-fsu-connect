@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useRealRegionalStats } from "@/hooks/useRealRegionalStats";
 import { useTranslation } from "react-i18next";
+import { useDirection } from "@/hooks/useDirection";
 
 const regionsConfig = [
   {
@@ -101,6 +102,7 @@ const cardVariants = {
 
 export function NexusRegions() {
   const { t } = useTranslation();
+  const { isRTL } = useDirection();
   const { data: stats, isLoading } = useRealRegionalStats();
 
   const getRegionStats = (dataKey: string) => {
@@ -132,10 +134,13 @@ export function NexusRegions() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12"
+          className={cn(
+            "flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12",
+            isRTL && "md:flex-row-reverse"
+          )}
         >
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
+          <div className={cn("space-y-3", isRTL && "text-right")}>
+            <div className={cn("flex items-center gap-3", isRTL && "flex-row-reverse")}>
               <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
                 <Globe className="w-5 h-5 text-primary" />
               </div>
@@ -153,15 +158,23 @@ export function NexusRegions() {
 
           <Link 
             to="/map"
-            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full 
-                       bg-white/5 border border-white/10 hover:border-primary/30 
-                       hover:bg-primary/5 transition-all duration-300"
+            className={cn(
+              "group inline-flex items-center gap-2 px-5 py-2.5 rounded-full",
+              "bg-white/5 border border-white/10 hover:border-primary/30",
+              "hover:bg-primary/5 transition-all duration-300",
+              isRTL && "flex-row-reverse"
+            )}
           >
             <Map className="w-4 h-4 text-white/70 group-hover:text-primary transition-colors" />
             <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">
               {t('regions.cta.map')}
             </span>
-            <ArrowRight className="w-4 h-4 text-white/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+            <ArrowRight className={cn(
+              "w-4 h-4 text-white/50 group-hover:text-primary transition-all",
+              isRTL 
+                ? "rotate-180 group-hover:-translate-x-0.5" 
+                : "group-hover:translate-x-0.5"
+            )} />
           </Link>
         </motion.div>
 
@@ -205,8 +218,8 @@ export function NexusRegions() {
                       region.shadowGlow
                     )}
                   >
-                    {/* Header with icon and count */}
-                    <div className="flex items-start justify-between mb-4">
+                    {/* Header with icon and count - RTL-aware */}
+                    <div className={cn("flex items-start justify-between mb-4", isRTL && "flex-row-reverse")}>
                       <div className={cn(
                         "p-2.5 rounded-xl bg-white/5 border border-white/10 transition-colors duration-300",
                         "group-hover:bg-white/10 group-hover:border-transparent"
@@ -214,7 +227,7 @@ export function NexusRegions() {
                         <Icon className={cn("w-5 h-5", region.color)} />
                       </div>
 
-                      <div className="text-right">
+                      <div className={isRTL ? "text-left" : "text-right"}>
                         <div className={cn(
                           "text-3xl font-bold transition-colors duration-300",
                           "text-white group-hover:" + region.color.replace("text-", "text-")
@@ -232,7 +245,7 @@ export function NexusRegions() {
                     </div>
 
                     {/* Content */}
-                    <div className="flex-1">
+                    <div className={cn("flex-1", isRTL && "text-right")}>
                       <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-white/90 transition-colors">
                         {t(region.nameKey)}
                       </h3>
@@ -241,9 +254,12 @@ export function NexusRegions() {
                       </p>
                     </div>
 
-                    {/* Footer */}
-                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/5">
-                      <div className="flex items-center gap-1.5">
+                    {/* Footer - RTL-aware */}
+                    <div className={cn(
+                      "flex items-center justify-between mt-4 pt-4 border-t border-white/5",
+                      isRTL && "flex-row-reverse"
+                    )}>
+                      <div className={cn("flex items-center gap-1.5", isRTL && "flex-row-reverse")}>
                         <Activity className={cn("w-3.5 h-3.5", region.color, "opacity-70")} />
                         <span className="text-sm text-white/60">
                           {isLoading ? (
@@ -259,8 +275,10 @@ export function NexusRegions() {
                         "bg-white/5 group-hover:bg-white/10 transition-colors duration-300"
                       )}>
                         <ArrowRight className={cn(
-                          "w-3.5 h-3.5 text-white/40 group-hover:text-white/80",
-                          "group-hover:translate-x-0.5 transition-all duration-300"
+                          "w-3.5 h-3.5 text-white/40 group-hover:text-white/80 transition-all duration-300",
+                          isRTL 
+                            ? "rotate-180 group-hover:-translate-x-0.5" 
+                            : "group-hover:translate-x-0.5"
                         )} />
                       </div>
                     </div>
@@ -275,10 +293,13 @@ export function NexusRegions() {
         <div className="mt-8 text-center lg:hidden">
           <Link 
             to="/network/members"
-            className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-primary transition-colors"
+            className={cn(
+              "inline-flex items-center gap-2 text-sm text-white/60 hover:text-primary transition-colors",
+              isRTL && "flex-row-reverse"
+            )}
           >
             {t('regions.explore.all')}
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className={cn("w-4 h-4", isRTL && "rotate-180")} />
           </Link>
         </div>
       </div>

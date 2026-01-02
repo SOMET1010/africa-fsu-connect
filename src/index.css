@@ -776,3 +776,35 @@ All colors MUST be HSL.
     @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
   }
 }
+
+/* ========================================
+   RTL (Right-to-Left) Support for Arabic
+   ======================================== */
+
+/* Arabic font family when RTL */
+[dir="rtl"] {
+  font-family: 'Noto Sans Arabic', 'Inter', system-ui, sans-serif;
+  letter-spacing: 0; /* Arabic doesn't use letter-spacing */
+}
+
+[dir="rtl"] h1, 
+[dir="rtl"] h2, 
+[dir="rtl"] h3, 
+[dir="rtl"] h4, 
+[dir="rtl"] h5, 
+[dir="rtl"] h6 {
+  font-family: 'Noto Sans Arabic', 'Poppins', system-ui, sans-serif;
+}
+
+/* Utility class to flip directional icons in RTL */
+.rtl-flip {
+  transform: scaleX(1);
+}
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* RTL-aware story-link underline animation */
+[dir="rtl"] .story-link {
+  @apply after:left-auto after:right-0 after:origin-bottom-left hover:after:origin-bottom-right;
+}

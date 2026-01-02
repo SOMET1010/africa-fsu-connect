@@ -12,6 +12,8 @@ import { Link } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import { useAfricaNews, type NewsItem } from "@/hooks/useAfricaNews";
 import { useTranslation } from "react-i18next";
+import { useDirection } from "@/hooks/useDirection";
+
 interface ActivityItem {
   id: number;
   country: string;
@@ -135,22 +137,24 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { 
-    opacity: 1, 
-    x: 0, 
-    transition: { duration: 0.5 } 
-  }
-};
-
 export function NexusActivityFeed() {
   const { t } = useTranslation();
+  const { isRTL } = useDirection();
   const { data, isLoading, isError } = useAfricaNews();
   
   const activities = data?.news 
     ? transformToActivityItems(data.news)
     : FALLBACK_ACTIVITIES;
+
+  // RTL-aware animation variants (defined inside component to access isRTL)
+  const itemVariants = {
+    hidden: { opacity: 0, x: isRTL ? 20 : -20 },
+    visible: { 
+      opacity: 1, 
+      x: 0, 
+      transition: { duration: 0.5 } 
+    }
+  };
 
   return (
     <section className="py-24 relative overflow-hidden bg-[hsl(var(--nx-night))]">
@@ -162,24 +166,24 @@ export function NexusActivityFeed() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Badge className="px-4 py-2 bg-white/10 text-white/80 border border-white/20">
-              <Activity className="w-3 h-3 mr-2" />
+        <div className={cn("text-center mb-16", isRTL && "text-right")}>
+          <div className={cn("flex items-center gap-3 mb-4", isRTL ? "justify-end" : "justify-center")}>
+            <Badge className={cn("px-4 py-2 bg-white/10 text-white/80 border border-white/20", isRTL && "flex-row-reverse")}>
+              <Activity className={cn("w-3 h-3", isRTL ? "ml-2" : "mr-2")} />
               {t('feed.badge')}
             </Badge>
             {!isLoading && !isError && data?.news && (
-              <Badge className="px-3 py-2 bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse">
-                <Radio className="w-3 h-3 mr-2" />
+              <Badge className={cn("px-3 py-2 bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse", isRTL && "flex-row-reverse")}>
+                <Radio className={cn("w-3 h-3", isRTL ? "ml-2" : "mr-2")} />
                 LIVE
               </Badge>
             )}
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className={cn("text-3xl md:text-4xl font-bold text-white mb-4", isRTL && "text-right")}>
             {t('feed.title')}{' '}
             <span className="text-[hsl(var(--nx-gold))]">{t('feed.title.highlight')}</span>
           </h2>
-          <p className="text-white/60 max-w-2xl mx-auto">
+          <p className={cn("text-white/60 max-w-2xl", isRTL ? "mr-0 ml-auto" : "mx-auto")}>
             {t('feed.subtitle')}
           </p>
         </div>
@@ -187,15 +191,21 @@ export function NexusActivityFeed() {
         {/* Timeline Feed */}
         <div className="relative">
           
-          {/* Ligne verticale de connexion (The Spine) - Desktop only */}
-          <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent hidden md:block" />
+          {/* Ligne verticale de connexion (The Spine) - Desktop only, RTL-aware */}
+          <div className={cn(
+            "absolute top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent hidden md:block",
+            isRTL ? "right-8" : "left-8"
+          )} />
 
           {/* Loading Skeleton */}
           {isLoading && (
             <div className="space-y-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="rounded-2xl p-5 md:pl-20 bg-white/[0.03] animate-pulse">
-                  <div className="ml-14 md:ml-0">
+                <div key={i} className={cn(
+                  "rounded-2xl p-5 bg-white/[0.03] animate-pulse",
+                  isRTL ? "md:pr-20" : "md:pl-20"
+                )}>
+                  <div className={isRTL ? "mr-14 md:mr-0" : "ml-14 md:ml-0"}>
                     <div className="h-4 bg-white/10 rounded w-1/4 mb-3" />
                     <div className="h-5 bg-white/10 rounded w-3/4 mb-2" />
                     <div className="h-4 bg-white/10 rounded w-1/2" />
@@ -218,24 +228,29 @@ export function NexusActivityFeed() {
                 <motion.div key={item.id} variants={itemVariants}>
                   <div
                     className={cn(
-                      "group relative rounded-2xl p-5 md:pl-20",
+                      "group relative rounded-2xl p-5",
+                      isRTL ? "md:pr-20" : "md:pl-20",
                       "bg-white/[0.03] backdrop-blur-sm",
                       "border border-white/[0.05]",
                       "hover:bg-white/[0.06] hover:border-white/10",
                       "transition-all duration-300 cursor-pointer"
                     )}
                   >
-                    {/* Glowing connector dot (Desktop only) */}
-                    <div className="absolute left-8 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
+                    {/* Glowing connector dot (Desktop only) - RTL-aware */}
+                    <div className={cn(
+                      "absolute top-1/2 -translate-y-1/2 hidden md:block",
+                      isRTL ? "right-8 translate-x-1/2" : "left-8 -translate-x-1/2"
+                    )}>
                       <div className="w-3 h-3 rounded-full bg-white/30">
                         <div className="absolute inset-0 rounded-full bg-[hsl(var(--nx-gold))]/50 animate-ping" />
                       </div>
                     </div>
 
-                    {/* Icon Box */}
+                    {/* Icon Box - RTL-aware */}
                     <div
                       className={cn(
-                        "absolute left-5 top-5 md:left-12 w-10 h-10 rounded-xl flex items-center justify-center border",
+                        "absolute top-5 w-10 h-10 rounded-xl flex items-center justify-center border",
+                        isRTL ? "right-5 md:right-12" : "left-5 md:left-12",
                         item.bg,
                         item.border
                       )}
@@ -243,9 +258,9 @@ export function NexusActivityFeed() {
                       <item.icon className={cn("w-5 h-5", item.color)} />
                     </div>
 
-                    {/* Content */}
-                    <div className="ml-14 md:ml-0">
-                      <div className="flex items-center gap-3 mb-2">
+                    {/* Content - RTL-aware */}
+                    <div className={isRTL ? "mr-14 md:mr-0" : "ml-14 md:ml-0"}>
+                      <div className={cn("flex items-center gap-3 mb-2", isRTL && "flex-row-reverse")}>
                         <Badge 
                           variant="outline" 
                           className="bg-white/10 text-white/70 border-white/20 text-xs font-mono"
@@ -255,23 +270,34 @@ export function NexusActivityFeed() {
                         <span className="text-white/80 text-sm font-medium">
                           {item.country}
                         </span>
-                        <span className="text-white/40 text-xs ml-auto">
+                        <span className={cn("text-white/40 text-xs", isRTL ? "mr-auto" : "ml-auto")}>
                           {item.time}
                         </span>
                       </div>
 
-                      <h4 className="text-white font-medium group-hover:text-[hsl(var(--nx-gold))] transition-colors duration-300 mb-1">
+                      <h4 className={cn(
+                        "text-white font-medium group-hover:text-[hsl(var(--nx-gold))] transition-colors duration-300 mb-1",
+                        isRTL && "text-right"
+                      )}>
                         {item.title}
                       </h4>
 
-                      <p className="text-white/50 text-sm">
+                      <p className={cn("text-white/50 text-sm", isRTL && "text-right")}>
                         {item.desc}
                       </p>
                     </div>
 
-                    {/* Action Arrow */}
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <ArrowRight className="w-5 h-5 text-white/50 group-hover:translate-x-1 transition-transform duration-300" />
+                    {/* Action Arrow - RTL-aware */}
+                    <div className={cn(
+                      "absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+                      isRTL ? "left-5" : "right-5"
+                    )}>
+                      <ArrowRight className={cn(
+                        "w-5 h-5 text-white/50 transition-transform duration-300",
+                        isRTL 
+                          ? "rotate-180 group-hover:-translate-x-1" 
+                          : "group-hover:translate-x-1"
+                      )} />
                     </div>
                   </div>
                 </motion.div>
@@ -281,7 +307,7 @@ export function NexusActivityFeed() {
 
           {/* Citations / Sources */}
           {data?.citations && data.citations.length > 0 && (
-            <div className="mt-8 text-center text-white/40 text-xs">
+            <div className={cn("mt-8 text-white/40 text-xs", isRTL ? "text-right" : "text-center")}>
               {t('feed.sources')}:{" "}
               {data.citations.slice(0, 3).map((url, i) => (
                 <a 
@@ -304,9 +330,9 @@ export function NexusActivityFeed() {
               variant="outline" 
               className="border-white/20 text-white/70 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all duration-300"
             >
-              <Link to="/activity" className="flex items-center gap-2">
+              <Link to="/activity" className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
                 {t('feed.viewAll')}
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className={cn("w-4 h-4", isRTL && "rotate-180")} />
               </Link>
             </Button>
           </div>

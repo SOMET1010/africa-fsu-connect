@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import nexusHeroImage from "@/assets/nexus-hero-africa.png";
 import { cn } from "@/lib/utils";
 import { NexusAfricaMap } from "./NexusAfricaMap";
+import { useDirection } from "@/hooks/useDirection";
 
 // --- Types & Constants ---
 
@@ -109,6 +110,7 @@ export function NexusHero({
   const content = defaultContent[variant];
   const isLanding = variant === "landing";
   const isMinimal = variant === "minimal";
+  const { isRTL } = useDirection();
   
   // Check for reduced motion preference
   const prefersReducedMotion = typeof window !== 'undefined' 
@@ -175,8 +177,13 @@ export function NexusHero({
 
       {/* ===== LAYER 3: Gradient Overlays for Depth & Readability ===== */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Main gradient - night to transparent */}
-        <div className="absolute inset-0 bg-gradient-to-r from-nx-night/80 via-nx-night/50 to-transparent" />
+        {/* Main gradient - night to transparent (RTL-aware) */}
+        <div className={cn(
+          "absolute inset-0",
+          isRTL 
+            ? "bg-gradient-to-l from-nx-night/80 via-nx-night/50 to-transparent" 
+            : "bg-gradient-to-r from-nx-night/80 via-nx-night/50 to-transparent"
+        )} />
         
         {/* Top/bottom vignette */}
         <div className="absolute inset-0 bg-gradient-to-t from-nx-night/70 via-transparent to-nx-night/50" />
@@ -184,11 +191,11 @@ export function NexusHero({
         {/* Subtle gold accent bottom */}
         <div className="absolute inset-0 bg-gradient-to-t from-nx-gold/10 via-transparent to-transparent" />
         
-        {/* Radial overlay for text readability (left side) */}
+        {/* Radial overlay for text readability (RTL-aware positioning) */}
         <div 
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at 20% 50%, rgba(11,19,43,0.75) 0%, rgba(11,19,43,0.35) 50%, transparent 70%)'
+            background: `radial-gradient(ellipse at ${isRTL ? '80%' : '20%'} 50%, rgba(11,19,43,0.75) 0%, rgba(11,19,43,0.35) 50%, transparent 70%)`
           }}
         />
         
@@ -201,10 +208,13 @@ export function NexusHero({
         />
       </div>
       
-      {/* ===== LAYER 4: African Patterns ===== */}
+      {/* ===== LAYER 4: African Patterns (RTL-aware) ===== */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <AfricanPattern className="left-0 w-24 md:w-32 opacity-[0.04]" />
-        <AfricanPattern className="right-0 w-24 md:w-32 opacity-[0.04]" style={{ transform: 'scaleX(-1)' }} />
+        <AfricanPattern className={cn("w-24 md:w-32 opacity-[0.04]", isRTL ? "right-0" : "left-0")} />
+        <AfricanPattern 
+          className={cn("w-24 md:w-32 opacity-[0.04]", isRTL ? "left-0" : "right-0")} 
+          style={{ transform: 'scaleX(-1)' }} 
+        />
       </div>
 
       {/* ===== LAYER 5: Content with Subtle Parallax ===== */}
@@ -214,7 +224,8 @@ export function NexusHero({
       >
         <div className={cn(
           "max-w-3xl",
-          isLanding ? "py-24" : "py-12"
+          isLanding ? "py-24" : "py-12",
+          isRTL && "ltr:ml-0 rtl:mr-0 ltr:mr-auto rtl:ml-auto text-right"
         )}>
           {/* Badge - Premium glass style */}
           <motion.div
@@ -223,9 +234,12 @@ export function NexusHero({
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <Badge 
-              className="mb-8 px-5 py-2.5 bg-white/[0.08] backdrop-blur-lg border border-nx-gold/25 shadow-lg shadow-black/20 text-white/90 font-medium text-sm hover:bg-white/[0.12] transition-all duration-300"
+              className={cn(
+                "mb-8 px-5 py-2.5 bg-white/[0.08] backdrop-blur-lg border border-nx-gold/25 shadow-lg shadow-black/20 text-white/90 font-medium text-sm hover:bg-white/[0.12] transition-all duration-300",
+                isRTL && "flex-row-reverse"
+              )}
             >
-              <Globe className="h-4 w-4 mr-2 text-nx-gold/80" />
+              <Globe className={cn("h-4 w-4 text-nx-gold/80", isRTL ? "ml-2" : "mr-2")} />
               Réseau panafricain SUTEL
             </Badge>
           </motion.div>
@@ -303,7 +317,7 @@ export function NexusHero({
               transition={{ duration: 0.7, delay: 1.1 }}
               className="mt-10"
             >
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className={cn("flex flex-col sm:flex-row gap-4", isRTL && "sm:flex-row-reverse")}>
                 <Button 
                   asChild 
                   size="lg" 
@@ -311,7 +325,12 @@ export function NexusHero({
                 >
                   <Link to="/network">
                     Explorer le réseau
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className={cn(
+                      "h-5 w-5 transition-transform",
+                      isRTL 
+                        ? "mr-2 rotate-180 group-hover:-translate-x-1" 
+                        : "ml-2 group-hover:translate-x-1"
+                    )} />
                   </Link>
                 </Button>
                 
@@ -332,7 +351,10 @@ export function NexusHero({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 1.4 }}
-                className="text-white/50 text-xs mt-4 text-center sm:text-left"
+                className={cn(
+                  "text-white/50 text-xs mt-4",
+                  isRTL ? "text-right" : "text-center sm:text-left"
+                )}
               >
                 Accès public aux ressources • Mode avancé réservé aux membres
               </motion.p>
