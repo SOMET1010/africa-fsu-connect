@@ -4,6 +4,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { SecurityApiService } from '../services/securityApi';
 import { SECURITY_CONSTANTS } from '../core/constants';
+import type { JsonValue } from '@/types/safeJson';
+import type { SecurityPreferences } from '../core/types';
 
 export const useSecurity = () => {
   const { user } = useAuth();
@@ -41,8 +43,9 @@ export const useSecurity = () => {
 
   // Update security preferences
   const updateSecurityPreferences = useMutation({
-    mutationFn: async (preferences: any) => {
+    mutationFn: async (preferences: Partial<SecurityPreferences> | null) => {
       if (!user?.id) throw new Error('User not authenticated');
+      if (!preferences) throw new Error('No preferences provided');
       
       return SecurityApiService.updateSecurityPreferences({
         user_id: user.id,
@@ -53,8 +56,9 @@ export const useSecurity = () => {
       queryClient.invalidateQueries({ queryKey: ['security-preferences'] });
       toast.success('Préférences de sécurité mises à jour');
     },
-    onError: (error: any) => {
-      toast.error(`Erreur: ${error.message}`);
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : 'Erreur inconnue';
+      toast.error(`Erreur: ${message}`);
     },
   });
 
@@ -64,7 +68,7 @@ export const useSecurity = () => {
       actionType: string;
       resourceType?: string;
       resourceId?: string;
-      details?: any;
+      details?: JsonValue;
       success?: boolean;
     }) => {
       if (!user?.id) return;
@@ -86,8 +90,9 @@ export const useSecurity = () => {
       queryClient.invalidateQueries({ queryKey: ['user-sessions'] });
       toast.success('Session terminée');
     },
-    onError: (error: any) => {
-      toast.error(`Erreur: ${error.message}`);
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : 'Erreur inconnue';
+      toast.error(`Erreur: ${message}`);
     },
   });
 

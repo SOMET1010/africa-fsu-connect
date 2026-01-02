@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/utils/logger";
+import { toErrorMessage } from "@/utils/errors";
 
 export interface Event {
   id: string;
@@ -65,7 +66,7 @@ export const useEvents = () => {
       if (error) throw error;
 
       // Get user's registrations separately
-      let userRegistrations: any[] = [];
+      let userRegistrations: { event_id: string }[] = [];
       if (user) {
         const { data: regData } = await supabase
           .from('event_registrations')
@@ -80,8 +81,9 @@ export const useEvents = () => {
       })) || [];
 
       setEvents(formattedEvents);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
         description: "Impossible de charger les événements.",
@@ -103,7 +105,7 @@ export const useEvents = () => {
 
       if (error) throw error;
       setRegistrations(data || []);
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('Failed to fetch registrations:', err);
     }
   };
@@ -132,11 +134,12 @@ export const useEvents = () => {
 
       await fetchEvents();
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -162,11 +165,12 @@ export const useEvents = () => {
 
       await fetchEvents();
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -230,11 +234,12 @@ export const useEvents = () => {
 
       await Promise.all([fetchEvents(), fetchRegistrations()]);
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -261,11 +266,12 @@ export const useEvents = () => {
       });
 
       await Promise.all([fetchEvents(), fetchRegistrations()]);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -312,10 +318,10 @@ export const useEvents = () => {
         title: "Fichier généré",
         description: "Le fichier .ics a été téléchargé.",
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Erreur",
-        description: err.message,
+        description: toErrorMessage(err),
         variant: "destructive",
       });
     }

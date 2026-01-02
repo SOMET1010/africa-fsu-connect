@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { toErrorMessage } from "@/utils/errors";
 
 export interface AdminUser {
   id: string;
@@ -68,8 +69,9 @@ export const useAdminUsers = () => {
 
       setUsers(formattedUsers);
       calculateStats(formattedUsers);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
         description: "Impossible de charger les utilisateurs.",
@@ -127,11 +129,12 @@ export const useAdminUsers = () => {
       });
 
       await fetchUsers(); // Refresh data
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -149,11 +152,12 @@ export const useAdminUsers = () => {
       });
 
       await fetchUsers(); // Refresh data
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -177,7 +181,7 @@ export const useAdminUsers = () => {
         title: "Notification envoyée",
         description: "La notification a été envoyée à l'utilisateur.",
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Erreur",
         description: "Impossible d'envoyer la notification.",
@@ -206,7 +210,7 @@ export const useAdminUsers = () => {
         title: "Notification diffusée",
         description: `Notification envoyée à ${userIds.length} utilisateurs.`,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Erreur",
         description: "Impossible d'envoyer la notification.",

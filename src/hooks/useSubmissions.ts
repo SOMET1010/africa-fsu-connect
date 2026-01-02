@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/utils/logger';
+import { toErrorMessage } from '@/utils/errors';
 
 export interface Submission {
   id: string;
@@ -61,8 +62,9 @@ export const useSubmissions = () => {
       const formattedSubmissions = data || [];
 
       setSubmissions(formattedSubmissions);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
         description: "Impossible de charger vos soumissions.",
@@ -81,8 +83,9 @@ export const useSubmissions = () => {
 
       if (error) throw error;
       setSubmissions(data || []);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
         description: "Impossible de charger les soumissions.",
@@ -116,11 +119,12 @@ export const useSubmissions = () => {
 
       await fetchSubmissions();
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -146,11 +150,12 @@ export const useSubmissions = () => {
 
       await fetchSubmissions();
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -182,8 +187,8 @@ export const useSubmissions = () => {
             message: 'Une nouvelle soumission nécessite votre attention.'
           }
         });
-      } catch (notifError) {
-        logger.error('Failed to send notification:', notifError as any);
+      } catch (notifError: unknown) {
+        logger.error('Failed to send notification:', notifError);
       }
 
       toast({
@@ -193,11 +198,12 @@ export const useSubmissions = () => {
 
       await fetchSubmissions();
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -235,11 +241,12 @@ export const useSubmissions = () => {
 
       await fetchAllSubmissions();
       return data;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
-        description: err.message,
+        description: message,
         variant: "destructive",
       });
       throw err;
@@ -268,10 +275,10 @@ export const useSubmissions = () => {
         url: urlData.publicUrl,
         path: fileName
       };
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Erreur d'upload",
-        description: err.message,
+        description: toErrorMessage(err),
         variant: "destructive",
       });
       throw err;

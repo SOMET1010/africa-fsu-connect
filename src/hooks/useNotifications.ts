@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/utils/logger";
+import { toErrorMessage } from "@/utils/errors";
 
 export interface Notification {
   id: string;
@@ -34,8 +35,9 @@ export const useNotifications = () => {
 
       if (error) throw error;
       setNotifications(data || []);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = toErrorMessage(err);
+      setError(message);
       toast({
         title: "Erreur",
         description: "Impossible de charger les notifications.",
@@ -59,7 +61,7 @@ export const useNotifications = () => {
           notif.id === notificationId ? { ...notif, is_read: true } : notif
         )
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('Failed to mark notification as read:', err);
     }
   };
@@ -81,7 +83,7 @@ export const useNotifications = () => {
       setNotifications(prev =>
         prev.map(notif => ({ ...notif, is_read: true }))
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('Failed to mark all notifications as read:', err);
     }
   };
@@ -110,7 +112,7 @@ export const useNotifications = () => {
 
       if (error) throw error;
       return data;
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('Failed to create notification:', err);
       throw err;
     }

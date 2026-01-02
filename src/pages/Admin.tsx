@@ -14,12 +14,34 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 
+// Type-safe interfaces for admin data
+interface AdminSelectedUser {
+  id: number;
+  name: string;
+  email: string;
+  country: string;
+  role: string;
+  status: string;
+  joinDate: string;
+  avatar: string;
+}
+
+interface AdminSelectedContent {
+  id: number;
+  type: string;
+  title: string;
+  author: string;
+  country: string;
+  submittedDate: string;
+  status: string;
+}
+
 const Admin = () => {
   const [loading, setLoading] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [showContentModal, setShowContentModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [selectedContent, setSelectedContent] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<AdminSelectedUser | null>(null);
+  const [selectedContent, setSelectedContent] = useState<AdminSelectedContent | null>(null);
 
   const stats = [
     {
@@ -170,14 +192,14 @@ const Admin = () => {
     { key: "actions", label: "Actions" }
   ];
 
-  const handleUserAction = (action: string, user: any) => {
+  const handleUserAction = (action: string, user: AdminSelectedUser) => {
     setSelectedUser(user);
     if (action === "edit") {
       setShowUserModal(true);
     }
   };
 
-  const handleContentAction = (action: string, content: any) => {
+  const handleContentAction = (action: string, content: AdminSelectedContent) => {
     setSelectedContent(content);
     if (action === "edit") {
       setShowContentModal(true);

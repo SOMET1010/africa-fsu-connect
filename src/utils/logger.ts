@@ -3,6 +3,8 @@
  * Provides structured logging with different levels and contexts
  */
 
+import type { JsonValue } from '@/types/safeJson';
+
 export enum LogLevel {
   DEBUG = 'debug',
   INFO = 'info',
@@ -17,11 +19,11 @@ export interface LogContext {
   count?: number;
   componentStack?: string;
   errorBoundary?: boolean;
-  data?: any;
+  data?: JsonValue;
   agency?: string;
   country?: string;
-  coordinates?: any;
-  error?: any;
+  coordinates?: [number, number] | null;
+  error?: string;
   updates?: string[];
   changes?: string[];
   metadata?: Record<string, unknown>;
@@ -36,7 +38,7 @@ export interface LogContext {
   reason?: string;
   namespace?: string;
   query?: string;
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
   role?: string;
 }
 
