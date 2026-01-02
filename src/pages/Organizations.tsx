@@ -64,7 +64,7 @@ const Organizations = () => {
     // Scroll to the content area
     setTimeout(() => {
       const element = document.querySelector('[data-view-content]');
-      logger.debug('Analytics scroll element found', { data: element });
+      logger.debug('Analytics scroll element found', { data: element ? 'found' : 'not-found' });
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {

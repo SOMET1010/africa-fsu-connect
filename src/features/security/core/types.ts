@@ -20,7 +20,7 @@ export interface AuditLog {
   action_type: string;
   resource_type?: string;
   resource_id?: string;
-  details?: any;
+  details?: Record<string, unknown>;
   ip_address?: string;
   user_agent?: string;
   success: boolean;
@@ -45,7 +45,7 @@ export interface SecurityAlert {
   id: string;
   type: 'suspicious_login' | 'new_device' | 'multiple_sessions' | 'security_setting_changed';
   message: string;
-  details?: any;
+  details?: Record<string, unknown>;
   created_at: string;
   resolved: boolean;
 }
@@ -56,7 +56,7 @@ export interface AnomalyAlert {
   type: 'suspicious_login' | 'unusual_location' | 'multiple_failures' | 'device_change' | 'time_anomaly';
   severity: 'low' | 'medium' | 'high' | 'critical';
   message: string;
-  details?: any;
+  details?: Record<string, unknown>;
   created_at: string;
   resolved: boolean;
   auto_blocked: boolean;
@@ -109,7 +109,7 @@ export interface ComplianceReport {
   title: string;
   description: string | null;
   status: 'pending' | 'in_progress' | 'completed' | 'failed';
-  report_data: any;
+  report_data: Record<string, unknown>;
   file_url: string | null;
   created_at: string;
   completed_at: string | null;
@@ -124,7 +124,7 @@ export interface NetworkSecurityEvent {
   source_ip: string | null;
   target_ip: string | null;
   description: string;
-  details: any;
+  details: Record<string, unknown>;
   blocked: boolean;
   created_at: string;
   resolved: boolean;
