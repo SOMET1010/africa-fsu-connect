@@ -90,6 +90,7 @@ const AdvancedMode = lazy(() => import('@/pages/AdvancedMode'));
 // Collaboration pages
 const Practices = lazy(() => import('@/pages/Practices'));
 const Webinars = lazy(() => import('@/pages/Webinars'));
+const MyContributions = lazy(() => import('@/pages/MyContributions'));
 
 // Configuration centralisée des routes
 export const ROUTES: RouteConfig[] = [
@@ -282,14 +283,26 @@ export const ROUTES: RouteConfig[] = [
   {
     path: '/submit',
     component: Submit,
-    title: 'Soumettre',
-    description: 'Soumettre des données ou documents',
+    title: 'Proposer',
+    description: 'Partager une initiative avec le réseau',
     icon: FileText,
     isProtected: true,
     showInSidebar: true,
     showInMobileNav: false,
     category: 'management',
-    univers: 'projets',
+    univers: 'communaute',
+  },
+  {
+    path: '/my-contributions',
+    component: MyContributions,
+    title: 'Mes contributions',
+    description: 'Suivez vos soumissions au réseau',
+    icon: FileText,
+    isProtected: true,
+    showInSidebar: false,
+    showInMobileNav: false,
+    category: 'personal',
+    univers: 'communaute',
   },
   {
     path: '/concept-note',
