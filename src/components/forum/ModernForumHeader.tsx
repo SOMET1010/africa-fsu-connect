@@ -27,14 +27,14 @@ export function ModernForumHeader({
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <GlassCard variant="default" className="p-8">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-accent/5 to-primary/10 opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--nx-gold)/0.1)] via-[hsl(var(--nx-cyan)/0.05)] to-[hsl(var(--nx-gold)/0.1)] opacity-50" />
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-6">
               <div className="space-y-2">
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-[hsl(var(--nx-gold))] via-[hsl(var(--nx-cyan))] to-[hsl(var(--nx-gold))] bg-clip-text text-transparent">
                   Forum Communautaire
                 </h1>
-                <p className="text-lg text-muted-foreground">
+                <p className="text-lg text-white/60">
                   Échangez avec la communauté FSU sur les enjeux des télécommunications
                 </p>
               </div>
@@ -48,7 +48,7 @@ export function ModernForumHeader({
                 )}
                 
                 <ModernButton onClick={onNewPost} className="relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--nx-gold))] to-[hsl(var(--nx-cyan))] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <Plus className="h-4 w-4 mr-2 relative z-10" />
                   <span className="relative z-10">Nouvelle Discussion</span>
                 </ModernButton>

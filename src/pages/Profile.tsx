@@ -319,12 +319,12 @@ const Profile = () => {
                   <h3 className="text-lg font-semibold mb-6">Sécurité du compte</h3>
                   
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
                       <div className="flex items-center space-x-3">
-                        <Shield className="h-5 w-5 text-primary" />
+                        <Shield className="h-5 w-5 text-[hsl(var(--nx-gold))]" />
                         <div>
-                          <p className="font-medium">Mot de passe</p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="font-medium text-white">Mot de passe</p>
+                          <p className="text-sm text-white/60">
                             Dernière modification il y a 30 jours
                           </p>
                         </div>
@@ -334,17 +334,17 @@ const Profile = () => {
                       </ModernButton>
                     </div>
                     
-                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
                       <div className="flex items-center space-x-3">
-                        <Shield className="h-5 w-5 text-green-600" />
+                        <Shield className="h-5 w-5 text-[hsl(var(--nx-coop-500))]" />
                         <div>
-                          <p className="font-medium">Authentification 2FA</p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="font-medium text-white">Authentification 2FA</p>
+                          <p className="text-sm text-white/60">
                             Activée
                           </p>
                         </div>
                       </div>
-                      <Badge variant="secondary" className="bg-green-100 text-green-800">
+                      <Badge variant="secondary" className="bg-[hsl(var(--nx-coop-600)/0.2)] text-[hsl(var(--nx-coop-500))] border border-[hsl(var(--nx-coop-500)/0.3)]">
                         Activée
                       </Badge>
                     </div>
