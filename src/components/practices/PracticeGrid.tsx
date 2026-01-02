@@ -1,8 +1,8 @@
 import { PracticeCardVisual } from "./PracticeCardVisual";
 import { motion } from "framer-motion";
-import type { ThemeType } from "@/components/shared/ThemeIllustration";
+import type { Practice } from "@/types/practice";
 
-const allPractices = [
+const allPractices: Practice[] = [
   {
     title: "École numérique mobile",
     description: "Des salles de classe itinérantes connectées pour les zones rurales.",
@@ -10,8 +10,9 @@ const allPractices = [
     agency: "Ministère de l'Éducation Numérique",
     country: "Cameroun",
     countryFlag: "🇨🇲",
-    theme: "Éducation" as ThemeType,
+    theme: "Éducation",
     date: "Oct 2025",
+    cover_image_url: "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=600&h=400&fit=crop",
   },
   {
     title: "Registre foncier numérique",
@@ -20,8 +21,9 @@ const allPractices = [
     agency: "Direction du Cadastre National",
     country: "Burkina Faso",
     countryFlag: "🇧🇫",
-    theme: "Gouvernance" as ThemeType,
+    theme: "Gouvernance",
     date: "Sept 2025",
+    // No image - will use fallback
   },
   {
     title: "Plateforme agricole connectée",
@@ -30,8 +32,9 @@ const allPractices = [
     agency: "Office National Agricole",
     country: "Mali",
     countryFlag: "🇲🇱",
-    theme: "Agriculture" as ThemeType,
+    theme: "Agriculture",
     date: "Août 2025",
+    cover_image_url: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&h=400&fit=crop",
   },
   {
     title: "Système d'alerte précoce inondations",
@@ -40,8 +43,9 @@ const allPractices = [
     agency: "Agence Nationale de Météorologie",
     country: "Sénégal",
     countryFlag: "🇸🇳",
-    theme: "Connectivité" as ThemeType,
+    theme: "Connectivité",
     date: "Juil 2025",
+    // No image - will use fallback
   },
   {
     title: "E-administration communale",
@@ -50,8 +54,9 @@ const allPractices = [
     agency: "Agence FSU Côte d'Ivoire",
     country: "Côte d'Ivoire",
     countryFlag: "🇨🇮",
-    theme: "Gouvernance" as ThemeType,
+    theme: "Gouvernance",
     date: "Juin 2025",
+    cover_image_url: "https://images.unsplash.com/photo-1577412647305-991150c7d163?w=600&h=400&fit=crop",
   },
   {
     title: "Formation digitale des enseignants",
@@ -60,8 +65,9 @@ const allPractices = [
     agency: "Institut de Formation Continue",
     country: "Cameroun",
     countryFlag: "🇨🇲",
-    theme: "Éducation" as ThemeType,
+    theme: "Éducation",
     date: "Mai 2025",
+    // No image - will use fallback
   },
 ];
 

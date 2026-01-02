@@ -2,9 +2,9 @@ import { Sparkles, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { PracticeCardVisual } from "./PracticeCardVisual";
 import { AfricanDivider, AfricanStatNumber } from "@/components/shared/AfricanPattern";
-import type { ThemeType } from "@/components/shared/ThemeIllustration";
+import type { Practice } from "@/types/practice";
 
-const featuredPractices = [
+const featuredPractices: Practice[] = [
   {
     title: "Connectivité rurale par satellite en zones isolées",
     description: "150 villages enfin connectés malgré l'isolement géographique. Une révolution pour l'accès aux services numériques.",
@@ -12,8 +12,9 @@ const featuredPractices = [
     agency: "Agence FSU Côte d'Ivoire",
     country: "Côte d'Ivoire",
     countryFlag: "🇨🇮",
-    theme: "Connectivité" as ThemeType,
+    theme: "Connectivité",
     date: "Déc 2025",
+    cover_image_url: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=800&h=500&fit=crop",
   },
   {
     title: "Télémédecine villageoise intégrée",
@@ -22,8 +23,9 @@ const featuredPractices = [
     agency: "Agence de l'Informatique de l'État du Sénégal",
     country: "Sénégal",
     countryFlag: "🇸🇳",
-    theme: "E-Santé" as ThemeType,
+    theme: "E-Santé",
     date: "Nov 2025",
+    cover_image_url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=500&fit=crop",
   },
 ];
 
