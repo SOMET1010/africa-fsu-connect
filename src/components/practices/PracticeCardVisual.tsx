@@ -1,9 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Eye, ArrowRight } from "lucide-react";
+import { Eye, ArrowRight, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { ThemeIllustration, ThemeBadge, ThemeType } from "@/components/shared/ThemeIllustration";
 import { CountryVisual } from "@/components/shared/CountryVisual";
+import { PracticeCover } from "./PracticeCover";
 import { cn } from "@/lib/utils";
 
 interface PracticeCardVisualProps {
@@ -17,6 +18,8 @@ interface PracticeCardVisualProps {
   agency?: string;
   featured?: boolean;
   variant?: "default" | "featured" | "compact";
+  cover_image_url?: string;
+  thumbnail_url?: string;
 }
 
 export function PracticeCardVisual({
@@ -30,6 +33,8 @@ export function PracticeCardVisual({
   agency,
   featured = false,
   variant = "default",
+  cover_image_url,
+  thumbnail_url,
 }: PracticeCardVisualProps) {
   
   if (variant === "featured") {
@@ -45,18 +50,14 @@ export function PracticeCardVisual({
           "border-2 hover:border-primary/30 transition-all duration-300",
           "african-card-accent shadow-lg hover:shadow-xl"
         )}>
-          {/* Large visual header */}
-          <div className={cn(
-            "relative h-48 flex items-center justify-center overflow-hidden",
-            "bg-gradient-to-br from-muted/50 to-muted",
-            "african-pattern-bogolan-subtle"
-          )}>
-            {/* Theme illustration */}
-            <ThemeIllustration 
-              theme={theme} 
-              size="xl" 
-              showBackground={false}
-              className="opacity-90"
+          {/* Large visual header with image or fallback */}
+          <div className="relative">
+            <PracticeCover
+              imageUrl={cover_image_url}
+              theme={theme}
+              height="lg"
+              overlay={!!cover_image_url}
+              className="african-pattern-bogolan-subtle"
             />
             
             {/* Country badge in corner */}
@@ -169,16 +170,13 @@ export function PracticeCardVisual({
         "hover:shadow-lg transition-all duration-300",
         featured && "border-primary/20 ring-1 ring-primary/10"
       )}>
-        {/* Visual header with illustration */}
-        <div className={cn(
-          "relative h-32 flex items-center justify-center",
-          "bg-gradient-to-br from-muted/30 to-muted/60",
-          "african-pattern-bogolan-subtle"
-        )}>
-          <ThemeIllustration 
-            theme={theme} 
-            size="lg" 
-            showBackground={false}
+        {/* Visual header with image or fallback */}
+        <div className="relative">
+          <PracticeCover
+            imageUrl={cover_image_url || thumbnail_url}
+            theme={theme}
+            height="md"
+            className="african-pattern-bogolan-subtle"
           />
 
           {/* Country flag in corner */}
