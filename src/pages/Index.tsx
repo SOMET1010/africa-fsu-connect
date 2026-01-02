@@ -1,99 +1,17 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Globe, Sparkles, ChevronDown } from "lucide-react";
-import { useTranslation } from "@/hooks/useTranslation";
+import { ArrowRight, Globe } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { RegionCards } from "@/components/network/RegionCards";
 import { ActivityTimeline } from "@/components/network/ActivityTimeline";
-import { PresenceIndicator } from "@/components/network/PresenceIndicator";
+import { NexusHero } from "@/components/shared/NexusHero";
 
 const Index = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
-      
-      {/* Hero Section - Ultra-light, no KPIs */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
-          <div className="absolute inset-0 bg-gradient-mesh opacity-40" />
-          <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-xl animate-pulse" />
-          <div className="absolute top-40 right-20 w-24 h-24 bg-accent/5 rounded-full blur-lg animate-bounce-subtle" />
-        </div>
-
-        <PageContainer size="full" className="relative z-10">
-          <div className="text-center space-y-8 animate-fade-in">
-            {/* Premium badge */}
-            <div className="flex justify-center">
-              <Badge 
-                className="px-6 py-3 bg-card/80 backdrop-blur-md border-primary/30 text-primary font-medium text-sm shadow-elegant hover:shadow-glow transition-all duration-300 hover:scale-105"
-              >
-                <Sparkles className="h-4 w-4 mr-2 animate-pulse" />
-                Réseau SUTEL
-              </Badge>
-            </div>
-
-            {/* Main heading - Narrative, no stats */}
-            <div className="space-y-6">
-              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight leading-tight">
-                <span className="gradient-text animate-shimmer bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto]">
-                  54 pays construisent ensemble
-                </span>
-                <br />
-                <span className="text-foreground/90 font-light">
-                  l'avenir du Service Universel en Afrique
-                </span>
-              </h1>
-              <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-light">
-                Une communauté panafricaine de partage et de coopération
-              </p>
-            </div>
-
-            {/* Network Presence - Visual bar, no numbers */}
-            <div className="flex justify-center py-4">
-              <PresenceIndicator level={7} maxLevel={10} />
-            </div>
-
-            {/* 2 CTAs maximum - Blueprint requirement */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button 
-                asChild 
-                size="lg" 
-                className="px-10 py-6 text-lg font-medium rounded-2xl shadow-elegant hover:shadow-glow transition-all duration-300 hover:scale-105 bg-gradient-to-r from-primary to-primary-dark"
-              >
-                <Link to="/network">
-                  Découvrir le réseau
-                  <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button>
-              
-              <Button 
-                asChild 
-                variant="outline" 
-                size="lg"
-                className="px-10 py-6 text-lg font-medium rounded-2xl bg-card/60 backdrop-blur-md border-border/50 hover:bg-card/80 hover:shadow-md transition-all duration-300 hover:scale-105"
-              >
-                <Link to="/projects">
-                  Explorer les projets inspirants
-                </Link>
-              </Button>
-            </div>
-
-            {/* Scroll indicator */}
-            <div className="pt-12 animate-fade-in">
-              <div className="flex flex-col items-center text-muted-foreground animate-bounce-subtle">
-                <span className="text-xs font-medium mb-2">Découvrir</span>
-                <ChevronDown className="h-5 w-5" />
-              </div>
-            </div>
-          </div>
-        </PageContainer>
-      </section>
+      {/* Hero Section - NEXUS Africa Network */}
+      <NexusHero variant="landing" showStats fullscreen parallax />
 
       {/* Recent Activity Section - Proof of life, no punitive alerts */}
       <section className="py-16 relative z-10">
