@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "@/hooks/useTranslation";
 import { mainNavigation } from "@/config/navigation";
+import { shouldShowAdminLinks } from "@/config/blueprintGuards";
 
 const ModernHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -271,7 +272,16 @@ const ModernHeader = () => {
                       <span>{t('nav.profile')}</span>
                     </Link>
                   </DropdownMenuItem>
-                  {isAdmin() && (
+                  {/* 
+                    ╔══════════════════════════════════════════════════════════════╗
+                    ║  NEXUS BLUEPRINT GARDE-FOU                                   ║
+                    ║                                                              ║
+                    ║  Le lien admin n'apparaît QUE sur Layer 3 (/advanced, /admin)║
+                    ║  Même si l'utilisateur EST admin, on ne montre pas ce lien   ║
+                    ║  sur / ou /network (couche politique)                        ║
+                    ╚══════════════════════════════════════════════════════════════╝
+                  */}
+                  {isAdmin() && shouldShowAdminLinks(location.pathname) && (
                     <DropdownMenuItem className="cursor-pointer">
                       <Link to="/admin" className="flex items-center w-full">
                         <Settings className="mr-2 h-4 w-4" />

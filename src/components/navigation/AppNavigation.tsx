@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useNexusLayer } from "@/hooks/useNexusLayer";
 
 interface NavItem {
   name: string;
@@ -30,6 +31,7 @@ export const AppNavigation = () => {
   const location = useLocation();
   const { profile } = useAuth();
   const { t } = useTranslation();
+  const { isOperationalLayer } = useNexusLayer();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -72,7 +74,16 @@ export const AppNavigation = () => {
         ))}
       </div>
 
-      {hasAdminAccess && (
+      {/* 
+        ╔══════════════════════════════════════════════════════════════════╗
+        ║  NEXUS BLUEPRINT GARDE-FOU                                       ║
+        ║                                                                  ║
+        ║  Les liens admin ne s'affichent QUE sur Layer 3 (Opérationnel)   ║
+        ║  Même si l'utilisateur a les droits admin, on ne montre pas      ║
+        ║  ces liens sur Layer 1 (Réseau) ou Layer 2 (Collaboration)       ║
+        ╚══════════════════════════════════════════════════════════════════╝
+      */}
+      {hasAdminAccess && isOperationalLayer && (
         <>
           <div className="my-3 px-3">
             <div className="h-px bg-border" />

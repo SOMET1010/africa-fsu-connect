@@ -55,7 +55,18 @@ const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
         )}
       </div>
 
-      {/* Smart suggestions sidebar - UNIQUEMENT sur /advanced et /admin */}
+      {/* 
+        ╔══════════════════════════════════════════════════════════════════╗
+        ║  NEXUS BLUEPRINT - SMART SUGGESTIONS GARDE-FOU                   ║
+        ║                                                                  ║
+        ║  Les suggestions intelligentes ne s'affichent QUE sur :          ║
+        ║  - /advanced/* (Mode Avancé)                                     ║
+        ║  - /admin/* (Administration)                                     ║
+        ║                                                                  ║
+        ║  JAMAIS sur / ou /network (couche politique Layer 1)             ║
+        ║  Voir blueprintGuards.ts pour les règles centralisées            ║
+        ╚══════════════════════════════════════════════════════════════════╝
+      */}
       {shouldShowSuggestions && (
         <div className="fixed bottom-4 right-4 w-80 max-w-[calc(100vw-2rem)] z-40">
           <SmartSuggestions compact maxSuggestions={2} />
