@@ -86,6 +86,26 @@
   --nx-success-500: 160 56% 42%;
 
   /* ========================================
+     NEXUS AFRICA NETWORK — Couleurs artistiques
+     Extraites de l'image hero Afrique connectée
+     ======================================== */
+  
+  /* Bleu nuit technologique — fond profond */
+  --nx-night: 215 60% 12%;
+  
+  /* Bleu réseau lumineux — connexions actives */
+  --nx-network: 220 100% 56%;
+  
+  /* Or africain — accents premium */
+  --nx-gold: 43 75% 52%;
+  
+  /* Cyan lumineux — points actifs */
+  --nx-cyan: 174 60% 56%;
+  
+  /* Gris profond — textes sur fond sombre */
+  --nx-deep: 217 33% 17%;
+
+  /* ========================================
      RADIUS — Arrondi moderne mais sobre
      ======================================== */
   

@@ -50,13 +50,14 @@ export function PracticeCardVisual({
           "border-2 hover:border-primary/30 transition-all duration-300",
           "african-card-accent shadow-lg hover:shadow-xl"
         )}>
-          {/* Large visual header with image or fallback */}
+          {/* Large visual header with image or fallback + NEXUS overlay */}
           <div className="relative">
             <PracticeCover
               imageUrl={cover_image_url}
               theme={theme}
-              height="lg"
-              overlay={!!cover_image_url}
+              height="xl"
+              overlay={true}
+              overlayGradient="nexus"
               className="african-pattern-bogolan-subtle"
             />
             
@@ -69,16 +70,16 @@ export function PracticeCardVisual({
               />
             </div>
 
-            {/* Impact overlay */}
+            {/* Impact overlay - hero style with NEXUS gold accent */}
             {impact && (
               <motion.div
-                className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg"
+                className="absolute bottom-4 left-4 bg-gradient-to-r from-nx-night/95 to-nx-night/80 backdrop-blur-sm rounded-xl px-5 py-3 shadow-lg border border-nx-gold/30"
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
               >
-                <span className="text-3xl font-bold text-primary">{impact.value}</span>
-                <span className="text-sm text-muted-foreground ml-2">{impact.label}</span>
+                <span className="text-4xl font-bold text-nx-gold">{impact.value}</span>
+                <span className="text-sm text-white/80 ml-2">{impact.label}</span>
               </motion.div>
             )}
           </div>

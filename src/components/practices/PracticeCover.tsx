@@ -5,8 +5,9 @@ import { cn } from "@/lib/utils";
 interface PracticeCoverProps {
   imageUrl?: string;
   theme: ThemeType;
-  height?: "sm" | "md" | "lg";
+  height?: "sm" | "md" | "lg" | "xl";
   overlay?: boolean;
+  overlayGradient?: "default" | "nexus";
   className?: string;
 }
 
@@ -14,6 +15,7 @@ const heightMap = {
   sm: "h-32",
   md: "h-40",
   lg: "h-48",
+  xl: "h-56",
 };
 
 export function PracticeCover({
@@ -21,6 +23,7 @@ export function PracticeCover({
   theme,
   height = "md",
   overlay = false,
+  overlayGradient = "default",
   className,
 }: PracticeCoverProps) {
   const [imageError, setImageError] = useState(false);
@@ -28,6 +31,10 @@ export function PracticeCover({
 
   const showImage = imageUrl && !imageError;
   const heightClass = heightMap[height];
+  
+  const overlayClass = overlayGradient === "nexus" 
+    ? "bg-gradient-to-br from-nx-night/70 via-nx-network/30 to-nx-gold/40"
+    : "bg-gradient-to-t from-black/60 via-black/20 to-transparent";
 
   return (
     <div className={cn("relative overflow-hidden", heightClass, className)}>
@@ -65,7 +72,7 @@ export function PracticeCover({
 
       {/* Optional overlay gradient for text readability */}
       {overlay && (
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        <div className={cn("absolute inset-0", overlayClass)} />
       )}
     </div>
   );

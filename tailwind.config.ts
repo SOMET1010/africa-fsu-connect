@@ -107,14 +107,20 @@ export default {
 						700: 'hsl(var(--nx-brand-700))',
 						500: 'hsl(var(--nx-brand-500))',
 					},
-					coop: {
-						600: 'hsl(var(--nx-coop-600))',
-						500: 'hsl(var(--nx-coop-500))',
-					},
-					info: 'hsl(var(--nx-info-500))',
-					warn: 'hsl(var(--nx-warn-500))',
-					success: 'hsl(var(--nx-success-500))',
-				}
+				coop: {
+					600: 'hsl(var(--nx-coop-600))',
+					500: 'hsl(var(--nx-coop-500))',
+				},
+				info: 'hsl(var(--nx-info-500))',
+				warn: 'hsl(var(--nx-warn-500))',
+				success: 'hsl(var(--nx-success-500))',
+				// NEXUS Africa Network colors
+				night: 'hsl(var(--nx-night))',
+				network: 'hsl(var(--nx-network))',
+				gold: 'hsl(var(--nx-gold))',
+				cyan: 'hsl(var(--nx-cyan))',
+				deep: 'hsl(var(--nx-deep))',
+			}
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
@@ -126,7 +132,11 @@ export default {
 				'gradient-info': 'var(--gradient-info)',
 				'gradient-glass': 'var(--gradient-glass)',
 				'gradient-border': 'var(--gradient-border)',
-				'gradient-telecom': 'var(--gradient-telecom)'
+				'gradient-telecom': 'var(--gradient-telecom)',
+				// NEXUS Africa Network gradients
+				'gradient-nexus': 'linear-gradient(135deg, hsl(var(--nx-night)) 0%, hsl(var(--nx-network) / 0.8) 50%, hsl(var(--nx-gold) / 0.6) 100%)',
+				'gradient-nexus-overlay': 'linear-gradient(to right, hsl(var(--nx-night) / 0.85), hsl(var(--nx-gold) / 0.3))',
+				'gradient-nexus-card': 'linear-gradient(135deg, hsl(var(--nx-night) / 0.7), hsl(var(--nx-gold) / 0.4))',
 			},
 			boxShadow: {
 				'elegant': 'var(--shadow-lg)',
