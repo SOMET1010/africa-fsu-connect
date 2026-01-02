@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Globe, Users, Sparkles, Network, ChevronDown } from "lucide-react";
+import { ArrowRight, Globe, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import nexusHeroImage from "@/assets/nexus-hero-africa.png";
 import { cn } from "@/lib/utils";
+import { NexusAfricaMap } from "./NexusAfricaMap";
 
 interface NexusHeroProps {
   variant?: "landing" | "section" | "minimal";
@@ -23,7 +24,7 @@ const defaultContent = {
   landing: {
     title: "54 pays construisent ensemble",
     titleAccent: "l'avenir du Service Universel en Afrique",
-    description: "Une plateforme panafricaine de coopération, de projets et de bonnes pratiques pour l'inclusion numérique.",
+    description: "Une plateforme de coopération, de projets et de partage au service de l'inclusion numérique africaine.",
   },
   section: {
     title: "Réseau NEXUS",
@@ -42,9 +43,9 @@ export function NexusHero({
   title,
   subtitle,
   description,
-  showStats = true,
-  fullscreen = false,
-  parallax = false,
+  showStats = false,
+  fullscreen = true,
+  parallax = true,
   className,
   children,
 }: NexusHeroProps) {
@@ -69,46 +70,68 @@ export function NexusHero({
   return (
     <div className={cn(
       "relative overflow-hidden",
-      fullscreen ? "min-h-screen" : isLanding ? "min-h-[85vh]" : isMinimal ? "min-h-[40vh]" : "min-h-[60vh]",
+      fullscreen ? "min-h-screen" : isLanding ? "min-h-[90vh]" : isMinimal ? "min-h-[40vh]" : "min-h-[60vh]",
       "flex items-center",
       className
     )}>
-      {/* Background Image with Parallax */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* ===== LAYER 1: Background Image with Strong Parallax ===== */}
+      <div 
+        className="absolute inset-0 overflow-hidden"
+        style={{
+          transform: parallax ? `translateY(${scrollY * 0.4}px)` : undefined,
+          willChange: parallax ? 'transform' : undefined,
+        }}
+      >
         <img
           src={nexusHeroImage}
           alt="Carte de l'Afrique connectée"
-          className="w-full h-[120%] object-cover object-center"
-          style={{
-            transform: parallax ? `translateY(${scrollY * 0.3}px)` : undefined,
-            willChange: parallax ? 'transform' : undefined,
-          }}
+          className="w-full h-[130%] object-cover object-center"
         />
+      </div>
+      
+      {/* ===== LAYER 2: Animated Network Map with Medium Parallax ===== */}
+      <motion.div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          transform: parallax ? `translateY(${scrollY * 0.2}px)` : undefined,
+          willChange: parallax ? 'transform' : undefined,
+        }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+      >
+        <NexusAfricaMap animated className="opacity-70" />
+      </motion.div>
+
+      {/* ===== LAYER 3: Gradient Overlays for Depth & Readability ===== */}
+      <div className="absolute inset-0">
+        {/* Main gradient - night to transparent */}
+        <div className="absolute inset-0 bg-gradient-to-r from-nx-night/80 via-nx-night/50 to-transparent" />
         
-        {/* Gradient overlay - bleu nuit → or africain */}
-        <div className="absolute inset-0 bg-gradient-to-r from-nx-night/90 via-nx-night/70 to-nx-gold/30" />
+        {/* Top/bottom vignette */}
+        <div className="absolute inset-0 bg-gradient-to-t from-nx-night/70 via-transparent to-nx-night/50" />
         
-        {/* Additional vignette for depth */}
-        <div className="absolute inset-0 bg-gradient-to-t from-nx-night/60 via-transparent to-nx-night/40" />
+        {/* Subtle gold accent bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-nx-gold/10 via-transparent to-transparent" />
       </div>
 
-      {/* Content */}
+      {/* ===== LAYER 4: Content (No Parallax - Stable) ===== */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <div className={cn(
           "max-w-3xl",
-          isLanding ? "py-20" : "py-12"
+          isLanding ? "py-24" : "py-12"
         )}>
-          {/* Badge */}
+          {/* Badge - Réseau panafricain */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
           >
             <Badge 
-              className="mb-6 px-4 py-2 bg-white/10 backdrop-blur-md border-white/20 text-white font-medium"
+              className="mb-8 px-5 py-2.5 bg-white/10 backdrop-blur-md border-nx-gold/30 text-white font-medium text-sm"
             >
-              <Network className="h-4 w-4 mr-2" />
-              Plateforme panafricaine
+              <Globe className="h-4 w-4 mr-2 text-nx-gold" />
+              Réseau panafricain SUTEL
             </Badge>
           </motion.div>
 
@@ -116,11 +139,11 @@ export function NexusHero({
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
           >
             <h1 className={cn(
-              "font-bold text-white leading-tight",
-              isLanding ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl"
+              "font-bold text-white leading-[1.1] tracking-tight",
+              isLanding ? "text-4xl md:text-5xl lg:text-6xl xl:text-7xl" : "text-3xl md:text-4xl"
             )}>
               {title || content.title}
             </h1>
@@ -130,11 +153,11 @@ export function NexusHero({
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.25 }}
+            transition={{ duration: 0.7, delay: 0.7 }}
           >
             <h1 className={cn(
-              "font-bold text-nx-gold leading-tight mt-2",
-              isLanding ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl"
+              "font-bold text-nx-gold leading-[1.1] tracking-tight mt-2",
+              isLanding ? "text-4xl md:text-5xl lg:text-6xl xl:text-7xl" : "text-3xl md:text-4xl"
             )}>
               {subtitle || content.titleAccent}
             </h1>
@@ -145,9 +168,9 @@ export function NexusHero({
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.35 }}
+              transition={{ duration: 0.7, delay: 0.9 }}
               className={cn(
-                "text-white/80 mt-6 max-w-2xl",
+                "text-white/80 mt-8 max-w-2xl leading-relaxed",
                 isLanding ? "text-lg md:text-xl" : "text-base md:text-lg"
               )}
             >
@@ -160,16 +183,16 @@ export function NexusHero({
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 mt-8"
+              transition={{ duration: 0.7, delay: 1.1 }}
+              className="flex flex-col sm:flex-row gap-4 mt-10"
             >
               <Button 
                 asChild 
                 size="lg" 
-                className="bg-white text-nx-night hover:bg-white/90 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="bg-white text-nx-night hover:bg-white/90 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 hover:scale-105 font-semibold px-8"
               >
                 <Link to="/network">
-                  Explorer le réseau
+                  Découvrir le réseau
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
@@ -178,7 +201,7 @@ export function NexusHero({
                 asChild 
                 variant="outline" 
                 size="lg"
-                className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300 hover:scale-105"
+                className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 px-8"
               >
                 <Link to="/auth">
                   Rejoindre
@@ -187,60 +210,20 @@ export function NexusHero({
             </motion.div>
           )}
 
-          {/* Stats - optional */}
-          {showStats && isLanding && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.7 }}
-              className="flex flex-wrap gap-8 mt-12 pt-8 border-t border-white/20"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                  <Globe className="h-6 w-6 text-nx-gold" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-white">54</div>
-                  <div className="text-sm text-white/70">pays membres</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                  <Sparkles className="h-6 w-6 text-nx-cyan" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-white">100+</div>
-                  <div className="text-sm text-white/70">projets partagés</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                  <Users className="h-6 w-6 text-nx-coop-500" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-white">500+</div>
-                  <div className="text-sm text-white/70">membres actifs</div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
           {/* Custom children */}
           {children}
         </div>
       </div>
       
-      {/* Scroll Indicator - fullscreen only */}
-      {fullscreen && isLanding && (
+      {/* Scroll Indicator - fullscreen landing only */}
+      {(fullscreen || isLanding) && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/70"
+          transition={{ duration: 0.6, delay: 1.5 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/60"
         >
-          <span className="text-xs font-medium mb-2">Découvrir</span>
+          <span className="text-xs font-medium mb-2 tracking-wide uppercase">Découvrir</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}

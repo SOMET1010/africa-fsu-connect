@@ -11,8 +11,8 @@ import { NexusNetworkPattern } from "@/components/shared/NexusNetworkPattern";
 const Index = () => {
   return (
     <div className="min-h-screen bg-[hsl(var(--nx-bg))] relative overflow-hidden">
-      {/* Hero Section - NEXUS Africa Network */}
-      <NexusHero variant="landing" showStats fullscreen parallax />
+      {/* Hero Section - NEXUS Africa Network (Infrastructure Vivante) */}
+      <NexusHero variant="landing" fullscreen parallax />
 
       {/* Recent Activity Section - Style NEXUS */}
       <section className="py-20 relative z-10 bg-[hsl(var(--nx-section-cool))]">
