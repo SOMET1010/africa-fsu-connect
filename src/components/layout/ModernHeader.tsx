@@ -250,11 +250,11 @@ const ModernHeader = () => {
 
             {/* Actions de droite avec effets premium */}
             <div className="flex items-center space-x-2">
+              {/* Sélecteur de langue - visible pour TOUS les utilisateurs */}
+              <LanguageSelector variant="ghost" size="sm" showLabel={false} />
+              
               {user && (
                 <>
-                  {/* Sélecteur de langue */}
-                  <LanguageSelector variant="ghost" size="sm" showLabel={false} />
-                  
                   {/* Centre de notifications */}
                   <div className="relative">
                     <NotificationCenter />
