@@ -1,16 +1,16 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useMemo, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { PageHero } from "@/components/shared/PageHero";
+import { GlassCard } from "@/components/ui/glass-card";
+import { ModernButton } from "@/components/ui/modern-button";
 import { AIWritingAssistant } from "@/components/submissions/AIWritingAssistant";
 import { submissionTemplateService } from "@/services/submissionTemplateService";
 import { DemoExportService } from "@/components/demo/services/demoExportService";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
-import { FileDown, Printer, Upload, Wand2 } from "lucide-react";
+import { FileDown, Printer, Upload, FileText } from "lucide-react";
 import { useAutoSave } from "@/hooks/useAutoSave";
 
 interface ConceptNoteData {
@@ -147,163 +147,165 @@ function ConceptNote() {
   }), [data]);
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      {/* SEO: H1 unique */}
-      <header className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Note conceptuelle</h1>
-        <p className="text-sm text-muted-foreground">Rédigez et prévisualisez une note conceptuelle structurée.</p>
+    <div className="min-h-screen bg-[hsl(var(--nx-bg))]">
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Hero */}
+        <PageHero
+          badge="Note Conceptuelle"
+          badgeIcon={FileText}
+          title="Rédaction de Note Conceptuelle"
+          subtitle="Rédigez et prévisualisez une note conceptuelle structurée"
+        />
+
         <link rel="canonical" href={`${window.location.origin}/concept-note`} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      </header>
 
-      <main className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Formulaire */}
-        <section aria-labelledby="form-title">
-          <Card>
-            <CardHeader className="space-y-2">
-              <CardTitle id="form-title">Saisie</CardTitle>
-              <div className="flex flex-wrap gap-2">
-                <Button variant="secondary" size="sm" onClick={loadDefaultTemplate}>
-                  <Upload className="h-4 w-4 mr-2" /> Charger le modèle
-                </Button>
-                <Button variant="ghost" size="sm" onClick={saveLocalTemplate}>
-                  Sauvegarder comme modèle
-                </Button>
-                <Button variant="ghost" size="sm" onClick={loadLocalTemplate}>
-                  Charger modèle local
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="title">Titre</Label>
-                <Input id="title" placeholder="Titre court et clair" value={data.title} onChange={update("title")} />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="subject">Sujet / Problématique</Label>
-                <Textarea id="subject" rows={2} placeholder="Quel problème souhaitons-nous résoudre ?" value={data.subject} onChange={update("subject")} />
-              </div>
-
-              <Separator />
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="context">Contexte</Label>
-                  <span className="text-xs text-muted-foreground">Astuce: 5-8 lignes</span>
+        <main className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
+          {/* Formulaire */}
+          <section aria-labelledby="form-title">
+            <GlassCard className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 id="form-title" className="text-lg font-semibold text-white">Saisie</h2>
+                <div className="flex flex-wrap gap-2">
+                  <ModernButton variant="outline" size="sm" onClick={loadDefaultTemplate}>
+                    <Upload className="h-4 w-4 mr-2" /> Charger le modèle
+                  </ModernButton>
+                  <ModernButton variant="ghost" size="sm" onClick={saveLocalTemplate}>
+                    Sauvegarder comme modèle
+                  </ModernButton>
+                  <ModernButton variant="ghost" size="sm" onClick={loadLocalTemplate}>
+                    Charger modèle local
+                  </ModernButton>
                 </div>
+              </div>
+              
+              <div className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="title" className="text-white/80">Titre</Label>
+                  <Input id="title" placeholder="Titre court et clair" value={data.title} onChange={update("title")} className="bg-white/5 border-white/10 text-white" />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="subject" className="text-white/80">Sujet / Problématique</Label>
+                  <Textarea id="subject" rows={2} placeholder="Quel problème souhaitons-nous résoudre ?" value={data.subject} onChange={update("subject")} className="bg-white/5 border-white/10 text-white" />
+                </div>
+
+                <Separator className="bg-white/10" />
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="context" className="text-white/80">Contexte</Label>
+                    <span className="text-xs text-white/50">Astuce: 5-8 lignes</span>
+                  </div>
+                  <div className="grid gap-2">
+                    <Textarea id="context" rows={5} placeholder="Contexte et justification..." value={data.context} onChange={update("context")} className="bg-white/5 border-white/10 text-white" />
+                    <AIWritingAssistant
+                      content={data.context}
+                      onContentUpdate={(v: string) => setData((d) => ({ ...d, context: v }))}
+                      type="concept_note"
+                      context={{ section: "context" }}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="objectives" className="text-white/80">Objectifs</Label>
+                    <span className="text-xs text-white/50">Liste en puces (une par ligne)</span>
+                  </div>
+                  <div className="grid gap-2">
+                    <Textarea id="objectives" rows={4} placeholder="1) ...\n2) ..." value={data.objectives} onChange={update("objectives")} className="bg-white/5 border-white/10 text-white" />
+                    <AIWritingAssistant
+                      content={data.objectives}
+                      onContentUpdate={(v: string) => setData((d) => ({ ...d, objectives: v }))}
+                      type="concept_note"
+                      context={{ section: "objectives" }}
+                    />
+                  </div>
+                </div>
+
                 <div className="grid gap-2">
-                  <Textarea id="context" rows={5} placeholder="Contexte et justification..." value={data.context} onChange={update("context")} />
-                  <AIWritingAssistant
-                    content={data.context}
-                    onContentUpdate={(v: string) => setData((d) => ({ ...d, context: v }))}
-                    type="concept_note"
-                    context={{ section: "context" }}
-                  />
+                  <Label htmlFor="audience" className="text-white/80">Public cible</Label>
+                  <Textarea id="audience" rows={2} placeholder="Qui est concerné ?" value={data.audience} onChange={update("audience")} className="bg-white/5 border-white/10 text-white" />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="objectives">Objectifs</Label>
-                  <span className="text-xs text-muted-foreground">Liste en puces (une par ligne)</span>
-                </div>
                 <div className="grid gap-2">
-                  <Textarea id="objectives" rows={4} placeholder="1) ...\n2) ..." value={data.objectives} onChange={update("objectives")} />
-                  <AIWritingAssistant
-                    content={data.objectives}
-                    onContentUpdate={(v: string) => setData((d) => ({ ...d, objectives: v }))}
-                    type="concept_note"
-                    context={{ section: "objectives" }}
-                  />
+                  <Label htmlFor="scope" className="text-white/80">Périmètre</Label>
+                  <Textarea id="scope" rows={3} placeholder="Ce qui est inclus / exclu..." value={data.scope} onChange={update("scope")} className="bg-white/5 border-white/10 text-white" />
                 </div>
-              </div>
 
-              <div className="grid gap-2">
-                <Label htmlFor="audience">Public cible</Label>
-                <Textarea id="audience" rows={2} placeholder="Qui est concerné ?" value={data.audience} onChange={update("audience")} />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="scope">Périmètre</Label>
-                <Textarea id="scope" rows={3} placeholder="Ce qui est inclus / exclu..." value={data.scope} onChange={update("scope")} />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="budget">Budget estimatif</Label>
-                <Input id="budget" placeholder="Ex: 120 000 000 FCFA (CAPEX/OPEX)" value={data.budget} onChange={update("budget")} />
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="outcomes">Résultats attendus</Label>
-                  <span className="text-xs text-muted-foreground">Liste en puces</span>
-                </div>
                 <div className="grid gap-2">
-                  <Textarea id="outcomes" rows={4} placeholder="Impact concret attendu..." value={data.outcomes} onChange={update("outcomes")} />
-                  <AIWritingAssistant
-                    content={data.outcomes}
-                    onContentUpdate={(v: string) => setData((d) => ({ ...d, outcomes: v }))}
-                    type="concept_note"
-                    context={{ section: "outcomes" }}
-                  />
+                  <Label htmlFor="budget" className="text-white/80">Budget estimatif</Label>
+                  <Input id="budget" placeholder="Ex: 120 000 000 FCFA (CAPEX/OPEX)" value={data.budget} onChange={update("budget")} className="bg-white/5 border-white/10 text-white" />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="outcomes" className="text-white/80">Résultats attendus</Label>
+                    <span className="text-xs text-white/50">Liste en puces</span>
+                  </div>
+                  <div className="grid gap-2">
+                    <Textarea id="outcomes" rows={4} placeholder="Impact concret attendu..." value={data.outcomes} onChange={update("outcomes")} className="bg-white/5 border-white/10 text-white" />
+                    <AIWritingAssistant
+                      content={data.outcomes}
+                      onContentUpdate={(v: string) => setData((d) => ({ ...d, outcomes: v }))}
+                      type="concept_note"
+                      context={{ section: "outcomes" }}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="indicators" className="text-white/80">Indicateurs de succès</Label>
+                  <Textarea id="indicators" rows={3} placeholder="KPI mesurables..." value={data.indicators} onChange={update("indicators")} className="bg-white/5 border-white/10 text-white" />
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="timeline" className="text-white/80">Calendrier</Label>
+                  <Textarea id="timeline" rows={3} placeholder=" Jalons clés..." value={data.timeline} onChange={update("timeline")} className="bg-white/5 border-white/10 text-white" />
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="risks" className="text-white/80">Risques / Atténuation</Label>
+                  <Textarea id="risks" rows={3} placeholder="Principaux risques et mesures..." value={data.risks} onChange={update("risks")} className="bg-white/5 border-white/10 text-white" />
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="decisions" className="text-white/80">Décisions attendues</Label>
+                  <Textarea id="decisions" rows={2} placeholder="Quelles décisions sont requises ?" value={data.decisions} onChange={update("decisions")} className="bg-white/5 border-white/10 text-white" />
+                </div>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <ModernButton size="sm" onClick={handlePrint}>
+                    <Printer className="h-4 w-4 mr-2" /> Exporter PDF (Imprimer)
+                  </ModernButton>
+                  <ModernButton variant="outline" size="sm" onClick={handleExportMarkdown}>
+                    <FileDown className="h-4 w-4 mr-2" /> Exporter Markdown
+                  </ModernButton>
                 </div>
               </div>
+            </GlassCard>
+          </section>
 
-              <div className="grid gap-2">
-                <Label htmlFor="indicators">Indicateurs de succès</Label>
-                <Textarea id="indicators" rows={3} placeholder="KPI mesurables..." value={data.indicators} onChange={update("indicators")} />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="timeline">Calendrier</Label>
-                <Textarea id="timeline" rows={3} placeholder=" Jalons clés..." value={data.timeline} onChange={update("timeline")} />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="risks">Risques / Atténuation</Label>
-                <Textarea id="risks" rows={3} placeholder="Principaux risques et mesures..." value={data.risks} onChange={update("risks")} />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="decisions">Décisions attendues</Label>
-                <Textarea id="decisions" rows={2} placeholder="Quelles décisions sont requises ?" value={data.decisions} onChange={update("decisions")} />
-              </div>
-
-              <div className="flex flex-wrap gap-2 pt-2">
-                <Button variant="default" size="sm" onClick={handlePrint}>
-                  <Printer className="h-4 w-4 mr-2" /> Exporter PDF (Imprimer)
-                </Button>
-                <Button variant="outline" size="sm" onClick={handleExportMarkdown}>
-                  <FileDown className="h-4 w-4 mr-2" /> Exporter Markdown
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        {/* Prévisualisation */}
-        <section aria-labelledby="preview-title">
-          <Card className="print:border-none">
-            <CardHeader>
-              <CardTitle id="preview-title">Aperçu</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <article className="prose prose-sm max-w-none dark:prose-invert">
-                <h2 className="mb-2">{data.title || "Note conceptuelle SUTEL"}</h2>
+          {/* Prévisualisation */}
+          <section aria-labelledby="preview-title">
+            <GlassCard className="p-6 print:border-none">
+              <h2 id="preview-title" className="text-lg font-semibold text-white mb-6">Aperçu</h2>
+              <article className="prose prose-sm max-w-none prose-invert">
+                <h2 className="mb-2 text-[hsl(var(--nx-gold))]">{data.title || "Note conceptuelle SUTEL"}</h2>
                 {data.subject && (
                   <p><strong>Sujet / Problématique:</strong> {data.subject}</p>
                 )}
                 {data.context && (
                   <section>
-                    <h3>Contexte</h3>
-                    <p className="whitespace-pre-wrap">{data.context}</p>
+                    <h3 className="text-white">Contexte</h3>
+                    <p className="whitespace-pre-wrap text-white/70">{data.context}</p>
                   </section>
                 )}
                 {data.objectives && (
                   <section>
-                    <h3>Objectifs</h3>
-                    <ul className="list-disc pl-6 whitespace-pre-wrap">
+                    <h3 className="text-white">Objectifs</h3>
+                    <ul className="list-disc pl-6 whitespace-pre-wrap text-white/70">
                       {data.objectives.split("\n").filter(Boolean).map((line, i) => (
                         <li key={i}>{line}</li>
                       ))}
@@ -312,26 +314,26 @@ function ConceptNote() {
                 )}
                 {data.audience && (
                   <section>
-                    <h3>Public cible</h3>
-                    <p className="whitespace-pre-wrap">{data.audience}</p>
+                    <h3 className="text-white">Public cible</h3>
+                    <p className="whitespace-pre-wrap text-white/70">{data.audience}</p>
                   </section>
                 )}
                 {data.scope && (
                   <section>
-                    <h3>Périmètre</h3>
-                    <p className="whitespace-pre-wrap">{data.scope}</p>
+                    <h3 className="text-white">Périmètre</h3>
+                    <p className="whitespace-pre-wrap text-white/70">{data.scope}</p>
                   </section>
                 )}
                 {data.budget && (
                   <section>
-                    <h3>Budget estimatif</h3>
-                    <p className="whitespace-pre-wrap">{data.budget}</p>
+                    <h3 className="text-white">Budget estimatif</h3>
+                    <p className="whitespace-pre-wrap text-white/70">{data.budget}</p>
                   </section>
                 )}
                 {data.outcomes && (
                   <section>
-                    <h3>Résultats attendus</h3>
-                    <ul className="list-disc pl-6 whitespace-pre-wrap">
+                    <h3 className="text-white">Résultats attendus</h3>
+                    <ul className="list-disc pl-6 whitespace-pre-wrap text-white/70">
                       {data.outcomes.split("\n").filter(Boolean).map((line, i) => (
                         <li key={i}>{line}</li>
                       ))}
@@ -340,33 +342,33 @@ function ConceptNote() {
                 )}
                 {data.indicators && (
                   <section>
-                    <h3>Indicateurs de succès</h3>
-                    <p className="whitespace-pre-wrap">{data.indicators}</p>
+                    <h3 className="text-white">Indicateurs de succès</h3>
+                    <p className="whitespace-pre-wrap text-white/70">{data.indicators}</p>
                   </section>
                 )}
                 {data.timeline && (
                   <section>
-                    <h3>Calendrier</h3>
-                    <p className="whitespace-pre-wrap">{data.timeline}</p>
+                    <h3 className="text-white">Calendrier</h3>
+                    <p className="whitespace-pre-wrap text-white/70">{data.timeline}</p>
                   </section>
                 )}
                 {data.risks && (
                   <section>
-                    <h3>Risques / Atténuation</h3>
-                    <p className="whitespace-pre-wrap">{data.risks}</p>
+                    <h3 className="text-white">Risques / Atténuation</h3>
+                    <p className="whitespace-pre-wrap text-white/70">{data.risks}</p>
                   </section>
                 )}
                 {data.decisions && (
                   <section>
-                    <h3>Décisions attendues</h3>
-                    <p className="whitespace-pre-wrap">{data.decisions}</p>
+                    <h3 className="text-white">Décisions attendues</h3>
+                    <p className="whitespace-pre-wrap text-white/70">{data.decisions}</p>
                   </section>
                 )}
               </article>
-            </CardContent>
-          </Card>
-        </section>
-      </main>
+            </GlassCard>
+          </section>
+        </main>
+      </div>
     </div>
   );
 }

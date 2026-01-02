@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { PageHero } from "@/components/shared/PageHero";
+import { GlassCard } from "@/components/ui/glass-card";
+import { ModernButton } from "@/components/ui/modern-button";
 import { 
   Bot, 
   Send, 
@@ -17,8 +18,7 @@ import {
   Paperclip,
   ThumbsUp,
   ThumbsDown,
-  Copy,
-  RotateCcw
+  Copy
 } from "lucide-react";
 
 interface Message {
@@ -104,43 +104,32 @@ const SutaAssistant = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-primary to-accent rounded-xl">
-            <Bot className="h-6 w-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2">
-              Assistant SUTA
-              <Badge variant="secondary" className="text-xs">
-                <Sparkles className="h-3 w-3 mr-1" />
-                IA
-              </Badge>
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Votre assistant intelligent pour la plateforme NEXUS
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2">
+    <div className="min-h-screen bg-[hsl(var(--nx-bg))]">
+      <div className="container mx-auto px-4 py-8 max-w-4xl space-y-6">
+        {/* Hero */}
+        <PageHero
+          badge="Assistant IA"
+          badgeIcon={Bot}
+          title="SUTA - Votre Assistant Intelligent"
+          subtitle="Posez vos questions sur le Service Universel, les projets FSU et la plateforme NEXUS"
+        />
+
+        {/* Language selector */}
+        <div className="flex justify-end gap-2 animate-fade-in">
           {languages.map((lang) => (
-            <Button
+            <ModernButton
               key={lang.code}
               variant={lang.code === 'fr' ? 'default' : 'ghost'}
               size="sm"
               className="text-xs"
             >
               {lang.label}
-            </Button>
+            </ModernButton>
           ))}
         </div>
-      </div>
 
-      {/* Chat Container */}
-      <Card className="h-[600px] flex flex-col">
-        <CardContent className="flex-1 flex flex-col p-0">
+        {/* Chat Container */}
+        <GlassCard className="h-[600px] flex flex-col animate-fade-in">
           {/* Messages */}
           <ScrollArea className="flex-1 p-4" ref={scrollRef}>
             <div className="space-y-4">
@@ -151,7 +140,7 @@ const SutaAssistant = () => {
                 >
                   {message.role === 'assistant' && (
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-xs">
+                      <AvatarFallback className="bg-gradient-to-br from-[hsl(var(--nx-gold))] to-[hsl(var(--nx-cyan))] text-[hsl(var(--nx-night))] text-xs">
                         <Bot className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
@@ -159,30 +148,30 @@ const SutaAssistant = () => {
                   <div
                     className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                       message.role === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
+                        ? 'bg-[hsl(var(--nx-gold))] text-[hsl(var(--nx-night))]'
+                        : 'bg-white/10'
                     }`}
                   >
-                    <div className="text-sm whitespace-pre-wrap" dangerouslySetInnerHTML={{
+                    <div className={`text-sm whitespace-pre-wrap ${message.role === 'assistant' ? 'text-white' : ''}`} dangerouslySetInnerHTML={{
                       __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                     }} />
                     {message.role === 'assistant' && (
-                      <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
-                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                      <div className="flex items-center gap-2 mt-2 pt-2 border-t border-white/10">
+                        <ModernButton variant="ghost" size="icon" className="h-6 w-6" aria-label="J'aime">
                           <ThumbsUp className="h-3 w-3" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                        </ModernButton>
+                        <ModernButton variant="ghost" size="icon" className="h-6 w-6" aria-label="Je n'aime pas">
                           <ThumbsDown className="h-3 w-3" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                        </ModernButton>
+                        <ModernButton variant="ghost" size="icon" className="h-6 w-6" aria-label="Copier">
                           <Copy className="h-3 w-3" />
-                        </Button>
+                        </ModernButton>
                       </div>
                     )}
                   </div>
                   {message.role === 'user' && (
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-secondary text-xs">U</AvatarFallback>
+                      <AvatarFallback className="bg-white/10 text-white text-xs">U</AvatarFallback>
                     </Avatar>
                   )}
                 </div>
@@ -190,15 +179,15 @@ const SutaAssistant = () => {
               {isTyping && (
                 <div className="flex gap-3">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-xs">
+                    <AvatarFallback className="bg-gradient-to-br from-[hsl(var(--nx-gold))] to-[hsl(var(--nx-cyan))] text-[hsl(var(--nx-night))] text-xs">
                       <Bot className="h-4 w-4" />
                     </AvatarFallback>
                   </Avatar>
-                  <div className="bg-muted rounded-2xl px-4 py-3">
+                  <div className="bg-white/10 rounded-2xl px-4 py-3">
                     <div className="flex gap-1">
-                      <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" />
-                      <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce delay-100" />
-                      <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce delay-200" />
+                      <span className="w-2 h-2 bg-white/50 rounded-full animate-bounce" />
+                      <span className="w-2 h-2 bg-white/50 rounded-full animate-bounce delay-100" />
+                      <span className="w-2 h-2 bg-white/50 rounded-full animate-bounce delay-200" />
                     </div>
                   </div>
                 </div>
@@ -207,10 +196,10 @@ const SutaAssistant = () => {
           </ScrollArea>
 
           {/* Quick Actions */}
-          <div className="px-4 py-3 border-t border-border/50">
+          <div className="px-4 py-3 border-t border-white/10">
             <div className="flex flex-wrap gap-2">
               {quickActions.map((action) => (
-                <Button
+                <ModernButton
                   key={action.label}
                   variant="outline"
                   size="sm"
@@ -219,43 +208,43 @@ const SutaAssistant = () => {
                 >
                   <action.icon className="h-3 w-3 mr-1" />
                   {action.label}
-                </Button>
+                </ModernButton>
               ))}
             </div>
           </div>
 
           {/* Input */}
-          <div className="p-4 border-t border-border/50">
+          <div className="p-4 border-t border-white/10">
             <div className="flex gap-2">
-              <Button variant="ghost" size="icon" className="shrink-0">
+              <ModernButton variant="ghost" size="icon" className="shrink-0" aria-label="Joindre un fichier">
                 <Paperclip className="h-4 w-4" />
-              </Button>
+              </ModernButton>
               <Input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Posez votre question..."
-                className="flex-1"
+                className="flex-1 bg-white/5 border-white/10 text-white placeholder:text-white/40"
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               />
-              <Button variant="ghost" size="icon" className="shrink-0">
+              <ModernButton variant="ghost" size="icon" className="shrink-0" aria-label="Enregistrement vocal">
                 <Mic className="h-4 w-4" />
-              </Button>
-              <Button onClick={handleSend} disabled={!inputValue.trim() || isTyping}>
+              </ModernButton>
+              <ModernButton onClick={handleSend} disabled={!inputValue.trim() || isTyping} aria-label="Envoyer">
                 <Send className="h-4 w-4" />
-              </Button>
+              </ModernButton>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </GlassCard>
 
-      {/* Footer */}
-      <div className="mt-4 text-center text-xs text-muted-foreground">
-        <p>
-          SUTA utilise l'IA pour vous aider. Les réponses peuvent parfois être imprécises.
-          <Button variant="link" size="sm" className="text-xs px-1">
-            En savoir plus
-          </Button>
-        </p>
+        {/* Footer */}
+        <div className="text-center text-xs text-white/50 animate-fade-in">
+          <p>
+            SUTA utilise l'IA pour vous aider. Les réponses peuvent parfois être imprécises.
+            <ModernButton variant="link" size="sm" className="text-xs px-1 text-white/50 hover:text-white/70">
+              En savoir plus
+            </ModernButton>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Search, Filter, Download, UserPlus, Mail, Shield, Eye, EyeOff, MoreHorizontal } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Search, Download, Mail, Eye, EyeOff, MoreHorizontal, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -11,6 +9,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { PageHero } from "@/components/shared/PageHero";
+import { GlassCard } from "@/components/ui/glass-card";
+import { ModernButton } from "@/components/ui/modern-button";
 import { useAdminUsers } from "@/hooks/useAdminUsers";
 import { useToast } from "@/hooks/use-toast";
 
@@ -59,24 +60,24 @@ const AdminUsers = () => {
   const getRoleColor = (role: string) => {
     switch (role) {
       case "super_admin":
-        return "bg-red-100 text-red-800 border-red-200";
+        return "bg-red-500/10 text-red-400 border-red-500/20";
       case "admin_pays":
-        return "bg-orange-100 text-orange-800 border-orange-200";
+        return "bg-orange-500/10 text-orange-400 border-orange-500/20";
       case "editeur":
-        return "bg-blue-100 text-blue-800 border-blue-200";
+        return "bg-[hsl(var(--nx-cyan)/0.1)] text-[hsl(var(--nx-cyan))] border-[hsl(var(--nx-cyan)/0.2)]";
       case "contributeur":
-        return "bg-green-100 text-green-800 border-green-200";
+        return "bg-green-500/10 text-green-400 border-green-500/20";
       case "lecteur":
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-white/5 text-white/60 border-white/10";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-white/5 text-white/60 border-white/10";
     }
   };
 
   const getStatusColor = (blocked: boolean) => {
     return blocked 
-      ? "bg-red-100 text-red-800 border-red-200"
-      : "bg-green-100 text-green-800 border-green-200";
+      ? "bg-red-500/10 text-red-400 border-red-500/20"
+      : "bg-green-500/10 text-green-400 border-green-500/20";
   };
 
   const handleRoleChange = async (userId: string, newRole: string) => {
@@ -146,186 +147,157 @@ const AdminUsers = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="min-h-screen bg-[hsl(var(--nx-night))] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Chargement des utilisateurs...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[hsl(var(--nx-gold))] mx-auto mb-4"></div>
+          <p className="text-white/60">Chargement des utilisateurs...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-primary mb-2">
-                Gestion des Utilisateurs
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                Administration complète des comptes utilisateurs de la plateforme
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <Button 
-                variant="outline" 
-                onClick={() => openNotificationDialog(undefined, "broadcast")}
-              >
-                <Mail className="h-4 w-4 mr-2" />
-                Notification Globale
-              </Button>
-              <Button onClick={exportUsers}>
-                <Download className="h-4 w-4 mr-2" />
-                Exporter
-              </Button>
-            </div>
-          </div>
+    <div className="min-h-screen bg-[hsl(var(--nx-night))]">
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Hero */}
+        <PageHero
+          badge="Administration"
+          badgeIcon={Users}
+          title="Gestion des Utilisateurs"
+          subtitle="Administration complète des comptes utilisateurs de la plateforme"
+        />
+
+        {/* Actions */}
+        <div className="flex gap-3 animate-fade-in">
+          <ModernButton 
+            variant="outline" 
+            onClick={() => openNotificationDialog(undefined, "broadcast")}
+          >
+            <Mail className="h-4 w-4 mr-2" />
+            Notification Globale
+          </ModernButton>
+          <ModernButton onClick={exportUsers}>
+            <Download className="h-4 w-4 mr-2" />
+            Exporter
+          </ModernButton>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardContent className="p-6">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-primary">{stats.totalUsers}</p>
-                <p className="text-sm text-muted-foreground">Total Utilisateurs</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-green-600">{stats.activeUsers}</p>
-                <p className="text-sm text-muted-foreground">Actifs</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-blue-600">{stats.newUsersThisMonth}</p>
-                <p className="text-sm text-muted-foreground">Nouveaux ce mois</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-orange-600">{stats.adminUsers}</p>
-                <p className="text-sm text-muted-foreground">Administrateurs</p>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid md:grid-cols-4 gap-6 animate-fade-in">
+          {[
+            { label: "Total Utilisateurs", value: stats.totalUsers, color: "text-[hsl(var(--nx-gold))]" },
+            { label: "Actifs", value: stats.activeUsers, color: "text-green-400" },
+            { label: "Nouveaux ce mois", value: stats.newUsersThisMonth, color: "text-[hsl(var(--nx-cyan))]" },
+            { label: "Administrateurs", value: stats.adminUsers, color: "text-orange-400" }
+          ].map((stat) => (
+            <GlassCard key={stat.label} className="p-6 text-center">
+              <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+              <p className="text-sm text-white/60">{stat.label}</p>
+            </GlassCard>
+          ))}
         </div>
 
         {/* Filters */}
-        <Card className="mb-6">
-          <CardContent className="p-6">
-            <div className="flex flex-wrap gap-4 items-center">
-              <div className="flex-1 min-w-64">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Rechercher par nom, email..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
+        <GlassCard className="p-6 animate-fade-in">
+          <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex-1 min-w-64">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/40" />
+                <Input
+                  placeholder="Rechercher par nom, email..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/40"
+                />
               </div>
-              
-              <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Filtrer par rôle" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les rôles</SelectItem>
-                  <SelectItem value="super_admin">Super Admin</SelectItem>
-                  <SelectItem value="admin_pays">Admin Pays</SelectItem>
-                  <SelectItem value="editeur">Éditeur</SelectItem>
-                  <SelectItem value="contributeur">Contributeur</SelectItem>
-                  <SelectItem value="lecteur">Lecteur</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Filtrer par statut" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les statuts</SelectItem>
-                  <SelectItem value="active">Actifs</SelectItem>
-                  <SelectItem value="blocked">Bloqués</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={countryFilter} onValueChange={setCountryFilter}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Filtrer par pays" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les pays</SelectItem>
-                  {uniqueCountries.map(country => (
-                    <SelectItem key={country} value={country!}>
-                      {country}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
-          </CardContent>
-        </Card>
+            
+            <Select value={roleFilter} onValueChange={setRoleFilter}>
+              <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
+                <SelectValue placeholder="Filtrer par rôle" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous les rôles</SelectItem>
+                <SelectItem value="super_admin">Super Admin</SelectItem>
+                <SelectItem value="admin_pays">Admin Pays</SelectItem>
+                <SelectItem value="editeur">Éditeur</SelectItem>
+                <SelectItem value="contributeur">Contributeur</SelectItem>
+                <SelectItem value="lecteur">Lecteur</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
+                <SelectValue placeholder="Filtrer par statut" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous les statuts</SelectItem>
+                <SelectItem value="active">Actifs</SelectItem>
+                <SelectItem value="blocked">Bloqués</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={countryFilter} onValueChange={setCountryFilter}>
+              <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
+                <SelectValue placeholder="Filtrer par pays" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous les pays</SelectItem>
+                {uniqueCountries.map(country => (
+                  <SelectItem key={country} value={country!}>
+                    {country}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </GlassCard>
 
         {/* Users Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Liste des Utilisateurs ({filteredUsers.length})</CardTitle>
-            <CardDescription>
-              Gestion complète des comptes utilisateurs
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        <GlassCard className="overflow-hidden animate-fade-in">
+          <div className="p-6 border-b border-white/10">
+            <h3 className="text-lg font-semibold text-white">Liste des Utilisateurs ({filteredUsers.length})</h3>
+            <p className="text-sm text-white/60">Gestion complète des comptes utilisateurs</p>
+          </div>
+          <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Utilisateur</TableHead>
-                  <TableHead>Pays</TableHead>
-                  <TableHead>Rôle</TableHead>
-                  <TableHead>Statut</TableHead>
-                  <TableHead>Inscription</TableHead>
-                  <TableHead>Actions</TableHead>
+                <TableRow className="border-white/10 hover:bg-white/5">
+                  <TableHead className="text-white/70">Utilisateur</TableHead>
+                  <TableHead className="text-white/70">Pays</TableHead>
+                  <TableHead className="text-white/70">Rôle</TableHead>
+                  <TableHead className="text-white/70">Statut</TableHead>
+                  <TableHead className="text-white/70">Inscription</TableHead>
+                  <TableHead className="text-white/70">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredUsers.map((user) => (
-                  <TableRow key={user.id}>
+                  <TableRow key={user.id} className="border-white/10 hover:bg-white/5">
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar>
                           <AvatarImage src={user.avatar_url || undefined} />
-                          <AvatarFallback>
+                          <AvatarFallback className="bg-[hsl(var(--nx-gold)/0.2)] text-[hsl(var(--nx-gold))]">
                             {user.first_name?.[0]}{user.last_name?.[0]}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium">
+                          <p className="font-medium text-white">
                             {user.first_name} {user.last_name}
                           </p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-white/50">
                             {user.email}
                           </p>
                           {user.organization && (
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-xs text-white/40">
                               {user.organization}
                             </p>
                           )}
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-white/70">
                       {user.country || "Non spécifié"}
                     </TableCell>
                     <TableCell>
@@ -333,7 +305,7 @@ const AdminUsers = () => {
                         value={user.role}
                         onValueChange={(newRole) => handleRoleChange(user.id, newRole)}
                       >
-                        <SelectTrigger className="w-36">
+                        <SelectTrigger className="w-36 bg-transparent border-0 p-0 h-auto">
                           <Badge className={getRoleColor(user.role)}>
                             {user.role === "super_admin" && "Super Admin"}
                             {user.role === "admin_pays" && "Admin Pays"}
@@ -356,15 +328,15 @@ const AdminUsers = () => {
                         {user.blocked ? "Bloqué" : "Actif"}
                       </Badge>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-white/70">
                       {new Date(user.created_at).toLocaleDateString('fr-FR')}
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
+                          <ModernButton variant="ghost" size="sm" aria-label="Actions">
                             <MoreHorizontal className="h-4 w-4" />
-                          </Button>
+                          </ModernButton>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem 
@@ -376,7 +348,7 @@ const AdminUsers = () => {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => handleToggleStatus(user.id, !user.blocked)}
-                            className={user.blocked ? "text-green-600" : "text-red-600"}
+                            className={user.blocked ? "text-green-400" : "text-red-400"}
                           >
                             {user.blocked ? (
                               <>
@@ -397,20 +369,20 @@ const AdminUsers = () => {
                 ))}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
+          </div>
+        </GlassCard>
 
         {/* Notification Dialog */}
         <Dialog open={notificationDialog} onOpenChange={setNotificationDialog}>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md bg-[hsl(var(--nx-night))] border-white/10">
             <DialogHeader>
-              <DialogTitle>
+              <DialogTitle className="text-white">
                 {notificationData.type === "individual" 
                   ? `Envoyer une notification à ${selectedUser?.first_name} ${selectedUser?.last_name}`
                   : "Envoyer une notification globale"
                 }
               </DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="text-white/60">
                 {notificationData.type === "individual"
                   ? "Cette notification sera envoyée uniquement à cet utilisateur."
                   : "Cette notification sera envoyée à tous les utilisateurs de la plateforme."
@@ -419,37 +391,33 @@ const AdminUsers = () => {
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="title">Titre</Label>
+                <Label htmlFor="title" className="text-white/80">Titre</Label>
                 <Input
                   id="title"
                   value={notificationData.title}
                   onChange={(e) => setNotificationData({...notificationData, title: e.target.value})}
                   placeholder="Titre de la notification"
+                  className="bg-white/5 border-white/10 text-white"
                 />
               </div>
               <div>
-                <Label htmlFor="message">Message</Label>
+                <Label htmlFor="message" className="text-white/80">Message</Label>
                 <Textarea
                   id="message"
                   value={notificationData.message}
                   onChange={(e) => setNotificationData({...notificationData, message: e.target.value})}
-                  placeholder="Contenu de la notification"
+                  placeholder="Contenu de la notification..."
                   rows={4}
+                  className="bg-white/5 border-white/10 text-white"
                 />
               </div>
-              <div className="flex justify-end gap-3">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setNotificationDialog(false)}
-                >
+              <div className="flex justify-end gap-2">
+                <ModernButton variant="outline" onClick={() => setNotificationDialog(false)}>
                   Annuler
-                </Button>
-                <Button 
-                  onClick={handleSendNotification}
-                  disabled={!notificationData.title || !notificationData.message}
-                >
+                </ModernButton>
+                <ModernButton onClick={handleSendNotification}>
                   Envoyer
-                </Button>
+                </ModernButton>
               </div>
             </div>
           </DialogContent>
