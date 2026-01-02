@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Globe, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
-import { RegionCards } from "@/components/network/RegionCards";
 import { NexusActivityFeed } from "@/components/network/NexusActivityFeed";
+import { NexusRegions } from "@/components/network/NexusRegions";
 import { NexusHero } from "@/components/shared/NexusHero";
-import { NexusNetworkPattern } from "@/components/shared/NexusNetworkPattern";
 
 const Index = () => {
   return (
@@ -17,37 +15,9 @@ const Index = () => {
       {/* Recent Activity Section - Nexus Stream (Dark Mode Continuity) */}
       <NexusActivityFeed />
 
-      {/* Regions Section - Style NEXUS avec pattern */}
-      <section className="py-20 bg-[hsl(var(--nx-night))] relative z-10 overflow-hidden">
-        {/* Pattern réseau */}
-        <NexusNetworkPattern variant="soft" className="opacity-[0.08]" />
-        
-        <PageContainer className="relative z-10">
-          <div className="text-center mb-12">
-            <Badge className="mb-4 px-4 py-2 bg-[hsl(var(--nx-gold))]/20 text-[hsl(var(--nx-gold))] border-[hsl(var(--nx-gold))]/30">
-              <Globe className="w-4 h-4 mr-2" />
-              Régions du réseau
-            </Badge>
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Un réseau panafricain
-            </h2>
-            <p className="text-white/60 max-w-2xl mx-auto mb-8">
-              Explorez les pays membres par région
-            </p>
-          </div>
-          
-          <RegionCards />
-          
-          <div className="text-center mt-10">
-            <Button asChild variant="outline" className="border-[hsl(var(--nx-gold))]/30 text-[hsl(var(--nx-gold))] hover:bg-[hsl(var(--nx-gold))]/10 hover:border-[hsl(var(--nx-gold))]/50 transition-all duration-300">
-              <Link to="/members" className="flex items-center gap-2">
-                <Globe className="h-4 w-4" />
-                <span>Voir tous les pays membres</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </PageContainer>
+      {/* Regions Section - Holographic Grid */}
+      <section className="bg-[hsl(var(--nx-night))] relative z-10">
+        <NexusRegions />
       </section>
 
       {/* CTA Section - Style NEXUS avec gradient or */}
