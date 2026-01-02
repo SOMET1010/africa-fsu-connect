@@ -20,6 +20,11 @@ const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
   const { trackActivity } = useContextualIntelligence();
   const { animationsEnabled } = useAccessibilityPreferences();
 
+  // ✅ Afficher les suggestions uniquement dans la couche opérationnelle (Advanced/Admin)
+  const shouldShowSuggestions = 
+    location.pathname.startsWith('/advanced') || 
+    location.pathname.startsWith('/admin');
+
   // Track page visits for contextual intelligence
   useEffect(() => {
     trackActivity({
@@ -50,10 +55,12 @@ const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
         )}
       </div>
 
-      {/* Smart suggestions sidebar */}
-      <div className="fixed bottom-4 right-4 w-80 max-w-[calc(100vw-2rem)] z-40">
-        <SmartSuggestions compact maxSuggestions={2} />
-      </div>
+      {/* Smart suggestions sidebar - UNIQUEMENT sur /advanced et /admin */}
+      {shouldShowSuggestions && (
+        <div className="fixed bottom-4 right-4 w-80 max-w-[calc(100vw-2rem)] z-40">
+          <SmartSuggestions compact maxSuggestions={2} />
+        </div>
+      )}
     </div>
   );
 };
