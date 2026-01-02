@@ -12,6 +12,7 @@ import { ActivityPanel } from "./ActivityPanel";
 import { MapFiltersHUD } from "./MapFiltersHUD";
 import { CommandCenterMap } from "./CommandCenterMap";
 import { CountrySheet } from "./CountrySheet";
+import { MapLegend } from "./MapLegend";
 
 export const NexusMapDashboard = () => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
@@ -98,7 +99,7 @@ export const NexusMapDashboard = () => {
       {/* 3. SIDE PANEL - Activity */}
       <ActivityPanel isOpen={showActivity} onToggle={() => setShowActivity(!showActivity)} />
 
-      {/* 4. BOTTOM BAR - Map Controls */}
+      {/* 4. BOTTOM BAR - Map Controls + Legend */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -136,14 +137,8 @@ export const NexusMapDashboard = () => {
           </Button>
         </div>
 
-        {/* Center: Link to Activity */}
-        <Link 
-          to="/activity" 
-          className="text-sm text-white/60 hover:text-white inline-flex items-center gap-1 transition-colors bg-slate-900/60 backdrop-blur px-3 py-1.5 rounded-full border border-white/10"
-        >
-          Voir l'activité détaillée
-          <ArrowRight className="h-3 w-3" />
-        </Link>
+        {/* Center: Visual Legend */}
+        <MapLegend />
 
         {/* Activity Toggle (when closed) */}
         {!showActivity && (

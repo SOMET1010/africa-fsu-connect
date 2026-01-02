@@ -67,8 +67,8 @@ export const CommandCenterMap = ({
       scrollWheelZoom: true,
     });
 
-    // CartoDB Dark Matter tiles - dark cinematic style
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    // CartoDB Dark Matter NO LABELS - ultra clean background
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 19,
@@ -105,6 +105,9 @@ export const CommandCenterMap = ({
       // Get variable size based on activity level
       const markerDims = getMarkerSize(activity.level);
 
+      // Random animation delay per country (0-2s) for organic breathing
+      const animationDelay = ((country.code.charCodeAt(0) + country.code.charCodeAt(1)) % 20) / 10;
+
       // Create custom marker icon - HUD style with variable size
       const icon = L.divIcon({
         html: `
@@ -120,6 +123,7 @@ export const CommandCenterMap = ({
               border: 2px solid ${color};
               opacity: 0.5;
               animation: pulse-ring-hud 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              animation-delay: ${animationDelay}s;
             "></div>
             <div style="
               position: absolute;
@@ -162,62 +166,38 @@ export const CommandCenterMap = ({
 
       const marker = L.marker([country.latitude, country.longitude], { icon });
 
-      // Create popup content - HUD style
+      // Create popup content - Simplified 3 lines max
       const popupContent = `
         <div style="
-          min-width: 200px;
-          max-width: 240px;
+          min-width: 160px;
+          max-width: 200px;
           font-family: system-ui, -apple-system, sans-serif;
           background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95));
           border: 1px solid ${color}40;
-          border-radius: 12px;
-          padding: 16px;
+          border-radius: 10px;
+          padding: 12px 14px;
           backdrop-filter: blur(8px);
         ">
           <div style="
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 6px;
           ">
-            <span style="font-size: 32px; line-height: 1;">${flag}</span>
-            <div>
-              <strong style="font-size: 15px; color: white;">${country.name_fr}</strong>
-              <div style="font-size: 11px; color: ${color}; font-weight: 600; margin-top: 2px;">
-                ${displayValue}${displaySuffix} ${valueLabel}
-              </div>
-            </div>
+            <span style="font-size: 20px; line-height: 1;">${flag}</span>
+            <strong style="font-size: 14px; color: white;">${country.name_fr}</strong>
           </div>
           <div style="
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 8px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 4px;
           ">
-            <div style="
-              background: rgba(255,255,255,0.05);
-              border-radius: 6px;
-              padding: 8px;
-              text-align: center;
-            ">
-              <div style="font-size: 16px; font-weight: bold; color: white;">${activity.contributions}</div>
-              <div style="font-size: 10px; color: rgba(255,255,255,0.5);">Contributions</div>
-            </div>
-            <div style="
-              background: rgba(255,255,255,0.05);
-              border-radius: 6px;
-              padding: 8px;
-              text-align: center;
-            ">
-              <div style="font-size: 16px; font-weight: bold; color: white;">${activity.projects}</div>
-              <div style="font-size: 10px; color: rgba(255,255,255,0.5);">Projets</div>
-            </div>
+            ${activity.contributions} contributions  •  ${activity.projects} projets
           </div>
-          <p style="
+          <div style="
             font-size: 11px;
             color: rgba(255,255,255,0.4);
-            margin: 0;
-          ">Dernière activité : ${activity.lastActivity}</p>
+          ">${activity.lastActivity}</div>
         </div>
       `;
 
@@ -259,7 +239,7 @@ export const CommandCenterMap = ({
         ref={mapContainerRef} 
         className="absolute inset-0"
         style={{
-          filter: 'brightness(0.8) contrast(1.15) saturate(0.7)',
+          filter: 'brightness(0.7) contrast(1.2) saturate(0.5) grayscale(0.3)',
         }}
       />
       
@@ -284,7 +264,7 @@ export const CommandCenterMap = ({
       <style>{`
         @keyframes pulse-ring-hud {
           0% { transform: scale(1); opacity: 0.5; }
-          50% { transform: scale(1.6); opacity: 0; }
+          50% { transform: scale(1.08); opacity: 0.2; }
           100% { transform: scale(1); opacity: 0.5; }
         }
         
