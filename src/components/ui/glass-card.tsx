@@ -19,9 +19,9 @@ const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(({
   ...props
 }, ref) => {
   const variants = {
-    default: "bg-card/80 backdrop-blur-md",
-    strong: "bg-card/90 backdrop-blur-lg",
-    subtle: "bg-card/60 backdrop-blur-sm"
+    default: "bg-white/5 backdrop-blur-md",
+    strong: "bg-white/10 backdrop-blur-lg",
+    subtle: "bg-white/[0.03] backdrop-blur-sm"
   };
 
   const blurLevels = {
@@ -45,7 +45,7 @@ const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(({
         "relative overflow-hidden rounded-2xl transition-all duration-300",
         variants[variant],
         blurLevels[blur],
-        border && "border border-border/20",
+        border && "border border-white/10",
         shadows[shadow],
         "before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:to-transparent before:opacity-0 before:transition-opacity before:duration-300",
         "hover:before:opacity-100 hover:shadow-xl hover:shadow-primary/5",
