@@ -66,15 +66,15 @@ const Community = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative z-10">
       {/* Hero Section - Neutral */}
       <CommunityHero
         totalCountries={totalCountries}
         totalCommunities={totalCommunities}
       />
 
-      {/* Map Section - Warm background */}
-      <section className="py-16 bg-secondary/30">
+      {/* Map Section - Dark glassmorphism */}
+      <section className="py-16 bg-white/[0.02]">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -83,10 +83,10 @@ const Community = () => {
             viewport={{ once: true }}
             className="mb-8"
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
               Répartition géographique
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-white/60">
               Explorez la diversité linguistique du réseau SUTEL à travers l'Afrique
             </p>
           </motion.div>
@@ -95,8 +95,8 @@ const Community = () => {
         </div>
       </section>
 
-      {/* Community Cards Section - Cool background */}
-      <section className="py-16 bg-muted/30">
+      {/* Community Cards Section - Dark */}
+      <section className="py-16 bg-transparent">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -105,10 +105,10 @@ const Community = () => {
             viewport={{ once: true }}
             className="mb-10"
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
               Découvrir les communautés
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-white/60">
               Chaque communauté linguistique contribue à la richesse du réseau
             </p>
           </motion.div>
@@ -131,8 +131,8 @@ const Community = () => {
         </div>
       </section>
 
-      {/* CTA Section - Neutral */}
-      <section className="py-16">
+      {/* CTA Section - Premium Dark */}
+      <section className="py-16 bg-white/[0.02]">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -141,21 +141,21 @@ const Community = () => {
             viewport={{ once: true }}
             className="text-center max-w-2xl mx-auto"
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
               Rejoindre le réseau
             </h2>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-white/60 mb-8">
               Découvrez les agences membres et leurs contributions à l'écosystème numérique africain.
             </p>
             
             <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="bg-[hsl(var(--nx-gold))] hover:bg-[hsl(var(--nx-gold)/0.9)] text-[hsl(var(--nx-night))]">
                 <Link to="/members">
                   Explorer les pays membres
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline" size="lg" className="border-white/20 text-white hover:bg-white/10">
                 <Link to="/contact">
                   Contacter le secrétariat
                 </Link>

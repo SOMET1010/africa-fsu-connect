@@ -196,17 +196,17 @@ const Events = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="min-h-screen bg-transparent relative z-10">
         <div className="p-6 lg:p-8 space-y-8">
-          <Skeleton className="h-64 w-full rounded-3xl" />
+          <Skeleton className="h-64 w-full rounded-3xl bg-white/5" />
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-32 rounded-2xl" />
+              <Skeleton key={i} className="h-32 rounded-2xl bg-white/5" />
             ))}
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-80 rounded-xl" />
+              <Skeleton key={i} className="h-80 rounded-xl bg-white/5" />
             ))}
           </div>
         </div>
@@ -215,7 +215,7 @@ const Events = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="min-h-screen bg-transparent relative z-10">
       <div className="p-6 lg:p-8 space-y-8">
         <EventsHero 
           totalEvents={events.length}
@@ -226,7 +226,7 @@ const Events = () => {
         />
         
         {/* Content Section */}
-        <div className="bg-card rounded-3xl border border-border p-6 lg:p-8 shadow-lg">
+        <div className="bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 p-6 lg:p-8 shadow-lg">
           <Tabs value={selectedView} onValueChange={setSelectedView} className="space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <TabsList className="grid w-full lg:w-auto grid-cols-3" role="tablist" aria-label="Vues des événements">

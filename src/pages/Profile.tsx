@@ -131,7 +131,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen relative z-10">
         <PageHeader
           title="Mon Profil"
           description="Gérez vos informations personnelles et préférences"
@@ -148,7 +148,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative z-10">
       <PageHeader
         title="Mon Profil"
         description="Gérez vos informations personnelles et préférences"

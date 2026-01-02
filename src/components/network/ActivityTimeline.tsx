@@ -107,14 +107,14 @@ const getIcon = (type: ActivityType): LucideIcon => {
   return icons[type];
 };
 
-// Couleurs NEXUS : brand (bleu) pour info, coop (vert) pour action
+// Couleurs NEXUS Dark : gold pour actions, cyan pour info
 const getIconStyle = (type: ActivityType): string => {
-  // Actions collaboratives → vert coopération
+  // Actions collaboratives → gold
   if (type === 'project' || type === 'collaboration') {
-    return 'bg-[hsl(var(--nx-coop-600)/0.1)] text-[hsl(var(--nx-coop-600))]';
+    return 'bg-[hsl(var(--nx-gold)/0.2)] text-[hsl(var(--nx-gold))]';
   }
-  // Info/ressources → bleu institutionnel
-  return 'bg-[hsl(var(--nx-brand-900)/0.1)] text-[hsl(var(--nx-brand-900))]';
+  // Info/ressources → cyan
+  return 'bg-[hsl(var(--nx-cyan)/0.2)] text-[hsl(var(--nx-cyan))]';
 };
 
 interface ActivityTimelineProps {
@@ -132,37 +132,34 @@ export const ActivityTimeline = ({ maxItems = 5 }: ActivityTimelineProps) => {
         const iconStyle = getIconStyle(activity.type);
         
         return (
-          <NexusCard 
+          <div 
             key={activity.id}
-            variant="flat"
-            padding="sm"
-            hover="subtle"
-            className="animate-fade-in"
+            className="rounded-[var(--nx-radius-md)] border border-white/10 bg-white/5 backdrop-blur-sm p-4 hover:bg-white/10 transition-all duration-[var(--nx-dur-2)] animate-fade-in"
             style={{ animationDelay: `${index * 80}ms` }}
           >
             <div className="flex items-start gap-4">
-              {/* Icône avec style NEXUS */}
+              {/* Icône avec style Dark */}
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${iconStyle}`}>
                 <Icon className="w-5 h-5" />
               </div>
               
               {/* Contenu narratif */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-[hsl(var(--nx-text-900))]">
+                <p className="text-sm text-white">
                   <span className="font-medium">{activity.flag} {activity.country}</span>
-                  <span className="text-[hsl(var(--nx-text-500))]"> {activity.action} </span>
+                  <span className="text-white/60"> {activity.action} </span>
                 </p>
-                <p className="text-[hsl(var(--nx-text-900))] font-medium mt-0.5 truncate">
+                <p className="text-white font-medium mt-0.5 truncate">
                   {activity.title}
                 </p>
               </div>
 
               {/* Temps */}
-              <span className="text-xs text-[hsl(var(--nx-text-500))] flex-shrink-0">
+              <span className="text-xs text-white/50 flex-shrink-0">
                 {activity.timeAgo}
               </span>
             </div>
-          </NexusCard>
+          </div>
         );
       })}
     </div>
