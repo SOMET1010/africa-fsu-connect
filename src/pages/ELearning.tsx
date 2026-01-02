@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PageHero } from "@/components/shared/PageHero";
 import { 
   GraduationCap, 
   Play, 
@@ -16,9 +17,11 @@ import {
   TrendingUp
 } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useDirection } from "@/hooks/useDirection";
 
 const ELearning = () => {
   const { t } = useTranslation();
+  const { isRTL } = useDirection();
 
   const courses = [
     {
@@ -104,44 +107,29 @@ const ELearning = () => {
     { name: "Mentor communautaire", icon: Users, earned: false }
   ];
 
+  const stats = [
+    { label: t('elearning.stats.courses'), value: "12", icon: BookOpen, color: "text-blue-500" },
+    { label: t('elearning.stats.hours'), value: "48h", icon: Clock, color: "text-green-500" },
+    { label: t('elearning.stats.certs'), value: "3", icon: Award, color: "text-purple-500" },
+    { label: t('elearning.stats.rank'), value: "#42", icon: Users, color: "text-orange-500" }
+  ];
+
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-primary/10 rounded-xl">
-              <GraduationCap className="h-6 w-6 text-primary" />
-            </div>
-            <h1 className="text-3xl font-bold text-foreground">E-Learning & Formation</h1>
-          </div>
-          <p className="text-muted-foreground">
-            Développez vos compétences avec nos parcours métiers et certifications
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Badge variant="outline" className="px-3 py-1">
-            <TrendingUp className="h-3 w-3 mr-1" />
-            4 cours en cours
-          </Badge>
-          <Badge className="px-3 py-1 bg-primary/10 text-primary border-primary/20">
-            <Award className="h-3 w-3 mr-1" />
-            2 badges obtenus
-          </Badge>
-        </div>
-      </div>
+      {/* Hero */}
+      <PageHero
+        badge={t('elearning.page.badge')}
+        badgeIcon={GraduationCap}
+        title={t('elearning.page.title')}
+        subtitle={t('elearning.page.subtitle')}
+      />
 
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: "Cours suivis", value: "12", icon: BookOpen, color: "text-blue-500" },
-          { label: "Heures d'apprentissage", value: "48h", icon: Clock, color: "text-green-500" },
-          { label: "Certifications", value: "3", icon: Award, color: "text-purple-500" },
-          { label: "Rang communauté", value: "#42", icon: Users, color: "text-orange-500" }
-        ].map((stat) => (
+        {stats.map((stat) => (
           <Card key={stat.label} className="bg-card/50 backdrop-blur-sm border-border/50">
             <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+              <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <div>
                   <p className="text-2xl font-bold">{stat.value}</p>
                   <p className="text-xs text-muted-foreground">{stat.label}</p>
@@ -155,9 +143,9 @@ const ELearning = () => {
 
       <Tabs defaultValue="courses" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3 max-w-md">
-          <TabsTrigger value="courses">Parcours</TabsTrigger>
-          <TabsTrigger value="webinars">Webinaires</TabsTrigger>
-          <TabsTrigger value="achievements">Badges</TabsTrigger>
+          <TabsTrigger value="courses">{t('elearning.tabs.courses')}</TabsTrigger>
+          <TabsTrigger value="webinars">{t('elearning.tabs.webinars')}</TabsTrigger>
+          <TabsTrigger value="achievements">{t('elearning.tabs.badges')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="courses" className="space-y-4">
@@ -177,16 +165,16 @@ const ELearning = () => {
                   <CardDescription>{course.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
+                  <div className={`flex items-center gap-4 text-sm text-muted-foreground ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <Clock className="h-4 w-4" />
                       {course.duration}
                     </span>
-                    <span className="flex items-center gap-1">
+                    <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <BookOpen className="h-4 w-4" />
-                      {course.modules} modules
+                      {course.modules} {t('elearning.modules')}
                     </span>
-                    <span className="flex items-center gap-1">
+                    <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <Users className="h-4 w-4" />
                       {course.enrolled}
                     </span>
@@ -195,7 +183,7 @@ const ELearning = () => {
                   {course.progress > 0 && (
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>Progression</span>
+                        <span>{t('elearning.course.progress')}</span>
                         <span className="font-medium">{course.progress}%</span>
                       </div>
                       <Progress value={course.progress} className="h-2" />
@@ -203,11 +191,15 @@ const ELearning = () => {
                   )}
                   
                   <Button 
-                    className="w-full" 
+                    className={`w-full ${isRTL ? 'flex-row-reverse' : ''}`}
                     variant={course.progress > 0 ? "default" : "outline"}
                   >
-                    <Play className="h-4 w-4 mr-2" />
-                    {course.progress === 0 ? "Commencer" : course.progress === 100 ? "Revoir" : "Continuer"}
+                    <Play className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                    {course.progress === 0 
+                      ? t('elearning.course.start') 
+                      : course.progress === 100 
+                        ? t('elearning.course.review') 
+                        : t('elearning.course.continue')}
                   </Button>
                 </CardContent>
               </Card>
@@ -223,16 +215,16 @@ const ELearning = () => {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="space-y-2">
                       <h3 className="text-lg font-semibold">{webinar.title}</h3>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-1">
+                      <div className={`flex items-center gap-4 text-sm text-muted-foreground ${isRTL ? 'flex-row-reverse' : ''}`}>
+                        <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                           <Calendar className="h-4 w-4" />
-                          {new Date(webinar.date).toLocaleDateString('fr-FR', { 
+                          {new Date(webinar.date).toLocaleDateString(isRTL ? 'ar-EG' : 'fr-FR', { 
                             day: 'numeric', 
                             month: 'long', 
                             year: 'numeric' 
                           })}
                         </span>
-                        <span className="flex items-center gap-1">
+                        <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                           <Clock className="h-4 w-4" />
                           {webinar.time}
                         </span>
@@ -242,14 +234,14 @@ const ELearning = () => {
                         <span className="text-muted-foreground"> • {webinar.organization}</span>
                       </p>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <Badge variant="outline">
-                        <Users className="h-3 w-3 mr-1" />
-                        {webinar.registered} inscrits
+                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <Badge variant="outline" className={isRTL ? 'flex-row-reverse' : ''}>
+                        <Users className={`h-3 w-3 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                        {webinar.registered} {t('elearning.enrolled')}
                       </Badge>
-                      <Button>
-                        <Video className="h-4 w-4 mr-2" />
-                        S'inscrire
+                      <Button className={isRTL ? 'flex-row-reverse' : ''}>
+                        <Video className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                        {t('elearning.register')}
                       </Button>
                     </div>
                   </div>
@@ -280,7 +272,7 @@ const ELearning = () => {
                 <p className="font-medium text-sm">{achievement.name}</p>
                 {achievement.earned && (
                   <Badge className="mt-2 bg-green-500/10 text-green-600 border-green-500/20">
-                    Obtenu
+                    {t('elearning.badge.earned')}
                   </Badge>
                 )}
               </Card>
