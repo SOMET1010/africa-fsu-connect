@@ -94,7 +94,8 @@ const MembersDirectory = () => {
                   <SelectItem value="all" className="focus:bg-white/10">{t('members.filter.status.all') || "Tous"}</SelectItem>
                   <SelectItem value="active" className="focus:bg-white/10">{t('members.filter.status.active') || "Actif"}</SelectItem>
                   <SelectItem value="member" className="focus:bg-white/10">{t('members.filter.status.member') || "Membre"}</SelectItem>
-                  <SelectItem value="joining" className="focus:bg-white/10">{t('members.filter.status.joining') || "En adhésion"}</SelectItem>
+                  <SelectItem value="onboarding" className="focus:bg-white/10">{t('members.filter.status.onboarding') || "En intégration"}</SelectItem>
+                  <SelectItem value="observer" className="focus:bg-white/10">{t('members.filter.status.observer') || "Observateur"}</SelectItem>
                 </SelectContent>
               </Select>
 

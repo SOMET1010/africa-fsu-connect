@@ -2,12 +2,14 @@ import { useState, useEffect, useMemo } from 'react';
 import { CountriesService, Country } from '@/services/countriesService';
 import { logger } from '@/utils/logger';
 
+import type { CountryStatus } from '@/types/countryStatus';
+
 export interface MemberCountry {
   code: string;
   name: string;
   flag: string;
   region: string;
-  status: 'active' | 'member' | 'joining';
+  status: CountryStatus;
   official_language?: string;
   working_languages?: string[];
   sutel_community?: string;
@@ -23,12 +25,14 @@ const getCountryFlag = (code: string): string => {
 };
 
 // Simule le statut membre (MVP - en production viendrait de la DB)
-const simulateMemberStatus = (code: string): 'active' | 'member' | 'joining' => {
-  const activeCountries = ['SN', 'CI', 'GH', 'KE', 'NG', 'TZ', 'RW', 'MA', 'EG', 'ZA', 'ET', 'UG', 'CM', 'ML', 'BF'];
-  const joiningCountries = ['LY', 'SD', 'ER', 'DJ', 'SO', 'SS'];
+const simulateMemberStatus = (code: string): CountryStatus => {
+  const activeCountries = ['SN', 'CI', 'GH', 'KE', 'NG', 'TZ', 'RW', 'MA', 'EG', 'ZA'];
+  const onboardingCountries = ['ET', 'UG', 'CM', 'ML', 'BF', 'LY', 'SD'];
+  const observerCountries = ['ER', 'DJ', 'SO', 'SS'];
   
   if (activeCountries.includes(code.toUpperCase())) return 'active';
-  if (joiningCountries.includes(code.toUpperCase())) return 'joining';
+  if (onboardingCountries.includes(code.toUpperCase())) return 'onboarding';
+  if (observerCountries.includes(code.toUpperCase())) return 'observer';
   return 'member';
 };
 

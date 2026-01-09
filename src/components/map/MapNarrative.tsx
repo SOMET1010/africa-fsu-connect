@@ -51,12 +51,12 @@ export const MapNarrative = ({ mode = 'members', className }: MapNarrativeProps)
           <span>Actifs</span>
         </div>
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: ACTIVITY_LEVELS.emerging.color }} />
-          <span>Émergents</span>
+          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: ACTIVITY_LEVELS.onboarding.color }} />
+          <span>En intégration</span>
         </div>
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: ACTIVITY_LEVELS.joining.color }} />
-          <span>En adhésion</span>
+          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: ACTIVITY_LEVELS.observer.color }} />
+          <span>Observateurs</span>
         </div>
       </div>
     </div>

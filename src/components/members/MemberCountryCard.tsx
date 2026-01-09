@@ -2,48 +2,35 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "@/hooks/useTranslation";
+import type { CountryStatus } from "@/types/countryStatus";
+import { getStatusClasses } from "@/types/countryStatus";
 
 interface MemberCountryCardProps {
   country: {
     code: string;
     name: string;
     flag: string;
-    status: 'active' | 'member' | 'joining';
+    status: CountryStatus;
   };
   variant?: 'light' | 'dark';
 }
 
-const getStatusBadge = (status: string, isDark: boolean) => {
+const getStatusBadge = (status: CountryStatus, isDark: boolean, t: (key: string) => string) => {
   const baseClass = "text-xs";
+  const classes = getStatusClasses(status, isDark);
+  const translationKey = `country.status.${status}`;
+  const fallback: Record<CountryStatus, string> = {
+    active: 'Actif',
+    member: 'Membre',
+    onboarding: 'En intégration',
+    observer: 'Observateur',
+  };
   
-  switch (status) {
-    case 'active':
-      return (
-        <Badge className={`${baseClass} ${isDark 
-          ? 'bg-green-500/20 text-green-400 border-green-500/30' 
-          : 'bg-green-500/10 text-green-600 border-green-500/20'}`}>
-          Actif
-        </Badge>
-      );
-    case 'member':
-      return (
-        <Badge className={`${baseClass} ${isDark 
-          ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' 
-          : 'bg-blue-500/10 text-blue-600 border-blue-500/20'}`}>
-          Membre
-        </Badge>
-      );
-    case 'joining':
-      return (
-        <Badge className={`${baseClass} ${isDark 
-          ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' 
-          : 'bg-amber-500/10 text-amber-600 border-amber-500/20'}`}>
-          En adhésion
-        </Badge>
-      );
-    default:
-      return <Badge variant="secondary" className={baseClass}>Membre</Badge>;
-  }
+  return (
+    <Badge className={`${baseClass} ${classes}`}>
+      {t(translationKey) || fallback[status]}
+    </Badge>
+  );
 };
 
 export const MemberCountryCard = ({ country, variant = 'light' }: MemberCountryCardProps) => {
@@ -75,7 +62,7 @@ export const MemberCountryCard = ({ country, variant = 'light' }: MemberCountryC
           </h3>
           
           {/* Badge statut */}
-          {getStatusBadge(country.status, isDark)}
+          {getStatusBadge(country.status, isDark, t)}
         </CardContent>
       </Card>
     </Link>
