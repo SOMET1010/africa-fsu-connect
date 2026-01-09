@@ -330,5 +330,16 @@
   "library.page.badge": "المكتبة",
   "library.page.title": "مكتبة شبكة SUTEL",
   "library.page.subtitle": "أدلة وتقارير وأفضل الممارسات المشتركة من وكالات صندوق الخدمة الشاملة عبر أفريقيا.",
-  "library.cta.share": "مشاركة مورد"
+  "library.cta.share": "مشاركة مورد",
+
+  "focal.invitation.language": "لغة الدعوة",
+  "focal.invitation.send": "إرسال الدعوة",
+  "focal.invitation.sending": "جار الإرسال...",
+  "focal.invitation.success": "تم إرسال الدعوة بنجاح",
+  "focal.invitation.error": "خطأ في إرسال الدعوة",
+  "focal.invitation.resend": "إعادة إرسال الدعوة",
+  "focal.status.pending": "قيد الانتظار",
+  "focal.status.invited": "مدعو",
+  "focal.status.active": "نشط",
+  "focal.status.inactive": "غير نشط"
 }

@@ -860,5 +860,16 @@
   "library.page.badge": "Library",
   "library.page.title": "SUTEL Network Library",
   "library.page.subtitle": "Guides, reports and best practices shared by Universal Service Fund agencies across Africa.",
-  "library.cta.share": "Share a Resource"
+  "library.cta.share": "Share a Resource",
+
+  "focal.invitation.language": "Invitation language",
+  "focal.invitation.send": "Send invitation",
+  "focal.invitation.sending": "Sending...",
+  "focal.invitation.success": "Invitation sent successfully",
+  "focal.invitation.error": "Error sending invitation",
+  "focal.invitation.resend": "Resend invitation",
+  "focal.status.pending": "Pending",
+  "focal.status.invited": "Invited",
+  "focal.status.active": "Active",
+  "focal.status.inactive": "Inactive"
 }

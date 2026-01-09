@@ -330,5 +330,16 @@
   "library.page.badge": "Biblioteca",
   "library.page.title": "Biblioteca da Rede SUTEL",
   "library.page.subtitle": "Guias, relatórios e boas práticas partilhadas pelas agências do Fundo do Serviço Universal em toda a África.",
-  "library.cta.share": "Partilhar um Recurso"
+  "library.cta.share": "Partilhar um Recurso",
+
+  "focal.invitation.language": "Idioma do convite",
+  "focal.invitation.send": "Enviar convite",
+  "focal.invitation.sending": "A enviar...",
+  "focal.invitation.success": "Convite enviado com sucesso",
+  "focal.invitation.error": "Erro ao enviar convite",
+  "focal.invitation.resend": "Reenviar convite",
+  "focal.status.pending": "Pendente",
+  "focal.status.invited": "Convidado",
+  "focal.status.active": "Ativo",
+  "focal.status.inactive": "Inativo"
 }
