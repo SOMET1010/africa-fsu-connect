@@ -1727,6 +1727,146 @@ export type Database = {
           },
         ]
       }
+      focal_point_invitations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          email: string
+          expires_at: string | null
+          focal_point_id: string
+          id: string
+          sent_at: string | null
+          status: string
+          token: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string | null
+          focal_point_id: string
+          id?: string
+          sent_at?: string | null
+          status?: string
+          token?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string | null
+          focal_point_id?: string
+          id?: string
+          sent_at?: string | null
+          status?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "focal_point_invitations_focal_point_id_fkey"
+            columns: ["focal_point_id"]
+            isOneToOne: false
+            referencedRelation: "focal_points"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      focal_points: {
+        Row: {
+          activated_at: string | null
+          country_code: string
+          created_at: string
+          created_by: string | null
+          designated_by: string | null
+          designation_date: string | null
+          designation_document_url: string | null
+          designation_type: string
+          email: string
+          expires_at: string | null
+          first_name: string
+          id: string
+          invitation_expires_at: string | null
+          invitation_sent_at: string | null
+          invitation_token: string | null
+          job_title: string | null
+          last_name: string
+          notes: string | null
+          organization: string | null
+          phone: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+          whatsapp_number: string | null
+        }
+        Insert: {
+          activated_at?: string | null
+          country_code: string
+          created_at?: string
+          created_by?: string | null
+          designated_by?: string | null
+          designation_date?: string | null
+          designation_document_url?: string | null
+          designation_type: string
+          email: string
+          expires_at?: string | null
+          first_name: string
+          id?: string
+          invitation_expires_at?: string | null
+          invitation_sent_at?: string | null
+          invitation_token?: string | null
+          job_title?: string | null
+          last_name: string
+          notes?: string | null
+          organization?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          whatsapp_number?: string | null
+        }
+        Update: {
+          activated_at?: string | null
+          country_code?: string
+          created_at?: string
+          created_by?: string | null
+          designated_by?: string | null
+          designation_date?: string | null
+          designation_document_url?: string | null
+          designation_type?: string
+          email?: string
+          expires_at?: string | null
+          first_name?: string
+          id?: string
+          invitation_expires_at?: string | null
+          invitation_sent_at?: string | null
+          invitation_token?: string | null
+          job_title?: string | null
+          last_name?: string
+          notes?: string | null
+          organization?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          whatsapp_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "focal_points_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "focal_points_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       forum_categories: {
         Row: {
           color: string | null
@@ -2063,6 +2203,97 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      indicator_submissions: {
+        Row: {
+          country_code: string
+          created_at: string
+          data_source: string | null
+          id: string
+          indicator_code: string
+          methodology_notes: string | null
+          published_at: string | null
+          published_by: string | null
+          quarter: number | null
+          rejected_reason: string | null
+          status: string
+          submitted_by: string
+          submitted_value: number | null
+          unit: string | null
+          updated_at: string
+          validated_by: string | null
+          validation_date: string | null
+          validation_notes: string | null
+          value_text: string | null
+          year: number
+        }
+        Insert: {
+          country_code: string
+          created_at?: string
+          data_source?: string | null
+          id?: string
+          indicator_code: string
+          methodology_notes?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          quarter?: number | null
+          rejected_reason?: string | null
+          status?: string
+          submitted_by: string
+          submitted_value?: number | null
+          unit?: string | null
+          updated_at?: string
+          validated_by?: string | null
+          validation_date?: string | null
+          validation_notes?: string | null
+          value_text?: string | null
+          year: number
+        }
+        Update: {
+          country_code?: string
+          created_at?: string
+          data_source?: string | null
+          id?: string
+          indicator_code?: string
+          methodology_notes?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          quarter?: number | null
+          rejected_reason?: string | null
+          status?: string
+          submitted_by?: string
+          submitted_value?: number | null
+          unit?: string | null
+          updated_at?: string
+          validated_by?: string | null
+          validation_date?: string | null
+          validation_notes?: string | null
+          value_text?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "indicator_submissions_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "indicator_submissions_submitted_by_fkey"
+            columns: ["submitted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "indicator_submissions_validated_by_fkey"
+            columns: ["validated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       indicator_translations: {
         Row: {
@@ -6878,6 +7109,19 @@ export type Database = {
           currency: string
         }[]
       }
+      get_country_focal_points: {
+        Args: { country: string }
+        Returns: {
+          designation_type: string
+          email: string
+          first_name: string
+          id: string
+          job_title: string
+          last_name: string
+          organization: string
+          status: string
+        }[]
+      }
       get_financial_summary: {
         Args: { user_id: string }
         Returns: {
@@ -6990,6 +7234,10 @@ export type Database = {
         }[]
       }
       is_admin: { Args: { user_id: string }; Returns: boolean }
+      is_focal_point: {
+        Args: { country?: string; user_id: string }
+        Returns: boolean
+      }
       is_participant_admin: { Args: never; Returns: boolean }
       log_security_event: {
         Args: {
@@ -7049,6 +7297,7 @@ export type Database = {
         | "editeur"
         | "contributeur"
         | "lecteur"
+        | "point_focal"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -7207,6 +7456,7 @@ export const Constants = {
         "editeur",
         "contributeur",
         "lecteur",
+        "point_focal",
       ],
     },
   },

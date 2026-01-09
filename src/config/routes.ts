@@ -71,6 +71,8 @@ const AdminUsers = lazy(() => import('@/pages/AdminUsers'));
 const AdminForum = lazy(() => import('@/pages/AdminForum'));
 const AdminResources = lazy(() => import('@/pages/admin/AdminResources'));
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
+const FocalPointsManagement = lazy(() => import('@/pages/admin/FocalPointsManagement'));
+const FocalDashboard = lazy(() => import('@/pages/FocalDashboard'));
 // New SUTEL modules
 const ELearning = lazy(() => import('@/pages/ELearning'));
 const StrategicWatch = lazy(() => import('@/pages/StrategicWatch'));
@@ -595,6 +597,33 @@ export const ROUTES: RouteConfig[] = [
     hideFromNav: true,
     category: 'admin',
     univers: 'admin',
+  },
+  {
+    path: '/admin/focal-points',
+    component: FocalPointsManagement,
+    title: 'Points Focaux',
+    description: 'Gestion des points focaux des États membres',
+    icon: Users,
+    isProtected: true,
+    requiredRoles: ['super_admin', 'admin_pays'],
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'admin',
+    univers: 'admin',
+  },
+  {
+    path: '/focal-dashboard',
+    component: FocalDashboard,
+    title: 'Dashboard Point Focal',
+    description: 'Tableau de bord pour les points focaux',
+    icon: BarChart3,
+    isProtected: true,
+    requiredRoles: ['point_focal'],
+    showInSidebar: true,
+    showInMobileNav: true,
+    category: 'main',
+    univers: 'pilotage',
   },
 ];
 

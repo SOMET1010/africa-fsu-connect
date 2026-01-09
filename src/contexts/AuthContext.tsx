@@ -5,7 +5,7 @@ import { Tables } from '@/integrations/supabase/types';
 import { logger } from '@/utils/logger';
 import type { SecurityEventDetails, ApiResponse } from '@/types/common';
 
-export type UserRole = 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur';
+export type UserRole = 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur' | 'point_focal';
 
 interface AuthContextType {
   user: User | null;
