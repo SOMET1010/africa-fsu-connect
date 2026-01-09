@@ -113,13 +113,13 @@ export const useAdminUsers = () => {
     setStats(stats);
   };
 
-  // Update user role
+  // Update user role using secure RPC function
   const updateUserRole = async (userId: string, newRole: 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur') => {
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('user_id', userId);
+      const { error } = await supabase.rpc('admin_update_user_role', {
+        target_user_id: userId,
+        new_role: newRole
+      });
 
       if (error) throw error;
 
