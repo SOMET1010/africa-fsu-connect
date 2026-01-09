@@ -73,6 +73,7 @@ const AdminResources = lazy(() => import('@/pages/admin/AdminResources'));
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 const FocalPointsManagement = lazy(() => import('@/pages/admin/FocalPointsManagement'));
 const FocalDashboard = lazy(() => import('@/pages/FocalDashboard'));
+const PlatformConfig = lazy(() => import('@/pages/admin/PlatformConfig'));
 // New SUTEL modules
 const ELearning = lazy(() => import('@/pages/ELearning'));
 const StrategicWatch = lazy(() => import('@/pages/StrategicWatch'));
@@ -624,6 +625,20 @@ export const ROUTES: RouteConfig[] = [
     showInMobileNav: true,
     category: 'main',
     univers: 'pilotage',
+  },
+  {
+    path: '/admin/platform-config',
+    component: PlatformConfig,
+    title: 'Configuration Plateforme',
+    description: 'Fiche de configuration initiale SUTEL Nexus',
+    icon: Settings,
+    isProtected: true,
+    requiredRoles: ['super_admin'],
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'admin',
+    univers: 'admin',
   },
 ];
 
