@@ -5,7 +5,7 @@ import { Tables } from '@/integrations/supabase/types';
 import { useLiferay } from '@/LiferayApp';
 import { logger } from '@/utils/logger';
 
-export type UserRole = 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur';
+export type UserRole = 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur' | 'point_focal';
 
 interface LiferayAuthContextType {
   user: User | null;
