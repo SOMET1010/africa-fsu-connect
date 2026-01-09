@@ -1,44 +1,34 @@
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Clock } from "lucide-react";
+import type { CountryStatus } from "@/types/countryStatus";
+import { getStatusClasses } from "@/types/countryStatus";
 
 interface CountryIdentityCardProps {
   country: {
     code: string;
     name: string;
     flag: string;
-    status: 'active' | 'member' | 'joining';
+    status: CountryStatus;
     lastContribution?: string;
   };
 }
 
-const getStatusBadge = (status: string, t: (key: string) => string) => {
-  switch (status) {
-    case 'active':
-      return (
-        <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
-          {t('country.status.active') || 'Actif'}
-        </Badge>
-      );
-    case 'member':
-      return (
-        <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/20">
-          {t('country.status.member') || 'Membre'}
-        </Badge>
-      );
-    case 'joining':
-      return (
-        <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20">
-          {t('country.status.joining') || 'En adhésion'}
-        </Badge>
-      );
-    default:
-      return (
-        <Badge variant="secondary">
-          {t('country.status.member') || 'Membre'}
-        </Badge>
-      );
-  }
+const getStatusBadge = (status: CountryStatus, t: (key: string) => string) => {
+  const classes = getStatusClasses(status, false);
+  const translationKey = `country.status.${status}`;
+  const fallback: Record<CountryStatus, string> = {
+    active: 'Actif',
+    member: 'Membre',
+    onboarding: 'En intégration',
+    observer: 'Observateur',
+  };
+  
+  return (
+    <Badge className={classes}>
+      {t(translationKey) || fallback[status]}
+    </Badge>
+  );
 };
 
 export const CountryIdentityCard = ({ country }: CountryIdentityCardProps) => {

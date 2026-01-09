@@ -7,8 +7,8 @@ interface MapLegendProps {
 const legendItems: { level: ActivityLevel; size: number }[] = [
   { level: 'high', size: 14 },
   { level: 'medium', size: 12 },
-  { level: 'emerging', size: 10 },
-  { level: 'joining', size: 8 },
+  { level: 'onboarding', size: 10 },
+  { level: 'observer', size: 8 },
 ];
 
 export const MapLegend = ({ className = "" }: MapLegendProps) => {

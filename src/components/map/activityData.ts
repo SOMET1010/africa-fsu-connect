@@ -1,5 +1,7 @@
 // Simulated activity data - will be replaced by real data from database
-export type ActivityLevel = 'high' | 'medium' | 'emerging' | 'joining';
+import type { CountryStatus } from '@/types/countryStatus';
+
+export type ActivityLevel = 'high' | 'medium' | 'onboarding' | 'observer';
 export type MapMode = 'members' | 'projects' | 'trends';
 
 export interface CountryActivity {
@@ -8,7 +10,7 @@ export interface CountryActivity {
   resources: number;
   trendScore: number; // 0-100
   level: ActivityLevel;
-  status: 'active' | 'member' | 'emerging' | 'joining';
+  status: CountryStatus;
   lastActivity: string;
   recentActions: string[];
 }
@@ -25,14 +27,14 @@ export const ACTIVITY_LEVELS: Record<ActivityLevel, { color: string; label: stri
     label: 'Actif', 
     threshold: 8 
   },
-  emerging: { 
-    color: '#F59E0B', // Amber - émergent
-    label: 'Émergent', 
+  onboarding: { 
+    color: '#F59E0B', // Amber - en intégration
+    label: 'En intégration', 
     threshold: 3 
   },
-  joining: { 
-    color: '#9CA3AF', // Gray - en adhésion
-    label: 'En adhésion', 
+  observer: { 
+    color: '#9CA3AF', // Gray - observateur
+    label: 'Observateur', 
     threshold: 0 
   },
 } as const;
@@ -190,26 +192,26 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     ]
   },
   
-  // Émergents
+  // En intégration (onboarding)
   ML: { 
     contributions: 5, 
     projects: 1,
     resources: 1,
     trendScore: 35,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Première contribution réseau"
     ]
   },
-  BF: { 
+  BF: {
     contributions: 4, 
     projects: 1,
     resources: 0,
     trendScore: 28,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Demande d'adhésion active"
@@ -220,8 +222,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 2,
     resources: 1,
     trendScore: 42,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 10 jours',
     recentActions: [
       "Participation forum régional"
@@ -232,8 +234,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 1,
     resources: 1,
     trendScore: 38,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Projet pilote en cours"
@@ -244,8 +246,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 2,
     resources: 1,
     trendScore: 45,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 1 semaine',
     recentActions: [
       "Initiative télécoms rurales"
@@ -256,8 +258,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 1,
     resources: 2,
     trendScore: 40,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 12 jours',
     recentActions: [
       "Programme villages connectés"
@@ -268,8 +270,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 0,
     resources: 1,
     trendScore: 22,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 1 mois',
     recentActions: [
       "Évaluation besoins en cours"
@@ -280,8 +282,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 0,
     resources: 0,
     trendScore: 15,
-    level: 'joining',
-    status: 'joining',
+    level: 'observer',
+    status: 'observer',
     lastActivity: 'il y a 6 semaines',
     recentActions: [
       "Contact initial établi"
@@ -292,8 +294,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 1,
     resources: 0,
     trendScore: 30,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Projet fibre en discussion"
@@ -304,8 +306,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 0,
     resources: 1,
     trendScore: 25,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 1 mois',
     recentActions: [
       "Participation observation"
@@ -316,8 +318,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 1,
     resources: 1,
     trendScore: 32,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Intérêt pour best practices"
@@ -328,8 +330,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 2,
     resources: 1,
     trendScore: 38,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 10 jours',
     recentActions: [
       "Projet écoles connectées"
@@ -340,8 +342,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 1,
     resources: 0,
     trendScore: 28,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Demande de collaboration"
@@ -352,8 +354,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 1,
     resources: 1,
     trendScore: 35,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Programme backbone rural"
@@ -364,8 +366,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 1,
     resources: 0,
     trendScore: 30,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Initiative numérique"
@@ -376,8 +378,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 0,
     resources: 1,
     trendScore: 22,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 1 mois',
     recentActions: [
       "Évaluation en cours"
@@ -388,8 +390,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 1,
     resources: 1,
     trendScore: 33,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 2 semaines',
     recentActions: [
       "Projet infrastructure"
@@ -400,8 +402,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 1,
     resources: 0,
     trendScore: 28,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 3 semaines',
     recentActions: [
       "Partenariat régional"
@@ -412,8 +414,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 2,
     resources: 1,
     trendScore: 40,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 10 jours',
     recentActions: [
       "Smart villages initiative"
@@ -424,8 +426,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 0,
     resources: 1,
     trendScore: 20,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 1 mois',
     recentActions: [
       "Connectivité îles"
@@ -436,21 +438,21 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 2,
     resources: 2,
     trendScore: 48,
-    level: 'emerging',
-    status: 'emerging',
+    level: 'onboarding',
+    status: 'onboarding',
     lastActivity: 'il y a 1 semaine',
     recentActions: [
       "Hub numérique régional"
     ]
   },
-  // En adhésion (joining)
+  // Observateurs (observer)
   SO: { 
     contributions: 1, 
     projects: 0,
     resources: 0,
     trendScore: 10,
-    level: 'joining',
-    status: 'joining',
+    level: 'observer',
+    status: 'observer',
     lastActivity: 'il y a 2 mois',
     recentActions: [
       "Demande d'adhésion soumise"
@@ -461,8 +463,8 @@ const COUNTRY_ACTIVITY_DATA: Record<string, CountryActivity> = {
     projects: 0,
     resources: 0,
     trendScore: 8,
-    level: 'joining',
-    status: 'joining',
+    level: 'observer',
+    status: 'observer',
     lastActivity: 'il y a 2 mois',
     recentActions: [
       "Premier contact établi"
@@ -476,8 +478,8 @@ const DEFAULT_ACTIVITY: CountryActivity = {
   projects: 0,
   resources: 0,
   trendScore: 5,
-  level: 'joining',
-  status: 'joining',
+  level: 'observer',
+  status: 'observer',
   lastActivity: 'En cours d\'intégration',
   recentActions: ["En cours d'intégration au réseau"]
 };
@@ -494,12 +496,12 @@ export const getActivityLabel = (level: ActivityLevel): string => {
   return ACTIVITY_LEVELS[level].label;
 };
 
-export const getStatusLabel = (status: CountryActivity['status']): string => {
-  const labels: Record<CountryActivity['status'], string> = {
+export const getStatusLabel = (status: CountryStatus): string => {
+  const labels: Record<CountryStatus, string> = {
     active: 'Membre actif',
     member: 'Membre',
-    emerging: 'Émergent',
-    joining: 'En adhésion'
+    onboarding: 'En intégration',
+    observer: 'Observateur'
   };
   return labels[status];
 };
@@ -542,7 +544,7 @@ export const getGlobalStats = () => {
     totalContributions,
     totalProjects,
     activeCountries,
-    emergingCountries: countries.length - activeCountries,
+    onboardingCountries: countries.length - activeCountries,
     avgTrendScore
   };
 };

@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { CountriesService } from '@/services/countriesService';
 import { logger } from '@/utils/logger';
 
+import type { CountryStatus } from '@/types/countryStatus';
+
 export interface CountryProfile {
   code: string;
   name: string;
   flag: string;
-  status: 'active' | 'member' | 'joining';
+  status: CountryStatus;
   lastContribution?: string;
   presenceLevel: number;
   region: string;
@@ -41,29 +43,35 @@ const getCountryFlag = (code: string): string => {
 };
 
 // Simule le statut (MVP)
-const simulateStatus = (code: string): 'active' | 'member' | 'joining' => {
-  const activeCountries = ['SN', 'CI', 'GH', 'KE', 'NG', 'TZ', 'RW', 'MA', 'EG', 'ZA', 'ET', 'UG', 'CM', 'ML', 'BF'];
-  const joiningCountries = ['LY', 'SD', 'ER', 'DJ', 'SO', 'SS'];
+const simulateStatus = (code: string): CountryStatus => {
+  const activeCountries = ['SN', 'CI', 'GH', 'KE', 'NG', 'TZ', 'RW', 'MA', 'EG', 'ZA'];
+  const onboardingCountries = ['ET', 'UG', 'CM', 'ML', 'BF', 'LY', 'SD'];
+  const observerCountries = ['ER', 'DJ', 'SO', 'SS'];
   
   if (activeCountries.includes(code.toUpperCase())) return 'active';
-  if (joiningCountries.includes(code.toUpperCase())) return 'joining';
+  if (onboardingCountries.includes(code.toUpperCase())) return 'onboarding';
+  if (observerCountries.includes(code.toUpperCase())) return 'observer';
   return 'member';
 };
 
 // Simule le niveau de présence (MVP)
-const simulatePresenceLevel = (status: string): number => {
+const simulatePresenceLevel = (status: CountryStatus): number => {
   if (status === 'active') return Math.floor(Math.random() * 2) + 5; // 5-6
-  if (status === 'joining') return Math.floor(Math.random() * 2) + 1; // 1-2
-  return Math.floor(Math.random() * 3) + 3; // 3-5
+  if (status === 'onboarding') return Math.floor(Math.random() * 2) + 2; // 2-3
+  if (status === 'observer') return Math.floor(Math.random() * 2) + 1; // 1-2
+  return Math.floor(Math.random() * 3) + 3; // 3-5 for member
 };
 
 // Simule la dernière contribution (MVP)
-const simulateLastContribution = (status: string): string => {
+const simulateLastContribution = (status: CountryStatus): string => {
   if (status === 'active') {
     const options = ['il y a 2 jours', 'il y a 3 jours', 'il y a 5 jours', 'cette semaine'];
     return options[Math.floor(Math.random() * options.length)];
   }
-  if (status === 'joining') {
+  if (status === 'onboarding') {
+    return 'il y a 2 semaines';
+  }
+  if (status === 'observer') {
     return 'En attente';
   }
   const options = ['il y a 2 semaines', 'il y a 1 mois', 'le mois dernier'];

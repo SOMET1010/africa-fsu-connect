@@ -1,10 +1,11 @@
 import { MemberCountryCard } from "./MemberCountryCard";
+import type { CountryStatus } from "@/types/countryStatus";
 
 interface Country {
   code: string;
   name: string;
   flag: string;
-  status: 'active' | 'member' | 'joining';
+  status: CountryStatus;
 }
 
 interface RegionSectionProps {
