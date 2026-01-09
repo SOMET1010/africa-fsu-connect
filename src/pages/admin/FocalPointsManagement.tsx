@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Mail, UserCheck, UserX, Search, Filter, MapPin } from 'lucide-react';
+import { Plus, Mail, UserCheck, UserX, Search, Filter, MapPin, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -33,6 +33,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { useFocalPoints, useCreateFocalPoint, useSendFocalPointInvitation, type CreateFocalPointData } from '@/hooks/useFocalPoints';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import type { SupportedLanguage } from '@/i18n/languages';
+
+const languageLabels: Record<SupportedLanguage, string> = {
+  fr: '🇫🇷 Français',
+  en: '🇬🇧 English',
+  pt: '🇵🇹 Português',
+  ar: '🇸🇦 العربية',
+};
 
 const statusColors: Record<string, string> = {
   pending: 'bg-yellow-100 text-yellow-800',
@@ -57,6 +65,9 @@ export default function FocalPointsManagement() {
   const sendInvitation = useSendFocalPointInvitation();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
+  const [selectedFocalPointId, setSelectedFocalPointId] = useState<string | null>(null);
+  const [inviteLanguage, setInviteLanguage] = useState<SupportedLanguage>('fr');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [countryFilter, setCountryFilter] = useState<string>('all');
@@ -107,8 +118,20 @@ export default function FocalPointsManagement() {
     });
   };
 
-  const handleSendInvitation = async (focalPointId: string) => {
-    await sendInvitation.mutateAsync(focalPointId);
+  const handleOpenInviteDialog = (focalPointId: string) => {
+    setSelectedFocalPointId(focalPointId);
+    setInviteLanguage('fr');
+    setIsInviteDialogOpen(true);
+  };
+
+  const handleSendInvitation = async () => {
+    if (!selectedFocalPointId) return;
+    await sendInvitation.mutateAsync({ 
+      focalPointId: selectedFocalPointId, 
+      language: inviteLanguage 
+    });
+    setIsInviteDialogOpen(false);
+    setSelectedFocalPointId(null);
   };
 
   // Filter focal points
@@ -446,7 +469,7 @@ export default function FocalPointsManagement() {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleSendInvitation(fp.id)}
+                            onClick={() => handleOpenInviteDialog(fp.id)}
                             disabled={sendInvitation.isPending}
                           >
                             <Mail className="mr-1 h-4 w-4" />
@@ -467,6 +490,56 @@ export default function FocalPointsManagement() {
           </Table>
         </CardContent>
       </Card>
+
+      {/* Invitation Language Dialog */}
+      <Dialog open={isInviteDialogOpen} onOpenChange={setIsInviteDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5" />
+              {t('focal.invitation.language')}
+            </DialogTitle>
+            <DialogDescription>
+              Sélectionnez la langue dans laquelle l'invitation sera envoyée
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>{t('focal.invitation.language')}</Label>
+              <Select
+                value={inviteLanguage}
+                onValueChange={(value) => setInviteLanguage(value as SupportedLanguage)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {(Object.entries(languageLabels) as [SupportedLanguage, string][]).map(([code, label]) => (
+                    <SelectItem key={code} value={code}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setIsInviteDialogOpen(false)}
+              >
+                {t('common.cancel')}
+              </Button>
+              <Button
+                onClick={handleSendInvitation}
+                disabled={sendInvitation.isPending}
+              >
+                <Mail className="mr-2 h-4 w-4" />
+                {sendInvitation.isPending ? t('focal.invitation.sending') : t('focal.invitation.send')}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

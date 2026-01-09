@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import type { SupportedLanguage } from '@/i18n/languages';
 
 export interface FocalPoint {
   id: string;
@@ -185,43 +186,39 @@ export function useUpdateFocalPoint() {
   });
 }
 
-// Hook to send invitation to a focal point
+// Hook to send invitation to a focal point via edge function (with multilingual email)
 export function useSendFocalPointInvitation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (focalPointId: string) => {
-      // Update focal point status to invited
-      const { data, error } = await supabase
-        .from('focal_points')
-        .update({
-          status: 'invited',
-          invitation_sent_at: new Date().toISOString(),
-          invitation_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        })
-        .eq('id', focalPointId)
-        .select()
-        .single();
+    mutationFn: async ({ 
+      focalPointId, 
+      language = 'fr' 
+    }: { 
+      focalPointId: string; 
+      language?: SupportedLanguage;
+    }) => {
+      // Call the edge function to send the email
+      const { data, error } = await supabase.functions.invoke(
+        'send-focal-point-invitation',
+        { 
+          body: { 
+            focalPointId, 
+            language 
+          } 
+        }
+      );
 
       if (error) throw error;
+      if (!data.success) throw new Error(data.error || 'Failed to send invitation');
 
-      // Create invitation record
-      const { error: inviteError } = await supabase
-        .from('focal_point_invitations')
-        .insert({
-          focal_point_id: focalPointId,
-          email: data.email,
-        });
-
-      if (inviteError) throw inviteError;
-
-      return data as FocalPoint;
+      return data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['focal-points'] });
       toast({
         title: 'Invitation envoyée',
-        description: `Une invitation a été envoyée à ${data.email}.`,
+        description: 'L\'invitation a été envoyée par email avec succès.',
       });
     },
     onError: (error: Error) => {
