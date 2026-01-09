@@ -871,5 +871,19 @@
   "focal.status.pending": "Pending",
   "focal.status.invited": "Invited",
   "focal.status.active": "Active",
-  "focal.status.inactive": "Inactive"
+  "focal.status.inactive": "Inactive",
+
+  "focal.chat.title": "Messages",
+  "focal.chat.country_team": "Team {{country}}",
+  "focal.chat.conversation": "Conversation",
+  "focal.chat.no_conversations": "No conversations",
+  "focal.chat.no_messages": "No messages in this conversation",
+  "focal.chat.start_conversation": "Send the first message!",
+  "focal.chat.select_conversation": "Select a conversation",
+  "focal.chat.type_message": "Write your message...",
+  "focal.chat.send": "Send",
+  "focal.chat.today": "Today",
+  "focal.chat.yesterday": "Yesterday",
+  "focal.chat.unread": "unread",
+  "focal.chat.contact": "Contact"
 }

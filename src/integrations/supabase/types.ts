@@ -1727,6 +1727,160 @@ export type Database = {
           },
         ]
       }
+      focal_conversation_participants: {
+        Row: {
+          conversation_id: string | null
+          focal_point_id: string | null
+          id: string
+          is_muted: boolean | null
+          joined_at: string | null
+          last_read_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          conversation_id?: string | null
+          focal_point_id?: string | null
+          id?: string
+          is_muted?: boolean | null
+          joined_at?: string | null
+          last_read_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          conversation_id?: string | null
+          focal_point_id?: string | null
+          id?: string
+          is_muted?: boolean | null
+          joined_at?: string | null
+          last_read_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "focal_conversation_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "focal_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "focal_conversation_participants_focal_point_id_fkey"
+            columns: ["focal_point_id"]
+            isOneToOne: false
+            referencedRelation: "focal_points"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "focal_conversation_participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      focal_conversations: {
+        Row: {
+          country_code: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          name: string | null
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          country_code?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          name?: string | null
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          country_code?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          name?: string | null
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "focal_conversations_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      focal_messages: {
+        Row: {
+          attachment_type: string | null
+          attachment_url: string | null
+          content: string
+          conversation_id: string | null
+          created_at: string | null
+          edited_at: string | null
+          id: string
+          indicator_reference: string | null
+          is_system_message: boolean | null
+          sender_id: string | null
+          sender_user_id: string | null
+        }
+        Insert: {
+          attachment_type?: string | null
+          attachment_url?: string | null
+          content: string
+          conversation_id?: string | null
+          created_at?: string | null
+          edited_at?: string | null
+          id?: string
+          indicator_reference?: string | null
+          is_system_message?: boolean | null
+          sender_id?: string | null
+          sender_user_id?: string | null
+        }
+        Update: {
+          attachment_type?: string | null
+          attachment_url?: string | null
+          content?: string
+          conversation_id?: string | null
+          created_at?: string | null
+          edited_at?: string | null
+          id?: string
+          indicator_reference?: string | null
+          is_system_message?: boolean | null
+          sender_id?: string | null
+          sender_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "focal_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "focal_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "focal_messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "focal_points"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "focal_messages_sender_user_id_fkey"
+            columns: ["sender_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       focal_point_invitations: {
         Row: {
           accepted_at: string | null

@@ -5,10 +5,10 @@ import {
   CheckCircle,
   Clock,
   AlertTriangle,
-  Send,
   Users,
   TrendingUp,
   Calendar,
+  MessageCircle,
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,8 @@ import { useMyFocalPoint, useCountryFocalPoints } from '@/hooks/useFocalPoints';
 import { useSubmissionStats, useMySubmissions, useSubmissionsByStatus } from '@/hooks/useIndicatorSubmissions';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { FocalChatWidget } from '@/components/focal-chat';
+import { useCreateDirectConversation } from '@/hooks/useFocalChat';
 
 export default function FocalDashboard() {
   const { t } = useTranslation();
@@ -363,6 +365,9 @@ export default function FocalDashboard() {
           </Card>
         </div>
       </div>
+
+      {/* Chat Widget pour les points focaux */}
+      <FocalChatWidget />
     </div>
   );
 }
