@@ -858,5 +858,19 @@
   "focal.status.pending": "En attente",
   "focal.status.invited": "Invité",
   "focal.status.active": "Actif",
-  "focal.status.inactive": "Inactif"
+  "focal.status.inactive": "Inactif",
+
+  "focal.chat.title": "Messages",
+  "focal.chat.country_team": "Équipe {{country}}",
+  "focal.chat.conversation": "Conversation",
+  "focal.chat.no_conversations": "Aucune conversation",
+  "focal.chat.no_messages": "Aucun message dans cette conversation",
+  "focal.chat.start_conversation": "Envoyez le premier message !",
+  "focal.chat.select_conversation": "Sélectionnez une conversation",
+  "focal.chat.type_message": "Écrivez votre message...",
+  "focal.chat.send": "Envoyer",
+  "focal.chat.today": "Aujourd'hui",
+  "focal.chat.yesterday": "Hier",
+  "focal.chat.unread": "non lus",
+  "focal.chat.contact": "Contacter"
 }
