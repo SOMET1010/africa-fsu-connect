@@ -6,11 +6,13 @@ import { GlassCard } from '@/components/ui/glass-card';
 import { ModernButton } from '@/components/ui/modern-button';
 import { Badge } from '@/components/ui/badge';
 
+import type { LucideIcon } from 'lucide-react';
+
 interface ToolCard {
   id: string;
   title: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   path: string;
   color: string;
   features: string[];
@@ -123,7 +125,7 @@ const FSUToolsHub: React.FC = () => {
                   className="p-3 rounded-xl"
                   style={{ backgroundColor: `${tool.color}20` }}
                 >
-                  <tool.icon className="w-6 h-6" style={{ color: tool.color }} />
+                  <tool.icon className="w-6 h-6" color={tool.color} />
                 </div>
                 {tool.status === 'coming_soon' && (
                   <Badge variant="outline" className="text-white/50 border-white/20">
