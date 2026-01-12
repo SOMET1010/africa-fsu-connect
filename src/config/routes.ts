@@ -74,6 +74,7 @@ const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 const FocalPointsManagement = lazy(() => import('@/pages/admin/FocalPointsManagement'));
 const FocalDashboard = lazy(() => import('@/pages/FocalDashboard'));
 const PlatformConfig = lazy(() => import('@/pages/admin/PlatformConfig'));
+const TranslationsExport = lazy(() => import('@/pages/admin/TranslationsExport'));
 // New SUTEL modules
 const ELearning = lazy(() => import('@/pages/ELearning'));
 const StrategicWatch = lazy(() => import('@/pages/StrategicWatch'));
@@ -634,6 +635,20 @@ export const ROUTES: RouteConfig[] = [
     icon: Settings,
     isProtected: true,
     requiredRoles: ['super_admin'],
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'admin',
+    univers: 'admin',
+  },
+  {
+    path: '/admin/translations',
+    component: TranslationsExport,
+    title: 'Export Traductions',
+    description: 'Gérer et exporter toutes les traductions de la plateforme',
+    icon: FileText,
+    isProtected: true,
+    requiredRoles: ['super_admin', 'admin_pays'],
     showInSidebar: false,
     showInMobileNav: false,
     hideFromNav: true,
