@@ -14,7 +14,8 @@ Réduire la fracture numérique en Afrique grâce à des données fiables, compa
 
 | Acteur | Rôle | Responsabilités |
 |--------|------|-----------------|
-| **UAT** | Administrateur central | Supervision globale, validation des données, coordination |
+| **État Membre Président** | Présidence tournante | Présidence des sessions, orientation stratégique |
+| **UAT** | Coordination technique | Coordination des travaux, support méthodologique, secrétariat |
 | **Points Focaux** | Représentants nationaux (2/pays) | Collecte et saisie des indicateurs nationaux |
 | **Consultants** | Experts techniques | Analyse, rapports, recommandations |
 | **ANSUT** | Partenaire technique | Pilote de la plateforme, support technique |
