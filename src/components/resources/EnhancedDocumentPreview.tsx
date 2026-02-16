@@ -5,6 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { 
   FileText, 
   Download, 
@@ -15,7 +18,12 @@ import {
   History,
   Share2,
   Bookmark,
-  Eye
+  Eye,
+  Upload,
+  Trash2,
+  Lock,
+  Globe,
+  Users
 } from "lucide-react";
 
 interface DocumentVersion {
@@ -40,6 +48,10 @@ interface EnhancedDocumentPreviewProps {
   comments?: DocumentComment[];
   onAddComment?: (comment: string, section?: string) => void;
   onDownloadVersion?: (versionId: string) => void;
+  onUploadVersion?: (documentId: string, file: File, changesSummary: string) => Promise<any>;
+  onDelete?: (document: any) => void;
+  canEdit?: boolean;
+  canDelete?: boolean;
 }
 
 export const EnhancedDocumentPreview = ({
@@ -47,10 +59,18 @@ export const EnhancedDocumentPreview = ({
   versions = [],
   comments = [],
   onAddComment,
-  onDownloadVersion
+  onDownloadVersion,
+  onUploadVersion,
+  onDelete,
+  canEdit = false,
+  canDelete = false
 }: EnhancedDocumentPreviewProps) => {
   const [newComment, setNewComment] = useState("");
   const [viewCount, setViewCount] = useState(document?.view_count || 0);
+  const [showVersionUpload, setShowVersionUpload] = useState(false);
+  const [versionFile, setVersionFile] = useState<File | null>(null);
+  const [changesSummary, setChangesSummary] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     // Increment view count when document is opened
@@ -64,11 +84,29 @@ export const EnhancedDocumentPreview = ({
     }
   };
 
+  const handleUploadVersion = async () => {
+    if (!versionFile || !changesSummary.trim() || !onUploadVersion) return;
+    setUploading(true);
+    try {
+      await onUploadVersion(document.id, versionFile, changesSummary);
+      setVersionFile(null);
+      setChangesSummary("");
+      setShowVersionUpload(false);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const getAccessLevelBadge = () => {
+    const level = document.access_level || 'public';
+    if (level === 'public') return <Badge variant="outline" className="flex items-center gap-1"><Globe className="h-3 w-3" /> Public</Badge>;
+    if (level === 'authenticated') return <Badge variant="secondary" className="flex items-center gap-1"><Users className="h-3 w-3" /> Authentifié</Badge>;
+    return <Badge variant="destructive" className="flex items-center gap-1"><Lock className="h-3 w-3" /> Restreint</Badge>;
+  };
+
   const getPreviewUrl = (document: any) => {
-    // Check if document can be previewed inline
     const previewableTypes = ['pdf', 'image', 'text'];
     const fileType = document.mime_type?.split('/')[0];
-    
     if (previewableTypes.includes(fileType) || document.mime_type === 'application/pdf') {
       return document.file_url;
     }
@@ -86,7 +124,8 @@ export const EnhancedDocumentPreview = ({
             <h1 className="text-2xl font-bold mb-2">{document.title}</h1>
             <p className="text-muted-foreground">{document.description}</p>
           </div>
-          <div className="flex items-center gap-2 ml-4">
+          <div className="flex items-center gap-2 ml-4 flex-wrap">
+            {getAccessLevelBadge()}
             <Badge variant="outline" className="flex items-center gap-1">
               <Eye className="h-3 w-3" />
               {viewCount} vues
@@ -127,6 +166,12 @@ export const EnhancedDocumentPreview = ({
             <Bookmark className="h-4 w-4 mr-2" />
             Sauvegarder
           </Button>
+          {canDelete && onDelete && (
+            <Button variant="destructive" onClick={() => onDelete(document)}>
+              <Trash2 className="h-4 w-4 mr-2" />
+              Supprimer
+            </Button>
+          )}
         </div>
       </Card>
 
@@ -246,11 +291,51 @@ export const EnhancedDocumentPreview = ({
         <TabsContent value="versions" className="space-y-4">
           <Card className="p-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold flex items-center gap-2">
-                <History className="h-5 w-5" />
-                Historique des versions
-              </h3>
-              
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <History className="h-5 w-5" />
+                  Historique des versions
+                </h3>
+                {canEdit && onUploadVersion && (
+                  <Button
+                    size="sm"
+                    variant={showVersionUpload ? "secondary" : "default"}
+                    onClick={() => setShowVersionUpload(!showVersionUpload)}
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Nouvelle version
+                  </Button>
+                )}
+              </div>
+
+              {showVersionUpload && (
+                <div className="border rounded-lg p-4 bg-muted/30 space-y-3">
+                  <div className="space-y-2">
+                    <Label>Fichier</Label>
+                    <Input
+                      type="file"
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                      onChange={(e) => setVersionFile(e.target.files?.[0] || null)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Résumé des modifications</Label>
+                    <Textarea
+                      value={changesSummary}
+                      onChange={(e) => setChangesSummary(e.target.value)}
+                      placeholder="Décrivez les changements apportés dans cette version..."
+                      rows={2}
+                    />
+                  </div>
+                  <Button
+                    size="sm"
+                    disabled={!versionFile || !changesSummary.trim() || uploading}
+                    onClick={handleUploadVersion}
+                  >
+                    {uploading ? "Envoi en cours..." : "Envoyer la version"}
+                  </Button>
+                </div>
+              )}
               {versions.length === 0 ? (
                 <div className="text-center text-muted-foreground py-8">
                   <History className="h-12 w-12 mx-auto mb-3 opacity-50" />

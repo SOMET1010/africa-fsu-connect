@@ -1265,6 +1265,8 @@ export type Database = {
       }
       documents: {
         Row: {
+          access_level: string
+          allowed_roles: string[] | null
           country: string | null
           created_at: string
           description: string | null
@@ -1284,6 +1286,8 @@ export type Database = {
           view_count: number | null
         }
         Insert: {
+          access_level?: string
+          allowed_roles?: string[] | null
           country?: string | null
           created_at?: string
           description?: string | null
@@ -1303,6 +1307,8 @@ export type Database = {
           view_count?: number | null
         }
         Update: {
+          access_level?: string
+          allowed_roles?: string[] | null
           country?: string | null
           created_at?: string
           description?: string | null

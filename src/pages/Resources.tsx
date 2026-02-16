@@ -24,7 +24,7 @@ import { useToast } from "@/hooks/use-toast";
  */
 const ResourcesContent = () => {
   const { state, performSearch, fetchInitialDocuments } = useSearch();
-  const { uploadDocument, downloadDocument } = useOptimizedDocuments();
+  const { uploadDocument, downloadDocument, deleteDocument } = useOptimizedDocuments();
   const { toast } = useToast();
   
   const [previewDoc, setPreviewDoc] = useState<any>(null);
@@ -111,6 +111,12 @@ const ResourcesContent = () => {
     setIsUploadDialogOpen(true);
   }, []);
 
+  const handleDelete = useCallback(async (doc: any) => {
+    await deleteDocument(doc);
+    setIsPreviewOpen(false);
+    fetchInitialDocuments();
+  }, [deleteDocument, fetchInitialDocuments]);
+
   return (
     <div className="min-h-screen bg-transparent relative z-10">
       <div className="container mx-auto px-4 py-8 space-y-8">
@@ -157,6 +163,7 @@ const ResourcesContent = () => {
           isOpen={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
           onDownload={handleDownload}
+          onDelete={handleDelete}
         />
 
         {/* Document Upload Dialog */}
