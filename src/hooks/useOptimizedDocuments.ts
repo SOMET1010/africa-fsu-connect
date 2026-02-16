@@ -14,6 +14,7 @@ interface UseDocumentsResult {
   uploading: boolean;
   uploadDocument: (file: File, metadata: Omit<DocumentInsert, 'uploaded_by' | 'file_url' | 'file_name' | 'file_size' | 'mime_type'>) => Promise<Document | undefined>;
   downloadDocument: (document: Document) => Promise<void>;
+  deleteDocument: (document: Document) => Promise<void>;
   refetch: () => Promise<void>;
 }
 
@@ -118,13 +119,11 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
 
   const downloadDocument = useCallback(async (document: Document) => {
     try {
-      // Increment download count
       await supabase
         .from('documents')
         .update({ download_count: (document.download_count || 0) + 1 })
         .eq('id', document.id);
 
-      // Update local state
       setDocuments(prev => 
         prev.map(doc => 
           doc.id === document.id 
@@ -133,7 +132,6 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
         )
       );
 
-      // Download file
       if (document.file_url) {
         const link = globalThis.document.createElement('a');
         link.href = document.file_url;
@@ -154,14 +152,46 @@ export const useOptimizedDocuments = (): UseDocumentsResult => {
     }
   }, [toast]);
 
+  const deleteDocument = useCallback(async (document: Document) => {
+    try {
+      // Delete from storage if file exists
+      if (document.file_url) {
+        const filePath = document.file_url.split('/documents/')[1];
+        if (filePath) {
+          await supabase.storage.from('documents').remove([`documents/${filePath}`]);
+        }
+      }
+
+      const { error } = await supabase
+        .from('documents')
+        .delete()
+        .eq('id', document.id);
+
+      if (error) throw error;
+
+      setDocuments(prev => prev.filter(doc => doc.id !== document.id));
+      toast({
+        title: "Succès",
+        description: "Document supprimé avec succès"
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer le document",
+        variant: "destructive"
+      });
+    }
+  }, [toast]);
+
   const returnValue = useMemo(() => ({
     documents,
     loading,
     uploading,
     uploadDocument,
     downloadDocument,
+    deleteDocument,
     refetch: fetchDocuments
-  }), [documents, loading, uploading, uploadDocument, downloadDocument, fetchDocuments]);
+  }), [documents, loading, uploading, uploadDocument, downloadDocument, deleteDocument, fetchDocuments]);
 
   return returnValue;
 };

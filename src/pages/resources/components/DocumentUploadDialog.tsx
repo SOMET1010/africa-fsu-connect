@@ -1,12 +1,13 @@
 
 import React, { useState } from "react";
-import { Upload, Plus } from "lucide-react";
+import { Upload, Plus, Lock, Globe, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import FileUpload from "@/components/shared/FileUpload";
 
 interface DocumentUploadDialogProps {
@@ -23,8 +24,19 @@ const DocumentUploadDialog = ({ onUpload, isOpen: controlledIsOpen, onClose }: D
     description: '',
     document_type: 'autre' as const,
     country: '',
-    tags: [] as string[]
+    tags: [] as string[],
+    access_level: 'public',
+    allowed_roles: [] as string[]
   });
+
+  const ROLES = [
+    { value: 'super_admin', label: 'Super Admin' },
+    { value: 'admin_pays', label: 'Admin Pays' },
+    { value: 'editeur', label: 'Éditeur' },
+    { value: 'contributeur', label: 'Contributeur' },
+    { value: 'point_focal', label: 'Point Focal' },
+    { value: 'lecteur', label: 'Lecteur' },
+  ];
 
   const handleUpload = async (files: File[]) => {
     await onUpload(files, metadata);
@@ -38,7 +50,9 @@ const DocumentUploadDialog = ({ onUpload, isOpen: controlledIsOpen, onClose }: D
       description: '',
       document_type: 'autre',
       country: '',
-      tags: []
+      tags: [],
+      access_level: 'public',
+      allowed_roles: []
     });
   };
 
@@ -117,6 +131,53 @@ const DocumentUploadDialog = ({ onUpload, isOpen: controlledIsOpen, onClose }: D
                   placeholder="Ex: Côte d'Ivoire"
                 />
               </div>
+            </div>
+
+            {/* Access Control Section */}
+            <div className="space-y-3 border rounded-lg p-4 bg-muted/30">
+              <Label className="text-sm font-semibold">Contrôle d'accès</Label>
+              <Select
+                value={metadata.access_level}
+                onValueChange={(value) => setMetadata(prev => ({ ...prev, access_level: value, allowed_roles: value === 'restricted' ? prev.allowed_roles : [] }))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="public">
+                    <span className="flex items-center gap-2"><Globe className="h-3 w-3" /> Public — visible par tous</span>
+                  </SelectItem>
+                  <SelectItem value="authenticated">
+                    <span className="flex items-center gap-2"><Users className="h-3 w-3" /> Authentifié — utilisateurs connectés</span>
+                  </SelectItem>
+                  <SelectItem value="restricted">
+                    <span className="flex items-center gap-2"><Lock className="h-3 w-3" /> Restreint — rôles spécifiques</span>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+
+              {metadata.access_level === 'restricted' && (
+                <div className="space-y-2 pl-2">
+                  <Label className="text-xs text-muted-foreground">Rôles autorisés :</Label>
+                  {ROLES.map(role => (
+                    <div key={role.value} className="flex items-center gap-2">
+                      <Checkbox
+                        id={`role-${role.value}`}
+                        checked={metadata.allowed_roles.includes(role.value)}
+                        onCheckedChange={(checked) => {
+                          setMetadata(prev => ({
+                            ...prev,
+                            allowed_roles: checked
+                              ? [...prev.allowed_roles, role.value]
+                              : prev.allowed_roles.filter(r => r !== role.value)
+                          }));
+                        }}
+                      />
+                      <Label htmlFor={`role-${role.value}`} className="text-sm font-normal cursor-pointer">{role.label}</Label>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className="border-t pt-4">
