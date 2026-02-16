@@ -97,6 +97,7 @@ const AdvancedMode = lazy(() => import('@/pages/AdvancedMode'));
 const Practices = lazy(() => import('@/pages/Practices'));
 const Webinars = lazy(() => import('@/pages/Webinars'));
 const MyContributions = lazy(() => import('@/pages/MyContributions'));
+const AgencyDocuments = lazy(() => import('@/pages/AgencyDocuments'));
 
 // Configuration centralisée des routes
 export const ROUTES: RouteConfig[] = [
@@ -232,6 +233,18 @@ export const ROUTES: RouteConfig[] = [
     title: 'Organisations',
     description: 'Gestion des organismes et agences',
     icon: Building2,
+    isProtected: true,
+    showInSidebar: true,
+    showInMobileNav: false,
+    category: 'management',
+    univers: 'projets',
+  },
+  {
+    path: '/agency-documents',
+    component: AgencyDocuments,
+    title: 'Documents Agences',
+    description: 'Bibliothèque documentaire partagée entre les agences',
+    icon: BookOpen,
     isProtected: true,
     showInSidebar: true,
     showInMobileNav: false,
