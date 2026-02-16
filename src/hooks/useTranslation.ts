@@ -1189,7 +1189,7 @@ export const useTranslation = () => {
     if (translated && translated !== key) return translated;
 
     // Fallback to legacy inline dictionary (mostly fr/en)
-    let fallback = (translations[currentLanguage] as Record<string, string>)?.[key] || (translations.fr as Record<string, string>)[key] || key;
+    let fallback = (translations[currentLanguage] as Record<string, string>)?.[key] || (translations.fr as Record<string, string>)[key] || '';
 
     // Simple string interpolation for {param} patterns
     if (params) {
