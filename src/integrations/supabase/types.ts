@@ -240,60 +240,157 @@ export type Database = {
           },
         ]
       }
+      agency_resource_comments: {
+        Row: {
+          comment: string
+          created_at: string
+          id: string
+          resource_id: string
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          id?: string
+          resource_id: string
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          id?: string
+          resource_id?: string
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_resource_comments_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "agency_resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agency_resource_versions: {
+        Row: {
+          changes_summary: string
+          file_name: string
+          file_size: number | null
+          file_url: string
+          id: string
+          resource_id: string
+          uploaded_at: string
+          uploaded_by: string
+          version: string
+        }
+        Insert: {
+          changes_summary: string
+          file_name: string
+          file_size?: number | null
+          file_url: string
+          id?: string
+          resource_id: string
+          uploaded_at?: string
+          uploaded_by: string
+          version: string
+        }
+        Update: {
+          changes_summary?: string
+          file_name?: string
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          resource_id?: string
+          uploaded_at?: string
+          uploaded_by?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_resource_versions_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "agency_resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agency_resources: {
         Row: {
+          access_level: string
           agency_id: string
+          allowed_roles: string[] | null
           created_at: string
+          current_version: string | null
           description: string | null
           download_count: number | null
           external_id: string | null
           file_size: number | null
           file_url: string | null
           id: string
+          is_public: boolean
           last_updated_at: string | null
           mime_type: string | null
           resource_type: string
+          shared_with_agencies: string[] | null
           source_url: string | null
           sync_status: string | null
           tags: string[] | null
           title: string
           updated_at: string
+          uploaded_by: string | null
         }
         Insert: {
+          access_level?: string
           agency_id: string
+          allowed_roles?: string[] | null
           created_at?: string
+          current_version?: string | null
           description?: string | null
           download_count?: number | null
           external_id?: string | null
           file_size?: number | null
           file_url?: string | null
           id?: string
+          is_public?: boolean
           last_updated_at?: string | null
           mime_type?: string | null
           resource_type: string
+          shared_with_agencies?: string[] | null
           source_url?: string | null
           sync_status?: string | null
           tags?: string[] | null
           title: string
           updated_at?: string
+          uploaded_by?: string | null
         }
         Update: {
+          access_level?: string
           agency_id?: string
+          allowed_roles?: string[] | null
           created_at?: string
+          current_version?: string | null
           description?: string | null
           download_count?: number | null
           external_id?: string | null
           file_size?: number | null
           file_url?: string | null
           id?: string
+          is_public?: boolean
           last_updated_at?: string | null
           mime_type?: string | null
           resource_type?: string
+          shared_with_agencies?: string[] | null
           source_url?: string | null
           sync_status?: string | null
           tags?: string[] | null
           title?: string
           updated_at?: string
+          uploaded_by?: string | null
         }
         Relationships: [
           {
@@ -7269,6 +7366,10 @@ export type Database = {
           currency: string
         }[]
       }
+      get_agency_member_role: {
+        Args: { p_agency_id: string; p_user_id: string }
+        Returns: string
+      }
       get_country_focal_points: {
         Args: { country: string }
         Returns: {
@@ -7394,6 +7495,10 @@ export type Database = {
         }[]
       }
       is_admin: { Args: { user_id: string }; Returns: boolean }
+      is_agency_member: {
+        Args: { p_agency_id: string; p_user_id: string }
+        Returns: boolean
+      }
       is_focal_point: {
         Args: { country?: string; user_id: string }
         Returns: boolean

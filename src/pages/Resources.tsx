@@ -10,6 +10,10 @@ import DocumentUploadDialog from "@/pages/resources/components/DocumentUploadDia
 import DocumentPreviewDialog from "@/pages/resources/components/DocumentPreviewDialog";
 import SampleDataButton from "@/components/resources/SampleDataButton";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
+import { Building2, ArrowRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 /**
  * Resources Page - NEXUS Layer 2 (Learning/Collaboration)
@@ -154,10 +158,26 @@ const ResourcesContent = () => {
           onDownload={handleDownload}
         />
 
+        {/* Agency Documents CTA */}
+        <Card className="border-dashed">
+          <CardContent className="flex items-center justify-between py-4">
+            <div className="flex items-center gap-3">
+              <Building2 className="h-5 w-5 text-primary" />
+              <div>
+                <p className="font-medium">Documents des Agences</p>
+                <p className="text-sm text-muted-foreground">Accédez aux bibliothèques documentaires partagées entre agences</p>
+              </div>
+            </div>
+            <Button variant="outline" asChild>
+              <Link to="/agency-documents">
+                Explorer <ArrowRight className="h-4 w-4 ml-2" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+
         {/* CTA to share resources */}
         <ShareResourceCTA onClick={handleOpenUploadDialog} />
-
-        {/* Document Preview Dialog */}
         <DocumentPreviewDialog
           document={previewDoc}
           isOpen={isPreviewOpen}
