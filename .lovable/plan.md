@@ -1,47 +1,81 @@
 
 
-# Page QA Checklist i18n -- Verification des traductions
+# Tableau de bord Collaboration Transfrontaliere
 
 ## Objectif
-Creer une page admin dediee a la verification interactive des traductions (FR/EN/AR/PT) et du support RTL. Contrairement a la page d'export existante (`TranslationsExport`), cette page permet de **tester visuellement** chaque section de l'application dans les 4 langues.
+Creer une page dediee aux projets inter-agences impliquant plusieurs pays, avec des vues filtrees par pays, theme et region. Cette page met en avant la dimension collaborative du reseau SUTEL.
 
 ## Ce qui sera cree
 
-### 1. Page `src/pages/admin/I18nQAChecklist.tsx`
+### 1. Page `src/pages/CrossBorderCollaboration.tsx`
 
-Une page avec 4 sections principales :
+Page principale avec le layout NexusLayout (Premium Dark), organisee en sections :
 
-- **Tableau de bord global** : pourcentages de couverture par langue (reutilise `getTranslationStats` de `export-translations.ts`), avec indicateurs vert/orange/rouge
-- **Test visuel par section** : pour chaque section (Navigation, Dashboard, Reseau, Forum...), affiche un panneau avec les traductions FR/EN/PT/AR cote a cote. Les cles manquantes sont surlignees en rouge
-- **Checklist RTL** : liste de verifications manuelles pour l'arabe (direction du texte, alignement des icones, navigation inversee) avec des cases a cocher persistees en localStorage
-- **Apercu live** : un composant qui affiche un texte d'exemple dans la langue selectionnee, avec un bouton pour basculer entre les 4 langues en temps reel
+- **Hero** : NexusSectionHero avec badge "Collaboration transfrontaliere", titre et sous-titre narratif
+- **KPI Cards** (4 cartes) : Projets conjoints, Pays impliques, Budget total mobilise, Beneficiaires
+- **Filtres** : Recherche textuelle + filtres par pays, theme (Connectivite, Education, Sante, Agriculture, Gouvernance) et statut
+- **Grille de projets** : Cartes de projets avec badges multi-pays, barre de progression, tags thematiques
+- **Carte de collaboration** : Visualisation des liens entre pays partenaires (widget simplifie)
 
-### 2. Composant `src/components/admin/i18n/QALanguagePreview.tsx`
+### 2. Composants dans `src/components/collaboration/`
 
-Un composant qui rend un bloc de texte echantillon (titres de navigation, labels de boutons, messages d'erreur) dans une langue choisie, avec detection automatique des cles vides.
+**`CrossBorderFilters.tsx`**
+- Barre de recherche + 3 selects (pays, theme, statut)
+- Style dark coherent avec ProjectFilters existant
+- Bouton "Effacer les filtres"
 
-### 3. Composant `src/components/admin/i18n/RTLChecklist.tsx`
+**`CrossBorderProjectCard.tsx`**
+- Carte affichant : titre, description, pays partenaires (drapeaux), theme, budget, progression
+- Badges multi-pays avec drapeaux emoji
+- Barre de progression visuelle (completion_percentage)
+- Style hover avec effet gold (nx-gold)
 
-Une checklist interactive avec ~10 points de verification RTL :
-- Direction du texte arabe
-- Alignement des icones
-- Navigation laterale inversee
-- Formulaires et inputs
-- Tableaux et listes
-- Boutons et dropdowns
+**`CrossBorderStats.tsx`**
+- 4 KPI cards reutilisant le pattern ImpactKPICard
+- Statistiques calculees a partir des donnees (demo ou reelles)
 
-Chaque point peut etre coche (OK / Probleme / Non teste). L'etat est sauvegarde en localStorage.
+**`CollaborationNetworkMini.tsx`**
+- Widget compact montrant les connexions entre pays sous forme de liste groupee
+- Pas de dependance cartographique lourde, simplement une grille visuelle des liens
+
+### 3. Donnees de demonstration
+
+Comme la table `agency_projects` est actuellement vide, la page inclura un jeu de donnees demo (8-10 projets transfrontaliers fictifs mais realistes) affiche par defaut, avec un bouton pour charger les donnees reelles depuis Supabase quand elles seront disponibles.
+
+Exemples de projets demo :
+- "Dorsale fibre optique Abidjan-Accra" (Cote d'Ivoire + Ghana) - Connectivite
+- "Programme scolaire numerique CEDEAO" (Senegal + Mali + Burkina Faso) - Education
+- "Corridor numerique de sante Est-africain" (Kenya + Tanzanie + Ouganda) - Sante
 
 ### 4. Route dans `src/config/routes.ts`
 
-Ajout de la route `/admin/i18n-qa` en tant que route admin protegee (`super_admin`, `admin_pays`), masquee de la navigation principale.
+- Path : `/collaboration`
+- Univers : `projets`
+- Accessible a tous les utilisateurs authentifies
+- Visible dans la sidebar sous la categorie "management"
+- Icone : `Handshake` (lucide-react)
 
 ## Details techniques
 
-- Reutilise `buildTranslationData` et `getTranslationStats` depuis `src/utils/export-translations.ts`
-- Utilise les composants UI existants : `Card`, `Tabs`, `Badge`, `Progress`, `Checkbox`, `Table`
-- Utilise `useLanguage` pour le basculement de langue en temps reel
-- Utilise `useDirection` pour les tests RTL
-- Pas de dependance backend -- tout est cote client avec les fichiers JSON existants
-- Checklist RTL persistee via `localStorage` sous la cle `i18n-qa-rtl-checklist`
+- Reutilise `NexusLayout`, `NexusSectionHero`, `Badge`, `Select`, `Input`, `Progress` existants
+- Les filtres operent cote client sur les donnees chargees (demo ou Supabase)
+- Les projets demo sont structures avec les memes champs que `agency_projects` + un champ `partner_countries` supplementaire (tableau de pays)
+- Pattern de style coherent avec la page Projects existante (variant dark)
+- Aucune migration de base de donnees requise : les champs `tags` et `location` existants dans `agency_projects` suffisent pour stocker les themes et pays partenaires
+- Support i18n via `useTranslation` pour les labels principaux
+- Animations framer-motion coherentes avec le reste de l'application
+
+## Structure des fichiers
+
+```text
+src/
+  pages/
+    CrossBorderCollaboration.tsx        -- Page principale
+  components/
+    collaboration/
+      CrossBorderFilters.tsx            -- Filtres dedies
+      CrossBorderProjectCard.tsx        -- Carte projet transfrontalier
+      CrossBorderStats.tsx              -- KPIs de collaboration
+      CollaborationNetworkMini.tsx      -- Widget reseau de liens
+```
 
