@@ -18,6 +18,7 @@ import {
   Flag,
   Lightbulb,
   Video,
+  Handshake,
 } from 'lucide-react';
 
 // UX Universe types for organized navigation
@@ -85,6 +86,7 @@ const SutaAssistant = lazy(() => import('@/pages/SutaAssistant'));
 const About = lazy(() => import('@/pages/About'));
 const Roadmap = lazy(() => import('@/pages/Roadmap'));
 const MyCountry = lazy(() => import('@/pages/MyCountry'));
+const CrossBorderCollaboration = lazy(() => import('@/pages/CrossBorderCollaboration'));
 
 // New network pages (3-layer architecture)
 const NetworkView = lazy(() => import('@/pages/NetworkView'));
@@ -258,6 +260,18 @@ export const ROUTES: RouteConfig[] = [
     title: 'Projets',
     description: 'Suivi et gestion des projets',
     icon: Rocket,
+    isProtected: true,
+    showInSidebar: true,
+    showInMobileNav: false,
+    category: 'management',
+    univers: 'projets',
+  },
+  {
+    path: '/collaboration',
+    component: CrossBorderCollaboration,
+    title: 'Collaboration transfrontalière',
+    description: 'Projets inter-agences impliquant plusieurs pays',
+    icon: Handshake,
     isProtected: true,
     showInSidebar: true,
     showInMobileNav: false,
