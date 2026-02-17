@@ -75,6 +75,7 @@ const FocalPointsManagement = lazy(() => import('@/pages/admin/FocalPointsManage
 const FocalDashboard = lazy(() => import('@/pages/FocalDashboard'));
 const PlatformConfig = lazy(() => import('@/pages/admin/PlatformConfig'));
 const TranslationsExport = lazy(() => import('@/pages/admin/TranslationsExport'));
+const I18nQAChecklist = lazy(() => import('@/pages/admin/I18nQAChecklist'));
 // New SUTEL modules
 const ELearning = lazy(() => import('@/pages/ELearning'));
 const StrategicWatch = lazy(() => import('@/pages/StrategicWatch'));
@@ -659,6 +660,20 @@ export const ROUTES: RouteConfig[] = [
     component: TranslationsExport,
     title: 'Export Traductions',
     description: 'Gérer et exporter toutes les traductions de la plateforme',
+    icon: FileText,
+    isProtected: true,
+    requiredRoles: ['super_admin', 'admin_pays'],
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'admin',
+    univers: 'admin',
+  },
+  {
+    path: '/admin/i18n-qa',
+    component: I18nQAChecklist,
+    title: 'QA Checklist i18n',
+    description: 'Vérification interactive des traductions et du support RTL',
     icon: FileText,
     isProtected: true,
     requiredRoles: ['super_admin', 'admin_pays'],
