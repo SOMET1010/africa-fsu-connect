@@ -14,29 +14,342 @@
   "nav.start": "انضم إلى الشبكة",
   "nav.home": "الرئيسية",
   "nav.submit": "مشاركة مشروع",
+  "nav.admin_users": "إدارة المستخدمين",
+  "nav.piloting": "التنسيق",
+  "nav.impact.view": "عرض شبكة SUTEL",
+  "nav.analytics": "الاتجاهات",
+  "nav.projects.fsu": "المشاريع المشتركة",
+  "nav.all.projects": "جميع المشاريع",
+  "nav.submit.project": "مشاركة مشروع",
+  "nav.concept.note": "مذكرة مفاهيمية",
+  "nav.community": "المجتمع",
+  "nav.discussions": "نقاشات",
+  "nav.library": "المكتبة",
   "nav.network": "الشبكة",
+  "nav.network.view": "عرض الشبكة",
+  "nav.network.members": "الدول الأعضاء",
+  "nav.network.map": "خريطة الشبكة",
+  "nav.network.activity": "النشاط الأخير",
   "nav.collaborate": "التعاون",
+  "nav.collaborate.projects": "مشاريع ملهمة",
+  "nav.collaborate.practices": "أفضل الممارسات",
+  "nav.collaborate.submit": "اقتراح مشروع",
+  "nav.collaborate.discussions": "نقاشات",
   "nav.learn": "التعلم",
+  "nav.learn.elearning": "التعلم الإلكتروني",
+  "nav.learn.events": "الفعاليات",
+  "nav.learn.webinars": "ندوات عبر الإنترنت",
   "nav.about": "من نحن",
   "nav.my.country": "بلدي",
 
   "network.title": "شبكة SUTEL",
   "network.subtitle": "التنسيق الموحد لصناديق الخدمة الشاملة",
   "network.summary": "شبكتنا تتقدم معاً",
-  "network.kpi.members": "الدول الأعضاء",
+  "network.kpi.members": "الدول الأعضاء النشطة",
   "network.kpi.shared.projects": "المشاريع المشتركة",
   "network.kpi.beneficiaries": "المستفيدون",
   "network.kpi.best.practices": "أفضل الممارسات",
+  "network.kpi.progression": "التقدم الجماعي",
+  "network.collaboration.opportunity": "فرصة تعاون",
+  "network.collaboration.support": "دعم الشبكة متاح",
+  "network.benchmarks.title": "اتجاهات الشبكة",
+  "network.learning.title": "ما ينجح في أماكن أخرى",
+  "network.learning.inspiring": "مشاريع ملهمة",
+  "network.all.advancing": "جميع الدول تتقدم وفقاً للخطة",
   "network.badge": "شبكة SUTEL",
   "network.hero.title": "54 دولة تبني معاً",
   "network.hero.subtitle": "مستقبل الخدمة الشاملة",
-  "network.cta.members": "استعراض الدول",
+  "network.hero.narrative": "مجتمع أفريقي شامل للمشاركة والتعاون. كل دولة تقدم تجاربها ومشاريعها وتعلمها.",
+  "network.presence.label": "حضور الشبكة",
+  "network.presence.description": "نشاط قوي هذا الشهر",
+  "network.cta.members": "استعراض الدول الأعضاء",
   "network.cta.projects": "استكشاف المشاريع",
+  "network.regions.title": "مناطق الشبكة",
+  "network.regions.subtitle": "جميع الدول الأعضاء حسب المنطقة",
+  "network.activity.title": "النشاط الأخير للشبكة",
+  "network.activity.subtitle": "ما يحدث في المجتمع",
+  "network.action.discuss": "تبادل",
+  "network.action.discuss.desc": "المشاركة في النقاشات",
+  "network.action.events": "المشاركة",
+  "network.action.events.desc": "فعاليات قادمة",
+  "network.action.resources": "التعلم",
+  "network.action.resources.desc": "أدلة وموارد",
+
+  "members.badge": "الدليل",
+  "members.title": "الدول الأعضاء في الشبكة",
+  "members.subtitle": "54 دولة توحد جهودها لتسريع الشمول الرقمي في أفريقيا",
+  "members.search.placeholder": "البحث عن دولة...",
+  "members.filter.region": "المنطقة",
+  "members.filter.region.all": "كل المناطق",
+  "members.filter.status": "الحالة",
+  "members.filter.status.all": "كل الحالات",
+  "members.filter.status.active": "نشط",
+  "members.filter.status.member": "عضو",
+  "members.filter.status.onboarding": "قيد الإدماج",
+  "members.filter.status.observer": "مراقب",
+  "members.filter.language": "اللغة",
+  "members.filter.language.all": "كل اللغات",
+  "members.results": "دول",
+  "members.empty": "لا توجد نتائج مطابقة",
+  "members.back": "العودة إلى الدليل",
+
+  "country.not.found": "الدولة غير موجودة",
+  "country.network.member": "عضو في شبكة SUTEL",
+  "country.last.contribution": "آخر مساهمة:",
+  "country.narrative": "{country} تساهم بنشاط في شبكة NEXUS بمشاركة المشاريع والخبرات مع الدول الأعضاء الأخرى.",
+  "country.cta.contact": "التواصل",
+  "country.cta.contributions": "عرض المساهمات",
+  "country.presence.label": "حضور الشبكة",
+  "country.presence.description": "مشاركة حديثة في الشبكة",
+  "country.tab.contributions": "المساهمات",
+  "country.tab.projects": "المشاريع",
+  "country.tab.practices": "أفضل الممارسات",
+  "country.tab.contact": "التواصل",
+  "country.stat.projects": "مشاريع مشتركة",
+  "country.stat.practices": "أفضل الممارسات",
+  "country.stat.collaborations": "تعاونات",
+  "country.contributions.summary": "تشارك هذه الدولة بنشاط في تبادل الخبرات ضمن شبكة SUTEL.",
+  "country.project.inspire": "استلهم",
+  "country.projects.consolidation": "البيانات قيد التجميع",
+  "country.practices.consolidation": "البيانات قيد التجميع",
+  "country.focal.title": "نقطة اتصال",
+  "country.focal.contact": "تواصل",
+  "country.focal.pending": "المعلومات قادمة قريباً",
+  "country.status.active": "نشط",
+  "country.status.member": "عضو",
+  "country.status.onboarding": "قيد الإدماج",
+  "country.status.observer": "مراقب",
+
+  "common.back": "عودة",
+  "common.loading": "جار التحميل...",
+  "common.error": "حدث خطأ",
+  "common.success": "تم بنجاح",
+  "common.cancel": "إلغاء",
+  "common.save": "حفظ",
+  "common.delete": "حذف",
+  "common.edit": "تعديل",
+  "common.view": "عرض",
+  "common.search": "بحث",
+  "common.filter": "تصفية",
+  "common.all": "الكل",
+  "common.close": "إغلاق",
+  "common.discover": "استكشاف مشاريع FSU",
+  "common.learn.more": "معرفة المزيد",
+  "common.get.started": "الوصول إلى المنصة",
+  "common.create.account": "إنشاء حساب",
+  "common.explore.projects": "استكشاف مشاريع FSU",
+  "common.countries": "دول",
+  "common.projects": "مشاريع",
+  "common.user": "مستخدم",
+  "common.explore.map": "استكشاف الخريطة",
+
+  "dashboard.welcome": "مرحباً {name}، إليك لوحة القيادة",
+  "dashboard.welcome.default": "مرحباً بك 👋",
+  "dashboard.realtime": "الوقت الفعلي",
+  "dashboard.title": "منصة FSU",
+  "dashboard.description": "مساحة عملك التعاونية لخدمة الاتصالات الشاملة في انتظارك. اكتشف مشاريعك وتواصل مع المجتمع.",
+  "dashboard.stats.active.projects": "مشاريع نشطة",
+  "dashboard.stats.collaborators": "المتعاونون",
+  "dashboard.stats.documents": "الوثائق",
+  "dashboard.stats.events": "الفعاليات",
+  "dashboard.stats.active.projects.desc": "مشاريع قيد التطوير",
+  "dashboard.stats.collaborators.desc": "أعضاء المجتمع النشطون",
+  "dashboard.stats.documents.desc": "موارد متاحة",
+  "dashboard.stats.events.desc": "الأنشطة القادمة",
+  "dashboard.stats.this.week": "هذا الأسبوع",
+  "dashboard.stats.this.month": "هذا الشهر",
+  "dashboard.stats.documents.added": "وثائق مضافة",
+  "dashboard.quick.actions": "وصول سريع",
+  "dashboard.quick.actions.desc": "الوصول السريع لأدواتك الأساسية",
+  "dashboard.shortcuts.available": "{count} اختصارات متاحة",
+  "dashboard.activity.recent": "النشاط الأخير",
+  "dashboard.activity.desc": "آخر التفاعلات من مجتمع FSU",
+  "dashboard.activity.view.all": "عرض الكل",
+  "dashboard.activity.view": "عرض",
+  "dashboard.activity.by": "بواسطة",
+  "dashboard.activity.created": "تم الإنشاء",
+  "dashboard.activity.added": "تمت الإضافة",
+  "dashboard.activity.planned": "مخطط",
+  "dashboard.activity.project.created": "تم إنشاء مشروع",
+  "dashboard.activity.document.added": "تم إضافة وثيقة",
+  "dashboard.activity.discussion.created": "تم إنشاء نقاش",
+  "dashboard.activity.event.planned": "تم تخطيط فعالية",
+  "dashboard.activity.ago.2h": "منذ ساعتين",
+  "dashboard.activity.ago.4h": "منذ 4 ساعات",
+  "dashboard.activity.ago.yesterday": "أمس",
+  "dashboard.activity.ago.1day": "منذ يوم",
+  "dashboard.stats.projects.development": "مشاريع قيد التطوير",
+  "dashboard.stats.active.members": "أعضاء مجتمع نشطون",
+  "dashboard.stats.available.resources": "موارد متاحة",
+  "dashboard.stats.upcoming.activities": "أنشطة قادمة",
+  "dashboard.welcome.name": "مرحباً {userName}",
+  "dashboard.welcome.guest": "مرحباً بكم في منصة FSU",
+  "dashboard.quick.overview": "نظرة سريعة",
+  "dashboard.actions.manage.projects": "إدارة المشاريع",
+  "dashboard.actions.community": "المجتمع",
+  "dashboard.actions.resources": "الموارد",
+  "dashboard.actions.events": "الفعاليات",
+  "dashboard.actions.analytics": "التحليلات",
+  "dashboard.trends.up": "↗ في ارتفاع",
+  "dashboard.trends.down": "↘ في انخفاض",
+  "dashboard.trends.stable": "→ مستقر",
+
+  "actions.new.project": "مشروع FSU جديد",
+  "actions.new.project.desc": "إطلاق مبادرة جديدة",
+  "actions.share.document": "مشاركة وثيقة",
+  "actions.share.document.desc": "إضافة مورد",
+  "actions.explore.organizations": "استكشاف المنظمات",
+  "actions.explore.organizations.desc": "اكتشاف الشركاء",
+  "actions.plan.event": "تخطيط فعالية",
+  "actions.plan.event.desc": "تنظيم لقاء",
+  "actions.new.discussion": "نقاش جديد",
+  "actions.new.discussion.desc": "بدء تبادل",
+  "actions.consult.resources": "استشارة الموارد",
+  "actions.consult.resources.desc": "الوصول إلى الأدلة",
+  "actions.title": "إجراءات سريعة",
+  "actions.subtitle": "وصول مباشر للوظائف الرئيسية",
+  "actions.customize": "تخصيص إجراءاتي",
+  "actions.quick.actions": "إجراءات سريعة",
+  "actions.preferences": "التفضيلات",
+  "actions.priority": "الأولوية",
+  "actions.new.project.description": "إطلاق مبادرة FSU جديدة",
+  "actions.community.forum": "منتدى المجتمع",
+  "actions.community.forum.description": "المشاركة في النقاشات",
+  "actions.resource.center": "مركز الموارد",
+  "actions.resource.center.description": "استكشاف الوثائق",
+  "actions.events.calendar": "تقويم الفعاليات",
+  "actions.events.calendar.description": "الأنشطة القادمة",
+  "actions.quick": "إجراءات سريعة",
+  "actions.quick.description": "وصول سريع لأدواتك الأساسية",
+  "actions.shortcuts": "اختصارات",
+
+  "auth.login": "تسجيل الدخول",
+  "auth.logout.success": "تم الخروج بنجاح",
+  "auth.logout.goodbye": "إلى اللقاء!",
+  "auth.logout.error": "فشل تسجيل الخروج",
+
+  "nexus.title": "شبكة NEXUS",
+  "nexus.subtitle": "مجتمع من الدول يتشارك المشاريع والخبرات والبنية التحتية.",
+  "nexus.interactive.map": "خريطة شبكة SUTEL",
+  "nexus.fullscreen": "عرض ملء الشاشة",
+
+  "map.title": "خريطة شبكة SUTEL",
+  "map.subtitle": "54 دولة عضو - 127 مشروع مشترك",
+  "map.search.placeholder": "بحث عن دولة أو مشروع...",
+  "map.kpi.members": "الدول الأعضاء",
+  "map.kpi.active": "نشطة هذا الربع",
+  "map.kpi.projects": "المشاريع المشتركة",
+  "map.kpi.practices": "أفضل الممارسات",
+  "map.filter.participation": "مشاركة الشبكة",
+  "map.filter.active": "دولة نشطة",
+  "map.filter.member": "دولة عضو",
+  "map.filter.joining": "قيد الانضمام",
+  "map.filter.project.type": "نوع المشاريع",
+  "map.tooltip.member": "دولة عضو في شبكة SUTEL",
+  "map.tooltip.projects": "مشاريع مشتركة",
+  "map.tooltip.contact": "التواصل مع نقطة الاتصال",
+  "map.tooltip.view": "عرض ملف الدولة",
+  "map.activity.title": "النشاط الأخير للشبكة",
+  "map.legend.active": "الدول النشطة في الشبكة",
+  "map.dynamics.title": "الديناميكيات الإقليمية",
+  "map.actions.members": "عرض الدول الأعضاء",
+  "map.actions.projects": "استكشاف المشاريع المشتركة",
+  "map.actions.network": "الوصول إلى عرض الشبكة",
+  "map.filter.region": "المنطقة",
+  "map.filter.region.all": "جميع المناطق",
+  "map.filter.activity": "النشاط",
+  "map.filter.activity.all": "جميع الأنشطة",
+  "map.mode.participation": "مشاركة",
+  "map.mode.projects": "مشاريع",
+  "map.mode.exchanges": "تبادلات",
+
+  "resources.title": "المكتبة الرقمية",
+  "resources.subtitle": "الأدلة والتقارير وأفضل الممارسات",
+  "resources.upload": "رفع وثيقة",
+  "resources.categories": "الفئات",
+  "resources.recent": "وثائق حديثة",
+  "resources.no.docs": "لا توجد وثائق",
+  "resources.upload.success": "تم رفع الوثيقة بنجاح",
+  "resources.description": "الوصول إلى مكتبة شاملة من الوثائق والأدلة والتقارير والموارد للخدمة الشاملة للاتصالات.",
+  "resources.add.document": "إضافة وثيقة",
+  "resources.analytics": "التحليلات",
+  "resources.search.filters": "البحث والفلاتر",
+  "resources.search.placeholder": "البحث في الوثائق حسب العنوان أو الوصف...",
+  "resources.documents.available": "الوثائق المتاحة",
+  "resources.documents.found": "وثيقة موجودة",
+  "resources.documents.found.plural": "وثائق موجودة",
+  "resources.download.all": "تحميل الكل",
+  "resources.document.type": "نوع الوثيقة",
+  "resources.document.country": "الدولة",
+  "resources.document.title.error": "يرجى إدخال عنوان الوثيقة",
+
+  "hero.badge": "المنصة الأفريقية للخدمة الشاملة",
+  "hero.title.line1": "رابطة صناديق",
+  "hero.title.line2": "الخدمة الشاملة في أفريقيا",
+  "hero.subtitle": "ربط الصناديق وتنسيق المشاريع وقيادة تأثير الخدمة الشاملة في أفريقيا.",
+  "hero.stats.countries": "دولة",
+  "hero.stats.projects": "مشروع",
+  "hero.stats.organizations": "منظمة",
+  "hero.stats.beneficiaries": "مستفيد",
+  "hero.trust.supported": "بدعم من المؤسسات الأفريقية الكبرى",
+  "hero.scroll.discover": "اكتشف المزيد",
+
+  "features.badge": "نظام متكامل",
+  "features.title": "منصة شاملة للتعاون",
+  "features.subtitle": "جميع الأدوات اللازمة لتنسيق ومشاركة وتسريع مبادرات FSU",
+  "features.fsu.projects": "مشاريع FSU",
+  "features.fsu.projects.desc": "متابعة وإدارة تعاونية لمبادرات الخدمة الشاملة",
+  "features.fsu.projects.highlight1": "إدارة المشاريع",
+  "features.fsu.projects.highlight2": "متابعة في الوقت الفعلي",
+  "features.fsu.projects.highlight3": "تقارير آلية",
+  "features.shared.resources": "موارد مشتركة",
+  "features.shared.resources.desc": "مكتبة أدلة وتقارير وأفضل الممارسات",
+  "features.shared.resources.highlight1": "أدلة عملية",
+  "features.shared.resources.highlight2": "دراسات حالة",
+  "features.shared.resources.highlight3": "وثائق تقنية",
+  "features.organizations.directory": "دليل المنظمات",
+  "features.organizations.directory.desc": "خريطة تفاعلية لوكالات FSU والشركاء",
+  "features.organizations.directory.highlight1": "خريطة تفاعلية",
+  "features.organizations.directory.highlight2": "ملفات تفصيلية",
+  "features.organizations.directory.highlight3": "تنسيق ميسر",
+  "features.collaborative.forum": "منتدى تعاوني",
+  "features.collaborative.forum.desc": "مساحة لتبادل الخبرات والتنسيق",
+  "features.collaborative.forum.highlight1": "نقاشات موضوعية",
+  "features.collaborative.forum.highlight2": "خبرات مشتركة",
+  "features.collaborative.forum.highlight3": "شبكة مهنية",
+  "features.events.training": "فعاليات وتدريب",
+  "features.events.training.desc": "أجندة تعاونية ووحدات تعليمية",
+  "features.events.training.highlight1": "تدريب عبر الإنترنت",
+  "features.events.training.highlight2": "ندوات عبر الإنترنت",
+  "features.events.training.highlight3": "لقاءات إقليمية",
+  "features.analytics.reporting": "التحليلات والتقارير",
+  "features.analytics.reporting.desc": "لوحات القيادة وتحليلات الأداء",
+  "features.analytics.reporting.highlight1": "مقاييس رئيسية",
+  "features.analytics.reporting.highlight2": "تحليلات إقليمية",
+  "features.analytics.reporting.highlight3": "تقارير مخصصة",
+
+  "regions.badge": "البنية التحتية",
+  "regions.title": "الشبكة القارية",
+  "regions.subtitle": "بنية تحتية للتعاون مقسمة إلى 5 مراكز إقليمية استراتيجية لتغطية مثالية للقارة.",
+  "regions.cta.map": "الخريطة التفاعلية",
+  "regions.label.countries": "دولة",
+  "regions.label.projects": "مشروع",
+  "regions.explore.all": "استكشاف جميع المناطق",
+  "regions.west.name": "غرب أفريقيا",
+  "regions.west.desc": "المجموعة الاقتصادية (CEDEAO)",
+  "regions.central.name": "وسط أفريقيا",
+  "regions.central.desc": "تجمع (CEEAC)",
+  "regions.east.name": "شرق أفريقيا",
+  "regions.east.desc": "المركز الرقمي (EAC)",
+  "regions.north.name": "شمال أفريقيا",
+  "regions.north.desc": "اتحاد المغرب العربي ومصر",
+  "regions.south.name": "أفريقيا الجنوبية",
+  "regions.south.desc": "منطقة (SADC)",
 
   "feed.badge": "بث مباشر",
   "feed.title": "الذكاء الجماعي",
   "feed.title.highlight": "في العمل",
-  "feed.subtitle": "تابع أحدث المساهمات والمشاريع والتعاون بين الدول الـ 54 الأعضاء.",
+  "feed.subtitle": "تابع أحدث المساهمات والمشاريع والتعاون بين الدول الـ 54 الأعضاء في شبكة NEXUS.",
   "feed.viewAll": "عرض كل الأنشطة",
   "feed.time.recent": "حديث",
   "feed.time.soon": "قريباً",
@@ -57,130 +370,335 @@
   "feed.demo.collab.title": "مشاركة البنية التحتية الأساسية",
   "feed.demo.collab.desc": "بدء تعاون ثنائي حول الإدارة عبر الحدود.",
 
-  "regions.badge": "البنية التحتية",
-  "regions.title": "الشبكة القارية",
-  "regions.subtitle": "بنية تحتية للتعاون مقسمة إلى 5 مراكز إقليمية استراتيجية.",
-  "regions.cta.map": "الخريطة التفاعلية",
-  "regions.label.countries": "دولة",
-  "regions.label.projects": "مشروع",
-  "regions.explore.all": "استكشاف جميع المناطق",
-  "regions.west.name": "غرب أفريقيا",
-  "regions.west.desc": "المجموعة الاقتصادية (CEDEAO)",
-  "regions.central.name": "وسط أفريقيا",
-  "regions.central.desc": "تجمع (CEEAC)",
-  "regions.east.name": "شرق أفريقيا",
-  "regions.east.desc": "المركز الرقمي (EAC)",
-  "regions.north.name": "شمال أفريقيا",
-  "regions.north.desc": "اتحاد المغرب العربي ومصر",
-  "regions.south.name": "أفريقيا الجنوبية",
-  "regions.south.desc": "منطقة (SADC)",
+  "cta.title": "انضم إلى التحول الرقمي لأفريقيا",
+  "cta.subtitle": "معاً، لنبني نظاماً رقمياً شاملاً ومستداماً",
 
-  "members.badge": "الدليل",
-  "members.title": "الدول الأعضاء",
-  "members.subtitle": "54 دولة توحد جهودها لتسريع الشمول الرقمي",
-  "members.search.placeholder": "البحث عن دولة...",
-  "members.filter.region": "المنطقة",
-  "members.filter.region.all": "كل المناطق",
-  "members.filter.status": "الحالة",
-  "members.filter.status.all": "كل الحالات",
-  "members.filter.status.active": "نشط",
-  "members.filter.status.member": "عضو",
-  "members.filter.status.onboarding": "قيد الإدماج",
-  "members.filter.status.observer": "مراقب",
-  "members.filter.language": "اللغة",
-  "members.filter.language.all": "كل اللغات",
-  "members.results": "دول",
-  "members.empty": "لا توجد نتائج مطابقة",
-
-  "common.back": "عودة",
-  "common.loading": "جار التحميل...",
-  "common.error": "حدث خطأ",
-  "common.success": "تم بنجاح",
-  "common.cancel": "إلغاء",
-  "common.save": "حفظ",
-  "common.delete": "حذف",
-  "common.edit": "تعديل",
-  "common.view": "عرض",
-  "common.search": "بحث",
-  "common.filter": "تصفية",
-  "common.all": "الكل",
-  "common.close": "إغلاق",
-  "common.countries": "دول",
-  "common.projects": "مشاريع",
-
-  "dashboard.welcome.default": "مرحباً بك 👋",
-  "dashboard.title": "منصة FSU",
-  "dashboard.stats.active.projects": "مشاريع نشطة",
-  "dashboard.stats.collaborators": "المتعاونون",
-  "dashboard.stats.documents": "الوثائق",
-  "dashboard.stats.events": "الفعاليات",
-  "dashboard.quick.actions": "وصول سريع",
-  "dashboard.activity.recent": "النشاط الأخير",
-
-  "auth.login": "تسجيل الدخول",
-  "auth.logout.success": "تم الخروج بنجاح",
-  "auth.logout.goodbye": "إلى اللقاء!",
-  "auth.logout.error": "فشل تسجيل الخروج",
-
-  "map.title": "خريطة SUTEL",
-  "map.subtitle": "54 دولة - 127 مشروع مشترك",
-  "map.search.placeholder": "بحث جغرافي...",
-  "map.kpi.members": "الدول الأعضاء",
-  "map.kpi.projects": "المشاريع المشتركة",
-  "map.filter.region": "المنطقة",
-  "map.filter.region.all": "جميع المناطق",
-  "map.filter.activity": "النشاط",
-  "map.filter.activity.all": "جميع الأنشطة",
-  "map.mode.participation": "مشاركة",
-  "map.mode.projects": "مشاريع",
-  "map.mode.exchanges": "تبادلات",
-
-  "resources.title": "المكتبة الرقمية",
-  "resources.subtitle": "الأدلة والتقارير وأفضل الممارسات",
-  "resources.no.docs": "لا توجد وثائق",
-  "resources.add.document": "رفع وثيقة",
-  "resources.search.placeholder": "البحث في المصادر...",
-
-  "hero.badge": "المنصة الأفريقية للخدمة الشاملة",
-  "hero.title.line1": "رابطة صناديق",
-  "hero.title.line2": "الخدمة الشاملة في أفريقيا",
-  "hero.subtitle": "ربط الصناديق وتنسيق المشاريع لقيادة التحول الرقمي في القارة.",
-  "hero.stats.countries": "دولة",
-  "hero.stats.projects": "مشروع",
-  "hero.stats.organizations": "منظمة",
-  "hero.stats.beneficiaries": "مستفيد",
-
-  "forum.title": "المنتدى",
+  "forum.title": "منتدى نقاش FSU",
+  "forum.subtitle": "مساحة للتبادل والتعاون بين وكالات FSU الأفريقية. شارك تجاربك وطرح أسئلتك.",
   "forum.new.discussion": "نقاش جديد",
+  "forum.create.discussion": "إنشاء نقاش جديد",
+  "forum.create.description": "شارك أفكارك وأسئلتك مع مجتمع FSU",
+  "forum.discussion.title": "عنوان النقاش",
+  "forum.category": "الفئة",
+  "forum.select.category": "اختر فئة",
+  "forum.content": "محتوى النقاش",
+  "forum.content.placeholder": "صف موضوعك وأسئلتك...",
+  "forum.publish": "نشر النقاش",
+  "forum.error.fill.fields": "يرجى ملء جميع الحقول المطلوبة.",
+  "forum.success.created": "تم إنشاء النقاش",
+  "forum.success.description": "تم نشر نقاشك الجديد بنجاح.",
+  "forum.reaction.added": "تمت إضافة رد فعل",
+  "forum.reaction.description": "تم تسجيل رد فعلك.",
+  "forum.search.placeholder": "البحث في النقاشات...",
+  "forum.tab.all": "الكل",
   "forum.replies": "ردود",
   "forum.views": "مشاهدات",
+  "forum.reply": "رد",
+  "forum.start.discussion": "بدء نقاش",
+  "forum.all.discussions": "جميع النقاشات",
+  "forum.sort.recent": "الأحدث",
+  "forum.sort.popular": "الأكثر شعبية",
+  "forum.sort.replies": "الأكثر ردوداً",
+  "forum.sort.by": "ترتيب حسب",
+  "forum.discussion.count": "نقاش",
+  "forum.discussions.count": "نقاشات",
+  "forum.empty.title": "لا توجد نقاشات",
+  "forum.empty.description": "كن أول من يبدأ نقاشاً في هذه الفئة",
+  "forum.create.cancel": "إلغاء",
+  "forum.create.publish": "نشر النقاش",
+  "forum.error.required": "يرجى ملء جميع الحقول المطلوبة.",
+  "forum.reply.title": "الرد",
+  "forum.reply.description": "ميزة الرد قيد التنفيذ",
+  "forum.category.create": "إنشاء فئة",
+  "forum.category.create.description": "وظيفة إدارية",
+  "forum.category.manage": "إدارة الفئات",
+  "forum.category.manage.description": "وظيفة إدارية",
 
-  "projects.title": "مشاريع FSU",
-  "projects.subtitle": "متابعة مشاريع الخدمة الشاملة",
-  "projects.new.project": "أضف مشروعاً",
-  "projects.no.projects": "لا توجد مشاريع حالياً",
+  "projects.title": "مشاريع FSU/NEXUS",
+  "projects.subtitle": "إدارة ومتابعة مشاريع الخدمة الشاملة في أفريقيا",
+  "projects.description": "اكتشف وأدر وتابع جميع مشاريع صناديق الخدمة الشاملة للاتصالات عبر أفريقيا.",
+  "projects.new.project": "مشروع جديد",
+  "projects.view.grid": "شبكة",
+  "projects.view.map": "خريطة",
+  "projects.view.analytics": "تحليلات",
+  "projects.view.reports": "تقارير",
+  "projects.views.title": "عرض المشاريع",
+  "projects.filters.title": "فلاتر وبحث",
+  "projects.search.placeholder": "البحث بالاسم أو الدولة أو الموقع...",
+  "projects.region": "المنطقة",
+  "projects.all.regions": "جميع المناطق",
+  "projects.status": "الحالة",
+  "projects.all.status": "جميع الحالات",
+  "projects.no.projects": "لا توجد مشاريع",
+  "projects.no.results": "لم يتم العثور على مشاريع تطابق معايير البحث.",
+  "projects.create.project": "إنشاء مشروع",
+  "projects.create.first": "أنشئ مشروعك الأول للبدء!",
+  "projects.adjust.filters": "حاول تعديل معايير البحث.",
+  "projects.delete.confirm": "هل أنت متأكد من حذف هذا المشروع؟",
+  "projects.managed.by": "مشروع مدار بواسطة",
+  "projects.stats.total": "إجمالي المشاريع",
+  "projects.stats.active": "مشاريع نشطة",
+  "projects.stats.completed": "مشاريع مكتملة",
+  "projects.stats.pending": "قيد الانتظار",
+
+  "landing.title": "منصة FSU أفريقيا",
+  "landing.subtitle": "الشبكة التعاونية لصناديق الخدمة الشاملة الأفريقية",
+
+  "admin.dashboard": "لوحة القيادة",
+  "admin.dashboard.description": "نظرة عامة وإحصائيات",
+  "admin.users": "المستخدمون",
+  "admin.users.description": "إدارة المستخدمين والأدوار",
+  "admin.forum.moderation": "إشراف المنتدى",
+  "admin.forum.description": "إشراف النقاشات",
+  "admin.documents": "الوثائق",
+  "admin.documents.description": "التحقق وإدارة الوثائق",
+  "admin.events": "الفعاليات",
+  "admin.events.description": "إدارة الفعاليات",
+  "admin.submissions": "المقدمات",
+  "admin.submissions.description": "مراجعة المقدمات",
+  "admin.notifications": "الإشعارات",
+  "admin.notifications.description": "إدارة الإشعارات",
+  "admin.settings": "الإعدادات",
+  "admin.settings.description": "إعدادات النظام",
+  "admin.menu.main": "القائمة الرئيسية",
+  "admin.quick.actions": "إجراءات سريعة",
+  "admin.send.notification": "إرسال إشعار عام",
+  "admin.export.data": "تصدير البيانات",
+
+  "enrichment.title": "إثراء موسع لمؤشرات FSU",
+  "enrichment.classic": "إثراء تقليدي",
+  "enrichment.standards": "المعايير الدولية",
+  "enrichment.description": "استرجاع آلي لأحدث مؤشرات FSU من واجهات برمجة التطبيقات الدولية الرئيسية.",
+  "enrichment.start.button": "بدء الإثراء الكامل",
+  "enrichment.in.progress": "الإثراء جار...",
+  "enrichment.stats.indicators": "المؤشرات",
+  "enrichment.stats.countries": "الدول المغطاة",
+  "enrichment.stats.sources": "مصادر API",
+  "enrichment.stats.datapoints": "نقاط البيانات",
+  "enrichment.log.title": "سجل الإثراء في الوقت الفعلي",
+  "enrichment.log.starting": "بدء الإثراء الموسع لمؤشرات FSU...",
+  "enrichment.log.configured": "أنواع مؤشرات مهيأة",
+  "enrichment.log.countries.process": "دولة أفريقية للمعالجة",
+  "enrichment.log.connecting": "الاتصال بواجهات برمجة التطبيقات الخارجية:",
+  "enrichment.log.connected": "متصل",
+  "enrichment.log.finished": "اكتمل الإثراء بنجاح!",
+  "enrichment.log.processed": "مؤشر تمت معالجته إجمالاً",
+  "enrichment.log.added": "مؤشرات جديدة مضافة",
+  "enrichment.log.updated.count": "مؤشرات محدثة",
+  "enrichment.log.countries.covered": "دولة أفريقية مغطاة",
+  "enrichment.log.error": "خطأ أثناء الإثراء:",
+  "enrichment.progress.title": "التقدم العام:",
+  "enrichment.progress.description": "معالجة البيانات من واجهات برمجة التطبيقات الدولية...",
+  "enrichment.toast.started": "بدأ الإثراء الموسع",
+  "enrichment.toast.started.desc": "الاسترجاع من البنك الدولي وUIT وGSMA...",
+  "enrichment.toast.success": "تم الإثراء بنجاح!",
+  "enrichment.toast.error": "خطأ أثناء الإثراء",
+  "enrichment.toast.error.desc": "تحقق من وحدة التحكم لمزيد من التفاصيل",
+
+  "activity.recent": "النشاط الأخير",
+  "activity.recent.description": "آخر تفاعلات مجتمع FSU",
+  "activity.project.created": "تم إنشاء مشروع",
+  "activity.document.added": "تم إضافة وثيقة",
+  "activity.discussion.created": "تم إنشاء نقاش",
+  "activity.event.planned": "تم تخطيط فعالية",
+
+  "placeholder.search": "بحث...",
+  "placeholder.search.events": "البحث عن فعاليات...",
+  "placeholder.search.discussions": "البحث في النقاشات...",
+  "placeholder.search.agency": "البحث عن وكالة أو دولة...",
+  "placeholder.search.name.email": "البحث بالاسم أو البريد الإلكتروني...",
+  "placeholder.enter.message": "اكتب رسالتك...",
+  "placeholder.describe.event": "صف الفعالية...",
+  "placeholder.describe.topic": "صف موضوعك وأسئلتك...",
+  "placeholder.search.projects": "البحث بالاسم أو الدولة أو الموقع...",
+  "placeholder.search.organizations": "البحث عن وكالة أو دولة...",
+  "placeholder.search.users": "البحث بالاسم أو البريد الإلكتروني...",
+  "placeholder.message": "اكتب رسالتك...",
+  "placeholder.event.title": "مثال: ندوة الابتكار",
+  "placeholder.topic.description": "صف موضوعك وأسئلتك...",
+
+  "security.system": "أمان النظام",
+  "security.level": "المستوى",
+  "security.alerts": "تنبيهات",
+  "security.details": "التفاصيل",
+  "security.high": "عالي",
+
+  "time.minutes.ago": "منذ {count} دقائق",
+  "time.hours.ago": "منذ {count} ساعة",
+  "time.days.ago": "منذ {count} يوم",
+  "time.yesterday": "أمس",
+
+  "my.country.title": "مساحة بلدي",
+  "my.country.subtitle": "العرض الخاص لصندوق الخدمة الشاملة",
+
+  "welcome.title": "مرحباً بكم في NEXUS",
+  "welcome.message": "أنت جزء من شبكة دول تبني معاً مستقبل الخدمة الشاملة في أفريقيا.",
+  "welcome.subtitle": "استكشف، شارك، تعاون - كل مساهمة تعزز مجتمعنا.",
+  "welcome.cta": "اكتشاف الشبكة",
+
+  "compare.title": "موقعي في الشبكة",
+  "compare.description": "قارن مؤشراتك مع دول ذات ملفات مشابهة.",
+
+  "submit.title": "نماذج التقديم",
+  "submit.description": "قدم مشاريعك ومواقفك المشتركة ومقترحاتك التنظيمية أو طلبات التمويل لمجتمع FSU الأفريقي.",
+  "submit.my.submissions": "تقديماتي",
+  "submit.my.submissions.description": "سجل تقديماتك وحالتها",
+  "submit.type.select": "اختر نوع التقديم",
+  "submit.type.select.description": "اختر نوع الوثيقة التي تريد تقديمها أعلاه",
+  "submit.type.project": "ملف مشروع FSU",
+  "submit.type.project.description": "قدم مشروعاً جديداً للتمويل أو مشاركة الخبرات",
+  "submit.type.position": "موقف مشترك",
+  "submit.type.position.description": "ساهم في صياغة موقف أفريقي مشترك",
+  "submit.type.regulation": "مقترح تنظيمي",
+  "submit.type.regulation.description": "اقترح تحسينات للإطار التنظيمي FSU",
+  "submit.type.funding": "طلب تمويل",
+  "submit.type.funding.description": "اطلب تمويلاً لمشروعك FSU",
+  "submit.status.draft": "مسودة",
+  "submit.status.review": "قيد المراجعة",
+  "submit.status.approved": "موافق عليه",
+  "submit.status.rejected": "مرفوض",
+  "submit.action.view": "عرض",
+  "submit.action.save.draft": "حفظ كمسودة",
+  "submit.action.submit.review": "تقديم للمراجعة",
+  "submit.modified": "تم التعديل في",
+  "submit.reviewer": "المراجع",
+  "submit.project.title": "ملف مشروع FSU",
+  "submit.project.description.detail": "املأ معلومات مشروعك FSU للتقديم والتقييم",
+  "submit.project.title.field": "عنوان المشروع",
+  "submit.project.title.placeholder": "مثال: القرى المتصلة - المرحلة 2",
+  "submit.project.country": "الدولة",
+  "submit.project.country.placeholder": "اختر الدولة",
+  "submit.project.description.field": "وصف المشروع",
+  "submit.project.description.placeholder": "صف أهداف المشروع ونطاقه والمستفيدين...",
+  "submit.project.budget": "الميزانية الإجمالية (دولار)",
+  "submit.project.budget.placeholder": "1000000",
+  "submit.project.start.date": "تاريخ البدء",
+  "submit.project.end.date": "تاريخ الانتهاء",
+  "submit.project.kpis": "مؤشرات الأداء الرئيسية",
+  "submit.project.kpis.placeholder": "قم بإدراج المؤشرات الرئيسية لقياس نجاح المشروع...",
+  "submit.project.documents": "الوثائق المرفقة",
+  "submit.project.files.added": "ملفات مضافة:",
+  "submit.project.file.remove": "حذف",
+  "submit.position.title": "موقف أفريقي مشترك",
+  "submit.position.description": "ساهم في صياغة موقف مشترك حول قضايا FSU",
+  "submit.position.subject": "موضوع الموقف",
+  "submit.position.subject.placeholder": "مثال: تمويل البنية التحتية الريفية",
+  "submit.position.context": "السياق والتحديات",
+  "submit.position.context.placeholder": "صف السياق والتحديات المتعلقة بهذا الموقف...",
+  "submit.position.proposed": "الموقف المقترح",
+  "submit.position.proposed.placeholder": "صغ بوضوح الموقف الأفريقي المقترح...",
+  "submit.position.justification": "المبررات",
+  "submit.position.justification.placeholder": "برر هذا الموقف بالحجج والبيانات...",
+  "submit.regulation.title": "مقترح تنظيمي",
+  "submit.regulation.in.development": "النموذج قيد التطوير",
+  "submit.funding.title": "طلب تمويل",
+  "submit.funding.in.development": "النموذج قيد التطوير",
+  "submit.toast.draft.saved": "تم حفظ المسودة",
+  "submit.toast.draft.saved.description": "تم حفظ مسودتك بنجاح.",
+  "submit.toast.submitted": "تم إرسال التقديم",
+  "submit.toast.submitted.description": "تم إرسال تقديمك للمراجعة.",
+  "submit.toast.files.added": "تمت إضافة الملفات",
+  "submit.toast.files.added.description": " ملف(ات) تمت إضافتها بنجاح.",
 
   "events.title": "الفعاليات والتدريب",
+  "events.description": "اكتشف أحدث الفعاليات والمؤتمرات والتدريبات في مجتمع FSU.",
+  "events.viewCalendar": "عرض التقويم",
   "events.newEvent": "فعالية جديدة",
+  "events.search.placeholder": "البحث عن فعالية...",
+  "events.stats.total": "إجمالي الفعاليات",
+  "events.stats.upcoming": "القادمة",
+  "events.stats.registered": "تسجيلاتي",
+  "events.stats.support": "الدعم",
+  "events.views.grid": "شبكة",
+  "events.views.list": "قائمة",
+  "events.views.calendar": "تقويم",
+  "events.create.title": "إنشاء فعالية جديدة",
+  "events.create.description": "نظم فعالية لمجتمع FSU",
+  "events.form.title": "عنوان الفعالية",
+  "events.form.title.placeholder": "مثال: ندوة الابتكار",
+  "events.form.maxAttendees": "الحد الأقصى للمشاركين",
+  "events.form.description": "الوصف",
+  "events.form.description.placeholder": "صف الفعالية...",
+  "events.form.startDate": "تاريخ البدء",
+  "events.form.endDate": "تاريخ الانتهاء",
+  "events.form.isVirtual": "فعالية افتراضية",
+  "events.form.location": "المكان",
+  "events.form.location.placeholder": "مثال: قاعة المؤتمرات A",
+  "events.form.virtualLink": "رابط الاتصال",
+  "events.form.virtualLink.placeholder": "https://...",
+  "events.form.error.required": "يرجى ملء جميع الحقول المطلوبة.",
+  "events.filters.type": "نوع الفعالية",
+  "events.filters.location": "المكان",
+  "events.filters.onlyRegistered": "تسجيلاتي فقط",
+  "events.filters.clear": "مسح الفلاتر",
+  "events.filters.type.all": "جميع الأنواع",
+  "events.filters.type.webinar": "ندوات عبر الإنترنت",
+  "events.filters.type.conference": "مؤتمرات",
+  "events.filters.type.workshop": "ورش عمل",
+  "events.filters.type.deadline": "مواعيد نهائية",
+  "events.filters.location.all": "جميع الأماكن",
+  "events.filters.location.online": "عبر الإنترنت",
+  "events.empty.title": "لم يتم العثور على فعاليات",
+  "events.empty.description": "لا توجد فعاليات تطابق معايير البحث.",
+  "events.accessibility.skipToContent": "انتقل إلى المحتوى الرئيسي",
+  "events.accessibility.skipToSearch": "انتقل إلى البحث",
+  "events.accessibility.skipToList": "انتقل إلى قائمة الفعاليات",
+  "events.new.event": "فعالية جديدة",
+  "events.create.event": "إنشاء فعالية جديدة",
+  "events.export.calendar": "تصدير .ics",
+  "events.view.list": "قائمة",
+  "events.view.calendar": "تقويم",
+  "events.view.upcoming": "القادمة",
+  "events.event.title": "عنوان الفعالية",
+  "events.event.type": "النوع",
+  "events.select.type": "اختر النوع",
+  "events.date": "التاريخ",
+  "events.time": "الوقت",
+  "events.duration": "المدة (ساعات)",
+  "events.create.button": "إنشاء فعالية",
+  "events.created.title": "تم إنشاء الفعالية",
+  "events.created.description": "تم إنشاء فعاليتك بنجاح.",
   "events.register": "تسجيل",
   "events.registered": "مسجل",
+  "events.details": "التفاصيل",
+  "events.participants": "مشاركون",
+  "events.organized.by": "نظمها:",
+  "events.register.success": "تم التسجيل",
+  "events.register.description": "أنت الآن مسجل في هذه الفعالية.",
+  "events.export.success": "تصدير التقويم",
+  "events.export.description": "تم إنشاء وتحميل ملف .ics.",
+  "events.calendar.view": "عرض التقويم",
+  "events.calendar.coming": "سيتم تنفيذ عرض التقويم في الإصدار القادم",
+  "events.see.list": "عرض كقائمة",
+  "events.general.info": "معلومات عامة",
 
   "form.error": "خطأ",
+  "form.fill.required.fields": "يرجى ملء جميع الحقول المطلوبة.",
   "form.required": "حقل إجباري",
 
-  "country.not.found": "الدولة غير موجودة",
-  "country.network.member": "عضو في شبكة SUTEL",
-  "country.status.active": "نشط",
-  "country.status.member": "عضو",
-  "country.status.onboarding": "قيد الإدماج",
-  "country.status.observer": "مراقب",
+  "assistant.welcome": "مرحباً! أنا مساعدك الافتراضي FSU. كيف يمكنني مساعدتك اليوم؟",
+  "assistant.greeting.user": "مرحباً {userName}! كيف يمكنني مساعدتك في مشاريعك FSU اليوم؟",
+  "assistant.suggestions.new.project": "إنشاء مشروع جديد",
+  "assistant.suggestions.explore.forum": "استكشاف المنتدى",
+  "assistant.suggestions.check.events": "التحقق من الفعاليات القادمة",
+  "assistant.suggestions.view.stats": "عرض الإحصائيات",
+  "assistant.response.project.help": "يمكنني مساعدتك في إدارة مشاريع FSU. هل تريد إنشاء مشروع جديد أو استشارة المشاريع الحالية أو الحصول على نصائح للتخطيط؟",
+  "assistant.response.forum.help": "منتدى FSU هو المكان المثالي للتبادل مع الوكالات الأخرى. يمكنك طرح أسئلة أو مشاركة الخبرات أو الانضمام إلى نقاشات موضوعية.",
+  "assistant.response.stats.help": "إليك نظرة عامة على إحصائياتك الحالية. هل هناك مقاييس محددة تريد تحليلها بمزيد من التفصيل؟",
+  "assistant.response.default": "أنا هنا لمساعدتك مع منصة FSU. يمكنك طرح أسئلة حول المشاريع والفعاليات والمنتدى.",
+  "assistant.placeholder": "اكتب رسالتك...",
+  "assistant.send": "إرسال",
 
   "presentation.hero.title": "منصة SUTEL: مستقبل الاتصالات الأفريقية",
   "presentation.hero.subtitle": "حل ثوري",
-  "presentation.hero.description": "المنصة التي تربط أكثر من 55 دولة، وتدير أكثر من 1100 مشروع وتحول صناعة الاتصالات في أفريقيا. انضم إلى الثورة الرقمية التي توحد قارتنا.",
+  "presentation.hero.description": "المنصة التي تربط أكثر من 55 دولة، وتدير أكثر من 1100 مشروع وتحول صناعة الاتصالات في أفريقيا.",
   "presentation.hero.cta.demo": "بدء العرض التوضيحي",
   "presentation.hero.cta.roi": "حساب العائد على الاستثمار",
   "presentation.regional.title": "التأثير الإقليمي",
+  "presentation.regional.description": "حضور أفريقي شامل يحول الاتصالات",
+  "presentation.regional.stats.countries": "الدول المغطاة",
+  "presentation.regional.stats.projects": "المشاريع النشطة",
+  "presentation.regional.stats.agencies": "الوكالات الشريكة",
   "presentation.roi.title": "حاسبة العائد على الاستثمار",
   "presentation.demo.title": "عرض توضيحي تفاعلي",
   "presentation.architecture.title": "الهندسة التقنية",
@@ -189,8 +707,15 @@
   "presentation.cta.title": "انضم إلينا",
   "presentation.controls.previous": "السابق",
   "presentation.controls.next": "التالي",
+  "presentation.controls.export": "تصدير",
+  "presentation.controls.share": "مشاركة",
   "presentation.controls.fullscreen": "ملء الشاشة",
   "presentation.controls.exitFullscreen": "الخروج من ملء الشاشة",
+  "presentation.controls.presenter": "وضع المقدم",
+  "presentation.controls.record": "تسجيل",
+  "presentation.controls.stopRecording": "إيقاف",
+  "presentation.controls.pauseRecording": "إيقاف مؤقت",
+  "presentation.controls.resumeRecording": "استئناف",
 
   "home.hero.badge": "شبكة SUTEL الأفريقية",
   "home.hero.subtitle.prefix": "مستقبل",
@@ -202,7 +727,7 @@
   "home.hero.scroll": "اكتشف",
   "home.hero.description": "منصة تعاون ومشاريع ومشاركة لخدمة الشمول الرقمي الأفريقي.",
   "home.hero.imageAlt": "خريطة أفريقيا المتصلة",
-  "nav.library": "المكتبة",
+
   "footer.platform.name": "منصة NEXUS",
   "footer.platform.description": "أول منصة رقمية أفريقية مخصصة للتعاون والابتكار وتقاسم الموارد لسد الفجوة الرقمية. بدعم من UAT و ANSUT كوت ديفوار.",
   "footer.platform.slogan": "ربط أفريقيا، معاً",
@@ -217,7 +742,7 @@
   "footer.partners.uat": "UAT - الاتحاد الأفريقي للاتصالات",
   "footer.partners.ansut": "ANSUT كوت ديفوار",
   "footer.partners.au": "الاتحاد الأفريقي",
-  "footer.partners.itu": "ITU - الاتحاد الدولي للاتصالات",
+  "footer.partners.itu": "UIT - الاتحاد الدولي للاتصالات",
   "footer.partners.regions": "المناطق: CEDEAO • SADC • EACO • ECCAS • UMA",
   "footer.contact.title": "اتصل بنا",
   "footer.contact.location": "أبيدجان، كوت ديفوار",
@@ -229,8 +754,6 @@
   "home.cta.kicker": "انضم إلينا",
   "home.cta.title": "انضم إلى شبكة SUTEL",
   "home.cta.subtitle": "شارك في البناء الجماعي للخدمة الشاملة في أفريقيا",
-  "common.create.account": "إنشاء حساب",
-  "common.learn.more": "معرفة المزيد",
 
   "nav.network.view.desc": "التنسيق الجماعي SUTEL",
   "nav.network.members.desc": "دليل الدول الأعضاء",
@@ -251,7 +774,7 @@
   "activity.presence.desc": "شبكة SUTEL نشطة والدول الأعضاء تساهم بانتظام",
   "activity.presence.status": "نشاط قوي هذا الشهر",
   "activity.filter.title": "تصفية النشاط",
-  "activity.timeline.title": "جدول الأنشطة الزمني",
+  "activity.timeline.title": "الجدول الزمني للأنشطة",
 
   "filter.period": "الفترة",
   "filter.period.placeholder": "اختر فترة",
@@ -307,12 +830,6 @@
   "forum.page.badge": "المجتمع",
   "forum.page.title": "منتدى نقاش FSU",
   "forum.page.subtitle": "شارك أفكارك وأسئلتك مع مجتمع FSU",
-  "forum.all.discussions": "جميع النقاشات",
-  "forum.sort.recent": "الأحدث",
-  "forum.sort.popular": "الأكثر شعبية",
-  "forum.sort.replies": "الأكثر ردوداً",
-  "forum.sort.by": "ترتيب حسب",
-  "forum.empty.title": "لا توجد نقاشات",
   "forum.empty.desc": "كن أول من يبدأ نقاشاً في هذه الفئة",
   "forum.empty.cta": "إنشاء نقاش",
   "forum.new.title": "إنشاء نقاش جديد",
@@ -326,7 +843,6 @@
   "forum.new.cancel": "إلغاء",
   "forum.new.publish": "نشر النقاش",
   "forum.error.fill": "يرجى ملء جميع الحقول المطلوبة.",
-  "forum.reaction.added": "تمت إضافة رد فعل",
   "forum.reaction.desc": "تم تسجيل رد فعلك.",
 
   "library.page.badge": "المكتبة",
@@ -343,5 +859,19 @@
   "focal.status.pending": "قيد الانتظار",
   "focal.status.invited": "مدعو",
   "focal.status.active": "نشط",
-  "focal.status.inactive": "غير نشط"
+  "focal.status.inactive": "غير نشط",
+
+  "focal.chat.title": "الرسائل",
+  "focal.chat.country_team": "فريق {{country}}",
+  "focal.chat.conversation": "محادثة",
+  "focal.chat.no_conversations": "لا توجد محادثات",
+  "focal.chat.no_messages": "لا توجد رسائل في هذه المحادثة",
+  "focal.chat.start_conversation": "أرسل أول رسالة!",
+  "focal.chat.select_conversation": "اختر محادثة",
+  "focal.chat.type_message": "اكتب رسالتك...",
+  "focal.chat.send": "إرسال",
+  "focal.chat.today": "اليوم",
+  "focal.chat.yesterday": "أمس",
+  "focal.chat.unread": "غير مقروءة",
+  "focal.chat.contact": "تواصل"
 }
