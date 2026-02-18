@@ -202,6 +202,9 @@ const Footer = () => {
               <Link to="/legal/terms" className="text-white/50 hover:text-[hsl(var(--nx-gold))] transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[hsl(var(--nx-gold))] after:transition-all after:duration-300 hover:after:w-full">
                 {t('footer.links.terms')}
               </Link>
+              <Link to="/contact" className="text-white/50 hover:text-[hsl(var(--nx-gold))] transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[hsl(var(--nx-gold))] after:transition-all after:duration-300 hover:after:w-full">
+                {t('footer.links.support')}
+              </Link>
             </div>
           </div>
         </div>
