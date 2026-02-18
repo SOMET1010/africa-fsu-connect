@@ -1,53 +1,101 @@
 
+# Plan: Multilingual Instant Search across Docs, Forum, and Projects
 
-# Plan : 3 corrections du Hero de la page d'accueil
+## Overview
 
-## Correction 1 -- Slogan officiel et description
+Upgrade the existing `CommandPalette` (Cmd+K) into a unified, multilingual instant search that queries three Supabase tables in parallel: `documents`, `forum_posts`, and `projects`. Results are grouped by type with live feedback as the user types.
 
-Remplacer le titre/description generiques du Hero par le contenu institutionnel demande.
+## Architecture
 
-**Fichier : `src/components/home/HomeHeroBlock.tsx`**
-- Changer le titre principal (ligne 20) : remplacer le fallback `'Plateforme de cooperation'` par **"Ne laisser personne hors ligne"**
-- Changer le highlight dore (ligne 21) : **"Service Universel"** (deja correct)
-- Changer le suffix (ligne 22) : remplacer `'Africain'` par **"pour connecter les non-connectes"**
-- Mettre a jour la description (ligne 23) avec : **"Renforcer le service universel pour une connectivite numerique inclusive. Fournir un service universel performant pour reduire la fracture numerique."**
+The search bar trigger will remain in the header (Cmd+K shortcut preserved). When the user types 2+ characters, three parallel Supabase queries fire with a 300ms debounce. Results are displayed grouped by category (Documents, Forum, Projects) inside the existing `CommandDialog`.
 
-**Fichiers i18n** (`fr.json`, `en.json`, `ar.json`, `pt.json`) :
-- Mettre a jour les cles `home.hero.subtitle.prefix`, `home.hero.subtitle.highlight`, `home.hero.subtitle.suffix` et `home.hero.description` avec les traductions correspondantes
+```text
+User types query
+       |
+  [300ms debounce]
+       |
+  3 parallel Supabase queries
+  +-----------+  +-----------+  +-----------+
+  | documents |  | forum_    |  | projects  |
+  | .ilike()  |  | posts     |  | .ilike()  |
+  +-----------+  | .ilike()  |  +-----------+
+                 +-----------+
+       |
+  Merge + group by type
+       |
+  Display in CommandDialog
+```
 
-## Correction 2 -- Bouton "S'inscrire" dans le Hero + meilleur contraste CTA
+## Changes
 
-**Fichier : `src/components/home/HomeHeroBlock.tsx`**
-- Ajouter un 3e bouton **"S'inscrire"** (lien vers `/auth`) avec un style dore bien visible, en premier dans la rangee de CTA
-- Renommer le bouton actuel "Espace membre" en **"Se connecter"** pour plus de clarte
-- Ameliorer le contraste du bouton outline : passer de `border-white/30 text-white` a `border-white/50 text-white bg-white/10` pour une meilleure visibilite
+### 1. Rewrite `src/components/ui/command-palette.tsx`
 
-Resultat : 3 CTA visibles dans le hero :
-1. **S'inscrire** (bouton dore, principal)
-2. **Explorer le reseau** (bouton outline clair)
-3. **Se connecter** (bouton outline)
+- Add a `useUnifiedSearch` custom hook that:
+  - Debounces input (300ms)
+  - Fires 3 parallel `supabase.from(table).select().ilike()` queries:
+    - `documents`: search `title` and `description`, filter `is_public = true`, limit 5
+    - `forum_posts`: search `title` and `content`, limit 5
+    - `projects`: search `title` and `description`/`location`, limit 5
+  - Returns `{ results, loading }` grouped by category
+- Replace the static command list with live search results
+- Keep static navigation commands as fallback when query is empty
+- Each result navigates to the appropriate page (`/resources`, `/forum`, `/projects`)
+- Add i18n labels for group headings and placeholder using `useTranslation`
 
-## Correction 3 -- Ameliorer le texte `white/70` pour le contraste
+### 2. Create `src/hooks/useUnifiedSearch.ts`
 
-**Fichier : `src/components/home/HomeHeroBlock.tsx`**
-- Ligne 61 : passer la description de `text-white/70` a `text-white/85` pour atteindre le ratio WCAG AA de 4.5:1
+New hook encapsulating the search logic:
+- Input: search query string
+- Output: `{ results: SearchResult[], loading: boolean }`
+- Uses `Promise.all` for parallel queries
+- Each result has: `id`, `title`, `description`, `type` (document/forum/project), `url`
+- Debounce built-in (300ms)
+- Minimum query length: 2 characters
 
-**Fichier : `src/components/home/HomePartnersBlock.tsx`**
-- Ligne 22 : passer le titre de `text-white/40` a `text-white/60`
-- Ligne 27 : passer les noms de partenaires de `text-white/30` a `text-white/50` et le border de `border-white/10` a `border-white/20`
+### 3. Update i18n files (`fr.json`, `en.json`, `ar.json`, `pt.json`)
 
----
+Add keys:
+- `search.placeholder`: "Search documents, forum, projects..."
+- `search.documents`: "Documents"
+- `search.forum`: "Forum Discussions"
+- `search.projects`: "Projects"
+- `search.no_results`: "No results found"
+- `search.hint`: "Cmd+K to search"
 
-## Resume technique
+## Technical Details
 
-| Fichier | Modifications |
+### Supabase Queries (no migration needed)
+
+```sql
+-- Documents (public only)
+SELECT id, title, description, document_type, country
+FROM documents
+WHERE is_public = true
+AND (title ILIKE '%query%' OR description ILIKE '%query%')
+LIMIT 5;
+
+-- Forum posts
+SELECT id, title, content, created_at
+FROM forum_posts
+WHERE title ILIKE '%query%' OR content ILIKE '%query%'
+LIMIT 5;
+
+-- Projects (uses existing projects table via Supabase SDK)
+SELECT id, title, description, status, location
+FROM projects
+WHERE title ILIKE '%query%' OR description ILIKE '%query%'
+LIMIT 5;
+```
+
+### Files Modified
+
+| File | Change |
 |---|---|
-| `src/components/home/HomeHeroBlock.tsx` | Slogan officiel, 3 CTA (S'inscrire/Explorer/Se connecter), contraste description |
-| `src/components/home/HomePartnersBlock.tsx` | Contraste texte partenaires |
-| `src/i18n/translations/fr.json` | Nouvelles cles hero |
-| `src/i18n/translations/en.json` | Traductions anglaises |
-| `src/i18n/translations/ar.json` | Traductions arabes |
-| `src/i18n/translations/pt.json` | Traductions portugaises |
+| `src/hooks/useUnifiedSearch.ts` | New hook - parallel Supabase search with debounce |
+| `src/components/ui/command-palette.tsx` | Rewrite to use live search + static fallback |
+| `src/i18n/translations/fr.json` | Add `search.*` keys |
+| `src/i18n/translations/en.json` | Add `search.*` keys |
+| `src/i18n/translations/ar.json` | Add `search.*` keys |
+| `src/i18n/translations/pt.json` | Add `search.*` keys |
 
-Aucune migration de base de donnees necessaire -- les contenus CMS utiliseront les memes cles JSONB existantes.
-
+No database migrations required - uses existing tables and columns with client-side `ilike` filtering.
