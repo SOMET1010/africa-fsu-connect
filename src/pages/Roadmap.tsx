@@ -85,11 +85,11 @@ const phases = [
 ];
 
 const milestones = [
-  { date: "Janvier 2025", event: "Lancement version bêta", icon: Rocket },
-  { date: "Mars 2025", event: "Premier atelier technique", icon: Users },
-  { date: "Mai 2025", event: "Atelier continental UAT", icon: Globe },
-  { date: "Septembre 2025", event: "30 pays connectés", icon: Target },
-  { date: "Décembre 2025", event: "Plateforme complète", icon: Star }
+  { date: "Janvier 2025", event: "Lancement version bêta", icon: Rocket, description: "Déploiement initial de la plateforme pour les premiers pays pilotes." },
+  { date: "Mars 2025", event: "Premier atelier technique", icon: Users, description: "Formation des équipes techniques des agences FSU partenaires." },
+  { date: "Mai 2025", event: "Atelier continental UAT", icon: Globe, description: "Réunion de toutes les parties prenantes pour valider la feuille de route." },
+  { date: "Septembre 2025", event: "30 pays connectés", icon: Target, description: "Extension de la couverture à 30 pays du continent africain." },
+  { date: "Décembre 2025", event: "Plateforme complète", icon: Star, description: "Déploiement intégral avec les 54 pays et tous les modules actifs." }
 ];
 
 const Roadmap = () => {
