@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PublicHeader } from "@/components/layout/PublicHeader";
 
 const TermsOfUse = () => (
   <div className="min-h-screen bg-[hsl(var(--nx-night))] text-white">
-    <PublicHeader />
     <main className="container mx-auto px-4 py-12 max-w-3xl">
       <Button asChild variant="ghost" className="mb-8 text-white/60 hover:text-white">
         <Link to="/"><ArrowLeft className="mr-2 h-4 w-4" />Retour à l'accueil</Link>
