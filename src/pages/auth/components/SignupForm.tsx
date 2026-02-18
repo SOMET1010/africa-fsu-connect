@@ -3,7 +3,7 @@ import { ModernButton } from '@/components/ui/modern-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 import { useEmailValidation, usePasswordValidation } from '../hooks/useFormValidation';
 import { EmailValidationIcon, EmailValidationMessage } from './EmailValidationIndicator';
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
@@ -88,18 +88,19 @@ export const SignupForm = ({
       {/* Country */}
       <div className="space-y-2">
         <Label htmlFor="signup-country" className="font-medium text-foreground">Pays</Label>
-        <Select value={country} onValueChange={onCountryChange || (() => {})}>
-          <SelectTrigger className="h-12 bg-muted/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
-            <SelectValue placeholder={countriesLoading ? "Chargement..." : "Sélectionnez votre pays"} />
-          </SelectTrigger>
-          <SelectContent className="max-h-60">
-            {(countries || []).map((c) => (
-              <SelectItem key={c.code} value={c.code}>
-                {c.name_fr}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <select
+          id="signup-country"
+          value={country}
+          onChange={(e) => onCountryChange?.(e.target.value)}
+          className="flex h-12 w-full rounded-md border border-border bg-muted/50 px-3 py-2 text-sm ring-offset-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+        >
+          <option value="">{countriesLoading ? "Chargement..." : "Sélectionnez votre pays"}</option>
+          {(countries || []).map((c) => (
+            <option key={c.code} value={c.code}>
+              {c.name_fr}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Organization */}

@@ -32,11 +32,7 @@ export function AppRoutes() {
       {/* Routes publiques */}
       <Route 
         path="/" 
-        element={
-          <AppShell>
-            <Index />
-          </AppShell>
-        } 
+        element={<Index />} 
       />
       <Route 
         path="/auth" 
