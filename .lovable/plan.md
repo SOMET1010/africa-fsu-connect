@@ -1,81 +1,107 @@
 
 
-# Tableau de bord Collaboration Transfrontaliere
+# Homepage Content Blocks with CMS Editor for i18n Strings
 
-## Objectif
-Creer une page dediee aux projets inter-agences impliquant plusieurs pays, avec des vues filtrees par pays, theme et region. Cette page met en avant la dimension collaborative du reseau SUTEL.
+## Context
 
-## Ce qui sera cree
+The current homepage (`Index.tsx`) has a hero section and 3 feature cards with hardcoded French fallbacks. Several i18n keys are missing (e.g., `home.features.network.title`), and there is no way for admins to edit homepage content without touching code.
 
-### 1. Page `src/pages/CrossBorderCollaboration.tsx`
+## What will be created
 
-Page principale avec le layout NexusLayout (Premium Dark), organisee en sections :
+### 1. Supabase table `homepage_content_blocks`
 
-- **Hero** : NexusSectionHero avec badge "Collaboration transfrontaliere", titre et sous-titre narratif
-- **KPI Cards** (4 cartes) : Projets conjoints, Pays impliques, Budget total mobilise, Beneficiaires
-- **Filtres** : Recherche textuelle + filtres par pays, theme (Connectivite, Education, Sante, Agriculture, Gouvernance) et statut
-- **Grille de projets** : Cartes de projets avec badges multi-pays, barre de progression, tags thematiques
-- **Carte de collaboration** : Visualisation des liens entre pays partenaires (widget simplifie)
+A lightweight CMS table to store editable content blocks:
 
-### 2. Composants dans `src/components/collaboration/`
+```text
+id (uuid, PK)
+block_key (text, unique)        -- e.g. "hero", "features", "cta", "partners", "stats"
+content_fr (jsonb)              -- { title, subtitle, description, cta_label, cta_link, ... }
+content_en (jsonb)
+content_ar (jsonb)
+content_pt (jsonb)
+is_visible (boolean, default true)
+sort_order (integer)
+updated_at (timestamptz)
+updated_by (uuid, FK to auth.users)
+```
 
-**`CrossBorderFilters.tsx`**
-- Barre de recherche + 3 selects (pays, theme, statut)
-- Style dark coherent avec ProjectFilters existant
-- Bouton "Effacer les filtres"
+RLS: read for all, write for `super_admin` and `admin_pays`.
 
-**`CrossBorderProjectCard.tsx`**
-- Carte affichant : titre, description, pays partenaires (drapeaux), theme, budget, progression
-- Badges multi-pays avec drapeaux emoji
-- Barre de progression visuelle (completion_percentage)
-- Style hover avec effet gold (nx-gold)
+### 2. Default content blocks (seed data)
 
-**`CrossBorderStats.tsx`**
-- 4 KPI cards reutilisant le pattern ImpactKPICard
-- Statistiques calculees a partir des donnees (demo ou reelles)
+5 blocks seeded with current homepage content:
+- **hero**: badge, title lines, description, CTAs
+- **features**: 3 feature items (icon key, title, description)
+- **partners**: partner organizations list
+- **cta**: bottom call-to-action section
+- **stats**: optional statistics row (countries, projects, etc.)
 
-**`CollaborationNetworkMini.tsx`**
-- Widget compact montrant les connexions entre pays sous forme de liste groupee
-- Pas de dependance cartographique lourde, simplement une grille visuelle des liens
+### 3. Hook `src/hooks/useHomepageContent.ts`
 
-### 3. Donnees de demonstration
+- Fetches blocks from Supabase with React Query
+- Falls back to i18n JSON keys if DB returns empty
+- Returns typed content per block, resolved for current language
+- Caches aggressively (staleTime: 10 min)
 
-Comme la table `agency_projects` est actuellement vide, la page inclura un jeu de donnees demo (8-10 projets transfrontaliers fictifs mais realistes) affiche par defaut, avec un bouton pour charger les donnees reelles depuis Supabase quand elles seront disponibles.
+### 4. Refactored `src/pages/Index.tsx`
 
-Exemples de projets demo :
-- "Dorsale fibre optique Abidjan-Accra" (Cote d'Ivoire + Ghana) - Connectivite
-- "Programme scolaire numerique CEDEAO" (Senegal + Mali + Burkina Faso) - Education
-- "Corridor numerique de sante Est-africain" (Kenya + Tanzanie + Ouganda) - Sante
+Split into composable content blocks:
+- `src/components/home/HomeHeroBlock.tsx` -- Hero with dynamic title/description/CTAs
+- `src/components/home/HomeFeaturesBlock.tsx` -- Feature cards grid (dynamic count)
+- `src/components/home/HomeCtaBlock.tsx` -- Bottom CTA section
+- `src/components/home/HomePartnersBlock.tsx` -- Trust/partners bar
 
-### 4. Route dans `src/config/routes.ts`
+Each block:
+- Reads from `useHomepageContent` hook
+- Shows placeholder skeleton while loading
+- Supports RTL via existing `useDirection`
+- Keeps current dark/gold visual style
 
-- Path : `/collaboration`
-- Univers : `projets`
-- Accessible a tous les utilisateurs authentifies
-- Visible dans la sidebar sous la categorie "management"
-- Icone : `Handshake` (lucide-react)
+### 5. Admin CMS editor page `src/pages/admin/HomepageEditor.tsx`
 
-## Details techniques
+An admin-only page at `/admin/homepage-editor` with:
+- List of content blocks with drag-to-reorder (sort_order)
+- Inline editing for each language tab (FR/EN/AR/PT) side by side
+- Toggle visibility per block
+- Live preview button (opens homepage in new tab)
+- Save with optimistic updates via React Query mutation
 
-- Reutilise `NexusLayout`, `NexusSectionHero`, `Badge`, `Select`, `Input`, `Progress` existants
-- Les filtres operent cote client sur les donnees chargees (demo ou Supabase)
-- Les projets demo sont structures avec les memes champs que `agency_projects` + un champ `partner_countries` supplementaire (tableau de pays)
-- Pattern de style coherent avec la page Projects existante (variant dark)
-- Aucune migration de base de donnees requise : les champs `tags` et `location` existants dans `agency_projects` suffisent pour stocker les themes et pays partenaires
-- Support i18n via `useTranslation` pour les labels principaux
-- Animations framer-motion coherentes avec le reste de l'application
+### 6. Missing i18n keys
 
-## Structure des fichiers
+Add `home.features.*` keys to all 4 translation files (fr/en/ar/pt) so the fallback chain always works even without DB content.
+
+### 7. Route registration
+
+Add `/admin/homepage-editor` to `routes.ts` as a protected admin route.
+
+## Technical details
+
+- No new dependencies required
+- Reuses existing UI components: `Card`, `Tabs`, `Input`, `Textarea`, `Switch`, `Badge`
+- Content resolution order: Supabase DB > i18n JSON files > hardcoded fallback
+- The `block_key` system is extensible -- new sections can be added without code changes
+- Framer-motion animations preserved on all blocks
+- All existing dark theme styling (`nx-night`, `nx-gold`) maintained
+
+## File structure
 
 ```text
 src/
+  components/home/
+    HomeHeroBlock.tsx
+    HomeFeaturesBlock.tsx
+    HomeCtaBlock.tsx
+    HomePartnersBlock.tsx
+  hooks/
+    useHomepageContent.ts
   pages/
-    CrossBorderCollaboration.tsx        -- Page principale
-  components/
-    collaboration/
-      CrossBorderFilters.tsx            -- Filtres dedies
-      CrossBorderProjectCard.tsx        -- Carte projet transfrontalier
-      CrossBorderStats.tsx              -- KPIs de collaboration
-      CollaborationNetworkMini.tsx      -- Widget reseau de liens
+    Index.tsx                    -- refactored to use block components
+    admin/
+      HomepageEditor.tsx         -- CMS editor
+  i18n/translations/
+    fr.json                      -- add home.features.* keys
+    en.json                      -- add home.features.* keys
+    ar.json                      -- add home.features.* keys
+    pt.json                      -- add home.features.* keys
 ```
 
