@@ -3,10 +3,13 @@ import { ModernButton } from '@/components/ui/modern-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useEmailValidation, usePasswordValidation } from '../hooks/useFormValidation';
 import { EmailValidationIcon, EmailValidationMessage } from './EmailValidationIndicator';
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
+import { useAfricanCountries } from '@/hooks/useCountries';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 interface SignupFormProps {
   firstName: string;
@@ -22,6 +25,10 @@ interface SignupFormProps {
   error: string | null;
   isSubmitting: boolean;
   onSubmit: (e: React.FormEvent) => void;
+  country?: string;
+  onCountryChange?: (value: string) => void;
+  organization?: string;
+  onOrganizationChange?: (value: string) => void;
 }
 
 export const SignupForm = ({
@@ -38,11 +45,15 @@ export const SignupForm = ({
   error,
   isSubmitting,
   onSubmit,
+  country = '',
+  onCountryChange,
+  organization = '',
+  onOrganizationChange,
 }: SignupFormProps) => {
   const emailValidation = useEmailValidation(email);
   const passwordValidation = usePasswordValidation(password);
+  const { data: countries, isLoading: countriesLoading } = useAfricanCountries();
   
-  // Form is valid when email is valid and password has at least 3 criteria met
   const isFormValid = emailValidation.isValid && passwordValidation.score >= 3 && firstName.trim() && lastName.trim();
 
   return (
@@ -72,6 +83,36 @@ export const SignupForm = ({
             className="h-12 bg-muted/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
           />
         </div>
+      </div>
+
+      {/* Country */}
+      <div className="space-y-2">
+        <Label htmlFor="signup-country" className="font-medium text-foreground">Pays</Label>
+        <Select value={country} onValueChange={onCountryChange || (() => {})}>
+          <SelectTrigger className="h-12 bg-muted/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+            <SelectValue placeholder={countriesLoading ? "Chargement..." : "Sélectionnez votre pays"} />
+          </SelectTrigger>
+          <SelectContent className="max-h-60">
+            {(countries || []).map((c) => (
+              <SelectItem key={c.code} value={c.code}>
+                {c.name_fr}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Organization */}
+      <div className="space-y-2">
+        <Label htmlFor="signup-organization" className="font-medium text-foreground">Organisation</Label>
+        <Input
+          id="signup-organization"
+          type="text"
+          value={organization}
+          onChange={(e) => onOrganizationChange?.(e.target.value)}
+          placeholder="Votre organisme ou institution"
+          className="h-12 bg-muted/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+        />
       </div>
       
       <div className="space-y-2">
@@ -152,7 +193,10 @@ export const SignupForm = ({
       </ModernButton>
 
       <p className="text-center text-muted-foreground text-xs mt-4">
-        En créant un compte, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.
+        En créant un compte, vous acceptez nos{' '}
+        <Link to="/legal/terms" className="underline hover:text-foreground transition-colors">conditions d'utilisation</Link>
+        {' '}et notre{' '}
+        <Link to="/legal/privacy" className="underline hover:text-foreground transition-colors">politique de confidentialité</Link>.
       </p>
     </form>
   );

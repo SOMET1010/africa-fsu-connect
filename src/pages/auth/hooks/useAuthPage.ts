@@ -21,6 +21,8 @@ export const useAuthPage = () => {
   const [signupPassword, setSignupPassword] = useState('');
   const [signupFirstName, setSignupFirstName] = useState('');
   const [signupLastName, setSignupLastName] = useState('');
+  const [signupCountry, setSignupCountry] = useState('');
+  const [signupOrganization, setSignupOrganization] = useState('');
 
   // Password reset state
   const [forgotMode, setForgotMode] = useState(false);
@@ -78,7 +80,7 @@ export const useAuthPage = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await signUp(signupEmail, signupPassword, signupFirstName, signupLastName);
+      const { error } = await signUp(signupEmail, signupPassword, signupFirstName, signupLastName, signupCountry, signupOrganization);
       
       if (error) {
         const errorMessage = toErrorMessage(error);
@@ -171,6 +173,10 @@ export const useAuthPage = () => {
     setSignupFirstName,
     signupLastName,
     setSignupLastName,
+    signupCountry,
+    setSignupCountry,
+    signupOrganization,
+    setSignupOrganization,
     handleSignup,
     
     // Password reset

@@ -86,6 +86,8 @@ const PublicDashboard = lazy(() => import('@/pages/PublicDashboard'));
 const SutaAssistant = lazy(() => import('@/pages/SutaAssistant'));
 const About = lazy(() => import('@/pages/About'));
 const Roadmap = lazy(() => import('@/pages/Roadmap'));
+const PrivacyPolicy = lazy(() => import('@/pages/legal/PrivacyPolicy'));
+const TermsOfUse = lazy(() => import('@/pages/legal/TermsOfUse'));
 const MyCountry = lazy(() => import('@/pages/MyCountry'));
 const CrossBorderCollaboration = lazy(() => import('@/pages/CrossBorderCollaboration'));
 
@@ -556,6 +558,30 @@ export const ROUTES: RouteConfig[] = [
     isProtected: false,
     showInSidebar: false,
     showInMobileNav: false,
+    category: 'main',
+  },
+  {
+    path: '/legal/privacy',
+    component: PrivacyPolicy,
+    title: 'Politique de confidentialité',
+    description: 'Protection des données personnelles',
+    icon: Shield,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'main',
+  },
+  {
+    path: '/legal/terms',
+    component: TermsOfUse,
+    title: 'Conditions d\'utilisation',
+    description: 'Règles d\'utilisation de la plateforme',
+    icon: FileText,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
     category: 'main',
   },
 

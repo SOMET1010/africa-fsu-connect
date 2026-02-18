@@ -28,6 +28,10 @@ const Auth = () => {
     setSignupFirstName,
     signupLastName,
     setSignupLastName,
+    signupCountry,
+    setSignupCountry,
+    signupOrganization,
+    setSignupOrganization,
     handleSignup,
     forgotMode,
     setForgotMode,
@@ -156,6 +160,10 @@ const Auth = () => {
                 error={error}
                 isSubmitting={isSubmitting}
                 onSubmit={handleSignup}
+                country={signupCountry}
+                onCountryChange={setSignupCountry}
+                organization={signupOrganization}
+                onOrganizationChange={setSignupOrganization}
               />
             </TabsContent>
           </Tabs>

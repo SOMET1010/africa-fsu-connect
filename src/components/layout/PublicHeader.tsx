@@ -1,0 +1,125 @@
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Globe, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { LanguageSelector } from "@/components/shared/LanguageSelector";
+import { useTranslation } from "@/hooks/useTranslation";
+import { useDirection } from "@/hooks/useDirection";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+
+const NAV_ITEMS = [
+  { path: "/", labelKey: "nav.home", fallback: "Accueil" },
+  { path: "/about", labelKey: "nav.about", fallback: "À propos" },
+  { path: "/network", labelKey: "nav.features", fallback: "Fonctionnalités" },
+  { path: "/projects", labelKey: "nav.projects", fallback: "Projets" },
+  { path: "/events", labelKey: "nav.events", fallback: "Événements" },
+  { path: "/public-dashboard", labelKey: "nav.dashboard", fallback: "Tableau de bord" },
+];
+
+export const PublicHeader = () => {
+  const { t } = useTranslation();
+  const { isRTL } = useDirection();
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-[hsl(var(--nx-night))]/80 border-b border-[hsl(var(--nx-gold))]/10">
+      <div className="container mx-auto px-4">
+        <div className={cn("flex items-center justify-between h-16", isRTL && "flex-row-reverse")}>
+          {/* Logo */}
+          <Link to="/" className={cn("flex items-center gap-3 shrink-0", isRTL && "flex-row-reverse")}>
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[hsl(var(--nx-gold))] to-[hsl(var(--nx-gold))]/70 flex items-center justify-center">
+              <Globe className="w-4 h-4 text-[hsl(var(--nx-night))]" />
+            </div>
+            <span className="text-lg font-bold text-white">NEXUS</span>
+          </Link>
+
+          {/* Desktop Nav */}
+          <nav className={cn("hidden lg:flex items-center gap-1", isRTL && "flex-row-reverse")}>
+            {NAV_ITEMS.map(({ path, labelKey, fallback }) => {
+              const isActive = location.pathname === path;
+              return (
+                <Link
+                  key={path}
+                  to={path}
+                  className={cn(
+                    "px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
+                    isActive
+                      ? "text-[hsl(var(--nx-gold))] bg-[hsl(var(--nx-gold))]/10"
+                      : "text-white/70 hover:text-white hover:bg-white/5"
+                  )}
+                >
+                  {t(labelKey) || fallback}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Right side */}
+          <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
+            <LanguageSelector variant="ghost" size="sm" showLabel={false} />
+            <Button asChild variant="ghost" className="hidden sm:inline-flex text-white/70 hover:text-white hover:bg-white/10 text-sm">
+              <Link to="/auth">{t("common.login") || "Connexion"}</Link>
+            </Button>
+            <Button asChild className="hidden sm:inline-flex bg-[hsl(var(--nx-gold))]/10 text-[hsl(var(--nx-gold))] hover:bg-[hsl(var(--nx-gold))]/20 border border-[hsl(var(--nx-gold))]/30 text-sm">
+              <Link to="/auth?tab=signup">{t("common.register") || "S'inscrire"}</Link>
+            </Button>
+
+            {/* Mobile toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden text-white/70 hover:text-white"
+              onClick={() => setMobileOpen(!mobileOpen)}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile nav */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden border-t border-white/10 overflow-hidden"
+          >
+            <nav className="container mx-auto px-4 py-4 space-y-1">
+              {NAV_ITEMS.map(({ path, labelKey, fallback }) => {
+                const isActive = location.pathname === path;
+                return (
+                  <Link
+                    key={path}
+                    to={path}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                      isActive
+                        ? "text-[hsl(var(--nx-gold))] bg-[hsl(var(--nx-gold))]/10"
+                        : "text-white/70 hover:text-white hover:bg-white/5"
+                    )}
+                  >
+                    {t(labelKey) || fallback}
+                  </Link>
+                );
+              })}
+              <div className="flex gap-2 pt-3 border-t border-white/10">
+                <Button asChild variant="ghost" className="flex-1 text-white/70 hover:text-white">
+                  <Link to="/auth" onClick={() => setMobileOpen(false)}>{t("common.login") || "Connexion"}</Link>
+                </Button>
+                <Button asChild className="flex-1 bg-[hsl(var(--nx-gold))]/10 text-[hsl(var(--nx-gold))] border border-[hsl(var(--nx-gold))]/30">
+                  <Link to="/auth?tab=signup" onClick={() => setMobileOpen(false)}>{t("common.register") || "S'inscrire"}</Link>
+                </Button>
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+};
