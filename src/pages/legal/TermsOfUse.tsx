@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PublicHeader } from "@/components/layout/PublicHeader";
+import Footer from "@/components/layout/Footer";
 
 const TermsOfUse = () => (
-  <div className="min-h-screen bg-[hsl(var(--nx-night))] text-white">
-    <main className="container mx-auto px-4 py-12 max-w-3xl">
+  <div className="min-h-screen bg-[hsl(var(--nx-night))] text-white flex flex-col">
+    <PublicHeader />
+    <main className="container mx-auto px-4 py-12 max-w-3xl flex-1">
       <Button asChild variant="ghost" className="mb-8 text-white/60 hover:text-white">
         <Link to="/"><ArrowLeft className="mr-2 h-4 w-4" />Retour à l'accueil</Link>
       </Button>
@@ -58,8 +61,21 @@ const TermsOfUse = () => (
           <h2 className="text-xl font-semibold text-white">8. Contact</h2>
           <p>Pour toute question : <a href="mailto:secretariat@atu-uat.org" className="text-[hsl(var(--nx-gold))] hover:underline">secretariat@atu-uat.org</a></p>
         </section>
+
+        <section>
+          <h2 className="text-xl font-semibold text-white">9. Sécurité des données</h2>
+          <p>La plateforme NEXUS met en œuvre des mesures techniques avancées pour protéger les données des utilisateurs :</p>
+          <ul className="list-disc pl-6 space-y-1">
+            <li>Chiffrement de bout en bout des communications (TLS/SSL)</li>
+            <li>Stockage sécurisé des données avec chiffrement au repos</li>
+            <li>Contrôle d'accès basé sur les rôles (RBAC) pour limiter l'accès aux données sensibles</li>
+            <li>Journalisation et audit des accès pour détecter toute activité suspecte</li>
+            <li>Conformité aux standards internationaux de protection des données (RGPD, cadre UA)</li>
+          </ul>
+        </section>
       </div>
     </main>
+    <Footer />
   </div>
 );
 

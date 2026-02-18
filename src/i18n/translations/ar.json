@@ -924,5 +924,28 @@
   "search.forum": "نقاشات المنتدى",
   "search.projects": "المشاريع",
   "search.no_results": "لم يتم العثور على نتائج",
-  "search.hint": "بحث..."
+  "search.hint": "بحث...",
+
+  "cookie.banner.text": "يستخدم هذا الموقع ملفات تعريف الارتباط لتحسين تجربتك وإنتاج إحصائيات مجهولة المصدر.",
+  "cookie.banner.accept": "قبول",
+  "cookie.banner.customize": "تخصيص",
+  "cookie.banner.save": "حفظ اختياراتي",
+  "cookie.banner.privacy": "سياسة الخصوصية",
+  "cookie.manage.title": "إدارة تفضيلاتك",
+  "cookie.manage.necessary": "ملفات تعريف الارتباط الضرورية",
+  "cookie.manage.functional": "ملفات تعريف الارتباط الوظيفية",
+  "cookie.manage.analytics": "ملفات تعريف الارتباط التحليلية",
+  "cookie.manage.marketing": "ملفات تعريف الارتباط التسويقية",
+
+  "trust.section.title": "الأمان وحماية البيانات",
+  "trust.section.subtitle": "تطبق منصة NEXUS أعلى المعايير لحماية بياناتك وضمان الامتثال التنظيمي.",
+  "trust.encryption.title": "تشفير TLS/SSL",
+  "trust.encryption.desc": "جميع البيانات مشفرة أثناء النقل وفي حالة السكون لضمان السرية.",
+  "trust.rbac.title": "التحكم في الوصول RBAC",
+  "trust.rbac.desc": "نظام قائم على الأدوار يضمن وصول كل مستخدم فقط إلى البيانات المصرح بها.",
+  "trust.compliance.title": "الامتثال للائحة RGPD والاتحاد الأفريقي",
+  "trust.compliance.desc": "الامتثال للوائح الدولية وإطار الاتحاد الأفريقي لحماية البيانات.",
+  "trust.moderation.title": "إشراف نشط",
+  "trust.moderation.desc": "تتم مراقبة المحتوى لضمان جودة التبادلات وسلامة المجتمع.",
+  "trust.privacy.link": "الاطلاع على سياسة الخصوصية"
 }
