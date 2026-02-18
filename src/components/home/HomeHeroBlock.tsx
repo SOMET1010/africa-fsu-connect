@@ -17,12 +17,13 @@ export function HomeHeroBlock() {
   const hero = getBlock('hero');
 
   const badge = (hero?.badge as string) || t('home.hero.badge') || 'Réseau SUTEL — Service Universel Africain';
-  const title = (hero?.title as string) || t('network.hero.title') || 'Plateforme de coopération';
+  const title = (hero?.title as string) || t('home.hero.title') || 'Ne laisser personne hors ligne';
   const highlight = (hero?.subtitle_highlight as string) || t('home.hero.subtitle.highlight') || 'Service Universel';
-  const suffix = (hero?.subtitle_suffix as string) || t('home.hero.subtitle.suffix') || 'Africain';
-  const description = (hero?.description as string) || t('home.hero.description') || "Une plateforme de coopération, de projets et de partage au service de l'inclusion numérique africaine.";
-  const ctaExplore = (hero?.cta_explore as string) || t('home.hero.cta.explore') || 'Découvrir le réseau';
-  const ctaMember = (hero?.cta_member as string) || t('home.hero.cta.member') || 'Espace membre';
+  const suffix = (hero?.subtitle_suffix as string) || t('home.hero.subtitle.suffix') || 'pour connecter les non-connectés';
+  const description = (hero?.description as string) || t('home.hero.description') || "Renforcer le service universel pour une connectivité numérique inclusive. Fournir un service universel performant pour réduire la fracture numérique.";
+  const ctaExplore = (hero?.cta_explore as string) || t('home.hero.cta.explore') || 'Explorer le réseau';
+  const ctaSignup = (hero?.cta_signup as string) || t('home.hero.cta.signup') || "S'inscrire";
+  const ctaLogin = (hero?.cta_login as string) || t('home.hero.cta.login') || 'Se connecter';
 
   if (isLoading) {
     return (
@@ -58,19 +59,24 @@ export function HomeHeroBlock() {
             {' '}{suffix}
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-lg md:text-xl text-white/70 mb-10 max-w-2xl">
+          <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-lg md:text-xl text-white/85 mb-10 max-w-2xl">
             {description}
           </motion.p>
 
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }} className={cn("flex flex-col sm:flex-row gap-4", isRTL && "sm:flex-row-reverse")}>
             <Button asChild size="lg" className="bg-gradient-to-r from-[hsl(var(--nx-gold))] to-amber-500 text-[hsl(var(--nx-night))] hover:opacity-90 font-semibold px-8">
-              <Link to="/network" className={cn("flex items-center", isRTL && "flex-row-reverse")}>
-                {ctaExplore}
+              <Link to="/auth?mode=signup" className={cn("flex items-center", isRTL && "flex-row-reverse")}>
+                {ctaSignup}
                 <ArrowRight className={cn("h-5 w-5", isRTL ? "mr-2 rotate-180" : "ml-2")} />
               </Link>
             </Button>
+            <Button asChild size="lg" variant="outline" className="border-white/50 text-white bg-white/10 hover:bg-white/20 px-8">
+              <Link to="/network" className={cn("flex items-center", isRTL && "flex-row-reverse")}>
+                {ctaExplore}
+              </Link>
+            </Button>
             <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8">
-              <Link to="/auth">{ctaMember}</Link>
+              <Link to="/auth">{ctaLogin}</Link>
             </Button>
           </motion.div>
         </div>
