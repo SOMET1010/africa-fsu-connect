@@ -1,93 +1,87 @@
 
 
-# Plan : Navigation et structure du site web
+# Plan : Confiance, confidentialite et conformite
 
 ## Audit de l'existant
 
-### Header public (PublicHeader.tsx)
-La navigation actuelle contient : Accueil, A propos, Fonctionnalites, Projets partages, Evenements, Vue Reseau, Connexion, S'inscrire
+**Ce qui existe deja :**
+- Page Politique de confidentialite (`/legal/privacy`) -- contenu complet en 7 sections
+- Page Conditions d'utilisation (`/legal/terms`) -- contenu complet en 8 sections
+- Composant `HomeTrustBadge` sur la page d'accueil -- 3 badges minimalistes (Donnees protegees, Hebergement securise, 55 pays)
+- Liens dans le footer : Confidentialite, CGU, Soutien
+- Composant `ConsentManager` interne (dans le panneau analytics, pas visible publiquement)
+- Hook `usePrivacyConsent` avec localStorage
 
-**Ecarts identifies :**
-- "Strategies Et Politiques" : absent -- aucune page n'existe
-- "Contact" : absent de la nav -- aucune page dediee n'existe (le contenu contact est dans la page A propos)
-- "Vue Reseau" et "Tableau de bord" : ne correspondent pas a la structure demandee
-
-### Footer (Footer.tsx)
-Le footer existe et contient 4 colonnes (Plateforme, Modules, Partenaires, Contact) + liens legaux (A propos, Feuille de Route, Confidentialite, CGU).
-
-**Ecarts identifies :**
-- "Soutien" (Support) : absent des liens du bas
-- Les liens existants sont bien structures
-
-### Header authentifie (ModernHeader.tsx)
-Utilise `mainNavigation` de `config/navigation.ts` avec des sous-menus (Reseau, Collaborer, Apprendre, Bibliotheque, A propos). Ce header n'est pas concerne par ce plan -- il est reserve aux utilisateurs connectes.
+**Ce qui manque :**
+- Aucune banniere de consentement cookies visible pour les visiteurs
+- Les pages legales n'ont pas de header/footer (navigation incoherente)
+- Pas de section dediee "Securite et Protection des donnees" sur la page d'accueil
+- Les badges de confiance actuels sont trop discrets (texte `white/50`, petite taille)
+- Pas d'explication visible sur la collecte, le stockage et la protection des donnees
+- Pas de mention des mesures de moderation
 
 ---
 
 ## Modifications prevues
 
-### 1. Mettre a jour les liens de navigation publique
+### 1. Banniere de consentement cookies (visible a tous les visiteurs)
 
-**Fichier : `src/components/layout/PublicHeader.tsx`**
+**Nouveau fichier : `src/components/privacy/CookieConsentBanner.tsx`**
 
-Remplacer le tableau `NAV_ITEMS` par la structure demandee :
+Banniere fixe en bas de page, affichee au premier visit (si pas encore accepte dans localStorage) :
+- Texte : "Ce site utilise des cookies pour ameliorer votre experience..."
+- Lien vers la politique de confidentialite
+- 2 boutons : "Accepter" (dore) et "Personnaliser" (outline, ouvre un dialogue de gestion)
+- Stocke le choix dans localStorage (`cookie-consent-accepted`)
+- S'integre avec le hook `usePrivacyConsent` existant
 
-```text
-Accueil          -> /
-A propos         -> /about
-Plateforme       -> /network
-Strategies       -> /strategies  (nouvelle page)
-Projets          -> /projects
-Evenements       -> /events
-Contact          -> /contact     (nouvelle page)
-```
+**Fichier : `src/App.tsx`**
+- Ajouter `<CookieConsentBanner />` au niveau global (visible sur toutes les pages)
 
-Les boutons "Connexion" et "S'inscrire" restent a droite (deja en place).
+### 2. Section "Securite et Protection" sur la page d'accueil
 
-### 2. Creer la page Contact
+**Nouveau fichier : `src/components/home/HomeTrustSection.tsx`**
 
-**Nouveau fichier : `src/pages/Contact.tsx`**
+Section dediee entre les fonctionnalites et le CTA, contenant :
+- Titre : "Securite et Protection des donnees"
+- 4 cartes visuelles :
+  - Chiffrement TLS/SSL (icone Lock)
+  - Controle d'acces RBAC (icone ShieldCheck)
+  - Conformite RGPD/UA (icone FileCheck)
+  - Moderation active (icone Eye)
+- Chaque carte : icone, titre, description courte
+- Lien vers la politique de confidentialite en bas de section
 
-Page simple et institutionnelle avec :
-- Coordonnees du secretariat UAT (email, telephone, adresse physique)
-- Lien vers le site officiel UAT
-- Formulaire de contact basique (nom, email, message) -- affichage seulement, sans backend pour l'instant
+**Fichier : `src/pages/Index.tsx`**
+- Ajouter `<HomeTrustSection />` apres `HomeFeaturesBlock`
 
-### 3. Creer la page Strategies et Politiques
+### 3. Ameliorer le composant HomeTrustBadge existant
 
-**Nouveau fichier : `src/pages/Strategies.tsx`**
+**Fichier : `src/components/home/HomeTrustBadge.tsx`**
+- Agrandir les badges : passer de `h-4 w-4` a `h-5 w-5` et texte de `text-sm` a `text-base`
+- Ameliorer le contraste : passer de `text-white/50` a `text-white/70`
+- Ajouter 2 badges supplementaires : "Conforme RGPD" (icone CheckCircle) et "Moderation active" (icone Eye)
 
-Page presentant les textes reglementaires par pays :
-- En-tete explicatif du cadre reglementaire FSU en Afrique
-- Section "Documents reglementaires" avec lien vers la bibliotheque filtree
-- Section "Cadres politiques regionaux" (CEDEAO, SADC, UA, UIT)
-- CTA vers la bibliotheque des ressources (`/resources`) pour les documents detailles
+### 4. Ajouter navigation coherente aux pages legales
 
-### 4. Enregistrer les nouvelles routes
+**Fichier : `src/pages/legal/PrivacyPolicy.tsx`**
+- Ajouter `PublicHeader` et `Footer` pour une navigation coherente
+- Ajouter une section supplementaire "8. Cookies et technologies" expliquant la collecte via cookies
+- Ajouter une section "9. Moderation et securite" detaillant les mesures de moderation
 
-**Fichier : `src/config/routes.ts`**
+**Fichier : `src/pages/legal/TermsOfUse.tsx`**
+- Ajouter `PublicHeader` et `Footer`
+- Ajouter une section "9. Securite des donnees" resumant les mesures techniques de protection
 
-Ajouter 2 entries :
-- `/contact` -> composant `Contact`, `isProtected: false`
-- `/strategies` -> composant `Strategies`, `isProtected: false`
-
-### 5. Ajouter "Soutien" dans le footer
-
-**Fichier : `src/components/layout/Footer.tsx`**
-
-Ajouter un lien "Soutien" dans la barre de liens legaux du bas, pointant vers `/contact` (la nouvelle page).
-
-### 6. Ajouter les cles i18n
+### 5. Cles i18n
 
 **Fichiers : `fr.json`, `en.json`, `ar.json`, `pt.json`**
 
 Nouvelles cles :
-- `nav.platform` : "Plateforme" / "Platform" / etc.
-- `nav.strategies` : "Strategies" / "Strategies" / etc.
-- `nav.contact` : "Contact"
-- `footer.links.support` : "Soutien" / "Support" / etc.
-- `strategies.*` : titres et descriptions de la page Strategies
-- `contact.*` : titres et descriptions de la page Contact
+- `cookie.banner.text` : message de la banniere cookies
+- `cookie.banner.accept` / `cookie.banner.customize`
+- `trust.section.title` : "Securite et Protection des donnees"
+- `trust.section.encryption` / `trust.section.rbac` / `trust.section.compliance` / `trust.section.moderation`
 
 ---
 
@@ -95,15 +89,17 @@ Nouvelles cles :
 
 | Fichier | Action |
 |---|---|
-| `src/components/layout/PublicHeader.tsx` | Remplacer NAV_ITEMS (7 liens standardises) |
-| `src/pages/Contact.tsx` | Creer -- page contact institutionnelle |
-| `src/pages/Strategies.tsx` | Creer -- page textes reglementaires |
-| `src/config/routes.ts` | Ajouter 2 routes publiques |
-| `src/components/layout/Footer.tsx` | Ajouter lien "Soutien" |
-| `src/i18n/translations/fr.json` | Cles nav + pages |
+| `src/components/privacy/CookieConsentBanner.tsx` | Creer -- banniere consentement cookies |
+| `src/components/home/HomeTrustSection.tsx` | Creer -- section securite sur l'accueil |
+| `src/components/home/HomeTrustBadge.tsx` | Ameliorer -- badges plus visibles + 2 nouveaux |
+| `src/pages/Index.tsx` | Ajouter HomeTrustSection |
+| `src/pages/legal/PrivacyPolicy.tsx` | Header/Footer + sections cookies et moderation |
+| `src/pages/legal/TermsOfUse.tsx` | Header/Footer + section securite |
+| `src/App.tsx` | Ajouter CookieConsentBanner global |
+| `src/i18n/translations/fr.json` | Cles cookies + trust |
 | `src/i18n/translations/en.json` | Traductions anglaises |
 | `src/i18n/translations/ar.json` | Traductions arabes |
 | `src/i18n/translations/pt.json` | Traductions portugaises |
 
-Aucune migration de base de donnees requise. Les nouvelles pages sont publiques (pas de protection d'acces).
+Aucune migration de base de donnees requise.
 
