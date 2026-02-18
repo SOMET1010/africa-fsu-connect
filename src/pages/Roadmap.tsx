@@ -2,7 +2,6 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ModernButton } from "@/components/ui/modern-button";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { 
   Calendar, 
   CheckCircle, 
@@ -98,8 +97,7 @@ const Roadmap = () => {
     <div className="min-h-screen bg-[hsl(var(--nx-bg))]">
       <div className="container mx-auto px-4 py-12 space-y-16">
         {/* Enhanced Hero */}
-        <ScrollReveal direction="fade">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[hsl(var(--nx-night))] via-[hsl(var(--nx-deep))] to-[hsl(var(--nx-night))] border border-white/10">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[hsl(var(--nx-night))] via-[hsl(var(--nx-deep))] to-[hsl(var(--nx-night))] border border-white/10 animate-fade-in">
             <div className="absolute inset-0 opacity-20">
               <div className="absolute top-0 right-0 w-96 h-96 bg-[hsl(var(--nx-gold)/0.3)] rounded-full blur-3xl" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-[hsl(var(--nx-cyan)/0.2)] rounded-full blur-2xl" />
@@ -121,7 +119,6 @@ const Roadmap = () => {
               </div>
             </div>
           </div>
-        </ScrollReveal>
 
         {/* Milestones Timeline */}
         <RoadmapTimeline milestones={milestones} />
