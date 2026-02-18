@@ -948,5 +948,19 @@
   "trust.compliance.desc": "Respect des réglementations internationales et du cadre de l'Union Africaine sur la protection des données.",
   "trust.moderation.title": "Modération active",
   "trust.moderation.desc": "Les contenus sont modérés pour assurer la qualité des échanges et la sécurité de la communauté.",
-  "trust.privacy.link": "Consulter notre politique de confidentialité"
+  "trust.privacy.link": "Consulter notre politique de confidentialité",
+
+  "signup.confirmation.title": "Inscription réussie !",
+  "signup.confirmation.subtitle": "Votre compte a été créé avec succès.",
+  "signup.confirmation.name": "Nom complet",
+  "signup.confirmation.country": "Pays",
+  "signup.confirmation.organization": "Organisation",
+  "signup.confirmation.email.notice": "Un email de confirmation a été envoyé. Veuillez vérifier votre boîte de réception pour activer votre compte.",
+
+  "messages.sg.title": "Message du Secrétaire Général",
+  "messages.sg.name": "Secrétaire Général de l'UAT",
+  "messages.sg.text": "La plateforme NEXUS représente un pas décisif vers la coordination numérique panafricaine. Notre ambition est de connecter les 55 États membres pour accélérer le déploiement du service universel sur tout le continent.",
+  "messages.dg.title": "Message du Directeur Général",
+  "messages.dg.name": "Directeur Général de l'ANSUT",
+  "messages.dg.text": "L'ANSUT s'engage aux côtés de l'UAT pour faire de NEXUS un outil stratégique au service du déploiement du service universel. Cette plateforme renforce notre capacité collective à réduire la fracture numérique et à connecter les communautés les plus isolées."
 }

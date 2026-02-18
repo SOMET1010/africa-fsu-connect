@@ -947,5 +947,19 @@
   "trust.compliance.desc": "Conformidade com regulamentações internacionais e o quadro da União Africana para proteção de dados.",
   "trust.moderation.title": "Moderação Ativa",
   "trust.moderation.desc": "Os conteúdos são moderados para garantir a qualidade das trocas e a segurança da comunidade.",
-  "trust.privacy.link": "Consultar a nossa política de privacidade"
+  "trust.privacy.link": "Consultar a nossa política de privacidade",
+
+  "signup.confirmation.title": "Registo bem-sucedido!",
+  "signup.confirmation.subtitle": "A sua conta foi criada com sucesso.",
+  "signup.confirmation.name": "Nome completo",
+  "signup.confirmation.country": "País",
+  "signup.confirmation.organization": "Organização",
+  "signup.confirmation.email.notice": "Foi enviado um email de confirmação. Verifique a sua caixa de entrada para ativar a sua conta.",
+
+  "messages.sg.title": "Mensagem do Secretário-Geral",
+  "messages.sg.name": "Secretário-Geral da UAT",
+  "messages.sg.text": "A plataforma NEXUS representa um passo decisivo para a coordenação digital pan-africana. A nossa ambição é conectar 55 estados membros para acelerar a implantação do serviço universal em todo o continente.",
+  "messages.dg.title": "Mensagem do Diretor-Geral",
+  "messages.dg.name": "Diretor-Geral da ANSUT",
+  "messages.dg.text": "A ANSUT compromete-se ao lado da UAT a fazer do NEXUS uma ferramenta estratégica ao serviço da implantação do serviço universal. Esta plataforma reforça a nossa capacidade coletiva para reduzir a exclusão digital e conectar as comunidades mais isoladas."
 }

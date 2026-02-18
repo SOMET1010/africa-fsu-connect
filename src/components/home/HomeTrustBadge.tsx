@@ -1,5 +1,4 @@
 import { Shield, Lock, Globe2, CheckCircle, Eye } from "lucide-react";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const TRUST_ITEMS = [
@@ -11,13 +10,7 @@ const TRUST_ITEMS = [
 ];
 
 export const HomeTrustBadge = () => (
-  <motion.section
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.6 }}
-    className="py-8"
-  >
+  <section className="py-8 animate-fade-in">
     <div className="container mx-auto px-4">
       <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
         {TRUST_ITEMS.map(({ icon: Icon, label }, i) => (
@@ -34,5 +27,5 @@ export const HomeTrustBadge = () => (
         </Link>
       </div>
     </div>
-  </motion.section>
+  </section>
 );

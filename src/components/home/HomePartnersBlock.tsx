@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
 import { useHomepageContent } from "@/hooks/useHomepageContent";
@@ -17,18 +16,18 @@ export function HomePartnersBlock() {
   if (items.length === 0) return null;
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.7 }} className="container mx-auto px-4 pb-8">
+    <div className="container mx-auto px-4 pb-8 animate-fade-in" style={{ contentVisibility: 'auto' }}>
       <div className={cn("text-center", isRTL && "text-right")}>
-        <p className="text-xs uppercase tracking-widest text-white/60 mb-4">{title}</p>
+        <p className="text-xs uppercase tracking-widest text-white/70 mb-4">{title}</p>
         <div className="flex flex-wrap items-center justify-center gap-6">
           <img src={atuLogo} alt="ATU - Union Africaine des Télécommunications" className="h-12 w-auto opacity-70 hover:opacity-100 transition-opacity" />
           {items.map((partner, i) => (
-            <span key={i} className="text-sm text-white/50 font-medium px-4 py-2 rounded-full border border-white/20">
+            <span key={i} className="text-sm text-white/75 font-medium px-4 py-2 rounded-full border border-white/20">
               {partner}
             </span>
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
