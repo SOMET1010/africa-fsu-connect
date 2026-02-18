@@ -94,7 +94,7 @@ const milestones = [
 
 const Roadmap = () => {
   return (
-    <div className="min-h-screen bg-[hsl(var(--nx-bg))]">
+    <div className="min-h-screen bg-[hsl(var(--nx-night))]">
       <div className="container mx-auto px-4 py-12 space-y-16">
         {/* Enhanced Hero */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[hsl(var(--nx-night))] via-[hsl(var(--nx-deep))] to-[hsl(var(--nx-night))] border border-white/10 animate-fade-in">
