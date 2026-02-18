@@ -6,6 +6,7 @@ import { AuthHeader } from './auth/components/AuthHeader';
 import { LoginForm } from './auth/components/LoginForm';
 import { SignupForm } from './auth/components/SignupForm';
 import { ResetPasswordForm } from './auth/components/ResetPasswordForm';
+import { SignupConfirmation } from './auth/components/SignupConfirmation';
 
 const Auth = () => {
   const {
@@ -33,6 +34,8 @@ const Auth = () => {
     signupOrganization,
     setSignupOrganization,
     handleSignup,
+    signupSuccess,
+    signupData,
     forgotMode,
     setForgotMode,
     resetMode,
@@ -139,32 +142,43 @@ const Auth = () => {
             </TabsContent>
 
             <TabsContent value="signup" className="p-8 space-y-6">
-              <div className="text-center space-y-2">
-                <h2 className="text-2xl font-bold text-foreground font-poppins">Créer un compte</h2>
-                <p className="text-muted-foreground font-inter">
-                  Rejoignez la communauté NEXUS
-                </p>
-              </div>
-              
-              <SignupForm
-                firstName={signupFirstName}
-                onFirstNameChange={setSignupFirstName}
-                lastName={signupLastName}
-                onLastNameChange={setSignupLastName}
-                email={signupEmail}
-                onEmailChange={setSignupEmail}
-                password={signupPassword}
-                onPasswordChange={setSignupPassword}
-                showPassword={showPassword}
-                onTogglePassword={() => setShowPassword(!showPassword)}
-                error={error}
-                isSubmitting={isSubmitting}
-                onSubmit={handleSignup}
-                country={signupCountry}
-                onCountryChange={setSignupCountry}
-                organization={signupOrganization}
-                onOrganizationChange={setSignupOrganization}
-              />
+              {signupSuccess ? (
+                <SignupConfirmation
+                  firstName={signupData.firstName}
+                  lastName={signupData.lastName}
+                  country={signupData.country}
+                  organization={signupData.organization}
+                />
+              ) : (
+                <>
+                  <div className="text-center space-y-2">
+                    <h2 className="text-2xl font-bold text-foreground font-poppins">Créer un compte</h2>
+                    <p className="text-muted-foreground font-inter">
+                      Rejoignez la communauté NEXUS
+                    </p>
+                  </div>
+                  
+                  <SignupForm
+                    firstName={signupFirstName}
+                    onFirstNameChange={setSignupFirstName}
+                    lastName={signupLastName}
+                    onLastNameChange={setSignupLastName}
+                    email={signupEmail}
+                    onEmailChange={setSignupEmail}
+                    password={signupPassword}
+                    onPasswordChange={setSignupPassword}
+                    showPassword={showPassword}
+                    onTogglePassword={() => setShowPassword(!showPassword)}
+                    error={error}
+                    isSubmitting={isSubmitting}
+                    onSubmit={handleSignup}
+                    country={signupCountry}
+                    onCountryChange={setSignupCountry}
+                    organization={signupOrganization}
+                    onOrganizationChange={setSignupOrganization}
+                  />
+                </>
+              )}
             </TabsContent>
           </Tabs>
         </div>

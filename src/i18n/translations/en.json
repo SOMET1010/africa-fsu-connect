@@ -961,5 +961,19 @@
   "trust.compliance.desc": "Compliance with international regulations and the African Union data protection framework.",
   "trust.moderation.title": "Active Moderation",
   "trust.moderation.desc": "Content is moderated to ensure quality exchanges and community safety.",
-  "trust.privacy.link": "View our privacy policy"
+  "trust.privacy.link": "View our privacy policy",
+
+  "signup.confirmation.title": "Registration successful!",
+  "signup.confirmation.subtitle": "Your account has been created successfully.",
+  "signup.confirmation.name": "Full name",
+  "signup.confirmation.country": "Country",
+  "signup.confirmation.organization": "Organisation",
+  "signup.confirmation.email.notice": "A confirmation email has been sent. Please check your inbox to activate your account.",
+
+  "messages.sg.title": "Message from the Secretary General",
+  "messages.sg.name": "Secretary General of ATU",
+  "messages.sg.text": "The NEXUS platform represents a decisive step towards pan-African digital coordination. Our ambition is to connect 55 member states to accelerate universal service deployment across the continent.",
+  "messages.dg.title": "Message from the Director General",
+  "messages.dg.name": "Director General of ANSUT",
+  "messages.dg.text": "ANSUT is committed alongside ATU to making NEXUS a strategic tool for universal service deployment. This platform strengthens our collective capacity to bridge the digital divide and connect the most isolated communities."
 }

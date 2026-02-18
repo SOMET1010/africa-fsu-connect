@@ -59,7 +59,7 @@ export function HomeHeroBlock() {
             {' '}{suffix}
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-lg md:text-xl text-white/85 mb-10 max-w-2xl">
+          <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl">
             {description}
           </motion.p>
 

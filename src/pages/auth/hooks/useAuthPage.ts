@@ -23,7 +23,8 @@ export const useAuthPage = () => {
   const [signupLastName, setSignupLastName] = useState('');
   const [signupCountry, setSignupCountry] = useState('');
   const [signupOrganization, setSignupOrganization] = useState('');
-
+  const [signupSuccess, setSignupSuccess] = useState(false);
+  const [signupData, setSignupData] = useState({ firstName: '', lastName: '', country: '', organization: '' });
   // Password reset state
   const [forgotMode, setForgotMode] = useState(false);
   const [resetMode, setResetMode] = useState(false);
@@ -92,6 +93,8 @@ export const useAuthPage = () => {
           setError(errorMessage);
         }
       } else {
+        setSignupData({ firstName: signupFirstName, lastName: signupLastName, country: signupCountry, organization: signupOrganization });
+        setSignupSuccess(true);
         toast.success('Compte créé ! Vérifiez votre email pour confirmer votre inscription.');
       }
     } catch (err) {
@@ -178,6 +181,8 @@ export const useAuthPage = () => {
     signupOrganization,
     setSignupOrganization,
     handleSignup,
+    signupSuccess,
+    signupData,
     
     // Password reset
     forgotMode,

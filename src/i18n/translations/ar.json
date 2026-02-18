@@ -947,5 +947,19 @@
   "trust.compliance.desc": "الامتثال للوائح الدولية وإطار الاتحاد الأفريقي لحماية البيانات.",
   "trust.moderation.title": "إشراف نشط",
   "trust.moderation.desc": "تتم مراقبة المحتوى لضمان جودة التبادلات وسلامة المجتمع.",
-  "trust.privacy.link": "الاطلاع على سياسة الخصوصية"
+  "trust.privacy.link": "الاطلاع على سياسة الخصوصية",
+
+  "signup.confirmation.title": "تم التسجيل بنجاح!",
+  "signup.confirmation.subtitle": "تم إنشاء حسابك بنجاح.",
+  "signup.confirmation.name": "الاسم الكامل",
+  "signup.confirmation.country": "البلد",
+  "signup.confirmation.organization": "المنظمة",
+  "signup.confirmation.email.notice": "تم إرسال بريد إلكتروني للتأكيد. يرجى التحقق من صندوق الوارد لتفعيل حسابك.",
+
+  "messages.sg.title": "رسالة الأمين العام",
+  "messages.sg.name": "الأمين العام للاتحاد الأفريقي للاتصالات",
+  "messages.sg.text": "تمثل منصة NEXUS خطوة حاسمة نحو التنسيق الرقمي الأفريقي. طموحنا هو ربط 55 دولة عضو لتسريع نشر الخدمة الشاملة في جميع أنحاء القارة.",
+  "messages.dg.title": "رسالة المدير العام",
+  "messages.dg.name": "المدير العام لـ ANSUT",
+  "messages.dg.text": "تلتزم ANSUT إلى جانب الاتحاد الأفريقي للاتصالات بجعل NEXUS أداة استراتيجية لنشر الخدمة الشاملة. تعزز هذه المنصة قدرتنا الجماعية على سد الفجوة الرقمية وربط المجتمعات الأكثر عزلة."
 }

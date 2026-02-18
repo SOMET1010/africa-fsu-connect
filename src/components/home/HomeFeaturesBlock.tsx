@@ -1,5 +1,5 @@
 import { Users, FolderGit2, FileText, type LucideIcon } from "lucide-react";
-import { motion } from "framer-motion";
+
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
@@ -33,7 +33,7 @@ export function HomeFeaturesBlock() {
   }
 
   return (
-    <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="container mx-auto px-4 pb-12">
+    <div className="container mx-auto px-4 pb-12 animate-fade-in" style={{ contentVisibility: 'auto' }}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {items.map((feature, index) => {
           const Icon = ICON_MAP[feature.icon] || FileText;
@@ -45,13 +45,13 @@ export function HomeFeaturesBlock() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-1">{feature.title}</h3>
-                  <p className="text-sm text-white/60">{feature.description}</p>
+                  <p className="text-sm text-white/80">{feature.description}</p>
                 </div>
               </div>
             </div>
           );
         })}
       </div>
-    </motion.div>
+    </div>
   );
 }

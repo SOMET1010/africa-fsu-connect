@@ -31,8 +31,9 @@ export const PublicHeader = () => {
         <div className={cn("flex items-center justify-between h-16", isRTL && "flex-row-reverse")}>
           {/* Logo */}
           <Link to="/" className={cn("flex items-center gap-3 shrink-0", isRTL && "flex-row-reverse")}>
-            <img src={atuLogo} alt="ATU - African Telecommunications Union" className="h-10 w-auto" />
+            <img src={atuLogo} alt="ATU - African Telecommunications Union" className="h-12 w-auto" />
             <span className="text-lg font-bold text-white">NEXUS</span>
+            <span className="hidden xl:inline text-xs text-white/60 font-medium">| UAT</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -58,7 +59,7 @@ export const PublicHeader = () => {
 
           {/* Right side */}
           <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
-            <LanguageSelector variant="ghost" size="sm" showLabel={false} />
+            <LanguageSelector variant="ghost" size="sm" showLabel={true} />
             <Button asChild variant="ghost" className="hidden sm:inline-flex text-white/70 hover:text-white hover:bg-white/10 text-sm">
               <Link to="/auth">{t("common.login") || "Connexion"}</Link>
             </Button>
