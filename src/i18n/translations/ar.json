@@ -882,5 +882,11 @@
   "focal.chat.today": "اليوم",
   "focal.chat.yesterday": "أمس",
   "focal.chat.unread": "غير مقروءة",
-  "focal.chat.contact": "تواصل"
+  "focal.chat.contact": "تواصل",
+  "search.placeholder": "البحث في الوثائق، المنتدى، المشاريع...",
+  "search.documents": "الوثائق",
+  "search.forum": "نقاشات المنتدى",
+  "search.projects": "المشاريع",
+  "search.no_results": "لم يتم العثور على نتائج",
+  "search.hint": "بحث..."
 }

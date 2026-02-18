@@ -883,5 +883,11 @@
   "focal.chat.today": "Aujourd'hui",
   "focal.chat.yesterday": "Hier",
   "focal.chat.unread": "non lus",
-  "focal.chat.contact": "Contacter"
+  "focal.chat.contact": "Contacter",
+  "search.placeholder": "Rechercher documents, forum, projets...",
+  "search.documents": "Documents",
+  "search.forum": "Discussions du Forum",
+  "search.projects": "Projets",
+  "search.no_results": "Aucun résultat trouvé",
+  "search.hint": "Rechercher..."
 }
