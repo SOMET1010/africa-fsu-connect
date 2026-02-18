@@ -12,10 +12,11 @@ import { motion, AnimatePresence } from "framer-motion";
 const NAV_ITEMS = [
   { path: "/", labelKey: "nav.home", fallback: "Accueil" },
   { path: "/about", labelKey: "nav.about", fallback: "À propos" },
-  { path: "/network", labelKey: "nav.features", fallback: "Fonctionnalités" },
+  { path: "/network", labelKey: "nav.platform", fallback: "Plateforme" },
+  { path: "/strategies", labelKey: "nav.strategies", fallback: "Stratégies" },
   { path: "/projects", labelKey: "nav.projects", fallback: "Projets" },
   { path: "/events", labelKey: "nav.events", fallback: "Événements" },
-  { path: "/public-dashboard", labelKey: "nav.dashboard", fallback: "Tableau de bord" },
+  { path: "/contact", labelKey: "nav.contact", fallback: "Contact" },
 ];
 
 export const PublicHeader = () => {

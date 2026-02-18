@@ -19,6 +19,7 @@ import {
   Lightbulb,
   Video,
   Handshake,
+  Mail,
 } from 'lucide-react';
 
 // UX Universe types for organized navigation
@@ -85,6 +86,8 @@ const Coauthoring = lazy(() => import('@/pages/Coauthoring'));
 const PublicDashboard = lazy(() => import('@/pages/PublicDashboard'));
 const SutaAssistant = lazy(() => import('@/pages/SutaAssistant'));
 const About = lazy(() => import('@/pages/About'));
+const Contact = lazy(() => import('@/pages/Contact'));
+const Strategies = lazy(() => import('@/pages/Strategies'));
 const Roadmap = lazy(() => import('@/pages/Roadmap'));
 const PrivacyPolicy = lazy(() => import('@/pages/legal/PrivacyPolicy'));
 const TermsOfUse = lazy(() => import('@/pages/legal/TermsOfUse'));
@@ -584,8 +587,31 @@ export const ROUTES: RouteConfig[] = [
     hideFromNav: true,
     category: 'main',
   },
+  {
+    path: '/contact',
+    component: Contact,
+    title: 'Contact',
+    description: 'Coordonnées et formulaire de contact',
+    icon: Mail,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'main',
+  },
+  {
+    path: '/strategies',
+    component: Strategies,
+    title: 'Stratégies et Politiques',
+    description: 'Cadres réglementaires et politiques FSU en Afrique',
+    icon: FileText,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'main',
+  },
 
-  // Routes admin (chunk séparé)
   {
     path: '/admin',
     component: Admin,
