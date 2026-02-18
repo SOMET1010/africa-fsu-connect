@@ -748,6 +748,12 @@
   "home.cta.kicker": "Rejoignez-nous",
   "home.cta.title": "Rejoignez le réseau SUTEL",
   "home.cta.subtitle": "Participez à la construction collective du Service Universel en Afrique",
+  "home.features.network.title": "54 Pays Membres",
+  "home.features.network.desc": "Réseau panafricain des agences de régulation",
+  "home.features.projects.title": "Projets FSU",
+  "home.features.projects.desc": "Partage d'expériences et bonnes pratiques",
+  "home.features.resources.title": "Ressources",
+  "home.features.resources.desc": "Documentation et guides méthodologiques",
 
   "nav.network.view.desc": "Coordination collective SUTEL",
   "nav.network.members.desc": "Annuaire des pays membres",

@@ -2375,6 +2375,45 @@ export type Database = {
           },
         ]
       }
+      homepage_content_blocks: {
+        Row: {
+          block_key: string
+          content_ar: Json | null
+          content_en: Json | null
+          content_fr: Json | null
+          content_pt: Json | null
+          id: string
+          is_visible: boolean | null
+          sort_order: number | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          block_key: string
+          content_ar?: Json | null
+          content_en?: Json | null
+          content_fr?: Json | null
+          content_pt?: Json | null
+          id?: string
+          is_visible?: boolean | null
+          sort_order?: number | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          block_key?: string
+          content_ar?: Json | null
+          content_en?: Json | null
+          content_fr?: Json | null
+          content_pt?: Json | null
+          id?: string
+          is_visible?: boolean | null
+          sort_order?: number | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       identity_verifications: {
         Row: {
           attempts: number | null

@@ -761,6 +761,12 @@
   "home.cta.kicker": "Join us",
   "home.cta.title": "Join the SUTEL Network",
   "home.cta.subtitle": "Participate in building Universal Service collectively in Africa",
+  "home.features.network.title": "54 Member Countries",
+  "home.features.network.desc": "Pan-African network of regulatory agencies",
+  "home.features.projects.title": "USF Projects",
+  "home.features.projects.desc": "Experience sharing and best practices",
+  "home.features.resources.title": "Resources",
+  "home.features.resources.desc": "Documentation and methodological guides",
 
   "nav.network.view.desc": "Collective SUTEL coordination",
   "nav.network.members.desc": "Member countries directory",
