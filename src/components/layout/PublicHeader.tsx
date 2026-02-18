@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Globe, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import atuLogo from "@/assets/atu-logo.png";
 import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/shared/LanguageSelector";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -29,9 +30,7 @@ export const PublicHeader = () => {
         <div className={cn("flex items-center justify-between h-16", isRTL && "flex-row-reverse")}>
           {/* Logo */}
           <Link to="/" className={cn("flex items-center gap-3 shrink-0", isRTL && "flex-row-reverse")}>
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[hsl(var(--nx-gold))] to-[hsl(var(--nx-gold))]/70 flex items-center justify-center">
-              <Globe className="w-4 h-4 text-[hsl(var(--nx-night))]" />
-            </div>
+            <img src={atuLogo} alt="ATU - African Telecommunications Union" className="h-10 w-auto" />
             <span className="text-lg font-bold text-white">NEXUS</span>
           </Link>
 
