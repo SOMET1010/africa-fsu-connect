@@ -13,7 +13,7 @@ interface AuthContextType {
   profile: Tables<'profiles'> | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<ApiResponse>;
-  signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<ApiResponse>;
+  signUp: (email: string, password: string, firstName?: string, lastName?: string, country?: string, organization?: string) => Promise<ApiResponse>;
   signOut: () => Promise<void>;
   requestPasswordReset: (email: string) => Promise<ApiResponse>;
   updatePassword: (newPassword: string) => Promise<ApiResponse>;
@@ -120,7 +120,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return { error };
   };
 
-  const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
+  const signUp = async (email: string, password: string, firstName?: string, lastName?: string, country?: string, organization?: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
     const { data, error } = await supabase.auth.signUp({
@@ -131,6 +131,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         data: {
           first_name: firstName,
           last_name: lastName,
+          country: country,
+          organization: organization,
         }
       }
     });
