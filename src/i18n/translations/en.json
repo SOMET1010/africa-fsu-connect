@@ -896,5 +896,11 @@
   "focal.chat.today": "Today",
   "focal.chat.yesterday": "Yesterday",
   "focal.chat.unread": "unread",
-  "focal.chat.contact": "Contact"
+  "focal.chat.contact": "Contact",
+  "search.placeholder": "Search documents, forum, projects...",
+  "search.documents": "Documents",
+  "search.forum": "Forum Discussions",
+  "search.projects": "Projects",
+  "search.no_results": "No results found",
+  "search.hint": "Search..."
 }
