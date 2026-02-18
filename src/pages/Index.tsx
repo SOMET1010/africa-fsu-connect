@@ -7,6 +7,7 @@ import { HomeCtaBlock } from "@/components/home/HomeCtaBlock";
 import { HomePartnersBlock } from "@/components/home/HomePartnersBlock";
 import { HomeMessagesBlock } from "@/components/home/HomeMessagesBlock";
 import { HomeTrustBadge } from "@/components/home/HomeTrustBadge";
+import { HomeTrustSection } from "@/components/home/HomeTrustSection";
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import Footer from "@/components/layout/Footer";
 
@@ -30,6 +31,7 @@ const Index = () => {
         <HomeHeroBlock />
         <HomeTrustBadge />
         <HomeFeaturesBlock />
+        <HomeTrustSection />
         <HomeMessagesBlock />
         <HomeCtaBlock />
         <HomePartnersBlock />

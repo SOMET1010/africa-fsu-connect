@@ -938,5 +938,28 @@
   "search.forum": "Forum Discussions",
   "search.projects": "Projects",
   "search.no_results": "No results found",
-  "search.hint": "Search..."
+  "search.hint": "Search...",
+
+  "cookie.banner.text": "This site uses cookies to improve your experience and produce anonymised statistics.",
+  "cookie.banner.accept": "Accept",
+  "cookie.banner.customize": "Customize",
+  "cookie.banner.save": "Save my choices",
+  "cookie.banner.privacy": "Privacy Policy",
+  "cookie.manage.title": "Manage your preferences",
+  "cookie.manage.necessary": "Necessary cookies",
+  "cookie.manage.functional": "Functional cookies",
+  "cookie.manage.analytics": "Analytics cookies",
+  "cookie.manage.marketing": "Marketing cookies",
+
+  "trust.section.title": "Security and Data Protection",
+  "trust.section.subtitle": "The NEXUS platform implements the highest standards to protect your data and ensure regulatory compliance.",
+  "trust.encryption.title": "TLS/SSL Encryption",
+  "trust.encryption.desc": "All data is encrypted in transit and at rest to ensure confidentiality.",
+  "trust.rbac.title": "RBAC Access Control",
+  "trust.rbac.desc": "A role-based system ensures each user only accesses authorised data.",
+  "trust.compliance.title": "GDPR & AU Compliance",
+  "trust.compliance.desc": "Compliance with international regulations and the African Union data protection framework.",
+  "trust.moderation.title": "Active Moderation",
+  "trust.moderation.desc": "Content is moderated to ensure quality exchanges and community safety.",
+  "trust.privacy.link": "View our privacy policy"
 }

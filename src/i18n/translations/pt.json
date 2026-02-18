@@ -924,5 +924,28 @@
   "search.forum": "Discussões do Fórum",
   "search.projects": "Projetos",
   "search.no_results": "Nenhum resultado encontrado",
-  "search.hint": "Pesquisar..."
+  "search.hint": "Pesquisar...",
+
+  "cookie.banner.text": "Este site utiliza cookies para melhorar a sua experiência e produzir estatísticas anónimas.",
+  "cookie.banner.accept": "Aceitar",
+  "cookie.banner.customize": "Personalizar",
+  "cookie.banner.save": "Guardar as minhas escolhas",
+  "cookie.banner.privacy": "Política de Privacidade",
+  "cookie.manage.title": "Gerir as suas preferências",
+  "cookie.manage.necessary": "Cookies necessários",
+  "cookie.manage.functional": "Cookies funcionais",
+  "cookie.manage.analytics": "Cookies analíticos",
+  "cookie.manage.marketing": "Cookies de marketing",
+
+  "trust.section.title": "Segurança e Proteção de Dados",
+  "trust.section.subtitle": "A plataforma NEXUS implementa os mais elevados padrões para proteger os seus dados e garantir a conformidade regulatória.",
+  "trust.encryption.title": "Encriptação TLS/SSL",
+  "trust.encryption.desc": "Todos os dados são encriptados em trânsito e em repouso para garantir a confidencialidade.",
+  "trust.rbac.title": "Controlo de Acesso RBAC",
+  "trust.rbac.desc": "Um sistema baseado em funções garante que cada utilizador acede apenas aos dados autorizados.",
+  "trust.compliance.title": "Conformidade RGPD & UA",
+  "trust.compliance.desc": "Conformidade com regulamentações internacionais e o quadro da União Africana para proteção de dados.",
+  "trust.moderation.title": "Moderação Ativa",
+  "trust.moderation.desc": "Os conteúdos são moderados para garantir a qualidade das trocas e a segurança da comunidade.",
+  "trust.privacy.link": "Consultar a nossa política de privacidade"
 }
