@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Mail, UserCheck, UserX, Search, Filter, MapPin, Globe } from 'lucide-react';
+import { Plus, Mail, UserCheck, UserX, Search, Filter, MapPin, Globe, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -33,6 +33,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useFocalPoints, useCreateFocalPoint, useSendFocalPointInvitation, type CreateFocalPointData } from '@/hooks/useFocalPoints';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import type { SupportedLanguage } from '@/i18n/languages';
 
 const languageLabels: Record<SupportedLanguage, string> = {
@@ -66,6 +67,7 @@ export default function FocalPointsManagement() {
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const [selectedFocalPointId, setSelectedFocalPointId] = useState<string | null>(null);
   const [inviteLanguage, setInviteLanguage] = useState<SupportedLanguage>('fr');
   const [searchTerm, setSearchTerm] = useState('');
@@ -134,6 +136,19 @@ export default function FocalPointsManagement() {
     setSelectedFocalPointId(null);
   };
 
+  const handleImportFocalPoints = async () => {
+    setIsImporting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('import-focal-points');
+      if (error) throw error;
+      toast.success(`Import réussi : ${data?.countries_inserted ?? 0} pays et ${data?.focal_points_inserted ?? 0} points focaux ajoutés`);
+    } catch (err: any) {
+      toast.error('Erreur lors de l\'import : ' + (err.message || 'Erreur inconnue'));
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
   // Filter focal points
   const filteredFocalPoints = focalPoints?.filter((fp) => {
     const matchesSearch =
@@ -169,13 +184,22 @@ export default function FocalPointsManagement() {
             Gérez les points focaux désignés par les États membres pour la saisie des données FSU
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Ajouter un point focal
-            </Button>
-          </DialogTrigger>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={handleImportFocalPoints}
+            disabled={isImporting}
+          >
+            <Upload className="mr-2 h-4 w-4" />
+            {isImporting ? 'Import en cours...' : 'Importer les 48 points focaux'}
+          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                Ajouter un point focal
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Ajouter un nouveau point focal</DialogTitle>
@@ -326,6 +350,7 @@ export default function FocalPointsManagement() {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       {/* Stats Cards */}
