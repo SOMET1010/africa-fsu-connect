@@ -1,25 +1,29 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Globe, ArrowRight } from "lucide-react";
 import { useAfricanCountries } from "@/hooks/useCountries";
-import { CommandCenterMap } from "@/components/map/CommandCenterMap";
 import { Country } from "@/services/countriesService";
 import { cn } from "@/lib/utils";
 import { useDirection } from "@/hooks/useDirection";
+import { HomeMemberMap } from "@/components/home/HomeMemberMap";
+import { ACTIVITY_LEVELS } from "@/components/map/activityData";
+
+const LEGEND_ITEMS = [
+  { level: 'high' as const, label: 'Très actif' },
+  { level: 'medium' as const, label: 'Membre' },
+  { level: 'onboarding' as const, label: 'En intégration' },
+  { level: 'observer' as const, label: 'Observateur' },
+];
 
 export function HomeMemberMapBlock() {
   const { data: countries = [], isLoading } = useAfricanCountries();
   const { isRTL } = useDirection();
 
-  const handleCountryClick = (_country: Country) => {
-    // Optional: could navigate to /map?country=XX
-  };
+  const handleCountryClick = (_country: Country) => {};
 
   return (
     <section className="py-16 animate-fade-in" style={{ contentVisibility: 'auto' }}>
       <div className="container mx-auto px-4">
-        {/* Section Header */}
         <div className={cn("text-center mb-10", isRTL && "text-right")}>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm mb-4">
             <Globe className="h-4 w-4 text-[hsl(var(--nx-gold))]" />
@@ -33,8 +37,10 @@ export function HomeMemberMapBlock() {
           </p>
         </div>
 
-        {/* Map Container */}
-        <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-[hsl(var(--nx-night))]" style={{ height: 'clamp(350px, 50vw, 500px)' }}>
+        <div
+          className="relative rounded-2xl overflow-hidden border border-[hsl(var(--nx-gold))]/20 bg-[hsl(var(--nx-night))]"
+          style={{ height: 'clamp(350px, 50vw, 500px)' }}
+        >
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
@@ -43,15 +49,25 @@ export function HomeMemberMapBlock() {
               </div>
             </div>
           ) : (
-            <CommandCenterMap
-              countries={countries}
-              onCountryClick={handleCountryClick}
-              mode="members"
-            />
+            <HomeMemberMap countries={countries} onCountryClick={handleCountryClick} />
           )}
         </div>
 
-        {/* CTA */}
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-5">
+          {LEGEND_ITEMS.map(({ level, label }) => (
+            <div key={level} className="flex items-center gap-2">
+              <div
+                className="w-3 h-3 rounded-full border-2"
+                style={{
+                  borderColor: ACTIVITY_LEVELS[level].color,
+                  backgroundColor: `${ACTIVITY_LEVELS[level].color}33`,
+                }}
+              />
+              <span className="text-xs text-white/60">{label}</span>
+            </div>
+          ))}
+        </div>
+
         <div className="text-center mt-8">
           <Button
             asChild
