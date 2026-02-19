@@ -1,99 +1,69 @@
 
-# Plan : Import en masse des 48 points focaux
+# Plan : Optimisation UX du Tableau de Bord Admin
 
-## Contexte
+## Problemes identifies
 
-Vous avez fourni une liste de 48 points focaux couvrant 24 pays africains. La base contient actuellement 0 point focal et seulement 15 pays dans la table `countries`. Il faut donc :
+L'analyse du code revele 4 axes d'amelioration sur la page `/admin` (fichier `src/pages/Admin.tsx` et ses composants).
 
-1. **Ajouter 16 pays manquants** dans la table `countries`
-2. **Inserer les 48 points focaux** dans la table `focal_points`
+## Changements prevus
 
-## Pays manquants a ajouter
+### 1. Lisibilite des cartes de statistiques (Priorite haute)
 
-| Code | Nom francais |
-|------|-------------|
-| SD | Soudan |
-| CG | Congo-Brazzaville |
-| SZ | Eswatini |
-| LS | Lesotho |
-| NA | Namibie |
-| ST | Sao Tome-et-Principe |
-| CV | Cabo Verde |
-| LR | Liberia |
-| GA | Gabon |
-| ZW | Zimbabwe |
-| MR | Mauritanie |
-| GN | Guinee |
-| GM | Gambie |
-| BI | Burundi |
-| CF | Republique centrafricaine |
-| MU | Maurice |
-| AO | Angola |
-| TD | Tchad |
+**Fichier** : `src/components/ui/modern-stats-card.tsx`
 
-## Mapping des points focaux (pays -> code ISO)
+- Les grands nombres utilisent `text-foreground` qui manque de contraste sur fond sombre
+- **Correction** : Forcer `text-white` ou `text-foreground font-extrabold` avec une luminosite accrue
+- Les badges de tendance utilisent `Badge variant="default"` avec un fond plein qui detourne l'attention
+- **Correction** : Remplacer par un texte simple colore sans fond -- vert (`text-emerald-400`) pour positif, rouge (`text-red-400`) pour negatif, avec juste l'icone de tendance
 
-Chaque pays recoit 2 points focaux (primary + secondary), sauf le Senegal qui en a 4 (2 paires d'organisations differentes : numerique.gouv.sn / fdsut.sn et artp.sn).
+**Fichier** : `src/pages/admin/components/AdminStatsGrid.tsx`
 
-## Details techniques
+- Le badge `variant="secondary"` avec fond blanc pour "+12% ce mois" est trop voyant
+- **Correction** : Utiliser un `span` avec `text-emerald-500 text-xs font-medium` sans fond
 
-### Etape 1 : Creer une edge function `import-focal-points`
+### 2. Navigation par onglets trop massive
 
-Cette fonction :
-- Insere les 16 pays manquants dans `countries` (avec `ON CONFLICT DO NOTHING`)
-- Insere les 48 points focaux dans `focal_points` avec statut `pending`
-- Attribue `designation_type: 'primary'` au premier point focal de chaque pays et `'secondary'` au second
-- Nettoie les numeros de telephone (suppression des espaces et caracteres speciaux)
+**Fichier** : `src/pages/Admin.tsx`
 
-### Etape 2 : Appeler la fonction
+- La `TabsList` utilise `grid w-full grid-cols-5` ce qui cree un bloc massif pleine largeur avec fond `bg-muted`
+- **Correction** : Passer a `inline-flex` (retirer `grid w-full grid-cols-5`), ajouter `border border-border/50 bg-transparent` pour un rendu plus fin
+- L'onglet actif passe en `bg-background` (blanc) ce qui ecrase visuellement le contenu
+- **Correction** : Utiliser un soulignement colore (`border-b-2 border-primary`) au lieu du bloc blanc, via des classes conditionnelles sur les `TabsTrigger` : `data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none`
 
-Un seul appel HTTP pour importer toutes les donnees.
+### 3. Actions du tableau utilisateurs avec icones
 
-### Donnees importees par pays
+**Fichier** : `src/pages/admin/components/AdminUsersTab.tsx`
 
-| # | Pays | Code | Point focal 1 (Primary) | Point focal 2 (Secondary) |
-|---|------|------|------------------------|--------------------------|
-| 1 | Soudan | SD | Saeed Addow Himmaida Mohammad | Zahwa Eltayeb Mokhtar |
-| 2 | Congo-Brazzaville | CG | Roch Blanchard OKEMBA | - |
-| 3 | Eswatini | SZ | Mbongeni Mtshali | - |
-| 4 | Lesotho | LS | Makhabane Mohale | - |
-| 5 | Namibie | NA | Jacobus Maritz | Monica Nangutuwala |
-| 6 | Sao Tome-et-Principe | ST | Adelaide fahe | Irandira Trovoada |
-| 7 | Senegal | SN | Maty Dieng LO + Ousmane NDIAYE | Mamadou NDIR |
-| 8 | Cabo Verde | CV | Josemar Soares | Juvenal Carvalho |
-| 9 | Liberia | LR | James Lynch Monbo | Elijah G. Glay |
-| 10 | Gabon | GA | LAURIANE CEPHORA SANOU EBINDA | Farid Nazare BAMBA + Kassa Patrick |
-| 11 | Zimbabwe | ZW | Kennedy Dewera | Remember Muchechemera |
-| 12 | Mauritanie | MR | Salahdine SOUHEIB | Nine Ahmed Abdellahi |
-| 13 | Ouganda | UG | Susan Nakanwagi | James Mpango |
-| 14 | Maroc | MA | Abdelkarim BELKHADIR | Abdelhay MOTIAA |
-| 15 | Kenya | KE | Miriam Mutuku | Julius Lenaseiyan |
-| 16 | Burkina Faso | BF | SANOU Soumanan | NIKIEMA Zakaria |
-| 17 | Guinee | GN | NABE Aboubacar Sidiki | - |
-| 18 | Gambie | GM | Serign Modou Bah | Lamin Fatty |
-| 19 | Burundi | BI | AHIBONEYE Elias | KAYEYE Milca Ornella |
-| 20 | Centrafrique | CF | Dieu Beni DAZOUROU | Elysee SOKOTE |
-| 21 | Tanzanie | TZ | Batholomew Marcel Waranse | Peter John Mushi |
-| 22 | Maurice | MU | Harish BHOOLAH | Shenabadi RAMASAMY |
-| 23 | Mali | ML | CAMARA Issa | DOUMBIA Ibrahim |
-| 24 | Angola | AO | Pedro Jose Manuel | Jose Cristovao Quiombo |
-| 25 | Tchad | TD | Kadidja Harsou Abbas | Zakaria Yamouda Djorbo |
+- Les boutons textuels "Modifier" et "Approuver" prennent trop de place
+- **Correction** : Remplacer par des boutons icones avec tooltips :
+  - Crayon (`Pencil`) pour editer
+  - Coche (`Check`) pour approuver
+  - Corbeille (`Trash2`) pour supprimer (nouveau)
+- Ajouter `TooltipProvider` + `Tooltip` autour de chaque bouton icone
+- Reduire l'espace occupe dans la colonne Actions
 
-### Fichiers concernes
+### 4. Barre de recherche du ModernDataTable
 
-| Fichier | Action |
-|---------|--------|
-| `supabase/functions/import-focal-points/index.ts` | Creer - edge function d'import avec toutes les donnees hardcodees |
+**Fichier** : `src/components/system/ModernDataTable.tsx`
 
-### Structure de l'edge function
+- La barre de recherche a `max-w-sm` mais son conteneur `flex-1` peut s'etendre
+- **Correction** : Ajouter `max-w-xs` (au lieu de `max-w-sm`) pour reduire sa largeur
+- Le conteneur GlassCard des filtres prend trop de place visuellement
+- **Correction** : Passer a un simple `div` avec `border-b border-border/30 pb-4` au lieu d'une GlassCard complete
 
-```text
-1. Authentification : verifier que l'appelant est admin
-2. INSERT INTO countries (code, name_fr, name_en, continent)
-   VALUES (...) ON CONFLICT (code) DO NOTHING
-3. INSERT INTO focal_points (country_code, designation_type, first_name, last_name, email, phone, organization, job_title, status)
-   VALUES (...) pour chacun des 48 enregistrements
-4. Retourner le nombre d'insertions reussies
-```
+## Resume des fichiers modifies
 
-Apres l'import, les 48 points focaux apparaitront dans la page d'administration `/admin/focal-points` avec le statut "En attente", prets a recevoir leurs invitations par email.
+| Fichier | Modifications |
+|---------|---------------|
+| `src/components/ui/modern-stats-card.tsx` | Nombres en blanc pur, badges tendance sans fond (texte colore uniquement) |
+| `src/pages/admin/components/AdminStatsGrid.tsx` | Badge description en texte colore simple sans fond blanc |
+| `src/pages/Admin.tsx` | TabsList en inline-flex sans grille pleine largeur, onglet actif avec soulignement au lieu de bloc blanc |
+| `src/pages/admin/components/AdminUsersTab.tsx` | Boutons d'action remplaces par icones (Pencil, Check, Trash2) avec tooltips |
+| `src/components/system/ModernDataTable.tsx` | Barre de recherche reduite (max-w-xs), conteneur filtres allegee |
+
+## Impact
+
+- Aucun changement de structure de donnees
+- Aucune nouvelle dependance
+- Modifications purement visuelles et UX
+- Les composants `Tooltip`, `Pencil`, `Check`, `Trash2` sont deja disponibles dans le projet
