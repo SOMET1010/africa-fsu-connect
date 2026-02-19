@@ -1,82 +1,99 @@
 
-# Plan : Cartes de statistiques Premium avec animations et interactivite
+# Plan : Import en masse des 48 points focaux
 
-## Objectif
+## Contexte
 
-Transformer le bloc `HomeFeaturesBlock` (les 3 cartes "54 Pays Membres", "Projets FSU", "Ressources") en composants visuellement percutants avec compteurs animes, effets de survol premium et liens d'action.
+Vous avez fourni une liste de 48 points focaux couvrant 24 pays africains. La base contient actuellement 0 point focal et seulement 15 pays dans la table `countries`. Il faut donc :
 
-## Changements prevus
+1. **Ajouter 16 pays manquants** dans la table `countries`
+2. **Inserer les 48 points focaux** dans la table `focal_points`
 
-### 1. Compteur anime au scroll pour "54 Pays Membres"
+## Pays manquants a ajouter
 
-- Extraire le nombre du titre (ex: "54" de "54 Pays Membres") et l'afficher avec le composant `AnimatedCounter` existant
-- L'animation ne demarre que lorsque la carte entre dans le viewport, en utilisant le hook `useScrollReveal` existant
-- Le chiffre sera affiche en taille `text-3xl` tandis que le texte restant ("Pays Membres") sera en `text-base` -- creant un point focal immediat
+| Code | Nom francais |
+|------|-------------|
+| SD | Soudan |
+| CG | Congo-Brazzaville |
+| SZ | Eswatini |
+| LS | Lesotho |
+| NA | Namibie |
+| ST | Sao Tome-et-Principe |
+| CV | Cabo Verde |
+| LR | Liberia |
+| GA | Gabon |
+| ZW | Zimbabwe |
+| MR | Mauritanie |
+| GN | Guinee |
+| GM | Gambie |
+| BI | Burundi |
+| CF | Republique centrafricaine |
+| MU | Maurice |
+| AO | Angola |
+| TD | Tchad |
 
-### 2. Effets de survol premium
+## Mapping des points focaux (pays -> code ISO)
 
-Chaque carte aura un etat hover enrichi :
-- **Bordure lumineuse** : passage de `border-white/10` a `border-[hsl(var(--nx-gold))]/40` au hover
-- **Soulevement** : `transform: translateY(-4px)` avec `shadow-lg shadow-[hsl(var(--nx-gold))]/5`
-- **Icone animee** : l'icone passe de `text-[hsl(var(--nx-gold))]` a une version plus lumineuse, et le cercle d'icone gagne un glow subtil (`shadow-[hsl(var(--nx-gold))]/20`)
-- Transition fluide sur toutes les proprietes (`transition-all duration-300`)
-
-### 3. Glow subtil sur les icones
-
-- Ajouter `shadow-[0_0_12px_hsl(var(--nx-gold)/0.15)]` sur le conteneur d'icone par defaut
-- Au hover, intensifier a `shadow-[0_0_20px_hsl(var(--nx-gold)/0.3)]`
-
-### 4. Icone "reseau" pour Projets FSU
-
-- Remplacer `FolderGit2` par `Network` (disponible dans lucide-react) pour mieux illustrer le partage d'experiences et la connexion entre pays
-
-### 5. Liens d'action discrets
-
-- Ajouter un lien "En savoir plus" en bas de chaque carte pour "Projets FSU" (vers `/projects`) et "Ressources" (vers `/resources`)
-- Style discret : `text-xs text-[hsl(var(--nx-gold))]/60` avec fleche, visible uniquement au hover de la carte
-
-### 6. Animation d'entree decalee (stagger)
-
-- Chaque carte apparait avec un delai progressif (0ms, 150ms, 300ms) via `ScrollReveal` pour un effet cascade elegant
+Chaque pays recoit 2 points focaux (primary + secondary), sauf le Senegal qui en a 4 (2 paires d'organisations differentes : numerique.gouv.sn / fdsut.sn et artp.sn).
 
 ## Details techniques
 
-### Logique d'extraction du compteur
+### Etape 1 : Creer une edge function `import-focal-points`
+
+Cette fonction :
+- Insere les 16 pays manquants dans `countries` (avec `ON CONFLICT DO NOTHING`)
+- Insere les 48 points focaux dans `focal_points` avec statut `pending`
+- Attribue `designation_type: 'primary'` au premier point focal de chaque pays et `'secondary'` au second
+- Nettoie les numeros de telephone (suppression des espaces et caracteres speciaux)
+
+### Etape 2 : Appeler la fonction
+
+Un seul appel HTTP pour importer toutes les donnees.
+
+### Donnees importees par pays
+
+| # | Pays | Code | Point focal 1 (Primary) | Point focal 2 (Secondary) |
+|---|------|------|------------------------|--------------------------|
+| 1 | Soudan | SD | Saeed Addow Himmaida Mohammad | Zahwa Eltayeb Mokhtar |
+| 2 | Congo-Brazzaville | CG | Roch Blanchard OKEMBA | - |
+| 3 | Eswatini | SZ | Mbongeni Mtshali | - |
+| 4 | Lesotho | LS | Makhabane Mohale | - |
+| 5 | Namibie | NA | Jacobus Maritz | Monica Nangutuwala |
+| 6 | Sao Tome-et-Principe | ST | Adelaide fahe | Irandira Trovoada |
+| 7 | Senegal | SN | Maty Dieng LO + Ousmane NDIAYE | Mamadou NDIR |
+| 8 | Cabo Verde | CV | Josemar Soares | Juvenal Carvalho |
+| 9 | Liberia | LR | James Lynch Monbo | Elijah G. Glay |
+| 10 | Gabon | GA | LAURIANE CEPHORA SANOU EBINDA | Farid Nazare BAMBA + Kassa Patrick |
+| 11 | Zimbabwe | ZW | Kennedy Dewera | Remember Muchechemera |
+| 12 | Mauritanie | MR | Salahdine SOUHEIB | Nine Ahmed Abdellahi |
+| 13 | Ouganda | UG | Susan Nakanwagi | James Mpango |
+| 14 | Maroc | MA | Abdelkarim BELKHADIR | Abdelhay MOTIAA |
+| 15 | Kenya | KE | Miriam Mutuku | Julius Lenaseiyan |
+| 16 | Burkina Faso | BF | SANOU Soumanan | NIKIEMA Zakaria |
+| 17 | Guinee | GN | NABE Aboubacar Sidiki | - |
+| 18 | Gambie | GM | Serign Modou Bah | Lamin Fatty |
+| 19 | Burundi | BI | AHIBONEYE Elias | KAYEYE Milca Ornella |
+| 20 | Centrafrique | CF | Dieu Beni DAZOUROU | Elysee SOKOTE |
+| 21 | Tanzanie | TZ | Batholomew Marcel Waranse | Peter John Mushi |
+| 22 | Maurice | MU | Harish BHOOLAH | Shenabadi RAMASAMY |
+| 23 | Mali | ML | CAMARA Issa | DOUMBIA Ibrahim |
+| 24 | Angola | AO | Pedro Jose Manuel | Jose Cristovao Quiombo |
+| 25 | Tchad | TD | Kadidja Harsou Abbas | Zakaria Yamouda Djorbo |
+
+### Fichiers concernes
+
+| Fichier | Action |
+|---------|--------|
+| `supabase/functions/import-focal-points/index.ts` | Creer - edge function d'import avec toutes les donnees hardcodees |
+
+### Structure de l'edge function
 
 ```text
-Titre: "54 Pays Membres"
--> Regex: /^(\d+)\s+(.+)$/
--> number = 54, label = "Pays Membres"
--> Affichage: <AnimatedCounter value={54} /> <span>Pays Membres</span>
-
-Titre sans nombre: "Ressources"
--> Pas de compteur, affichage normal
+1. Authentification : verifier que l'appelant est admin
+2. INSERT INTO countries (code, name_fr, name_en, continent)
+   VALUES (...) ON CONFLICT (code) DO NOTHING
+3. INSERT INTO focal_points (country_code, designation_type, first_name, last_name, email, phone, organization, job_title, status)
+   VALUES (...) pour chacun des 48 enregistrements
+4. Retourner le nombre d'insertions reussies
 ```
 
-### Structure de carte finale
-
-```text
-+------------------------------------------+
-|  [icone glow]                            |
-|                                          |
-|  54          (text-3xl, AnimatedCounter)  |
-|  Pays Membres  (text-base)              |
-|  Description...  (text-sm)              |
-|                                          |
-|  En savoir plus ->  (visible au hover)  |
-+------------------------------------------+
-```
-
-### Liens d'action par carte
-
-| Carte | Lien | Destination |
-|---|---|---|
-| Pays Membres | Explorer le reseau | `/map` |
-| Projets FSU | Voir les projets | `/projects` |
-| Ressources | Consulter | `/resources` |
-
-### Fichier modifie
-
-| Fichier | Modifications |
-|---|---|
-| `src/components/home/HomeFeaturesBlock.tsx` | Ajout AnimatedCounter + useScrollReveal, hover premium avec glow/lift/border, icone Network, liens CTA, stagger animation |
+Apres l'import, les 48 points focaux apparaitront dans la page d'administration `/admin/focal-points` avec le statut "En attente", prets a recevoir leurs invitations par email.
