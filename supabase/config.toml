@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.send-focal-point-invitation]
 verify_jwt = true
+
+[functions.import-focal-points]
+verify_jwt = false
