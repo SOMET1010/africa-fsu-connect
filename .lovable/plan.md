@@ -1,99 +1,82 @@
 
-# Plan : Refonte Premium de la carte des membres
+# Plan : Cartes de statistiques Premium avec animations et interactivite
 
-## Problemes identifies
+## Objectif
 
-1. **Fond trop sombre** : les tuiles `dark_nolabels` de CartoDB rendent la carte quasi noire, sans frontieres visibles
-2. **Zoom mal cadre** : centre sur [5, 20] avec zoom 3, laissant beaucoup d'espace vide autour de l'Afrique
-3. **Chevauchement des marqueurs** : taille unique (36px), les pays proches (Afrique de l'Ouest, Afrique centrale) se superposent
-4. **Tooltips basiques** : seulement le nom du pays et le statut, pas de donnees chiffrees (projets, contributions)
-5. **Pas de filtrage** : aucun moyen de basculer entre Projets / Contributions / Tendances
-6. **Bouton CTA peu visible** : bordure blanche transparente, se fond dans le fond sombre
-7. **Taille des marqueurs non proportionnelle** aux donnees
+Transformer le bloc `HomeFeaturesBlock` (les 3 cartes "54 Pays Membres", "Projets FSU", "Ressources") en composants visuellement percutants avec compteurs animes, effets de survol premium et liens d'action.
 
 ## Changements prevus
 
-### 1. Fond de carte "Midnight Blue" avec frontieres (`HomeMemberMap.tsx`)
+### 1. Compteur anime au scroll pour "54 Pays Membres"
 
-- Remplacer les tuiles `dark_nolabels` par `dark_all` (CartoDB Dark Matter avec labels/frontieres)
-- Appliquer un filtre CSS leger `hue-rotate(210deg) saturate(0.7) brightness(1.1)` pour obtenir un ton bleu nuit au lieu du noir pur
-- Cela fait apparaitre les frontieres en gris clair et donne un fond "midnight blue" professionnel
+- Extraire le nombre du titre (ex: "54" de "54 Pays Membres") et l'afficher avec le composant `AnimatedCounter` existant
+- L'animation ne demarre que lorsque la carte entre dans le viewport, en utilisant le hook `useScrollReveal` existant
+- Le chiffre sera affiche en taille `text-3xl` tandis que le texte restant ("Pays Membres") sera en `text-base` -- creant un point focal immediat
 
-### 2. Zoom centre sur l'Afrique
+### 2. Effets de survol premium
 
-- Changer le centre a `[2, 20]` avec zoom `3.5`
-- Ajouter `maxBounds` pour limiter le panoramique au continent africain (lat -40 a 40, lng -25 a 55)
+Chaque carte aura un etat hover enrichi :
+- **Bordure lumineuse** : passage de `border-white/10` a `border-[hsl(var(--nx-gold))]/40` au hover
+- **Soulevement** : `transform: translateY(-4px)` avec `shadow-lg shadow-[hsl(var(--nx-gold))]/5`
+- **Icone animee** : l'icone passe de `text-[hsl(var(--nx-gold))]` a une version plus lumineuse, et le cercle d'icone gagne un glow subtil (`shadow-[hsl(var(--nx-gold))]/20`)
+- Transition fluide sur toutes les proprietes (`transition-all duration-300`)
 
-### 3. Marqueurs proportionnels avec degradee de couleur
+### 3. Glow subtil sur les icones
 
-- Taille dynamique basee sur les contributions : de 28px (observateur) a 48px (tres actif)
-- Remplacer les drapeaux emoji par le code pays (2 lettres) pour un look plus institutionnel
-- Cercle avec fond en degradee d'opacite selon le niveau d'activite
-- Garder le code couleur existant (vert/bleu/ambre/gris)
+- Ajouter `shadow-[0_0_12px_hsl(var(--nx-gold)/0.15)]` sur le conteneur d'icone par defaut
+- Au hover, intensifier a `shadow-[0_0_20px_hsl(var(--nx-gold)/0.3)]`
 
-### 4. Tooltips enrichis
+### 4. Icone "reseau" pour Projets FSU
 
-Au survol, afficher une carte flottante avec :
-- Drapeau + nom complet du pays
-- Badge de statut colore
-- Nombre de contributions (icone)
-- Nombre de projets (icone)
-- Derniere activite
+- Remplacer `FolderGit2` par `Network` (disponible dans lucide-react) pour mieux illustrer le partage d'experiences et la connexion entre pays
 
-### 5. Barre de filtres par mode (`HomeMemberMapBlock.tsx`)
+### 5. Liens d'action discrets
 
-Ajouter 3 boutons au-dessus de la carte :
-- **Membres** (par defaut) : taille = contributions
-- **Projets** : taille = nombre de projets
-- **Tendances** : taille = trendScore
+- Ajouter un lien "En savoir plus" en bas de chaque carte pour "Projets FSU" (vers `/projects`) et "Ressources" (vers `/resources`)
+- Style discret : `text-xs text-[hsl(var(--nx-gold))]/60` avec fleche, visible uniquement au hover de la carte
 
-Les donnees existent deja dans `activityData.ts` (`MapMode`, `getValueByMode`, `getLabelByMode`).
+### 6. Animation d'entree decalee (stagger)
 
-### 6. Bouton CTA plus visible
-
-- Passer a un fond semi-blanc `bg-white/15` avec bordure plus marquee `border-white/40`
-- Ajouter une ombre portee `shadow-lg`
-
-### 7. Legende enrichie
-
-Ajouter sous chaque pastille le nombre de pays concernes pour chaque niveau.
+- Chaque carte apparait avec un delai progressif (0ms, 150ms, 300ms) via `ScrollReveal` pour un effet cascade elegant
 
 ## Details techniques
 
-### Fichiers modifies
+### Logique d'extraction du compteur
+
+```text
+Titre: "54 Pays Membres"
+-> Regex: /^(\d+)\s+(.+)$/
+-> number = 54, label = "Pays Membres"
+-> Affichage: <AnimatedCounter value={54} /> <span>Pays Membres</span>
+
+Titre sans nombre: "Ressources"
+-> Pas de compteur, affichage normal
+```
+
+### Structure de carte finale
+
+```text
++------------------------------------------+
+|  [icone glow]                            |
+|                                          |
+|  54          (text-3xl, AnimatedCounter)  |
+|  Pays Membres  (text-base)              |
+|  Description...  (text-sm)              |
+|                                          |
+|  En savoir plus ->  (visible au hover)  |
++------------------------------------------+
+```
+
+### Liens d'action par carte
+
+| Carte | Lien | Destination |
+|---|---|---|
+| Pays Membres | Explorer le reseau | `/map` |
+| Projets FSU | Voir les projets | `/projects` |
+| Ressources | Consulter | `/resources` |
+
+### Fichier modifie
 
 | Fichier | Modifications |
 |---|---|
-| `src/components/home/HomeMemberMap.tsx` | Tuiles dark_all + filtre CSS, centre/zoom Afrique, maxBounds, marqueurs proportionnels avec code pays, tooltips enrichis avec projets/contributions |
-| `src/components/home/HomeMemberMapBlock.tsx` | Barre de filtres (3 boutons Membres/Projets/Tendances), legende avec compteurs, bouton CTA plus visible |
-
-### Logique des marqueurs proportionnels
-
-```text
-Taille = 28 + (contributions / maxContributions) * 20
-
-Resultat :
-- Observateur (1 contrib) -> ~28px
-- Onboarding (5 contrib)  -> ~33px
-- Medium (12 contrib)     -> ~39px
-- High (22 contrib)       -> ~48px
-```
-
-### Filtre CSS pour le fond "Midnight Blue"
-
-```text
-.leaflet-tile-pane {
-  filter: hue-rotate(210deg) saturate(0.7) brightness(1.1);
-}
-```
-
-Ce filtre transforme le noir pur de CartoDB Dark Matter en un bleu nuit elegant, tout en gardant les frontieres et labels visibles grace a l'utilisation de `dark_all` au lieu de `dark_nolabels`.
-
-### Structure de la barre de filtres
-
-```text
-[Membres]  [Projets]  [Tendances]
-   actif     inactif     inactif
-```
-
-Boutons compacts en haut a droite de la section, utilisant le state local `useState<MapMode>('members')` passe au composant `HomeMemberMap` pour ajuster la taille des marqueurs dynamiquement.
+| `src/components/home/HomeFeaturesBlock.tsx` | Ajout AnimatedCounter + useScrollReveal, hover premium avec glow/lift/border, icone Network, liens CTA, stagger animation |
