@@ -85,12 +85,12 @@ const Admin = () => {
           <AdminStatsGrid stats={stats} />
 
           <Tabs defaultValue="users" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="users"><Users className="h-4 w-4 mr-2" />Utilisateurs</TabsTrigger>
-              <TabsTrigger value="content"><FileText className="h-4 w-4 mr-2" />Contenu</TabsTrigger>
-              <TabsTrigger value="moderation"><Shield className="h-4 w-4 mr-2" />Modération</TabsTrigger>
-              <TabsTrigger value="analytics"><BarChart3 className="h-4 w-4 mr-2" />Analytiques</TabsTrigger>
-              <TabsTrigger value="settings"><Settings className="h-4 w-4 mr-2" />Paramètres</TabsTrigger>
+            <TabsList className="inline-flex bg-transparent border border-border/50 rounded-lg p-1">
+              <TabsTrigger value="users" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><Users className="h-4 w-4 mr-2" />Utilisateurs</TabsTrigger>
+              <TabsTrigger value="content" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><FileText className="h-4 w-4 mr-2" />Contenu</TabsTrigger>
+              <TabsTrigger value="moderation" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><Shield className="h-4 w-4 mr-2" />Modération</TabsTrigger>
+              <TabsTrigger value="analytics" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><BarChart3 className="h-4 w-4 mr-2" />Analytiques</TabsTrigger>
+              <TabsTrigger value="settings" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><Settings className="h-4 w-4 mr-2" />Paramètres</TabsTrigger>
             </TabsList>
 
             <TabsContent value="users" className="space-y-6">

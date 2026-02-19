@@ -77,23 +77,23 @@ export function ModernStatsCard({
         </div>
         
         {trend && (
-          <Badge 
-            variant={trend.positive ? "default" : "destructive"}
-            className="flex items-center gap-1 text-xs"
-          >
+          <span className={cn(
+            "flex items-center gap-1 text-xs font-medium",
+            trend.positive ? "text-emerald-500" : "text-red-500"
+          )}>
             {trend.positive ? (
               <TrendingUp className="h-3 w-3" />
             ) : (
               <TrendingDown className="h-3 w-3" />
             )}
             {trend.value > 0 ? '+' : ''}{trend.value}%
-          </Badge>
+          </span>
         )}
       </div>
 
       <div className="space-y-2">
         <div className={cn(
-          "font-bold text-foreground group-hover:text-primary transition-colors duration-200",
+          "font-extrabold text-white drop-shadow-sm group-hover:text-primary transition-colors duration-200",
           valueSizes[size]
         )}>
           <AnimatedCounter 

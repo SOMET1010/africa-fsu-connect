@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { ModernButton } from "@/components/ui/modern-button";
 import { ModernDataTable, DataRow } from "@/components/system/ModernDataTable";
 import { AdminSelectedUser, getStatusBadgeConfig, getRoleLabel } from "../hooks/useAdminPage";
+import { Pencil, Check, Trash2 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Convert to DataRow compatible format
 const toDataRows = (users: AdminSelectedUser[]): DataRow[] => 
@@ -55,23 +57,36 @@ export const AdminUsersTab = ({ users, onUserAction, onRefresh }: AdminUsersTabP
         } : col.key === "actions" ? (_value: unknown, row: Record<string, unknown>) => {
           const user = row as unknown as AdminSelectedUser;
           return (
-            <div className="flex items-center space-x-2">
-              <ModernButton 
-                size="sm" 
-                variant="outline"
-                onClick={() => onUserAction("edit", user)}
-              >
-                Modifier
-              </ModernButton>
-              {user.status === "pending" && (
-                <ModernButton 
-                  size="sm"
-                  onClick={() => onUserAction("approve", user)}
-                >
-                  Approuver
-                </ModernButton>
-              )}
-            </div>
+            <TooltipProvider>
+              <div className="flex items-center space-x-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ModernButton size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => onUserAction("edit", user)}>
+                      <Pencil className="h-4 w-4" />
+                    </ModernButton>
+                  </TooltipTrigger>
+                  <TooltipContent>Modifier</TooltipContent>
+                </Tooltip>
+                {user.status === "pending" && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <ModernButton size="sm" variant="ghost" className="h-8 w-8 p-0 text-emerald-500 hover:text-emerald-600" onClick={() => onUserAction("approve", user)}>
+                        <Check className="h-4 w-4" />
+                      </ModernButton>
+                    </TooltipTrigger>
+                    <TooltipContent>Approuver</TooltipContent>
+                  </Tooltip>
+                )}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ModernButton size="sm" variant="ghost" className="h-8 w-8 p-0 text-destructive hover:text-destructive/80" onClick={() => onUserAction("delete", user)}>
+                      <Trash2 className="h-4 w-4" />
+                    </ModernButton>
+                  </TooltipTrigger>
+                  <TooltipContent>Supprimer</TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
           );
         } : undefined
       }))}
