@@ -69,7 +69,7 @@ const About = () => {
       <div className="text-center max-w-4xl mx-auto space-y-6">
         <Badge variant="outline" className="px-4 py-2 bg-white/5 border-white/20 text-white">
           <Building2 className="h-4 w-4 mr-2" />
-          À Propos de NEXUS
+          À Propos d'ADCA
         </Badge>
         <h1 className="text-4xl md:text-5xl font-bold text-white">
           La Première Plateforme Africaine pour le
@@ -88,7 +88,7 @@ const About = () => {
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-white">Notre Mission</h2>
               <p className="text-white/70 leading-relaxed">
-                La Plateforme NEXUS vise à créer un guichet unique panafricain pour la collaboration,
+                La Plateforme ADCA vise à créer un guichet unique panafricain pour la collaboration,
                 l'innovation et la mutualisation des ressources dans le domaine du Service Universel 
                 des Télécommunications.
               </p>
@@ -144,7 +144,7 @@ const About = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <Users className="h-5 w-5 text-[hsl(var(--nx-cyan))]" />
-              Comité de Pilotage NEXUS
+              Comité de Pilotage ADCA
             </CardTitle>
             <CardDescription className="text-white/60">
               Structure de gouvernance et prise de décision

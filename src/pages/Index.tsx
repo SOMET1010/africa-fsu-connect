@@ -8,6 +8,7 @@ import { HomePartnersBlock } from "@/components/home/HomePartnersBlock";
 import { HomeMessagesBlock } from "@/components/home/HomeMessagesBlock";
 import { HomeTrustBadge } from "@/components/home/HomeTrustBadge";
 import { HomeTrustSection } from "@/components/home/HomeTrustSection";
+import { HomeMemberMapBlock } from "@/components/home/HomeMemberMapBlock";
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import Footer from "@/components/layout/Footer";
 
@@ -30,6 +31,7 @@ const Index = () => {
         {/* Dynamic Content Blocks */}
         <HomeHeroBlock />
         <HomeTrustBadge />
+        <HomeMemberMapBlock />
         <HomeFeaturesBlock />
         <HomeTrustSection />
         <HomeMessagesBlock />

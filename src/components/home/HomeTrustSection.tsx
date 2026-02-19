@@ -32,7 +32,7 @@ export const HomeTrustSection = () => (
           Sécurité et Protection des données
         </h2>
         <p className="text-white/80 max-w-2xl mx-auto">
-          La plateforme NEXUS met en œuvre les standards les plus élevés pour protéger vos données et garantir la conformité réglementaire.
+          La plateforme ADCA met en œuvre les standards les plus élevés pour protéger vos données et garantir la conformité réglementaire.
         </p>
       </div>
 
