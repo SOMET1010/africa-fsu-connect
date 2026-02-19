@@ -28,9 +28,9 @@ export const AdminStatsGrid = ({ stats }: AdminStatsGridProps) => {
                   <span className="text-2xl font-bold text-foreground">
                     <AnimatedCounter value={stat.value} />
                   </span>
-                  <Badge variant="secondary" className="text-xs">
+                  <span className="text-xs font-medium text-emerald-500">
                     {stat.description}
-                  </Badge>
+                  </span>
                 </div>
               </div>
               <div className={`p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors ${stat.color}`}>

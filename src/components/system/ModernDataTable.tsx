@@ -147,10 +147,10 @@ export function ModernDataTable({
       )}
 
       {/* Search and Stats */}
-      <GlassCard variant="subtle" className="p-4">
+      <div className="border-b border-border/30 pb-4">
         <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
           <div className="flex items-center gap-4 flex-1">
-            <div className="relative flex-1 max-w-sm">
+            <div className="relative flex-1 max-w-xs">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder={searchPlaceholder}
@@ -177,7 +177,7 @@ export function ModernDataTable({
             </Badge>
           </div>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Table */}
       <ModernCard variant="glass">
