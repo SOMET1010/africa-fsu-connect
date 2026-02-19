@@ -9,6 +9,7 @@ import { HomeMessagesBlock } from "@/components/home/HomeMessagesBlock";
 import { HomeTrustBadge } from "@/components/home/HomeTrustBadge";
 import { HomeTrustSection } from "@/components/home/HomeTrustSection";
 import { HomeMemberMapBlock } from "@/components/home/HomeMemberMapBlock";
+import { AdminLocaleConsistencyAlert } from "@/components/home/AdminLocaleConsistencyAlert";
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import Footer from "@/components/layout/Footer";
 
@@ -27,6 +28,7 @@ const Index = () => {
       {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col">
         <PublicHeader />
+        <AdminLocaleConsistencyAlert />
 
         {/* Dynamic Content Blocks */}
         <HomeHeroBlock />
