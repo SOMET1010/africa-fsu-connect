@@ -1,25 +1,38 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Globe, ArrowRight } from "lucide-react";
+import { Globe, ArrowRight, Users, FolderOpen, TrendingUp } from "lucide-react";
 import { useAfricanCountries } from "@/hooks/useCountries";
 import { Country } from "@/services/countriesService";
 import { cn } from "@/lib/utils";
 import { useDirection } from "@/hooks/useDirection";
 import { HomeMemberMap } from "@/components/home/HomeMemberMap";
-import { ACTIVITY_LEVELS } from "@/components/map/activityData";
+import { ACTIVITY_LEVELS, type MapMode, type ActivityLevel, getCountryActivity } from "@/components/map/activityData";
 
-const LEGEND_ITEMS = [
-  { level: 'high' as const, label: 'Très actif' },
-  { level: 'medium' as const, label: 'Membre' },
-  { level: 'onboarding' as const, label: 'En intégration' },
-  { level: 'observer' as const, label: 'Observateur' },
+const LEGEND_ITEMS: { level: ActivityLevel; label: string }[] = [
+  { level: 'high', label: 'Très actif' },
+  { level: 'medium', label: 'Membre' },
+  { level: 'onboarding', label: 'En intégration' },
+  { level: 'observer', label: 'Observateur' },
+];
+
+const MODE_OPTIONS: { mode: MapMode; label: string; icon: typeof Users }[] = [
+  { mode: 'members', label: 'Membres', icon: Users },
+  { mode: 'projects', label: 'Projets', icon: FolderOpen },
+  { mode: 'trends', label: 'Tendances', icon: TrendingUp },
 ];
 
 export function HomeMemberMapBlock() {
   const { data: countries = [], isLoading } = useAfricanCountries();
   const { isRTL } = useDirection();
+  const [activeMode, setActiveMode] = useState<MapMode>('members');
 
   const handleCountryClick = (_country: Country) => {};
+
+  // Count countries per level
+  const countByLevel = (level: ActivityLevel): number => {
+    return countries.filter((c) => getCountryActivity(c.code).level === level).length;
+  };
 
   return (
     <section className="py-16 animate-fade-in" style={{ contentVisibility: 'auto' }}>
@@ -37,9 +50,28 @@ export function HomeMemberMapBlock() {
           </p>
         </div>
 
+        {/* Filter bar */}
+        <div className="flex items-center justify-center gap-2 mb-4">
+          {MODE_OPTIONS.map(({ mode, label, icon: Icon }) => (
+            <button
+              key={mode}
+              onClick={() => setActiveMode(mode)}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-all",
+                activeMode === mode
+                  ? "bg-[hsl(var(--nx-gold))]/20 text-[hsl(var(--nx-gold))] border border-[hsl(var(--nx-gold))]/40"
+                  : "bg-white/5 text-white/50 border border-white/10 hover:bg-white/10 hover:text-white/70"
+              )}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {label}
+            </button>
+          ))}
+        </div>
+
         <div
           className="relative rounded-2xl overflow-hidden border border-[hsl(var(--nx-gold))]/20 bg-[hsl(var(--nx-night))]"
-          style={{ height: 'clamp(350px, 50vw, 500px)' }}
+          style={{ height: 'clamp(380px, 55vw, 520px)' }}
         >
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -49,10 +81,11 @@ export function HomeMemberMapBlock() {
               </div>
             </div>
           ) : (
-            <HomeMemberMap countries={countries} onCountryClick={handleCountryClick} />
+            <HomeMemberMap countries={countries} onCountryClick={handleCountryClick} mode={activeMode} />
           )}
         </div>
 
+        {/* Legend with counts */}
         <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-5">
           {LEGEND_ITEMS.map(({ level, label }) => (
             <div key={level} className="flex items-center gap-2">
@@ -63,7 +96,10 @@ export function HomeMemberMapBlock() {
                   backgroundColor: `${ACTIVITY_LEVELS[level].color}33`,
                 }}
               />
-              <span className="text-xs text-white/60">{label}</span>
+              <span className="text-xs text-white/60">
+                {label}
+                <span className="ml-1 text-white/40">({countByLevel(level)})</span>
+              </span>
             </div>
           ))}
         </div>
@@ -72,7 +108,7 @@ export function HomeMemberMapBlock() {
           <Button
             asChild
             variant="outline"
-            className="border-white/20 text-white hover:bg-white/10 hover:text-white"
+            className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white shadow-lg"
           >
             <Link to="/network" className="inline-flex items-center gap-2">
               Explorer la carte complète
