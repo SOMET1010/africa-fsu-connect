@@ -16,11 +16,11 @@ export function HomeHeroBlock() {
 
   const hero = getBlock('hero');
 
-  const badge = (hero?.badge as string) || t('home.hero.badge') || 'Réseau SUTEL — Service Universel Africain';
-  const title = (hero?.title as string) || t('home.hero.title') || 'Ne laisser personne hors ligne';
-  const highlight = (hero?.subtitle_highlight as string) || t('home.hero.subtitle.highlight') || 'Service Universel';
-  const suffix = (hero?.subtitle_suffix as string) || t('home.hero.subtitle.suffix') || 'pour connecter les non-connectés';
-  const description = (hero?.description as string) || t('home.hero.description') || "Renforcer le service universel pour une connectivité numérique inclusive. Fournir un service universel performant pour réduire la fracture numérique.";
+  const badge = (hero?.badge as string) || t('home.hero.badge') || 'UAT Digital Connect Africa (ADCA)';
+  const title = (hero?.title as string) || t('home.hero.title') || 'Connecter l\'écosystème';
+  const highlight = (hero?.subtitle_highlight as string) || t('home.hero.subtitle.highlight') || 'numérique de l\'Afrique';
+  const suffix = (hero?.subtitle_suffix as string) || t('home.hero.subtitle.suffix') || '';
+  const description = (hero?.description as string) || t('home.hero.description') || "Plateforme panafricaine pour la coordination, l'innovation et la mutualisation des ressources du Service Universel des Télécommunications.";
   const ctaExplore = (hero?.cta_explore as string) || t('home.hero.cta.explore') || 'Explorer le réseau';
   const ctaSignup = (hero?.cta_signup as string) || t('home.hero.cta.signup') || "S'inscrire";
   const ctaLogin = (hero?.cta_login as string) || t('home.hero.cta.login') || 'Se connecter';

@@ -21,7 +21,7 @@ const Footer = () => {
           <div className="space-y-4">
             <div className={cn("flex items-center gap-3 group", isRTL && "flex-row-reverse")}>
               <div className="relative w-12 h-12 bg-gradient-to-br from-[hsl(var(--nx-gold))] via-[hsl(var(--nx-gold))]/80 to-[hsl(var(--nx-network))] rounded-xl flex items-center justify-center shadow-lg shadow-[hsl(var(--nx-gold))]/20">
-                <span className="text-[hsl(var(--nx-night))] font-bold text-sm">NEXUS</span>
+                <span className="text-[hsl(var(--nx-night))] font-bold text-sm">ADCA</span>
                 <Sparkles className="absolute -top-1 -right-1 h-3 w-3 text-[hsl(var(--nx-gold))] opacity-80" />
               </div>
               <div>

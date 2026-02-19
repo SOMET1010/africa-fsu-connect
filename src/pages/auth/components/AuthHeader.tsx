@@ -20,13 +20,13 @@ export const AuthHeader = () => {
       </div>
       
       <h1 className="text-4xl font-black text-white mb-2 font-poppins tracking-tight">
-        NEXUS
+        ADCA
       </h1>
       <p className="text-white/90 font-medium text-lg font-inter">
-        Plateforme panafricaine du Service Universel
+        Connecter l'écosystème numérique de l'Afrique
       </p>
       <p className="text-white/70 text-sm mt-2 font-inter tracking-wide">
-        UAT • ANSUT • Réseau SUTEL
+        UAT • ANSUT • Digital Connect Africa
       </p>
     </div>
   );

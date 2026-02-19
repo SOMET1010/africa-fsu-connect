@@ -30,7 +30,7 @@ export const UATCoordinationSection = () => {
                 </Badge>
                 
                 <h3 className="text-xl font-semibold text-white">
-                  {currentLanguage === 'en' ? 'UAT - SUTEL Network Coordination' : 'UAT - Coordination du Réseau SUTEL'}
+                  {currentLanguage === 'en' ? 'UAT - ADCA Network Coordination' : 'UAT - Coordination du Réseau ADCA'}
                 </h3>
                 
                 <p className="text-white/70 leading-relaxed">

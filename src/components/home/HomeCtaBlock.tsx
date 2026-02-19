@@ -13,7 +13,7 @@ export function HomeCtaBlock() {
   if (!content) return null;
 
   const kicker = content.kicker as string || 'Rejoignez-nous';
-  const title = content.title as string || 'Rejoignez le réseau SUTEL';
+  const title = content.title as string || 'Rejoignez ADCA';
   const subtitle = content.subtitle as string || '';
   const buttonLabel = content.button_label as string || 'Créer un compte';
   const buttonLink = content.button_link as string || '/auth';
