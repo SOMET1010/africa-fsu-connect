@@ -1,92 +1,96 @@
 
 
-# Corrections d'accessibilite et de qualite -- Audit Score 6.2/10
+# Tableau de bord utilisateur avec KPIs et activite recente
 
-Ce plan cible les problemes concrets et corrigeables identifies dans l'audit. Les faux positifs (backend inexistant, pages manquantes, formulaires non fonctionnels) ont deja ete demystifies dans l'analyse precedente.
+## Objectif
 
----
-
-## 1. Images sans attribut `alt` descriptif (Accessibilite WCAG 2.1)
-
-L'audit signale 18 images sans alt text. Apres verification du code :
-
-| Fichier | Probleme | Correction |
-|---|---|---|
-| `src/components/practices/PracticeCover.tsx` | `alt=""` sur les images de couverture | Ajouter un prop `altText` avec fallback `"Illustration de bonne pratique"` |
-| `src/components/admin/AdminLayout.tsx` | `AvatarImage src="/api/placeholder/32/32"` sans alt | Ajouter `alt="Avatar administrateur"` |
-| `src/components/layout/SimplifiedSidebar.tsx` | `AvatarImage` sans alt | Ajouter `alt="Photo de profil"` |
-| `src/components/layout/ModernSidebar.tsx` | `AvatarImage` sans alt | Ajouter `alt="Photo de profil"` |
-| `src/components/layout/AppSidebar.tsx` | `AvatarImage` sans alt | Ajouter `alt="Photo de profil"` |
-| `src/components/forum/ModernForumCard.tsx` | `AvatarImage` sans alt | Ajouter `alt={author.name}` |
+Transformer la page `/dashboard` pour offrir un veritable tableau de bord personnel avec des widgets KPI exploitant les donnees Supabase et un fil d'activite recente en temps reel.
 
 ---
 
-## 2. Contraste insuffisant (61 elements signales)
+## Architecture
 
-Les principaux coupables sont les textes `text-white/50`, `text-white/60`, `text-white/70` sur fond sombre. Le ratio WCAG AA exige 4.5:1 pour le texte normal.
-
-Corrections ciblees :
-
-| Fichier | Element | Avant | Apres |
-|---|---|---|---|
-| `PublicHeader.tsx` | Sous-titre "Digital Connect Africa" | `text-white/60` | `text-white/80` |
-| `HomePartnersBlock.tsx` | Titre section partenaires | `text-white/50` | `text-white/70` |
-| `HomePartnersBlock.tsx` | Noms partenaires | `text-white/75` | `text-white/90` |
-| `HomeMemberMapBlock.tsx` | Badge "Reseau continental" | `text-white/70` | `text-white/80` |
-| `HomeMemberMapBlock.tsx` | Description section | `text-white/70` | `text-white/80` |
-| `HomeTrustSection.tsx` | Descriptions piliers | `text-white/70` | `text-white/80` |
-| `HomeMessagesBlock.tsx` | Citations | `text-white/70` | `text-white/85` |
-| `HomeFeaturesBlock.tsx` | Descriptions features | `text-white/70` | `text-white/80` |
+Le dashboard existant (`NetworkDashboard`) est oriente "vue reseau". Nous allons le remplacer par un dashboard hybride qui combine :
+- Un hero d'accueil personnalise (existant : `DashboardHero`)
+- Une rangee de KPI cards connectees a Supabase
+- Un fil d'activite recente (soumissions, documents, evenements)
+- Des raccourcis vers les espaces de travail
 
 ---
 
-## 3. Navigation : regrouper pour reduire la charge cognitive
+## Fichiers modifies
 
-L'audit signale 7 items dans la navigation principale. Le menu "Projets" redirige vers une page protegee (login requis), ce qui est deroutant pour un visiteur.
+### 1. `src/hooks/useUserDashboardKPIs.ts` (nouveau)
 
-Correction : Retirer "Projets" du menu public (accessible uniquement apres connexion via le sidebar). Cela reduit le menu a 6 items.
+Hook dedie qui recupere les KPIs personnels de l'utilisateur connecte :
 
-| Fichier | Modification |
+- **Mes projets** : nombre de projets dans les agences dont l'utilisateur est membre
+- **Documents** : nombre total de documents
+- **Evenements a venir** : evenements futurs
+- **Soumissions** : nombre de soumissions de l'utilisateur
+- **Activite recente** : 8 dernieres activites (soumissions + documents) avec titre, date, type
+
+Chaque KPI inclut un indicateur de tendance (comparaison periode precedente).
+
+### 2. `src/components/dashboard/widgets/UserKPICards.tsx` (nouveau)
+
+Composant qui affiche 4 cartes KPI en grille responsive :
+- Design glassmorphism coherent avec le theme Nexus (fond sombre, bordures blanches/10)
+- Icones colorees, valeurs en grand, tendance en badge
+- Animation d'entree avec framer-motion
+- Etats de chargement (skeleton)
+
+### 3. `src/components/dashboard/widgets/UserRecentActivity.tsx` (nouveau)
+
+Fil d'activite recente affichant les 8 dernieres actions :
+- Timeline verticale avec points colores par type (soumission, document, evenement)
+- Nom de l'auteur, date relative, description
+- Bouton "Voir tout" renvoyant vers `/activity`
+- Design coherent avec `NetworkActivityWidget` existant
+
+### 4. `src/components/dashboard/NetworkDashboard.tsx` (modifie)
+
+Integration des nouveaux widgets dans le layout existant :
+- Ajout de `UserKPICards` entre le hero et la synthese reseau
+- Remplacement du widget `NetworkActivityWidget` par `UserRecentActivity` dans la grille
+- Conservation de la carte et des projets inspirants
+
+### 5. `src/pages/Dashboard.tsx` (inchange)
+
+Continue a rendre `NetworkDashboard` -- pas de modification necessaire.
+
+---
+
+## Donnees Supabase utilisees
+
+Toutes les tables existent deja, aucune migration requise :
+
+| Table | Donnee |
 |---|---|
-| `src/components/layout/PublicHeader.tsx` | Supprimer la ligne `{ path: "/projects", ... }` de `NAV_ITEMS` |
+| `agency_projects` | Nombre de projets |
+| `documents` | Nombre de documents |
+| `events` | Evenements a venir |
+| `submissions` | Soumissions utilisateur + activite recente |
+| `profiles` | Nom de l'auteur des activites |
 
 ---
 
-## 4. PracticeCover : alt text dynamique
+## Design
 
-Ajouter un prop optionnel `altText` au composant `PracticeCover` pour que les images de couverture aient un texte alternatif significatif.
-
-| Fichier | Modification |
-|---|---|
-| `src/components/practices/PracticeCover.tsx` | Ajouter prop `altText?: string`, utiliser `alt={altText \|\| "Illustration de bonne pratique"}` |
+- Theme Nexus existant : fond `nx-night`, cartes `bg-white/5`, bordures `border-white/10`
+- Couleurs KPI : bleu electrique (projets), or (documents), emeraude (evenements), violet (soumissions)
+- Responsive : 1 colonne mobile, 2 colonnes tablette, 4 colonnes desktop
+- Animations framer-motion avec delais progressifs
 
 ---
 
-## Resume des fichiers modifies
+## Resume
 
-| Fichier | Nature |
+| Action | Fichier |
 |---|---|
-| `src/components/practices/PracticeCover.tsx` | Alt text dynamique |
-| `src/components/admin/AdminLayout.tsx` | Alt sur AvatarImage |
-| `src/components/layout/SimplifiedSidebar.tsx` | Alt sur AvatarImage |
-| `src/components/layout/ModernSidebar.tsx` | Alt sur AvatarImage |
-| `src/components/layout/AppSidebar.tsx` | Alt sur AvatarImage |
-| `src/components/forum/ModernForumCard.tsx` | Alt sur AvatarImage |
-| `src/components/layout/PublicHeader.tsx` | Retirer "Projets" du menu public + contraste sous-titre |
-| `src/components/home/HomePartnersBlock.tsx` | Contraste textes |
-| `src/components/home/HomeMemberMapBlock.tsx` | Contraste textes |
-| `src/components/home/HomeTrustSection.tsx` | Contraste descriptions |
-| `src/components/home/HomeMessagesBlock.tsx` | Contraste citations |
-| `src/components/home/HomeFeaturesBlock.tsx` | Contraste descriptions |
+| Creer | `src/hooks/useUserDashboardKPIs.ts` |
+| Creer | `src/components/dashboard/widgets/UserKPICards.tsx` |
+| Creer | `src/components/dashboard/widgets/UserRecentActivity.tsx` |
+| Modifier | `src/components/dashboard/NetworkDashboard.tsx` |
 
-Total : 12 fichiers modifies, 0 dependances ajoutees.
-
-## Points hors perimetre (rappel)
-
-- **Badge Lovable** : Parametres projet > Hide Lovable Badge
-- **Backend/Auth** : Deja fonctionnel via Supabase (signalement faux positif)
-- **Pages manquantes** : Toutes implementees (signalement faux positif)
-- **Validation formulaires** : Deja implementee (email + force du mot de passe)
-- **Dashboard utilisateur** : Existe derriere l'authentification
-- **Carte interactive** : Version complete sur /map, version simplifiee en homepage volontairement
-
+Total : 3 fichiers crees, 1 fichier modifie, 0 migration SQL, 0 dependance ajoutee.
