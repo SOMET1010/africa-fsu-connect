@@ -232,14 +232,14 @@ const About = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-[hsl(var(--nx-cyan))]" />
-                  <a href="mailto:secretariat@atu-uat.org" className="text-white/80 hover:text-[hsl(var(--nx-gold))] transition-colors">
-                    secretariat@atu-uat.org
+                  <a href="mailto:secretariat@atuuat.africa" className="text-white/80 hover:text-[hsl(var(--nx-gold))] transition-colors">
+                    secretariat@atuuat.africa
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Globe className="h-5 w-5 text-[hsl(var(--nx-cyan))]" />
-                  <a href="https://platform.atu-uat.org" className="text-white/80 hover:text-[hsl(var(--nx-gold))] transition-colors">
-                    platform.atu-uat.org
+                  <a href="https://www.atuuat.africa" className="text-white/80 hover:text-[hsl(var(--nx-gold))] transition-colors">
+                    www.atuuat.africa
                   </a>
                 </div>
                 <div className="flex items-center gap-3">

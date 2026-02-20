@@ -86,7 +86,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm">
               <li>
                 <a 
-                  href="https://atu-uat.org" 
+                  href="https://www.atuuat.africa" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className={cn("group flex items-center text-white/60 hover:text-[hsl(var(--nx-gold))] transition-all duration-300", isRTL && "flex-row-reverse")}
@@ -145,10 +145,10 @@ const Footer = () => {
                   <Mail className="h-4 w-4 text-[hsl(var(--nx-gold))]" />
                 </div>
                 <a 
-                  href="mailto:secretariat@atu-uat.org" 
+                  href="mailto:secretariat@atuuat.africa" 
                   className="text-white/60 hover:text-[hsl(var(--nx-gold))] transition-colors duration-300"
                 >
-                  secretariat@atu-uat.org
+                  secretariat@atuuat.africa
                 </a>
               </div>
               <div className={cn("group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors duration-300", isRTL && "flex-row-reverse")}>
@@ -168,12 +168,12 @@ const Footer = () => {
                   <Globe className="h-4 w-4 text-[hsl(var(--nx-gold))]" />
                 </div>
                 <a 
-                  href="https://platform.atu-uat.org" 
+                  href="https://www.atuuat.africa" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-white/60 hover:text-[hsl(var(--nx-gold))] transition-colors duration-300"
                 >
-                  platform.atu-uat.org
+                  www.atuuat.africa
                 </a>
               </div>
             </div>

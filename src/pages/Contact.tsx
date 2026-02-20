@@ -52,8 +52,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="font-medium text-foreground">{t("contact.info.email") || "Email"}</p>
-                  <a href="mailto:secretariat@atu-uat.org" className="text-muted-foreground hover:text-[hsl(var(--nx-gold))] transition-colors">
-                    secretariat@atu-uat.org
+                  <a href="mailto:secretariat@atuuat.africa" className="text-muted-foreground hover:text-[hsl(var(--nx-gold))] transition-colors">
+                    secretariat@atuuat.africa
                   </a>
                 </div>
               </div>
@@ -83,8 +83,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="font-medium text-foreground">{t("contact.info.website") || "Site officiel"}</p>
-                  <a href="https://atu-uat.org" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[hsl(var(--nx-gold))] transition-colors">
-                    atu-uat.org
+                  <a href="https://www.atuuat.africa" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[hsl(var(--nx-gold))] transition-colors">
+                    www.atuuat.africa
                   </a>
                 </div>
               </div>

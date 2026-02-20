@@ -16,7 +16,7 @@ export function HomeHeroBlock() {
 
   const hero = getBlock('hero');
 
-  const badge = (hero?.badge as string) ?? t('home.hero.badge') ?? 'USF Universal Digital Connect (UDC)';
+  const badge = (hero?.badge as string) ?? t('home.hero.badge') ?? 'USF Digital Connect Africa';
   const title = (hero?.title as string) ?? t('home.hero.title') ?? 'Connecter l\'écosystème';
   const highlight = (hero?.subtitle_highlight as string) ?? t('home.hero.subtitle.highlight') ?? 'numérique de l\'Afrique';
   const suffix = (hero?.subtitle_suffix as string) ?? t('home.hero.subtitle.suffix') ?? '';
