@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "NEXUS Platform: The Future of African Telecommunications",
+    "title": "USF Universal Digital Connect: The Future of African Telecommunications",
     "subtitle": "A Revolutionary Solution",
     "description": "The platform that connects 55+ countries, manages 1100+ projects and transforms the telecommunications industry in Africa. Join the digital revolution uniting our continent.",
     "cta": {
@@ -19,7 +19,7 @@
   },
   "roi": {
     "title": "ROI Calculator",
-    "description": "Estimate your savings and gains with NEXUS",
+    "description": "Estimate your savings and gains with UDC",
     "inputs": {
       "currentCost": "Current Monthly Cost (€)",
       "employees": "Number of Employees",
@@ -33,7 +33,7 @@
   },
   "demo": {
     "title": "Interactive Demo",
-    "description": "Explore NEXUS's key features",
+    "description": "Explore UDC's key features",
     "modules": {
       "dashboard": "Dashboard",
       "analytics": "Advanced Analytics",

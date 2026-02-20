@@ -27,11 +27,11 @@ export function DashboardHero() {
             <div className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-[hsl(var(--nx-gold))]" />
               <span className="text-xs font-medium uppercase tracking-wider text-[hsl(var(--nx-gold))]">
-                Réseau NEXUS
+                USF Universal Digital Connect
               </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">
-              Bienvenue sur le Réseau NEXUS
+              Bienvenue sur USF Universal Digital Connect
             </h1>
             <p className="text-white/60 text-lg">
               Le réseau panafricain du Service Universel des Télécommunications
@@ -45,7 +45,7 @@ export function DashboardHero() {
 
         <div className="mt-6 flex items-center gap-2 text-sm text-white/50">
           <Users className="h-4 w-4" />
-          <span>Connecté avec les pays membres de la communauté SUTEL</span>
+          <span>Connecté avec les pays membres de la communauté UDC</span>
         </div>
       </div>
     </motion.div>
