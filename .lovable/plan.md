@@ -1,120 +1,113 @@
 
 
-# Plan : Renommer la plateforme en "USF Universal Digital Connect"
+# Plan : Renommage complet restant -- USF Universal Digital Connect (UDC)
 
-## Changement demande
+Le premier passage a couvert ~18 fichiers, mais il reste encore **~60+ fichiers** avec des mentions visibles par l'utilisateur de "ADCA", "NEXUS" ou "SUTEL" dans du texte en dur (hors noms de composants/variables techniques).
 
-Remplacer toutes les occurrences du nom actuel **"ADCA"** / **"UAT Digital Connect Africa"** par le nouveau nom definitif **"USF Universal Digital Connect"**.
+---
 
-L'acronyme devient **UDC** (au lieu de ADCA).
+## Perimetre des changements
 
-## Fichiers a modifier
+### Regle de remplacement
 
-### 1. Composant Logo central
-**`src/components/shared/NexusLogo.tsx`**
-- Ligne 128 : `ADCA` -> `UDC`
-- Ligne 132 : `UAT • Digital Connect Africa` -> `USF • Universal Digital Connect`
-- Ligne 148 : `ADCA` -> `UDC`
-- Ligne 152 : `UAT • Digital Connect Africa` -> `USF • Universal Digital Connect`
+| Ancien | Nouveau |
+|--------|---------|
+| ADCA | UDC |
+| UAT Digital Connect Africa | USF Universal Digital Connect |
+| SUTEL (dans les textes affichables) | UDC |
+| Réseau SUTEL / Réseau NEXUS | Réseau UDC |
+| plateforme SUTEL / plateforme NEXUS | plateforme UDC |
+| SUTEL Platform | UDC Platform |
+| SUTEL Nexus (config/placeholder) | USF Universal Digital Connect |
 
-### 2. Page d'authentification
-**`src/pages/auth/components/AuthHeader.tsx`**
-- Ligne 23 : `ADCA` -> `UDC`
-- Ligne 26 : `Connecter l'ecosysteme numerique de l'Afrique` (garde le slogan)
-- Ligne 29 : `UAT • ANSUT • Digital Connect Africa` -> `UAT • ANSUT • Universal Digital Connect`
+### Ce qui NE change PAS
 
-### 3. Traductions francaises
-**`src/i18n/translations/fr.json`** (environ 25 remplacements)
-- `"Réseau ADCA"` -> `"Réseau UDC"`
-- `"Plateforme ADCA"` -> `"Plateforme UDC"`
-- `"UAT Digital Connect Africa (ADCA)"` -> `"USF Universal Digital Connect (UDC)"`
-- `"ADCA Platform"` -> `"UDC Platform"`
-- `"Projets FSU/ADCA"` -> `"Projets FSU/UDC"`
-- `"Bienvenue dans ADCA"` -> `"Bienvenue dans UDC"`
-- `"réseau ADCA"` -> `"réseau UDC"`
-- `"Carte du Réseau ADCA"` -> `"Carte du Réseau UDC"`
-- `"footer.copyright"` : `"Plateforme ADCA"` -> `"Plateforme UDC"`
-- Toutes les autres mentions
+- Noms de fichiers/composants (NexusLogo, NexusCard, SutaChatbot, etc.)
+- Variables CSS (--nx-*)
+- Noms de fonctions/hooks (useNexusLayer, etc.)
+- Commentaires techniques (NEXUS_LAYER1_GUARD, blueprintGuards)
+- Champs metadata techniques (sutel_type dans la BDD)
+- Noms de clés i18n (feed.demo.sutel.country reste comme cle, seule la valeur change)
 
-### 4. Traductions anglaises
-**`src/i18n/translations/en.json`**
-- `"UAT Digital Connect Africa (ADCA)"` -> `"USF Universal Digital Connect (UDC)"`
+---
 
-### 5. Traductions arabes
-**`src/i18n/translations/ar.json`**
-- `"UAT Digital Connect Africa (ADCA)"` -> `"USF Universal Digital Connect (UDC)"`
+## Fichiers a modifier -- Groupe 1 : Pages (src/pages/)
 
-### 6. Traductions portugaises
-**`src/i18n/translations/pt.json`**
-- `"UAT Digital Connect Africa (ADCA)"` -> `"USF Universal Digital Connect (UDC)"`
+| Fichier | Mentions a remplacer |
+|---------|---------------------|
+| `SutaAssistant.tsx` | "plateforme ADCA" (x2), "base de données ADCA" |
+| `About.tsx` | "A Propos d'ADCA", "Plateforme ADCA", "Comité de Pilotage ADCA" |
+| `CountryProfile.tsx` | fallback "réseau SUTEL" |
+| `ConceptNote.tsx` | "Note conceptuelle SUTEL" (x3) |
+| `Community.tsx` | "réseau SUTEL" |
+| `Strategies.tsx` | fallback "réseau SUTEL" |
+| `CrossBorderCollaboration.tsx` | "réseau SUTEL" |
+| `MyContributions.tsx` | "réseau SUTEL" |
+| `AgencyDocuments.tsx` | "réseau SUTEL" |
+| `Coauthoring.tsx` | "Rapport Annuel SUTEL 2025" |
+| `Projects.tsx` | fallback "Réseau SUTEL" |
+| `legal/TermsOfUse.tsx` | "plateforme ADCA" (x3), "réseau ADCA" |
+| `admin/PlatformConfig.tsx` | "SUTEL Nexus" |
+| `admin/TranslationsExport.tsx` | "plateforme SUTEL" |
+| `admin/AdminDashboard.tsx` | "réseau NEXUS" |
 
-### 7. Page HTML
-**`index.html`**
-- Titre : `FSU - Plateforme de Collaboration` -> `USF Universal Digital Connect`
+## Fichiers a modifier -- Groupe 2 : Composants (src/components/)
 
-### 8. Mentions dans les pages
-**`src/pages/legal/PrivacyPolicy.tsx`**
-- `"ADCA (UAT Digital Connect Africa)"` -> `"UDC (USF Universal Digital Connect)"`
-- `"réseau ADCA"` -> `"réseau UDC"`
-- `"plateforme ADCA"` -> `"plateforme UDC"`
+| Fichier | Mentions a remplacer |
+|---------|---------------------|
+| `layout/Footer.tsx` | "ADCA" (badge logo) |
+| `home/HomeTrustSection.tsx` | "plateforme ADCA" |
+| `home/HomeMessagesBlock.tsx` | "plateforme ADCA", "d'ADCA" |
+| `network/UATCoordinationSection.tsx` | "ADCA Network Coordination", "Réseau ADCA" |
+| `dashboard/ImpactDashboard.tsx` | "Vue Réseau ADCA" |
+| `dashboard/widgets/DashboardMapWidget.tsx` | "Carte du Réseau SUTEL" |
+| `dashboard/widgets/MapWidget.tsx` | "Carte SUTEL", "Carte Interactive SUTEL", "Agences SUTEL" (texte label) |
+| `dashboard/components/ExecutiveSummary.tsx` | "réseau SUTEL" |
+| `dashboard/components/UpcomingEvents.tsx` | "Conférence Annuelle SUTEL" |
+| `assistant/SutaChatbot.tsx` | "Statistiques SUTEL", "plateforme SUTEL offre" (dans les reponses) |
+| `community/CommunityHero.tsx` | "SUTEL" |
+| `map/ActivityPanel.tsx` | "réseau SUTEL" |
+| `organizations/LeafletInteractiveMap.tsx` | "réseau SUTEL" (x2) |
+| `organizations/EnrichedAgencyCard.tsx` | "SUTEL" (badge label -- texte visible) |
+| `organizations/AgencyComparison.tsx` | "Type SUTEL", "SUTEL confirmees" |
+| `organizations/AdvancedGeolocation.tsx` | "Couverture SUTEL Afrique" |
+| `presentation/InteractiveDemoSection.tsx` | "plateforme SUTEL" |
+| `presentation/InteractiveRegionalMap.tsx` | "Présence SUTEL" |
+| `presentation/ROICalculator.tsx` | "SUTEL" (x5 dans les labels) |
+| `presentation/SocialProofSection.tsx` | "Directeur SUTEL", "SUTEL Platform" |
+| `projects/ProposeProjectCTA.tsx` | "réseau SUTEL" |
+| `projects/ProjectReports.tsx` | "FSU/SUTEL" |
+| `submit/ShareInitiativeHero.tsx` | "réseau SUTEL" |
+| `submit/ContributionSuccess.tsx` | "equipe SUTEL" |
+| `webinars/WebinarsHero.tsx` | "réseau NEXUS" |
+| `webinars/WebinarReplays.tsx` | "architecture NEXUS", "Equipe NEXUS" |
+| `shared/FloatingMapButton.tsx` | pas de texte visible (variable technique -- conserver) |
+| `admin/config/IdentitySection.tsx` | placeholder "SUTEL Nexus" et "sutel-nexus.org" |
+| `layout/AppSidebar.tsx` | fallback "NEXUS" |
 
-**`src/pages/Roadmap.tsx`**
-- `"l'aventure ADCA"` -> `"l'aventure UDC"`
+## Fichiers a modifier -- Groupe 3 : Utilitaires/Services
 
-**`src/pages/Auth.tsx`**
-- `"compte NEXUS"` -> `"compte UDC"`
-- `"communauté NEXUS"` -> `"communauté UDC"`
+| Fichier | Mentions a remplacer |
+|---------|---------------------|
+| `lib/advanced-presentation-export.ts` | "SUTEL PLATFORM", "Vision SUTEL Afrique", "sutel-presentation" (nom fichier export) |
+| `features/security/components/advanced/EnhancedWebAuthn.tsx` | rp.name "SUTEL Platform" |
+| `demo/services/demoExportService.ts` | "Plateforme SUTEL" |
+| `hooks/usePlatformConfig.ts` | localStorage key "sutel_platform_config" et nom export "sutel-config" (technique mais visible dans fichier telecharge) |
 
-### 9. Composants Dashboard
-**`src/components/dashboard/components/DashboardHero.tsx`**
-- `"Réseau NEXUS"` (x2) -> `"USF Universal Digital Connect"`
+## Fichiers a modifier -- Groupe 4 : Traductions manquantes
 
-**`src/components/dashboard/components/NetworkHero.tsx`**
-- `"Réseau NEXUS"` -> `"USF Universal Digital Connect"`
+Les fichiers JSON de traduction ont ete partiellement mis a jour. Il reste des **fallbacks en dur** dans les composants TSX qui referent encore a SUTEL/NEXUS. Ces fallbacks seront aussi mis a jour.
 
-### 10. Composant Chatbot
-**`src/components/assistant/SutaChatbot.tsx`**
-- `"plateforme SUTEL"` -> `"plateforme UDC"`
-- `"Aide SUTEL"` -> `"Aide UDC"`
-
-### 11. Landing page
-**`src/components/landing/PremiumHeroSection.tsx`**
-- `"Réseau NEXUS"` n'est pas en dur (utilise `t()`) - deja couvert par les traductions
-
-### 12. Sidebar / Navigation
-**`src/components/layout/SimplifiedSidebar.tsx`**
-- `"NEXUS"` (fallback organisation) -> `"UDC"`
-
-**`src/components/layout/AppSidebar.tsx`**
-- Pas de texte en dur, utilise NexusLogo - deja couvert
-
-### 13. Page presentation
-**`src/i18n/locales/fr/presentation.json`**
-- `"NEXUS Platform"` -> `"USF Universal Digital Connect"`
-- `"NEXUS"` -> `"UDC"` (dans les descriptions)
-
-**`src/i18n/locales/en/presentation.json`**
-- Idem
-
-### 14. Home CTA
-**`src/components/home/HomeCtaBlock.tsx`**
-- `"Rejoignez ADCA"` -> `"Rejoignez UDC"`
-
-## Ce qui ne change PAS
-
-- Les noms de fichiers et composants (`NexusLogo`, `NexusIcon`, etc.) restent inchanges pour eviter des refactors massifs sans valeur ajoutee
-- Les variables CSS (`--nx-*`) restent inchanges
-- Le SVG du logo reste identique visuellement
-- Les commentaires techniques (`NEXUS_LAYER1_GUARD`, `blueprintGuards`) restent inchanges
+---
 
 ## Resume
 
-| Categorie | Nombre de fichiers |
+| Categorie | Fichiers restants |
 |-----------|-------------------|
-| Composants UI | 8 |
-| Traductions JSON | 6 |
-| Pages | 3 |
-| HTML | 1 |
-| **Total** | **~18 fichiers** |
+| Pages TSX | ~15 |
+| Composants TSX | ~28 |
+| Services/Utils | ~4 |
+| **Total** | **~47 fichiers** |
 
-Toutes les mentions visibles par l'utilisateur de "ADCA", "Digital Connect Africa", "NEXUS" et "SUTEL" (dans les textes affichables) seront remplacees par **"USF Universal Digital Connect"** (nom complet) ou **"UDC"** (acronyme).
+Chaque fichier sera modifie avec des remplacements cibles (lov-line-replace) sur les lignes contenant du texte visible par l'utilisateur. Les identifiants techniques (noms de composants, hooks, cles i18n, variables CSS, metadata BDD) restent inchanges.
+
