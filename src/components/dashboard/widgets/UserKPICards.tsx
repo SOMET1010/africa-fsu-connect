@@ -1,7 +1,8 @@
-import { FolderKanban, FileText, Calendar, Send } from "lucide-react";
+import { FolderKanban, FileText, Calendar, Send, Download } from "lucide-react";
 import { motion } from "framer-motion";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { DashboardKPI } from "@/hooks/useUserDashboardKPIs";
 
@@ -22,6 +23,24 @@ const kpiConfig = [
   { key: "submissions" as const, icon: Send, color: "text-purple-400", bgGlow: "bg-purple-500/10" },
 ];
 
+function exportKPIsToCSV(kpis: UserKPICardsProps["kpis"]) {
+  if (!kpis) return;
+  const BOM = "\uFEFF";
+  const header = "Indicateur,Valeur,Tendance (%)";
+  const rows = (["projects", "documents", "events", "submissions"] as const).map((key) => {
+    const k = kpis[key];
+    return `"${k.label}",${k.value},${k.trend ?? "N/A"}`;
+  });
+  const csv = BOM + [header, ...rows].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `kpis_export_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export function UserKPICards({ kpis, loading }: UserKPICardsProps) {
   if (loading) {
     return (
@@ -40,43 +59,56 @@ export function UserKPICards({ kpis, loading }: UserKPICardsProps) {
   if (!kpis) return null;
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {kpiConfig.map(({ key, icon: Icon, color, bgGlow }, index) => {
-        const kpi = kpis[key];
-        return (
-          <motion.div
-            key={key}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.08 }}
-            className="p-5 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/20 transition-colors"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className={`p-2 rounded-xl ${bgGlow}`}>
-                <Icon className={`h-5 w-5 ${color}`} />
+    <div className="space-y-3">
+      <div className="flex justify-end">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => exportKPIsToCSV(kpis)}
+          className="text-white/60 hover:text-white"
+        >
+          <Download className="h-4 w-4 mr-1" />
+          Exporter
+        </Button>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {kpiConfig.map(({ key, icon: Icon, color, bgGlow }, index) => {
+          const kpi = kpis[key];
+          return (
+            <motion.div
+              key={key}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              className="p-5 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/20 transition-colors"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className={`p-2 rounded-xl ${bgGlow}`}>
+                  <Icon className={`h-5 w-5 ${color}`} />
+                </div>
+                {kpi.trend !== null && (
+                  <Badge
+                    variant="outline"
+                    className={`text-xs border-0 ${
+                      kpi.trend >= 0
+                        ? "bg-emerald-500/10 text-emerald-400"
+                        : "bg-red-500/10 text-red-400"
+                    }`}
+                  >
+                    {kpi.trend >= 0 ? "+" : ""}
+                    {kpi.trend}%
+                  </Badge>
+                )}
               </div>
-              {kpi.trend !== null && (
-                <Badge
-                  variant="outline"
-                  className={`text-xs border-0 ${
-                    kpi.trend >= 0
-                      ? "bg-emerald-500/10 text-emerald-400"
-                      : "bg-red-500/10 text-red-400"
-                  }`}
-                >
-                  {kpi.trend >= 0 ? "+" : ""}
-                  {kpi.trend}%
-                </Badge>
-              )}
-            </div>
-            <AnimatedCounter
-              value={kpi.value}
-              className="text-2xl text-white"
-            />
-            <p className="text-sm text-white/60 mt-1">{kpi.label}</p>
-          </motion.div>
-        );
-      })}
+              <AnimatedCounter
+                value={kpi.value}
+                className="text-2xl text-white"
+              />
+              <p className="text-sm text-white/60 mt-1">{kpi.label}</p>
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 }
