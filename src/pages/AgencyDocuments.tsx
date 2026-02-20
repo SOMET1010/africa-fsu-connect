@@ -127,7 +127,7 @@ const AgencyDocuments = () => {
               Bibliothèque des Agences
             </h1>
             <p className="text-muted-foreground mt-1">
-              Documents partagés entre les agences du réseau SUTEL
+              Documents partagés entre les agences du réseau UDC
             </p>
           </div>
           <Button onClick={() => setUploadOpen(true)} disabled={!selectedAgency}>

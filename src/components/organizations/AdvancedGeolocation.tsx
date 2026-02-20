@@ -160,7 +160,7 @@ export const AdvancedGeolocation = ({ agencies, onAgencySelect }: AdvancedGeoloc
               {/* Simulated Map Interface */}
               <div className="absolute inset-0 opacity-20">
                 <div className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm rounded-lg p-2">
-                  <div className="text-xs font-medium">Couverture SUTEL Afrique</div>
+                  <div className="text-xs font-medium">Couverture UDC Afrique</div>
                 </div>
                 
                 {/* Layer indicators */}
@@ -225,7 +225,7 @@ export const AdvancedGeolocation = ({ agencies, onAgencySelect }: AdvancedGeoloc
 
               <div className="text-center text-muted-foreground">
                 <Globe className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Carte interactive des SUTEL africaines</p>
+                <p className="text-sm">Carte interactive des agences UDC africaines</p>
                 <p className="text-xs opacity-75">Cliquez sur les marqueurs pour plus de détails</p>
               </div>
             </div>

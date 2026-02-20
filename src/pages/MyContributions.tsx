@@ -45,7 +45,7 @@ export const MyContributions = () => {
           badge="Mes Contributions"
           badgeIcon={FileText}
           title="Suivi de vos Soumissions"
-          subtitle="Suivez l'état de vos soumissions au réseau SUTEL"
+          subtitle="Suivez l'état de vos soumissions au réseau UDC"
           ctaLabel="Nouvelle contribution"
           ctaIcon={Plus}
           onCtaClick={() => navigate('/submit')}

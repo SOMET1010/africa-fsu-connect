@@ -38,11 +38,11 @@ export function ROICalculator() {
     const timeWasteCost = (employees * timeSpentMonthly * averageSalary) / 160; // 160h/mois
     const currentMonthlyCosts = monthlyOpCosts + timeWasteCost;
 
-    // Coûts avec SUTEL (réduction de 60% des coûts opérationnels + 70% de temps économisé)
+    // Coûts avec UDC (réduction de 60% des coûts opérationnels + 70% de temps économisé)
     const newOpCosts = monthlyOpCosts * 0.4;
     const newTimeWaste = timeWasteCost * 0.3;
-    const sutelMonthlyCost = employees * 15; // 15$ par utilisateur/mois
-    const newMonthlyCosts = newOpCosts + newTimeWaste + sutelMonthlyCost;
+    const udcMonthlyCost = employees * 15; // 15$ par utilisateur/mois
+    const newMonthlyCosts = newOpCosts + newTimeWaste + udcMonthlyCost;
 
     const monthlySavings = currentMonthlyCosts - newMonthlyCosts;
     const annualSavings = monthlySavings * 12;
@@ -78,7 +78,7 @@ export function ROICalculator() {
           Calculateur ROI Personnalisé
         </motion.h2>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Découvrez les économies réelles que SUTEL peut générer pour votre organisation
+          Découvrez les économies réelles que UDC peut générer pour votre organisation
         </p>
       </div>
 
@@ -184,7 +184,7 @@ export function ROICalculator() {
                       <BarChart
                         data={[
                           { name: 'Système actuel', value: metrics.currentCosts },
-                          { name: 'Avec SUTEL', value: metrics.newCosts }
+                          { name: 'Avec UDC', value: metrics.newCosts }
                         ]}
                       >
                         <CartesianGrid strokeDasharray="3 3" />
@@ -265,7 +265,7 @@ export function ROICalculator() {
                   </div>
                   
                   <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/10 rounded-lg">
-                    <span className="font-medium">Coûts avec SUTEL</span>
+                    <span className="font-medium">Coûts avec UDC</span>
                     <Badge variant="secondary" className="bg-green-100 text-green-800">
                       ${Math.round(metrics.newCosts).toLocaleString()}
                     </Badge>
@@ -282,7 +282,7 @@ export function ROICalculator() {
                           Excellent potentiel d'économies !
                         </div>
                         <div className="text-sm text-green-700 dark:text-green-500">
-                          Votre organisation bénéficierait grandement de SUTEL
+                          Votre organisation bénéficierait grandement de UDC
                         </div>
                       </div>
                     </div>

@@ -95,7 +95,7 @@ export function InteractiveDemoSection() {
         <Badge variant="secondary">Démonstration Interactive</Badge>
         <h2 className="text-4xl font-bold">Explorez les Modules en Action</h2>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Découvrez la plateforme SUTEL à travers des démonstrations guidées et interactives.
+          Découvrez la plateforme UDC à travers des démonstrations guidées et interactives.
         </p>
       </div>
 

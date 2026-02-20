@@ -44,7 +44,7 @@ export const CommunityHero = ({ totalCountries, totalCommunities }: CommunityHer
               <span className="bg-gradient-to-r from-white via-[hsl(var(--nx-gold))] to-white bg-clip-text text-transparent">
                 Linguistiques
               </span>{" "}
-              SUTEL
+              UDC
             </motion.h1>
             
             <motion.p

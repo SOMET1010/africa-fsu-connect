@@ -33,7 +33,7 @@ const SutaAssistant = () => {
     {
       id: '1',
       role: 'assistant',
-      content: "Bonjour ! Je suis SUTA, votre assistant IA dédié à la plateforme ADCA. Je peux vous aider avec :\n\n• **Recherche de projets** - Trouvez des projets FSU par pays ou thématique\n• **Statistiques** - Obtenez des données sur le service universel\n• **Réglementation** - Consultez les cadres réglementaires\n• **Support** - Répondre à vos questions sur la plateforme\n\nComment puis-je vous aider aujourd'hui ?",
+      content: "Bonjour ! Je suis SUTA, votre assistant IA dédié à la plateforme UDC. Je peux vous aider avec :\n\n• **Recherche de projets** - Trouvez des projets FSU par pays ou thématique\n• **Statistiques** - Obtenez des données sur le service universel\n• **Réglementation** - Consultez les cadres réglementaires\n• **Support** - Répondre à vos questions sur la plateforme\n\nComment puis-je vous aider aujourd'hui ?",
       timestamp: new Date()
     }
   ]);
@@ -45,7 +45,7 @@ const SutaAssistant = () => {
     { label: "Projets actifs", icon: FileText, query: "Quels sont les projets FSU actifs en Afrique de l'Ouest ?" },
     { label: "Statistiques", icon: BarChart3, query: "Montre-moi les statistiques de couverture par région" },
     { label: "Réglementation", icon: Globe, query: "Quelles sont les principales réglementations FSU ?" },
-    { label: "Aide", icon: HelpCircle, query: "Comment utiliser la plateforme ADCA ?" }
+    { label: "Aide", icon: HelpCircle, query: "Comment utiliser la plateforme UDC ?" }
   ];
 
   const languages = [
@@ -80,7 +80,7 @@ const SutaAssistant = () => {
       const responses: Record<string, string> = {
         'projets': "Actuellement, nous avons **127 projets actifs** à travers l'Afrique. Les principales catégories sont :\n\n• Connectivité rurale (45 projets)\n• Infrastructures backbone (32 projets)\n• E-éducation (28 projets)\n• E-santé (22 projets)\n\nVoulez-vous plus de détails sur une catégorie spécifique ?",
         'statistiques': "Voici les statistiques clés du Service Universel en Afrique :\n\n📊 **Couverture**: 68% de la population\n🌍 **Pays actifs**: 54\n💰 **Budget total**: $2.4 milliards USD\n📡 **Sites connectés**: 12,847\n\nQuelle métrique souhaitez-vous approfondir ?",
-        'default': "Je comprends votre question. Laissez-moi rechercher les informations pertinentes dans notre base de données ADCA...\n\nPour le moment, je suis en mode démonstration. Une fois connecté à l'API Lovable AI, je pourrai vous fournir des réponses précises basées sur les données réelles de la plateforme."
+        'default': "Je comprends votre question. Laissez-moi rechercher les informations pertinentes dans notre base de données UDC...\n\nPour le moment, je suis en mode démonstration. Une fois connecté à l'API Lovable AI, je pourrai vous fournir des réponses précises basées sur les données réelles de la plateforme."
       };
 
       const responseKey = inputValue.toLowerCase().includes('projet') ? 'projets' 
@@ -111,7 +111,7 @@ const SutaAssistant = () => {
           badge="Assistant IA"
           badgeIcon={Bot}
           title="SUTA - Votre Assistant Intelligent"
-          subtitle="Posez vos questions sur le Service Universel, les projets FSU et la plateforme ADCA"
+          subtitle="Posez vos questions sur le Service Universel, les projets FSU et la plateforme UDC"
         />
 
         {/* Language selector */}

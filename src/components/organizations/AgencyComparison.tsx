@@ -231,10 +231,10 @@ export const AgencyComparison = ({ agencies, isOpen, onClose }: AgencyComparison
 
                   {/* SUTEL Type */}
                   <ComparisonField
-                    label="Type SUTEL"
+                    label="Type UDC"
                     icon={Building2}
                     values={selectedAgencies.map(a => 
-                      getMetadataValue(a, 'sutel_type') ? "SUTEL" : "Non SUTEL"
+                      getMetadataValue(a, 'sutel_type') ? "UDC" : "Non UDC"
                     )}
                   />
                 </div>
@@ -259,7 +259,7 @@ export const AgencyComparison = ({ agencies, isOpen, onClose }: AgencyComparison
                     </p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">SUTEL confirmées</p>
+                    <p className="text-muted-foreground">UDC confirmées</p>
                     <p className="font-medium">
                       {selectedAgencies.filter(a => 
                         getMetadataValue(a, 'sutel_type')

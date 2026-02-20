@@ -36,7 +36,7 @@ const defaultEvents: UpcomingEvent[] = [
   },
   {
     id: "3",
-    title: "Conférence Annuelle SUTEL",
+    title: "Conférence Annuelle UDC",
     date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     type: "conference",
     isVirtual: false

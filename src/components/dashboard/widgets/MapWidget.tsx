@@ -30,7 +30,7 @@ export const MapWidget = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="h-5 w-5" />
-            Carte SUTEL
+            Carte UDC
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -47,7 +47,7 @@ export const MapWidget = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Globe className="h-5 w-5 text-primary" />
-          Carte Interactive SUTEL
+          Carte Interactive UDC
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -57,7 +57,7 @@ export const MapWidget = () => {
               <Zap className="h-4 w-4 text-primary" />
             </div>
             <div className="text-2xl font-bold">{sutelAgencies.length}</div>
-            <div className="text-xs text-muted-foreground">Agences SUTEL</div>
+            <div className="text-xs text-muted-foreground">Agences UDC</div>
           </div>
           <div className="text-center p-3 bg-green-50 dark:bg-green-900/10 rounded-lg">
             <div className="flex items-center justify-center gap-1 mb-1">
@@ -98,7 +98,7 @@ export const MapWidget = () => {
 
         <div className="pt-2 border-t">
           <p className="text-xs text-muted-foreground">
-            Visualisez la répartition géographique des agences SUTEL à travers l'Afrique
+            Visualisez la répartition géographique des agences UDC à travers l'Afrique
           </p>
         </div>
       </CardContent>

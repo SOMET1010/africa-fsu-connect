@@ -4,7 +4,7 @@ import { PlatformConfiguration, DEFAULT_PLATFORM_CONFIG } from '@/types/platform
 export const usePlatformConfig = () => {
   const [config, setConfig] = useState<PlatformConfiguration>(() => {
     // Charger depuis localStorage si disponible
-    const saved = localStorage.getItem('sutel_platform_config');
+    const saved = localStorage.getItem('udc_platform_config');
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -33,7 +33,7 @@ export const usePlatformConfig = () => {
     setIsSaving(true);
     try {
       // Sauvegarder dans localStorage
-      localStorage.setItem('sutel_platform_config', JSON.stringify(config));
+      localStorage.setItem('udc_platform_config', JSON.stringify(config));
       setLastSaved(new Date());
       return true;
     } catch (error) {
@@ -46,13 +46,13 @@ export const usePlatformConfig = () => {
 
   const resetConfig = useCallback(() => {
     setConfig(DEFAULT_PLATFORM_CONFIG);
-    localStorage.removeItem('sutel_platform_config');
+    localStorage.removeItem('udc_platform_config');
   }, []);
 
   const exportToJSON = useCallback(() => {
     const dataStr = JSON.stringify(config, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-    const exportName = `sutel-config-${new Date().toISOString().split('T')[0]}.json`;
+    const exportName = `udc-config-${new Date().toISOString().split('T')[0]}.json`;
     
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);

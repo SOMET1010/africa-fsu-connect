@@ -18,12 +18,12 @@ const TermsOfUse = () => (
       <div className="prose prose-invert prose-sm max-w-none space-y-8 text-white/80">
         <section>
           <h2 className="text-xl font-semibold text-white">1. Objet</h2>
-          <p>Les présentes conditions d'utilisation régissent l'accès et l'utilisation de la plateforme ADCA (UAT Digital Connect Africa), un réseau numérique panafricain dédié à la coordination des Fonds de Service Universel (FSU) des télécommunications, opéré sous l'égide de l'Union Africaine des Télécommunications (UAT).</p>
+          <p>Les présentes conditions d'utilisation régissent l'accès et l'utilisation de la plateforme UDC (USF Universal Digital Connect), un réseau numérique panafricain dédié à la coordination des Fonds de Service Universel (FSU) des télécommunications, opéré sous l'égide de l'Union Africaine des Télécommunications (UAT).</p>
         </section>
 
         <section>
           <h2 className="text-xl font-semibold text-white">2. Accès à la plateforme</h2>
-          <p>L'accès à la plateforme est réservé aux représentants des organismes membres du réseau ADCA, aux partenaires institutionnels et aux personnes dûment autorisées. L'inscription requiert la fourniture d'informations exactes et vérifiables.</p>
+          <p>L'accès à la plateforme est réservé aux représentants des organismes membres du réseau UDC, aux partenaires institutionnels et aux personnes dûment autorisées. L'inscription requiert la fourniture d'informations exactes et vérifiables.</p>
         </section>
 
         <section>
@@ -64,7 +64,7 @@ const TermsOfUse = () => (
 
         <section>
           <h2 className="text-xl font-semibold text-white">9. Sécurité des données</h2>
-          <p>La plateforme ADCA met en œuvre des mesures techniques avancées pour protéger les données des utilisateurs :</p>
+          <p>La plateforme UDC met en œuvre des mesures techniques avancées pour protéger les données des utilisateurs :</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Chiffrement de bout en bout des communications (TLS/SSL)</li>
             <li>Stockage sécurisé des données avec chiffrement au repos</li>

@@ -44,7 +44,7 @@ export async function exportToPDFAdvanced(
     
     pdf.setTextColor(255, 255, 255);
     pdf.setFontSize(32);
-    pdf.text('SUTEL PLATFORM', pageWidth / 2, pageHeight / 3, { align: 'center' });
+    pdf.text('UDC PLATFORM', pageWidth / 2, pageHeight / 3, { align: 'center' });
     
     pdf.setFontSize(18);
     pdf.text("L'Avenir des Télécommunications Africaines", pageWidth / 2, pageHeight / 2, { align: 'center' });
@@ -64,7 +64,7 @@ export async function exportToPDFAdvanced(
     pdf.text('Table des Matières', 20, 30);
 
     const sections = [
-      'Vision SUTEL Afrique',
+      'Vision UDC Afrique',
       'Impact Régional',
       'Calculateur ROI',
       'Démonstration Interactive',
@@ -126,7 +126,7 @@ export async function exportToPDFAdvanced(
       // Footer
       pdf.setFontSize(8);
       pdf.setTextColor(150, 150, 150);
-      pdf.text(`SUTEL Platform - ${date}`, 20, pageHeight - 10);
+      pdf.text(`UDC Platform - ${date}`, 20, pageHeight - 10);
       pdf.text(`Page ${i + 3}`, pageWidth - 30, pageHeight - 10);
     }
 
@@ -143,7 +143,7 @@ export async function exportToPDFAdvanced(
     onProgress?.({ current: 10, total: 10, status: 'Finalisation...' });
 
     // Save PDF
-    pdf.save(`sutel-presentation-${Date.now()}.pdf`);
+    pdf.save(`udc-presentation-${Date.now()}.pdf`);
 
   } catch (error) {
     logger.error('Error generating PDF', error);

@@ -20,16 +20,16 @@ export function SocialProofSection() {
   const testimonials = [
     {
       name: "Dr. Amadou Diallo",
-      position: "Directeur SUTEL Sénégal",
+      position: "Directeur UDC Sénégal",
       country: "Sénégal",
-      quote: "SUTEL Platform a révolutionné notre gestion des projets télécoms. +400% d'efficacité en 6 mois.",
+      quote: "UDC Platform a révolutionné notre gestion des projets télécoms. +400% d'efficacité en 6 mois.",
       rating: 5,
       savings: "2.3M$",
       timeframe: "6 mois"
     },
     {
       name: "Fatima Al-Hassan", 
-      position: "CTO SUTEL Nigeria",
+      position: "CTO UDC Nigeria",
       country: "Nigeria",
       quote: "La meilleure décision technologique de notre organisation. ROI de 300% dès la première année.",
       rating: 5,
@@ -38,7 +38,7 @@ export function SocialProofSection() {
     },
     {
       name: "Jean-Baptiste Kouadio",
-      position: "Président SUTEL Côte d'Ivoire", 
+      position: "Président UDC Côte d'Ivoire", 
       country: "Côte d'Ivoire",
       quote: "Simplicité d'usage exceptionnelle. Nos équipes ont adopté la plateforme en moins d'une semaine.",
       rating: 5,
@@ -59,7 +59,7 @@ export function SocialProofSection() {
       icon: Building2,
       metric: `${statsData?.globalStats.agencies || 0}+`,
       label: "Organisations",
-      description: "SUTELs et agences partenaires",
+      description: "Agences UDC et partenaires",
       color: "bg-green-500"
     },
     {

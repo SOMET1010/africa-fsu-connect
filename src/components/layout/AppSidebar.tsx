@@ -195,7 +195,7 @@ export function AppSidebar() {
                 {getUserDisplayName()}
               </p>
               <p className="text-xs text-sidebar-foreground/70 truncate">
-                {profile?.organization || "NEXUS"}
+                {profile?.organization || "UDC"}
               </p>
             </div>
           )}

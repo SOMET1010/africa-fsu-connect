@@ -50,7 +50,7 @@ const Coauthoring = () => {
     },
     {
       id: 3,
-      title: "Rapport Annuel SUTEL 2025",
+      title: "Rapport Annuel UDC 2025",
       type: "Rapport",
       status: "Finalisé",
       lastModified: "2026-01-25T16:45:00",

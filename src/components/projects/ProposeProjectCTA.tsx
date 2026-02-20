@@ -28,7 +28,7 @@ export function ProposeProjectCTA({ variant = 'light' }: ProposeProjectCTAProps)
             Vous avez un projet à partager ?
           </h3>
           <p className={`max-w-md ${isDark ? 'text-white/70' : 'text-muted-foreground'}`}>
-            Partagez votre initiative avec le réseau SUTEL et inspirez d'autres pays 
+            Partagez votre initiative avec le réseau UDC et inspirez d'autres pays 
             dans leur mission de connectivité universelle.
           </p>
         </div>

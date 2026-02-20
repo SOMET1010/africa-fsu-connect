@@ -22,7 +22,7 @@ interface ActivityItem {
 const recentActivities: ActivityItem[] = [
   { id: '1', type: 'project', title: 'Nouveau Backbone', description: 'Déploiement fibre initié au Sénégal (Zone Nord).', time: 'Il y a 2h', status: 'new' },
   { id: '2', type: 'document', title: 'Rapport publié', description: 'Guide des bonnes pratiques 5G et régulation.', time: 'Il y a 5h' },
-  { id: '3', type: 'member', title: 'Nouveau membre', description: 'ARCEP Congo a rejoint le réseau SUTEL.', time: 'Il y a 1j', status: 'new' },
+  { id: '3', type: 'member', title: 'Nouveau membre', description: 'ARCEP Congo a rejoint le réseau UDC.', time: 'Il y a 1j', status: 'new' },
   { id: '4', type: 'project', title: 'Projet complété', description: 'Couverture 4G Mali - Phase 1 terminée.', time: 'Il y a 2j' },
   { id: '5', type: 'document', title: 'Best practice', description: 'Télémédecine rurale - Côte d\'Ivoire.', time: 'Il y a 3j' },
   { id: '6', type: 'project', title: 'Maintenance', description: 'Mise à jour des nœuds de connexion (Lagos).', time: 'Il y a 4j' },

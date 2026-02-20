@@ -187,7 +187,7 @@ export const EnrichedAgencyCard = ({ agency, onViewProfile }: EnrichedAgencyCard
           
           {metadata?.sutel_type && (
             <Badge variant="default" className="text-xs bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
-              SUTEL
+              UDC
             </Badge>
           )}
           

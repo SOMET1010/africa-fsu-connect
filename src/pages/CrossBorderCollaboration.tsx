@@ -34,7 +34,7 @@ const CrossBorderCollaboration = () => {
         badge="Collaboration transfrontalière"
         badgeIcon={Handshake}
         title="Projets Inter-Agences"
-        subtitle="Initiatives collaboratives impliquant plusieurs pays du réseau SUTEL — connectivité, éducation, santé, agriculture et gouvernance."
+        subtitle="Initiatives collaboratives impliquant plusieurs pays du réseau UDC — connectivité, éducation, santé, agriculture et gouvernance."
         size="md"
       />
 

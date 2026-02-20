@@ -114,7 +114,7 @@ function ConceptNote() {
 
   const toMarkdown = useMemo(() => {
     const lines: string[] = [];
-    lines.push(`# ${data.title || "Note conceptuelle SUTEL"}`);
+    lines.push(`# ${data.title || "Note conceptuelle UDC"}`);
     if (data.subject) lines.push(`\n**Sujet / Problématique**: ${data.subject}`);
     if (data.context) lines.push(`\n## Contexte\n${data.context}`);
     if (data.objectives) lines.push(`\n## Objectifs\n${data.objectives}`);
@@ -140,7 +140,7 @@ function ConceptNote() {
   const jsonLd = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: data.title || "Note conceptuelle SUTEL",
+    headline: data.title || "Note conceptuelle UDC",
     about: data.subject || undefined,
     audience: data.audience || undefined,
     description: data.context?.slice(0, 150) || undefined,
@@ -292,7 +292,7 @@ function ConceptNote() {
             <GlassCard className="p-6 print:border-none">
               <h2 id="preview-title" className="text-lg font-semibold text-white mb-6">Aperçu</h2>
               <article className="prose prose-sm max-w-none prose-invert">
-                <h2 className="mb-2 text-[hsl(var(--nx-gold))]">{data.title || "Note conceptuelle SUTEL"}</h2>
+                <h2 className="mb-2 text-[hsl(var(--nx-gold))]">{data.title || "Note conceptuelle UDC"}</h2>
                 {data.subject && (
                   <p><strong>Sujet / Problématique:</strong> {data.subject}</p>
                 )}

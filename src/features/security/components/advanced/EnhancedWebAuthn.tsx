@@ -74,7 +74,7 @@ const EnhancedWebAuthn = () => {
       const publicKeyCredentialCreationOptions = {
         challenge: new Uint8Array(32),
         rp: {
-          name: "SUTEL Platform",
+          name: "UDC Platform",
           id: window.location.hostname,
         },
         user: {
