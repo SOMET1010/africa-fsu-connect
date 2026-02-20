@@ -27,7 +27,7 @@ const CTA_MAP: Record<string, string> = {
 };
 
 const FALLBACK_FEATURES = [
-  { icon: "Users", title: "54 Pays Membres", description: "Réseau panafricain des agences de régulation" },
+  { icon: "Users", title: "55 Pays Membres", description: "Réseau panafricain des agences de régulation" },
   { icon: "Network", title: "Projets FSU", description: "Partage d'expériences et bonnes pratiques" },
   { icon: "FileText", title: "Ressources", description: "Documentation et guides méthodologiques" },
 ];
