@@ -1,117 +1,92 @@
 
 
-# Plan de correction -- Audit approfondi Africa FSU Connect
+# Corrections d'accessibilite et de qualite -- Audit Score 6.2/10
 
-## Resume des problemes identifies et corrections proposees
-
-L'audit a revele plusieurs problemes concrets que nous pouvons corriger. Voici le plan d'action organise par priorite.
+Ce plan cible les problemes concrets et corrigeables identifies dans l'audit. Les faux positifs (backend inexistant, pages manquantes, formulaires non fonctionnels) ont deja ete demystifies dans l'analyse precedente.
 
 ---
 
-## 1. Incoherence de branding dans le CMS (CRITIQUE)
+## 1. Images sans attribut `alt` descriptif (Accessibilite WCAG 2.1)
 
-**Probleme** : Le badge hero dans la base de donnees CMS affiche "UAT Digital Connect Africa (ADCA)" en francais, tandis que les autres langues affichent "SUTEL Network". Le nom officiel est "USF Digital Connect Africa".
+L'audit signale 18 images sans alt text. Apres verification du code :
 
-**Correction** : Mettre a jour la table `homepage_content_blocks` pour le bloc `hero` :
-- FR : `badge` = "USF Digital Connect Africa"
-- EN : `badge` = "USF Digital Connect Africa"
-- PT : `badge` = "USF Digital Connect Africa"
-- AR : `badge` = "USF Digital Connect Africa"
+| Fichier | Probleme | Correction |
+|---|---|---|
+| `src/components/practices/PracticeCover.tsx` | `alt=""` sur les images de couverture | Ajouter un prop `altText` avec fallback `"Illustration de bonne pratique"` |
+| `src/components/admin/AdminLayout.tsx` | `AvatarImage src="/api/placeholder/32/32"` sans alt | Ajouter `alt="Avatar administrateur"` |
+| `src/components/layout/SimplifiedSidebar.tsx` | `AvatarImage` sans alt | Ajouter `alt="Photo de profil"` |
+| `src/components/layout/ModernSidebar.tsx` | `AvatarImage` sans alt | Ajouter `alt="Photo de profil"` |
+| `src/components/layout/AppSidebar.tsx` | `AvatarImage` sans alt | Ajouter `alt="Photo de profil"` |
+| `src/components/forum/ModernForumCard.tsx` | `AvatarImage` sans alt | Ajouter `alt={author.name}` |
 
-Le nom de marque ne se traduit pas.
+---
 
-| Fichier/Ressource | Action |
+## 2. Contraste insuffisant (61 elements signales)
+
+Les principaux coupables sont les textes `text-white/50`, `text-white/60`, `text-white/70` sur fond sombre. Le ratio WCAG AA exige 4.5:1 pour le texte normal.
+
+Corrections ciblees :
+
+| Fichier | Element | Avant | Apres |
+|---|---|---|---|
+| `PublicHeader.tsx` | Sous-titre "Digital Connect Africa" | `text-white/60` | `text-white/80` |
+| `HomePartnersBlock.tsx` | Titre section partenaires | `text-white/50` | `text-white/70` |
+| `HomePartnersBlock.tsx` | Noms partenaires | `text-white/75` | `text-white/90` |
+| `HomeMemberMapBlock.tsx` | Badge "Reseau continental" | `text-white/70` | `text-white/80` |
+| `HomeMemberMapBlock.tsx` | Description section | `text-white/70` | `text-white/80` |
+| `HomeTrustSection.tsx` | Descriptions piliers | `text-white/70` | `text-white/80` |
+| `HomeMessagesBlock.tsx` | Citations | `text-white/70` | `text-white/85` |
+| `HomeFeaturesBlock.tsx` | Descriptions features | `text-white/70` | `text-white/80` |
+
+---
+
+## 3. Navigation : regrouper pour reduire la charge cognitive
+
+L'audit signale 7 items dans la navigation principale. Le menu "Projets" redirige vers une page protegee (login requis), ce qui est deroutant pour un visiteur.
+
+Correction : Retirer "Projets" du menu public (accessible uniquement apres connexion via le sidebar). Cela reduit le menu a 6 items.
+
+| Fichier | Modification |
 |---|---|
-| Migration SQL | UPDATE `homepage_content_blocks` pour corriger les 4 badges linguistiques |
+| `src/components/layout/PublicHeader.tsx` | Supprimer la ligne `{ path: "/projects", ... }` de `NAV_ITEMS` |
 
 ---
 
-## 2. Statistiques incoherentes : "54 Pays" vs "55 pays membres"
+## 4. PracticeCover : alt text dynamique
 
-**Probleme** : Le badge de confiance dit "55 pays membres" mais la carte des features dit "54 Pays Membres". L'Union Africaine compte 55 Etats membres.
+Ajouter un prop optionnel `altText` au composant `PracticeCover` pour que les images de couverture aient un texte alternatif significatif.
 
-**Correction** : Mettre a jour le fallback du bloc features pour afficher "55" au lieu de "54".
-
-| Fichier | Action |
+| Fichier | Modification |
 |---|---|
-| `src/components/home/HomeFeaturesBlock.tsx` | Changer "54 Pays Membres" en "55 Pays Membres" dans `FALLBACK_FEATURES` |
-
----
-
-## 3. Hero : texte du 3eme bouton invisible
-
-**Probleme** : Le bouton "Se connecter" dans le hero a un style `border-white/30 text-white` mais apparait presque invisible sur le screenshot (texte tres pale).
-
-**Correction** : Augmenter l'opacite du texte et de la bordure du 3eme bouton CTA.
-
-| Fichier | Action |
-|---|---|
-| `src/components/home/HomeHeroBlock.tsx` | Changer `border-white/30 text-white` en `border-white/50 text-white bg-white/10` (comme le 2eme bouton) |
-
----
-
-## 4. Navigation "Projets partagés" -- lien trompeur
-
-**Probleme** : Le menu affiche "Projets partagés" mais le lien pointe vers `/projects` qui est une route protegee. Un visiteur non connecte sera redirige vers la page d'authentification.
-
-**Correction** : Renommer "Projets partagés" en "Projets" pour correspondre au contenu.
-
-| Fichier | Action |
-|---|---|
-| `src/components/layout/PublicHeader.tsx` | Changer le label de "Projets" en "Projets partagés" dans `NAV_ITEMS` (deja correct, le fallback affiche "Projets") -- en realite, verifier la cle i18n `nav.projects` |
-
----
-
-## 5. Nom de la plateforme dans le CTA
-
-**Probleme** : Le bloc CTA affiche "Rejoignez le reseau SUTEL" alors que le nom officiel est "USF Digital Connect Africa" ou "UDC".
-
-**Correction** : Mettre a jour le contenu CMS du bloc `cta` pour remplacer "SUTEL" par "UDC".
-
-| Fichier/Ressource | Action |
-|---|---|
-| Migration SQL | UPDATE `homepage_content_blocks` pour le bloc `cta` : titre = "Rejoignez le reseau UDC" |
-
----
-
-## 6. Accessibilite : attribut `lang` du HTML
-
-**Probleme** : Le fichier `index.html` a `lang="en"` alors que la langue par defaut est le francais.
-
-**Correction** : Changer `lang="en"` en `lang="fr"` puisque le contenu par defaut est en francais.
-
-| Fichier | Action |
-|---|---|
-| `index.html` | Changer `lang="en"` en `lang="fr"` |
-
----
-
-## 7. Titre de la page dans l'onglet du navigateur
-
-**Probleme** : Le titre HTML est "USF Digital Connect Africa" -- c'est correct mais il manque le "| Plateforme panafricaine" pour le SEO.
-
-**Correction** : Pas de modification necessaire, le titre actuel est acceptable.
-
----
-
-## 8. Points non corrigeables dans ce cycle
-
-Les elements suivants sont notes mais ne font pas partie de ce plan :
-
-- **Badge Lovable visible** : Se desactive dans les parametres du projet Lovable (Settings > Hide Lovable Badge)
-- **Fonctionnalites non accessibles** : Les modules (E-Learning, Forum, Carte interactive, etc.) existent dans le code mais sont derriere l'authentification -- c'est voulu
-- **Zoom carte limité** : La carte de la page d'accueil est volontairement simplifiee ; la carte complete est accessible via "/network"
+| `src/components/practices/PracticeCover.tsx` | Ajouter prop `altText?: string`, utiliser `alt={altText \|\| "Illustration de bonne pratique"}` |
 
 ---
 
 ## Resume des fichiers modifies
 
-| Fichier | Modification |
+| Fichier | Nature |
 |---|---|
-| Migration SQL | Corriger branding badge hero (4 langues) + titre CTA |
-| `src/components/home/HomeFeaturesBlock.tsx` | 54 -> 55 pays |
-| `src/components/home/HomeHeroBlock.tsx` | Opacite 3eme bouton CTA |
-| `index.html` | `lang="en"` -> `lang="fr"` |
+| `src/components/practices/PracticeCover.tsx` | Alt text dynamique |
+| `src/components/admin/AdminLayout.tsx` | Alt sur AvatarImage |
+| `src/components/layout/SimplifiedSidebar.tsx` | Alt sur AvatarImage |
+| `src/components/layout/ModernSidebar.tsx` | Alt sur AvatarImage |
+| `src/components/layout/AppSidebar.tsx` | Alt sur AvatarImage |
+| `src/components/forum/ModernForumCard.tsx` | Alt sur AvatarImage |
+| `src/components/layout/PublicHeader.tsx` | Retirer "Projets" du menu public + contraste sous-titre |
+| `src/components/home/HomePartnersBlock.tsx` | Contraste textes |
+| `src/components/home/HomeMemberMapBlock.tsx` | Contraste textes |
+| `src/components/home/HomeTrustSection.tsx` | Contraste descriptions |
+| `src/components/home/HomeMessagesBlock.tsx` | Contraste citations |
+| `src/components/home/HomeFeaturesBlock.tsx` | Contraste descriptions |
 
-Total : 3 fichiers + 1 migration SQL.
+Total : 12 fichiers modifies, 0 dependances ajoutees.
+
+## Points hors perimetre (rappel)
+
+- **Badge Lovable** : Parametres projet > Hide Lovable Badge
+- **Backend/Auth** : Deja fonctionnel via Supabase (signalement faux positif)
+- **Pages manquantes** : Toutes implementees (signalement faux positif)
+- **Validation formulaires** : Deja implementee (email + force du mot de passe)
+- **Dashboard utilisateur** : Existe derriere l'authentification
+- **Carte interactive** : Version complete sur /map, version simplifiee en homepage volontairement
 
