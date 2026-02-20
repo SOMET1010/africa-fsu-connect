@@ -75,7 +75,7 @@ export function HomeHeroBlock() {
                 {ctaExplore}
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8">
+            <Button asChild size="lg" variant="outline" className="border-white/50 text-white bg-white/10 hover:bg-white/20 px-8">
               <Link to="/auth">{ctaLogin}</Link>
             </Button>
           </motion.div>
