@@ -125,11 +125,11 @@ export const NexusLogo = ({
           "font-black tracking-wider bg-gradient-to-r from-[#0B3C5D] to-[#1F7A63] bg-clip-text text-transparent",
           config.text
         )}>
-          ADCA
+          UDC
         </span>
         {showSubtext && (
           <span className={cn("font-medium text-muted-foreground tracking-widest", config.subtext)}>
-            UAT • Digital Connect Africa
+            USF • Universal Digital Connect
           </span>
         )}
       </div>
@@ -145,11 +145,11 @@ export const NexusLogo = ({
           "font-black tracking-wider bg-gradient-to-r from-[#0B3C5D] to-[#1F7A63] bg-clip-text text-transparent leading-tight",
           config.text
         )}>
-          ADCA
+          UDC
         </span>
         {showSubtext && (
           <span className={cn("font-medium text-muted-foreground tracking-wide", config.subtext)}>
-            UAT • Digital Connect Africa
+            USF • Universal Digital Connect
           </span>
         )}
       </div>

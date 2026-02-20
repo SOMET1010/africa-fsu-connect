@@ -133,7 +133,7 @@ const Roadmap = () => {
         {/* CTA */}
         <GlassCard className="p-8 text-center bg-gradient-to-r from-[hsl(var(--nx-gold)/0.2)] to-[hsl(var(--nx-cyan)/0.2)] animate-fade-in">
           <h2 className="text-2xl font-bold mb-4 text-white">
-            Rejoignez l'aventure ADCA
+            Rejoignez l'aventure UDC
           </h2>
           <p className="text-white/85 mb-6 max-w-2xl mx-auto">
             Participez à la transformation numérique de l'Afrique. Que vous soyez une agence FSU, 

@@ -55,9 +55,9 @@ const quickActions: QuickAction[] = [
   },
   {
     icon: HelpCircle,
-    label: "Aide SUTEL",
-    labelEn: "SUTEL Help",
-    prompt: "Comment fonctionne la plateforme SUTEL ?"
+    label: "Aide UDC",
+    labelEn: "UDC Help",
+    prompt: "Comment fonctionne la plateforme UDC ?"
   }
 ];
 
@@ -75,7 +75,7 @@ export function SutaChatbot() {
     {
       id: "welcome",
       role: "assistant",
-      content: "👋 Bonjour ! Je suis SUTA, votre assistant IA pour la plateforme SUTEL. Comment puis-je vous aider aujourd'hui ?\n\nJe peux vous renseigner sur :\n• Les projets FSU en Afrique\n• Les statistiques et indicateurs\n• Les réglementations du service universel\n• L'utilisation de la plateforme",
+      content: "👋 Bonjour ! Je suis SUTA, votre assistant IA pour la plateforme UDC. Comment puis-je vous aider aujourd'hui ?\n\nJe peux vous renseigner sur :\n• Les projets FSU en Afrique\n• Les statistiques et indicateurs\n• Les réglementations du service universel\n• L'utilisation de la plateforme",
       timestamp: new Date()
     }
   ]);
@@ -130,7 +130,7 @@ export function SutaChatbot() {
         response = responses["réglementations"];
       } else if (lowerText.includes("projet") || lowerText.includes("région") || lowerText.includes("cedeao") || lowerText.includes("sadc")) {
         response = responses["projets"];
-      } else if (lowerText.includes("plateforme") || lowerText.includes("sutel") || lowerText.includes("comment") || lowerText.includes("aide")) {
+      } else if (lowerText.includes("plateforme") || lowerText.includes("udc") || lowerText.includes("comment") || lowerText.includes("aide")) {
         response = responses["plateforme"];
       }
 

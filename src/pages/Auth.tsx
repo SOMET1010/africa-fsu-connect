@@ -95,7 +95,7 @@ const Auth = () => {
                     ? 'Choisissez un nouveau mot de passe pour votre compte'
                     : forgotMode
                       ? 'Entrez votre email pour recevoir un lien de réinitialisation'
-                      : 'Accédez à votre compte NEXUS'}
+                      : 'Accédez à votre compte UDC'}
                 </p>
               </div>
 
@@ -154,7 +154,7 @@ const Auth = () => {
                   <div className="text-center space-y-2">
                     <h2 className="text-2xl font-bold text-foreground font-poppins">Créer un compte</h2>
                     <p className="text-muted-foreground font-inter">
-                      Rejoignez la communauté NEXUS
+                      Rejoignez la communauté UDC
                     </p>
                   </div>
                   

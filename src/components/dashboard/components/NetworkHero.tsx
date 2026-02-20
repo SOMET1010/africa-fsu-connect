@@ -17,7 +17,7 @@ export function NetworkHero() {
           
           <div className="flex-1 space-y-2">
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-              Bienvenue sur le Réseau NEXUS
+              Bienvenue sur USF Universal Digital Connect
             </h1>
             <p className="text-muted-foreground text-lg">
               Le réseau panafricain du Service Universel des Télécommunications
@@ -31,7 +31,7 @@ export function NetworkHero() {
 
         <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
           <Users className="h-4 w-4" />
-          <span>Connecté avec les pays membres de la communauté SUTEL</span>
+          <span>Connecté avec les pays membres de la communauté UDC</span>
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@ const PrivacyPolicy = () => (
       <div className="prose prose-invert prose-sm max-w-none space-y-8 text-white/80">
         <section>
           <h2 className="text-xl font-semibold text-white">1. Introduction</h2>
-          <p>La plateforme ADCA (UAT Digital Connect Africa), opérée par l'Union Africaine des Télécommunications (UAT) en partenariat avec l'ANSUT, s'engage à protéger la vie privée et les données personnelles de ses utilisateurs conformément aux réglementations internationales en vigueur.</p>
+          <p>La plateforme UDC (USF Universal Digital Connect), opérée par l'Union Africaine des Télécommunications (UAT) en partenariat avec l'ANSUT, s'engage à protéger la vie privée et les données personnelles de ses utilisateurs conformément aux réglementations internationales en vigueur.</p>
         </section>
 
         <section>
@@ -56,7 +56,7 @@ const PrivacyPolicy = () => (
 
         <section>
           <h2 className="text-xl font-semibold text-white">5. Partage des données</h2>
-          <p>Vos données personnelles ne sont jamais vendues à des tiers. Elles peuvent être partagées uniquement avec les organismes partenaires de l'UAT dans le cadre strict de la mission du réseau ADCA, et avec votre consentement explicite.</p>
+          <p>Vos données personnelles ne sont jamais vendues à des tiers. Elles peuvent être partagées uniquement avec les organismes partenaires de l'UAT dans le cadre strict de la mission du réseau UDC, et avec votre consentement explicite.</p>
         </section>
 
         <section>
@@ -77,7 +77,7 @@ const PrivacyPolicy = () => (
 
         <section>
           <h2 className="text-xl font-semibold text-white">8. Cookies et technologies</h2>
-          <p>La plateforme ADCA utilise des cookies et technologies similaires pour :</p>
+          <p>La plateforme UDC utilise des cookies et technologies similaires pour :</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Maintenir votre session de connexion (cookies nécessaires)</li>
             <li>Mémoriser vos préférences linguistiques et d'affichage (cookies fonctionnels)</li>

@@ -299,7 +299,7 @@ export function SimplifiedSidebar() {
                 )}
               </div>
               <p className="text-xs text-muted-foreground truncate mt-1">
-                {profile?.organization || "NEXUS"}
+                {profile?.organization || "UDC"}
               </p>
             </div>
           )}
