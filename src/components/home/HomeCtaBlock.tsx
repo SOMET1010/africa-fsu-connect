@@ -5,7 +5,7 @@ import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
 import { useHomepageContent } from "@/hooks/useHomepageContent";
 
-export function HomeCtaBlock() {
+export function HomeCtaBlock({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const { isRTL } = useDirection();
   const { getBlock } = useHomepageContent();
 

@@ -10,6 +10,7 @@ export interface UserPreferences {
   theme: 'light' | 'dark' | 'system';
   language: SupportedLanguage; // 'fr' | 'en' | 'pt' | 'ar'
   navigation_level: 'beginner' | 'standard' | 'expert';
+  homeLayout: 'light' | 'immersive';
   notifications: {
     email: boolean;
     push: boolean;
@@ -39,6 +40,7 @@ const defaultPreferences: UserPreferences = {
   theme: 'system',
   language: 'fr',
   navigation_level: 'beginner',
+  homeLayout: 'light',
   notifications: {
     email: true,
     push: true,
