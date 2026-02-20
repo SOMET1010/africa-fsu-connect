@@ -19,7 +19,7 @@ export function CallToActionSection() {
   const offers = [
     {
       title: "Pilote Gratuit 90 Jours",
-      description: "Essayez SUTEL Platform sans engagement avec accès complet",
+      description: "Essayez UDC Platform sans engagement avec accès complet",
       features: [
         "Accès illimité à toutes les fonctionnalités",
         "Support dédié 24/7 en français",
@@ -92,7 +92,7 @@ export function CallToActionSection() {
   const urgencyFactors = [
     {
       factor: "Offre limitée",
-      description: "Pilote gratuit disponible pour les 5 prochains SUTELs seulement",
+      description: "Pilote gratuit disponible pour les 5 prochaines agences UDC seulement",
       icon: Clock,
       color: "text-red-600"
     },
@@ -118,7 +118,7 @@ export function CallToActionSection() {
           animate={{ opacity: 1, y: 0 }}
           className="text-4xl font-bold bg-gradient-to-r from-orange-600 via-red-500 to-pink-600 bg-clip-text text-transparent"
         >
-          Rejoignez la Révolution SUTEL Aujourd'hui
+          Rejoignez la Révolution UDC Aujourd'hui
         </motion.h2>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Ne restez pas en arrière. Transformez votre organisation dès maintenant avec la plateforme qui unit l'Afrique.
@@ -260,9 +260,9 @@ export function CallToActionSection() {
       <Card className="p-8 bg-gradient-to-r from-primary via-primary/90 to-primary text-primary-foreground">
         <div className="text-center space-y-6">
           <div>
-            <h3 className="text-3xl font-bold mb-4">Prêt à Transformer Votre SUTEL ?</h3>
+            <h3 className="text-3xl font-bold mb-4">Prêt à Transformer Votre Organisation ?</h3>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              Rejoignez les 55+ pays qui font confiance à SUTEL Platform. 
+              Rejoignez les 55+ pays qui font confiance à UDC Platform. 
               Votre organisation mérite le meilleur.
             </p>
           </div>
@@ -299,7 +299,7 @@ export function CallToActionSection() {
           <div className="flex flex-wrap justify-center gap-6 pt-6 opacity-80">
             <div className="flex items-center gap-2">
               <Mail className="h-4 w-4" />
-              <span className="text-sm">contact@sutel-platform.africa</span>
+              <span className="text-sm">contact@udc-platform.africa</span>
             </div>
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
@@ -307,7 +307,7 @@ export function CallToActionSection() {
             </div>
             <div className="flex items-center gap-2">
               <Globe className="h-4 w-4" />
-              <span className="text-sm">www.sutel-platform.africa</span>
+              <span className="text-sm">www.udc-platform.africa</span>
             </div>
           </div>
         </div>

@@ -46,7 +46,7 @@ export function HomeMemberMapBlock() {
             Participation des Membres
           </h2>
           <p className="text-white/70 max-w-2xl mx-auto">
-            Visualisez l'engagement des pays africains dans le réseau ADCA — contributions, projets et collaborations en temps réel.
+            Visualisez l'engagement des pays africains dans le réseau UDC — contributions, projets et collaborations en temps réel.
           </p>
         </div>
 

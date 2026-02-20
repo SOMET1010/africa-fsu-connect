@@ -72,8 +72,8 @@ export const LinguisticCommunitiesSection = () => {
           </h2>
           <p className="text-sm text-white/60 mt-2">
             {currentLanguage === 'en' 
-              ? 'The SUTEL network brings together countries from different linguistic areas' 
-              : 'Le réseau SUTEL réunit des pays de différentes zones linguistiques'}
+              ? 'The UDC network brings together countries from different linguistic areas' 
+              : 'Le réseau UDC réunit des pays de différentes zones linguistiques'}
           </p>
         </div>
         

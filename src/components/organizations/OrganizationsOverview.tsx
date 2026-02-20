@@ -110,7 +110,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
               <Zap className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">SUTEL Africaines</p>
+              <p className="text-sm text-muted-foreground">Agences UDC Africaines</p>
               <p className="text-2xl font-bold">{stats.total}</p>
             </div>
           </div>
@@ -175,7 +175,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Map className="h-5 w-5" />
-                Répartition régionale SUTEL
+                Répartition régionale UDC
               </h3>
               <div className="space-y-4">
                 {stats.regions.map((region) => (
@@ -187,7 +187,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">{region.region}</span>
                       <Badge variant="outline">
-                        {region.count} SUTEL{region.count > 1 ? 's' : ''}
+                        {region.count} UDC{region.count > 1 ? 's' : ''}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -281,7 +281,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
           </div>
 
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Mission des SUTEL</h3>
+            <h3 className="text-lg font-semibold mb-4">Mission des agences UDC</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="text-center p-4 bg-muted/30 rounded-lg">
                 <Target className="h-8 w-8 mx-auto mb-2 text-primary" />
@@ -319,7 +319,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
       {selectedRegion && (
         <Card className="p-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">SUTEL - {selectedRegion}</h3>
+            <h3 className="font-semibold">UDC - {selectedRegion}</h3>
             <button 
               onClick={() => setSelectedRegion(null)}
               className="text-sm text-muted-foreground hover:text-foreground"
@@ -343,7 +343,7 @@ export const OrganizationsOverview = ({ agencies, onAgencyClick }: Organizations
                 <p className="text-xs text-muted-foreground mb-1">{agency.country}</p>
                 <div className="flex gap-1">
                   <Badge variant="default" className="text-xs">
-                    SUTEL
+                    UDC
                   </Badge>
                   {agency.metadata?.governance_type === 'autonomous_agency' && (
                     <Badge variant="outline" className="text-xs">

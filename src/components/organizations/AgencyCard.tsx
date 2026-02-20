@@ -98,10 +98,10 @@ export const AgencyCard = ({ agency, onViewProfile }: AgencyCardProps) => {
             {agency.region}
           </Badge>
           
-          {/* SUTEL Type Badge */}
+          {/* UDC Type Badge */}
           {agency.metadata && typeof agency.metadata === 'object' && 'sutel_type' in agency.metadata && agency.metadata.sutel_type && (
             <Badge variant="default" className="text-xs bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
-              SUTEL
+              UDC
             </Badge>
           )}
           

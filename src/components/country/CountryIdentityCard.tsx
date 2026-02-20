@@ -48,7 +48,7 @@ export const CountryIdentityCard = ({ country }: CountryIdentityCardProps) => {
       <div className="flex items-center justify-center gap-3">
         {getStatusBadge(country.status, t)}
         <span className="text-muted-foreground">
-          {t('country.network.member') || 'Membre du réseau SUTEL'}
+          {t('country.network.member') || 'Membre du réseau UDC'}
         </span>
       </div>
 
