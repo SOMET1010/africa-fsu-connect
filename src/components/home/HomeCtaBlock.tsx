@@ -20,7 +20,7 @@ export function HomeCtaBlock() {
 
   return (
     <div className="container mx-auto px-4 pb-12 animate-fade-in" style={{ contentVisibility: 'auto' }}>
-      <div className={cn("rounded-2xl bg-gradient-to-br from-[hsl(var(--nx-gold))]/10 to-[hsl(var(--nx-gold))]/5 border border-[hsl(var(--nx-gold))]/20 p-8 md:p-12 text-center", isRTL && "text-right")}>
+      <div className={cn("rounded-2xl bg-[hsl(var(--nx-brand-900))] p-8 md:p-12 text-center", isRTL && "text-right")}>
         <p className="text-[hsl(var(--nx-gold))] font-medium text-sm mb-2">{kicker}</p>
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">{title}</h2>
         {subtitle && <p className="text-white/80 mb-6 max-w-xl mx-auto">{subtitle}</p>}

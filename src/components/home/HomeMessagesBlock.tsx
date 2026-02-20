@@ -24,7 +24,7 @@ export const HomeMessagesBlock = () => {
     <section className="py-16 relative animate-fade-in" style={{ contentVisibility: 'auto' }}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-[hsl(var(--nx-text-900))] mb-3">
             Messages officiels
           </h2>
           <div className="w-16 h-1 bg-gradient-to-r from-[hsl(var(--nx-gold))] to-[hsl(var(--nx-gold))]/50 mx-auto rounded-full" />
@@ -34,7 +34,7 @@ export const HomeMessagesBlock = () => {
           {OFFICIAL_MESSAGES.map((msg, i) => (
             <div
               key={i}
-              className="relative bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-[hsl(var(--nx-gold))]/20 transition-colors"
+              className="relative bg-[hsl(var(--nx-surface))] border border-[hsl(var(--nx-border))] rounded-2xl p-8 shadow-[var(--nx-shadow-sm)] hover:border-[hsl(var(--nx-gold))]/20 transition-colors"
             >
               <Quote className="absolute top-6 right-6 h-8 w-8 text-[hsl(var(--nx-gold))]/15" />
               <div className={cn("flex items-center gap-4 mb-6", isRTL && "flex-row-reverse")}>
@@ -42,11 +42,11 @@ export const HomeMessagesBlock = () => {
                   <span className="text-[hsl(var(--nx-night))] font-bold text-sm">{msg.initials}</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-lg">{msg.title}</h3>
-                  <p className="text-[hsl(var(--nx-gold))]/80 text-sm">{msg.name}</p>
+                  <h3 className="font-semibold text-[hsl(var(--nx-text-900))] text-lg">{msg.title}</h3>
+                  <p className="text-[hsl(var(--nx-gold))] text-sm">{msg.name}</p>
                 </div>
               </div>
-              <p className="text-white/85 leading-relaxed text-sm italic">
+              <p className="text-[hsl(var(--nx-text-700))] leading-relaxed text-sm italic">
                 "{msg.text}"
               </p>
             </div>
