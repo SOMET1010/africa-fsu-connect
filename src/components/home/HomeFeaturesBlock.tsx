@@ -55,38 +55,38 @@ function FeatureCard({ feature, index, isVisible }: {
     <ScrollReveal delay={index * 150} direction="up">
       <div
         className={cn(
-          "group p-6 rounded-xl bg-white/5 backdrop-blur border border-white/10 transition-all duration-300",
-          "hover:border-[hsl(var(--nx-gold))]/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-[hsl(var(--nx-gold))]/5 hover:bg-white/10",
+          "group p-6 rounded-xl bg-[hsl(var(--nx-surface))] border border-[hsl(var(--nx-border))] shadow-[var(--nx-shadow-sm)] transition-all duration-300",
+          "hover:border-[hsl(var(--nx-gold))]/40 hover:-translate-y-1 hover:shadow-[var(--nx-shadow-md)]",
           isRTL && "text-right"
         )}
       >
         <div className={cn("flex flex-col gap-4", isRTL && "items-end")}>
           {/* Icon with glow */}
-          <div className="p-2.5 rounded-lg bg-[hsl(var(--nx-gold))]/10 border border-[hsl(var(--nx-gold))]/20 w-fit shadow-[0_0_12px_hsl(var(--nx-gold)/0.15)] group-hover:shadow-[0_0_20px_hsl(var(--nx-gold)/0.3)] transition-shadow duration-300">
-            <Icon className="w-5 h-5 text-[hsl(var(--nx-gold))] group-hover:text-[hsl(var(--nx-gold))] group-hover:drop-shadow-[0_0_4px_hsl(var(--nx-gold)/0.4)] transition-all duration-300" />
+          <div className="p-2.5 rounded-lg bg-[hsl(var(--nx-gold))]/10 border border-[hsl(var(--nx-gold))]/20 w-fit">
+            <Icon className="w-5 h-5 text-[hsl(var(--nx-gold))]" />
           </div>
 
           {/* Title with animated counter */}
           <div>
             {number !== null ? (
               <div className="mb-1">
-                <span className="text-3xl font-bold text-white">
+                <span className="text-3xl font-bold text-[hsl(var(--nx-text-900))]">
                   {isVisible ? <AnimatedCounter value={number} duration={1200} /> : "0"}
                 </span>
-                <span className="text-base font-semibold text-white ml-2">{label}</span>
+                <span className="text-base font-semibold text-[hsl(var(--nx-text-900))] ml-2">{label}</span>
               </div>
             ) : (
-              <h3 className="font-semibold text-white text-lg mb-1">{label}</h3>
+              <h3 className="font-semibold text-[hsl(var(--nx-text-900))] text-lg mb-1">{label}</h3>
             )}
-            <p className="text-sm text-white/70">{feature.description}</p>
+            <p className="text-sm text-[hsl(var(--nx-text-500))]">{feature.description}</p>
           </div>
 
-          {/* CTA link - visible on hover */}
+          {/* CTA link */}
           {link && cta && (
             <Link
               to={link}
               className={cn(
-                "inline-flex items-center gap-1 text-xs text-[hsl(var(--nx-gold))]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:text-[hsl(var(--nx-gold))]",
+                "inline-flex items-center gap-1 text-xs text-[hsl(var(--nx-brand-900))] opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:text-[hsl(var(--nx-brand-700))]",
                 isRTL && "flex-row-reverse"
               )}
             >
@@ -112,7 +112,7 @@ export function HomeFeaturesBlock() {
     return (
       <div className="container mx-auto px-4 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[1, 2, 3].map(i => <Skeleton key={i} className="h-36 bg-white/5 rounded-xl" />)}
+          {[1, 2, 3].map(i => <Skeleton key={i} className="h-36 bg-[hsl(var(--nx-border))] rounded-xl" />)}
         </div>
       </div>
     );

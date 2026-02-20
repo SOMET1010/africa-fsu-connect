@@ -18,28 +18,35 @@ const Index = () => {
   const { isRTL } = useDirection();
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--nx-night))] relative overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <img src={nexusHeroImage} alt="Africa Network" className="w-full h-full object-cover opacity-45" loading="lazy" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--nx-night))]/40 via-[hsl(var(--nx-night))]/60 to-[hsl(var(--nx-night))]" />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* ===== DARK ZONE: Hero ===== */}
+      <div className="bg-[hsl(var(--nx-night))] relative">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img src={nexusHeroImage} alt="Africa Network" className="w-full h-full object-cover opacity-45" loading="lazy" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--nx-night))]/40 via-[hsl(var(--nx-night))]/60 to-[hsl(var(--nx-night))]" />
+        </div>
+
+        <div className="relative z-10">
+          <PublicHeader />
+          <AdminLocaleConsistencyAlert />
+          <HomeHeroBlock />
+          <HomeTrustBadge />
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 min-h-screen flex flex-col">
-        <PublicHeader />
-        <AdminLocaleConsistencyAlert />
-
-        {/* Dynamic Content Blocks */}
-        <HomeHeroBlock />
-        <HomeTrustBadge />
+      {/* ===== LIGHT ZONE: Content ===== */}
+      <div className="bg-[hsl(var(--nx-bg))] relative z-10">
         <HomeMemberMapBlock />
         <HomeFeaturesBlock />
         <HomeTrustSection />
         <HomeMessagesBlock />
         <HomeCtaBlock />
         <HomePartnersBlock />
+      </div>
 
+      {/* ===== DARK ZONE: Footer ===== */}
+      <div className="bg-[hsl(var(--nx-night))] relative z-10">
         <Footer />
       </div>
     </div>
