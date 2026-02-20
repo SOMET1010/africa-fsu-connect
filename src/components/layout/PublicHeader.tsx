@@ -14,7 +14,6 @@ const NAV_ITEMS = [
   { path: "/about", labelKey: "nav.about", fallback: "À propos" },
   { path: "/network", labelKey: "nav.platform", fallback: "Plateforme" },
   { path: "/strategies", labelKey: "nav.strategies", fallback: "Stratégies" },
-  { path: "/projects", labelKey: "nav.projects", fallback: "Projets" },
   { path: "/events", labelKey: "nav.events", fallback: "Événements" },
   { path: "/contact", labelKey: "nav.contact", fallback: "Contact" },
 ];
@@ -33,7 +32,7 @@ export const PublicHeader = () => {
           <Link to="/" className={cn("flex items-center gap-3 shrink-0", isRTL && "flex-row-reverse")}>
             <img src={atuLogo} alt="ATU - African Telecommunications Union" className="h-12 w-auto" />
             <span className="text-lg font-bold text-white">UDC</span>
-            <span className="hidden xl:inline text-xs text-white/60 font-medium">| Digital Connect Africa</span>
+            <span className="hidden xl:inline text-xs text-white/80 font-medium">| Digital Connect Africa</span>
           </Link>
 
           {/* Desktop Nav */}

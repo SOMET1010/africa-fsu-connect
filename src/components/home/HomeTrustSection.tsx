@@ -33,7 +33,7 @@ export const HomeTrustSection = ({ variant = 'light' }: { variant?: 'light' | 'd
         <h2 className={`text-2xl md:text-3xl font-bold mb-3 ${d ? 'text-white' : 'text-[hsl(var(--nx-text-900))]'}`}>
           Sécurité et Protection des données
         </h2>
-        <p className={`max-w-2xl mx-auto ${d ? 'text-white/70' : 'text-[hsl(var(--nx-text-700))]'}`}>
+        <p className={`max-w-2xl mx-auto ${d ? 'text-white/80' : 'text-[hsl(var(--nx-text-700))]'}`}>
           La plateforme UDC met en œuvre les standards les plus élevés pour protéger vos données et garantir la conformité réglementaire.
         </p>
       </div>
@@ -48,7 +48,7 @@ export const HomeTrustSection = ({ variant = 'light' }: { variant?: 'light' | 'd
               <Icon className="h-6 w-6 text-[hsl(var(--nx-gold))]" />
             </div>
             <h3 className={`text-sm font-semibold mb-2 ${d ? 'text-white' : 'text-[hsl(var(--nx-text-900))]'}`}>{title}</h3>
-            <p className={`text-xs leading-relaxed ${d ? 'text-white/70' : 'text-[hsl(var(--nx-text-700))]'}`}>{description}</p>
+            <p className={`text-xs leading-relaxed ${d ? 'text-white/80' : 'text-[hsl(var(--nx-text-700))]'}`}>{description}</p>
           </div>
         ))}
       </div>

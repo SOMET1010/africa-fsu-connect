@@ -278,7 +278,7 @@ export function SimplifiedSidebar() {
       <SidebarFooter className="border-t border-border p-4">
         <div className="flex items-center space-x-3">
           <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-            <AvatarImage src={profile?.avatar_url || ""} />
+            <AvatarImage src={profile?.avatar_url || ""} alt="Photo de profil" />
             <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
               {getUserInitials()}
             </AvatarFallback>

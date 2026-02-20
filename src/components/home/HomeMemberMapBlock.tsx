@@ -38,14 +38,14 @@ export function HomeMemberMapBlock({ variant = 'light' }: { variant?: 'light' | 
     <section className="py-16 animate-fade-in" style={{ contentVisibility: 'auto' }}>
       <div className="container mx-auto px-4">
         <div className={cn("text-center mb-10", isRTL && "text-right")}>
-          <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-4", d ? "bg-white/5 border border-white/10 text-white/70" : "bg-[hsl(var(--nx-brand-900))]/5 border border-[hsl(var(--nx-border))] text-[hsl(var(--nx-text-500))]")}>
+          <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-4", d ? "bg-white/5 border border-white/10 text-white/80" : "bg-[hsl(var(--nx-brand-900))]/5 border border-[hsl(var(--nx-border))] text-[hsl(var(--nx-text-500))]")}>
             <Globe className="h-4 w-4 text-[hsl(var(--nx-gold))]" />
             Réseau continental
           </div>
           <h2 className={cn("text-2xl md:text-3xl font-bold mb-3", d ? "text-white" : "text-[hsl(var(--nx-text-900))]")}>
             Participation des Membres
           </h2>
-          <p className={cn("max-w-2xl mx-auto", d ? "text-white/70" : "text-[hsl(var(--nx-text-500))]")}>
+          <p className={cn("max-w-2xl mx-auto", d ? "text-white/80" : "text-[hsl(var(--nx-text-500))]")}>
             Visualisez l'engagement des pays africains dans le réseau UDC — contributions, projets et collaborations en temps réel.
           </p>
         </div>

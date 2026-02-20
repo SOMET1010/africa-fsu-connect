@@ -97,7 +97,7 @@ export function ModernForumCard({
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3 flex-1">
             <Avatar className="h-10 w-10 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
-              <AvatarImage src={author.avatar} />
+              <AvatarImage src={author.avatar} alt={author.name} />
               <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-xs font-medium">
                 {author.name.split(' ').map(n => n[0]).join('')}
               </AvatarFallback>

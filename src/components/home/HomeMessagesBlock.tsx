@@ -47,7 +47,7 @@ export const HomeMessagesBlock = ({ variant = 'light' }: { variant?: 'light' | '
                   <p className="text-[hsl(var(--nx-gold))] text-sm">{msg.name}</p>
                 </div>
               </div>
-              <p className={cn("leading-relaxed text-sm italic", d ? "text-white/70" : "text-[hsl(var(--nx-text-700))]")}>
+              <p className={cn("leading-relaxed text-sm italic", d ? "text-white/85" : "text-[hsl(var(--nx-text-700))]")}>
                 "{msg.text}"
               </p>
             </div>

@@ -8,6 +8,7 @@ interface PracticeCoverProps {
   height?: "sm" | "md" | "lg" | "xl";
   overlay?: boolean;
   overlayGradient?: "default" | "nexus";
+  altText?: string;
   className?: string;
 }
 
@@ -24,6 +25,7 @@ export function PracticeCover({
   height = "md",
   overlay = false,
   overlayGradient = "default",
+  altText,
   className,
 }: PracticeCoverProps) {
   const [imageError, setImageError] = useState(false);
@@ -47,7 +49,7 @@ export function PracticeCover({
           )}
           <img
             src={imageUrl}
-            alt=""
+            alt={altText || "Illustration de bonne pratique"}
             className={cn(
               "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
               imageLoaded ? "opacity-100" : "opacity-0"

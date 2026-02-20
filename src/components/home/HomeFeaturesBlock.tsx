@@ -80,7 +80,7 @@ function FeatureCard({ feature, index, isVisible, variant = 'light' }: {
             ) : (
               <h3 className={cn("font-semibold text-lg mb-1", d ? "text-white" : "text-[hsl(var(--nx-text-900))]")}>{label}</h3>
             )}
-            <p className={cn("text-sm", d ? "text-white/70" : "text-[hsl(var(--nx-text-500))]")}>{feature.description}</p>
+            <p className={cn("text-sm", d ? "text-white/80" : "text-[hsl(var(--nx-text-500))]")}>{feature.description}</p>
           </div>
 
           {/* CTA link */}
