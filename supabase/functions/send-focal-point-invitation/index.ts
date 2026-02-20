@@ -20,56 +20,56 @@ interface InvitationRequest {
 // Email templates for each language
 const emailTemplates = {
   fr: {
-    subject: (countryName: string) => `Invitation Point Focal NEXUS - ${countryName}`,
+    subject: (countryName: string) => `Invitation Point Focal UDC - ${countryName}`,
     greeting: (firstName: string) => `Cher/Chère ${firstName},`,
     body: (designationType: string, countryName: string) => 
-      `L'Union Africaine des Télécommunications (UAT) vous a désigné(e) comme point focal ${designationType === 'primary' ? 'principal' : 'secondaire'} pour ${countryName} sur la plateforme NEXUS.`,
+      `L'USF Universal Digital Connect (UDC) vous a désigné(e) comme point focal ${designationType === 'primary' ? 'principal' : 'secondaire'} pour ${countryName} sur la plateforme UDC.`,
     roleDescription: `Votre rôle sera de saisir et valider les données du Fonds de Service Universel (FSU) de votre pays. Cette responsabilité est essentielle pour assurer la transparence et la coordination des initiatives FSU à travers le continent africain.`,
     cta: "Activer mon compte",
     expiry: (date: string) => `Cette invitation expire le ${date}.`,
     contact: "Pour toute question, contactez-nous à",
-    footer: "Union Africaine des Télécommunications",
+    footer: "USF Universal Digital Connect",
     regards: "Cordialement,",
-    team: "L'équipe NEXUS"
+    team: "L'équipe UDC"
   },
   en: {
-    subject: (countryName: string) => `NEXUS Focal Point Invitation - ${countryName}`,
+    subject: (countryName: string) => `UDC Focal Point Invitation - ${countryName}`,
     greeting: (firstName: string) => `Dear ${firstName},`,
     body: (designationType: string, countryName: string) => 
-      `The African Telecommunications Union (ATU) has designated you as the ${designationType === 'primary' ? 'primary' : 'secondary'} focal point for ${countryName} on the NEXUS platform.`,
+      `The USF Universal Digital Connect (UDC) has designated you as the ${designationType === 'primary' ? 'primary' : 'secondary'} focal point for ${countryName} on the UDC platform.`,
     roleDescription: `Your role will be to enter and validate Universal Service Fund (USF) data for your country. This responsibility is essential to ensure transparency and coordination of USF initiatives across the African continent.`,
     cta: "Activate my account",
     expiry: (date: string) => `This invitation expires on ${date}.`,
     contact: "For any questions, contact us at",
-    footer: "African Telecommunications Union",
+    footer: "USF Universal Digital Connect",
     regards: "Best regards,",
-    team: "The NEXUS Team"
+    team: "The UDC Team"
   },
   pt: {
-    subject: (countryName: string) => `Convite Ponto Focal NEXUS - ${countryName}`,
+    subject: (countryName: string) => `Convite Ponto Focal UDC - ${countryName}`,
     greeting: (firstName: string) => `Caro/Cara ${firstName},`,
     body: (designationType: string, countryName: string) => 
-      `A União Africana das Telecomunicações (UAT) designou-o(a) como ponto focal ${designationType === 'primary' ? 'principal' : 'secundário'} para ${countryName} na plataforma NEXUS.`,
+      `A USF Universal Digital Connect (UDC) designou-o(a) como ponto focal ${designationType === 'primary' ? 'principal' : 'secundário'} para ${countryName} na plataforma UDC.`,
     roleDescription: `O seu papel será introduzir e validar os dados do Fundo de Serviço Universal (FSU) do seu país. Esta responsabilidade é essencial para garantir a transparência e a coordenação das iniciativas FSU em todo o continente africano.`,
     cta: "Ativar minha conta",
     expiry: (date: string) => `Este convite expira em ${date}.`,
     contact: "Para qualquer questão, contacte-nos em",
-    footer: "União Africana das Telecomunicações",
+    footer: "USF Universal Digital Connect",
     regards: "Com os melhores cumprimentos,",
-    team: "A Equipa NEXUS"
+    team: "A Equipa UDC"
   },
   ar: {
-    subject: (countryName: string) => `دعوة نقطة الاتصال NEXUS - ${countryName}`,
+    subject: (countryName: string) => `UDC دعوة نقطة الاتصال - ${countryName}`,
     greeting: (firstName: string) => `عزيزي/عزيزتي ${firstName}،`,
     body: (designationType: string, countryName: string) => 
-      `قام الاتحاد الأفريقي للاتصالات (UAT) بتعيينك كنقطة اتصال ${designationType === 'primary' ? 'رئيسية' : 'ثانوية'} لـ ${countryName} على منصة NEXUS.`,
+      `قامت USF Universal Digital Connect (UDC) بتعيينك كنقطة اتصال ${designationType === 'primary' ? 'رئيسية' : 'ثانوية'} لـ ${countryName} على منصة UDC.`,
     roleDescription: `سيكون دورك هو إدخال والتحقق من صحة بيانات صندوق الخدمة الشاملة (FSU) لبلدك. هذه المسؤولية ضرورية لضمان الشفافية والتنسيق لمبادرات FSU عبر القارة الأفريقية.`,
     cta: "تفعيل حسابي",
     expiry: (date: string) => `تنتهي هذه الدعوة في ${date}.`,
     contact: "لأي استفسار، اتصل بنا على",
-    footer: "الاتحاد الأفريقي للاتصالات",
+    footer: "USF Universal Digital Connect",
     regards: "مع أطيب التحيات،",
-    team: "فريق NEXUS"
+    team: "UDC فريق"
   }
 };
 
@@ -102,7 +102,7 @@ function generateEmailHtml(
           <!-- Header -->
           <tr>
             <td style="background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); padding: 40px 40px 30px; text-align: center;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;">NEXUS</h1>
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;">UDC</h1>
               <p style="color: #a3c9e8; margin: 8px 0 0; font-size: 14px;">${template.footer}</p>
             </td>
           </tr>
@@ -260,7 +260,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email via Resend
     const emailResponse = await resend.emails.send({
-      from: `NEXUS Platform <${fromEmail}>`,
+      from: `UDC Platform <${fromEmail}>`,
       to: [focalPoint.email],
       subject: template.subject(countryName),
       html: emailHtml,
