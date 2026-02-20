@@ -1,69 +1,120 @@
 
-# Plan : Optimisation UX du Tableau de Bord Admin
 
-## Problemes identifies
+# Plan : Renommer la plateforme en "USF Universal Digital Connect"
 
-L'analyse du code revele 4 axes d'amelioration sur la page `/admin` (fichier `src/pages/Admin.tsx` et ses composants).
+## Changement demande
 
-## Changements prevus
+Remplacer toutes les occurrences du nom actuel **"ADCA"** / **"UAT Digital Connect Africa"** par le nouveau nom definitif **"USF Universal Digital Connect"**.
 
-### 1. Lisibilite des cartes de statistiques (Priorite haute)
+L'acronyme devient **UDC** (au lieu de ADCA).
 
-**Fichier** : `src/components/ui/modern-stats-card.tsx`
+## Fichiers a modifier
 
-- Les grands nombres utilisent `text-foreground` qui manque de contraste sur fond sombre
-- **Correction** : Forcer `text-white` ou `text-foreground font-extrabold` avec une luminosite accrue
-- Les badges de tendance utilisent `Badge variant="default"` avec un fond plein qui detourne l'attention
-- **Correction** : Remplacer par un texte simple colore sans fond -- vert (`text-emerald-400`) pour positif, rouge (`text-red-400`) pour negatif, avec juste l'icone de tendance
+### 1. Composant Logo central
+**`src/components/shared/NexusLogo.tsx`**
+- Ligne 128 : `ADCA` -> `UDC`
+- Ligne 132 : `UAT • Digital Connect Africa` -> `USF • Universal Digital Connect`
+- Ligne 148 : `ADCA` -> `UDC`
+- Ligne 152 : `UAT • Digital Connect Africa` -> `USF • Universal Digital Connect`
 
-**Fichier** : `src/pages/admin/components/AdminStatsGrid.tsx`
+### 2. Page d'authentification
+**`src/pages/auth/components/AuthHeader.tsx`**
+- Ligne 23 : `ADCA` -> `UDC`
+- Ligne 26 : `Connecter l'ecosysteme numerique de l'Afrique` (garde le slogan)
+- Ligne 29 : `UAT • ANSUT • Digital Connect Africa` -> `UAT • ANSUT • Universal Digital Connect`
 
-- Le badge `variant="secondary"` avec fond blanc pour "+12% ce mois" est trop voyant
-- **Correction** : Utiliser un `span` avec `text-emerald-500 text-xs font-medium` sans fond
+### 3. Traductions francaises
+**`src/i18n/translations/fr.json`** (environ 25 remplacements)
+- `"Réseau ADCA"` -> `"Réseau UDC"`
+- `"Plateforme ADCA"` -> `"Plateforme UDC"`
+- `"UAT Digital Connect Africa (ADCA)"` -> `"USF Universal Digital Connect (UDC)"`
+- `"ADCA Platform"` -> `"UDC Platform"`
+- `"Projets FSU/ADCA"` -> `"Projets FSU/UDC"`
+- `"Bienvenue dans ADCA"` -> `"Bienvenue dans UDC"`
+- `"réseau ADCA"` -> `"réseau UDC"`
+- `"Carte du Réseau ADCA"` -> `"Carte du Réseau UDC"`
+- `"footer.copyright"` : `"Plateforme ADCA"` -> `"Plateforme UDC"`
+- Toutes les autres mentions
 
-### 2. Navigation par onglets trop massive
+### 4. Traductions anglaises
+**`src/i18n/translations/en.json`**
+- `"UAT Digital Connect Africa (ADCA)"` -> `"USF Universal Digital Connect (UDC)"`
 
-**Fichier** : `src/pages/Admin.tsx`
+### 5. Traductions arabes
+**`src/i18n/translations/ar.json`**
+- `"UAT Digital Connect Africa (ADCA)"` -> `"USF Universal Digital Connect (UDC)"`
 
-- La `TabsList` utilise `grid w-full grid-cols-5` ce qui cree un bloc massif pleine largeur avec fond `bg-muted`
-- **Correction** : Passer a `inline-flex` (retirer `grid w-full grid-cols-5`), ajouter `border border-border/50 bg-transparent` pour un rendu plus fin
-- L'onglet actif passe en `bg-background` (blanc) ce qui ecrase visuellement le contenu
-- **Correction** : Utiliser un soulignement colore (`border-b-2 border-primary`) au lieu du bloc blanc, via des classes conditionnelles sur les `TabsTrigger` : `data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none`
+### 6. Traductions portugaises
+**`src/i18n/translations/pt.json`**
+- `"UAT Digital Connect Africa (ADCA)"` -> `"USF Universal Digital Connect (UDC)"`
 
-### 3. Actions du tableau utilisateurs avec icones
+### 7. Page HTML
+**`index.html`**
+- Titre : `FSU - Plateforme de Collaboration` -> `USF Universal Digital Connect`
 
-**Fichier** : `src/pages/admin/components/AdminUsersTab.tsx`
+### 8. Mentions dans les pages
+**`src/pages/legal/PrivacyPolicy.tsx`**
+- `"ADCA (UAT Digital Connect Africa)"` -> `"UDC (USF Universal Digital Connect)"`
+- `"réseau ADCA"` -> `"réseau UDC"`
+- `"plateforme ADCA"` -> `"plateforme UDC"`
 
-- Les boutons textuels "Modifier" et "Approuver" prennent trop de place
-- **Correction** : Remplacer par des boutons icones avec tooltips :
-  - Crayon (`Pencil`) pour editer
-  - Coche (`Check`) pour approuver
-  - Corbeille (`Trash2`) pour supprimer (nouveau)
-- Ajouter `TooltipProvider` + `Tooltip` autour de chaque bouton icone
-- Reduire l'espace occupe dans la colonne Actions
+**`src/pages/Roadmap.tsx`**
+- `"l'aventure ADCA"` -> `"l'aventure UDC"`
 
-### 4. Barre de recherche du ModernDataTable
+**`src/pages/Auth.tsx`**
+- `"compte NEXUS"` -> `"compte UDC"`
+- `"communauté NEXUS"` -> `"communauté UDC"`
 
-**Fichier** : `src/components/system/ModernDataTable.tsx`
+### 9. Composants Dashboard
+**`src/components/dashboard/components/DashboardHero.tsx`**
+- `"Réseau NEXUS"` (x2) -> `"USF Universal Digital Connect"`
 
-- La barre de recherche a `max-w-sm` mais son conteneur `flex-1` peut s'etendre
-- **Correction** : Ajouter `max-w-xs` (au lieu de `max-w-sm`) pour reduire sa largeur
-- Le conteneur GlassCard des filtres prend trop de place visuellement
-- **Correction** : Passer a un simple `div` avec `border-b border-border/30 pb-4` au lieu d'une GlassCard complete
+**`src/components/dashboard/components/NetworkHero.tsx`**
+- `"Réseau NEXUS"` -> `"USF Universal Digital Connect"`
 
-## Resume des fichiers modifies
+### 10. Composant Chatbot
+**`src/components/assistant/SutaChatbot.tsx`**
+- `"plateforme SUTEL"` -> `"plateforme UDC"`
+- `"Aide SUTEL"` -> `"Aide UDC"`
 
-| Fichier | Modifications |
-|---------|---------------|
-| `src/components/ui/modern-stats-card.tsx` | Nombres en blanc pur, badges tendance sans fond (texte colore uniquement) |
-| `src/pages/admin/components/AdminStatsGrid.tsx` | Badge description en texte colore simple sans fond blanc |
-| `src/pages/Admin.tsx` | TabsList en inline-flex sans grille pleine largeur, onglet actif avec soulignement au lieu de bloc blanc |
-| `src/pages/admin/components/AdminUsersTab.tsx` | Boutons d'action remplaces par icones (Pencil, Check, Trash2) avec tooltips |
-| `src/components/system/ModernDataTable.tsx` | Barre de recherche reduite (max-w-xs), conteneur filtres allegee |
+### 11. Landing page
+**`src/components/landing/PremiumHeroSection.tsx`**
+- `"Réseau NEXUS"` n'est pas en dur (utilise `t()`) - deja couvert par les traductions
 
-## Impact
+### 12. Sidebar / Navigation
+**`src/components/layout/SimplifiedSidebar.tsx`**
+- `"NEXUS"` (fallback organisation) -> `"UDC"`
 
-- Aucun changement de structure de donnees
-- Aucune nouvelle dependance
-- Modifications purement visuelles et UX
-- Les composants `Tooltip`, `Pencil`, `Check`, `Trash2` sont deja disponibles dans le projet
+**`src/components/layout/AppSidebar.tsx`**
+- Pas de texte en dur, utilise NexusLogo - deja couvert
+
+### 13. Page presentation
+**`src/i18n/locales/fr/presentation.json`**
+- `"NEXUS Platform"` -> `"USF Universal Digital Connect"`
+- `"NEXUS"` -> `"UDC"` (dans les descriptions)
+
+**`src/i18n/locales/en/presentation.json`**
+- Idem
+
+### 14. Home CTA
+**`src/components/home/HomeCtaBlock.tsx`**
+- `"Rejoignez ADCA"` -> `"Rejoignez UDC"`
+
+## Ce qui ne change PAS
+
+- Les noms de fichiers et composants (`NexusLogo`, `NexusIcon`, etc.) restent inchanges pour eviter des refactors massifs sans valeur ajoutee
+- Les variables CSS (`--nx-*`) restent inchanges
+- Le SVG du logo reste identique visuellement
+- Les commentaires techniques (`NEXUS_LAYER1_GUARD`, `blueprintGuards`) restent inchanges
+
+## Resume
+
+| Categorie | Nombre de fichiers |
+|-----------|-------------------|
+| Composants UI | 8 |
+| Traductions JSON | 6 |
+| Pages | 3 |
+| HTML | 1 |
+| **Total** | **~18 fichiers** |
+
+Toutes les mentions visibles par l'utilisateur de "ADCA", "Digital Connect Africa", "NEXUS" et "SUTEL" (dans les textes affichables) seront remplacees par **"USF Universal Digital Connect"** (nom complet) ou **"UDC"** (acronyme).
