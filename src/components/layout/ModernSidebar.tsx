@@ -114,7 +114,7 @@ export function ModernSidebar() {
           <div className="flex items-center space-x-3">
             <div className="relative">
               <Avatar className="h-8 w-8 shrink-0">
-                <AvatarImage src={profile?.avatar_url || ""} />
+                <AvatarImage src={profile?.avatar_url || ""} alt="Photo de profil" />
                 <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                   {getUserInitials()}
                 </AvatarFallback>
