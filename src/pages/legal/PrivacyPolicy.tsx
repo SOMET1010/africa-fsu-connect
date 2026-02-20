@@ -72,7 +72,7 @@ const PrivacyPolicy = () => (
 
         <section>
           <h2 className="text-xl font-semibold text-white">7. Contact</h2>
-          <p>Pour toute question relative à la protection de vos données, contactez-nous à : <a href="mailto:secretariat@atu-uat.org" className="text-[hsl(var(--nx-gold))] hover:underline">secretariat@atu-uat.org</a></p>
+          <p>Pour toute question relative à la protection de vos données, contactez-nous à : <a href="mailto:secretariat@atuuat.africa" className="text-[hsl(var(--nx-gold))] hover:underline">secretariat@atuuat.africa</a></p>
         </section>
 
         <section>

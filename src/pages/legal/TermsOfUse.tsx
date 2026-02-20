@@ -59,7 +59,7 @@ const TermsOfUse = () => (
 
         <section>
           <h2 className="text-xl font-semibold text-white">8. Contact</h2>
-          <p>Pour toute question : <a href="mailto:secretariat@atu-uat.org" className="text-[hsl(var(--nx-gold))] hover:underline">secretariat@atu-uat.org</a></p>
+          <p>Pour toute question : <a href="mailto:secretariat@atuuat.africa" className="text-[hsl(var(--nx-gold))] hover:underline">secretariat@atuuat.africa</a></p>
         </section>
 
         <section>

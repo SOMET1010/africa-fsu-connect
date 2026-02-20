@@ -33,7 +33,7 @@ export const PublicHeader = () => {
           <Link to="/" className={cn("flex items-center gap-3 shrink-0", isRTL && "flex-row-reverse")}>
             <img src={atuLogo} alt="ATU - African Telecommunications Union" className="h-12 w-auto" />
             <span className="text-lg font-bold text-white">UDC</span>
-            <span className="hidden xl:inline text-xs text-white/60 font-medium">| Universal Digital Connect</span>
+            <span className="hidden xl:inline text-xs text-white/60 font-medium">| Digital Connect Africa</span>
           </Link>
 
           {/* Desktop Nav */}

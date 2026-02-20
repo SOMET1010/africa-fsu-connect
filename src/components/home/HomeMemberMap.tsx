@@ -41,8 +41,8 @@ export const HomeMemberMap = ({ countries, onCountryClick, mode = 'members' }: H
     if (!mapContainerRef.current || mapRef.current) return;
 
     const map = L.map(mapContainerRef.current, {
-      center: [2, 20],
-      zoom: 3.5,
+      center: [5, 20],
+      zoom: 3.2,
       minZoom: 3,
       maxZoom: 6,
       zoomControl: false,
@@ -50,7 +50,7 @@ export const HomeMemberMap = ({ countries, onCountryClick, mode = 'members' }: H
       dragging: true,
       doubleClickZoom: false,
       attributionControl: false,
-      maxBounds: L.latLngBounds([-40, -25], [40, 55]),
+      maxBounds: L.latLngBounds([-38, -30], [42, 60]),
       maxBoundsViscosity: 0.8,
     });
 

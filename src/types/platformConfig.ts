@@ -121,8 +121,8 @@ export interface PlatformConfiguration {
 export const DEFAULT_PLATFORM_CONFIG: PlatformConfiguration = {
   status: 'draft',
   identity: {
-    platformName: 'SUTEL Nexus',
-    acronym: 'SUTEL',
+    platformName: 'USF Digital Connect Africa',
+    acronym: 'UDC',
     slogan: 'Connecter les régulateurs africains du service universel',
     url: '',
     logoUrl: '',
@@ -135,7 +135,7 @@ export const DEFAULT_PLATFORM_CONFIG: PlatformConfiguration = {
       name: "Union Africaine des Télécommunications",
       acronym: "UAT",
       role: 'main',
-      website: 'https://atu-uat.org',
+      website: 'https://www.atuuat.africa',
       logoUrl: '',
       contactName: '',
       contactEmail: '',

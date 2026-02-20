@@ -21,8 +21,8 @@ const Index = () => {
     <div className="min-h-screen bg-[hsl(var(--nx-night))] relative overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img src={nexusHeroImage} alt="Africa Network" className="w-full h-full object-cover opacity-30" loading="lazy" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--nx-night))]/60 via-[hsl(var(--nx-night))]/80 to-[hsl(var(--nx-night))]" />
+        <img src={nexusHeroImage} alt="Africa Network" className="w-full h-full object-cover opacity-45" loading="lazy" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--nx-night))]/40 via-[hsl(var(--nx-night))]/60 to-[hsl(var(--nx-night))]" />
       </div>
 
       {/* Content */}
