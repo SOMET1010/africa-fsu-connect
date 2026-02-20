@@ -1,81 +1,117 @@
 
 
-# Toggle de mise en page deux zones pour la page d'accueil
+# Plan de correction -- Audit approfondi Africa FSU Connect
 
-## Contexte
+## Resume des problemes identifies et corrections proposees
 
-La page d'accueil utilise actuellement une structure fixe en deux zones : hero sombre en haut, contenu clair au milieu, footer sombre en bas. L'objectif est de permettre aux utilisateurs de basculer entre ce mode clair et un mode entierement sombre (comme l'ancien design).
+L'audit a revele plusieurs problemes concrets que nous pouvons corriger. Voici le plan d'action organise par priorite.
 
-## Fonctionnement
+---
 
-Un nouveau champ `homeLayout` sera ajoute aux preferences utilisateur avec deux options :
-- **`light`** (defaut) : hero sombre + contenu clair + footer sombre (design actuel)
-- **`immersive`** : toute la page en fond sombre avec texte clair (ancien design)
+## 1. Incoherence de branding dans le CMS (CRITIQUE)
 
-La preference est sauvegardee via le systeme existant (Supabase pour les utilisateurs connectes, localStorage pour les visiteurs).
+**Probleme** : Le badge hero dans la base de donnees CMS affiche "UAT Digital Connect Africa (ADCA)" en francais, tandis que les autres langues affichent "SUTEL Network". Le nom officiel est "USF Digital Connect Africa".
 
-## Modifications
+**Correction** : Mettre a jour la table `homepage_content_blocks` pour le bloc `hero` :
+- FR : `badge` = "USF Digital Connect Africa"
+- EN : `badge` = "USF Digital Connect Africa"
+- PT : `badge` = "USF Digital Connect Africa"
+- AR : `badge` = "USF Digital Connect Africa"
 
-### 1. `src/contexts/UserPreferencesContext.tsx`
+Le nom de marque ne se traduit pas.
 
-Ajouter `homeLayout: 'light' | 'immersive'` a l'interface `UserPreferences` et au `defaultPreferences` (valeur par defaut : `'light'`).
+| Fichier/Ressource | Action |
+|---|---|
+| Migration SQL | UPDATE `homepage_content_blocks` pour corriger les 4 badges linguistiques |
 
-### 2. `src/pages/Index.tsx`
+---
 
-- Importer `useUserPreferences`
-- Lire `preferences.homeLayout`
-- Conditionner les classes CSS de la zone contenu :
-  - `light` : `bg-[hsl(var(--nx-bg))]` (actuel)
-  - `immersive` : `bg-[hsl(var(--nx-night))]` avec une classe `dark-zone` qui sera utilisee par les composants enfants
+## 2. Statistiques incoherentes : "54 Pays" vs "55 pays membres"
 
-Passer un prop `darkMode` aux composants enfants, ou utiliser un simple wrapper CSS avec un attribut `data-zone="dark"` que les composants peuvent lire.
+**Probleme** : Le badge de confiance dit "55 pays membres" mais la carte des features dit "54 Pays Membres". L'Union Africaine compte 55 Etats membres.
 
-### 3. `src/components/home/HomeLayoutToggle.tsx` (nouveau fichier)
-
-Un petit bouton flottant en bas a droite de l'ecran avec deux icones (soleil/lune) permettant de basculer entre les modes. Il appelle `updatePreferences({ homeLayout: ... })`.
-
-- Position fixe, `bottom-6 right-6`, `z-50`
-- Deux icones : Sun pour le mode clair, Moon pour le mode immersif
-- Tooltip expliquant la fonction
-- Transition animee au clic
-
-### 4. `src/components/preferences/PreferencesPanel.tsx`
-
-Ajouter dans l'onglet "Apparence" un selecteur pour la mise en page de la page d'accueil avec les deux options (Clair / Immersif), juste apres le selecteur de theme existant.
-
-### 5. Composants home (ajustement conditionnel)
-
-Les 6 composants de la zone contenu recoivent un prop `variant?: 'light' | 'dark'` (defaut `'light'`). Quand `variant="dark"`, ils utilisent les classes sombres (`text-white`, `bg-white/5`, etc.) au lieu des classes claires.
-
-Fichiers concernes :
-- `HomeMemberMapBlock.tsx`
-- `HomeFeaturesBlock.tsx`
-- `HomeTrustSection.tsx`
-- `HomeMessagesBlock.tsx`
-- `HomeCtaBlock.tsx`
-- `HomePartnersBlock.tsx`
-
-Chaque composant utilisera un simple ternaire sur le prop variant pour choisir ses classes CSS (texte, fond des cartes, bordures).
-
-## Details techniques
+**Correction** : Mettre a jour le fallback du bloc features pour afficher "55" au lieu de "54".
 
 | Fichier | Action |
-|---------|--------|
-| `src/contexts/UserPreferencesContext.tsx` | Ajouter `homeLayout` au type et aux valeurs par defaut |
-| `src/pages/Index.tsx` | Lire la preference, conditionner les classes, passer le variant aux enfants, afficher le toggle |
-| `src/components/home/HomeLayoutToggle.tsx` | Creer -- bouton flottant Sun/Moon |
-| `src/components/preferences/PreferencesPanel.tsx` | Ajouter selecteur "Mise en page accueil" dans l'onglet Apparence |
-| `src/components/home/HomeMemberMapBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
-| `src/components/home/HomeFeaturesBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
-| `src/components/home/HomeTrustSection.tsx` | Ajouter prop `variant` et classes conditionnelles |
-| `src/components/home/HomeMessagesBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
-| `src/components/home/HomeCtaBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
-| `src/components/home/HomePartnersBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
+|---|---|
+| `src/components/home/HomeFeaturesBlock.tsx` | Changer "54 Pays Membres" en "55 Pays Membres" dans `FALLBACK_FEATURES` |
 
-## Impact
+---
 
-- 10 fichiers modifies/crees
-- Aucune dependance ajoutee
-- Retrocompatible : le mode `light` est le defaut, aucun changement visuel sans action utilisateur
-- La preference persiste entre les sessions via le systeme existant
+## 3. Hero : texte du 3eme bouton invisible
+
+**Probleme** : Le bouton "Se connecter" dans le hero a un style `border-white/30 text-white` mais apparait presque invisible sur le screenshot (texte tres pale).
+
+**Correction** : Augmenter l'opacite du texte et de la bordure du 3eme bouton CTA.
+
+| Fichier | Action |
+|---|---|
+| `src/components/home/HomeHeroBlock.tsx` | Changer `border-white/30 text-white` en `border-white/50 text-white bg-white/10` (comme le 2eme bouton) |
+
+---
+
+## 4. Navigation "Projets partagés" -- lien trompeur
+
+**Probleme** : Le menu affiche "Projets partagés" mais le lien pointe vers `/projects` qui est une route protegee. Un visiteur non connecte sera redirige vers la page d'authentification.
+
+**Correction** : Renommer "Projets partagés" en "Projets" pour correspondre au contenu.
+
+| Fichier | Action |
+|---|---|
+| `src/components/layout/PublicHeader.tsx` | Changer le label de "Projets" en "Projets partagés" dans `NAV_ITEMS` (deja correct, le fallback affiche "Projets") -- en realite, verifier la cle i18n `nav.projects` |
+
+---
+
+## 5. Nom de la plateforme dans le CTA
+
+**Probleme** : Le bloc CTA affiche "Rejoignez le reseau SUTEL" alors que le nom officiel est "USF Digital Connect Africa" ou "UDC".
+
+**Correction** : Mettre a jour le contenu CMS du bloc `cta` pour remplacer "SUTEL" par "UDC".
+
+| Fichier/Ressource | Action |
+|---|---|
+| Migration SQL | UPDATE `homepage_content_blocks` pour le bloc `cta` : titre = "Rejoignez le reseau UDC" |
+
+---
+
+## 6. Accessibilite : attribut `lang` du HTML
+
+**Probleme** : Le fichier `index.html` a `lang="en"` alors que la langue par defaut est le francais.
+
+**Correction** : Changer `lang="en"` en `lang="fr"` puisque le contenu par defaut est en francais.
+
+| Fichier | Action |
+|---|---|
+| `index.html` | Changer `lang="en"` en `lang="fr"` |
+
+---
+
+## 7. Titre de la page dans l'onglet du navigateur
+
+**Probleme** : Le titre HTML est "USF Digital Connect Africa" -- c'est correct mais il manque le "| Plateforme panafricaine" pour le SEO.
+
+**Correction** : Pas de modification necessaire, le titre actuel est acceptable.
+
+---
+
+## 8. Points non corrigeables dans ce cycle
+
+Les elements suivants sont notes mais ne font pas partie de ce plan :
+
+- **Badge Lovable visible** : Se desactive dans les parametres du projet Lovable (Settings > Hide Lovable Badge)
+- **Fonctionnalites non accessibles** : Les modules (E-Learning, Forum, Carte interactive, etc.) existent dans le code mais sont derriere l'authentification -- c'est voulu
+- **Zoom carte limité** : La carte de la page d'accueil est volontairement simplifiee ; la carte complete est accessible via "/network"
+
+---
+
+## Resume des fichiers modifies
+
+| Fichier | Modification |
+|---|---|
+| Migration SQL | Corriger branding badge hero (4 langues) + titre CTA |
+| `src/components/home/HomeFeaturesBlock.tsx` | 54 -> 55 pays |
+| `src/components/home/HomeHeroBlock.tsx` | Opacite 3eme bouton CTA |
+| `index.html` | `lang="en"` -> `lang="fr"` |
+
+Total : 3 fichiers + 1 migration SQL.
 
