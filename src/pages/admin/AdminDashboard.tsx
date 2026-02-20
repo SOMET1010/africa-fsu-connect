@@ -43,7 +43,7 @@ const AdminDashboard = () => {
     <div className="min-h-screen">
       <PageHeader
         title="Tableau de Pilotage"
-        description="Indicateurs de performance et outils d'administration du réseau NEXUS"
+        description="Indicateurs de performance et outils d'administration du réseau UDC"
         badge="Administration"
         gradient
         actions={

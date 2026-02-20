@@ -38,7 +38,7 @@ const Strategies = () => {
         {/* Intro */}
         <section className="max-w-3xl mx-auto text-center space-y-4">
           <p className="text-muted-foreground text-lg leading-relaxed">
-            {t("strategies.intro") || "Les Fonds du Service Universel en Afrique s'inscrivent dans des cadres réglementaires nationaux et régionaux. Cette section présente les principaux textes et politiques qui guident l'action des pays membres du réseau SUTEL."}
+            {t("strategies.intro") || "Les Fonds du Service Universel en Afrique s'inscrivent dans des cadres réglementaires nationaux et régionaux. Cette section présente les principaux textes et politiques qui guident l'action des pays membres du réseau UDC."}
           </p>
         </section>
 

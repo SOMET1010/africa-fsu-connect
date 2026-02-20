@@ -80,7 +80,7 @@ const PlatformConfig = () => {
               <div>
                 <h1 className="text-2xl font-bold">Configuration de la plateforme</h1>
                 <p className="text-sm text-muted-foreground">
-                  Fiche de configuration initiale SUTEL Nexus
+                  Fiche de configuration initiale USF Universal Digital Connect
                 </p>
               </div>
             </div>

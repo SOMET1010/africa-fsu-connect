@@ -87,7 +87,7 @@ const Community = () => {
               Répartition géographique
             </h2>
             <p className="text-white/60">
-              Explorez la diversité linguistique du réseau SUTEL à travers l'Afrique
+              Explorez la diversité linguistique du réseau UDC à travers l'Afrique
             </p>
           </motion.div>
 

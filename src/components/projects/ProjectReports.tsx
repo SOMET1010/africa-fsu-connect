@@ -79,7 +79,7 @@ export const ProjectReports = ({ projects }: ProjectReportsProps) => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
-            Tableau de bord exécutif FSU/SUTEL
+            Tableau de bord exécutif FSU/UDC
           </CardTitle>
         </CardHeader>
         <CardContent>

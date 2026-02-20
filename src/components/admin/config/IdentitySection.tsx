@@ -31,7 +31,7 @@ export const IdentitySection = ({ identity, onChange }: IdentitySectionProps) =>
             id="platformName"
             value={identity.platformName}
             onChange={(e) => handleChange('platformName', e.target.value)}
-            placeholder="SUTEL Nexus"
+            placeholder="USF Universal Digital Connect"
           />
         </div>
         
@@ -41,7 +41,7 @@ export const IdentitySection = ({ identity, onChange }: IdentitySectionProps) =>
             id="acronym"
             value={identity.acronym}
             onChange={(e) => handleChange('acronym', e.target.value)}
-            placeholder="SUTEL"
+            placeholder="UDC"
           />
         </div>
 
@@ -63,7 +63,7 @@ export const IdentitySection = ({ identity, onChange }: IdentitySectionProps) =>
             type="url"
             value={identity.url}
             onChange={(e) => handleChange('url', e.target.value)}
-            placeholder="https://sutel-nexus.org"
+            placeholder="https://udc-platform.org"
           />
         </div>
 

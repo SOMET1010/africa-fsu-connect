@@ -196,7 +196,7 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
               <span style="font-size: 24px;">${getCountryFlag(agency.country)}</span>
               <div>
                 <h3 style="margin: 0; font-size: 16px; font-weight: bold;">${agency.country}</h3>
-                <p style="margin: 0; font-size: 11px; color: #666;">Pays membre du réseau SUTEL</p>
+                <p style="margin: 0; font-size: 11px; color: #666;">Pays membre du réseau UDC</p>
               </div>
             </div>
             
@@ -361,7 +361,7 @@ export const LeafletInteractiveMap = ({ agencies }: LeafletInteractiveMapProps) 
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Globe className="h-5 w-5 text-primary" />
-          <h3 className="text-lg font-semibold">Carte du Réseau SUTEL</h3>
+          <h3 className="text-lg font-semibold">Carte du Réseau UDC</h3>
         </div>
         <Badge variant="outline" className="bg-primary/5">
           {totalCountries} pays membres • {totalProjects} projets partagés

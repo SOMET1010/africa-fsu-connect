@@ -45,7 +45,7 @@ export const DashboardMapWidget = ({ compact = true }: DashboardMapWidgetProps) 
         <div className="flex items-center justify-between flex-wrap gap-2 pb-3">
           <h3 className="text-lg font-semibold text-white flex items-center gap-2">
             <Globe className="h-5 w-5 text-[hsl(var(--nx-gold))]" />
-            Carte du Réseau SUTEL
+            Carte du Réseau UDC
           </h3>
           <div className="flex items-center gap-2">
             <div className="flex gap-1">

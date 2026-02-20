@@ -37,8 +37,8 @@ interface QuickAction {
 const quickActions: QuickAction[] = [
   {
     icon: BarChart3,
-    label: "Statistiques FSU",
-    labelEn: "FSU Statistics",
+    label: "Statistiques UDC",
+    labelEn: "UDC Statistics",
     prompt: "Quelles sont les dernières statistiques des projets FSU en Afrique ?"
   },
   {
@@ -115,10 +115,10 @@ export function SutaChatbot() {
     // Simulate AI response (in production, this would call the Lovable AI gateway)
     setTimeout(() => {
       const responses: Record<string, string> = {
-        "statistiques": "📊 **Statistiques SUTEL actuelles:**\n\n• **54 pays** participants\n• **127 projets** actifs\n• **89 documents** partagés\n• **12 événements** à venir\n\nLa couverture population moyenne atteint 73% avec une croissance de 5% ce trimestre.",
+        "statistiques": "📊 **Statistiques UDC actuelles:**\n\n• **54 pays** participants\n• **127 projets** actifs\n• **89 documents** partagés\n• **12 événements** à venir\n\nLa couverture population moyenne atteint 73% avec une croissance de 5% ce trimestre.",
         "réglementations": "📜 **Principales réglementations FSU:**\n\n1. **Contribution FSU** - Taxe sur les opérateurs (1-5% du CA)\n2. **Zones blanches** - Obligation de couverture rurale\n3. **Accès universel** - Tarifs plafonnés pour populations vulnérables\n4. **Transparence** - Reporting annuel obligatoire\n\nConsultez la bibliothèque pour les textes complets.",
         "projets": "🌍 **Projets FSU actifs par région:**\n\n• **CEDEAO** - 45 projets (Connectivité rurale)\n• **SADC** - 32 projets (Infrastructure backbone)\n• **EACO** - 28 projets (E-éducation)\n• **ECCAS** - 15 projets (Santé digitale)\n• **UMA** - 7 projets (Administration électronique)\n\nCliquez sur 'Carte' dans le menu pour visualiser.",
-        "plateforme": "🖥️ **La plateforme SUTEL offre:**\n\n1. **Base de données FSU** - Tous les projets africains\n2. **Carte interactive** - Visualisation géographique\n3. **Bibliothèque** - Documents et bonnes pratiques\n4. **Forum** - Échanges entre agences\n5. **E-Learning** - Formations certifiantes\n6. **Veille stratégique** - Actualités du secteur\n\nN'hésitez pas à explorer les menus !"
+        "plateforme": "🖥️ **La plateforme UDC offre:**\n\n1. **Base de données FSU** - Tous les projets africains\n2. **Carte interactive** - Visualisation géographique\n3. **Bibliothèque** - Documents et bonnes pratiques\n4. **Forum** - Échanges entre agences\n5. **E-Learning** - Formations certifiantes\n6. **Veille stratégique** - Actualités du secteur\n\nN'hésitez pas à explorer les menus !"
       };
 
       let response = "Je suis là pour vous aider ! Pourriez-vous préciser votre question sur les projets FSU, les statistiques, les réglementations ou l'utilisation de la plateforme ?";

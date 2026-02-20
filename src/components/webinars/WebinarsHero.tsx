@@ -17,7 +17,7 @@ export function WebinarsHero() {
         
         <p className="text-lg text-muted-foreground max-w-2xl">
           Sessions en direct et replays pour apprendre ensemble. 
-          Participez aux échanges avec les experts du réseau NEXUS.
+          Participez aux échanges avec les experts du réseau UDC.
         </p>
       </div>
     </div>

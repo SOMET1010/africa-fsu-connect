@@ -87,7 +87,7 @@ export const ExecutiveSummary = ({
 
               <div className="space-y-2">
                 <p className="text-base leading-relaxed text-foreground/90">
-                  Le réseau SUTEL <strong className="text-primary">{getNetworkDynamic()}</strong> : {" "}
+                  Le réseau UDC <strong className="text-primary">{getNetworkDynamic()}</strong> : {" "}
                   <strong>{stats.totalAgencies} pays membres</strong> partagent{" "}
                   <strong>{stats.totalProjects} projets</strong>, bénéficiant à{" "}
                   <strong className="text-accent">{formatPopulation(stats.populationCovered)} de personnes</strong>.

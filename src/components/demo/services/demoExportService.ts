@@ -7,7 +7,7 @@ export class DemoExportService {
 
   static exportToMarkdown(steps: any[], completedSteps: string[]): string {
     let content = '# Guide de Démonstration Interactive\n\n';
-    content += '**Plateforme SUTEL - Scénario Marie Diallo**\n\n';
+    content += '**Plateforme UDC - Scénario Marie Diallo**\n\n';
     
     steps.forEach((step, index) => {
       const completed = completedSteps.includes(step.id) ? '✅' : '⏳';

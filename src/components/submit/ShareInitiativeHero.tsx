@@ -13,7 +13,7 @@ export const ShareInitiativeHero = () => {
       </h1>
       
       <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-        Contribuez au réseau SUTEL en partageant vos projets, bonnes pratiques 
+        Contribuez au réseau UDC en partageant vos projets, bonnes pratiques 
         ou ressources avec les autres pays membres.
       </p>
     </div>

@@ -76,7 +76,7 @@ const Projects = () => {
     <NexusLayout>
       {/* Hero Section - Premium Dark */}
       <NexusSectionHero
-        badge={t('projects.badge') || 'Réseau SUTEL'}
+        badge={t('projects.badge') || 'Réseau UDC'}
         badgeIcon={Rocket}
         title={t('projects.hero.title') || 'Découvrez les initiatives inspirantes'}
         subtitle={t('projects.hero.subtitle') || "Explorez les projets portés par les Fonds du Service Universel africains. Chaque initiative témoigne de l'engagement collectif."}

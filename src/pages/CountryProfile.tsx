@@ -70,7 +70,7 @@ const CountryProfile = () => {
           <div className="mt-8 text-center">
             <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
               {t('country.narrative', { country: country.name }) || 
-                `${country.name} contribue activement au réseau NEXUS en partageant des projets et des expériences avec les autres pays membres.`}
+                `${country.name} contribue activement au réseau UDC en partageant des projets et des expériences avec les autres pays membres.`}
             </p>
           </div>
 
@@ -152,7 +152,7 @@ const CountryProfile = () => {
               </div>
               <p className="text-center text-muted-foreground">
                 {t('country.contributions.summary') || 
-                  "Ce pays participe activement au partage d'expériences dans le réseau SUTEL."}
+                  "Ce pays participe activement au partage d'expériences dans le réseau UDC."}
               </p>
             </TabsContent>
 

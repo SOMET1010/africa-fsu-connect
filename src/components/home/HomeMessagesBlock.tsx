@@ -6,13 +6,13 @@ const OFFICIAL_MESSAGES = [
   {
     name: "Secrétaire Général de l'UAT",
     title: "Message du Secrétaire Général",
-    text: "La plateforme ADCA représente un pas décisif vers la coordination numérique panafricaine. Notre ambition est de connecter les 55 États membres pour accélérer le déploiement du service universel sur tout le continent.",
+    text: "La plateforme UDC représente un pas décisif vers la coordination numérique panafricaine. Notre ambition est de connecter les 55 États membres pour accélérer le déploiement du service universel sur tout le continent.",
     initials: "SG",
   },
   {
     name: "Directeur Général de l'ANSUT",
     title: "Message du Directeur Général",
-    text: "L'ANSUT s'engage aux côtés de l'UAT pour faire d'ADCA un outil stratégique au service du déploiement du service universel. Cette plateforme renforce notre capacité collective à réduire la fracture numérique et à connecter les communautés les plus isolées.",
+    text: "L'ANSUT s'engage aux côtés de l'UAT pour faire d'UDC un outil stratégique au service du déploiement du service universel. Cette plateforme renforce notre capacité collective à réduire la fracture numérique et à connecter les communautés les plus isolées.",
     initials: "DG",
   },
 ];

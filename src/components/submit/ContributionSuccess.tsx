@@ -35,7 +35,7 @@ export const ContributionSuccess = ({ type, title, onNewContribution }: Contribu
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto">
             {getTypeLabel()} <span className="font-medium text-foreground">"{title}"</span> a été 
-            soumis avec succès. L'équipe SUTEL examinera votre contribution prochainement.
+            soumis avec succès. L'équipe UDC examinera votre contribution prochainement.
           </p>
         </div>
 

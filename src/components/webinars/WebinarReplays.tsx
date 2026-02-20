@@ -2,9 +2,9 @@ import { WebinarCard } from "./WebinarCard";
 
 const replayWebinars = [
   {
-    title: "Introduction à l'architecture NEXUS",
+    title: "Introduction à l'architecture UDC",
     description: "Présentation de la plateforme et de ses fonctionnalités pour les nouveaux membres.",
-    presenter: "Équipe NEXUS",
+    presenter: "Équipe UDC",
     presenterCountry: "Réseau",
     presenterFlag: "🌍",
     date: "5 Déc 2025",

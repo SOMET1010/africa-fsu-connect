@@ -113,7 +113,7 @@ export function InteractiveRegionalMap() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <MapPin className="h-6 w-6 text-primary" />
-            <h3 className="text-2xl font-bold">Carte Interactive - Présence SUTEL</h3>
+            <h3 className="text-2xl font-bold">Carte Interactive - Présence UDC</h3>
           </div>
           <Badge variant="secondary" className="flex items-center gap-2">
             <Building2 className="h-4 w-4" />

@@ -196,7 +196,7 @@ export const ImpactDashboard = () => {
       >
         <div>
           <h1 className="text-2xl md:text-3xl font-bold gradient-text">
-            Vue Réseau ADCA
+            Vue Réseau UDC
           </h1>
           <p className="text-muted-foreground mt-1">
             Coordination collective des Fonds du Service Universel

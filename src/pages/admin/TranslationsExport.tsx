@@ -91,7 +91,7 @@ const TranslationsExport = () => {
             Export des Traductions
           </h1>
           <p className="text-muted-foreground mt-1">
-            Gérez et exportez toutes les traductions de la plateforme SUTEL
+            Gérez et exportez toutes les traductions de la plateforme UDC
           </p>
         </div>
         
