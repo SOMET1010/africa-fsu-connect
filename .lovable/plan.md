@@ -1,109 +1,81 @@
 
 
-# Eclaircir le site -- Inspiration Carnegie Endowment
+# Toggle de mise en page deux zones pour la page d'accueil
 
-## Analyse du modele de reference
+## Contexte
 
-Le site Carnegie utilise une structure visuelle en deux zones distinctes :
+La page d'accueil utilise actuellement une structure fixe en deux zones : hero sombre en haut, contenu clair au milieu, footer sombre en bas. L'objectif est de permettre aux utilisateurs de basculer entre ce mode clair et un mode entierement sombre (comme l'ancien design).
 
-1. **Zone haute (Hero)** : Fond bleu profond avec l'image de l'Afrique connectee -- conserve l'impact visuel
-2. **Zone basse (Contenu)** : Fond blanc/clair avec texte sombre -- lisibilite maximale, professionnalisme institutionnel
+## Fonctionnement
 
-Votre site actuel est entierement sombre (`nx-night`) du haut en bas, ce qui le rend visuellement lourd et difficile a lire.
+Un nouveau champ `homeLayout` sera ajoute aux preferences utilisateur avec deux options :
+- **`light`** (defaut) : hero sombre + contenu clair + footer sombre (design actuel)
+- **`immersive`** : toute la page en fond sombre avec texte clair (ancien design)
 
-## Strategie de transformation
+La preference est sauvegardee via le systeme existant (Supabase pour les utilisateurs connectes, localStorage pour les visiteurs).
 
-Conserver le hero sombre (impact visuel fort) mais basculer toutes les sections de contenu en fond clair avec texte sombre, comme Carnegie.
+## Modifications
 
-### Zones qui restent sombres
-- Header (navigation)
-- Hero (image Afrique + badge + titre)
-- Trust Badge (bandeau de confiance)
-- Footer
+### 1. `src/contexts/UserPreferencesContext.tsx`
 
-### Zones qui passent en fond clair
-- Carte des membres
-- Features (54 pays, projets, ressources)
-- Section Securite/Trust
-- Messages officiels
-- CTA "Rejoignez-nous"
-- Partenaires
+Ajouter `homeLayout: 'light' | 'immersive'` a l'interface `UserPreferences` et au `defaultPreferences` (valeur par defaut : `'light'`).
 
-## Modifications fichier par fichier
+### 2. `src/pages/Index.tsx`
 
-### 1. `src/pages/Index.tsx` -- Structure de la page
+- Importer `useUserPreferences`
+- Lire `preferences.homeLayout`
+- Conditionner les classes CSS de la zone contenu :
+  - `light` : `bg-[hsl(var(--nx-bg))]` (actuel)
+  - `immersive` : `bg-[hsl(var(--nx-night))]` avec une classe `dark-zone` qui sera utilisee par les composants enfants
 
-Couper la page en deux zones :
-- Zone hero : conserve le fond sombre `nx-night` avec l'image de fond
-- Zone contenu : nouveau conteneur avec fond `bg-white` (ou `bg-[hsl(var(--nx-bg))]` ivoire clair) pour toutes les sections apres le trust badge
+Passer un prop `darkMode` aux composants enfants, ou utiliser un simple wrapper CSS avec un attribut `data-zone="dark"` que les composants peuvent lire.
 
-### 2. `src/components/home/HomeMemberMapBlock.tsx`
+### 3. `src/components/home/HomeLayoutToggle.tsx` (nouveau fichier)
 
-- Titres : `text-white` remplace par `text-[hsl(var(--nx-text-900))]` (texte sombre)
-- Sous-titres : `text-white/70` remplace par `text-[hsl(var(--nx-text-500))]`
-- Badges/pills : fond `bg-white/5` remplace par `bg-[hsl(var(--nx-brand-900))]/5`
-- Boutons de filtre : adapter les couleurs pour fond clair
-- Conteneur carte : conserver le fond sombre (`nx-night`) uniquement pour la carte elle-meme
-- Legende : textes en gris fonce au lieu de blanc
+Un petit bouton flottant en bas a droite de l'ecran avec deux icones (soleil/lune) permettant de basculer entre les modes. Il appelle `updatePreferences({ homeLayout: ... })`.
 
-### 3. `src/components/home/HomeFeaturesBlock.tsx`
+- Position fixe, `bottom-6 right-6`, `z-50`
+- Deux icones : Sun pour le mode clair, Moon pour le mode immersif
+- Tooltip expliquant la fonction
+- Transition animee au clic
 
-- Cartes : fond `bg-white/5` remplace par `bg-white shadow-sm border border-[hsl(var(--nx-border))]`
-- Titres cartes : `text-white` remplace par `text-[hsl(var(--nx-text-900))]`
-- Descriptions : `text-white/70` remplace par `text-[hsl(var(--nx-text-500))]`
-- Icones : conserver l'or `nx-gold` sur fond or leger
+### 4. `src/components/preferences/PreferencesPanel.tsx`
 
-### 4. `src/components/home/HomeTrustSection.tsx`
+Ajouter dans l'onglet "Apparence" un selecteur pour la mise en page de la page d'accueil avec les deux options (Clair / Immersif), juste apres le selecteur de theme existant.
 
-- Fond section : ajouter `bg-[hsl(var(--nx-section-cool))]` (bleu tres pale)
-- Titres : `text-white` vers `text-[hsl(var(--nx-text-900))]`
-- Descriptions : `text-white/80` vers `text-[hsl(var(--nx-text-700))]`
-- Cartes : `bg-white/5 border-white/10` vers `bg-white border border-[hsl(var(--nx-border))] shadow-sm`
+### 5. Composants home (ajustement conditionnel)
 
-### 5. `src/components/home/HomeMessagesBlock.tsx`
+Les 6 composants de la zone contenu recoivent un prop `variant?: 'light' | 'dark'` (defaut `'light'`). Quand `variant="dark"`, ils utilisent les classes sombres (`text-white`, `bg-white/5`, etc.) au lieu des classes claires.
 
-- Titre : `text-white` vers `text-[hsl(var(--nx-text-900))]`
-- Cartes messages : `bg-white/5 border-white/10` vers `bg-white border border-[hsl(var(--nx-border))] shadow-sm`
-- Textes : `text-white` vers `text-[hsl(var(--nx-text-900))]`, `text-white/85` vers `text-[hsl(var(--nx-text-700))]`
+Fichiers concernes :
+- `HomeMemberMapBlock.tsx`
+- `HomeFeaturesBlock.tsx`
+- `HomeTrustSection.tsx`
+- `HomeMessagesBlock.tsx`
+- `HomeCtaBlock.tsx`
+- `HomePartnersBlock.tsx`
 
-### 6. `src/components/home/HomeCtaBlock.tsx`
+Chaque composant utilisera un simple ternaire sur le prop variant pour choisir ses classes CSS (texte, fond des cartes, bordures).
 
-- Fond du bloc CTA : passer de `from-[hsl(var(--nx-gold))]/10` a un fond brand institutionnel `bg-[hsl(var(--nx-brand-900))]` avec texte blanc (comme Carnegie utilise un bloc accent)
-- Bouton CTA : conserver le gradient or
+## Details techniques
 
-### 7. `src/components/home/HomePartnersBlock.tsx`
-
-- Texte "Partenaires" : `text-white/70` vers `text-[hsl(var(--nx-text-500))]`
-- Badges partenaires : `text-white/75 border-white/20` vers `text-[hsl(var(--nx-text-700))] border-[hsl(var(--nx-border))]`
-
-## Resultat attendu
-
-```text
-+------------------------------------------+
-|  Header (sombre - nx-night)              |
-+------------------------------------------+
-|  Hero + Image Afrique (sombre)           |
-|  Badge USF + Titre + CTA                 |
-+------------------------------------------+
-|  Trust Badge (sombre)                    |
-+==========================================+
-|  FOND CLAIR (blanc/ivoire)               |
-|                                          |
-|  Carte des Membres                       |
-|  Features (54 pays, projets...)          |
-|  Securite & Protection                   |
-|  Messages officiels                      |
-|  CTA "Rejoignez-nous" (bloc accent)     |
-|  Partenaires                             |
-+==========================================+
-|  Footer (sombre - nx-night)              |
-+------------------------------------------+
-```
+| Fichier | Action |
+|---------|--------|
+| `src/contexts/UserPreferencesContext.tsx` | Ajouter `homeLayout` au type et aux valeurs par defaut |
+| `src/pages/Index.tsx` | Lire la preference, conditionner les classes, passer le variant aux enfants, afficher le toggle |
+| `src/components/home/HomeLayoutToggle.tsx` | Creer -- bouton flottant Sun/Moon |
+| `src/components/preferences/PreferencesPanel.tsx` | Ajouter selecteur "Mise en page accueil" dans l'onglet Apparence |
+| `src/components/home/HomeMemberMapBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
+| `src/components/home/HomeFeaturesBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
+| `src/components/home/HomeTrustSection.tsx` | Ajouter prop `variant` et classes conditionnelles |
+| `src/components/home/HomeMessagesBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
+| `src/components/home/HomeCtaBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
+| `src/components/home/HomePartnersBlock.tsx` | Ajouter prop `variant` et classes conditionnelles |
 
 ## Impact
 
-- 8 fichiers modifies (Index.tsx + 6 composants home + 0 nouveau fichier)
+- 10 fichiers modifies/crees
 - Aucune dependance ajoutee
-- Le footer et le header conservent leur style sombre actuel
-- Les design tokens `nx-text-900`, `nx-text-700`, `nx-text-500`, `nx-bg`, `nx-border` deja definis dans `nexus-tokens.css` sont reutilises
+- Retrocompatible : le mode `light` est le defaut, aucun changement visuel sans action utilisateur
+- La preference persiste entre les sessions via le systeme existant
 
