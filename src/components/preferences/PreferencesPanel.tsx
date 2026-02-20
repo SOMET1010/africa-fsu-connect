@@ -131,6 +131,24 @@ export const PreferencesPanel = () => {
               </div>
 
               <div className="space-y-2">
+                <Label>Mise en page accueil</Label>
+                <Select
+                  value={preferences.homeLayout}
+                  onValueChange={(value) =>
+                    handlePreferenceChange({ homeLayout: value as any })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="light">☀️ Clair</SelectItem>
+                    <SelectItem value="immersive">🌙 Immersif</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
                 <Label>Langue</Label>
                 <Select
                   value={preferences.language}

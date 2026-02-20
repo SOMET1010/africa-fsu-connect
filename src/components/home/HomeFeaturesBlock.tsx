@@ -40,11 +40,13 @@ function parseTitle(title: string): { number: number | null; label: string } {
   return { number: null, label: title };
 }
 
-function FeatureCard({ feature, index, isVisible }: {
+function FeatureCard({ feature, index, isVisible, variant = 'light' }: {
   feature: { icon: string; title: string; description: string };
   index: number;
   isVisible: boolean;
+  variant?: 'light' | 'dark';
 }) {
+  const d = variant === 'dark';
   const { isRTL } = useDirection();
   const Icon = ICON_MAP[feature.icon] || FileText;
   const link = LINK_MAP[feature.icon];
@@ -55,8 +57,8 @@ function FeatureCard({ feature, index, isVisible }: {
     <ScrollReveal delay={index * 150} direction="up">
       <div
         className={cn(
-          "group p-6 rounded-xl bg-[hsl(var(--nx-surface))] border border-[hsl(var(--nx-border))] shadow-[var(--nx-shadow-sm)] transition-all duration-300",
-          "hover:border-[hsl(var(--nx-gold))]/40 hover:-translate-y-1 hover:shadow-[var(--nx-shadow-md)]",
+          "group p-6 rounded-xl transition-all duration-300 hover:-translate-y-1",
+          d ? "bg-white/5 border border-white/10 hover:border-[hsl(var(--nx-gold))]/40 hover:shadow-lg" : "bg-[hsl(var(--nx-surface))] border border-[hsl(var(--nx-border))] shadow-[var(--nx-shadow-sm)] hover:border-[hsl(var(--nx-gold))]/40 hover:shadow-[var(--nx-shadow-md)]",
           isRTL && "text-right"
         )}
       >
@@ -70,15 +72,15 @@ function FeatureCard({ feature, index, isVisible }: {
           <div>
             {number !== null ? (
               <div className="mb-1">
-                <span className="text-3xl font-bold text-[hsl(var(--nx-text-900))]">
+                <span className={cn("text-3xl font-bold", d ? "text-white" : "text-[hsl(var(--nx-text-900))]")}>
                   {isVisible ? <AnimatedCounter value={number} duration={1200} /> : "0"}
                 </span>
-                <span className="text-base font-semibold text-[hsl(var(--nx-text-900))] ml-2">{label}</span>
+                <span className={cn("text-base font-semibold ml-2", d ? "text-white" : "text-[hsl(var(--nx-text-900))]")}>{label}</span>
               </div>
             ) : (
-              <h3 className="font-semibold text-[hsl(var(--nx-text-900))] text-lg mb-1">{label}</h3>
+              <h3 className={cn("font-semibold text-lg mb-1", d ? "text-white" : "text-[hsl(var(--nx-text-900))]")}>{label}</h3>
             )}
-            <p className="text-sm text-[hsl(var(--nx-text-500))]">{feature.description}</p>
+            <p className={cn("text-sm", d ? "text-white/70" : "text-[hsl(var(--nx-text-500))]")}>{feature.description}</p>
           </div>
 
           {/* CTA link */}
@@ -100,7 +102,7 @@ function FeatureCard({ feature, index, isVisible }: {
   );
 }
 
-export function HomeFeaturesBlock() {
+export function HomeFeaturesBlock({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const { t } = useTranslation();
   const { getBlock, isLoading } = useHomepageContent();
   const { ref, isVisible } = useScrollReveal({ threshold: 0.2 });
@@ -122,7 +124,7 @@ export function HomeFeaturesBlock() {
     <div ref={ref} className="container mx-auto px-4 pb-12" style={{ contentVisibility: 'auto' }}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {items.map((feature, index) => (
-          <FeatureCard key={index} feature={feature} index={index} isVisible={isVisible} />
+          <FeatureCard key={index} feature={feature} index={index} isVisible={isVisible} variant={variant} />
         ))}
       </div>
     </div>

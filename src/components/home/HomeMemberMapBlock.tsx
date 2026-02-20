@@ -22,7 +22,8 @@ const MODE_OPTIONS: { mode: MapMode; label: string; icon: typeof Users }[] = [
   { mode: 'trends', label: 'Tendances', icon: TrendingUp },
 ];
 
-export function HomeMemberMapBlock() {
+export function HomeMemberMapBlock({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
+  const d = variant === 'dark';
   const { data: countries = [], isLoading } = useAfricanCountries();
   const { isRTL } = useDirection();
   const [activeMode, setActiveMode] = useState<MapMode>('members');
@@ -37,14 +38,14 @@ export function HomeMemberMapBlock() {
     <section className="py-16 animate-fade-in" style={{ contentVisibility: 'auto' }}>
       <div className="container mx-auto px-4">
         <div className={cn("text-center mb-10", isRTL && "text-right")}>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(var(--nx-brand-900))]/5 border border-[hsl(var(--nx-border))] text-[hsl(var(--nx-text-500))] text-sm mb-4">
+          <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-4", d ? "bg-white/5 border border-white/10 text-white/70" : "bg-[hsl(var(--nx-brand-900))]/5 border border-[hsl(var(--nx-border))] text-[hsl(var(--nx-text-500))]")}>
             <Globe className="h-4 w-4 text-[hsl(var(--nx-gold))]" />
             Réseau continental
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-[hsl(var(--nx-text-900))] mb-3">
+          <h2 className={cn("text-2xl md:text-3xl font-bold mb-3", d ? "text-white" : "text-[hsl(var(--nx-text-900))]")}>
             Participation des Membres
           </h2>
-          <p className="text-[hsl(var(--nx-text-500))] max-w-2xl mx-auto">
+          <p className={cn("max-w-2xl mx-auto", d ? "text-white/70" : "text-[hsl(var(--nx-text-500))]")}>
             Visualisez l'engagement des pays africains dans le réseau UDC — contributions, projets et collaborations en temps réel.
           </p>
         </div>
@@ -58,8 +59,8 @@ export function HomeMemberMapBlock() {
               className={cn(
                 "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-all",
                 activeMode === mode
-                  ? "bg-[hsl(var(--nx-brand-900))]/10 text-[hsl(var(--nx-brand-900))] border border-[hsl(var(--nx-brand-900))]/30"
-                  : "bg-[hsl(var(--nx-surface))] text-[hsl(var(--nx-text-500))] border border-[hsl(var(--nx-border))] hover:bg-[hsl(var(--nx-border))] hover:text-[hsl(var(--nx-text-700))]"
+                  ? d ? "bg-white/10 text-white border border-white/30" : "bg-[hsl(var(--nx-brand-900))]/10 text-[hsl(var(--nx-brand-900))] border border-[hsl(var(--nx-brand-900))]/30"
+                  : d ? "bg-white/5 text-white/60 border border-white/10 hover:bg-white/10 hover:text-white/80" : "bg-[hsl(var(--nx-surface))] text-[hsl(var(--nx-text-500))] border border-[hsl(var(--nx-border))] hover:bg-[hsl(var(--nx-border))] hover:text-[hsl(var(--nx-text-700))]"
               )}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -95,10 +96,10 @@ export function HomeMemberMapBlock() {
                   backgroundColor: `${ACTIVITY_LEVELS[level].color}33`,
                 }}
               />
-              <span className="text-xs text-[hsl(var(--nx-text-500))]">
-                {label}
-                <span className="ml-1 text-[hsl(var(--nx-text-500))]/60">({countByLevel(level)})</span>
-              </span>
+               <span className={cn("text-xs", d ? "text-white/60" : "text-[hsl(var(--nx-text-500))]")}>
+                 {label}
+                 <span className="ml-1 opacity-60">({countByLevel(level)})</span>
+               </span>
             </div>
           ))}
         </div>
@@ -107,7 +108,7 @@ export function HomeMemberMapBlock() {
           <Button
             asChild
             variant="outline"
-            className="border-[hsl(var(--nx-border))] bg-[hsl(var(--nx-surface))] text-[hsl(var(--nx-text-900))] hover:bg-[hsl(var(--nx-border))] shadow-sm"
+            className={d ? "border-white/20 bg-white/10 text-white hover:bg-white/20" : "border-[hsl(var(--nx-border))] bg-[hsl(var(--nx-surface))] text-[hsl(var(--nx-text-900))] hover:bg-[hsl(var(--nx-border))] shadow-sm"}
           >
             <Link to="/network" className="inline-flex items-center gap-2">
               Explorer la carte complète
