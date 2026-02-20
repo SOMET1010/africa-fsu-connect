@@ -4,14 +4,17 @@ import { NetworkSummary } from "./components/NetworkSummary";
 import { InspiringProjects } from "./components/InspiringProjects";
 import { RecentResources } from "./components/RecentResources";
 import { UpcomingEvents } from "./components/UpcomingEvents";
-import { NetworkActivityWidget } from "./widgets/NetworkActivityWidget";
 import { DashboardMapWidget } from "./widgets/DashboardMapWidget";
+import { UserKPICards } from "./widgets/UserKPICards";
+import { UserRecentActivity } from "./widgets/UserRecentActivity";
 import { NexusLayout } from "@/components/layout/NexusLayout";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useUserDashboardKPIs } from "@/hooks/useUserDashboardKPIs";
 
 export function NetworkDashboard() {
   const navigate = useNavigate();
+  const { kpis, kpisLoading, recentActivity, activityLoading } = useUserDashboardKPIs();
 
   // Fetch network stats
   const { data: stats } = useQuery({
@@ -49,6 +52,9 @@ export function NetworkDashboard() {
       <div className="container mx-auto px-4 py-6 space-y-6">
         {/* Hero de bienvenue réseau */}
         <DashboardHero />
+
+        {/* KPI Cards utilisateur */}
+        <UserKPICards kpis={kpis} loading={kpisLoading} />
         
         {/* Synthèse narrative du réseau */}
         <NetworkSummary 
@@ -57,10 +63,14 @@ export function NetworkDashboard() {
           collaborationOpportunities={3}
         />
         
-        {/* Carte + Activités récentes */}
+        {/* Carte + Activité récente utilisateur */}
         <div className="grid gap-6 lg:grid-cols-2">
           <DashboardMapWidget />
-          <NetworkActivityWidget onViewAll={() => navigate('/community')} />
+          <UserRecentActivity
+            activities={recentActivity}
+            loading={activityLoading}
+            onViewAll={() => navigate('/community')}
+          />
         </div>
         
         {/* Projets inspirants */}
