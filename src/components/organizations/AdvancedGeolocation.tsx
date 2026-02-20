@@ -299,7 +299,7 @@ export const AdvancedGeolocation = ({ agencies, onAgencySelect }: AdvancedGeoloc
                    typeof selectedAgency.metadata === 'object' && 
                    'sutel_type' in selectedAgency.metadata && (
                     <Badge variant="default" className="text-xs">
-                      SUTEL
+                      UDC
                     </Badge>
                   )}
                 </div>

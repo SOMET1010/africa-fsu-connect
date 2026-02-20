@@ -5,7 +5,7 @@
 
 import { logger } from './logger';
 
-const CACHE_NAME = 'sutel-app-v1';
+const CACHE_NAME = 'udc-app-v1';
 const STATIC_ASSETS = [
   '/',
   '/static/js/bundle.js',

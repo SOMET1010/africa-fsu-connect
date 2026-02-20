@@ -265,7 +265,7 @@ export const useEnhancedDashboardStats = (timeRange: TimeRange = '30d') => {
 
       // Calculate telecommunications metrics
       const totalBtsSites = Math.floor((projectsCount || 0) * 2.5); // Estimate based on projects
-      const totalPopulation = 45000000; // Total SUTEL region population estimate
+      const totalPopulation = 45000000; // Total UDC region population estimate
       const populationCovered = Math.floor(totalBtsSites * 1200); // Avg 1200 people per BTS
       const localitiesCovered = Math.floor(totalBtsSites * 0.8); // Most BTS cover multiple localities
       const coveragePercentage = Math.min(Math.round((populationCovered / totalPopulation) * 100), 95);

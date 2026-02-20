@@ -6,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { RTLChecklist } from '@/components/admin/i18n/RTLChecklist';
 import { QALanguagePreview } from '@/components/admin/i18n/QALanguagePreview';
+import { BrandAuditChecklist } from '@/components/admin/i18n/BrandAuditChecklist';
 import { getTranslationStats, buildTranslationData } from '@/utils/export-translations';
 import { LANGUAGES, LANGUAGE_LIST, type SupportedLanguage } from '@/i18n/languages';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -66,11 +67,12 @@ const I18nQAChecklist = () => {
         </div>
 
         <Tabs defaultValue="dashboard">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="dashboard">📊 Couverture</TabsTrigger>
             <TabsTrigger value="sections">📋 Par section</TabsTrigger>
             <TabsTrigger value="preview">👁️ Aperçu live</TabsTrigger>
             <TabsTrigger value="rtl">🔄 RTL</TabsTrigger>
+            <TabsTrigger value="brand">🏷️ Audit marque</TabsTrigger>
           </TabsList>
 
           {/* Tab 1: Dashboard */}
@@ -161,6 +163,11 @@ const I18nQAChecklist = () => {
           {/* Tab 4: RTL */}
           <TabsContent value="rtl">
             <RTLChecklist />
+          </TabsContent>
+
+          {/* Tab 5: Brand Audit */}
+          <TabsContent value="brand">
+            <BrandAuditChecklist />
           </TabsContent>
         </Tabs>
       </div>
