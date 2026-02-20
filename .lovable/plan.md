@@ -1,36 +1,44 @@
 
 
-# Renommer en "USF Digital Connect Africa" dans les fichiers i18n
+# Tests unitaires i18n pour le branding "USF Digital Connect Africa"
 
-## Probleme
+## Objectif
 
-Le titre de la page (`index.html`) et le fallback du badge hero sont corrects ("USF Digital Connect Africa"), mais les **4 fichiers de traduction** (FR, EN, PT, AR) affichent encore l'ancien nom "USF Universal Digital Connect (UDC)" dans le badge hero et les noms de plateforme du footer.
+Creer des tests automatises qui verifient que le nouveau nom de marque "USF Digital Connect Africa" est correctement present dans toutes les traductions (FR, EN, PT, AR) pour les composants cles de l'interface.
 
-## Modifications
+## Mise en place du framework de test
 
-### 4 fichiers de traduction JSON
+Le projet n'a pas encore de configuration Vitest. Il faut creer les fichiers de base :
 
-| Cle | Valeur actuelle | Nouvelle valeur |
-|-----|-----------------|-----------------|
-| `home.hero.badge` (FR) | "USF Universal Digital Connect (UDC)" | "USF Digital Connect Africa" |
-| `home.hero.badge` (EN) | "USF Universal Digital Connect (UDC)" | "USF Digital Connect Africa" |
-| `home.hero.badge` (PT) | "USF Universal Digital Connect (UDC)" | "USF Digital Connect Africa" |
-| `home.hero.badge` (AR) | "USF Universal Digital Connect (UDC)" | "USF Digital Connect Africa" |
-| `footer.platform.name` (FR) | "Plateforme UDC" | "USF Digital Connect Africa" |
-| `footer.platform.name` (EN) | "UDC Platform" | "USF Digital Connect Africa" |
-| `footer.platform.name` (PT) | "Plataforma UDC" | "USF Digital Connect Africa" |
-| `footer.platform.name` (AR) | "منصة UDC" | "USF Digital Connect Africa" |
+- `vitest.config.ts` : configuration Vitest avec jsdom
+- `src/test/setup.ts` : fichier de setup avec les mocks necessaires (matchMedia)
 
-### Fichiers concernes
+## Tests a creer
 
-- `src/i18n/translations/fr.json` (lignes 714, 728)
-- `src/i18n/translations/en.json` (lignes 727, 741)
-- `src/i18n/translations/pt.json` (lignes 720, 734)
-- `src/i18n/translations/ar.json` (lignes 720, 734)
+### Fichier : `src/i18n/__tests__/branding.test.ts`
 
-### Elements deja corrects (aucune modification)
+Ce fichier testera directement les fichiers JSON de traduction sans rendu React, ce qui est rapide et fiable :
 
-- `index.html` : titre deja "USF Digital Connect Africa"
-- `HomeHeroBlock.tsx` : fallback deja "USF Digital Connect Africa"
-- `PublicHeader.tsx` : sous-titre deja "Digital Connect Africa"
+1. **Badge hero** : Verifier que `home.hero.badge` vaut "USF Digital Connect Africa" dans les 4 langues
+2. **Nom footer** : Verifier que `footer.platform.name` vaut "USF Digital Connect Africa" dans les 4 langues
+3. **Absence de l'ancien nom** : Verifier qu'aucune des 4 traductions ne contient "NEXUS", "Universal Digital Connect (UDC)" ou "Plateforme UDC" dans ces cles
+4. **Coherence inter-langues** : Verifier que la valeur du badge et du footer est identique dans les 4 langues (le nom de marque ne se traduit pas)
+
+### Fichier : `src/components/home/__tests__/HomeHeroBlock.test.tsx`
+
+Test de rendu du composant hero :
+
+1. Verifier que le fallback du badge contient "USF Digital Connect Africa"
+
+## Details techniques
+
+| Fichier | Action |
+|---------|--------|
+| `vitest.config.ts` | Creer - configuration Vitest |
+| `src/test/setup.ts` | Creer - setup avec mocks |
+| `tsconfig.app.json` | Ajouter `"vitest/globals"` aux types |
+| `src/i18n/__tests__/branding.test.ts` | Creer - tests des traductions JSON |
+| `src/components/home/__tests__/HomeHeroBlock.test.tsx` | Creer - test du composant hero |
+
+Les tests importent directement les fichiers JSON et verifient les valeurs des cles, sans necessite de monter l'application complete. Cela garantit que toute regression sur le nom de marque sera detectee immediatement.
 
