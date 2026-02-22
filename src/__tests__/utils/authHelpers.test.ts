@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 // Auth helper pure functions extracted for testing
-// These mirror the logic in AuthContext and LiferayAuthContext
+// These mirror the logic in AuthContext
 
 type UserRole = 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur';
 
