@@ -641,12 +641,8 @@ All colors MUST be HSL.
 }
 
 @keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
 }
 
 @keyframes microBounce {
@@ -690,12 +686,8 @@ All colors MUST be HSL.
 }
 
 @keyframes gentle-glow {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(var(--primary) / 0.1);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(var(--primary) / 0.2);
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
 }
 
 /* New premium animations */
@@ -718,12 +710,8 @@ All colors MUST be HSL.
 }
 
 @keyframes glow {
-  from {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.2);
-  }
-  to {
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.4), 0 0 40px hsl(var(--primary) / 0.1);
-  }
+  from { opacity: 1; }
+  to { opacity: 0.95; }
 }
 
 /* Advanced glassmorphism effects */

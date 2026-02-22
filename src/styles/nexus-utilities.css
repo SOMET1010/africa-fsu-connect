@@ -93,9 +93,9 @@
   box-shadow: var(--nx-shadow-md);
 }
 
-/* Glow subtil */
+/* Hover effect */
 .nx-hover-glow:hover {
-  box-shadow: var(--nx-shadow-md), 0 0 20px hsl(var(--nx-brand-900) / 0.1);
+  box-shadow: var(--nx-shadow-md);
 }
 
 /* ========================================

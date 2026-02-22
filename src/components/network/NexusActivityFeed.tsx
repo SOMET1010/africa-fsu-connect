@@ -174,9 +174,8 @@ export function NexusActivityFeed() {
   return (
     <section className="py-24 relative overflow-hidden bg-[hsl(var(--nx-night))]">
       
-      {/* Background Elements - Continuité visuelle */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[hsl(var(--nx-night))] to-[hsl(var(--nx-night))]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[hsl(var(--nx-gold))]/5 rounded-full blur-3xl" />
+      {/* Clean background */}
+      <div className="absolute inset-0 bg-[hsl(var(--nx-night))]" />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -245,7 +244,7 @@ export function NexusActivityFeed() {
                     className={cn(
                       "group relative rounded-2xl p-5",
                       isRTL ? "md:pr-20" : "md:pl-20",
-                      "bg-white/[0.03] backdrop-blur-sm",
+                      "bg-white/[0.05]",
                       "border border-white/[0.05]",
                       "hover:bg-white/[0.06] hover:border-white/10",
                       "transition-all duration-300 cursor-pointer"

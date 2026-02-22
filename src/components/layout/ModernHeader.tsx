@@ -106,8 +106,8 @@ const ModernHeader = () => {
         className={cn(
           "fixed top-0 left-0 right-0 w-full transition-all duration-300 ease-out z-header",
           scrolled 
-            ? "bg-background/95 backdrop-blur-xl border-b border-border shadow-md" 
-            : "bg-background/80 backdrop-blur-lg border-b border-border/50"
+            ? "bg-background border-b border-border shadow-sm" 
+            : "bg-background border-b border-border"
         )}
       >
         <div className="container mx-auto px-4">
@@ -430,7 +430,7 @@ const ModernHeader = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: isRTL ? -20 : 20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed inset-x-0 top-16 bottom-0 bg-background/95 backdrop-blur-xl z-40 lg:hidden overflow-y-auto border-t border-border"
+            className="fixed inset-x-0 top-16 bottom-0 bg-background z-40 lg:hidden overflow-y-auto border-t border-border"
           >
             <div className="container mx-auto px-4 py-6">
               <div className="space-y-2">

@@ -84,7 +84,7 @@ export function ModernSidebar() {
 
   return (
     <Sidebar 
-      className="border-r border-border/30 bg-gradient-to-b from-background/95 to-background backdrop-blur-xl"
+      className="border-r border-border bg-background"
       collapsible={true}
     >
       <SidebarHeader className="border-b border-border/30 p-4">
