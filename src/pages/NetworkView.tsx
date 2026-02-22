@@ -1,65 +1,71 @@
-// NEXUS_LAYER1_GUARD
-// - max 2 CTA visibles
-// - pas de KPI cards
-// - pas d'alertes rouges
-// - pas de ranking
-// - 1 message principal par écran
-// - animations lentes uniquement (fade/slide)
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Users, FolderOpen, MessageSquare, Calendar, BookOpen } from "lucide-react";
+import { Users, FolderOpen, MessageSquare, Calendar, BookOpen, Globe, TrendingUp } from "lucide-react";
 import { RegionCards } from "@/components/network/RegionCards";
 import { ActivityTimeline } from "@/components/network/ActivityTimeline";
 import { PresenceIndicator } from "@/components/network/PresenceIndicator";
 import { NexusActionCard } from "@/components/ui/nexus-card";
 import { UATCoordinationSection } from "@/components/network/UATCoordinationSection";
 import { LinguisticCommunitiesSection } from "@/components/network/LinguisticCommunitiesSection";
+import { NetworkMembersGrid } from "@/components/network/NetworkMembersGrid";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useAfricanCountries } from "@/hooks/useCountries";
 
 const NetworkView = () => {
   const { t } = useTranslation();
+  const { data: countries } = useAfricanCountries();
+  const countryCount = countries?.length ?? 54;
+
+  const kpis = [
+    { value: countryCount, label: "Pays membres", trend: "+3 cette année", icon: Globe },
+    { value: 127, label: "Projets actifs", trend: "+18 ce trimestre", icon: FolderOpen },
+    { value: 5, label: "Régions couvertes", trend: null, icon: Users },
+    { value: 4, label: "Communautés linguistiques", trend: null, icon: MessageSquare },
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-background relative z-10">
-      {/* Hero Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-primary to-primary-dark">
+      {/* Hero Section — fond clair */}
+      <section className="py-14 md:py-18 bg-white dark:bg-card border-b border-gray-200 dark:border-border">
         <div className="container mx-auto px-4 max-w-5xl">
-          <div className="text-center space-y-6">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20">
-              <PresenceIndicator />
+          <div className="text-center space-y-5">
+            {/* Badge KPI visible */}
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+              </span>
+              <span className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
+                Réseau actif — {countryCount} pays
+              </span>
             </div>
-            
-            {/* Titre principal */}
-            <h1 className="text-[28px] md:text-[32px] font-semibold text-white leading-tight max-w-3xl mx-auto">
-              {t('network.hero.title') || 'Le réseau des agences africaines du service universel'}
+
+            {/* Titre */}
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-foreground leading-tight max-w-3xl mx-auto">
+              Le réseau des agences du service universel
             </h1>
-            
-            {/* Description narrative */}
-            <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-              {t('network.hero.narrative') || 'Un espace de coopération et de partage entre les agences nationales pour réduire la fracture numérique en Afrique.'}
+
+            {/* Description courte */}
+            <p className="text-base text-gray-600 dark:text-muted-foreground max-w-xl mx-auto">
+              Coopération et partage entre {countryCount} pays africains.
             </p>
-            
+
             {/* 2 CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-              <Button 
-                asChild 
-                className="bg-white text-primary font-medium rounded-xl px-6 py-2.5 hover:bg-white/90 shadow-sm"
-              >
+            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+              <Button asChild className="rounded-xl px-6 py-2.5 font-medium">
                 <Link to="/members" className="inline-flex items-center gap-2">
                   <Users className="w-4 h-4" />
-                  {t('network.cta.members') || 'Voir les pays membres'}
+                  Voir les pays membres
                 </Link>
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 asChild
-                className="border-white/30 text-white hover:bg-white/10 rounded-xl px-6 py-2.5"
+                className="border-primary text-primary hover:bg-primary/5 rounded-xl px-6 py-2.5 font-medium"
               >
                 <Link to="/projects" className="inline-flex items-center gap-2">
                   <FolderOpen className="w-4 h-4" />
-                  {t('network.cta.projects') || 'Explorer les projets'}
+                  Explorer les projets
                 </Link>
               </Button>
             </div>
@@ -67,7 +73,38 @@ const NetworkView = () => {
         </div>
       </section>
 
-      {/* Section UAT - Coordination du réseau */}
+      {/* Barre KPI */}
+      <section className="py-8 bg-slate-50 dark:bg-background">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {kpis.map((kpi) => (
+              <div
+                key={kpi.label}
+                className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border shadow-sm p-5 text-center"
+              >
+                <div className="flex items-center justify-center mb-2">
+                  <kpi.icon className="w-5 h-5 text-primary" />
+                </div>
+                <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{kpi.value}</p>
+                <p className="text-xs text-gray-500 dark:text-muted-foreground uppercase tracking-wide mt-1">
+                  {kpi.label}
+                </p>
+                {kpi.trend && (
+                  <div className="inline-flex items-center gap-1 mt-2">
+                    <TrendingUp className="w-3 h-3 text-emerald-600" />
+                    <span className="text-xs text-emerald-600 font-medium">{kpi.trend}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section Pays Membres + Carte */}
+      <NetworkMembersGrid />
+
+      {/* Section UAT */}
       <UATCoordinationSection />
 
       {/* Section Communautés linguistiques */}
@@ -77,10 +114,10 @@ const NetworkView = () => {
       <section className="py-12 bg-white dark:bg-card">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-foreground">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground">
               {t('network.regions.title') || 'Les régions du réseau'}
             </h2>
-            <p className="text-sm text-slate-500 dark:text-muted-foreground mt-2">
+            <p className="text-sm text-gray-500 dark:text-muted-foreground mt-2">
               {t('network.regions.subtitle') || 'Cliquez sur une région pour découvrir ses membres'}
             </p>
           </div>
@@ -88,14 +125,14 @@ const NetworkView = () => {
         </div>
       </section>
 
-      {/* Section Activité - Timeline */}
+      {/* Section Activité */}
       <section className="py-12">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-foreground">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground">
               {t('network.activity.title') || 'Activité récente'}
             </h2>
-            <p className="text-sm text-slate-500 dark:text-muted-foreground mt-2">
+            <p className="text-sm text-gray-500 dark:text-muted-foreground mt-2">
               {t('network.activity.subtitle') || 'Les dernières contributions du réseau'}
             </p>
           </div>
@@ -103,7 +140,7 @@ const NetworkView = () => {
         </div>
       </section>
 
-      {/* Section Actions secondaires */}
+      {/* Actions secondaires */}
       <section className="py-12 bg-white dark:bg-card">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="grid md:grid-cols-3 gap-6">
@@ -112,32 +149,21 @@ const NetworkView = () => {
               title={t('network.action.discuss') || 'Échanger'}
               description={t('network.action.discuss.desc') || 'Participez aux discussions entre pairs du réseau.'}
               accent="brand"
-              primaryAction={{
-                label: t('common.discover') || 'Découvrir',
-                href: '/forum'
-              }}
+              primaryAction={{ label: t('common.discover') || 'Découvrir', href: '/forum' }}
             />
-            
             <NexusActionCard
               icon={Calendar}
               title={t('network.action.events') || 'Participer'}
               description={t('network.action.events.desc') || 'Rejoignez les événements et ateliers du réseau.'}
               accent="coop"
-              primaryAction={{
-                label: t('common.discover') || 'Découvrir',
-                href: '/events'
-              }}
+              primaryAction={{ label: t('common.discover') || 'Découvrir', href: '/events' }}
             />
-            
             <NexusActionCard
               icon={BookOpen}
               title={t('network.action.resources') || 'Apprendre'}
               description={t('network.action.resources.desc') || 'Accédez aux ressources partagées par le réseau.'}
               accent="brand"
-              primaryAction={{
-                label: t('common.discover') || 'Découvrir',
-                href: '/resources'
-              }}
+              primaryAction={{ label: t('common.discover') || 'Découvrir', href: '/resources' }}
             />
           </div>
         </div>

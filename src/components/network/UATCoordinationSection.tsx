@@ -10,7 +10,7 @@ export const UATCoordinationSection = () => {
   return (
     <section className="py-12">
       <div className="container mx-auto px-4 max-w-5xl">
-        <div className="rounded-2xl border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm p-8">
+        <div className="rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card shadow-sm p-8">
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Icône */}
             <div className="flex-shrink-0">
