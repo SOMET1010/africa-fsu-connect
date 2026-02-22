@@ -1,147 +1,119 @@
 
 
-# Refonte de la page d'accueil -- Design Institutionnel "Portail UDC"
+# Nettoyage des effets visuels parasites -- Audit complet et suppression
 
-## Constat
+## Composants et fichiers identifies
 
-La page d'accueil actuelle a un hero sombre avec image de fond, des badges de confiance, puis des sections empilees verticalement (carte, features, messages, CTA, partenaires). Le design ressemble a un site marketing.
+Voici l'inventaire complet des elements a supprimer ou nettoyer, organise par priorite.
 
-Vos maquettes montrent un design completement different : un **portail institutionnel** structure en grille, fond blanc, avec des donnees visibles immediatement -- pays membres, projets en cours, activites recentes, statistiques du reseau. C'est clair, stable, professionnel.
+---
 
-## Plan de refonte
+### 1. Supprimer `AdminHeatmapOverlay` (canvas monte dans le DOM)
 
-### 1. Nouveau Header -- Branding "UDC"
+**Fichiers concernes :**
+- `src/App.tsx` -- supprimer l'import et `<AdminHeatmapOverlay />`
+- `src/components/analytics/AdminHeatmapOverlay.tsx` -- supprimer le fichier
+- `src/components/analytics/HeatmapOverlay.tsx` -- supprimer le fichier (contient un `<canvas>` avec `fixed inset-0 pointer-events-none z-50`)
+- `src/hooks/useAdvancedAnalytics.ts` -- supprimer le fichier (contient `canvasRef`, `renderHeatmap`)
 
-**Fichier : `src/components/layout/PublicHeader.tsx`**
+C'est le seul `<canvas>` monte dans le DOM au niveau global. Il persiste entre les routes car il est dans `App.tsx`.
 
-- Remplacer "USF Digital Connect / AFRICA" par **"UDC"** en gras + **"Union Digitale de la Connectivite Africaine"** a cote
-- Ajouter une barre de recherche dans le header (visible sur desktop)
-- Icones de notification, messagerie, globe (langue) a droite
-- Navigation : Reseau, Collaboration, Evenements, Ressources, Tableaux de bord
-- Style : fond blanc, `border-b border-gray-200`, pas de shadow
+---
 
-### 2. Nouveau Hero -- Structure en grille
+### 2. Supprimer `NexusNetworkPattern` (SVG `absolute inset-0 pointer-events-none`)
 
-**Fichier : `src/components/home/HomeHeroBlock.tsx` (refonte complete)**
+**Fichiers concernes :**
+- `src/components/shared/NexusNetworkPattern.tsx` -- supprimer le fichier
+- `src/components/shared/NexusSectionBackground.tsx` -- supprimer le fichier (wrapper qui utilise uniquement NexusNetworkPattern)
+- `src/components/practices/PracticesHero.tsx` -- supprimer l'import et `<NexusNetworkPattern variant="subtle" />`
 
-Remplacer le hero sombre par un hero clair structure :
+---
 
-- **Colonne gauche** : 
-  - Fil d'Ariane : Accueil > Reseau
-  - Badge : "Reseau actif -- 54 pays"
-  - Titre : **"Connecter l'Afrique, Ensemble"** en noir, typographie forte
-  - Sous-titre descriptif
-  - Deux boutons : "Explorer le Reseau" (primaire bleu) + "Voir les Projets" (outline)
+### 3. Supprimer `NexusHero` et composants lies (parallax, overlays, patterns)
 
-- **Colonne droite** :
-  - Carte d'Afrique stylisee (reutiliser le composant `HomeMemberMap` existant mais dans un conteneur plus petit, sans le fond sombre)
-  - Legende : Pays membres / En integration / Projets actifs
+Le composant `NexusHero` contient 5 couches `absolute inset-0` superposees (image parallax, carte animee, gradients, patterns africains). Il n'est plus utilise sur la homepage mais reste importe dans `src/components/landing/HeroSection.tsx`.
 
-- **Sous le hero** : 4 cartes KPI en ligne
-  - 54 Pays membres (+3 cette annee)
-  - 127 Projets actifs (+18 ce trimestre)
-  - 892 Partenariats (+24 ce mois)
-  - 45 Evenements (cette annee)
-  - Chaque carte : fond blanc, bordure grise fine, icone bleue/verte, fleche de navigation
+**Fichiers concernes :**
+- `src/components/shared/NexusHero.tsx` -- supprimer le fichier (contient NoiseOverlay, AfricanPattern inline, 5 couches absolute, parallax framer-motion)
+- `src/components/landing/HeroSection.tsx` -- supprimer le fichier (seul consommateur de NexusHero, non importe nulle part)
+- `src/components/shared/NexusAfricaMap.tsx` -- supprimer le fichier (uniquement utilise par NexusHero)
 
-### 3. Section centrale -- Grille a 3 colonnes
+---
 
-**Nouveau fichier : `src/components/home/HomeGridSection.tsx`**
+### 4. Nettoyer `AfricanSection` (overlay `absolute inset-0 pointer-events-none`)
 
-Layout en 3 colonnes :
+**Fichier : `src/components/shared/AfricanPattern.tsx`**
 
-- **Colonne 1 -- Pays Membres** :
-  - Titre avec icone globe + lien "Voir tout"
-  - Grille de cartes pays (drapeau, nom, badge statut "Actif" / "En integration")
-  - 6 pays affiches + "+48 autres pays"
-  - Donnees depuis `useAfricanCountries()`
-
-- **Colonne 2 -- Carte du Reseau UDC** :
-  - Carte Leaflet interactive reduite
-  - Legende en bas
-  - Boutons zoom +/-
-  - Reutiliser `HomeMemberMap` avec styles adaptes
-
-- **Colonne 3 -- Activite Recente + Prochains Evenements** :
-  - Timeline verticale : points colores + titre + description + horodatage
-  - Section "Prochains Evenements" : date en bloc (JUIL 15) + titre + lieu
-  - Donnees depuis hooks existants
-
-### 4. Section Statistiques
-
-**Nouveau fichier : `src/components/home/HomeStatsSection.tsx`**
-
-- Titre "Statistiques 2024"
-- 3 colonnes : Croissance du Reseau (graphique ligne), Projets par Domaine (donut), Impact (chiffres)
-- Utiliser `recharts` deja installe
-- Style : cartes blanches, bordures fines, typographie contrastee
-
-### 5. Barre partenaires en bas
-
-**Fichier : `src/components/home/HomePartnersBlock.tsx` (modifier)**
-
-- Fond gris tres clair `bg-gray-50`
-- Logos UAT, ANSUT, UA, CEDEAO alignes horizontalement
-- Bouton "Proposer un Projet" en jaune/or a droite
-
-### 6. Page Index -- Assemblage
-
-**Fichier : `src/pages/Index.tsx` (refonte)**
-
-Supprimer :
-- Le wrapper sombre `bg-[hsl(var(--nx-night))]`
-- L'image de fond `nexus-hero-africa.png` en arriere-plan
-- `HomeTrustBadge` (les infos confiance seront dans le footer ou page dediee)
-- `HomeMessagesBlock` (messages officiels -- deplacer vers /about)
-- `HomeCtaBlock` (le CTA sera integre dans le hero et la barre partenaires)
-
-Nouvelle structure :
-```text
-PublicHeader
-HomeHeroBlock (clair, grille 2 colonnes)
-HomeKPIBar (4 cartes stats)
-HomeGridSection (3 colonnes : pays, carte, activite)
-HomeStatsSection (statistiques avec graphiques)
-HomePartnersBlock (barre logos + CTA)
-Footer
+Le composant `AfricanSection` contient :
+```
+<div className="absolute inset-0 african-pattern-bogolan-subtle opacity-50 pointer-events-none" />
 ```
 
-### 7. Nettoyage CSS
+Supprimer cette couche overlay. Garder le composant `AfricanSection` mais sans le pattern superpose -- il ne restera que le fond en gradient subtil.
 
-- Supprimer les references a `--nx-night` dans la page d'accueil
-- Fond global : `bg-white` ou `bg-gray-50`
-- Cartes : `bg-white border border-gray-200 rounded-xl`
-- Typographie : noir `text-gray-900` pour titres, `text-gray-600` pour descriptions
-- Couleurs d'accent : bleu primaire pour actions, vert pour statuts positifs, or/jaune pour boutons CTA
+Garder `AfricanDivider`, `AfricanStatNumber`, `AfricanAccentCard` (pas de couche parasite).
 
-## Details techniques
+---
 
-### Composants reutilises
-- `HomeMemberMap` -- carte Leaflet existante, juste re-stylisee
-- `useAfricanCountries()` -- donnees pays
-- `useHomepageContent()` -- contenus dynamiques
-- `AnimatedCounter` -- compteurs animes
-- `recharts` -- graphiques statistiques
+### 5. Nettoyer `CommandCenterMap` (overlays decoratifs)
 
-### Composants crees
-- `HomeKPIBar` -- barre de 4 cartes KPI
-- `HomeGridSection` -- grille 3 colonnes
-- `HomeStatsSection` -- section statistiques avec graphiques
-- `HomeCountryCard` -- carte pays avec drapeau et badge statut
-- `HomeActivityFeed` -- timeline d'activite recente
-- `HomeUpcomingEvents` -- bloc evenements a venir
+**Fichier : `src/components/map/CommandCenterMap.tsx`**
 
-### Composants supprimes/deplaces
-- `HomeTrustBadge` -- supprime de l'accueil (redondant)
-- `HomeMessagesBlock` -- deplace vers /about
-- `HomeCtaBlock` -- integre dans hero + barre partenaires
-- `HomeTrustSection` -- deplace vers /about ou /legal
+Supprimer les deux couches decoratives :
+- "Tactical Grid Overlay" : `absolute inset-0 pointer-events-none` avec `radial-gradient` (lignes 246-253)
+- "Vignette Effect" : `absolute inset-0 pointer-events-none` avec `radial-gradient` (lignes 255-261)
+- L'animation `pulse-ring-hud` dans le `<style>` tag (lignes 264-269)
 
-### Principes de design appliques
-- Fond blanc, pas de hero sombre
-- Bordures fines `border-gray-200`, pas de shadows lourdes
-- Typographie haute contraste (noir sur blanc)
-- Donnees visibles immediatement (pas de scroll pour voir les KPIs)
-- Navigation claire et institutionnelle
-- Zero effet decoratif (pas de glow, blur, gradient de fond)
+---
+
+### 6. Supprimer le CSS des patterns africains
+
+**Fichier : `src/styles/african-patterns.css`**
+
+Supprimer :
+- `.african-pattern-bogolan` et `.african-pattern-bogolan-subtle` (radial-gradient patterns)
+- `.african-pattern-kente` et `.african-pattern-kente-border`
+- `.african-pattern-adinkra` (les points roses)
+- `.african-pattern-animated` (animation shimmer)
+
+Garder :
+- `.african-divider` et `.african-divider-subtle` (lignes simples)
+- `.african-bg-warm`, `.african-bg-cool`, `.african-bg-premium` (fonds de section simples)
+- Les card styles si utilises
+
+**Fichier : `src/index.css`** -- garder l'import car le fichier CSS contiendra encore les styles utiles.
+
+---
+
+### 7. Supprimer la CSS inutilisee de `StatsHUD` (optionnel)
+
+Le composant `src/components/map/StatsHUD.tsx` n'a pas de couche parasite mais contient des `z-index` et des couleurs de glow dans les bordures. Pas prioritaire car c'est un composant de carte, pas un overlay global.
+
+---
+
+## Resume des fichiers
+
+| Action | Fichier |
+|--------|---------|
+| Supprimer | `src/components/analytics/HeatmapOverlay.tsx` |
+| Supprimer | `src/components/analytics/AdminHeatmapOverlay.tsx` |
+| Supprimer | `src/hooks/useAdvancedAnalytics.ts` |
+| Supprimer | `src/components/shared/NexusNetworkPattern.tsx` |
+| Supprimer | `src/components/shared/NexusSectionBackground.tsx` |
+| Supprimer | `src/components/shared/NexusHero.tsx` |
+| Supprimer | `src/components/shared/NexusAfricaMap.tsx` |
+| Supprimer | `src/components/landing/HeroSection.tsx` |
+| Modifier | `src/App.tsx` -- retirer AdminHeatmapOverlay |
+| Modifier | `src/components/practices/PracticesHero.tsx` -- retirer NexusNetworkPattern |
+| Modifier | `src/components/shared/AfricanPattern.tsx` -- retirer overlay dans AfricanSection |
+| Modifier | `src/components/map/CommandCenterMap.tsx` -- retirer overlays decoratifs |
+| Modifier | `src/styles/african-patterns.css` -- retirer les classes pattern (garder dividers et bg) |
+
+## Garanties
+
+- Zero `<canvas>` dans le DOM
+- Zero couche `absolute inset-0 pointer-events-none` decorative
+- Zero animation decorative persistante entre routes
+- Fond propre sur toutes les pages
+- Les composants fonctionnels (carte Leaflet, graphiques recharts) restent intacts
 
