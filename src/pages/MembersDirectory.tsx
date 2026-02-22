@@ -48,10 +48,10 @@ const MembersDirectory = () => {
   // Appliquer le filtre région depuis l'URL
   useEffect(() => {
     const regionParam = searchParams.get('region');
-    if (regionParam) {
+    if (regionParam && regions.includes(regionParam)) {
       setSelectedRegion(regionParam);
     }
-  }, [searchParams, setSelectedRegion]);
+  }, [searchParams, regions, setSelectedRegion]);
 
   return (
     <NexusLayout>
