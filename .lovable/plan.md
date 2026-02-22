@@ -1,55 +1,43 @@
 
+# Onboarding Tour for Institutional Users
 
-# Fix and Complete DB-Driven Country Filter for Document Library
+## Overview
+Create a guided onboarding tour for new institutional users on the `/dashboard` page, using `driver.js` (already installed). The tour will highlight key sections of the `NetworkDashboard`, explain user roles, the language switcher, and key resources. Full FR/EN/AR/PT translations with RTL support for Arabic -- following the exact same pattern as the existing admin tour (`useAdminOnboarding.ts`).
 
-## Problem
+## Tour Steps (6 steps)
 
-The country filter dropdown correctly loads countries from the `countries` table, but filtering is broken:
+| # | Target | Topic |
+|---|--------|-------|
+| 1 | Welcome hero section | Welcome to the platform -- explains the network purpose |
+| 2 | KPI cards | Your dashboard metrics -- projects, documents, events, submissions |
+| 3 | Network map | Interactive map -- explore member countries |
+| 4 | Projects section | Inspiring projects -- collaborate across borders |
+| 5 | Resources and Events | Key resources and upcoming events |
+| 6 | Language selector (header) | Switch language (FR/EN/AR/PT) and your role in the platform |
 
-1. **Country mismatch**: The filter sends a country `code` (e.g., "SN") but `documents.country` stores French names (e.g., "Senegal"). The comparison always fails.
-2. **Missing columns**: The `documents` table has no `theme` or `language` column, so those two filter dropdowns do nothing.
-3. **Missing filter logic**: `Resources.tsx` does not apply theme or language filters even if they were present.
+## Technical Details
 
-## Plan
+### New file: `src/hooks/useUserOnboardingTour.ts`
+- Mirrors the pattern of `useAdminOnboarding.ts`
+- 6 tour steps with FR/EN/AR/PT translations for title and description
+- Uses `driver.js` with `localStorage` key `user_onboarding_tour_completed`
+- Auto-starts on first visit (with 1.2s delay for DOM rendering)
+- Exports `startTour` and `resetTour`
+- Applies RTL class when Arabic is active (reuses existing `driver-rtl.css`)
 
-### Step 1 -- Database migration
+### Modified file: `src/components/dashboard/NetworkDashboard.tsx`
+- Import and call `useUserOnboardingTour`
+- Import `driver-rtl.css`
+- Add `data-tour` attributes to key sections:
+  - `data-tour="user-hero"` on the `DashboardHero` wrapper
+  - `data-tour="user-kpis"` on the `UserKPICards` wrapper
+  - `data-tour="user-map"` on the `DashboardMapWidget` wrapper
+  - `data-tour="user-projects"` on the `InspiringProjects` wrapper
+  - `data-tour="user-resources"` on the resources/events grid wrapper
+- Add a `HelpCircle` replay button in the hero area
 
-Add two new nullable columns to the `documents` table:
+### Modified file: `src/components/layout/ModernHeader.tsx`
+- Add `data-tour="user-lang-selector"` attribute on the `LanguageSelector` wrapper so the tour can highlight it
 
-- `theme TEXT` -- stores the thematic tag (connectivity, funding, regulation, etc.)
-- `language VARCHAR(5)` -- stores the document language code (fr, en, pt, ar)
-
-### Step 2 -- Fix country filtering logic in `Resources.tsx`
-
-Instead of comparing `doc.country` (a name) to `filters.country` (a code), resolve the code to a name using the countries list fetched in the filters component. Two options:
-
-- **Option A (simpler)**: Change `ResourceFilters` to send the country **name** instead of the code when a country is selected.
-- **Option B**: Pass the countries list up and do the lookup in Resources.
-
-We will go with **Option A** -- update `ResourceFilters` to emit the country name (matching what is stored in `documents.country`).
-
-### Step 3 -- Apply theme and language filters in `Resources.tsx`
-
-Add the missing filter branches (lines ~60-74):
-
-```
-if (filters.theme) {
-  docs = docs.filter(doc => doc.theme === filters.theme);
-}
-if (filters.language) {
-  docs = docs.filter(doc => doc.language === filters.language);
-}
-```
-
-### Step 4 -- Update `ResourceFilters.tsx` country value emission
-
-In the country `Select`, change the emitted value from `c.code` to the country name (`c.name_fr` or `c.name_en` depending on current language). This ensures the filter value matches what is stored in the `documents` table (French names).
-
-### Summary of file changes
-
-| File | Change |
-|------|--------|
-| Database migration | Add `theme` and `language` columns to `documents` |
-| `src/pages/Resources.tsx` | Add theme and language filter branches |
-| `src/components/resources/ResourceFilters.tsx` | Emit country **name** (not code) so it matches `documents.country` |
-
+### No new dependencies required
+`driver.js` and `driver-rtl.css` are already in place.
