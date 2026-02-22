@@ -29,18 +29,11 @@ export function HeroSection({
 }: HeroSectionProps) {
   return (
     <div className={cn(
-      "relative overflow-hidden rounded-3xl border border-border/50",
-      "bg-gradient-to-br from-card via-card/95 to-card/90",
-      "shadow-2xl",
+      "relative overflow-hidden rounded-xl border border-border",
+      "bg-card",
+      "shadow-sm",
       className
     )}>
-      {backgroundPattern && (
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
-        </div>
-      )}
       
       <div className="relative z-10 p-8 md:p-12 lg:p-16">
         <div className="max-w-4xl">
@@ -52,10 +45,8 @@ export function HeroSection({
             </div>
           )}
           
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-            <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6 leading-tight">
               {title}
-            </span>
           </h1>
           
           {description && (

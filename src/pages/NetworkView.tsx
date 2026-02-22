@@ -24,35 +24,35 @@ const NetworkView = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-background relative z-10">
-      {/* Hero Section — fond clair */}
-      <section className="py-14 md:py-18 bg-white dark:bg-card border-b border-gray-200 dark:border-border">
+    <div className="min-h-screen bg-muted relative z-10">
+      {/* Hero Section — fond clair, sobre, institutionnel */}
+      <section className="py-14 md:py-18 bg-white dark:bg-card border-b border-border">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center space-y-5">
-            {/* Badge KPI visible */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30">
+            {/* Badge KPI */}
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/20">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary" />
               </span>
-              <span className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
+              <span className="text-sm font-medium text-secondary">
                 Réseau actif — {countryCount} pays
               </span>
             </div>
 
-            {/* Titre */}
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-foreground leading-tight max-w-3xl mx-auto">
+            {/* Titre — bleu UAT profond, pas de gradient */}
+            <h1 className="text-2xl md:text-3xl font-bold text-primary leading-tight max-w-3xl mx-auto">
               Le réseau des agences du service universel
             </h1>
 
-            {/* Description courte */}
-            <p className="text-base text-gray-600 dark:text-muted-foreground max-w-xl mx-auto">
+            {/* Description */}
+            <p className="text-base text-muted-foreground max-w-xl mx-auto">
               Coopération et partage entre {countryCount} pays africains.
             </p>
 
-            {/* 2 CTAs */}
+            {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-              <Button asChild className="rounded-xl px-6 py-2.5 font-medium">
+              <Button asChild className="rounded-xl px-6 py-2.5 font-medium bg-primary text-primary-foreground hover:bg-primary-dark">
                 <Link to="/members" className="inline-flex items-center gap-2">
                   <Users className="w-4 h-4" />
                   Voir les pays membres
@@ -74,25 +74,25 @@ const NetworkView = () => {
       </section>
 
       {/* Barre KPI */}
-      <section className="py-8 bg-slate-50 dark:bg-background">
+      <section className="py-8 bg-muted">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {kpis.map((kpi) => (
               <div
                 key={kpi.label}
-                className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border shadow-sm p-5 text-center"
+                className="bg-card rounded-xl border border-border shadow-sm p-5 text-center"
               >
                 <div className="flex items-center justify-center mb-2">
                   <kpi.icon className="w-5 h-5 text-primary" />
                 </div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{kpi.value}</p>
-                <p className="text-xs text-gray-500 dark:text-muted-foreground uppercase tracking-wide mt-1">
+                <p className="text-3xl font-bold text-foreground">{kpi.value}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mt-1">
                   {kpi.label}
                 </p>
                 {kpi.trend && (
                   <div className="inline-flex items-center gap-1 mt-2">
-                    <TrendingUp className="w-3 h-3 text-emerald-600" />
-                    <span className="text-xs text-emerald-600 font-medium">{kpi.trend}</span>
+                    <TrendingUp className="w-3 h-3 text-secondary" />
+                    <span className="text-xs text-secondary font-medium">{kpi.trend}</span>
                   </div>
                 )}
               </div>
@@ -111,13 +111,13 @@ const NetworkView = () => {
       <LinguisticCommunitiesSection />
 
       {/* Section Régions */}
-      <section className="py-12 bg-white dark:bg-card">
+      <section className="py-12 bg-card">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground">
+            <h2 className="text-xl font-semibold text-foreground">
               {t('network.regions.title') || 'Les régions du réseau'}
             </h2>
-            <p className="text-sm text-gray-500 dark:text-muted-foreground mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               {t('network.regions.subtitle') || 'Cliquez sur une région pour découvrir ses membres'}
             </p>
           </div>
@@ -129,10 +129,10 @@ const NetworkView = () => {
       <section className="py-12">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground">
+            <h2 className="text-xl font-semibold text-foreground">
               {t('network.activity.title') || 'Activité récente'}
             </h2>
-            <p className="text-sm text-gray-500 dark:text-muted-foreground mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               {t('network.activity.subtitle') || 'Les dernières contributions du réseau'}
             </p>
           </div>
@@ -141,7 +141,7 @@ const NetworkView = () => {
       </section>
 
       {/* Actions secondaires */}
-      <section className="py-12 bg-white dark:bg-card">
+      <section className="py-12 bg-card">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="grid md:grid-cols-3 gap-6">
             <NexusActionCard

@@ -13,78 +13,78 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Core institutional palette — Light, clear, trustworthy */
-    --background: 210 20% 98%;
+    /* Core institutional palette — UAT panafricaine */
+    --background: 220 14% 96%;
     --foreground: 222 47% 11%;
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
     
-    /* Primary — Deep institutional blue */
-    --primary: 210 73% 28%;
-    --primary-light: 210 60% 40%;
-    --primary-dark: 210 80% 22%;
+    /* Primary — Bleu UAT profond (#1E3A8A) */
+    --primary: 224 65% 33%;
+    --primary-light: 224 55% 45%;
+    --primary-dark: 224 70% 25%;
     --primary-foreground: 0 0% 100%;
     
-    /* Secondary — Subtle grey-blue */
-    --secondary: 210 25% 96%;
-    --secondary-light: 210 25% 98%;
-    --secondary-foreground: 222 47% 15%;
+    /* Secondary — Vert africain institutionnel (#0F766E) */
+    --secondary: 175 77% 26%;
+    --secondary-light: 175 60% 92%;
+    --secondary-foreground: 0 0% 100%;
     
-    /* Accent — Institutional teal, restrained */
-    --accent: 170 45% 40%;
-    --accent-light: 170 45% 52%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent — Doré Union Africaine (#C8A23A) */
+    --accent: 43 55% 51%;
+    --accent-light: 43 70% 90%;
+    --accent-foreground: 222 47% 11%;
     
     /* Neutral tones */
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 20% 40%;
-    --border: 214 20% 89%;
-    --input: 214 20% 93%;
-    --ring: 210 73% 28%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
+    --border: 220 13% 91%;
+    --input: 220 13% 93%;
+    --ring: 224 65% 33%;
     
-    /* Status colors — Soft, not aggressive */
+    /* Status colors — Soft, institutional */
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --success: 142 60% 40%;
+    --success: 142 60% 35%;
     --success-foreground: 0 0% 100%;
-    --warning: 40 85% 55%;
-    --warning-foreground: 0 0% 10%;
-    --info: 210 73% 50%;
+    --warning: 43 55% 51%;
+    --warning-foreground: 222 47% 11%;
+    --info: 224 55% 45%;
     --info-foreground: 0 0% 100%;
     
     /* Telecoms-specific colors */
-    --signal-excellent: 142 60% 40%;
+    --signal-excellent: 142 60% 35%;
     --signal-good: 60 70% 48%;
-    --signal-average: 40 85% 55%;
+    --signal-average: 43 55% 51%;
     --signal-poor: 0 72% 51%;
     --coverage-5g: 270 55% 50%;
-    --coverage-4g: 210 73% 50%;
-    --coverage-3g: 40 85% 55%;
+    --coverage-4g: 224 55% 45%;
+    --coverage-3g: 43 55% 51%;
     --coverage-2g: 0 72% 51%;
     
-    /* Chart colors */
-    --chart-1: 210 73% 40%;
-    --chart-2: 142 55% 42%;
-    --chart-3: 40 80% 52%;
-    --chart-4: 270 55% 50%;
+    /* Chart colors — UAT palette */
+    --chart-1: 224 65% 33%;
+    --chart-2: 175 77% 26%;
+    --chart-3: 43 55% 51%;
+    --chart-4: 142 60% 35%;
     --chart-5: 0 65% 50%;
     
     /* Institutional gradients — Subtle, not flashy */
-    --gradient-primary: linear-gradient(135deg, hsl(210 73% 28%) 0%, hsl(210 60% 40%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(210 25% 96%) 0%, hsl(210 25% 98%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(210 73% 28%) 0%, hsl(210 80% 22%) 50%, hsl(210 60% 40%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(224 65% 33%) 0%, hsl(224 55% 45%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(220 14% 96%) 0%, hsl(220 14% 98%) 100%);
+    --gradient-hero: none;
     --gradient-card: none;
     --gradient-mesh: none;
     
     /* Simple functional gradients */
-    --gradient-success: linear-gradient(135deg, hsl(142 60% 40%) 0%, hsl(142 55% 48%) 100%);
-    --gradient-warning: linear-gradient(135deg, hsl(40 85% 55%) 0%, hsl(40 80% 62%) 100%);
-    --gradient-info: linear-gradient(135deg, hsl(210 73% 50%) 0%, hsl(210 65% 58%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 60% 35%) 0%, hsl(142 55% 42%) 100%);
+    --gradient-warning: linear-gradient(135deg, hsl(43 55% 51%) 0%, hsl(43 60% 60%) 100%);
+    --gradient-info: linear-gradient(135deg, hsl(224 55% 45%) 0%, hsl(224 50% 55%) 100%);
     --gradient-glass: none;
     --gradient-border: none;
-    --gradient-telecom: linear-gradient(135deg, hsl(270 55% 50%) 0%, hsl(210 73% 50%) 50%, hsl(170 45% 40%) 100%);
+    --gradient-telecom: none;
     
     /* Institutional shadows — Soft, subtle */
     --shadow-sm: 0 1px 3px hsl(222 15% 20% / 0.06);
@@ -101,12 +101,12 @@ All colors MUST be HSL.
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 222 47% 15%;
-    --sidebar-primary: 210 73% 28%;
+    --sidebar-primary: 224 65% 33%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 20% 96%;
+    --sidebar-accent: 220 14% 96%;
     --sidebar-accent-foreground: 222 47% 15%;
-    --sidebar-border: 214 20% 89%;
-    --sidebar-ring: 210 73% 28%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 224 65% 33%;
 
     /* Layering tokens */
     --z-sidebar: 30;
@@ -119,56 +119,55 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Background — Deep navy, not pure black */
+    /* Background — Deep navy */
     --background: 222 20% 10%;
-    --foreground: 210 20% 96%;
+    --foreground: 220 14% 96%;
     --card: 222 18% 13%;
-    --card-foreground: 210 20% 96%;
+    --card-foreground: 220 14% 96%;
     --popover: 222 18% 13%;
-    --popover-foreground: 210 20% 96%;
+    --popover-foreground: 220 14% 96%;
     
-    /* Primary — Lightened for AA on dark surfaces (≥4.5:1 on card) */
-    --primary: 210 70% 58%;
-    --primary-light: 210 65% 68%;
-    --primary-dark: 210 70% 42%;
+    /* Primary — Lightened for AA on dark */
+    --primary: 224 60% 58%;
+    --primary-light: 224 55% 68%;
+    --primary-dark: 224 65% 42%;
     --primary-foreground: 0 0% 100%;
     
-    /* Secondary */
-    --secondary: 222 18% 17%;
-    --secondary-light: 222 18% 22%;
-    --secondary-foreground: 210 20% 92%;
+    /* Secondary — Green lightened */
+    --secondary: 175 60% 40%;
+    --secondary-light: 175 40% 20%;
+    --secondary-foreground: 0 0% 100%;
     
-    /* Accent — Lightened for AA */
-    --accent: 160 50% 55%;
-    --accent-light: 160 50% 65%;
+    /* Accent — Gold lightened */
+    --accent: 43 60% 58%;
+    --accent-light: 43 40% 20%;
     --accent-foreground: 0 0% 100%;
     
     /* Muted */
     --muted: 222 18% 17%;
     --muted-foreground: 215 15% 72%;
-    /* Border — Raised for 3:1 UI contrast */
     --border: 225 12% 32%;
     --input: 225 15% 20%;
-    --ring: 210 70% 58%;
+    --ring: 224 60% 58%;
     
-    /* Status — Lightened for AA on dark cards */
+    /* Status */
     --destructive: 0 72% 62%;
     --destructive-foreground: 0 0% 100%;
-    --success: 142 55% 55%;
+    --success: 142 55% 50%;
     --success-foreground: 0 0% 100%;
-    --warning: 40 80% 62%;
+    --warning: 43 60% 58%;
     --warning-foreground: 0 0% 10%;
     
-    /* Chart colors — Lightened for readability */
-    --chart-1: 210 70% 58%;
-    --chart-2: 142 55% 55%;
-    --chart-3: 40 80% 62%;
-    --chart-4: 270 55% 62%;
+    /* Chart colors */
+    --chart-1: 224 60% 58%;
+    --chart-2: 175 60% 40%;
+    --chart-3: 43 60% 58%;
+    --chart-4: 142 55% 50%;
     --chart-5: 0 65% 60%;
     
-    --gradient-primary: linear-gradient(135deg, hsl(210 70% 58%), hsl(210 65% 68%));
+    --gradient-primary: linear-gradient(135deg, hsl(224 60% 58%), hsl(224 55% 68%));
     --gradient-secondary: linear-gradient(135deg, hsl(225 15% 15%), hsl(225 15% 20%));
-    --gradient-hero: linear-gradient(135deg, hsl(210 70% 58%), hsl(210 70% 42%));
+    --gradient-hero: none;
     --gradient-card: none;
     
     --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.20);
@@ -181,13 +180,13 @@ All colors MUST be HSL.
     
     /* Sidebar */
     --sidebar-background: 225 15% 10%;
-    --sidebar-foreground: 210 20% 92%;
-    --sidebar-primary: 210 70% 58%;
+    --sidebar-foreground: 220 14% 92%;
+    --sidebar-primary: 224 60% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 225 15% 15%;
-    --sidebar-accent-foreground: 210 20% 92%;
+    --sidebar-accent-foreground: 220 14% 92%;
     --sidebar-border: 225 12% 25%;
-    --sidebar-ring: 210 70% 58%;
+    --sidebar-ring: 224 60% 58%;
   }
 }
 
