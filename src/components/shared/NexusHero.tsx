@@ -84,15 +84,7 @@ const AfricanPattern = ({ className, style }: { className?: string; style?: Reac
 };
 
 // Noise texture overlay for premium cinematic feel (reduces gradient banding)
-const NoiseOverlay = () => (
-  <div 
-    className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay"
-    style={{
-      backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-      backgroundRepeat: 'repeat',
-    }}
-  />
-);
+const NoiseOverlay = () => null;
 
 // --- Main Component ---
 
@@ -237,7 +229,7 @@ export function NexusHero({
           >
             <Badge 
               className={cn(
-                "mb-8 px-5 py-2.5 bg-white/[0.08] backdrop-blur-lg border border-nx-gold/25 shadow-lg shadow-black/20 text-white/90 font-medium text-sm hover:bg-white/[0.12] transition-all duration-300",
+                "mb-8 px-5 py-2.5 bg-white/10 border border-white/20 text-white/90 font-medium text-sm hover:bg-white/15 transition-all duration-300",
                 isRTL && "flex-row-reverse"
               )}
             >
@@ -282,13 +274,7 @@ export function NexusHero({
                     >
                       {t('home.hero.subtitle.highlight')}
                     </span>
-                    {/* Glow effect behind text */}
-                    <span 
-                      className="absolute inset-0 bg-gradient-to-r from-nx-gold via-amber-400 to-nx-gold bg-clip-text text-transparent blur-xl opacity-50 pointer-events-none"
-                      aria-hidden="true"
-                    >
-                      {t('home.hero.subtitle.highlight')}
-                    </span>
+                    {/* Gold accent text - no glow */}
                   </span>
                   {" "}{t('home.hero.subtitle.suffix')}
                 </>
@@ -340,7 +326,7 @@ export function NexusHero({
                   asChild 
                   variant="outline" 
                   size="lg"
-                  className="border border-white/40 bg-white/[0.08] backdrop-blur-md text-white hover:bg-white/15 hover:border-white/60 transition-all duration-300 font-medium px-8 py-6"
+                  className="border border-white/30 bg-white/10 text-white hover:bg-white/15 hover:border-white/50 transition-all duration-300 font-medium px-8 py-6"
                 >
                   <Link to="/auth">
                     {t('home.hero.cta.member')}

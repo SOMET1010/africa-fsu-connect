@@ -19,16 +19,16 @@ const EnhancedCard = React.forwardRef<HTMLDivElement, EnhancedCardProps>(({
 }, ref) => {
   const variants = {
     default: "bg-card border border-border",
-    glassmorphism: "bg-card/80 backdrop-blur-lg border border-border/50 shadow-xl",
-    elevated: "bg-card border border-border shadow-dramatic",
+    glassmorphism: "bg-card border border-border shadow-sm",
+    elevated: "bg-card border border-border shadow-sm",
     minimal: "bg-transparent border-0",
-    gradient: "bg-gradient-to-br from-card to-card/50 border border-border/30"
+    gradient: "bg-card border border-border"
   };
 
   const hoverEffects = {
-    lift: "hover:-translate-y-2 hover:shadow-xl",
-    glow: "hover:shadow-2xl hover:shadow-primary/10",
-    scale: "hover:scale-[1.02]",
+    lift: "hover:-translate-y-1 hover:shadow-md",
+    glow: "hover:shadow-md",
+    scale: "hover:scale-[1.01]",
     none: ""
   };
 

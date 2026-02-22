@@ -21,7 +21,7 @@ export const PublicHeader = () => {
   const headerItems = getNavItems("header");
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border">
+    <header className="sticky top-0 z-50 bg-background border-b border-border">
       <div className="container mx-auto px-4">
         <div className={cn("flex items-center justify-between h-[4.5rem]", isRTL && "flex-row-reverse")}>
           {/* Logo */}

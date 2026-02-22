@@ -29,7 +29,7 @@ export const PageHeader = ({
 
   return (
     <div className={cn(
-      "page-header border-b border-border bg-background/95 backdrop-blur-sm",
+      "page-header border-b border-border bg-background",
       className
     )}>
       <div className="page-container py-5">
