@@ -292,7 +292,9 @@ const ModernHeader = () => {
               <ThemeToggleButton />
 
               {/* Sélecteur de langue - visible pour TOUS les utilisateurs */}
-              <LanguageSelector variant="ghost" size="sm" showLabel={false} />
+              <div data-tour="user-lang-selector">
+                <LanguageSelector variant="ghost" size="sm" showLabel={false} />
+              </div>
               
               {user && (
                 <>

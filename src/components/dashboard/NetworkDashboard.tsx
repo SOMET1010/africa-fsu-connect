@@ -11,10 +11,14 @@ import { NexusLayout } from "@/components/layout/NexusLayout";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserDashboardKPIs } from "@/hooks/useUserDashboardKPIs";
+import { useUserOnboardingTour } from "@/hooks/useUserOnboardingTour";
+import { HelpCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function NetworkDashboard() {
   const navigate = useNavigate();
   const { kpis, kpisLoading, recentActivity, activityLoading } = useUserDashboardKPIs();
+  const { resetTour } = useUserOnboardingTour();
 
   // Fetch network stats
   const { data: stats } = useQuery({
@@ -50,11 +54,24 @@ export function NetworkDashboard() {
   return (
     <NexusLayout>
       <div className="container mx-auto px-4 py-6 space-y-6">
-        {/* Hero de bienvenue réseau */}
-        <DashboardHero />
+        {/* Hero de bienvenue réseau + replay button */}
+        <div className="relative" data-tour="user-hero">
+          <DashboardHero />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={resetTour}
+            className="absolute top-4 right-4 z-10 text-white/50 hover:text-white hover:bg-white/10"
+            title="Replay tour"
+          >
+            <HelpCircle className="h-5 w-5" />
+          </Button>
+        </div>
 
         {/* KPI Cards utilisateur */}
-        <UserKPICards kpis={kpis} loading={kpisLoading} />
+        <div data-tour="user-kpis">
+          <UserKPICards kpis={kpis} loading={kpisLoading} />
+        </div>
         
         {/* Synthèse narrative du réseau */}
         <NetworkSummary 
@@ -65,7 +82,9 @@ export function NetworkDashboard() {
         
         {/* Carte + Activité récente utilisateur */}
         <div className="grid gap-6 lg:grid-cols-2">
-          <DashboardMapWidget />
+          <div data-tour="user-map">
+            <DashboardMapWidget />
+          </div>
           <UserRecentActivity
             activities={recentActivity}
             loading={activityLoading}
@@ -74,13 +93,15 @@ export function NetworkDashboard() {
         </div>
         
         {/* Projets inspirants */}
-        <InspiringProjects 
-          onViewProject={handleViewProject}
-          onContactCountry={handleContactCountry}
-        />
+        <div data-tour="user-projects">
+          <InspiringProjects 
+            onViewProject={handleViewProject}
+            onContactCountry={handleContactCountry}
+          />
+        </div>
         
         {/* Ressources + Événements */}
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2" data-tour="user-resources">
           <RecentResources 
             onViewResource={handleViewResource}
             onViewAll={() => navigate('/resources')}
