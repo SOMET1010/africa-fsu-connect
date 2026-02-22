@@ -44,7 +44,7 @@ export const ResetPasswordForm = ({
             placeholder="Votre nouveau mot de passe"
             required
             minLength={6}
-            className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary pr-12"
+            className="h-12 bg-background border-border focus:border-primary pr-12"
           />
         </div>
         <div className="space-y-2">
@@ -57,12 +57,12 @@ export const ResetPasswordForm = ({
             placeholder="Confirmez le mot de passe"
             required
             minLength={6}
-            className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary pr-12"
+            className="h-12 bg-background border-border focus:border-primary pr-12"
           />
         </div>
 
         {error && (
-          <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 backdrop-blur-sm">
+          <Alert variant="destructive" className="border-destructive/20 bg-destructive/10">
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
@@ -101,12 +101,12 @@ export const ResetPasswordForm = ({
           onChange={(e) => onEmailChange?.(e.target.value)}
           placeholder="votre@email.com"
           required
-          className="h-12 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary"
+          className="h-12 bg-background border-border focus:border-primary"
         />
       </div>
 
       {error && (
-        <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 backdrop-blur-sm">
+        <Alert variant="destructive" className="border-destructive/20 bg-destructive/10">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}

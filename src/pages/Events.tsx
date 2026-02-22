@@ -55,7 +55,7 @@ const Events = () => {
         />
         
         {/* Content Section */}
-        <div className="bg-muted/50 backdrop-blur-md rounded-3xl border border-border p-6 lg:p-8 shadow-lg">
+        <div className="bg-white dark:bg-card rounded-2xl border border-border p-6 lg:p-8 shadow-sm">
           <Tabs value={selectedView} onValueChange={setSelectedView} className="space-y-6">
             <EventsToolbar
               selectedView={selectedView}

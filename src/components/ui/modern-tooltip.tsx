@@ -16,9 +16,9 @@ const TooltipContent = React.forwardRef<
   }
 >(({ className, sideOffset = 4, variant = "default", ...props }, ref) => {
   const variants = {
-    default: "bg-popover text-popover-foreground border border-border/50",
-    glass: "bg-card/90 backdrop-blur-xl text-foreground border border-border/20 shadow-xl",
-    dark: "bg-gray-900 text-white border border-gray-700"
+    default: "bg-popover text-popover-foreground border border-border",
+    glass: "bg-card text-foreground border border-border shadow-sm",
+    dark: "bg-foreground text-background border border-border"
   };
 
   return (

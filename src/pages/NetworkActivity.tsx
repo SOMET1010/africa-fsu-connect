@@ -55,7 +55,7 @@ const NetworkActivity = () => {
         />
 
         {/* Network Presence Summary */}
-        <Card className="mb-8 bg-card/80 backdrop-blur-sm border-border/50">
+        <Card className="mb-8 bg-card border-border">
           <CardContent className="py-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className={`text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}>

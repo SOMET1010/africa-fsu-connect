@@ -14,7 +14,7 @@ export const AuthHeader = () => {
       </Link>
       
       <div className="flex items-center justify-center mb-6">
-        <div className="w-24 h-24 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl flex items-center justify-center border border-white/50">
+        <div className="w-24 h-24 bg-white rounded-2xl shadow-sm flex items-center justify-center border border-border">
           <NexusLogo size="lg" variant="icon" animated={false} />
         </div>
       </div>
