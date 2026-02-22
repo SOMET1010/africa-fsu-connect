@@ -20,8 +20,8 @@ const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(({
 }, ref) => {
   const variants = {
     default: "bg-card shadow-sm",
-    strong: "bg-card shadow-md",
-    subtle: "bg-secondary/50"
+    strong: "bg-card shadow-sm",
+    subtle: "bg-card"
   };
 
   const shadows = {

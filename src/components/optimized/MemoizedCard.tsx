@@ -22,8 +22,8 @@ const MemoizedCardComponent = React.memo<MemoizedCardProps>(({
   return (
     <Card 
       className={cn(
-        "transition-all duration-200 hover:shadow-medium cursor-pointer",
-        "hover:scale-[1.02] hover:-translate-y-1",
+        "transition-all duration-200 hover:shadow-sm cursor-pointer",
+        "hover:-translate-y-0.5",
         loading && "opacity-50 pointer-events-none",
         className
       )}

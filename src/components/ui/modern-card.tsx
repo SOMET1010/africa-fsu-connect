@@ -18,18 +18,18 @@ const ModernCard = React.forwardRef<HTMLDivElement, ModernCardProps>(({
   ...props
 }, ref) => {
   const variants = {
-    default: "bg-card border border-border/50 shadow-lg",
-    gradient: "bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/30 shadow-xl backdrop-blur-sm",
-    glass: "bg-card/80 backdrop-blur-xl border border-border/20 shadow-2xl",
-    elevated: "bg-card border border-border shadow-dramatic",
-    neon: "bg-card border-2 border-primary/20 shadow-lg shadow-primary/5"
+    default: "bg-card border border-border shadow-sm",
+    gradient: "bg-card border border-border shadow-sm",
+    glass: "bg-card border border-border shadow-sm",
+    elevated: "bg-card border border-border shadow-sm",
+    neon: "bg-card border border-border shadow-sm"
   };
 
   const hoverEffects = {
-    lift: "hover:-translate-y-3 hover:shadow-2xl transition-all duration-300 ease-out",
-    glow: "hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300",
-    scale: "hover:scale-[1.02] transition-transform duration-200",
-    tilt: "hover:rotate-1 hover:scale-[1.02] transition-all duration-200",
+    lift: "hover:-translate-y-1 hover:shadow-md transition-all duration-200 ease-out",
+    glow: "hover:shadow-md transition-all duration-200",
+    scale: "hover:scale-[1.01] transition-transform duration-200",
+    tilt: "hover:scale-[1.01] transition-all duration-200",
     none: ""
   };
 
@@ -45,10 +45,7 @@ const ModernCard = React.forwardRef<HTMLDivElement, ModernCardProps>(({
       )}
       {...props}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-0 transition-opacity duration-300 hover:opacity-100" />
-      <div className="relative z-10">
-        {children}
-      </div>
+      {children}
     </div>
   );
 });
@@ -84,8 +81,7 @@ export const ModernIconCard = React.forwardRef<HTMLDivElement, IconCardProps>(({
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center space-x-4">
           <div className="relative">
-            <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border border-primary/20">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-border">
               <Icon className={cn("h-7 w-7", iconColor)} />
             </div>
           </div>
@@ -104,7 +100,7 @@ export const ModernIconCard = React.forwardRef<HTMLDivElement, IconCardProps>(({
       {stats && (
         <div className="grid grid-cols-2 gap-4 mb-4">
           {stats.map((stat, index) => (
-            <div key={index} className="text-center p-3 rounded-xl bg-muted/30 border border-border/30">
+            <div key={index} className="text-center p-3 rounded-xl bg-muted/50 border border-border">
               <div className="text-2xl font-bold text-primary">{stat.value}</div>
               <div className="text-xs text-muted-foreground font-medium">{stat.label}</div>
             </div>
