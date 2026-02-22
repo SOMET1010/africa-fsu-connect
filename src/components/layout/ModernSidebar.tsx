@@ -61,7 +61,7 @@ export function ModernSidebar() {
       case 'super_admin':
         return 'bg-gradient-to-r from-red-500/20 to-red-600/20 text-red-700 border-red-200/50';
       case 'admin_pays':
-        return 'bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-700 border-blue-200/50';
+        return 'bg-primary/20 text-primary border-primary/30';
       case 'editeur':
         return 'bg-gradient-to-r from-green-500/20 to-green-600/20 text-green-700 border-green-200/50';
       case 'contributeur':

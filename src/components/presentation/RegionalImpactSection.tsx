@@ -26,7 +26,7 @@ export function RegionalImpactSection() {
       countries: 15,
       projects: 312,
       coverage: "98%",
-      color: "bg-blue-500",
+      color: "bg-primary",
       highlights: ["Nigeria", "Ghana", "Sénégal", "Côte d'Ivoire"]
     },
     {
@@ -261,8 +261,8 @@ export function RegionalImpactSection() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
             <div className="text-center space-y-3">
-              <div className="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center">
-                <Zap className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 mx-auto bg-uat-primary-100 dark:bg-primary/20 rounded-full flex items-center justify-center">
+                <Zap className="h-8 w-8 text-primary" />
               </div>
               <h4 className="text-xl font-bold">Déploiement Rapide</h4>
               <p className="text-muted-foreground">

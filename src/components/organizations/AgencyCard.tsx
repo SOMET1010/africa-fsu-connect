@@ -86,7 +86,7 @@ export const AgencyCard = ({ agency, onViewProfile }: AgencyCardProps) => {
               href={agency.website_url} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+              className="text-sm text-primary hover:underline flex items-center gap-1"
             >
               Site officiel <ExternalLink className="h-3 w-3" />
             </a>
@@ -100,14 +100,14 @@ export const AgencyCard = ({ agency, onViewProfile }: AgencyCardProps) => {
           
           {/* UDC Type Badge */}
           {agency.metadata && typeof agency.metadata === 'object' && 'sutel_type' in agency.metadata && agency.metadata.sutel_type && (
-            <Badge variant="default" className="text-xs bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
+            <Badge variant="default" className="text-xs bg-primary text-primary-foreground border-0">
               UDC
             </Badge>
           )}
           
           {/* Governance Type Badge */}
           {agency.metadata && typeof agency.metadata === 'object' && 'governance_type' in agency.metadata && agency.metadata.governance_type && (
-            <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+            <Badge variant="outline" className="text-xs bg-uat-primary-50 text-primary border-uat-primary-200">
               {agency.metadata.governance_type === 'autonomous_agency' ? 'Agence autonome' :
                agency.metadata.governance_type === 'unit_within_regulator' ? 'Unité régulateur' :
                agency.metadata.governance_type === 'ministry_unit' ? 'Unité ministérielle' :
@@ -188,7 +188,7 @@ export const AgencyCard = ({ agency, onViewProfile }: AgencyCardProps) => {
         {agency.contact_email && (
           <a 
             href={`mailto:${agency.contact_email}`}
-            className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+            className="text-xs text-primary hover:underline flex items-center gap-1"
           >
             <Mail className="h-3 w-3" />
             Contact

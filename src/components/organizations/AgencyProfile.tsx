@@ -127,7 +127,7 @@ export const AgencyProfile = ({ agency, onClose }: AgencyProfileProps) => {
                           href={agency.website_url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+                          className="text-sm text-primary hover:underline flex items-center gap-1"
                         >
                           Site officiel <ExternalLink className="h-3 w-3" />
                         </a>
@@ -172,7 +172,7 @@ export const AgencyProfile = ({ agency, onClose }: AgencyProfileProps) => {
                       <Mail className="h-4 w-4 text-muted-foreground" />
                       <a 
                         href={`mailto:${agency.contact_email}`}
-                        className="text-sm text-blue-600 hover:underline"
+                        className="text-sm text-primary hover:underline"
                       >
                         {agency.contact_email}
                       </a>

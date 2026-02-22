@@ -85,10 +85,10 @@ export const InternationalStandardsPanel = () => {
   return (
     <div className="space-y-6">
       {/* Panel principal */}
-      <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+      <Card className="border-uat-primary-200 bg-uat-primary-50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Globe2 className="h-5 w-5 text-blue-600" />
+            <Globe2 className="h-5 w-5 text-primary" />
             Standards Internationaux ITU/OCDE/G20
           </CardTitle>
           <div className="flex flex-wrap gap-2 mt-2">
@@ -112,9 +112,9 @@ export const InternationalStandardsPanel = () => {
             selon les recommandations ITU Toolkit G20, OCDE Digital Economy et UN SDG.
           </p>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-blue-50 rounded-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-uat-primary-50 rounded-lg">
             <div className="text-center">
-              <div className="text-lg font-bold text-blue-600">{totalStandardIndicators}</div>
+              <div className="text-lg font-bold text-primary">{totalStandardIndicators}</div>
               <div className="text-xs text-muted-foreground">Standards Internationaux</div>
             </div>
             <div className="text-center">
@@ -166,7 +166,7 @@ export const InternationalStandardsPanel = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-600" />
+            <BarChart3 className="h-5 w-5 text-primary" />
             Standards par Thème ITU/OCDE
           </CardTitle>
         </CardHeader>
@@ -175,7 +175,7 @@ export const InternationalStandardsPanel = () => {
             <div className="border rounded-lg p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-blue-600" />
+                  <Shield className="h-4 w-4 text-primary" />
                   Infrastructure & Accès
                 </h4>
                 <Badge variant="outline">{INTERNATIONAL_STANDARDS.INFRASTRUCTURE_ACCESS.length} indicateurs</Badge>
@@ -231,7 +231,7 @@ export const InternationalStandardsPanel = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-blue-600" />
+            <Zap className="h-5 w-5 text-primary" />
             APIs Officielles Configurées
           </CardTitle>
         </CardHeader>
@@ -288,7 +288,7 @@ export const InternationalStandardsPanel = () => {
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center space-y-1">
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-primary">
                   {enrichmentStats.totalIndicators.toLocaleString()}
                 </div>
                 <div className="text-xs text-muted-foreground">Total Traités</div>

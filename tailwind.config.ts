@@ -122,8 +122,31 @@ export default {
 				cyan: 'hsl(var(--nx-cyan))',
 				deep: 'hsl(var(--nx-deep))',
 			},
-				// UAT Status tokens
+				// UAT Design Tokens
 				uat: {
+					primary: {
+						DEFAULT: 'hsl(var(--uat-primary))',
+						50: 'hsl(var(--uat-primary-50))',
+						100: 'hsl(var(--uat-primary-100))',
+						200: 'hsl(var(--uat-primary-200))',
+						600: 'hsl(var(--uat-primary-600))',
+						700: 'hsl(var(--uat-primary-700))',
+					},
+					secondary: {
+						DEFAULT: 'hsl(var(--uat-secondary))',
+						50: 'hsl(var(--uat-secondary-50))',
+						100: 'hsl(var(--uat-secondary-100))',
+						600: 'hsl(var(--uat-secondary-600))',
+						700: 'hsl(var(--uat-secondary-700))',
+					},
+					accent: {
+						DEFAULT: 'hsl(var(--uat-accent))',
+						50: 'hsl(var(--uat-accent-50))',
+						100: 'hsl(var(--uat-accent-100))',
+						600: 'hsl(var(--uat-accent-600))',
+						700: 'hsl(var(--uat-accent-700))',
+					},
+					// Status tokens
 					active: {
 						DEFAULT: 'hsl(var(--uat-status-active))',
 						bg: 'hsl(var(--uat-status-active-bg))',
