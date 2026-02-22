@@ -45,6 +45,14 @@ const MembersDirectory = () => {
     }
   }, [searchParams, languages, setSelectedLanguage]);
 
+  // Appliquer le filtre région depuis l'URL
+  useEffect(() => {
+    const regionParam = searchParams.get('region');
+    if (regionParam) {
+      setSelectedRegion(regionParam);
+    }
+  }, [searchParams, setSelectedRegion]);
+
   return (
     <NexusLayout>
       {/* Hero Section - Premium Dark */}

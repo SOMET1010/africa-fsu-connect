@@ -65,7 +65,7 @@ export function HomeHeroBlock() {
 
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }} className={cn("flex flex-col sm:flex-row gap-4", isRTL && "sm:flex-row-reverse")}>
             <Button asChild size="lg" className="bg-gradient-to-r from-[hsl(var(--nx-gold))] to-amber-500 text-[hsl(var(--nx-night))] hover:opacity-90 font-semibold px-8">
-              <Link to="/auth?mode=signup" className={cn("flex items-center", isRTL && "flex-row-reverse")}>
+              <Link to="/auth?tab=signup" className={cn("flex items-center", isRTL && "flex-row-reverse")}>
                 {ctaSignup}
                 <ArrowRight className={cn("h-5 w-5", isRTL ? "mr-2 rotate-180" : "ml-2")} />
               </Link>

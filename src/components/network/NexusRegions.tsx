@@ -197,7 +197,7 @@ export function NexusRegions() {
                 className="group relative"
               >
                 <Link
-                  to={`/network/members?region=${encodeURIComponent(region.slug)}`}
+                  to={`/members?region=${encodeURIComponent(region.slug)}`}
                   className="block h-full"
                 >
                   {/* Glow effect on hover */}
@@ -292,7 +292,7 @@ export function NexusRegions() {
         {/* Mobile CTA */}
         <div className="mt-8 text-center lg:hidden">
           <Link 
-            to="/network/members"
+            to="/members"
             className={cn(
               "inline-flex items-center gap-2 text-sm text-white/60 hover:text-primary transition-colors",
               isRTL && "flex-row-reverse"
