@@ -153,19 +153,10 @@ const ModernHeader = () => {
                           aria-label={`${item.labelKey ? t(item.labelKey) : item.label} menu`}
                           aria-haspopup="menu"
                         >
-                          {/* Active indicator */}
-                          <AnimatePresence>
-                            {(hoveredLink === item.id || active) && (
-                              <motion.div
-                                layoutId="nav-highlight"
-                                className="absolute inset-0 bg-primary/8 rounded-xl -z-10"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.15 }}
-                              />
-                            )}
-                          </AnimatePresence>
+                          {/* Active indicator - simple background */}
+                          {(hoveredLink === item.id || active) && (
+                            <div className="absolute inset-0 bg-primary/8 rounded-xl -z-10" />
+                          )}
                           
                           <Icon className={cn(
                             "h-4 w-4 transition-colors duration-200",
@@ -236,18 +227,9 @@ const ModernHeader = () => {
                     onMouseEnter={() => setHoveredLink(item.id)}
                     onMouseLeave={() => setHoveredLink(null)}
                   >
-                    <AnimatePresence>
-                      {(hoveredLink === item.id || active) && (
-                        <motion.div
-                          layoutId="nav-highlight"
-                          className="absolute inset-0 bg-primary/8 rounded-xl -z-10"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.15 }}
-                        />
-                      )}
-                    </AnimatePresence>
+                    {(hoveredLink === item.id || active) && (
+                      <div className="absolute inset-0 bg-primary/8 rounded-xl -z-10" />
+                    )}
                     
                     <Icon className={cn(
                       "h-4 w-4 transition-colors duration-200",
@@ -386,13 +368,7 @@ const ModernHeader = () => {
                       )} />
                     </span>
                     
-                    {/* Shine effect on hover */}
-                    <div className={cn(
-                      "absolute inset-0 transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent",
-                      isRTL 
-                        ? "translate-x-full group-hover:-translate-x-full" 
-                        : "-translate-x-full group-hover:translate-x-full"
-                    )} />
+                    {/* Removed shine effect */}
                   </Link>
                 </div>
               )}
@@ -564,12 +540,7 @@ const ModernHeader = () => {
                         isRTL ? "mr-2 rotate-180" : "ml-2"
                       )} />
                     </span>
-                    <div className={cn(
-                      "absolute inset-0 transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent",
-                      isRTL 
-                        ? "translate-x-full group-hover:-translate-x-full" 
-                        : "-translate-x-full group-hover:translate-x-full"
-                    )} />
+                    {/* Removed shine effect */}
                   </Link>
                 </motion.div>
               )}

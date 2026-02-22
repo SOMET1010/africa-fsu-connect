@@ -71,13 +71,9 @@ export function AfricaMapMini({ onCountryClick, selectedCountry, className }: Af
           style={{ left: `${country.x}%`, top: `${country.y}%` }}
           title={`${country.name}: ${country.count} pratiques`}
         >
-          {/* Pulse effect for countries with many practices */}
+          {/* Static indicator for countries with many practices */}
           {country.count >= 10 && (
-            <motion.div
-              className="absolute inset-0 rounded-full bg-primary/30"
-              animate={{ scale: [1, 1.8, 1], opacity: [0.5, 0, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
+            <div className="absolute inset-0 rounded-full border-2 border-primary/30" />
           )}
 
           {/* Main dot */}

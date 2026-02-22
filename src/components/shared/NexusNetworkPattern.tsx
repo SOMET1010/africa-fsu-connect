@@ -27,14 +27,6 @@ export function NexusNetworkPattern({
         preserveAspectRatio="xMidYMid slice"
       >
         <defs>
-          {/* Glow filter for nodes */}
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
           
           {/* Gradient for connections */}
           <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -65,7 +57,7 @@ export function NexusNetworkPattern({
         </g>
 
         {/* Network nodes - key points */}
-        <g filter="url(#glow)">
+        <g>
           {/* Primary nodes (countries/hubs) */}
           <circle cx="100" cy="300" r="4" fill="hsl(220, 100%, 56%)" />
           <circle cx="350" cy="200" r="5" fill="hsl(43, 75%, 52%)" />
@@ -83,19 +75,7 @@ export function NexusNetworkPattern({
           <circle cx="680" cy="380" r="1.5" fill="hsl(43, 75%, 60%)" />
         </g>
 
-        {/* Animated pulse rings - only if animated */}
-        {animated && (
-          <g>
-            <circle cx="350" cy="200" r="8" fill="none" stroke="hsl(43, 75%, 52%)" strokeWidth="0.5">
-              <animate attributeName="r" from="5" to="20" dur="3s" repeatCount="indefinite" />
-              <animate attributeName="opacity" from="0.6" to="0" dur="3s" repeatCount="indefinite" />
-            </circle>
-            <circle cx="500" cy="450" r="8" fill="none" stroke="hsl(174, 60%, 56%)" strokeWidth="0.5">
-              <animate attributeName="r" from="5" to="20" dur="3s" begin="1s" repeatCount="indefinite" />
-              <animate attributeName="opacity" from="0.6" to="0" dur="3s" begin="1s" repeatCount="indefinite" />
-            </circle>
-          </g>
-        )}
+        {/* No animated pulse rings */}
       </svg>
     </div>
   );
