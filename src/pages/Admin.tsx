@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDirection } from "@/hooks/useDirection";
+import { useAdminOnboarding } from "@/hooks/useAdminOnboarding";
 import { LanguageSelector } from "@/components/shared/LanguageSelector";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -14,8 +15,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Loader2, Users, FileText, MessageSquare, Calendar, Globe, Rocket,
   Settings, Shield, BookOpen, MapPin, Flag, AlertTriangle,
-  ExternalLink, Clock, ArrowRight, TrendingUp, Layout } from "lucide-react";
+  ExternalLink, Clock, ArrowRight, TrendingUp, Layout, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import "@/styles/driver-rtl.css";
 
 // ─── i18n labels ───────────────────────────────────────────────
 
@@ -116,6 +118,7 @@ const Admin = () => {
   const { profile } = useAuth();
   const { currentLanguage } = useTranslation();
   const { isRTL } = useDirection();
+  const { resetTour } = useAdminOnboarding();
   const lang = currentLanguage || "fr";
   const userRole = profile?.role ?? "lecteur";
 
@@ -252,7 +255,12 @@ const Admin = () => {
         gradient
         actions={
           <div className="flex items-center gap-2">
-            <LanguageSelector variant="outline" size="sm" showLabel />
+            <Button variant="ghost" size="sm" onClick={resetTour} title="Tour">
+              <HelpCircle className="h-4 w-4" />
+            </Button>
+            <div data-tour="lang-selector">
+              <LanguageSelector variant="outline" size="sm" showLabel />
+            </div>
           </div>
         }
       />
@@ -260,7 +268,7 @@ const Admin = () => {
       <PageContainer>
         <div className="space-y-8">
           {/* ── KPI Grid ── */}
-          <section>
+          <section data-tour="kpis">
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
               {l("kpis", lang)}
             </h2>
@@ -290,7 +298,7 @@ const Admin = () => {
           </section>
 
           {/* ── Shortcuts ── */}
-          <section>
+          <section data-tour="shortcuts">
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
               {l("shortcuts", lang)}
             </h2>
@@ -324,7 +332,7 @@ const Admin = () => {
           {/* ── Bottom row: Activity + Alerts ── */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Recent Activity */}
-            <section>
+            <section data-tour="activity">
               <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                 {l("activity", lang)}
               </h2>
@@ -362,7 +370,7 @@ const Admin = () => {
 
             {/* Alerts & Moderation */}
             {["super_admin", "admin_pays"].includes(userRole) && (
-              <section>
+              <section data-tour="alerts">
                 <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                   {l("alerts", lang)}
                 </h2>
