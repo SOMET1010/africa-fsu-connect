@@ -29,87 +29,6 @@
 }
 
 /* ============================================
-   BOGOLAN-INSPIRED PATTERNS (Mali Mud Cloth)
-   ============================================ */
-
-.african-pattern-bogolan {
-  background-image: 
-    linear-gradient(45deg, hsl(var(--african-terracotta) / 0.1) 25%, transparent 25%),
-    linear-gradient(-45deg, hsl(var(--african-terracotta) / 0.1) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, hsl(var(--african-terracotta) / 0.1) 75%),
-    linear-gradient(-45deg, transparent 75%, hsl(var(--african-terracotta) / 0.1) 75%);
-  background-size: 20px 20px;
-  background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
-}
-
-.african-pattern-bogolan-subtle {
-  background-image: 
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 8px,
-      hsl(var(--african-ochre) / 0.05) 8px,
-      hsl(var(--african-ochre) / 0.05) 9px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 8px,
-      hsl(var(--african-ochre) / 0.05) 8px,
-      hsl(var(--african-ochre) / 0.05) 9px
-    );
-}
-
-/* ============================================
-   KENTE-INSPIRED PATTERNS (Ghana Weave)
-   ============================================ */
-
-.african-pattern-kente {
-  background: 
-    repeating-linear-gradient(
-      90deg,
-      hsl(var(--african-kente-gold) / 0.15) 0px,
-      hsl(var(--african-kente-gold) / 0.15) 4px,
-      transparent 4px,
-      transparent 8px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      hsl(var(--african-kente-green) / 0.1) 0px,
-      hsl(var(--african-kente-green) / 0.1) 4px,
-      transparent 4px,
-      transparent 8px
-    );
-}
-
-.african-pattern-kente-border {
-  border-image: repeating-linear-gradient(
-    90deg,
-    hsl(var(--african-kente-gold)) 0px,
-    hsl(var(--african-kente-gold)) 10px,
-    hsl(var(--african-kente-green)) 10px,
-    hsl(var(--african-kente-green)) 20px,
-    hsl(var(--african-kente-red)) 20px,
-    hsl(var(--african-kente-red)) 30px
-  ) 1;
-}
-
-/* ============================================
-   ADINKRA-INSPIRED PATTERNS (Ghana Symbols)
-   ============================================ */
-
-.african-pattern-adinkra {
-  background-image: radial-gradient(
-    circle at 50% 50%,
-    hsl(var(--african-indigo) / 0.08) 0%,
-    hsl(var(--african-indigo) / 0.08) 30%,
-    transparent 30%,
-    transparent 100%
-  );
-  background-size: 40px 40px;
-}
-
-/* ============================================
    DECORATIVE ELEMENTS
    ============================================ */
 
@@ -281,19 +200,6 @@
   background: hsl(var(--african-copper) / 0.1);
   color: hsl(var(--african-copper));
   border: 1px solid hsl(var(--african-copper) / 0.2);
-}
-
-/* ============================================
-   ANIMATIONS FOR PATTERNS
-   ============================================ */
-
-@keyframes pattern-shimmer {
-  0% { background-position: 0% 0%; }
-  100% { background-position: 100% 100%; }
-}
-
-.african-pattern-animated {
-  animation: pattern-shimmer 30s linear infinite;
 }
 
 /* ============================================

@@ -4,7 +4,6 @@ import { Share2, Search, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { ThemeIllustration } from "@/components/shared/ThemeIllustration";
 import { AfricaMapMini } from "./AfricaMapMini";
-import { NexusNetworkPattern } from "@/components/shared/NexusNetworkPattern";
 
 interface PracticesHeroProps {
   searchQuery: string;
@@ -14,10 +13,7 @@ interface PracticesHeroProps {
 export function PracticesHero({ searchQuery, onSearchChange }: PracticesHeroProps) {
   return (
     <div className="py-10 md:py-16 relative">
-      {/* Subtle NEXUS network pattern background */}
-      <NexusNetworkPattern variant="subtle" />
-      
-      <div className="grid lg:grid-cols-2 gap-10 items-center relative z-10">
+      <div className="grid lg:grid-cols-2 gap-10 items-center">
         {/* Left: Text content */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}

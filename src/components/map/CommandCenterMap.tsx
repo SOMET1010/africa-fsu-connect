@@ -121,9 +121,7 @@ export const CommandCenterMap = ({
               inset: 0;
               border-radius: 50%;
               border: 2px solid ${color};
-              opacity: 0.5;
-              animation: pulse-ring-hud 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-              animation-delay: ${animationDelay}s;
+              opacity: 0.3;
             "></div>
             <div style="
               position: absolute;
@@ -243,31 +241,8 @@ export const CommandCenterMap = ({
         }}
       />
       
-      {/* Tactical Grid Overlay */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0)',
-          backgroundSize: '40px 40px',
-        }}
-      />
-
-      {/* Vignette Effect */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, transparent 0%, rgba(15,23,42,0.4) 100%)',
-        }}
-      />
-
       {/* Custom CSS for markers */}
       <style>{`
-        @keyframes pulse-ring-hud {
-          0% { transform: scale(1); opacity: 0.5; }
-          50% { transform: scale(1.08); opacity: 0.2; }
-          100% { transform: scale(1); opacity: 0.5; }
-        }
-        
         .command-marker-container {
           background: transparent !important;
           border: none !important;
