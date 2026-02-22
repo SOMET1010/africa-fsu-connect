@@ -66,10 +66,9 @@ export function ModernStatsCard({
       className={cn(sizeClasses[size], "group", className)}
     >
       <div className="flex items-start justify-between mb-4">
-        <div className="relative">
-          <div className="absolute inset-0 bg-primary/20 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div>
           <div className={cn(
-            "relative rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border border-primary/20",
+            "rounded-xl bg-primary/10 flex items-center justify-center border border-border",
             iconSizes[size]
           )}>
             <Icon className="h-5 w-5 text-primary" />

@@ -35,17 +35,6 @@ export const PageHero: React.FC<PageHeroProps> = ({
         "relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary/80 border border-border",
         className
       )}>
-        {/* Subtle background pattern */}
-        <div className="absolute inset-0 opacity-30">
-          <div className={cn(
-            "absolute top-0 w-96 h-96 bg-white/10 rounded-full blur-3xl",
-            isRTL ? "left-0" : "right-0"
-          )} />
-          <div className={cn(
-            "absolute bottom-0 w-64 h-64 bg-white/10 rounded-full blur-2xl",
-            isRTL ? "right-0" : "left-0"
-          )} />
-        </div>
         
         <div className="relative px-8 py-12 md:px-12 md:py-16">
           <div className="max-w-3xl">

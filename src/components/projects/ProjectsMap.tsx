@@ -262,22 +262,15 @@ export const ProjectsMap = ({ projects }: ProjectsMapProps) => {
                 onMouseLeave={() => setHoveredRegion(null)}
                 onClick={() => setSelectedRegion(selectedRegion === region ? null : region)}
               >
-                {/* Pulse Rings */}
-                <div className="absolute inset-0 animate-ping">
-                  <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${config.color} opacity-20`} />
-                </div>
-                <div className="absolute inset-1 animate-ping animation-delay-200">
-                  <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${config.color} opacity-30`} />
-                </div>
                 
                 {/* Main Marker */}
-                <div className={`relative w-12 h-12 rounded-full bg-gradient-to-r ${config.color} shadow-sm transition-all duration-500 ${
-                  isHovered || isSelected ? 'scale-150 shadow-md' : 'hover:scale-125'
-                } border-3 border-white dark:border-gray-800 flex items-center justify-center`}>
+                <div className={`relative w-12 h-12 rounded-full bg-gradient-to-r ${config.color} shadow-sm transition-all duration-300 ${
+                  isHovered || isSelected ? 'scale-125 shadow-md' : 'hover:scale-110'
+                } border-2 border-white dark:border-gray-800 flex items-center justify-center`}>
                   <span className="text-xl">{config.flag}</span>
                   
                   {/* Project Count Badge */}
-                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800 font-bold animate-bounce">
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-destructive text-white text-xs rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800 font-bold">
                     {regionProjects.length}
                   </div>
                 </div>
@@ -371,7 +364,7 @@ export const ProjectsMap = ({ projects }: ProjectsMapProps) => {
                 </div>
               ))}
               <div className="flex items-center gap-2 mt-3 pt-2 border-t border-border">
-                <div className="w-3 h-3 bg-primary/20 rounded-full animate-pulse" />
+                <div className="w-3 h-3 bg-primary/20 rounded-full" />
                 <span>Activité temps réel</span>
               </div>
             </div>

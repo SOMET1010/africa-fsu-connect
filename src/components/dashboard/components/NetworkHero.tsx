@@ -6,10 +6,8 @@ export function NetworkHero() {
   const firstName = user?.user_metadata?.first_name || user?.email?.split('@')[0] || 'Membre';
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-background border border-border/50">
-      <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
-      
-      <div className="relative px-6 py-8 md:px-8 md:py-10">
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-background border border-border">
+      <div className="px-6 py-8 md:px-8 md:py-10">
         <div className="flex items-start gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <Globe className="h-7 w-7" />
