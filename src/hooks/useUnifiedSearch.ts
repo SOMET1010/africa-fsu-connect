@@ -15,7 +15,17 @@ export interface GroupedResults {
   projects: SearchResult[];
 }
 
-export const useUnifiedSearch = (query: string) => {
+export interface SearchFilters {
+  types: ('document' | 'forum' | 'project')[];
+  country?: string;
+  documentType?: string;
+}
+
+const DEFAULT_FILTERS: SearchFilters = {
+  types: ['document', 'forum', 'project'],
+};
+
+export const useUnifiedSearch = (query: string, filters: SearchFilters = DEFAULT_FILTERS) => {
   const [results, setResults] = useState<GroupedResults>({ documents: [], forum: [], projects: [] });
   const [loading, setLoading] = useState(false);
   const abortRef = useRef(0);
@@ -35,32 +45,47 @@ export const useUnifiedSearch = (query: string) => {
       try {
         const pattern = `%${trimmed}%`;
 
-        const [docsRes, forumRes, projectsRes] = await Promise.all([
-          supabase
-            .from('documents')
-            .select('id, title, description')
-            .eq('is_public', true)
-            .or(`title.ilike.${pattern},description.ilike.${pattern}`)
-            .limit(5),
-          supabase
-            .from('forum_posts')
-            .select('id, title, content')
-            .or(`title.ilike.${pattern},content.ilike.${pattern}`)
-            .limit(5),
-          supabase
-            .from('agency_projects')
-            .select('id, title, description, location')
-            .or(`title.ilike.${pattern},description.ilike.${pattern}`)
-            .limit(5),
-        ]);
+        const docsPromise = filters.types.includes('document')
+          ? (() => {
+              let q = supabase
+                .from('documents')
+                .select('id, title, description')
+                .eq('is_public', true)
+                .or(`title.ilike.${pattern},description.ilike.${pattern}`);
+              if (filters.country) q = q.eq('country', filters.country);
+              if (filters.documentType) q = q.eq('document_type', filters.documentType as any);
+              return q.limit(5);
+            })()
+          : Promise.resolve({ data: [] as any[] });
 
-        if (id !== abortRef.current) return; // stale
+        const forumPromise = filters.types.includes('forum')
+          ? supabase
+              .from('forum_posts')
+              .select('id, title, content')
+              .or(`title.ilike.${pattern},content.ilike.${pattern}`)
+              .limit(5)
+          : Promise.resolve({ data: [] as any[] });
+
+        const projectsPromise = filters.types.includes('project')
+          ? (() => {
+              let q = supabase
+                .from('agency_projects')
+                .select('id, title, description, location')
+                .or(`title.ilike.${pattern},description.ilike.${pattern}`);
+              if (filters.country) q = q.eq('location', filters.country);
+              return q.limit(5);
+            })()
+          : Promise.resolve({ data: [] as any[] });
+
+        const [docsRes, forumRes, projectsRes] = await Promise.all([docsPromise, forumPromise, projectsPromise]);
+
+        if (id !== abortRef.current) return;
 
         const documents: SearchResult[] = (docsRes.data || []).map(d => ({
           id: d.id,
           title: d.title,
           description: d.description || '',
-          type: 'document',
+          type: 'document' as const,
           url: '/resources',
         }));
 
@@ -68,7 +93,7 @@ export const useUnifiedSearch = (query: string) => {
           id: f.id,
           title: f.title,
           description: (f.content || '').slice(0, 100),
-          type: 'forum',
+          type: 'forum' as const,
           url: '/forum',
         }));
 
@@ -76,7 +101,7 @@ export const useUnifiedSearch = (query: string) => {
           id: p.id,
           title: p.title,
           description: p.description || p.location || '',
-          type: 'project',
+          type: 'project' as const,
           url: '/projects',
         }));
 
@@ -89,7 +114,7 @@ export const useUnifiedSearch = (query: string) => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query, filters]);
 
   const hasResults = results.documents.length > 0 || results.forum.length > 0 || results.projects.length > 0;
 
