@@ -28,17 +28,18 @@ const GradientHeroSection: React.FC<GradientHeroSectionProps> = ({
   children
 }) => {
   const getGradientClasses = () => {
+    // All variants use the institutional UAT palette — no flashy gradients
     switch (variant) {
       case "blue":
-        return "bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800";
+        return "bg-primary";
       case "green":
-        return "bg-gradient-to-br from-green-600 via-green-700 to-green-800";
+        return "bg-secondary";
       case "purple":
-        return "bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800";
+        return "bg-primary-dark";
       case "orange":
-        return "bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800";
+        return "bg-accent";
       default:
-        return "bg-gradient-to-br from-primary via-primary-dark to-accent";
+        return "bg-primary";
     }
   };
 

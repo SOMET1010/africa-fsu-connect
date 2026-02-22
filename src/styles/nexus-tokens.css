@@ -86,54 +86,57 @@
   --nx-success-500: 160 56% 42%;
 
   /* ========================================
-     UAT PRIMARY PALETTE — Variantes complètes
+     UAT PRIMARY PALETTE — Charte institutionnelle
+     Primary: Bleu UAT profond (#1E3A8A)
+     Secondary: Vert africain (#0F766E)
+     Accent: Doré Union Africaine (#C8A23A)
      ======================================== */
 
-  /* UAT Primary (bleu institutionnel) */
-  --uat-primary: 210 73% 28%;
-  --uat-primary-50: 210 60% 97%;
-  --uat-primary-100: 210 55% 93%;
-  --uat-primary-200: 210 50% 85%;
-  --uat-primary-600: 210 73% 28%;
-  --uat-primary-700: 210 80% 22%;
+  /* UAT Primary (bleu profond institutionnel) */
+  --uat-primary: 224 65% 33%;
+  --uat-primary-50: 224 50% 97%;
+  --uat-primary-100: 224 45% 93%;
+  --uat-primary-200: 224 40% 85%;
+  --uat-primary-600: 224 65% 33%;
+  --uat-primary-700: 224 70% 25%;
 
-  /* UAT Secondary (gris-bleu) */
-  --uat-secondary: 210 25% 96%;
-  --uat-secondary-50: 210 20% 98%;
-  --uat-secondary-100: 210 25% 96%;
-  --uat-secondary-600: 215 20% 40%;
-  --uat-secondary-700: 222 47% 15%;
+  /* UAT Secondary (vert africain institutionnel) */
+  --uat-secondary: 175 77% 26%;
+  --uat-secondary-50: 175 40% 97%;
+  --uat-secondary-100: 175 40% 92%;
+  --uat-secondary-600: 175 77% 26%;
+  --uat-secondary-700: 175 80% 20%;
 
-  /* UAT Accent (teal coopération) */
-  --uat-accent: 170 45% 40%;
-  --uat-accent-50: 170 40% 97%;
-  --uat-accent-100: 170 40% 93%;
-  --uat-accent-600: 170 45% 40%;
-  --uat-accent-700: 170 50% 32%;
+  /* UAT Accent (doré Union Africaine) */
+  --uat-accent: 43 55% 51%;
+  --uat-accent-50: 43 60% 96%;
+  --uat-accent-100: 43 55% 90%;
+  --uat-accent-600: 43 55% 51%;
+  --uat-accent-700: 43 60% 42%;
 
   /* ========================================
-     UAT STATUS TOKENS — Statuts cohérents
+     UAT STATUS TOKENS
      ======================================== */
 
   /* Actif — Vert institutionnel */
-  --uat-status-active: 142 60% 40%;
-  --uat-status-active-bg: 142 60% 96%;
+  --uat-status-active: 142 71% 29%;
+  --uat-status-active-bg: 142 76% 95%;
   --uat-status-active-border: 142 50% 82%;
 
-  /* En intégration — Bleu UAT (pas bleu Tailwind) */
-  --uat-status-onboarding: 210 73% 38%;
-  --uat-status-onboarding-bg: 210 60% 96%;
-  --uat-status-onboarding-border: 210 50% 82%;
+  /* En intégration — Doré ambre */
+  --uat-status-onboarding: 43 60% 42%;
+  --uat-status-onboarding-bg: 43 60% 96%;
+  --uat-status-onboarding-border: 43 50% 82%;
 
   /* Observateur — Gris neutre */
   --uat-status-observer: 215 16% 47%;
-  --uat-status-observer-bg: 210 20% 96%;
-  --uat-status-observer-border: 214 20% 89%;
+  --uat-status-observer-bg: 220 14% 96%;
+  --uat-status-observer-border: 220 13% 89%;
 
-  /* Document / Info — Bleu primaire UAT */
-  --uat-info: 210 73% 50%;
-  --uat-info-bg: 210 60% 96%;
-  --uat-info-border: 210 50% 85%;
+  /* Info — Bleu UAT */
+  --uat-info: 224 55% 45%;
+  --uat-info-bg: 224 50% 96%;
+  --uat-info-border: 224 40% 85%;
 
   /* ========================================
      NEXUS AFRICA NETWORK — Couleurs artistiques
@@ -208,39 +211,39 @@
   --nx-shadow-md: 0 12px 28px hsl(0 0% 0% / 0.35);
 
   /* UAT Primary — Dark mode */
-  --uat-primary: 210 70% 58%;
-  --uat-primary-50: 210 50% 15%;
-  --uat-primary-100: 210 45% 20%;
-  --uat-primary-200: 210 50% 30%;
-  --uat-primary-600: 210 70% 58%;
-  --uat-primary-700: 210 65% 48%;
+  --uat-primary: 224 60% 58%;
+  --uat-primary-50: 224 50% 15%;
+  --uat-primary-100: 224 45% 20%;
+  --uat-primary-200: 224 50% 30%;
+  --uat-primary-600: 224 60% 58%;
+  --uat-primary-700: 224 55% 48%;
 
-  --uat-secondary: 222 18% 17%;
-  --uat-secondary-50: 222 18% 12%;
-  --uat-secondary-100: 222 18% 17%;
-  --uat-secondary-600: 215 15% 72%;
-  --uat-secondary-700: 210 20% 92%;
+  --uat-secondary: 175 60% 40%;
+  --uat-secondary-50: 175 40% 12%;
+  --uat-secondary-100: 175 40% 18%;
+  --uat-secondary-600: 175 60% 40%;
+  --uat-secondary-700: 175 50% 50%;
 
-  --uat-accent: 160 50% 55%;
-  --uat-accent-50: 170 40% 12%;
-  --uat-accent-100: 170 40% 18%;
-  --uat-accent-600: 160 50% 55%;
-  --uat-accent-700: 160 45% 65%;
+  --uat-accent: 43 60% 58%;
+  --uat-accent-50: 43 40% 12%;
+  --uat-accent-100: 43 40% 18%;
+  --uat-accent-600: 43 60% 58%;
+  --uat-accent-700: 43 50% 65%;
 
   /* UAT Status — Dark mode */
-  --uat-status-active: 142 55% 55%;
+  --uat-status-active: 142 55% 50%;
   --uat-status-active-bg: 142 50% 15%;
   --uat-status-active-border: 142 40% 25%;
 
-  --uat-status-onboarding: 210 70% 58%;
-  --uat-status-onboarding-bg: 210 60% 15%;
-  --uat-status-onboarding-border: 210 50% 25%;
+  --uat-status-onboarding: 43 55% 55%;
+  --uat-status-onboarding-bg: 43 40% 15%;
+  --uat-status-onboarding-border: 43 40% 25%;
 
   --uat-status-observer: 215 15% 55%;
   --uat-status-observer-bg: 215 15% 15%;
   --uat-status-observer-border: 215 12% 25%;
 
-  --uat-info: 210 70% 58%;
-  --uat-info-bg: 210 50% 15%;
-  --uat-info-border: 210 40% 28%;
+  --uat-info: 224 60% 58%;
+  --uat-info-bg: 224 50% 15%;
+  --uat-info-border: 224 40% 28%;
 }
