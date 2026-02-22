@@ -1,4 +1,4 @@
-// Indicateur de présence visuel, sans chiffres agressifs
+// Indicateur de présence — adapté fond clair
 
 import { cn } from "@/lib/utils";
 
@@ -22,12 +22,6 @@ export const PresenceIndicator = ({
   className = ""
 }: PresenceIndicatorProps) => {
   const percentage = (level / maxLevel) * 100;
-  
-  const barSizeClasses = {
-    sm: "w-1 gap-0.5",
-    md: "w-1 gap-0.5",
-    lg: "w-1.5 gap-1",
-  };
 
   const heightClasses = {
     sm: [4, 6, 8, 10],
@@ -42,7 +36,7 @@ export const PresenceIndicator = ({
     return "Activité en développement";
   };
 
-  // Simple mode (inline, no wrapping) — used in hero (white text context)
+  // Simple inline mode — fond clair
   if (!showLabel && !label) {
     return (
       <div className={`flex items-center gap-3 ${className}`}>
@@ -51,20 +45,14 @@ export const PresenceIndicator = ({
             <div
               key={index}
               className={cn(
-                "rounded-full transition-all duration-200",
-                barSizeClasses[size],
-                index < level 
-                  ? 'bg-white' 
-                  : 'bg-white/30'
+                "rounded-full transition-all duration-200 w-1",
+                index < level ? "bg-emerald-500" : "bg-gray-300 dark:bg-border"
               )}
-              style={{
-                height: `${(heightClasses[size] || heightClasses.md)[index] || 16}px`,
-              }}
+              style={{ height: `${(heightClasses[size] || heightClasses.md)[index] || 16}px` }}
             />
           ))}
         </div>
-        
-        <span className="text-sm text-white/80">
+        <span className="text-sm text-gray-600 dark:text-muted-foreground font-medium">
           Réseau actif
         </span>
       </div>
@@ -75,11 +63,8 @@ export const PresenceIndicator = ({
   return (
     <div className={`flex flex-col items-center space-y-2 ${className}`}>
       {label && (
-        <span className="text-sm text-slate-500 dark:text-muted-foreground font-medium">
-          {label}
-        </span>
+        <span className="text-sm text-gray-500 dark:text-muted-foreground font-medium">{label}</span>
       )}
-      
       <div className="flex gap-1 items-end">
         {Array.from({ length: maxLevel }).map((_, index) => (
           <div
@@ -87,17 +72,12 @@ export const PresenceIndicator = ({
             className={cn(
               "rounded-sm transition-colors duration-200",
               size === "sm" ? "w-4 h-2" : size === "lg" ? "w-8 h-4" : "w-6 h-3",
-              index < level 
-                ? 'bg-emerald-500' 
-                : 'bg-slate-200 dark:bg-border'
+              index < level ? "bg-emerald-500" : "bg-gray-200 dark:bg-border"
             )}
           />
         ))}
       </div>
-      
-      <span className="text-xs text-slate-500 dark:text-muted-foreground">
-        {getDescription()}
-      </span>
+      <span className="text-xs text-gray-500 dark:text-muted-foreground">{getDescription()}</span>
     </div>
   );
 };
