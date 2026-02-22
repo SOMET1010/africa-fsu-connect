@@ -46,7 +46,7 @@ export function UserKPICards({ kpis, loading }: UserKPICardsProps) {
     return (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="p-5 rounded-2xl bg-card border border-border">
+          <div key={i} className="p-5 rounded-2xl bg-white dark:bg-card border border-slate-200 dark:border-border">
             <Skeleton className="h-4 w-24 mb-3 bg-muted" />
             <Skeleton className="h-8 w-16 mb-2 bg-muted" />
             <Skeleton className="h-4 w-20 bg-muted" />
@@ -80,7 +80,7 @@ export function UserKPICards({ kpis, loading }: UserKPICardsProps) {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
-              className="p-5 rounded-2xl bg-card border border-border shadow-sm hover:border-border transition-colors"
+              className="p-5 rounded-2xl bg-white dark:bg-card border border-slate-200 dark:border-border shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className={`p-2 rounded-xl ${bgGlow}`}>
@@ -102,9 +102,9 @@ export function UserKPICards({ kpis, loading }: UserKPICardsProps) {
               </div>
               <AnimatedCounter
                 value={kpi.value}
-                className="text-2xl text-foreground"
+                className="text-2xl font-bold text-slate-900 dark:text-foreground"
               />
-              <p className="text-sm text-muted-foreground mt-1">{kpi.label}</p>
+              <p className="text-sm text-slate-600 dark:text-muted-foreground mt-1">{kpi.label}</p>
             </motion.div>
           );
         })}

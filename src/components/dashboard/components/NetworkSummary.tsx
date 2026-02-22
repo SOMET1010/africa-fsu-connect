@@ -18,7 +18,7 @@ export function NetworkSummary({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.1 }}
-      className="p-6 rounded-2xl bg-card border border-border shadow-sm"
+      className="p-6 rounded-2xl bg-white dark:bg-card border border-slate-200 dark:border-border shadow-sm"
     >
       <div className="flex items-start gap-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 border border-primary/20">
@@ -26,7 +26,7 @@ export function NetworkSummary({
         </div>
         
         <div className="flex-1 space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-foreground">
             Synthèse du Réseau
           </h2>
           
