@@ -22,10 +22,10 @@ const InteractiveCard = React.forwardRef<HTMLDivElement, InteractiveCardProps>(
     const { getInteractionProps } = useMicroInteractions();
 
     const variantClasses = {
-      default: "bg-card border border-border/50",
-      subtle: "bg-card/50 border border-border/30 backdrop-blur-sm",
-      elevated: "bg-card border border-border/50 shadow-lg",
-      glow: "bg-card border border-primary/20 shadow-[0_0_20px_rgba(var(--primary)_/_0.1)]"
+      default: "bg-card border border-border",
+      subtle: "bg-card border border-border/70",
+      elevated: "bg-card border border-border shadow-sm",
+      glow: "bg-card border border-border"
     };
 
     const interactionProps = interactive 
