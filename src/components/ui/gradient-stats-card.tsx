@@ -22,7 +22,7 @@ const GradientStatsCard: React.FC<GradientStatsCardProps> = ({
   const getGradientClasses = () => {
     switch (variant) {
       case "blue":
-        return "bg-gradient-to-br from-blue-500/20 via-blue-600/20 to-blue-700/20 border-blue-500/30";
+        return "bg-gradient-to-br from-primary/20 via-primary/30 to-primary-dark/20 border-primary/30";
       case "green":
         return "bg-gradient-to-br from-emerald-500/20 via-emerald-600/20 to-emerald-700/20 border-emerald-500/30";
       case "purple":
@@ -39,7 +39,7 @@ const GradientStatsCard: React.FC<GradientStatsCardProps> = ({
   const getIconColor = () => {
     switch (variant) {
       case "blue":
-        return "text-blue-600";
+        return "text-primary";
       case "green":
         return "text-emerald-600";
       case "purple":

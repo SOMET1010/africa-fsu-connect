@@ -121,7 +121,30 @@ export default {
 				gold: 'hsl(var(--nx-gold))',
 				cyan: 'hsl(var(--nx-cyan))',
 				deep: 'hsl(var(--nx-deep))',
-			}
+			},
+				// UAT Status tokens
+				uat: {
+					active: {
+						DEFAULT: 'hsl(var(--uat-status-active))',
+						bg: 'hsl(var(--uat-status-active-bg))',
+						border: 'hsl(var(--uat-status-active-border))',
+					},
+					onboarding: {
+						DEFAULT: 'hsl(var(--uat-status-onboarding))',
+						bg: 'hsl(var(--uat-status-onboarding-bg))',
+						border: 'hsl(var(--uat-status-onboarding-border))',
+					},
+					observer: {
+						DEFAULT: 'hsl(var(--uat-status-observer))',
+						bg: 'hsl(var(--uat-status-observer-bg))',
+						border: 'hsl(var(--uat-status-observer-border))',
+					},
+					info: {
+						DEFAULT: 'hsl(var(--uat-info))',
+						bg: 'hsl(var(--uat-info-bg))',
+						border: 'hsl(var(--uat-info-border))',
+					},
+				},
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',

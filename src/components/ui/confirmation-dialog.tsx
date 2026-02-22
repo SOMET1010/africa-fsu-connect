@@ -59,7 +59,7 @@ export function ConfirmationDialog({
       case "info":
         return {
           icon: Info,
-          iconColor: "text-blue-600",
+          iconColor: "text-info",
           title: title || "Information",
           description: description || "Please confirm your action.",
           confirmVariant: "default" as const

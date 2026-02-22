@@ -31,7 +31,7 @@ export const ProjectAnalytics = ({ projects }: ProjectAnalyticsProps) => {
     'connectivite': {
       name: 'Connectivité rurale',
       icon: Wifi,
-      color: 'bg-blue-500',
+      color: 'bg-primary',
       projects: projects.filter(p => 
         p.title.toLowerCase().includes('fibre') || 
         p.title.toLowerCase().includes('réseau') ||
@@ -250,7 +250,7 @@ export const ProjectAnalytics = ({ projects }: ProjectAnalyticsProps) => {
               </div>
               <div className="flex justify-between items-center">
                 <span>Population connectée</span>
-                <Badge className="bg-blue-500">
+                <Badge className="bg-primary">
                   {new Intl.NumberFormat('fr-FR', { notation: 'compact' }).format(totalBeneficiaries)}
                 </Badge>
               </div>

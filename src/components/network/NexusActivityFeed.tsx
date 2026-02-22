@@ -57,9 +57,9 @@ const FALLBACK_ACTIVITIES: ActivityItem[] = [
     timeKey: "time.ago.hours",
     timeCount: 5,
     icon: FileText,
-    color: "text-blue-400",
-    bg: "bg-blue-400/10",
-    border: "border-blue-400/20",
+    color: "text-uat-info",
+    bg: "bg-uat-info-bg",
+    border: "border-uat-info-border",
     isTranslationKey: true
   },
   {
@@ -103,9 +103,9 @@ const typeConfig: Record<string, { icon: LucideIcon; color: string; bg: string; 
   },
   doc: {
     icon: FileText,
-    color: "text-blue-400",
-    bg: "bg-blue-400/10",
-    border: "border-blue-400/20"
+    color: "text-uat-info",
+    bg: "bg-uat-info-bg",
+    border: "border-uat-info-border"
   },
   event: {
     icon: Calendar,

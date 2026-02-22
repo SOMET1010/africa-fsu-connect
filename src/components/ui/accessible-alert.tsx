@@ -69,7 +69,7 @@ const AccessibleAlert = React.forwardRef<HTMLDivElement, AccessibleAlertProps>(
         case "error":
           return "border-red-200 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200";
         default:
-          return "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-200";
+          return "border-uat-info-border bg-uat-info-bg text-uat-info dark:border-uat-info-border dark:bg-uat-info-bg dark:text-uat-info";
       }
     };
 

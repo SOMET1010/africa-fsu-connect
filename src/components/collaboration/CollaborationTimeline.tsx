@@ -27,7 +27,7 @@ export const CollaborationTimeline = ({
     switch (type) {
       case 'user_joined': return <Users className="h-3 w-3 text-green-500" />;
       case 'user_left': return <Users className="h-3 w-3 text-red-500" />;
-      case 'action_performed': return <Activity className="h-3 w-3 text-blue-500" />;
+      case 'action_performed': return <Activity className="h-3 w-3 text-primary" />;
       default: return <MessageCircle className="h-3 w-3 text-gray-500" />;
     }
   };
@@ -36,7 +36,7 @@ export const CollaborationTimeline = ({
     switch (type) {
       case 'user_joined': return 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950';
       case 'user_left': return 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950';
-      case 'action_performed': return 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950';
+      case 'action_performed': return 'border-uat-info-border bg-uat-info-bg dark:border-uat-info-border dark:bg-uat-info-bg';
       default: return 'border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950';
     }
   };

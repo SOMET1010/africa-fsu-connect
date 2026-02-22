@@ -163,10 +163,10 @@ export default function FocalDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Publiés</CardTitle>
-            <TrendingUp className="h-4 w-4 text-blue-500" />
+            <TrendingUp className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{submissionStats?.published || 0}</div>
+            <div className="text-2xl font-bold text-primary">{submissionStats?.published || 0}</div>
             <p className="text-xs text-muted-foreground">visibles publiquement</p>
           </CardContent>
         </Card>
