@@ -54,7 +54,7 @@ function ThemeToggleButton() {
   return (
     <button
       onClick={cycle}
-      className="p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200"
+      className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
       aria-label={`Thème: ${label}`}
       title={`Thème: ${label}`}
     >
@@ -126,10 +126,10 @@ const ModernHeader = () => {
     <>
       <header 
         className={cn(
-          "fixed top-0 left-0 right-0 w-full transition-all duration-500 ease-out z-header",
+          "fixed top-0 left-0 right-0 w-full transition-all duration-300 ease-out z-header",
           scrolled 
-            ? "bg-[hsl(var(--nx-night))]/95 backdrop-blur-2xl border-b border-white/10 shadow-2xl shadow-black/30" 
-            : "bg-[hsl(var(--nx-night))]/80 backdrop-blur-xl border-b border-white/5"
+            ? "bg-background/95 backdrop-blur-xl border-b border-border shadow-md" 
+            : "bg-background/80 backdrop-blur-lg border-b border-border/50"
         )}
       >
         <div className="container mx-auto px-4">
@@ -142,13 +142,9 @@ const ModernHeader = () => {
               >
                 <NexusLogo size="md" variant="full" showSubtext={false} animated />
               </motion.div>
-              <motion.span 
-                className="text-[hsl(var(--nx-gold))] font-bold text-xl hidden sm:inline-block"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              >
-                .
-              </motion.span>
+              <span className="text-primary font-bold text-xl hidden sm:inline-block">
+                UDC
+              </span>
             </Link>
 
             {/* Navigation Desktop avec micro-interactions */}
@@ -165,10 +161,10 @@ const ModernHeader = () => {
                       <DropdownMenuTrigger asChild>
                         <button
                           className={cn(
-                            "relative flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 group",
+                            "relative flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 group",
                             active
-                              ? "text-[hsl(var(--nx-gold))]"
-                              : "text-white/60 hover:text-white",
+                              ? "text-primary"
+                              : "text-muted-foreground hover:text-foreground",
                             isRTL && "flex-row-reverse"
                           )}
                           onMouseEnter={() => setHoveredLink(item.id)}
@@ -176,25 +172,24 @@ const ModernHeader = () => {
                           aria-label={`${item.labelKey ? t(item.labelKey) : item.label} menu`}
                           aria-haspopup="menu"
                         >
-                          {/* Glow background animé */}
+                          {/* Active indicator */}
                           <AnimatePresence>
                             {(hoveredLink === item.id || active) && (
                               <motion.div
-                                layoutId="nav-glow"
-                                className="absolute inset-0 bg-[hsl(var(--nx-gold))]/15 rounded-xl -z-10"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.2 }}
-                                style={{ filter: 'blur(4px)' }}
+                                layoutId="nav-highlight"
+                                className="absolute inset-0 bg-primary/8 rounded-xl -z-10"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.15 }}
                               />
                             )}
                           </AnimatePresence>
                           
                           <Icon className={cn(
-                            "h-4 w-4 transition-all duration-300",
+                            "h-4 w-4 transition-colors duration-200",
                             isRTL ? "ml-2" : "mr-2",
-                            active ? "text-[hsl(var(--nx-gold))]" : "group-hover:text-[hsl(var(--nx-gold))]"
+                            active ? "text-primary" : "group-hover:text-primary"
                           )} />
                           <span className="relative z-10">{item.labelKey ? t(item.labelKey) : item.label}</span>
                           <ChevronDown className={cn(
@@ -205,7 +200,7 @@ const ModernHeader = () => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent 
                         align={isRTL ? "end" : "start"} 
-                        className="w-64 animate-scale-in bg-[hsl(var(--nx-night))]/95 backdrop-blur-2xl border-white/10 p-2"
+                        className="w-64 animate-scale-in bg-popover border-border p-2"
                       >
                         {item.submenu?.map((subItem) => {
                           const SubIcon = subItem.icon;
@@ -217,14 +212,14 @@ const ModernHeader = () => {
                                 className={cn(
                                   "flex items-start gap-3 p-3 rounded-lg transition-all duration-200 w-full cursor-pointer",
                                   subActive 
-                                    ? "bg-[hsl(var(--nx-gold))]/20 text-[hsl(var(--nx-gold))]" 
-                                    : "text-white/70 hover:bg-white/5 hover:text-white",
+                                    ? "bg-primary/10 text-primary" 
+                                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
                                   isRTL && "flex-row-reverse"
                                 )}
                               >
                                 <div className={cn(
                                   "p-2 rounded-lg shrink-0",
-                                  subActive ? "bg-[hsl(var(--nx-gold))]/30" : "bg-white/5"
+                                  subActive ? "bg-primary/15" : "bg-muted"
                                 )}>
                                   <SubIcon className="h-4 w-4" />
                                 </div>
@@ -232,7 +227,7 @@ const ModernHeader = () => {
                                   <span className="font-medium text-sm">
                                     {subItem.labelKey ? t(subItem.labelKey) : subItem.label}
                                   </span>
-                                  <span className="text-xs text-white/50">
+                                  <span className="text-xs text-muted-foreground">
                                     {subItem.descriptionKey ? t(subItem.descriptionKey) : subItem.description}
                                   </span>
                                 </div>
@@ -251,34 +246,32 @@ const ModernHeader = () => {
                     key={item.id}
                     to={item.href || '/'}
                     className={cn(
-                      "relative flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 group",
+                      "relative flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 group",
                       active
-                        ? "text-[hsl(var(--nx-gold))]"
-                        : "text-white/60 hover:text-white",
+                        ? "text-primary"
+                        : "text-muted-foreground hover:text-foreground",
                       isRTL && "flex-row-reverse"
                     )}
                     onMouseEnter={() => setHoveredLink(item.id)}
                     onMouseLeave={() => setHoveredLink(null)}
                   >
-                    {/* Glow background animé */}
                     <AnimatePresence>
                       {(hoveredLink === item.id || active) && (
                         <motion.div
-                          layoutId="nav-glow"
-                          className="absolute inset-0 bg-[hsl(var(--nx-gold))]/15 rounded-xl -z-10"
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.2 }}
-                          style={{ filter: 'blur(4px)' }}
+                          layoutId="nav-highlight"
+                          className="absolute inset-0 bg-primary/8 rounded-xl -z-10"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.15 }}
                         />
                       )}
                     </AnimatePresence>
                     
                     <Icon className={cn(
-                      "h-4 w-4 transition-all duration-300",
+                      "h-4 w-4 transition-colors duration-200",
                       isRTL ? "ml-2" : "mr-2",
-                      active ? "text-[hsl(var(--nx-gold))]" : "group-hover:text-[hsl(var(--nx-gold))]"
+                      active ? "text-primary" : "group-hover:text-primary"
                     )} />
                     <span className="relative z-10">{item.labelKey ? t(item.labelKey) : item.label}</span>
                   </Link>
@@ -311,33 +304,33 @@ const ModernHeader = () => {
                   <DropdownMenuTrigger asChild>
                     <ModernButton 
                       variant="ghost" 
-                      className="relative h-9 w-9 rounded-full p-0 ring-2 ring-transparent hover:ring-[hsl(var(--nx-gold))]/30 transition-all duration-300"
+                      className="relative h-9 w-9 rounded-full p-0 ring-2 ring-transparent hover:ring-primary/30 transition-all duration-200"
                       aria-label="User menu"
                       aria-haspopup="menu"
                     >
-                      <Avatar className="h-9 w-9 transition-transform hover:scale-105">
+                      <Avatar className="h-9 w-9">
                         <AvatarImage src={profile?.avatar_url || ""} alt={profile?.first_name || "User avatar"} />
-                        <AvatarFallback className="bg-gradient-to-br from-[hsl(var(--nx-gold))] to-amber-600 text-[hsl(var(--nx-night))] text-xs font-medium">
+                        <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
                           {getUserInitials()}
                         </AvatarFallback>
                       </Avatar>
                       <div className={cn(
-                        "absolute -bottom-1 w-3 h-3 bg-green-500 rounded-full border-2 border-[hsl(var(--nx-night))] animate-pulse",
+                        "absolute -bottom-1 w-3 h-3 bg-success rounded-full border-2 border-background",
                         isRTL ? "-left-1" : "-right-1"
                       )} aria-hidden="true" />
                     </ModernButton>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align={isRTL ? "start" : "end"} className="w-64 animate-scale-in bg-[hsl(var(--nx-night))]/95 backdrop-blur-2xl border-white/10">
+                  <DropdownMenuContent align={isRTL ? "start" : "end"} className="w-64 animate-scale-in bg-popover border-border">
                     <DropdownMenuLabel className="font-normal p-4">
                       <GlassCard variant="subtle" className="p-3">
                         <div className={cn("flex flex-col space-y-2", isRTL && "text-right")}>
-                          <p className="text-sm font-medium leading-none text-white">
+                          <p className="text-sm font-medium leading-none text-foreground">
                             {profile?.first_name && profile?.last_name 
                               ? `${profile.first_name} ${profile.last_name}`
                               : user.email?.split('@')[0]
                             }
                           </p>
-                          <p className="text-xs leading-none text-white/50">
+                          <p className="text-xs leading-none text-muted-foreground">
                             {user.email}
                           </p>
                           {profile?.role && (
@@ -353,8 +346,8 @@ const ModernHeader = () => {
                         </div>
                       </GlassCard>
                     </DropdownMenuLabel>
-                    <DropdownMenuSeparator className="bg-white/10" />
-                    <DropdownMenuItem className="cursor-pointer text-white/70 hover:text-white hover:bg-white/5">
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-muted">
                       <Link to="/profile" className={cn("flex items-center w-full", isRTL && "flex-row-reverse")}>
                         <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
                         <span>{t('nav.profile')}</span>
@@ -362,15 +355,15 @@ const ModernHeader = () => {
                     </DropdownMenuItem>
                     {/* NEXUS BLUEPRINT GARDE-FOU */}
                     {isAdmin() && shouldShowAdminLinks(location.pathname) && (
-                      <DropdownMenuItem className="cursor-pointer text-white/70 hover:text-white hover:bg-white/5">
+                      <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-muted">
                         <Link to="/admin" className={cn("flex items-center w-full", isRTL && "flex-row-reverse")}>
                           <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
                           <span>{t('nav.admin')}</span>
                         </Link>
                       </DropdownMenuItem>
                     )}
-                    <DropdownMenuSeparator className="bg-white/10" />
-                    <DropdownMenuItem onClick={handleSignOut} className={cn("cursor-pointer text-red-400 hover:text-red-300 hover:bg-red-500/10", isRTL && "flex-row-reverse")}>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className={cn("cursor-pointer text-destructive hover:bg-destructive/10", isRTL && "flex-row-reverse")}>
                       <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
                       <span>{t('nav.logout')}</span>
                     </DropdownMenuItem>
@@ -383,7 +376,7 @@ const ModernHeader = () => {
                     variant="ghost" 
                     size="sm" 
                     className={cn(
-                      "hidden sm:flex text-white/70 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all duration-300",
+                      "hidden sm:flex text-muted-foreground hover:text-foreground hover:bg-muted border border-transparent hover:border-border transition-all duration-200",
                       isRTL && "flex-row-reverse"
                     )} 
                     asChild
@@ -398,7 +391,7 @@ const ModernHeader = () => {
                   <Link 
                     to="/auth" 
                     className={cn(
-                      "relative overflow-hidden group inline-flex items-center px-4 py-2 rounded-xl bg-gradient-to-r from-[hsl(var(--nx-gold))] to-amber-500 text-[hsl(var(--nx-night))] font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-[hsl(var(--nx-gold))]/30 hover:scale-105",
+                      "relative overflow-hidden group inline-flex items-center px-4 py-2 rounded-xl bg-primary text-primary-foreground font-semibold text-sm transition-all duration-200 hover:bg-primary-dark",
                       isRTL && "flex-row-reverse"
                     )}
                   >
@@ -427,7 +420,7 @@ const ModernHeader = () => {
               <ModernButton
                 variant="ghost"
                 size="sm"
-                className="lg:hidden text-white/70 hover:text-white"
+                className="lg:hidden text-muted-foreground hover:text-foreground"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 {isMenuOpen ? 
@@ -444,7 +437,7 @@ const ModernHeader = () => {
           "container mx-auto px-4 transition-all duration-500",
           scrolled ? "opacity-0 h-0 py-0 overflow-hidden" : "opacity-100 py-2"
         )}>
-          <GlassCard variant="subtle" className="p-2">
+          <GlassCard variant="subtle" className="p-2 bg-muted/50 border-border">
             <Breadcrumb />
           </GlassCard>
         </div>
@@ -458,7 +451,7 @@ const ModernHeader = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: isRTL ? -20 : 20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed inset-x-0 top-16 bottom-0 bg-[hsl(var(--nx-night))]/95 backdrop-blur-2xl z-40 lg:hidden overflow-y-auto"
+            className="fixed inset-x-0 top-16 bottom-0 bg-background/95 backdrop-blur-xl z-40 lg:hidden overflow-y-auto border-t border-border"
           >
             <div className="container mx-auto px-4 py-6">
               <div className="space-y-2">
@@ -478,7 +471,7 @@ const ModernHeader = () => {
                       >
                         <div className={cn(
                           "flex items-center px-4 py-3 rounded-xl text-sm font-medium",
-                          active ? "text-[hsl(var(--nx-gold))]" : "text-white/60",
+                          active ? "text-primary" : "text-muted-foreground",
                           isRTL && "flex-row-reverse"
                         )}>
                           <Icon className={cn("h-5 w-5", isRTL ? "ml-3" : "mr-3")} />
@@ -495,8 +488,8 @@ const ModernHeader = () => {
                                 className={cn(
                                   "flex items-center px-4 py-3 rounded-xl text-sm transition-all",
                                   subActive
-                                    ? "bg-[hsl(var(--nx-gold))]/20 text-[hsl(var(--nx-gold))]"
-                                    : "text-white/60 hover:text-white hover:bg-white/5",
+                                    ? "bg-primary/10 text-primary"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted",
                                   isRTL && "flex-row-reverse"
                                 )}
                                 onClick={() => setIsMenuOpen(false)}
@@ -523,8 +516,8 @@ const ModernHeader = () => {
                         className={cn(
                           "flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all",
                           active
-                            ? "bg-[hsl(var(--nx-gold))]/20 text-[hsl(var(--nx-gold))]"
-                            : "text-white/60 hover:text-white hover:bg-white/5",
+                            ? "bg-primary/10 text-primary"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted",
                           isRTL && "flex-row-reverse"
                         )}
                         onClick={() => setIsMenuOpen(false)}
@@ -539,13 +532,13 @@ const ModernHeader = () => {
               
               {/* Sélecteur de langue mobile */}
               <motion.div 
-                className="mt-6 pt-6 border-t border-white/10"
+                className="mt-6 pt-6 border-t border-border"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
                 <div className={cn("flex items-center justify-between px-4", isRTL && "flex-row-reverse")}>
-                  <span className="text-sm font-medium text-white/50">Langue / Language</span>
+                  <span className="text-sm font-medium text-muted-foreground">Langue / Language</span>
                   <LanguageSelector variant="outline" size="sm" showLabel={true} />
                 </div>
               </motion.div>
@@ -561,7 +554,7 @@ const ModernHeader = () => {
                   <Link
                     to="/auth"
                     className={cn(
-                      "flex items-center justify-center w-full px-4 py-3 rounded-xl border border-white/20 text-white/80 hover:text-white hover:bg-white/5 transition-all",
+                      "flex items-center justify-center w-full px-4 py-3 rounded-xl border border-border text-foreground hover:bg-muted transition-all",
                       isRTL && "flex-row-reverse"
                     )}
                     onClick={() => setIsMenuOpen(false)}
@@ -572,7 +565,7 @@ const ModernHeader = () => {
                   <Link
                     to="/auth"
                     className={cn(
-                      "relative overflow-hidden group flex items-center justify-center w-full px-4 py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--nx-gold))] to-amber-500 text-[hsl(var(--nx-night))] font-semibold transition-all",
+                      "relative overflow-hidden group flex items-center justify-center w-full px-4 py-3 rounded-xl bg-primary text-primary-foreground font-semibold transition-all",
                       isRTL && "flex-row-reverse"
                     )}
                     onClick={() => setIsMenuOpen(false)}
