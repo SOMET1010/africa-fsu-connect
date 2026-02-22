@@ -22,7 +22,7 @@ export function TechnicalArchitecture() {
       icon: Globe,
       technologies: ["React.js", "TypeScript", "Tailwind CSS", "i18n Ready"],
       description: "Interface responsive multilingue",
-      color: "bg-blue-500"
+      color: "bg-primary"
     },
     {
       layer: "Backend / API",
@@ -67,7 +67,7 @@ export function TechnicalArchitecture() {
       value: "<200ms",
       description: "Latence moyenne",
       icon: Zap,
-      color: "text-blue-600"
+      color: "text-primary"
     },
     {
       metric: "Sécurité",
@@ -190,9 +190,9 @@ export function TechnicalArchitecture() {
               className="mb-8"
             >
               <div className="flex justify-center gap-4 mb-4">
-                <div className="bg-blue-100 dark:bg-blue-900/20 p-4 rounded-lg">
+                <div className="bg-uat-primary-100 dark:bg-primary/20 p-4 rounded-lg">
                   <div className="text-center">
-                    <Globe className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+                    <Globe className="h-8 w-8 mx-auto mb-2 text-primary" />
                     <div className="text-sm font-medium">Utilisateurs</div>
                   </div>
                 </div>
@@ -275,7 +275,7 @@ export function TechnicalArchitecture() {
               <CheckCircle className="h-4 w-4 mr-1" />
               Production Ready
             </Badge>
-            <Badge variant="outline" className="text-blue-600 border-blue-200">
+            <Badge variant="outline" className="text-primary border-uat-primary-200">
               <Shield className="h-4 w-4 mr-1" />
               Enterprise Grade
             </Badge>

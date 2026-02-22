@@ -42,7 +42,7 @@ export const CustomMetricsWidget = ({ id, onRemove }: CustomMetricsWidgetProps) 
       target: 30,
       type: 'number',
       trend: -2,
-      color: 'bg-blue-500'
+      color: 'bg-primary'
     },
     {
       id: '3',

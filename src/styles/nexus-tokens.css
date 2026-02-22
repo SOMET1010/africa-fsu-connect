@@ -86,6 +86,32 @@
   --nx-success-500: 160 56% 42%;
 
   /* ========================================
+     UAT PRIMARY PALETTE — Variantes complètes
+     ======================================== */
+
+  /* UAT Primary (bleu institutionnel) */
+  --uat-primary: 210 73% 28%;
+  --uat-primary-50: 210 60% 97%;
+  --uat-primary-100: 210 55% 93%;
+  --uat-primary-200: 210 50% 85%;
+  --uat-primary-600: 210 73% 28%;
+  --uat-primary-700: 210 80% 22%;
+
+  /* UAT Secondary (gris-bleu) */
+  --uat-secondary: 210 25% 96%;
+  --uat-secondary-50: 210 20% 98%;
+  --uat-secondary-100: 210 25% 96%;
+  --uat-secondary-600: 215 20% 40%;
+  --uat-secondary-700: 222 47% 15%;
+
+  /* UAT Accent (teal coopération) */
+  --uat-accent: 170 45% 40%;
+  --uat-accent-50: 170 40% 97%;
+  --uat-accent-100: 170 40% 93%;
+  --uat-accent-600: 170 45% 40%;
+  --uat-accent-700: 170 50% 32%;
+
+  /* ========================================
      UAT STATUS TOKENS — Statuts cohérents
      ======================================== */
 
@@ -180,6 +206,26 @@
   
   --nx-shadow-sm: 0 8px 20px hsl(0 0% 0% / 0.25);
   --nx-shadow-md: 0 12px 28px hsl(0 0% 0% / 0.35);
+
+  /* UAT Primary — Dark mode */
+  --uat-primary: 210 70% 58%;
+  --uat-primary-50: 210 50% 15%;
+  --uat-primary-100: 210 45% 20%;
+  --uat-primary-200: 210 50% 30%;
+  --uat-primary-600: 210 70% 58%;
+  --uat-primary-700: 210 65% 48%;
+
+  --uat-secondary: 222 18% 17%;
+  --uat-secondary-50: 222 18% 12%;
+  --uat-secondary-100: 222 18% 17%;
+  --uat-secondary-600: 215 15% 72%;
+  --uat-secondary-700: 210 20% 92%;
+
+  --uat-accent: 160 50% 55%;
+  --uat-accent-50: 170 40% 12%;
+  --uat-accent-100: 170 40% 18%;
+  --uat-accent-600: 160 50% 55%;
+  --uat-accent-700: 160 45% 65%;
 
   /* UAT Status — Dark mode */
   --uat-status-active: 142 55% 55%;

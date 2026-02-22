@@ -109,10 +109,10 @@ export const RealTimeMetricsWidget = ({ id, onRemove }: RealTimeMetricsWidgetPro
           {/* Online Users */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-blue-600" />
+              <Users className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">Utilisateurs Connectés</span>
             </div>
-            <span className="text-lg font-bold text-blue-600">{metrics.onlineUsers}</span>
+            <span className="text-lg font-bold text-primary">{metrics.onlineUsers}</span>
           </div>
 
           {/* Active Connections */}

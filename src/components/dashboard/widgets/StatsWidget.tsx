@@ -20,8 +20,8 @@ export const StatsWidget = ({ id, stats, loading, onRemove }: StatsWidgetProps) 
       total: stats.totalProfiles,
       icon: Users,
       trend: { value: stats.profilesGrowth, positive: stats.profilesGrowth > 0 },
-      color: "text-blue-600",
-      bgColor: "bg-blue-500/20"
+      color: "text-primary",
+      bgColor: "bg-primary/20"
     },
     {
       title: "Documents",
@@ -125,10 +125,10 @@ export const StatsWidget = ({ id, stats, loading, onRemove }: StatsWidgetProps) 
                 <div className="w-full bg-muted rounded-full h-1.5 mt-2">
                   <div 
                     className={`h-1.5 rounded-full transition-all duration-300 ${
-                      stat.color.includes('blue') ? 'bg-blue-500' :
-                      stat.color.includes('green') ? 'bg-green-500' :
+                      stat.color.includes('primary') ? 'bg-primary' :
+                      stat.color.includes('green') ? 'bg-success' :
                       stat.color.includes('purple') ? 'bg-purple-500' :
-                      'bg-orange-500'
+                      'bg-warning'
                     }`}
                     style={{ width: `${Math.min(((stat.value || 0) / (stat.total || 1)) * 100, 100)}%` }}
                   ></div>

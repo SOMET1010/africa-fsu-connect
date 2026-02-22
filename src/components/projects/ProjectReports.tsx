@@ -183,7 +183,7 @@ export const ProjectReports = ({ projects }: ProjectReportsProps) => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-blue-500">{sectorAnalysis.connectivite}</div>
+              <div className="text-2xl font-bold text-primary">{sectorAnalysis.connectivite}</div>
               <p className="text-sm text-muted-foreground">Connectivité</p>
             </div>
             <div className="text-center p-4 border rounded-lg">
@@ -209,10 +209,10 @@ export const ProjectReports = ({ projects }: ProjectReportsProps) => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-uat-primary-50 rounded-lg">
               <div>
                 <p className="text-sm font-medium">Projets actifs</p>
-                <p className="text-2xl font-bold text-blue-600">{activeProjects}</p>
+                <p className="text-2xl font-bold text-primary">{activeProjects}</p>
               </div>
               <div className="text-blue-600">
                 <TrendingUp className="h-8 w-8" />

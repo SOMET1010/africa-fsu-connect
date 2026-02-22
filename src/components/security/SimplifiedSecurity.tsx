@@ -110,7 +110,7 @@ export const SimplifiedSecurity = ({
           </div>
           
           <div className="flex items-start gap-3 p-3 bg-muted/20 rounded-lg">
-            <div className="p-1 rounded-full bg-blue-100 text-blue-600">
+            <div className="p-1 rounded-full bg-uat-primary-100 text-primary">
               <Shield className="h-3 w-3" />
             </div>
             <div>

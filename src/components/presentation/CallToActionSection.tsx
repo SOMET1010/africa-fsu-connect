@@ -40,7 +40,7 @@ export function CallToActionSection() {
         "Support post-migration 6 mois"
       ],
       icon: Users,
-      color: "bg-blue-500",
+      color: "bg-primary",
       highlight: "Recommandé"
     },
     {
@@ -106,7 +106,7 @@ export function CallToActionSection() {
       factor: "Formation prioritaire",
       description: "Accès prioritaire à nos formateurs experts",
       icon: Users,
-      color: "text-blue-600"
+      color: "text-primary"
     }
   ];
 

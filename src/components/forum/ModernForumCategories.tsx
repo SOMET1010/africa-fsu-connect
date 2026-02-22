@@ -40,11 +40,11 @@ export function ModernForumCategories({
 
   const getCategoryGradient = (color: string) => {
     const gradients = {
-      blue: "from-blue-500/20 to-blue-600/20 border-blue-200/50",
+      blue: "from-primary/20 to-primary/20 border-primary/30",
       green: "from-green-500/20 to-green-600/20 border-green-200/50",
       purple: "from-purple-500/20 to-purple-600/20 border-purple-200/50",
       orange: "from-orange-500/20 to-orange-600/20 border-orange-200/50",
-      pink: "from-pink-500/20 to-pink-600/20 border-pink-200/50",
+      pink: "from-primary/15 to-primary/20 border-primary/25",
     };
     return gradients[color as keyof typeof gradients] || "from-gray-500/20 to-gray-600/20 border-gray-200/50";
   };

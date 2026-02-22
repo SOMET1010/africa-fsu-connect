@@ -36,7 +36,7 @@ const About = () => {
   ];
 
   const regions = [
-    { name: "CEDEAO", countries: 15, color: "bg-blue-500" },
+    { name: "CEDEAO", countries: 15, color: "bg-primary" },
     { name: "SADC", countries: 16, color: "bg-green-500" },
     { name: "EACO", countries: 8, color: "bg-purple-500" },
     { name: "ECCAS", countries: 11, color: "bg-orange-500" },
