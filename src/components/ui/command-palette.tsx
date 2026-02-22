@@ -12,6 +12,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 type ContentType = 'document' | 'forum' | 'project';
 
 const DOCUMENT_TYPES = ['guide', 'rapport', 'presentation', 'formulaire', 'autre'] as const;
+const STORAGE_KEY = 'search-filters';
+
+const ALL_TYPES: ContentType[] = ['document', 'forum', 'project'];
+
+function loadFilters(): { types: ContentType[]; country?: string; documentType?: string } {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch { /* ignore */ }
+  return { types: ALL_TYPES };
+}
+
+function saveFilters(types: ContentType[], country?: string, documentType?: string) {
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ types, country, documentType }));
+  } catch { /* ignore */ }
+}
 
 interface NavCommand {
   id: string;
@@ -24,9 +41,10 @@ interface NavCommand {
 export const CommandPalette = () => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [activeTypes, setActiveTypes] = useState<ContentType[]>(['document', 'forum', 'project']);
-  const [country, setCountry] = useState<string | undefined>(undefined);
-  const [documentType, setDocumentType] = useState<string | undefined>(undefined);
+  const stored = loadFilters();
+  const [activeTypes, setActiveTypes] = useState<ContentType[]>(stored.types);
+  const [country, setCountry] = useState<string | undefined>(stored.country);
+  const [documentType, setDocumentType] = useState<string | undefined>(stored.documentType);
   const navigate = useNavigate();
   const { user } = useAuth();
   const { t, currentLanguage } = useTranslation();
@@ -37,6 +55,11 @@ export const CommandPalette = () => {
     country: country || undefined,
     documentType: documentType || undefined,
   }), [activeTypes, country, documentType]);
+
+  // Persist filters to sessionStorage whenever they change
+  useEffect(() => {
+    saveFilters(activeTypes, country, documentType);
+  }, [activeTypes, country, documentType]);
 
   const { results, loading, hasResults } = useUnifiedSearch(query, filters);
 
@@ -53,12 +76,15 @@ export const CommandPalette = () => {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
+  // Restore filters from session on open, only clear query on close
   useEffect(() => {
-    if (!open) {
+    if (open) {
+      const s = loadFilters();
+      setActiveTypes(s.types);
+      setCountry(s.country);
+      setDocumentType(s.documentType);
+    } else {
       setQuery("");
-      setActiveTypes(['document', 'forum', 'project']);
-      setCountry(undefined);
-      setDocumentType(undefined);
     }
   }, [open]);
 
@@ -78,7 +104,7 @@ export const CommandPalette = () => {
   };
 
   const clearFilters = () => {
-    setActiveTypes(['document', 'forum', 'project']);
+    setActiveTypes(ALL_TYPES);
     setCountry(undefined);
     setDocumentType(undefined);
   };
