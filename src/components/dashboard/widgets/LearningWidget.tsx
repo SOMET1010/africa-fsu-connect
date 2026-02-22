@@ -167,7 +167,7 @@ export const LearningWidget = ({ maxItems = 3 }: LearningWidgetProps) => {
             className="w-full text-xs h-8" 
             asChild
           >
-            <Link to="/projects?filter=inspiring">
+            <Link to="/practices">
               <Lightbulb className="h-3.5 w-3.5 mr-2" />
               Explorer toutes les bonnes pratiques
             </Link>

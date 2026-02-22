@@ -136,7 +136,7 @@ export const CommunityLanguageMap = ({ countries }: CommunityLanguageMapProps) =
               </p>
             </div>
           </div>
-          <a href="/members?country=${country.code}" 
+          <a href="/country/${country.code}" 
              style="color: #3B82F6; font-size: 13px; text-decoration: none;">
             Voir la fiche pays →
           </a>

@@ -267,7 +267,7 @@ const Forum = () => {
                       ? `${post.author.first_name} ${post.author.last_name}`
                       : t('common.user'),
                     role: post.author?.role || "Membre",
-                    avatar: post.author?.avatar_url || "/api/placeholder/40/40",
+                    avatar: post.author?.avatar_url || "",
                     country: post.author?.country || "Non spécifié"
                   }}
                   category={post.category_id}

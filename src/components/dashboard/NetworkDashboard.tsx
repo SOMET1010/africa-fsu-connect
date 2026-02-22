@@ -69,7 +69,7 @@ export function NetworkDashboard() {
           <UserRecentActivity
             activities={recentActivity}
             loading={activityLoading}
-            onViewAll={() => navigate('/community')}
+            onViewAll={() => navigate('/activity')}
           />
         </div>
         
