@@ -26,7 +26,7 @@ export const SectionCard = ({
     default: "bg-card border border-border",
     gradient: "bg-gradient-to-br from-card to-card/80 border border-border/50",
     bordered: "bg-card border-2 border-primary/20",
-    elevated: "bg-card border border-border shadow-elegant"
+    elevated: "bg-card border border-border shadow-elegant hover:shadow-lg transition-shadow duration-200"
   };
 
   const paddingClasses = {
@@ -44,12 +44,12 @@ export const SectionCard = ({
     )}>
       {(title || description || headerActions) && (
         <CardHeader className={cn(
-          "flex flex-row items-center justify-between space-y-0",
+          "flex flex-row items-center justify-between space-y-0 border-b border-border",
           padding !== "none" && "pb-4"
         )}>
           <div className="space-y-1">
             {title && (
-              <CardTitle className="text-xl font-semibold">
+              <CardTitle className="text-lg font-semibold">
                 {title}
               </CardTitle>
             )}

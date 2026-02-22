@@ -32,17 +32,17 @@ export const PageHero: React.FC<PageHeroProps> = ({
   return (
     <ScrollReveal direction="fade">
       <div className={cn(
-        "relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-md border border-white/10",
+        "relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary/80 border border-border",
         className
       )}>
         {/* Subtle background pattern */}
         <div className="absolute inset-0 opacity-30">
           <div className={cn(
-            "absolute top-0 w-96 h-96 bg-[hsl(var(--nx-gold)/0.2)] rounded-full blur-3xl",
+            "absolute top-0 w-96 h-96 bg-white/10 rounded-full blur-3xl",
             isRTL ? "left-0" : "right-0"
           )} />
           <div className={cn(
-            "absolute bottom-0 w-64 h-64 bg-[hsl(var(--nx-cyan)/0.2)] rounded-full blur-2xl",
+            "absolute bottom-0 w-64 h-64 bg-white/10 rounded-full blur-2xl",
             isRTL ? "right-0" : "left-0"
           )} />
         </div>
@@ -52,7 +52,7 @@ export const PageHero: React.FC<PageHeroProps> = ({
             {/* Badge */}
             {badge && (
               <Badge variant="outline" className={cn(
-                "mb-4 px-4 py-2 border-white/20 bg-white/5 text-white/80",
+                "mb-4 px-4 py-2 border-white/30 bg-white/10 text-white/90",
                 isRTL && "flex-row-reverse"
               )}>
                 {BadgeIcon && <BadgeIcon className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} />}

@@ -32,7 +32,7 @@ export const PageHeader = ({
       "page-header border-b border-border bg-background/95 backdrop-blur-sm",
       className
     )}>
-      <div className="page-container py-6">
+      <div className="page-container py-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             {showBackButton && (
@@ -46,22 +46,22 @@ export const PageHeader = ({
               </Button>
             )}
             
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex items-center space-x-3">
                 <h1 className={cn(
-                  "text-3xl font-bold tracking-tight",
+                  "text-2xl font-bold tracking-tight text-foreground",
                   gradient && "gradient-text"
                 )}>
                   {title}
                 </h1>
                 {badge && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs font-medium">
                     {badge}
                   </Badge>
                 )}
               </div>
               {description && (
-                <p className="text-lg text-muted-foreground max-w-2xl">
+                <p className="text-base text-muted-foreground max-w-2xl">
                   {description}
                 </p>
               )}

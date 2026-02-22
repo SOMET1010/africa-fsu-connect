@@ -111,7 +111,7 @@ const ModernHeader = () => {
         )}
       >
         <div className="container mx-auto px-4">
-          <div className={cn("flex items-center justify-between h-16", isRTL && "flex-row-reverse")}>
+          <div className={cn("flex items-center justify-between h-[4.5rem]", isRTL && "flex-row-reverse")}>
             {/* Premium Logo avec animation hover */}
             <Link to="/" className={cn("flex items-center group", isRTL ? "space-x-reverse space-x-3" : "space-x-3")}>
               <motion.div
@@ -120,13 +120,14 @@ const ModernHeader = () => {
               >
                 <NexusLogo size="md" variant="full" showSubtext={false} animated />
               </motion.div>
+              <div className="border-l border-border/60 h-8 hidden sm:block" />
               <span className="text-primary font-bold text-xl hidden sm:inline-block">
                 UDC
               </span>
             </Link>
 
             {/* Navigation Desktop avec micro-interactions */}
-            <nav className={cn("hidden lg:flex items-center", isRTL ? "space-x-reverse space-x-1" : "space-x-1")}>
+            <nav className={cn("hidden lg:flex items-center", isRTL ? "space-x-reverse space-x-0.5" : "space-x-0.5")}>
               {mainNavigation.map((item) => {
                 const Icon = item.icon;
                 const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -139,7 +140,7 @@ const ModernHeader = () => {
                       <DropdownMenuTrigger asChild>
                         <button
                           className={cn(
-                            "relative flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 group",
+                          "relative flex items-center px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 group",
                             active
                               ? "text-primary"
                               : "text-muted-foreground hover:text-foreground",
@@ -224,7 +225,7 @@ const ModernHeader = () => {
                     key={item.id}
                     to={item.href || '/'}
                     className={cn(
-                      "relative flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 group",
+                      "relative flex items-center px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 group",
                       active
                         ? "text-primary"
                         : "text-muted-foreground hover:text-foreground",
@@ -258,7 +259,7 @@ const ModernHeader = () => {
             </nav>
 
             {/* Actions de droite avec effets premium */}
-            <div className={cn("flex items-center", isRTL ? "space-x-reverse space-x-2" : "space-x-2")}>
+            <div className={cn("flex items-center", isRTL ? "space-x-reverse space-x-3" : "space-x-3")}>
               {/* Theme Toggle */}
               <ThemeSwitch />
 
