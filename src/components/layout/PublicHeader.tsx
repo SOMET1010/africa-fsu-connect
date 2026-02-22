@@ -23,16 +23,17 @@ export const PublicHeader = () => {
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border">
       <div className="container mx-auto px-4">
-        <div className={cn("flex items-center justify-between h-16", isRTL && "flex-row-reverse")}>
+        <div className={cn("flex items-center justify-between h-[4.5rem]", isRTL && "flex-row-reverse")}>
           {/* Logo */}
           <Link to="/" className={cn("flex items-center gap-3 shrink-0", isRTL && "flex-row-reverse")}>
-            <img src={atuLogo} alt="ATU - African Telecommunications Union" className="h-12 w-auto" />
-            <span className="text-lg font-bold text-foreground">UDC</span>
-            <span className="hidden xl:inline text-xs text-muted-foreground font-medium">| Digital Connect Africa</span>
+            <img src={atuLogo} alt="ATU - African Telecommunications Union" className="h-10 w-auto" />
+            <div className="border-l border-border h-8" />
+            <span className="text-xl font-bold text-foreground">UDC</span>
+            <span className="hidden lg:inline text-xs text-muted-foreground font-medium">| Digital Connect Africa</span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className={cn("hidden lg:flex items-center gap-1", isRTL && "flex-row-reverse")}>
+          <nav className={cn("hidden lg:flex items-center gap-0.5", isRTL && "flex-row-reverse")}>
             {headerItems.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -42,7 +43,7 @@ export const PublicHeader = () => {
                   target={item.is_external ? "_blank" : undefined}
                   rel={item.is_external ? "noopener noreferrer" : undefined}
                   className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
+                    "px-3.5 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
                     isActive
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -61,7 +62,7 @@ export const PublicHeader = () => {
             <Button asChild variant="ghost" className="hidden sm:inline-flex text-muted-foreground hover:text-foreground hover:bg-muted text-sm">
               <Link to="/auth">{t("common.login") || "Connexion"}</Link>
             </Button>
-            <Button asChild className="hidden sm:inline-flex bg-primary/10 text-primary hover:bg-primary/20 border border-primary/30 text-sm">
+            <Button asChild className="hidden sm:inline-flex bg-primary text-primary-foreground hover:bg-primary/90 text-sm">
               <Link to="/auth?tab=signup">{t("common.register") || "S'inscrire"}</Link>
             </Button>
 
@@ -113,7 +114,7 @@ export const PublicHeader = () => {
                 <Button asChild variant="ghost" className="flex-1 text-muted-foreground hover:text-foreground">
                   <Link to="/auth" onClick={() => setMobileOpen(false)}>{t("common.login") || "Connexion"}</Link>
                 </Button>
-                <Button asChild className="flex-1 bg-primary/10 text-primary border border-primary/30">
+                <Button asChild className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
                   <Link to="/auth?tab=signup" onClick={() => setMobileOpen(false)}>{t("common.register") || "S'inscrire"}</Link>
                 </Button>
               </div>
