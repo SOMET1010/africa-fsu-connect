@@ -29,10 +29,15 @@ export function useHomepageContent() {
         .from('homepage_content_blocks' as any)
         .select('*')
         .order('sort_order');
-      if (error) throw error;
+      if (error) {
+        // Table doesn't exist or query failed — gracefully return empty
+        console.warn('Homepage content blocks not available, using i18n fallback');
+        return [];
+      }
       return (data || []) as any[];
     },
     staleTime: 10 * 60 * 1000, // 10 min
+    retry: false, // Don't retry if table doesn't exist
   });
 
   const getBlock = (key: string): Record<string, unknown> | null => {
