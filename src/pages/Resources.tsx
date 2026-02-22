@@ -51,7 +51,8 @@ const ResourcesContent = () => {
       const query = searchQuery.toLowerCase();
       docs = docs.filter(doc => 
         doc.title?.toLowerCase().includes(query) ||
-        doc.description?.toLowerCase().includes(query)
+        doc.description?.toLowerCase().includes(query) ||
+        doc.tags?.some(tag => tag.toLowerCase().includes(query))
       );
     }
 
@@ -62,7 +63,14 @@ const ResourcesContent = () => {
 
     // Country filter
     if (filters.country) {
-      docs = docs.filter(doc => doc.country?.toLowerCase() === filters.country);
+      docs = docs.filter(doc => doc.country?.toLowerCase() === filters.country.toLowerCase());
+    }
+
+    // Tag filter
+    if (filters.tags && filters.tags.length > 0) {
+      docs = docs.filter(doc => 
+        filters.tags!.some(tag => doc.tags?.includes(tag))
+      );
     }
 
     return docs;
