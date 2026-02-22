@@ -79,6 +79,7 @@ const PlatformConfig = lazy(() => import('@/pages/admin/PlatformConfig'));
 const TranslationsExport = lazy(() => import('@/pages/admin/TranslationsExport'));
 const I18nQAChecklist = lazy(() => import('@/pages/admin/I18nQAChecklist'));
 const HomepageEditor = lazy(() => import('@/pages/admin/HomepageEditor'));
+const ContentManager = lazy(() => import('@/pages/admin/ContentManager'));
 // New SUTEL modules
 const ELearning = lazy(() => import('@/pages/ELearning'));
 const StrategicWatch = lazy(() => import('@/pages/StrategicWatch'));
@@ -758,6 +759,20 @@ export const ROUTES: RouteConfig[] = [
     icon: FileText,
     isProtected: true,
     requiredRoles: ['super_admin', 'admin_pays'],
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'admin',
+    univers: 'admin',
+  },
+  {
+    path: '/admin/content',
+    component: ContentManager,
+    title: 'Gestion du contenu',
+    description: 'Paramètres du site, navigation et blocs CMS',
+    icon: Settings,
+    isProtected: true,
+    requiredRoles: ['super_admin', 'admin_pays', 'editeur'],
     showInSidebar: false,
     showInMobileNav: false,
     hideFromNav: true,
