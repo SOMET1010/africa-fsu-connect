@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import {
   FileText,
   CheckCircle,
@@ -114,10 +114,10 @@ export default function FocalDashboard() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
-            <a href="/indicators/submit">
+            <Link to="/submit">
               <FileText className="mr-2 h-4 w-4" />
               Saisir des données
-            </a>
+            </Link>
           </Button>
         </div>
       </div>
@@ -223,7 +223,7 @@ export default function FocalDashboard() {
                   <FileText className="h-12 w-12 mx-auto mb-3 opacity-50" />
                   <p>Aucune soumission pour le moment</p>
                   <Button className="mt-4" variant="outline" asChild>
-                    <a href="/indicators/submit">Commencer à saisir des données</a>
+                    <Link to="/submit">Commencer à saisir des données</Link>
                   </Button>
                 </div>
               ) : (
@@ -344,22 +344,22 @@ export default function FocalDashboard() {
             </CardHeader>
             <CardContent className="space-y-2">
               <Button variant="outline" className="w-full justify-start" asChild>
-                <a href="/indicators/submit">
+                <Link to="/submit">
                   <FileText className="mr-2 h-4 w-4" />
                   Saisir des indicateurs
-                </a>
+                </Link>
               </Button>
               <Button variant="outline" className="w-full justify-start" asChild>
-                <a href="/my-country">
+                <Link to="/my-country">
                   <TrendingUp className="mr-2 h-4 w-4" />
                   Voir le profil pays
-                </a>
+                </Link>
               </Button>
               <Button variant="outline" className="w-full justify-start" asChild>
-                <a href="/indicators">
+                <Link to="/indicators">
                   <Calendar className="mr-2 h-4 w-4" />
                   Consulter les indicateurs
-                </a>
+                </Link>
               </Button>
             </CardContent>
           </Card>

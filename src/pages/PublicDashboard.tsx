@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { PageHero } from "@/components/shared/PageHero";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ModernButton } from "@/components/ui/modern-button";
+import { Link } from "react-router-dom";
 import { 
   BarChart3, 
   Globe, 
@@ -204,10 +205,10 @@ const PublicDashboard = () => {
                 </p>
               </div>
               <ModernButton variant="outline" asChild>
-                <a href="/map">
+                <Link to="/map">
                   <MapPin className="h-4 w-4 mr-2" />
                   Ouvrir la carte
-                </a>
+                </Link>
               </ModernButton>
             </div>
           </div>
