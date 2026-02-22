@@ -44,19 +44,16 @@ const GradientHeroSection: React.FC<GradientHeroSectionProps> = ({
 
   return (
     <div className={cn(
-      "relative overflow-hidden rounded-3xl text-white p-8 lg:p-12",
+      "relative overflow-hidden rounded-2xl text-white p-8 lg:p-12",
       getGradientClasses(),
       className
     )}>
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-y-32 translate-x-32" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-2xl translate-y-16 -translate-x-16" />
       
       <div className="relative z-10">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="space-y-6">
             {subtitle && (
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/20">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/20">
                 <span className="text-sm font-medium text-white/90">{subtitle}</span>
               </div>
             )}

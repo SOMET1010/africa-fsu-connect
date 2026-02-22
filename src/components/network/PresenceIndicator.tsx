@@ -1,30 +1,17 @@
-// NEXUS_COMPONENT
 // Indicateur de présence visuel, sans chiffres agressifs
-// Couleurs : nx-coop uniquement
-// Compatible avec l'ancienne et nouvelle API
 
 import { cn } from "@/lib/utils";
 
 interface PresenceIndicatorProps {
-  // Legacy API (for backward compatibility)
   level?: number;
   maxLevel?: number;
   size?: "sm" | "md" | "lg";
   label?: string;
   description?: string;
   showLabel?: boolean;
-  // New API
   className?: string;
 }
 
-/**
- * PresenceIndicator - Couche 1 compliant (NEXUS)
- * 
- * Visual bar showing network presence WITHOUT numerical values.
- * This is intentional per the Blueprint UX guidelines.
- * 
- * UX RULE: No hard KPIs on Couche 1 screens
- */
 export const PresenceIndicator = ({ 
   level = 3,
   maxLevel = 4,
@@ -55,21 +42,20 @@ export const PresenceIndicator = ({
     return "Activité en développement";
   };
 
-  // Simple mode (inline, no wrapping)
+  // Simple mode (inline, no wrapping) — used in hero (white text context)
   if (!showLabel && !label) {
     return (
       <div className={`flex items-center gap-3 ${className}`}>
-        {/* Barres de présence NEXUS */}
         <div className="flex items-end gap-0.5 h-4">
           {Array.from({ length: Math.min(maxLevel, 4) }).map((_, index) => (
             <div
               key={index}
               className={cn(
-                "rounded-full transition-all duration-[var(--nx-dur-2)] ease-[var(--nx-ease)]",
+                "rounded-full transition-all duration-200",
                 barSizeClasses[size],
                 index < level 
-                  ? 'bg-[hsl(var(--nx-coop-600))]' 
-                  : 'bg-[hsl(var(--nx-border))]'
+                  ? 'bg-white' 
+                  : 'bg-white/30'
               )}
               style={{
                 height: `${(heightClasses[size] || heightClasses.md)[index] || 16}px`,
@@ -78,40 +64,38 @@ export const PresenceIndicator = ({
           ))}
         </div>
         
-        {/* Label textuel discret */}
-        <span className="text-sm text-[hsl(var(--nx-text-500))]">
+        <span className="text-sm text-white/80">
           Réseau actif
         </span>
       </div>
     );
   }
 
-  // Full mode (centered, with label and description)
+  // Full mode
   return (
     <div className={`flex flex-col items-center space-y-2 ${className}`}>
       {label && (
-        <span className="text-sm text-[hsl(var(--nx-text-500))] font-medium">
+        <span className="text-sm text-slate-500 dark:text-muted-foreground font-medium">
           {label}
         </span>
       )}
       
-      {/* Barre visuelle NEXUS - pas de chiffres */}
       <div className="flex gap-1 items-end">
         {Array.from({ length: maxLevel }).map((_, index) => (
           <div
             key={index}
             className={cn(
-              "rounded-sm transition-colors duration-[var(--nx-dur-2)]",
+              "rounded-sm transition-colors duration-200",
               size === "sm" ? "w-4 h-2" : size === "lg" ? "w-8 h-4" : "w-6 h-3",
               index < level 
-                ? 'bg-[hsl(var(--nx-coop-600))]' 
-                : 'bg-[hsl(var(--nx-border))]'
+                ? 'bg-emerald-500' 
+                : 'bg-slate-200 dark:bg-border'
             )}
           />
         ))}
       </div>
       
-      <span className="text-xs text-[hsl(var(--nx-text-500))]">
+      <span className="text-xs text-slate-500 dark:text-muted-foreground">
         {getDescription()}
       </span>
     </div>
