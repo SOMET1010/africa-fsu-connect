@@ -61,12 +61,8 @@ export function AfricanSection({
   }[variant];
 
   return (
-    <section className={cn(bgClass, "relative overflow-hidden", className)}>
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 african-pattern-bogolan-subtle opacity-50 pointer-events-none" />
-      <div className="relative z-10">
-        {children}
-      </div>
+    <section className={cn(bgClass, className)}>
+      {children}
     </section>
   );
 }
