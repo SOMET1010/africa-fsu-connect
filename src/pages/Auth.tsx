@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -9,6 +11,15 @@ import { ResetPasswordForm } from './auth/components/ResetPasswordForm';
 import { SignupConfirmation } from './auth/components/SignupConfirmation';
 
 const Auth = () => {
+  const [searchParams] = useSearchParams();
+  const initialTab = searchParams.get('tab') || searchParams.get('mode') || 'login';
+  const [activeTab, setActiveTab] = useState(initialTab === 'signup' ? 'signup' : 'login');
+
+  useEffect(() => {
+    const tab = searchParams.get('tab') || searchParams.get('mode');
+    if (tab === 'signup') setActiveTab('signup');
+  }, [searchParams]);
+
   const {
     loading,
     isSubmitting,
@@ -69,7 +80,7 @@ const Auth = () => {
 
         {/* Auth Forms */}
         <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
-          <Tabs defaultValue="login" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-gray-100/80 p-1.5 m-4 w-[calc(100%-2rem)] rounded-xl">
               <TabsTrigger 
                 value="login" 

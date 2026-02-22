@@ -44,7 +44,7 @@ export function NetworkDashboard() {
   };
 
   const handleViewEvent = (eventId: string) => {
-    navigate(`/community?tab=events&id=${eventId}`);
+    navigate(`/events?id=${eventId}`);
   };
 
   return (
@@ -87,7 +87,7 @@ export function NetworkDashboard() {
           />
           <UpcomingEvents 
             onViewEvent={handleViewEvent}
-            onViewAll={() => navigate('/community?tab=events')}
+            onViewAll={() => navigate('/events')}
           />
         </div>
       </div>
