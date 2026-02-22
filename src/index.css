@@ -329,28 +329,19 @@ All colors MUST be HSL.
   }
   
   .page-header {
-    @apply border-b border-border/60 bg-background/85 backdrop-blur-xl sticky top-0 z-40;
-    background-image: linear-gradient(135deg, hsl(var(--background) / 0.95) 0%, hsl(var(--muted) / 0.5) 100%);
+    @apply border-b border-border bg-background sticky top-0 z-40;
   }
   
   .section-card {
-    @apply bg-card border border-border/60 rounded-2xl shadow-lg backdrop-blur-sm;
-    background-image: var(--gradient-card);
+    @apply bg-card border border-border rounded-2xl shadow-sm;
   }
   
   .premium-card {
-    @apply bg-card border border-border/40 rounded-3xl shadow-elegant backdrop-blur-md relative overflow-hidden;
-    background-image: var(--gradient-card);
-  }
-  
-  .premium-card::before {
-    @apply absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none;
-    content: '';
+    @apply bg-card border border-border rounded-2xl shadow-sm relative overflow-hidden;
   }
   
   .action-bar {
-    @apply flex items-center justify-between gap-4 p-4 bg-muted/40 border-t border-border/60 backdrop-blur-sm;
-    background-image: var(--gradient-secondary);
+    @apply flex items-center justify-between gap-4 p-4 bg-muted/40 border-t border-border;
   }
   
   /* Font family utilities */
@@ -372,7 +363,7 @@ All colors MUST be HSL.
   }
 
   .animate-pulse-glow {
-    animation: pulseGlow 2s ease-in-out infinite;
+    /* removed — no glow effects */
   }
 
   .hover-lift {
@@ -391,17 +382,17 @@ All colors MUST be HSL.
     background-image: var(--gradient-mesh);
   }
 
-  /* Glassmorphism utilities */
+  /* Card utilities - simplified */
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border/20 shadow-2xl;
+    @apply bg-card border border-border shadow-sm;
   }
   
   .glass-subtle {
-    @apply bg-card/60 backdrop-blur-md border border-border/10 shadow-lg;
+    @apply bg-card/80 border border-border shadow-sm;
   }
   
   .glass-strong {
-    @apply bg-card/90 backdrop-blur-2xl border border-border/30 shadow-3xl;
+    @apply bg-card border border-border shadow-sm;
   }
 
   /* Modern interaction effects */
@@ -428,7 +419,7 @@ All colors MUST be HSL.
   }
   
   .glow-on-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/20;
+    @apply transition-all duration-300 hover:shadow-md;
   }
 
   /* Enhanced micro-interactions */
@@ -453,23 +444,15 @@ All colors MUST be HSL.
   }
 
   .gentle-glow {
-    animation: gentle-glow 2s ease-in-out infinite;
+    /* removed — no glow effects */
   }
 
-  /* Premium glass cards */
+  /* Card utility - simplified */
   .premium-glass {
-    @apply relative overflow-hidden rounded-3xl border border-border/20 backdrop-blur-xl;
-    background: var(--gradient-glass);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    @apply relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm;
   }
 
-  .premium-glass::before {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none;
-  }
+
 
   /* Signal status badges */
   .signal-excellent {
@@ -524,7 +507,7 @@ All colors MUST be HSL.
   }
 
   .animate-glow {
-    animation: glow 2s ease-in-out infinite alternate;
+    /* removed — no glow effects */
   }
 
   /* Improved focus states */

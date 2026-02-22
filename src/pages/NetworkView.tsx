@@ -5,7 +5,6 @@
 // - pas de ranking
 // - 1 message principal par écran
 // - animations lentes uniquement (fade/slide)
-// - couleurs : nx-brand + nx-coop uniquement
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -22,31 +21,31 @@ const NetworkView = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-transparent relative z-10">
-      {/* Hero Section - Premium Dark */}
-      <section className="py-16 md:py-20">
+    <div className="min-h-screen bg-slate-50 dark:bg-background relative z-10">
+      {/* Hero Section */}
+      <section className="py-16 md:py-20 bg-gradient-to-b from-primary to-primary-dark">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center space-y-6">
-            {/* Badge glassmorphism */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20">
               <PresenceIndicator />
             </div>
             
-            {/* Titre principal - Premium Dark */}
+            {/* Titre principal */}
             <h1 className="text-[28px] md:text-[32px] font-semibold text-white leading-tight max-w-3xl mx-auto">
               {t('network.hero.title') || 'Le réseau des agences africaines du service universel'}
             </h1>
             
             {/* Description narrative */}
-            <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
               {t('network.hero.narrative') || 'Un espace de coopération et de partage entre les agences nationales pour réduire la fracture numérique en Afrique.'}
             </p>
             
-            {/* 2 CTAs - Style glassmorphism */}
+            {/* 2 CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
               <Button 
                 asChild 
-                className="bg-[hsl(var(--nx-gold))] hover:bg-[hsl(var(--nx-gold)/0.9)] text-[hsl(var(--nx-night))] font-medium rounded-[var(--nx-radius-md)] px-6 py-2.5 transition-all duration-[var(--nx-dur-2)] ease-[var(--nx-ease)] shadow-[0_0_20px_hsl(var(--nx-gold)/0.3)]"
+                className="bg-white text-primary font-medium rounded-xl px-6 py-2.5 hover:bg-white/90 shadow-sm"
               >
                 <Link to="/members" className="inline-flex items-center gap-2">
                   <Users className="w-4 h-4" />
@@ -56,7 +55,7 @@ const NetworkView = () => {
               <Button 
                 variant="outline" 
                 asChild
-                className="border-white/20 text-white hover:bg-white/10 hover:border-white/30 rounded-[var(--nx-radius-md)] px-6 py-2.5 transition-all duration-[var(--nx-dur-2)] ease-[var(--nx-ease)]"
+                className="border-white/30 text-white hover:bg-white/10 rounded-xl px-6 py-2.5"
               >
                 <Link to="/projects" className="inline-flex items-center gap-2">
                   <FolderOpen className="w-4 h-4" />
@@ -74,14 +73,14 @@ const NetworkView = () => {
       {/* Section Communautés linguistiques */}
       <LinguisticCommunitiesSection />
 
-      {/* Section Régions - Glassmorphism */}
-      <section className="py-12 bg-white/[0.02]">
+      {/* Section Régions */}
+      <section className="py-12 bg-white dark:bg-card">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
-            <h2 className="text-xl font-medium text-white">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-foreground">
               {t('network.regions.title') || 'Les régions du réseau'}
             </h2>
-            <p className="text-sm text-white/60 mt-2">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground mt-2">
               {t('network.regions.subtitle') || 'Cliquez sur une région pour découvrir ses membres'}
             </p>
           </div>
@@ -93,10 +92,10 @@ const NetworkView = () => {
       <section className="py-12">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
-            <h2 className="text-xl font-medium text-white">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-foreground">
               {t('network.activity.title') || 'Activité récente'}
             </h2>
-            <p className="text-sm text-white/60 mt-2">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground mt-2">
               {t('network.activity.subtitle') || 'Les dernières contributions du réseau'}
             </p>
           </div>
@@ -104,8 +103,8 @@ const NetworkView = () => {
         </div>
       </section>
 
-      {/* Section Actions secondaires - Glassmorphism */}
-      <section className="py-12 bg-white/[0.02]">
+      {/* Section Actions secondaires */}
+      <section className="py-12 bg-white dark:bg-card">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="grid md:grid-cols-3 gap-6">
             <NexusActionCard

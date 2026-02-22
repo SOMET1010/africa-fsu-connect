@@ -1,9 +1,6 @@
-// NEXUS_COMPONENT
 // Régions avec couleur égalitaire (pas de hiérarchie visuelle)
-// Toutes les régions ont la même importance visuelle
 
 import { Link } from "react-router-dom";
-import { NexusCard } from "@/components/ui/nexus-card";
 import { useTranslation } from "@/hooks/useTranslation";
 
 interface Region {
@@ -13,7 +10,6 @@ interface Region {
   countriesCount: number;
 }
 
-// Toutes les régions ont la même couleur (égalité)
 const regions: Region[] = [
   { id: '1', name: 'Afrique de l\'Ouest', code: 'west', countriesCount: 15 },
   { id: '2', name: 'Afrique Centrale', code: 'central', countriesCount: 9 },
@@ -45,19 +41,19 @@ export const RegionCards = () => {
             className="block group"
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <div className="h-full text-center animate-fade-in rounded-[var(--nx-radius-md)] border border-white/10 bg-white/5 backdrop-blur-sm p-4 hover:bg-white/10 hover:border-[hsl(var(--nx-gold)/0.5)] transition-all duration-[var(--nx-dur-2)]">
-              {/* Indicateur de région - couleur gold */}
-              <div className="w-12 h-12 bg-[hsl(var(--nx-gold))] rounded-xl mx-auto mb-3 flex items-center justify-center transition-transform duration-[var(--nx-dur-2)] ease-[var(--nx-ease)] group-hover:scale-105 shadow-[0_0_20px_hsl(var(--nx-gold)/0.3)]">
-                <span className="text-[hsl(var(--nx-night))] font-semibold text-lg">
+            <div className="h-full text-center animate-fade-in rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm p-4 hover:shadow-md hover:border-primary/30 transition-all duration-200">
+              {/* Indicateur de région */}
+              <div className="w-12 h-12 bg-primary rounded-xl mx-auto mb-3 flex items-center justify-center transition-transform duration-200 group-hover:scale-105 shadow-sm">
+                <span className="text-white font-semibold text-lg">
                   {badge}
                 </span>
               </div>
 
-              <h3 className="font-medium text-sm text-white mb-1">
+              <h3 className="font-medium text-sm text-slate-900 dark:text-foreground mb-1">
                 {region.name}
               </h3>
 
-              <p className="text-xs text-white/60">
+              <p className="text-xs text-slate-500 dark:text-muted-foreground">
                 {region.countriesCount} {t('common.countries') || 'pays'}
               </p>
             </div>
