@@ -87,22 +87,22 @@ export function ModernSidebar() {
       className="border-r border-border bg-background"
       collapsible={true}
     >
-      <SidebarHeader className="border-b border-border/30 p-4">
-        <GlassCard variant="subtle" className="p-3">
+      <SidebarHeader className="border-b border-border p-4">
+        <div className="p-3">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary via-primary-light to-accent rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-primary/20 animate-pulse-glow">
-              <span className="text-white font-bold text-sm">FSU</span>
+            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shrink-0">
+              <span className="text-primary-foreground font-bold text-sm">FSU</span>
             </div>
             {!collapsed && (
               <div className="min-w-0">
-                <h2 className="font-bold text-foreground text-base leading-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <h2 className="font-bold text-foreground text-base leading-tight">
                   FSU Afrique
                 </h2>
                 <p className="text-xs text-muted-foreground">Plateforme collaborative</p>
               </div>
             )}
           </div>
-        </GlassCard>
+        </div>
       </SidebarHeader>
 
       <SidebarContent className="px-3 py-4">

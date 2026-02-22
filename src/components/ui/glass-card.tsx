@@ -27,8 +27,8 @@ const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(({
   const shadows = {
     none: "",
     sm: "shadow-sm",
-    md: "shadow-md",
-    lg: "shadow-lg shadow-black/5"
+    md: "shadow-sm",
+    lg: "shadow-sm"
   };
 
   return (
@@ -39,7 +39,7 @@ const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(({
         variants[variant],
         border && (variant === "subtle" ? "border border-border/50" : "border border-border"),
         shadows[shadow],
-        "hover:shadow-md hover:border-primary/20",
+        "hover:shadow-md",
         className
       )}
       {...props}

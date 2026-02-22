@@ -70,16 +70,12 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#0F4C6D] to-[#1F7A63] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Dynamic Background Glow Effects */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl animate-pulse" />
-      
+    <div className="min-h-screen bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center p-4 relative overflow-hidden">
       <div className="w-full max-w-md relative z-10">
         <AuthHeader />
 
         {/* Auth Forms */}
-        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-border overflow-hidden">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-gray-100/80 p-1.5 m-4 w-[calc(100%-2rem)] rounded-xl">
               <TabsTrigger 

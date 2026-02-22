@@ -22,7 +22,7 @@ export function GlobalLoadingIndicator({
 
   return (
     <div className={cn(
-      "fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm",
+      "fixed top-0 left-0 right-0 z-50 bg-background",
       className
     )}>
       {showProgress ? (
@@ -68,7 +68,7 @@ export function LoadingOverlay({
 
   return (
     <div className={cn(
-      "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm",
+      "fixed inset-0 z-50 bg-background/95",
       "flex items-center justify-center",
       className
     )}>

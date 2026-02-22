@@ -729,26 +729,7 @@ All colors MUST be HSL.
   to { opacity: 0.95; }
 }
 
-/* Advanced glassmorphism effects */
-@keyframes glassShimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.glass-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  background-size: 200% 100%;
-  animation: glassShimmer 2s infinite;
-}
+/* Removed glassmorphism and dramatic shadow effects */
 
 /* Modern scroll effects */
 .scroll-reveal {
@@ -762,13 +743,13 @@ All colors MUST be HSL.
   transform: translateY(0);
 }
 
-/* Enhanced shadows */
+/* Clean shadows */
 .shadow-3xl {
-  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-lg);
 }
 
 .shadow-dramatic {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-md);
 }
 
 /* Animation utilities */

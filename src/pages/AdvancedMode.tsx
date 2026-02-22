@@ -176,7 +176,7 @@ const AdvancedMode = () => {
             return (
               <Card 
                 key={module.id} 
-                className="group hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-card/80 backdrop-blur-sm border-border/50"
+                className="group hover:shadow-md transition-all duration-200 bg-card border-border"
               >
                 <CardHeader>
                   <div className={`w-12 h-12 rounded-xl ${module.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
@@ -203,7 +203,7 @@ const AdvancedMode = () => {
         </div>
 
         {/* Dynamic Stats from Supabase */}
-        <Card className="mt-8 bg-card/80 backdrop-blur-sm border-border/50">
+        <Card className="mt-8 bg-card border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Database className="h-5 w-5 text-primary" />

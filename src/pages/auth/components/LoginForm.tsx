@@ -88,7 +88,7 @@ export const LoginForm = ({
       </div>
 
       {error && (
-        <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 backdrop-blur-sm">
+        <Alert variant="destructive" className="border-destructive/20 bg-destructive/10">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}

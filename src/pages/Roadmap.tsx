@@ -94,17 +94,13 @@ const milestones = [
 
 const Roadmap = () => {
   return (
-    <div className="min-h-screen bg-[hsl(var(--nx-night))]">
+    <div className="min-h-screen bg-slate-50 dark:bg-background">
       <div className="container mx-auto px-4 py-12 space-y-16">
-        {/* Enhanced Hero */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[hsl(var(--nx-night))] via-[hsl(var(--nx-deep))] to-[hsl(var(--nx-night))] border border-white/10 animate-fade-in">
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-[hsl(var(--nx-gold)/0.3)] rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-[hsl(var(--nx-cyan)/0.2)] rounded-full blur-2xl" />
-            </div>
+        {/* Hero */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary-dark border border-border animate-fade-in">
             <div className="relative px-8 py-14 md:px-12 md:py-20">
               <div className="max-w-3xl">
-                <Badge variant="outline" className="mb-5 px-4 py-2 border-white/20 bg-white/5 text-white/80">
+                <Badge variant="outline" className="mb-5 px-4 py-2 border-white/30 bg-white/10 text-white/90">
                   <Calendar className="w-4 h-4 mr-2" />
                   Feuille de Route 2025-2026
                 </Badge>
