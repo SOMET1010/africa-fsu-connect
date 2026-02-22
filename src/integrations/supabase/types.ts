@@ -3328,6 +3328,42 @@ export type Database = {
         }
         Relationships: []
       }
+      navigation_items: {
+        Row: {
+          href: string
+          icon: string | null
+          id: string
+          is_external: boolean
+          is_visible: boolean
+          label: Json
+          location: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          href: string
+          icon?: string | null
+          id?: string
+          is_external?: boolean
+          is_visible?: boolean
+          label?: Json
+          location: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          href?: string
+          icon?: string | null
+          id?: string
+          is_external?: boolean
+          is_visible?: boolean
+          label?: Json
+          location?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       network_security_events: {
         Row: {
           blocked: boolean | null
@@ -5468,6 +5504,27 @@ export type Database = {
           orders_count?: number | null
           revenue?: number
           service_category?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
         }
         Relationships: []
       }
