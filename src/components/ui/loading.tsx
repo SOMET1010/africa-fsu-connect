@@ -72,7 +72,7 @@ export function LoadingOverlay({
       "flex items-center justify-center",
       className
     )}>
-      <div className="flex flex-col items-center space-y-4 p-8 bg-card rounded-lg border shadow-lg">
+      <div className="flex flex-col items-center space-y-4 p-8 bg-card rounded-lg border shadow-sm">
         <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         <p className="text-sm text-muted-foreground">{message}</p>
       </div>

@@ -56,8 +56,8 @@ const RoadmapTimeline = ({ milestones }: RoadmapTimelineProps) => {
                 <div className={cn(
                   "rounded-xl p-5 text-center w-full transition-all duration-300 border",
                   isActive
-                    ? "bg-white/10 border-[hsl(var(--nx-gold)/0.3)] shadow-xl shadow-[hsl(var(--nx-gold)/0.1)] -translate-y-1"
-                    : "bg-white/5 border-transparent shadow-lg shadow-black/10 hover:bg-white/[0.07] hover:-translate-y-0.5"
+                    ? "bg-white/10 border-[hsl(var(--nx-gold)/0.3)] shadow-md -translate-y-1"
+                    : "bg-white/5 border-transparent shadow-sm hover:bg-white/[0.07] hover:-translate-y-0.5"
                 )}>
                   <div className={cn(
                     "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 transition-all duration-300",

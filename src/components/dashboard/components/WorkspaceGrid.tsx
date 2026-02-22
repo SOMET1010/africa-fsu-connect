@@ -15,7 +15,7 @@ export function WorkspaceGrid({ workspaces }: WorkspaceGridProps) {
       {workspaces.map((workspace) => {
         const Icon = workspace.icon;
         return (
-          <Card key={workspace.id} className={`${workspace.color} hover:shadow-lg transition-all duration-200 cursor-pointer group`}>
+          <Card key={workspace.id} className={`${workspace.color} hover:shadow-sm transition-all duration-200 cursor-pointer group`}>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">

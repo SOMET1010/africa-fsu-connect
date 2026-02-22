@@ -271,8 +271,8 @@ export const ProjectsMap = ({ projects }: ProjectsMapProps) => {
                 </div>
                 
                 {/* Main Marker */}
-                <div className={`relative w-12 h-12 rounded-full bg-gradient-to-r ${config.color} shadow-xl transition-all duration-500 ${
-                  isHovered || isSelected ? 'scale-150 shadow-2xl' : 'hover:scale-125'
+                <div className={`relative w-12 h-12 rounded-full bg-gradient-to-r ${config.color} shadow-sm transition-all duration-500 ${
+                  isHovered || isSelected ? 'scale-150 shadow-md' : 'hover:scale-125'
                 } border-3 border-white dark:border-gray-800 flex items-center justify-center`}>
                   <span className="text-xl">{config.flag}</span>
                   
@@ -286,7 +286,7 @@ export const ProjectsMap = ({ projects }: ProjectsMapProps) => {
                 <div className={`absolute bottom-16 left-1/2 transform -translate-x-1/2 transition-all duration-500 ${
                   isHovered || isSelected ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
                 }`}>
-                  <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm p-5 rounded-2xl shadow-2xl border border-border min-w-80 max-w-sm">
+                  <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md border border-border min-w-80 max-w-sm">
                     <div className="flex items-center gap-3 mb-4">
                       <span className="text-3xl">{config.flag}</span>
                       <div>
@@ -358,7 +358,7 @@ export const ProjectsMap = ({ projects }: ProjectsMapProps) => {
           })}
 
           {/* Enhanced Legend */}
-          <div className="absolute bottom-6 left-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-border">
+          <div className="absolute bottom-6 left-6 bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm border border-border">
             <h5 className="font-bold text-sm mb-3 flex items-center gap-2">
               <MapPin className="h-4 w-4 text-primary" />
               Légende des Projets
@@ -378,7 +378,7 @@ export const ProjectsMap = ({ projects }: ProjectsMapProps) => {
           </div>
 
           {/* Performance Indicator */}
-          <div className="absolute top-6 right-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-border">
+          <div className="absolute top-6 right-6 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-border">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className="h-4 w-4 text-green-500" />
               <span className="text-sm font-medium">Performance Globale</span>
@@ -405,7 +405,7 @@ export const ProjectsMap = ({ projects }: ProjectsMapProps) => {
                 <ModernCard
                   key={region}
                   className={`p-4 cursor-pointer transition-all duration-300 hover:scale-105 ${config.gradient} ${
-                    isSelected ? 'ring-2 ring-primary shadow-xl' : ''
+                    isSelected ? 'ring-2 ring-primary shadow-sm' : ''
                   }`}
                   onClick={() => setSelectedRegion(selectedRegion === region ? null : region)}
                 >

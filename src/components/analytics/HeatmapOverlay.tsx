@@ -33,7 +33,7 @@ export const HeatmapOverlay = () => {
 
       {/* Controls */}
       <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
-        <div className="bg-card border rounded-lg p-3 shadow-lg">
+        <div className="bg-card border rounded-lg p-3 shadow-sm">
           <div className="text-xs text-muted-foreground mb-2">
             Analytics: {stats.totalInteractions} interactions
           </div>
