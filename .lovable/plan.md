@@ -1,96 +1,147 @@
 
 
-# Redesign Header et Cards -- Branding institutionnel
+# Refonte de la page d'accueil -- Design Institutionnel "Portail UDC"
 
-## Objectif
+## Constat
 
-Renforcer la hierarchie visuelle et l'espacement dans les headers (PublicHeader, ModernHeader, PageHeader) et les composants Card (card.tsx, SectionCard, PageHero, GlassCard) pour un rendu institutionnel clair, lisible et structure.
+La page d'accueil actuelle a un hero sombre avec image de fond, des badges de confiance, puis des sections empilees verticalement (carte, features, messages, CTA, partenaires). Le design ressemble a un site marketing.
 
----
+Vos maquettes montrent un design completement different : un **portail institutionnel** structure en grille, fond blanc, avec des donnees visibles immediatement -- pays membres, projets en cours, activites recentes, statistiques du reseau. C'est clair, stable, professionnel.
 
-## 1. PublicHeader -- Renforcer la presence institutionnelle
+## Plan de refonte
 
-**Fichier** : `src/components/layout/PublicHeader.tsx`
+### 1. Nouveau Header -- Branding "UDC"
 
-Changements :
-- Augmenter la hauteur du header de `h-16` a `h-18` (4.5rem) pour plus de respiration
-- Agrandir le logo ATU de `h-12` a `h-10` (ajuste pour etre proportionnel a la nouvelle hauteur)
-- Ajouter un separateur vertical (`border-l border-border h-8`) entre le logo et le texte "UDC"
-- Texte "UDC" passe de `text-lg` a `text-xl font-bold` + sous-texte "Digital Connect Africa" visible des `lg:` au lieu de `xl:`
-- Bouton "S'inscrire" : remplacer `bg-primary/10 text-primary border-primary/30` par `bg-primary text-primary-foreground` pour un CTA plus affirme
-- Espacement des nav links : passer `gap-1` a `gap-0.5` avec `px-3.5` pour plus de precision
+**Fichier : `src/components/layout/PublicHeader.tsx`**
 
-## 2. ModernHeader -- Hierarchie et espacement
+- Remplacer "USF Digital Connect / AFRICA" par **"UDC"** en gras + **"Union Digitale de la Connectivite Africaine"** a cote
+- Ajouter une barre de recherche dans le header (visible sur desktop)
+- Icones de notification, messagerie, globe (langue) a droite
+- Navigation : Reseau, Collaboration, Evenements, Ressources, Tableaux de bord
+- Style : fond blanc, `border-b border-gray-200`, pas de shadow
 
-**Fichier** : `src/components/layout/ModernHeader.tsx`
+### 2. Nouveau Hero -- Structure en grille
 
-Changements :
-- Augmenter `h-16` a `h-18` pour coherence avec PublicHeader
-- Logo "UDC" : ajouter un `border-l border-border/60 pl-3 h-8` comme separateur visuel
-- Navigation desktop : uniformiser les liens a `px-3.5 py-2` au lieu de `px-4 py-2`
-- Dropdown submenu : ajouter un header de section discret avec `DropdownMenuLabel` en `text-xs uppercase text-muted-foreground tracking-wider`
-- Bouton CTA "Rejoindre" : passer en `bg-primary text-primary-foreground` plein (solide, institutionnel) au lieu du gradient shine effect
-- Espacement actions droite : `space-x-3` au lieu de `space-x-2` pour une meilleure respiration
+**Fichier : `src/components/home/HomeHeroBlock.tsx` (refonte complete)**
 
-## 3. PageHeader -- Hierarchie typographique renforcee
+Remplacer le hero sombre par un hero clair structure :
 
-**Fichier** : `src/components/layout/PageHeader.tsx`
+- **Colonne gauche** : 
+  - Fil d'Ariane : Accueil > Reseau
+  - Badge : "Reseau actif -- 54 pays"
+  - Titre : **"Connecter l'Afrique, Ensemble"** en noir, typographie forte
+  - Sous-titre descriptif
+  - Deux boutons : "Explorer le Reseau" (primaire bleu) + "Voir les Projets" (outline)
 
-Changements :
-- Titre : passer de `text-3xl font-bold` a `text-2xl font-bold text-foreground` (plus compact, plus institutionnel)
-- Description : passer de `text-lg` a `text-base text-muted-foreground` pour un meilleur ratio de taille
-- Ajouter une ligne de separation visuelle sous le badge : `border-b border-border` implicite deja present
-- Espacement vertical du conteneur : `py-6` a `py-5` pour un rendu plus compact et professionnel
-- Badge : ajouter `font-medium` pour plus de lisibilite
+- **Colonne droite** :
+  - Carte d'Afrique stylisee (reutiliser le composant `HomeMemberMap` existant mais dans un conteneur plus petit, sans le fond sombre)
+  - Legende : Pays membres / En integration / Projets actifs
 
-## 4. Card base -- Fondation institutionnelle
+- **Sous le hero** : 4 cartes KPI en ligne
+  - 54 Pays membres (+3 cette annee)
+  - 127 Projets actifs (+18 ce trimestre)
+  - 892 Partenariats (+24 ce mois)
+  - 45 Evenements (cette annee)
+  - Chaque carte : fond blanc, bordure grise fine, icone bleue/verte, fleche de navigation
 
-**Fichier** : `src/components/ui/card.tsx`
+### 3. Section centrale -- Grille a 3 colonnes
 
-Changements :
-- Ajouter `rounded-xl` au lieu de `rounded-lg` pour un arrondi plus moderne
-- Ajouter une transition douce : `transition-shadow duration-200`
-- CardHeader : reduire l'espacement de `p-6` a `p-5` et `space-y-1.5` a `space-y-1` pour un rendu plus compact
-- CardTitle : passer de `text-2xl` a `text-lg font-semibold` -- les titres de cartes doivent etre proportionnes
-- CardContent : `p-6 pt-0` a `p-5 pt-0`
-- CardFooter : `p-6 pt-0` a `p-5 pt-0`
+**Nouveau fichier : `src/components/home/HomeGridSection.tsx`**
 
-## 5. PageHero -- Convertir aux tokens semantiques
+Layout en 3 colonnes :
 
-**Fichier** : `src/components/shared/PageHero.tsx`
+- **Colonne 1 -- Pays Membres** :
+  - Titre avec icone globe + lien "Voir tout"
+  - Grille de cartes pays (drapeau, nom, badge statut "Actif" / "En integration")
+  - 6 pays affiches + "+48 autres pays"
+  - Donnees depuis `useAfricanCountries()`
 
-Le PageHero utilise encore des couleurs hardcodees (`bg-white/5`, `text-white`, `border-white/10`, `nx-gold`, `nx-cyan`). Conversion :
-- Conteneur : `bg-white/5 backdrop-blur-md border-white/10` remplace par `bg-gradient-to-r from-primary to-primary-dark border border-border`
-- Decorations background : supprimer les blobs `nx-gold` et `nx-cyan`, remplacer par des shapes en `bg-white/10` sur le gradient primaire
-- Badge : `border-white/20 bg-white/5 text-white/80` remplace par `border-white/30 bg-white/10 text-white/90`
-- Titre : `text-white` conserve (sur fond gradient primaire)
-- Sous-titre : `text-white/80` conserve
-- Meilleure lisibilite grace au fond solide au lieu du backdrop-blur fragile
+- **Colonne 2 -- Carte du Reseau UDC** :
+  - Carte Leaflet interactive reduite
+  - Legende en bas
+  - Boutons zoom +/-
+  - Reutiliser `HomeMemberMap` avec styles adaptes
 
-## 6. SectionCard -- Espacement et hierarchie
+- **Colonne 3 -- Activite Recente + Prochains Evenements** :
+  - Timeline verticale : points colores + titre + description + horodatage
+  - Section "Prochains Evenements" : date en bloc (JUIL 15) + titre + lieu
+  - Donnees depuis hooks existants
 
-**Fichier** : `src/components/layout/SectionCard.tsx`
+### 4. Section Statistiques
 
-Changements :
-- `rounded-lg` implicite de Card remplace par le nouveau `rounded-xl` (via Card base)
-- CardTitle : passer de `text-xl font-semibold` a `text-lg font-semibold` pour coherence
-- Ajouter un `border-b border-border` entre le CardHeader et le CardContent quand un titre est present
-- Variant "elevated" : ajouter `hover:shadow-lg transition-shadow duration-200`
+**Nouveau fichier : `src/components/home/HomeStatsSection.tsx`**
 
----
+- Titre "Statistiques 2024"
+- 3 colonnes : Croissance du Reseau (graphique ligne), Projets par Domaine (donut), Impact (chiffres)
+- Utiliser `recharts` deja installe
+- Style : cartes blanches, bordures fines, typographie contrastee
+
+### 5. Barre partenaires en bas
+
+**Fichier : `src/components/home/HomePartnersBlock.tsx` (modifier)**
+
+- Fond gris tres clair `bg-gray-50`
+- Logos UAT, ANSUT, UA, CEDEAO alignes horizontalement
+- Bouton "Proposer un Projet" en jaune/or a droite
+
+### 6. Page Index -- Assemblage
+
+**Fichier : `src/pages/Index.tsx` (refonte)**
+
+Supprimer :
+- Le wrapper sombre `bg-[hsl(var(--nx-night))]`
+- L'image de fond `nexus-hero-africa.png` en arriere-plan
+- `HomeTrustBadge` (les infos confiance seront dans le footer ou page dediee)
+- `HomeMessagesBlock` (messages officiels -- deplacer vers /about)
+- `HomeCtaBlock` (le CTA sera integre dans le hero et la barre partenaires)
+
+Nouvelle structure :
+```text
+PublicHeader
+HomeHeroBlock (clair, grille 2 colonnes)
+HomeKPIBar (4 cartes stats)
+HomeGridSection (3 colonnes : pays, carte, activite)
+HomeStatsSection (statistiques avec graphiques)
+HomePartnersBlock (barre logos + CTA)
+Footer
+```
+
+### 7. Nettoyage CSS
+
+- Supprimer les references a `--nx-night` dans la page d'accueil
+- Fond global : `bg-white` ou `bg-gray-50`
+- Cartes : `bg-white border border-gray-200 rounded-xl`
+- Typographie : noir `text-gray-900` pour titres, `text-gray-600` pour descriptions
+- Couleurs d'accent : bleu primaire pour actions, vert pour statuts positifs, or/jaune pour boutons CTA
 
 ## Details techniques
 
-| Fichier | Nature du changement |
-|---|---|
-| `src/components/layout/PublicHeader.tsx` | Hauteur, logo separator, CTA solide |
-| `src/components/layout/ModernHeader.tsx` | Hauteur, separator, espacement, CTA solide |
-| `src/components/layout/PageHeader.tsx` | Typographie compacte, espacement |
-| `src/components/ui/card.tsx` | Arrondi xl, tailles compactes, transition |
-| `src/components/shared/PageHero.tsx` | Tokens semantiques, fond gradient solide |
-| `src/components/layout/SectionCard.tsx` | Titre coherent, border separator |
+### Composants reutilises
+- `HomeMemberMap` -- carte Leaflet existante, juste re-stylisee
+- `useAfricanCountries()` -- donnees pays
+- `useHomepageContent()` -- contenus dynamiques
+- `AnimatedCounter` -- compteurs animes
+- `recharts` -- graphiques statistiques
 
-### Pas de nouvelles dependances
+### Composants crees
+- `HomeKPIBar` -- barre de 4 cartes KPI
+- `HomeGridSection` -- grille 3 colonnes
+- `HomeStatsSection` -- section statistiques avec graphiques
+- `HomeCountryCard` -- carte pays avec drapeau et badge statut
+- `HomeActivityFeed` -- timeline d'activite recente
+- `HomeUpcomingEvents` -- bloc evenements a venir
 
-Tout utilise les tokens CSS et Tailwind existants.
+### Composants supprimes/deplaces
+- `HomeTrustBadge` -- supprime de l'accueil (redondant)
+- `HomeMessagesBlock` -- deplace vers /about
+- `HomeCtaBlock` -- integre dans hero + barre partenaires
+- `HomeTrustSection` -- deplace vers /about ou /legal
+
+### Principes de design appliques
+- Fond blanc, pas de hero sombre
+- Bordures fines `border-gray-200`, pas de shadows lourdes
+- Typographie haute contraste (noir sur blanc)
+- Donnees visibles immediatement (pas de scroll pour voir les KPIs)
+- Navigation claire et institutionnelle
+- Zero effet decoratif (pas de glow, blur, gradient de fond)
 
