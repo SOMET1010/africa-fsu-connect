@@ -115,7 +115,7 @@ export const NetworkMembersGrid = () => {
                   <Link
                     key={c.code}
                     to={`/members?search=${encodeURIComponent(c.name_fr)}`}
-                    className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border shadow-sm p-4 hover:shadow-md hover:border-primary/30 transition-all duration-200 block"
+                    className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border shadow-sm p-4 hover:border-primary/30 transition-colors duration-200 block"
                   >
                     <div className="flex items-start gap-3">
                       <span className="text-2xl leading-none">{getCountryFlag(c.code)}</span>
