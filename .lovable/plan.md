@@ -1,51 +1,74 @@
 
-# Fine-tuning UX institutionnel
 
-## 1. Corriger le composant GlassCard pour le theme clair
+# Theme Switch institutionnel avec contraste WCAG
 
-Le `GlassCard` utilise `bg-white/5` et `border-white/10` -- concu pour un fond sombre. Sur fond clair, cela rend les cartes quasi invisibles.
+## Contexte
 
-**Changements :**
-- `default` : `bg-white` avec `border border-border` et `shadow-sm`
-- `strong` : `bg-white` avec `shadow-md`
-- `subtle` : `bg-secondary/50` avec `border border-border/50`
-- Supprimer le pseudo-element `before:` gradient overlay
-- Hover : `hover:shadow-md hover:border-primary/20` au lieu de glow
+Le projet dispose deja de `next-themes` avec un `ThemeToggleButton` dans le `ModernHeader`, mais plusieurs problemes existent :
+- Le toggle actuel est minimaliste (icone seule, pas de label)
+- Le `PublicHeader` utilise des couleurs hardcodees dark (`nx-night`, `text-white`) -- il ne reagit pas au changement de theme
+- Le `HomeLayoutToggle` (light/immersive) est un concept different du theme dark/light, ce qui cree de la confusion
+- Les tokens dark mode dans `index.css` doivent etre verifies pour le contraste WCAG AA (ratio 4.5:1 minimum)
 
-## 2. Renforcer les icones stats admin (WCAG AA)
+## Changements prevus
 
-Dans `AdminStatsGrid`, les icones utilisent `bg-primary/10` qui manque de contraste sur fond blanc.
+### 1. Creer un composant `ThemeSwitch` institutionnel dedie
 
-**Changements :**
-- Passer le fond icone a `bg-primary/15` avec l'icone en `text-primary`
-- Ajouter des variantes de couleur par stat : bleu, vert, violet, orange avec des fonds suffisamment contrastes (ex: `bg-blue-100 text-blue-700`, `bg-emerald-100 text-emerald-700`)
-- S'assurer que le ratio de contraste depasse 4.5:1
+Nouveau fichier : `src/components/shared/ThemeSwitch.tsx`
 
-## 3. Boutons CTA : hover plus distinct
+- Bouton accessible avec icone Sun/Moon et label textuel optionnel
+- Animation douce de transition entre les icones
+- Utilise `useTheme` de `next-themes`
+- Cycle simplifie : light <-> dark (suppression du mode "system" pour la clarte)
+- Attributs ARIA complets (`aria-label`, `role`)
+- Style institutionnel : bordure subtile, fond `bg-muted`, texte `text-foreground`
 
-Dans `button.tsx`, les variantes actuelles perdent l'indicateur visuel des anciens glows.
+### 2. Auditer et corriger les tokens dark mode (WCAG AA)
 
-**Changements :**
-- Variante `default` : ajouter `hover:shadow-md hover:translate-y-[-1px]` pour un feedback physique
-- Variante `outline` : ajouter `hover:border-primary hover:shadow-sm` pour un contour plus marque
-- Variante `glass` : remplacer par un style compatible theme clair (`bg-secondary hover:bg-secondary/80 border-border`)
+Fichier : `src/index.css`
 
-## 4. Typographie : deja en place (aucun changement)
+Corrections sur les tokens `.dark` :
+- `--muted-foreground` : passer de `215 20% 65%` a `215 20% 70%` pour atteindre un ratio 4.5:1 sur fond `222 20% 10%`
+- `--border` : passer de `225 15% 22%` a `225 15% 28%` pour une meilleure visibilite des separateurs
+- Ajouter `--card-foreground: 210 40% 98%` explicitement pour garantir le contraste texte/carte
+- Verifier que `--destructive` sur fond dark atteint 4.5:1
 
-Inter est deja configure comme police principale du body, Poppins pour les titres, et Noto Sans Arabic pour le RTL. La configuration est conforme a l'objectif "gouvernemental moderne". Pas de modification necessaire.
+### 3. Rendre le `PublicHeader` theme-aware
+
+Fichier : `src/components/layout/PublicHeader.tsx`
+
+Le header public utilise actuellement des couleurs hardcodees (`bg-[hsl(var(--nx-night))]`, `text-white`). Les changements :
+- Remplacer `bg-[hsl(var(--nx-night))]/80` par `bg-background/80`
+- Remplacer `text-white/70` par `text-muted-foreground`
+- Remplacer `text-white` par `text-foreground`
+- Remplacer les references `nx-gold` par `text-primary` et `bg-primary/10` pour les liens actifs
+- Remplacer les bordures `border-white/10` par `border-border`
+- Le header fonctionnera alors correctement en mode clair ET sombre
+
+### 4. Integrer le `ThemeSwitch` dans les headers
+
+Fichiers : `src/components/layout/ModernHeader.tsx`, `src/components/layout/PublicHeader.tsx`
+
+- Remplacer le `ThemeToggleButton` inline dans `ModernHeader` par le nouveau `ThemeSwitch`
+- Ajouter le `ThemeSwitch` dans le `PublicHeader` (section "Right side", a cote du `LanguageSelector`)
+
+### 5. Supprimer le `HomeLayoutToggle` redondant
+
+Le `THEME_CHANGELOG.md` indique deja que le `HomeLayoutToggle` est redondant. Il sera supprime de `Index.tsx` (s'il y est encore utilise) pour eviter la confusion entre "theme" et "layout variant".
 
 ---
 
 ## Details techniques
 
-### Fichiers modifies
-
-| Fichier | Nature du changement |
+| Fichier | Changement |
 |---|---|
-| `src/components/ui/glass-card.tsx` | Refonte des variantes pour theme clair |
-| `src/pages/admin/components/AdminStatsGrid.tsx` | Couleurs icones avec meilleur contraste |
-| `src/components/ui/button.tsx` | Hover states plus marques |
+| `src/components/shared/ThemeSwitch.tsx` | Nouveau composant theme toggle institutionnel |
+| `src/index.css` | Correction tokens dark pour WCAG AA |
+| `src/components/layout/PublicHeader.tsx` | Remplacement couleurs hardcodees par tokens semantiques |
+| `src/components/layout/ModernHeader.tsx` | Remplacement du `ThemeToggleButton` inline par `ThemeSwitch` |
+| `src/components/home/HomeLayoutToggle.tsx` | Suppression (redondant) |
 
 ### Pas de nouvelles dependances
 
-Toutes les modifications utilisent Tailwind CSS existant.
+Tout repose sur `next-themes` (deja installe) et Tailwind CSS.
+
