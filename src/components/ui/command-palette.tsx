@@ -1,10 +1,17 @@
-import { useState, useEffect } from "react";
-import { Search, ChevronRight, FileText, MessageSquare, FolderKanban, Loader2 } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Search, ChevronRight, FileText, MessageSquare, FolderKanban, Loader2, X } from "lucide-react";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useUnifiedSearch } from "@/hooks/useUnifiedSearch";
+import { useUnifiedSearch, type SearchFilters } from "@/hooks/useUnifiedSearch";
+import { useCountries } from "@/hooks/useCountries";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+type ContentType = 'document' | 'forum' | 'project';
+
+const DOCUMENT_TYPES = ['guide', 'rapport', 'presentation', 'formulaire', 'autre'] as const;
 
 interface NavCommand {
   id: string;
@@ -17,10 +24,23 @@ interface NavCommand {
 export const CommandPalette = () => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [activeTypes, setActiveTypes] = useState<ContentType[]>(['document', 'forum', 'project']);
+  const [country, setCountry] = useState<string | undefined>(undefined);
+  const [documentType, setDocumentType] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { t } = useTranslation();
-  const { results, loading, hasResults } = useUnifiedSearch(query);
+  const { t, currentLanguage } = useTranslation();
+  const { data: countries } = useCountries();
+
+  const filters: SearchFilters = useMemo(() => ({
+    types: activeTypes,
+    country: country || undefined,
+    documentType: documentType || undefined,
+  }), [activeTypes, country, documentType]);
+
+  const { results, loading, hasResults } = useUnifiedSearch(query, filters);
+
+  const hasActiveFilters = activeTypes.length < 3 || !!country || !!documentType;
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -33,14 +53,34 @@ export const CommandPalette = () => {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
-  // Reset query when dialog closes
   useEffect(() => {
-    if (!open) setQuery("");
+    if (!open) {
+      setQuery("");
+      setActiveTypes(['document', 'forum', 'project']);
+      setCountry(undefined);
+      setDocumentType(undefined);
+    }
   }, [open]);
 
   const go = (path: string) => {
     navigate(path);
     setOpen(false);
+  };
+
+  const toggleType = (type: ContentType) => {
+    setActiveTypes(prev => {
+      if (prev.includes(type)) {
+        if (prev.length === 1) return prev; // keep at least one
+        return prev.filter(t => t !== type);
+      }
+      return [...prev, type];
+    });
+  };
+
+  const clearFilters = () => {
+    setActiveTypes(['document', 'forum', 'project']);
+    setCountry(undefined);
+    setDocumentType(undefined);
   };
 
   const navCommands: NavCommand[] = [
@@ -61,6 +101,8 @@ export const CommandPalette = () => {
   const isSearching = query.trim().length >= 2;
   const placeholder = t("search.placeholder") || "Rechercher documents, forum, projets...";
 
+  const countryName = (c: any) => currentLanguage === 'en' ? c.name_en : c.name_fr;
+
   return (
     <>
       <button
@@ -80,6 +122,69 @@ export const CommandPalette = () => {
           value={query}
           onValueChange={setQuery}
         />
+
+        {/* Filter chips row */}
+        <div className="flex flex-wrap items-center gap-1.5 px-3 py-2 border-b border-border">
+          {/* Content type toggles */}
+          {([
+            { type: 'document' as ContentType, label: t("search.filters.documents") || "Documents", icon: FileText },
+            { type: 'forum' as ContentType, label: t("search.filters.forum") || "Forum", icon: MessageSquare },
+            { type: 'project' as ContentType, label: t("search.filters.projects") || "Projets", icon: FolderKanban },
+          ]).map(({ type, label, icon: Icon }) => (
+            <button
+              key={type}
+              onClick={() => toggleType(type)}
+              className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+                activeTypes.includes(type)
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-muted text-muted-foreground border-border hover:bg-accent'
+              }`}
+            >
+              <Icon className="h-3 w-3" />
+              {label}
+            </button>
+          ))}
+
+          {/* Country dropdown */}
+          <Select value={country || "__all__"} onValueChange={(v) => setCountry(v === "__all__" ? undefined : v)}>
+            <SelectTrigger className="h-7 w-auto min-w-[80px] max-w-[140px] text-xs border-border rounded-full px-2 gap-1">
+              <SelectValue placeholder={t("search.filters.country") || "Pays"} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all__">{t("search.filters.all") || "Tous"}</SelectItem>
+              {(countries || []).map((c) => (
+                <SelectItem key={c.code} value={c.code}>{countryName(c)}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Document type dropdown */}
+          <Select value={documentType || "__all__"} onValueChange={(v) => setDocumentType(v === "__all__" ? undefined : v)}>
+            <SelectTrigger className="h-7 w-auto min-w-[70px] max-w-[130px] text-xs border-border rounded-full px-2 gap-1">
+              <SelectValue placeholder={t("search.filters.document_type") || "Type"} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all__">{t("search.filters.all") || "Tous"}</SelectItem>
+              {DOCUMENT_TYPES.map((dt) => (
+                <SelectItem key={dt} value={dt}>
+                  {t(`search.filters.doctype.${dt}`) || dt}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Clear filters */}
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+            >
+              <X className="h-3 w-3" />
+              {t("search.filters.clear") || "Effacer"}
+            </button>
+          )}
+        </div>
+
         <CommandList>
           {loading && (
             <div className="flex items-center justify-center py-6">
@@ -91,7 +196,6 @@ export const CommandPalette = () => {
             <CommandEmpty>{t("search.no_results") || "Aucun résultat trouvé."}</CommandEmpty>
           )}
 
-          {/* Live search results */}
           {isSearching && results.documents.length > 0 && (
             <CommandGroup heading={t("search.documents") || "Documents"}>
               {results.documents.map((r) => (
@@ -137,7 +241,6 @@ export const CommandPalette = () => {
             </CommandGroup>
           )}
 
-          {/* Static nav fallback when not searching */}
           {!isSearching && (
             <>
               <CommandGroup heading="Navigation">
