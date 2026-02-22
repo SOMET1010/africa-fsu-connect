@@ -110,13 +110,13 @@ export const OrganizationsMap = ({ agencies }: OrganizationsMapProps) => {
               <div className="flex items-center gap-2">
                 <AnimatedCounter 
                   value={totalCountries} 
-                  className="text-2xl font-bold text-blue-600"
+                  className="text-2xl font-bold text-primary"
                 />
-                <ArrowUp className="h-4 w-4 text-blue-500" />
+                <ArrowUp className="h-4 w-4 text-primary" />
               </div>
             </div>
-            <div className="p-3 bg-blue-500/20 rounded-xl">
-              <Globe className="h-6 w-6 text-blue-600" />
+            <div className="p-3 bg-primary/20 rounded-xl">
+              <Globe className="h-6 w-6 text-primary" />
             </div>
           </div>
         </ModernCard>

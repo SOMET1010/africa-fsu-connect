@@ -15,10 +15,10 @@ const getCountryFlag = (code: string): string => {
 };
 
 const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
-  high: { label: "Actif", className: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/30" },
-  medium: { label: "Actif", className: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/30" },
-  onboarding: { label: "En intégration", className: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/30" },
-  observer: { label: "Observateur", className: "bg-gray-50 text-gray-600 border-gray-200 dark:bg-muted dark:text-muted-foreground dark:border-border" },
+  high: { label: "Actif", className: "bg-uat-active-bg text-uat-active border-uat-active-border" },
+  medium: { label: "Actif", className: "bg-uat-active-bg text-uat-active border-uat-active-border" },
+  onboarding: { label: "En intégration", className: "bg-uat-onboarding-bg text-uat-onboarding border-uat-onboarding-border" },
+  observer: { label: "Observateur", className: "bg-uat-observer-bg text-uat-observer border-uat-observer-border" },
 };
 
 export const NetworkMembersGrid = () => {
@@ -160,7 +160,7 @@ export const NetworkMembersGrid = () => {
                 Actif
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-uat-onboarding" />
                 En intégration
               </div>
               <div className="flex items-center gap-1.5">

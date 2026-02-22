@@ -86,6 +86,30 @@
   --nx-success-500: 160 56% 42%;
 
   /* ========================================
+     UAT STATUS TOKENS — Statuts cohérents
+     ======================================== */
+
+  /* Actif — Vert institutionnel */
+  --uat-status-active: 142 60% 40%;
+  --uat-status-active-bg: 142 60% 96%;
+  --uat-status-active-border: 142 50% 82%;
+
+  /* En intégration — Bleu UAT (pas bleu Tailwind) */
+  --uat-status-onboarding: 210 73% 38%;
+  --uat-status-onboarding-bg: 210 60% 96%;
+  --uat-status-onboarding-border: 210 50% 82%;
+
+  /* Observateur — Gris neutre */
+  --uat-status-observer: 215 16% 47%;
+  --uat-status-observer-bg: 210 20% 96%;
+  --uat-status-observer-border: 214 20% 89%;
+
+  /* Document / Info — Bleu primaire UAT */
+  --uat-info: 210 73% 50%;
+  --uat-info-bg: 210 60% 96%;
+  --uat-info-border: 210 50% 85%;
+
+  /* ========================================
      NEXUS AFRICA NETWORK — Couleurs artistiques
      Extraites de l'image hero Afrique connectée
      ======================================== */
@@ -156,4 +180,21 @@
   
   --nx-shadow-sm: 0 8px 20px hsl(0 0% 0% / 0.25);
   --nx-shadow-md: 0 12px 28px hsl(0 0% 0% / 0.35);
+
+  /* UAT Status — Dark mode */
+  --uat-status-active: 142 55% 55%;
+  --uat-status-active-bg: 142 50% 15%;
+  --uat-status-active-border: 142 40% 25%;
+
+  --uat-status-onboarding: 210 70% 58%;
+  --uat-status-onboarding-bg: 210 60% 15%;
+  --uat-status-onboarding-border: 210 50% 25%;
+
+  --uat-status-observer: 215 15% 55%;
+  --uat-status-observer-bg: 215 15% 15%;
+  --uat-status-observer-border: 215 12% 25%;
+
+  --uat-info: 210 70% 58%;
+  --uat-info-bg: 210 50% 15%;
+  --uat-info-border: 210 40% 28%;
 }

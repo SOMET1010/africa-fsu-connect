@@ -58,7 +58,7 @@ export const AdvancedAnalyticsDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Activity className="h-5 w-5 text-blue-500" />
+            <Activity className="h-5 w-5 text-primary" />
             <div>
               <p className="text-sm text-muted-foreground">Total Interactions</p>
               <p className="text-2xl font-bold">{stats.totalInteractions}</p>
