@@ -1,58 +1,242 @@
-import { Users, FileText, MessageSquare, Calendar, Settings, Shield, BarChart3, AlertTriangle, Plus, Download } from "lucide-react";
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/hooks/useTranslation";
+import { useDirection } from "@/hooks/useDirection";
+import { LanguageSelector } from "@/components/shared/LanguageSelector";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { ModernButton } from "@/components/ui/modern-button";
 import { GlassCard } from "@/components/ui/glass-card";
-import { ModernInput, ModernSelect, ModernTextarea } from "@/components/forms";
-import { ModernCardSkeleton } from "@/components/ui/modern-loading-states";
-import { ModernModal, ModernModalFooter } from "@/components/ui/modern-modal";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Loader2, Users, FileText, MessageSquare, Calendar, Globe, Rocket,
+  Settings, Shield, BookOpen, MapPin, Flag, AlertTriangle,
+  ExternalLink, Clock, ArrowRight, TrendingUp, Layout } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-import { useAdminPage, AdminStat } from "./admin/hooks/useAdminPage";
-import { AdminStatsGrid } from "./admin/components/AdminStatsGrid";
-import { AdminUsersTab } from "./admin/components/AdminUsersTab";
-import { AdminContentTab } from "./admin/components/AdminContentTab";
+// ─── i18n labels ───────────────────────────────────────────────
+
+const LABELS: Record<string, Record<string, string>> = {
+  title:            { fr: "Administration", en: "Administration", ar: "الإدارة", pt: "Administração" },
+  subtitle:         { fr: "Tableau de bord administrateur", en: "Admin dashboard", ar: "لوحة القيادة", pt: "Painel de administração" },
+  kpis:             { fr: "Indicateurs clés", en: "Key indicators", ar: "المؤشرات الرئيسية", pt: "Indicadores-chave" },
+  shortcuts:        { fr: "Accès rapide", en: "Quick access", ar: "وصول سريع", pt: "Acesso rápido" },
+  activity:         { fr: "Activité récente", en: "Recent activity", ar: "النشاط الأخير", pt: "Atividade recente" },
+  alerts:           { fr: "Alertes & modération", en: "Alerts & moderation", ar: "التنبيهات والإشراف", pt: "Alertas e moderação" },
+  users:            { fr: "Utilisateurs", en: "Users", ar: "المستخدمون", pt: "Utilizadores" },
+  documents:        { fr: "Documents", en: "Documents", ar: "الوثائق", pt: "Documentos" },
+  events:           { fr: "Événements", en: "Events", ar: "الفعاليات", pt: "Eventos" },
+  projects:         { fr: "Projets", en: "Projects", ar: "المشاريع", pt: "Projetos" },
+  countries:        { fr: "Pays actifs", en: "Active countries", ar: "الدول النشطة", pt: "Países ativos" },
+  submissions:      { fr: "Soumissions", en: "Submissions", ar: "التقديمات", pt: "Submissões" },
+  pending:          { fr: "En attente", en: "Pending", ar: "قيد الانتظار", pt: "Pendente" },
+  noAlerts:         { fr: "Aucune alerte active", en: "No active alerts", ar: "لا توجد تنبيهات نشطة", pt: "Nenhum alerta ativo" },
+  noActivity:       { fr: "Aucune activité récente", en: "No recent activity", ar: "لا يوجد نشاط حديث", pt: "Nenhuma atividade recente" },
+  unresolvedAlerts: { fr: "Alertes non résolues", en: "Unresolved alerts", ar: "تنبيهات غير محلولة", pt: "Alertas não resolvidos" },
+  forumPosts:       { fr: "Discussions forum", en: "Forum discussions", ar: "مناقشات المنتدى", pt: "Discussões do fórum" },
+};
+
+const l = (key: string, lang: string) => LABELS[key]?.[lang] ?? LABELS[key]?.fr ?? key;
+
+// ─── Admin shortcuts by role ──────────────────────────────────
+
+interface Shortcut {
+  label: Record<string, string>;
+  href: string;
+  icon: React.ElementType;
+  roles: string[];
+  description: Record<string, string>;
+}
+
+const SHORTCUTS: Shortcut[] = [
+  {
+    label: { fr: "Gestion contenu", en: "Content management", ar: "إدارة المحتوى", pt: "Gestão de conteúdo" },
+    href: "/admin/content",
+    icon: Layout,
+    roles: ["super_admin", "admin_pays", "editeur"],
+    description: { fr: "CMS, navigation, paramètres", en: "CMS, navigation, settings", ar: "نظام إدارة المحتوى", pt: "CMS, navegação, configurações" },
+  },
+  {
+    label: { fr: "Utilisateurs", en: "Users", ar: "المستخدمون", pt: "Utilizadores" },
+    href: "/admin/users",
+    icon: Users,
+    roles: ["super_admin", "admin_pays"],
+    description: { fr: "Rôles, permissions, comptes", en: "Roles, permissions, accounts", ar: "الأدوار والصلاحيات", pt: "Funções, permissões, contas" },
+  },
+  {
+    label: { fr: "Points focaux", en: "Focal points", ar: "نقاط الاتصال", pt: "Pontos focais" },
+    href: "/admin/focal-points",
+    icon: Flag,
+    roles: ["super_admin", "admin_pays"],
+    description: { fr: "Correspondants nationaux", en: "National correspondents", ar: "المراسلون الوطنيون", pt: "Correspondentes nacionais" },
+  },
+  {
+    label: { fr: "Ressources", en: "Resources", ar: "الموارد", pt: "Recursos" },
+    href: "/admin/resources",
+    icon: BookOpen,
+    roles: ["super_admin", "admin_pays", "editeur"],
+    description: { fr: "Documents et bibliothèque", en: "Documents & library", ar: "الوثائق والمكتبة", pt: "Documentos e biblioteca" },
+  },
+  {
+    label: { fr: "Forum", en: "Forum", ar: "المنتدى", pt: "Fórum" },
+    href: "/admin/forum",
+    icon: MessageSquare,
+    roles: ["super_admin", "admin_pays"],
+    description: { fr: "Modération des discussions", en: "Discussion moderation", ar: "إدارة النقاشات", pt: "Moderação de discussões" },
+  },
+  {
+    label: { fr: "Config plateforme", en: "Platform config", ar: "إعدادات المنصة", pt: "Config. plataforma" },
+    href: "/admin/platform-config",
+    icon: Settings,
+    roles: ["super_admin"],
+    description: { fr: "Identité, modules, langues", en: "Identity, modules, languages", ar: "الهوية والوحدات واللغات", pt: "Identidade, módulos, idiomas" },
+  },
+  {
+    label: { fr: "Tableau de pilotage", en: "Analytics dashboard", ar: "لوحة التحليلات", pt: "Painel analítico" },
+    href: "/admin/dashboard",
+    icon: TrendingUp,
+    roles: ["super_admin", "admin_pays"],
+    description: { fr: "Métriques et KPIs détaillés", en: "Detailed metrics & KPIs", ar: "المقاييس التفصيلية", pt: "Métricas e KPIs detalhados" },
+  },
+  {
+    label: { fr: "Sécurité", en: "Security", ar: "الأمان", pt: "Segurança" },
+    href: "/security",
+    icon: Shield,
+    roles: ["super_admin", "admin_pays"],
+    description: { fr: "Audit, sessions, anomalies", en: "Audit, sessions, anomalies", ar: "التدقيق والجلسات", pt: "Auditoria, sessões, anomalias" },
+  },
+];
+
+// ─── Component ────────────────────────────────────────────────
 
 const Admin = () => {
-  const {
-    loading,
-    setLoading,
-    showUserModal,
-    setShowUserModal,
-    showContentModal,
-    setShowContentModal,
-    selectedUser,
-    selectedContent,
-    handleUserAction,
-    handleContentAction,
-  } = useAdminPage();
+  const { profile } = useAuth();
+  const { currentLanguage } = useTranslation();
+  const { isRTL } = useDirection();
+  const lang = currentLanguage || "fr";
+  const userRole = profile?.role ?? "lecteur";
 
-  const stats: AdminStat[] = [
-    { title: "Utilisateurs Actifs", value: 1247, description: "+12% ce mois", icon: Users, color: "text-blue-600", trend: "up" },
-    { title: "Documents Publiés", value: 856, description: "+5% cette semaine", icon: FileText, color: "text-green-600", trend: "up" },
-    { title: "Discussions Forum", value: 234, description: "+18% cette semaine", icon: MessageSquare, color: "text-purple-600", trend: "up" },
-    { title: "Événements Planifiés", value: 45, description: "3 ce mois", icon: Calendar, color: "text-orange-600", trend: "stable" }
+  // ── Live KPI queries (parallel) ──
+  const { data: userCount = 0, isLoading: loadingUsers } = useQuery({
+    queryKey: ["admin-kpi-users"],
+    queryFn: async () => {
+      const { count, error } = await supabase.from("profiles").select("*", { count: "exact", head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: docCount = 0, isLoading: loadingDocs } = useQuery({
+    queryKey: ["admin-kpi-documents"],
+    queryFn: async () => {
+      const { count, error } = await supabase.from("documents").select("*", { count: "exact", head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: eventCount = 0, isLoading: loadingEvents } = useQuery({
+    queryKey: ["admin-kpi-events"],
+    queryFn: async () => {
+      const { count, error } = await supabase.from("events").select("*", { count: "exact", head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: countryCount = 0 } = useQuery({
+    queryKey: ["admin-kpi-countries"],
+    queryFn: async () => {
+      const { count, error } = await supabase.from("countries").select("*", { count: "exact", head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+    staleTime: 10 * 60 * 1000,
+  });
+
+  const { data: projectCount = 0 } = useQuery({
+    queryKey: ["admin-kpi-projects"],
+    queryFn: async () => {
+      const { count, error } = await supabase.from("agency_projects").select("*", { count: "exact", head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: forumCount = 0 } = useQuery({
+    queryKey: ["admin-kpi-forum"],
+    queryFn: async () => {
+      const { count, error } = await supabase.from("forum_posts").select("*", { count: "exact", head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // ── Recent activity ──
+  const { data: recentActivity = [] } = useQuery({
+    queryKey: ["admin-recent-activity"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("audit_logs")
+        .select("id, action_type, resource_type, created_at, details")
+        .order("created_at", { ascending: false })
+        .limit(8);
+      if (error) throw error;
+      return data ?? [];
+    },
+    staleTime: 2 * 60 * 1000,
+  });
+
+  // ── Unresolved alerts ──
+  const { data: unresolvedAlerts = [] } = useQuery({
+    queryKey: ["admin-unresolved-alerts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("anomaly_alerts")
+        .select("id, type, severity, message, created_at")
+        .eq("resolved", false)
+        .order("created_at", { ascending: false })
+        .limit(5);
+      if (error) throw error;
+      return data ?? [];
+    },
+    staleTime: 2 * 60 * 1000,
+    enabled: ["super_admin", "admin_pays"].includes(userRole),
+  });
+
+  const isLoading = loadingUsers || loadingDocs || loadingEvents;
+
+  // ── KPIs ──
+  const kpis = [
+    { label: l("users", lang), value: userCount, icon: Users, color: "text-blue-500" },
+    { label: l("documents", lang), value: docCount, icon: FileText, color: "text-emerald-500" },
+    { label: l("events", lang), value: eventCount, icon: Calendar, color: "text-amber-500" },
+    { label: l("countries", lang), value: countryCount, icon: Globe, color: "text-violet-500" },
+    { label: l("projects", lang), value: projectCount, icon: Rocket, color: "text-rose-500" },
+    { label: l("forumPosts", lang), value: forumCount, icon: MessageSquare, color: "text-cyan-500" },
   ];
 
-  const recentUsers = [
-    { id: 1, name: "Dr. Paul Mbeng", email: "paul.mbeng@camtel.cm", country: "Cameroun", role: "admin_pays", status: "pending", joinDate: "2024-01-15", avatar: "" },
-    { id: 2, name: "Sarah Diallo", email: "sarah.diallo@artp.sn", country: "Sénégal", role: "editeur", status: "active", joinDate: "2024-01-14", avatar: "" },
-    { id: 3, name: "Mohamed Al-Rashid", email: "m.rashid@ntra.gov.eg", country: "Égypte", role: "contributeur", status: "active", joinDate: "2024-01-13", avatar: "" }
-  ];
+  // ── Filtered shortcuts ──
+  const filteredShortcuts = useMemo(
+    () => SHORTCUTS.filter((s) => s.roles.includes(userRole)),
+    [userRole]
+  );
 
-  const pendingContent = [
-    { id: 1, type: "Document", title: "Cadre Réglementaire FSU - Maroc 2024", author: "Ahmed Benali", country: "Maroc", submittedDate: "2024-01-15", status: "review" },
-    { id: 2, type: "Forum Post", title: "Proposition d'harmonisation CEDEAO", author: "Dr. Fatima Touré", country: "Mali", submittedDate: "2024-01-14", status: "pending" },
-    { id: 3, type: "Projet", title: "Extension 4G Zones Rurales", author: "Jean-Claude Ndong", country: "Gabon", submittedDate: "2024-01-13", status: "review" }
-  ];
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen">
-        <PageHeader title="Administration" description="Tableau de bord administrateur" badge="Administration" gradient />
+        <PageHeader title={l("title", lang)} description={l("subtitle", lang)} badge="Admin" gradient />
         <PageContainer>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {[...Array(4)].map((_, i) => <ModernCardSkeleton key={i} />)}
+          <div className="flex justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
           </div>
         </PageContainer>
       </div>
@@ -60,127 +244,178 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className={cn("min-h-screen", isRTL && "text-right")}>
       <PageHeader
-        title="Administration"
-        description="Tableau de bord administrateur pour la gestion de la plateforme"
-        badge="Administration"
+        title={l("title", lang)}
+        description={l("subtitle", lang)}
+        badge="Admin"
         gradient
         actions={
-          <>
-            <ModernButton variant="outline" size="sm">
-              <Download className="mr-2 h-4 w-4" />
-              Exporter rapport
-            </ModernButton>
-            <ModernButton size="sm">
-              <Plus className="mr-2 h-4 w-4" />
-              Nouveau
-            </ModernButton>
-          </>
+          <div className="flex items-center gap-2">
+            <LanguageSelector variant="outline" size="sm" showLabel />
+          </div>
         }
       />
-      
+
       <PageContainer>
         <div className="space-y-8">
-          <AdminStatsGrid stats={stats} />
+          {/* ── KPI Grid ── */}
+          <section>
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+              {l("kpis", lang)}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {kpis.map((kpi, i) => {
+                const Icon = kpi.icon;
+                return (
+                  <GlassCard
+                    key={i}
+                    variant="default"
+                    className="p-4 transition-all hover:shadow-lg hover:shadow-primary/5 group animate-fade-in"
+                    style={{ animationDelay: `${i * 60}ms` } as React.CSSProperties}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className={cn("p-2 rounded-lg bg-primary/10 group-hover:bg-primary/15 transition-colors", kpi.color)}>
+                        <Icon className="h-4 w-4" />
+                      </div>
+                    </div>
+                    <p className="text-2xl font-bold text-foreground">
+                      <AnimatedCounter value={kpi.value} />
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{kpi.label}</p>
+                  </GlassCard>
+                );
+              })}
+            </div>
+          </section>
 
-          <Tabs defaultValue="users" className="space-y-6">
-            <TabsList className="inline-flex bg-transparent border border-border/50 rounded-lg p-1">
-              <TabsTrigger value="users" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><Users className="h-4 w-4 mr-2" />Utilisateurs</TabsTrigger>
-              <TabsTrigger value="content" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><FileText className="h-4 w-4 mr-2" />Contenu</TabsTrigger>
-              <TabsTrigger value="moderation" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><Shield className="h-4 w-4 mr-2" />Modération</TabsTrigger>
-              <TabsTrigger value="analytics" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><BarChart3 className="h-4 w-4 mr-2" />Analytiques</TabsTrigger>
-              <TabsTrigger value="settings" className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none"><Settings className="h-4 w-4 mr-2" />Paramètres</TabsTrigger>
-            </TabsList>
+          {/* ── Shortcuts ── */}
+          <section>
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+              {l("shortcuts", lang)}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {filteredShortcuts.map((shortcut) => {
+                const Icon = shortcut.icon;
+                return (
+                  <Link key={shortcut.href} to={shortcut.href}>
+                    <GlassCard variant="default" className="p-4 hover:shadow-md hover:border-primary/20 transition-all group cursor-pointer h-full">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/15 transition-colors shrink-0">
+                          <Icon className="h-4 w-4 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                            {shortcut.label[lang] ?? shortcut.label.fr}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-0.5 truncate">
+                            {shortcut.description[lang] ?? shortcut.description.fr}
+                          </p>
+                        </div>
+                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/50 group-hover:text-primary transition-colors shrink-0 mt-1" />
+                      </div>
+                    </GlassCard>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
 
-            <TabsContent value="users" className="space-y-6">
-              <AdminUsersTab users={recentUsers} onUserAction={handleUserAction} onRefresh={() => setLoading(true)} />
-            </TabsContent>
-
-            <TabsContent value="content" className="space-y-6">
-              <AdminContentTab content={pendingContent} onContentAction={handleContentAction} onRefresh={() => setLoading(true)} />
-            </TabsContent>
-
-            <TabsContent value="moderation" className="space-y-6">
-              <GlassCard variant="default" className="p-8">
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                    <Shield className="h-8 w-8 text-primary" />
+          {/* ── Bottom row: Activity + Alerts ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Recent Activity */}
+            <section>
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+                {l("activity", lang)}
+              </h2>
+              <GlassCard variant="default" className="p-0 divide-y divide-border">
+                {recentActivity.length === 0 ? (
+                  <div className="p-8 text-center text-muted-foreground text-sm">
+                    <Clock className="h-8 w-8 mx-auto mb-2 opacity-40" />
+                    {l("noActivity", lang)}
                   </div>
-                  <h3 className="text-xl font-semibold">Outils de Modération</h3>
-                  <p className="text-muted-foreground max-w-md mx-auto">Interface de modération avancée en cours de développement.</p>
-                  <ModernButton>Découvrir bientôt</ModernButton>
-                </div>
+                ) : (
+                  recentActivity.map((log: any) => (
+                    <div key={log.id} className="px-4 py-3 flex items-center gap-3 hover:bg-muted/30 transition-colors">
+                      <div className="p-1.5 rounded bg-muted shrink-0">
+                        <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-foreground truncate">
+                          <span className="font-medium">{log.action_type}</span>
+                          {log.resource_type && (
+                            <span className="text-muted-foreground"> — {log.resource_type}</span>
+                          )}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(log.created_at).toLocaleString(lang === "ar" ? "ar-EG" : lang === "pt" ? "pt-BR" : lang, {
+                            dateStyle: "short",
+                            timeStyle: "short",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
               </GlassCard>
-            </TabsContent>
+            </section>
 
-            <TabsContent value="analytics" className="space-y-6">
-              <GlassCard variant="default" className="p-8">
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                    <BarChart3 className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold">Analytiques Avancées</h3>
-                  <p className="text-muted-foreground max-w-md mx-auto">Tableaux de bord détaillés avec métriques en temps réel.</p>
-                  <ModernButton>Voir les métriques</ModernButton>
-                </div>
-              </GlassCard>
-            </TabsContent>
-
-            <TabsContent value="settings" className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <GlassCard variant="default" className="p-6">
-                  <h3 className="text-lg font-semibold mb-6">Configuration Plateforme</h3>
-                  <div className="space-y-4">
-                    <ModernButton variant="outline" className="w-full justify-start"><Settings className="h-4 w-4 mr-2" />Paramètres Généraux</ModernButton>
-                    <ModernButton variant="outline" className="w-full justify-start"><Shield className="h-4 w-4 mr-2" />Sécurité & Permissions</ModernButton>
-                    <ModernButton variant="outline" className="w-full justify-start"><AlertTriangle className="h-4 w-4 mr-2" />Maintenance</ModernButton>
-                  </div>
+            {/* Alerts & Moderation */}
+            {["super_admin", "admin_pays"].includes(userRole) && (
+              <section>
+                <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+                  {l("alerts", lang)}
+                </h2>
+                <GlassCard variant="default" className="p-0 divide-y divide-border">
+                  {unresolvedAlerts.length === 0 ? (
+                    <div className="p-8 text-center text-muted-foreground text-sm">
+                      <Shield className="h-8 w-8 mx-auto mb-2 opacity-40" />
+                      {l("noAlerts", lang)}
+                    </div>
+                  ) : (
+                    unresolvedAlerts.map((alert: any) => (
+                      <div key={alert.id} className="px-4 py-3 flex items-center gap-3 hover:bg-muted/30 transition-colors">
+                        <div className={cn(
+                          "p-1.5 rounded shrink-0",
+                          alert.severity === "critical" ? "bg-destructive/10" :
+                          alert.severity === "high" ? "bg-orange-500/10" : "bg-amber-500/10"
+                        )}>
+                          <AlertTriangle className={cn(
+                            "h-3.5 w-3.5",
+                            alert.severity === "critical" ? "text-destructive" :
+                            alert.severity === "high" ? "text-orange-500" : "text-amber-500"
+                          )} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-foreground truncate">{alert.message}</p>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                              {alert.type}
+                            </Badge>
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(alert.created_at).toLocaleDateString(lang)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                  {unresolvedAlerts.length > 0 && (
+                    <div className="p-3">
+                      <Button asChild variant="ghost" size="sm" className="w-full text-xs">
+                        <Link to="/security">
+                          {l("unresolvedAlerts", lang)} ({unresolvedAlerts.length})
+                          <ExternalLink className="ml-1 h-3 w-3" />
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
                 </GlassCard>
-                <GlassCard variant="default" className="p-6">
-                  <h3 className="text-lg font-semibold mb-6">Actions Rapides</h3>
-                  <div className="space-y-4">
-                    <ModernButton className="w-full justify-start"><Users className="h-4 w-4 mr-2" />Exporter Utilisateurs</ModernButton>
-                    <ModernButton className="w-full justify-start"><FileText className="h-4 w-4 mr-2" />Générer Rapport</ModernButton>
-                    <ModernButton className="w-full justify-start"><Download className="h-4 w-4 mr-2" />Backup Données</ModernButton>
-                  </div>
-                </GlassCard>
-              </div>
-            </TabsContent>
-          </Tabs>
+              </section>
+            )}
+          </div>
         </div>
       </PageContainer>
-
-      {/* User Modal */}
-      <ModernModal isOpen={showUserModal} onClose={() => setShowUserModal(false)} title="Modifier l'utilisateur" description="Modifiez les informations de l'utilisateur">
-        <div className="space-y-4">
-          <ModernInput label="Nom" value={selectedUser?.name || ""} onChange={() => {}} />
-          <ModernInput label="Email" value={selectedUser?.email || ""} onChange={() => {}} />
-          <ModernSelect label="Rôle" value={selectedUser?.role || ""} onChange={() => {}} options={[
-            { value: "super_admin", label: "Super Admin" },
-            { value: "admin_pays", label: "Admin Pays" },
-            { value: "editeur", label: "Éditeur" },
-            { value: "contributeur", label: "Contributeur" },
-          ]} />
-        </div>
-        <ModernModalFooter>
-          <ModernButton variant="outline" onClick={() => setShowUserModal(false)}>Annuler</ModernButton>
-          <ModernButton onClick={() => setShowUserModal(false)}>Enregistrer</ModernButton>
-        </ModernModalFooter>
-      </ModernModal>
-
-      {/* Content Modal */}
-      <ModernModal isOpen={showContentModal} onClose={() => setShowContentModal(false)} title="Réviser le contenu" description="Examinez et modifiez le contenu soumis">
-        <div className="space-y-4">
-          <ModernInput label="Titre" value={selectedContent?.title || ""} onChange={() => {}} />
-          <ModernTextarea label="Notes de révision" placeholder="Ajoutez vos commentaires..." />
-        </div>
-        <ModernModalFooter>
-          <ModernButton variant="outline" onClick={() => setShowContentModal(false)}>Annuler</ModernButton>
-          <ModernButton variant="destructive">Rejeter</ModernButton>
-          <ModernButton onClick={() => setShowContentModal(false)}>Approuver</ModernButton>
-        </ModernModalFooter>
-      </ModernModal>
     </div>
   );
 };
