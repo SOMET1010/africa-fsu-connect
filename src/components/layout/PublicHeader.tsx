@@ -21,15 +21,17 @@ export const PublicHeader = () => {
   const headerItems = getNavItems("header");
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border" role="banner" aria-label={t('accessibility.publicHeader') || 'En-tête du site public'}>
+    <header className="sticky top-0 z-50 bg-white dark:bg-card border-b border-border shadow-sm" role="banner" aria-label={t('accessibility.publicHeader') || 'En-tête du site public'}>
       <div className="container mx-auto px-4">
-        <div className={cn("flex items-center justify-between h-[4.5rem]", isRTL && "flex-row-reverse")}>
+        <div className={cn("flex items-center justify-between h-16", isRTL && "flex-row-reverse")}>
           {/* Logo */}
           <Link to="/" className={cn("flex items-center gap-3 shrink-0", isRTL && "flex-row-reverse")}>
-            <img src={atuLogo} alt="ATU - African Telecommunications Union" className="h-10 w-auto" />
-            <div className="border-l border-border h-8" />
-            <span className="text-xl font-bold text-foreground">UDC</span>
-            <span className="hidden lg:inline text-xs text-muted-foreground font-medium">| Digital Connect Africa</span>
+            <img src={atuLogo} alt="ATU - African Telecommunications Union" className="h-9 w-auto" />
+            <div className="border-l border-border h-7" />
+            <div className={cn("flex flex-col", isRTL && "items-end")}>
+              <span className="text-base font-bold tracking-tight text-[hsl(222_47%_11%)] dark:text-foreground leading-tight">USF Digital Connect</span>
+              <span className="text-[10px] font-medium text-[hsl(215_20%_40%)] dark:text-muted-foreground uppercase tracking-widest leading-tight">Africa</span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}
