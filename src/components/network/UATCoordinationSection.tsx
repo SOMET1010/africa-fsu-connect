@@ -30,13 +30,13 @@ export const UATCoordinationSection = () => {
                 </Badge>
                 
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-foreground">
-                  {currentLanguage === 'en' ? 'UAT - UDC Network Coordination' : 'UAT - Coordination du Réseau UDC'}
+                  {currentLanguage === 'en' ? 'ATU - UDC Network Coordination' : 'UAT - Coordination du Réseau UDC'}
                 </h3>
                 
                 <p className="text-slate-600 dark:text-muted-foreground leading-relaxed">
                   {currentLanguage === 'en' 
-                    ? "The Technical Assistance Unit (UAT) coordinates the network of African universal service agencies. It facilitates exchanges, harmonizes practices, and supports member countries in their mission of universal access to telecommunications."
-                    : "L'Unité d'Assistance Technique (UAT) assure la coordination du réseau des agences africaines du service universel. Elle facilite les échanges, harmonise les pratiques et accompagne les pays membres dans leur mission d'accès universel aux télécommunications."}
+                    ? "The African Telecommunications Union (ATU) coordinates the network of African universal service agencies. It facilitates exchanges, harmonizes practices, and supports member countries in their mission of universal access to telecommunications."
+                    : "L'Union Africaine des Télécommunications (UAT) assure la coordination du réseau des agences africaines du service universel. Elle facilite les échanges, harmonise les pratiques et accompagne les pays membres dans leur mission d'accès universel aux télécommunications."}
                 </p>
               </div>
               
