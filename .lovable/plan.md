@@ -1,119 +1,109 @@
 
+# Refonte de l'ecran Reseau -- Design institutionnel clair et lisible
 
-# Nettoyage des effets visuels parasites -- Audit complet et suppression
+## Constat actuel
 
-## Composants et fichiers identifies
+La page `/network` (fichier `src/pages/NetworkView.tsx`) presente :
+- Un hero sombre (gradient primary) avec badge "Reseau actif" peu visible
+- Le bouton secondaire "Explorer les projets" quasi invisible (outline blanc sur fond sombre)
+- Aucune carte interactive ni KPI visible
+- Aucune section "Pays membres" avec filtres
+- Les sections existantes (UAT, Communautes linguistiques, Regions, Timeline, Actions) sont correctes en structure mais manquent de hierarchie
 
-Voici l'inventaire complet des elements a supprimer ou nettoyer, organise par priorite.
+## Modifications prevues
 
----
+### 1. Hero -- Fond clair, KPI visible, CTA renforcee
 
-### 1. Supprimer `AdminHeatmapOverlay` (canvas monte dans le DOM)
+**Fichier : `src/pages/NetworkView.tsx`**
+
+Remplacer le hero sombre par un hero blanc :
+- Fond : `bg-white border-b border-gray-200` au lieu du gradient sombre
+- Badge KPI : "Reseau actif -- 54 pays" dans un badge vert bien visible (`bg-emerald-50 text-emerald-700 border border-emerald-200`) avec un point vert anime
+- Titre : `text-gray-900 text-3xl font-bold` -- raccourcir a "Le reseau des agences du service universel"
+- Description : raccourcir a une seule ligne -- "Cooperation et partage entre 54 pays africains"
+- Bouton primaire : "Voir les pays membres" -- `bg-primary text-white`
+- Bouton secondaire : "Explorer les projets" -- `border-primary text-primary hover:bg-primary/5` (outline bleu visible au lieu de blanc)
+- Fil d'Ariane : garder tel quel (deja present au-dessus)
+
+### 2. Barre KPI sous le hero
+
+**Fichier : `src/pages/NetworkView.tsx`** (nouvelle section inline)
+
+Ajouter 4 cartes KPI juste sous le hero :
+- 54 Pays membres (+3 cette annee)
+- 127 Projets actifs (+18 ce trimestre)
+- 5 Regions couvertes
+- 4 Communautes linguistiques
+
+Design : `bg-white rounded-xl border border-gray-200 shadow-sm p-4`
+- Chiffres : `text-3xl font-bold text-gray-900`
+- Labels : `text-xs text-gray-500 uppercase tracking-wide`
+- Tendances "+3" : `text-xs text-emerald-600 font-medium`
+
+Donnees depuis `useAfricanCountries()` pour le compte reel des pays.
+
+### 3. Section Pays Membres avec carte et filtres
+
+**Nouveau composant : `src/components/network/NetworkMembersGrid.tsx`**
+
+Grille 2 colonnes (gauche : pays, droite : carte) :
+
+**Colonne gauche -- Liste pays** :
+- Titre "Pays Membres" avec icone Globe + lien "Voir tout" vers `/members`
+- Barre de filtres : 3 boutons radio (Tous / Actif / En integration) + champ recherche compact
+- Grille 2x3 de cartes pays :
+  - Drapeau emoji (grand)
+  - Nom en gras `font-semibold text-gray-900`
+  - Badge statut : "Actif" vert ou "En integration" bleu
+  - Compteur projets en petit
+- Lien "+48 autres pays" en bas
+- Donnees depuis `useAfricanCountries()`
+
+**Colonne droite -- Carte** :
+- Carte Leaflet dans une card blanche `bg-white rounded-xl border border-gray-200 shadow-sm`
+- Pas de filtre CSS hue-rotate (style clair)
+- Legende en bas de la card
+- Reutiliser `LeafletInteractiveMap` ou `HomeMemberMap`
+
+### 4. Section UAT -- Conserver, ajuster spacing
+
+**Fichier : `src/components/network/UATCoordinationSection.tsx`**
+
+Pas de changement structurel, mais uniformiser :
+- `rounded-xl` au lieu de `rounded-2xl`
+- `shadow-sm` coherent
+- `border-gray-200`
+
+### 5. Sections existantes -- Uniformisation
 
 **Fichiers concernes :**
-- `src/App.tsx` -- supprimer l'import et `<AdminHeatmapOverlay />`
-- `src/components/analytics/AdminHeatmapOverlay.tsx` -- supprimer le fichier
-- `src/components/analytics/HeatmapOverlay.tsx` -- supprimer le fichier (contient un `<canvas>` avec `fixed inset-0 pointer-events-none z-50`)
-- `src/hooks/useAdvancedAnalytics.ts` -- supprimer le fichier (contient `canvasRef`, `renderHeatmap`)
+- `src/components/network/LinguisticCommunitiesSection.tsx` -- garder tel quel (deja propre)
+- `src/components/network/RegionCards.tsx` -- uniformiser `rounded-xl border-gray-200 shadow-sm`
+- `src/components/network/ActivityTimeline.tsx` -- uniformiser bordures
+- `src/components/ui/nexus-card.tsx` -- pas de changement (utilise dans les action cards)
 
-C'est le seul `<canvas>` monte dans le DOM au niveau global. Il persiste entre les routes car il est dans `App.tsx`.
+### 6. Design tokens appliques
 
----
+Tous les composants modifies suivront :
+- Bordures : `border-gray-200`
+- Radius : `rounded-xl` (12px)
+- Shadow : `shadow-sm` uniquement
+- Typographie : `text-gray-900` titres, `text-gray-600` descriptions, `text-gray-500` labels
+- Fond : `bg-white` pour les cartes, `bg-slate-50` pour les sections alternees
+- Zero particule, zero glow, zero gradient decoratif
 
-### 2. Supprimer `NexusNetworkPattern` (SVG `absolute inset-0 pointer-events-none`)
-
-**Fichiers concernes :**
-- `src/components/shared/NexusNetworkPattern.tsx` -- supprimer le fichier
-- `src/components/shared/NexusSectionBackground.tsx` -- supprimer le fichier (wrapper qui utilise uniquement NexusNetworkPattern)
-- `src/components/practices/PracticesHero.tsx` -- supprimer l'import et `<NexusNetworkPattern variant="subtle" />`
-
----
-
-### 3. Supprimer `NexusHero` et composants lies (parallax, overlays, patterns)
-
-Le composant `NexusHero` contient 5 couches `absolute inset-0` superposees (image parallax, carte animee, gradients, patterns africains). Il n'est plus utilise sur la homepage mais reste importe dans `src/components/landing/HeroSection.tsx`.
-
-**Fichiers concernes :**
-- `src/components/shared/NexusHero.tsx` -- supprimer le fichier (contient NoiseOverlay, AfricanPattern inline, 5 couches absolute, parallax framer-motion)
-- `src/components/landing/HeroSection.tsx` -- supprimer le fichier (seul consommateur de NexusHero, non importe nulle part)
-- `src/components/shared/NexusAfricaMap.tsx` -- supprimer le fichier (uniquement utilise par NexusHero)
-
----
-
-### 4. Nettoyer `AfricanSection` (overlay `absolute inset-0 pointer-events-none`)
-
-**Fichier : `src/components/shared/AfricanPattern.tsx`**
-
-Le composant `AfricanSection` contient :
-```
-<div className="absolute inset-0 african-pattern-bogolan-subtle opacity-50 pointer-events-none" />
-```
-
-Supprimer cette couche overlay. Garder le composant `AfricanSection` mais sans le pattern superpose -- il ne restera que le fond en gradient subtil.
-
-Garder `AfricanDivider`, `AfricanStatNumber`, `AfricanAccentCard` (pas de couche parasite).
-
----
-
-### 5. Nettoyer `CommandCenterMap` (overlays decoratifs)
-
-**Fichier : `src/components/map/CommandCenterMap.tsx`**
-
-Supprimer les deux couches decoratives :
-- "Tactical Grid Overlay" : `absolute inset-0 pointer-events-none` avec `radial-gradient` (lignes 246-253)
-- "Vignette Effect" : `absolute inset-0 pointer-events-none` avec `radial-gradient` (lignes 255-261)
-- L'animation `pulse-ring-hud` dans le `<style>` tag (lignes 264-269)
-
----
-
-### 6. Supprimer le CSS des patterns africains
-
-**Fichier : `src/styles/african-patterns.css`**
-
-Supprimer :
-- `.african-pattern-bogolan` et `.african-pattern-bogolan-subtle` (radial-gradient patterns)
-- `.african-pattern-kente` et `.african-pattern-kente-border`
-- `.african-pattern-adinkra` (les points roses)
-- `.african-pattern-animated` (animation shimmer)
-
-Garder :
-- `.african-divider` et `.african-divider-subtle` (lignes simples)
-- `.african-bg-warm`, `.african-bg-cool`, `.african-bg-premium` (fonds de section simples)
-- Les card styles si utilises
-
-**Fichier : `src/index.css`** -- garder l'import car le fichier CSS contiendra encore les styles utiles.
-
----
-
-### 7. Supprimer la CSS inutilisee de `StatsHUD` (optionnel)
-
-Le composant `src/components/map/StatsHUD.tsx` n'a pas de couche parasite mais contient des `z-index` et des couleurs de glow dans les bordures. Pas prioritaire car c'est un composant de carte, pas un overlay global.
-
----
-
-## Resume des fichiers
+## Fichiers modifies
 
 | Action | Fichier |
 |--------|---------|
-| Supprimer | `src/components/analytics/HeatmapOverlay.tsx` |
-| Supprimer | `src/components/analytics/AdminHeatmapOverlay.tsx` |
-| Supprimer | `src/hooks/useAdvancedAnalytics.ts` |
-| Supprimer | `src/components/shared/NexusNetworkPattern.tsx` |
-| Supprimer | `src/components/shared/NexusSectionBackground.tsx` |
-| Supprimer | `src/components/shared/NexusHero.tsx` |
-| Supprimer | `src/components/shared/NexusAfricaMap.tsx` |
-| Supprimer | `src/components/landing/HeroSection.tsx` |
-| Modifier | `src/App.tsx` -- retirer AdminHeatmapOverlay |
-| Modifier | `src/components/practices/PracticesHero.tsx` -- retirer NexusNetworkPattern |
-| Modifier | `src/components/shared/AfricanPattern.tsx` -- retirer overlay dans AfricanSection |
-| Modifier | `src/components/map/CommandCenterMap.tsx` -- retirer overlays decoratifs |
-| Modifier | `src/styles/african-patterns.css` -- retirer les classes pattern (garder dividers et bg) |
+| Modifier | `src/pages/NetworkView.tsx` -- hero clair, barre KPI, integration carte+pays |
+| Creer | `src/components/network/NetworkMembersGrid.tsx` -- grille pays + carte + filtres |
+| Modifier | `src/components/network/UATCoordinationSection.tsx` -- uniformiser spacing |
+| Modifier | `src/components/network/RegionCards.tsx` -- uniformiser tokens |
+| Modifier | `src/components/network/PresenceIndicator.tsx` -- adapter au fond clair |
 
-## Garanties
-
-- Zero `<canvas>` dans le DOM
-- Zero couche `absolute inset-0 pointer-events-none` decorative
-- Zero animation decorative persistante entre routes
-- Fond propre sur toutes les pages
-- Les composants fonctionnels (carte Leaflet, graphiques recharts) restent intacts
-
+## Composants reutilises
+- `useAfricanCountries()` -- donnees pays
+- `LeafletInteractiveMap` ou `HomeMemberMap` -- carte dans la grille
+- `PresenceIndicator` -- adapte pour fond clair (texte gris au lieu de blanc)
+- `NexusActionCard` -- cartes actions en bas (inchangees)
