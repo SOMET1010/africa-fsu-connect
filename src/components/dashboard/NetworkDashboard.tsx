@@ -61,7 +61,7 @@ export function NetworkDashboard() {
             variant="ghost"
             size="icon"
             onClick={resetTour}
-            className="absolute top-4 right-4 z-10 text-white/50 hover:text-white hover:bg-white/10"
+            className="absolute top-4 right-4 z-10 text-white/60 hover:text-white hover:bg-white/20"
             title="Replay tour"
           >
             <HelpCircle className="h-5 w-5" />
