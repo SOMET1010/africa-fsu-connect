@@ -1,0 +1,26 @@
+/* RTL support for driver.js onboarding tour */
+.driver-rtl .driver-popover {
+  direction: rtl;
+  text-align: right;
+}
+
+.driver-rtl .driver-popover-title {
+  font-family: inherit;
+}
+
+.driver-rtl .driver-popover-description {
+  font-family: inherit;
+}
+
+.driver-rtl .driver-popover-footer {
+  direction: rtl;
+  flex-direction: row-reverse;
+}
+
+.driver-rtl .driver-popover-navigation-btns {
+  flex-direction: row-reverse;
+}
+
+.driver-rtl .driver-popover-progress-text {
+  direction: ltr;
+}
