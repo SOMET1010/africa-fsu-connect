@@ -29,11 +29,11 @@ export const UATCoordinationSection = () => {
                   {currentLanguage === 'en' ? 'Network Secretariat' : 'Secrétariat du Réseau'}
                 </Badge>
                 
-                <h3 className="text-xl font-semibold text-slate-900 dark:text-foreground">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-foreground">
                   {currentLanguage === 'en' ? 'ATU - UDC Network Coordination' : 'UAT - Coordination du Réseau UDC'}
                 </h3>
                 
-                <p className="text-slate-600 dark:text-muted-foreground leading-relaxed">
+                <p className="text-gray-600 dark:text-muted-foreground leading-relaxed">
                   {currentLanguage === 'en' 
                     ? "The African Telecommunications Union (ATU) coordinates the network of African universal service agencies. It facilitates exchanges, harmonizes practices, and supports member countries in their mission of universal access to telecommunications."
                     : "L'Union Africaine des Télécommunications (UAT) assure la coordination du réseau des agences africaines du service universel. Elle facilite les échanges, harmonise les pratiques et accompagne les pays membres dans leur mission d'accès universel aux télécommunications."}
@@ -42,15 +42,15 @@ export const UATCoordinationSection = () => {
               
               {/* Langues de travail */}
               <div className="flex items-center gap-3 pt-2">
-                <Globe className="w-4 h-4 text-slate-400 dark:text-muted-foreground" />
-                <span className="text-sm text-slate-500 dark:text-muted-foreground">
+                <Globe className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+                <span className="text-sm text-gray-500 dark:text-muted-foreground">
                   {currentLanguage === 'en' ? 'Working languages:' : 'Langues de travail :'}
                 </span>
                 <div className="flex gap-2">
-                  <Badge variant="secondary" className="text-xs bg-slate-100 dark:bg-muted text-slate-600 dark:text-muted-foreground border-slate-200 dark:border-border">🇫🇷 FR</Badge>
-                  <Badge variant="secondary" className="text-xs bg-slate-100 dark:bg-muted text-slate-600 dark:text-muted-foreground border-slate-200 dark:border-border">🇬🇧 EN</Badge>
-                  <Badge variant="secondary" className="text-xs bg-slate-100 dark:bg-muted text-slate-600 dark:text-muted-foreground border-slate-200 dark:border-border">🇵🇹 PT</Badge>
-                  <Badge variant="secondary" className="text-xs bg-slate-100 dark:bg-muted text-slate-600 dark:text-muted-foreground border-slate-200 dark:border-border">🇸🇦 AR</Badge>
+                  <Badge variant="secondary" className="text-xs bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground border-gray-200 dark:border-border">🇫🇷 FR</Badge>
+                  <Badge variant="secondary" className="text-xs bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground border-gray-200 dark:border-border">🇬🇧 EN</Badge>
+                  <Badge variant="secondary" className="text-xs bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground border-gray-200 dark:border-border">🇵🇹 PT</Badge>
+                  <Badge variant="secondary" className="text-xs bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground border-gray-200 dark:border-border">🇸🇦 AR</Badge>
                 </div>
               </div>
               
@@ -60,7 +60,7 @@ export const UATCoordinationSection = () => {
                   variant="outline" 
                   size="sm" 
                   asChild
-                  className="border-slate-200 dark:border-border text-slate-700 dark:text-foreground hover:bg-slate-50 dark:hover:bg-muted"
+                  className="border-gray-200 dark:border-border text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted"
                 >
                   <Link to="/about" className="inline-flex items-center gap-2">
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -70,7 +70,7 @@ export const UATCoordinationSection = () => {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="text-slate-500 dark:text-muted-foreground hover:text-slate-900 dark:hover:text-foreground hover:bg-slate-50 dark:hover:bg-muted"
+                  className="text-gray-500 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:bg-gray-50 dark:hover:bg-muted"
                 >
                   <Mail className="w-3.5 h-3.5 mr-2" />
                   {currentLanguage === 'en' ? 'Contact' : 'Contacter'}

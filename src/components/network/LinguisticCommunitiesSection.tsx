@@ -49,9 +49,9 @@ export const LinguisticCommunitiesSection = () => {
     return (
       <section className="py-12">
         <div className="container mx-auto px-4 max-w-5xl">
-          <div className="animate-pulse flex gap-4">
+          <div className="flex gap-4">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="flex-1 h-24 bg-slate-100 dark:bg-muted rounded-lg" />
+              <div key={i} className="flex-1 h-24 bg-gray-100 dark:bg-muted rounded-xl animate-pulse" />
             ))}
           </div>
         </div>
@@ -63,10 +63,10 @@ export const LinguisticCommunitiesSection = () => {
     <section className="py-12">
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="text-center mb-8">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-foreground">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground">
             {currentLanguage === 'en' ? 'Linguistic Communities' : 'Communautés linguistiques'}
           </h2>
-          <p className="text-sm text-slate-500 dark:text-muted-foreground mt-2">
+          <p className="text-sm text-gray-500 dark:text-muted-foreground mt-2">
             {currentLanguage === 'en' 
               ? 'The UDC network brings together countries from different linguistic areas' 
               : 'Le réseau UDC réunit des pays de différentes zones linguistiques'}
@@ -78,15 +78,15 @@ export const LinguisticCommunitiesSection = () => {
             <Link
               key={community.code}
               to={`/members?language=${community.code}`}
-              className="group rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm p-4 hover:shadow-md hover:border-primary/30 transition-all duration-200"
+              className="group rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card shadow-sm p-4 hover:border-primary/30 transition-colors duration-200"
             >
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-2xl">{community.flag}</span>
-                <span className="font-medium text-slate-900 dark:text-foreground group-hover:text-primary transition-colors">
+                <span className="font-medium text-gray-900 dark:text-foreground group-hover:text-primary transition-colors">
                   {community.name}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-muted-foreground">
+              <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-muted-foreground">
                 <Users className="w-3.5 h-3.5" />
                 <span>{community.count} {currentLanguage === 'en' ? 'countries' : 'pays'}</span>
               </div>

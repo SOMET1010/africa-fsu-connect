@@ -42,7 +42,7 @@ const getIconStyle = (type: ActivityType): string => {
   if (type === 'project' || type === 'collaboration') {
     return 'bg-primary/10 text-primary';
   }
-  return 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
+  return 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-500';
 };
 
 interface ActivityTimelineProps {
@@ -54,7 +54,7 @@ export const ActivityTimeline = ({ maxItems = 5 }: ActivityTimelineProps) => {
   const displayActivities = mockActivities.slice(0, maxItems);
 
   return (
-    <div className="divide-y divide-slate-100 dark:divide-border rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm overflow-hidden">
+    <div className="divide-y divide-gray-100 dark:divide-border rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card shadow-sm overflow-hidden">
       {displayActivities.map((activity, index) => {
         const Icon = getIcon(activity.type);
         const iconStyle = getIconStyle(activity.type);
@@ -62,7 +62,7 @@ export const ActivityTimeline = ({ maxItems = 5 }: ActivityTimelineProps) => {
         return (
           <div 
             key={activity.id}
-            className="p-4 hover:bg-slate-50 dark:hover:bg-muted/50 transition-colors duration-200 animate-fade-in"
+            className="p-4 hover:bg-gray-50 dark:hover:bg-muted/50 transition-colors duration-200 animate-fade-in"
             style={{ animationDelay: `${index * 80}ms` }}
           >
             <div className="flex items-start gap-4">
@@ -73,17 +73,17 @@ export const ActivityTimeline = ({ maxItems = 5 }: ActivityTimelineProps) => {
               
               {/* Contenu narratif */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-slate-900 dark:text-foreground">
+                <p className="text-sm text-gray-900 dark:text-foreground">
                   <span className="font-medium">{activity.flag} {activity.country}</span>
-                  <span className="text-slate-500 dark:text-muted-foreground"> {activity.action} </span>
+                  <span className="text-gray-500 dark:text-muted-foreground"> {activity.action} </span>
                 </p>
-                <p className="text-slate-900 dark:text-foreground font-medium mt-0.5 truncate">
+                <p className="text-gray-900 dark:text-foreground font-medium mt-0.5 truncate">
                   {activity.title}
                 </p>
               </div>
 
               {/* Temps */}
-              <span className="text-xs text-slate-400 dark:text-muted-foreground flex-shrink-0">
+              <span className="text-xs text-gray-400 dark:text-muted-foreground flex-shrink-0">
                 {activity.timeAgo}
               </span>
             </div>
