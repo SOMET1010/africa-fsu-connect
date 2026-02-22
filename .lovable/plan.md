@@ -1,77 +1,51 @@
 
-# Enhanced Global Search with Multi-Language Filters
+# Fine-tuning UX institutionnel
 
-## What exists today
-A `CommandPalette` (Cmd+K) already searches across documents, forum posts, and projects using `useUnifiedSearch`. However, it has no filtering -- all three content types are always queried with no way to narrow results by type, country, or document category.
+## 1. Corriger le composant GlassCard pour le theme clair
 
-## What we will add
+Le `GlassCard` utilise `bg-white/5` et `border-white/10` -- concu pour un fond sombre. Sur fond clair, cela rend les cartes quasi invisibles.
 
-### 1. Filter chips in the Command Palette
-Below the search input, add a row of toggle chips that let users narrow results:
-- **Content type**: Documents / Forum / Projects (toggle each on/off)
-- **Country**: Dropdown from the `countries` table
-- **Document type**: guide, rapport, presentation, formulaire, autre
+**Changements :**
+- `default` : `bg-white` avec `border border-border` et `shadow-sm`
+- `strong` : `bg-white` avec `shadow-md`
+- `subtle` : `bg-secondary/50` avec `border border-border/50`
+- Supprimer le pseudo-element `before:` gradient overlay
+- Hover : `hover:shadow-md hover:border-primary/20` au lieu de glow
 
-All labels will be translated (FR/EN/AR/PT) using existing i18n keys.
+## 2. Renforcer les icones stats admin (WCAG AA)
 
-### 2. Updated search hook with filter support
+Dans `AdminStatsGrid`, les icones utilisent `bg-primary/10` qui manque de contraste sur fond blanc.
 
-Extend `useUnifiedSearch` to accept a filters object:
+**Changements :**
+- Passer le fond icone a `bg-primary/15` avec l'icone en `text-primary`
+- Ajouter des variantes de couleur par stat : bleu, vert, violet, orange avec des fonds suffisamment contrastes (ex: `bg-blue-100 text-blue-700`, `bg-emerald-100 text-emerald-700`)
+- S'assurer que le ratio de contraste depasse 4.5:1
 
-```text
-filters: {
-  types: ('document' | 'forum' | 'project')[]   -- which content types to query
-  country?: string                                -- filter documents/projects by country
-  documentType?: string                           -- filter documents by type enum
-}
-```
+## 3. Boutons CTA : hover plus distinct
 
-When a content type is toggled off, its Supabase query is skipped entirely. Country and documentType filters are applied as `.eq()` clauses on the relevant queries.
+Dans `button.tsx`, les variantes actuelles perdent l'indicateur visuel des anciens glows.
 
-### 3. Translated filter labels
+**Changements :**
+- Variante `default` : ajouter `hover:shadow-md hover:translate-y-[-1px]` pour un feedback physique
+- Variante `outline` : ajouter `hover:border-primary hover:shadow-sm` pour un contour plus marque
+- Variante `glass` : remplacer par un style compatible theme clair (`bg-secondary hover:bg-secondary/80 border-border`)
 
-Add i18n keys under `search.filters.*` in each language JSON file (fr, en, ar, pt) for:
-- "Tous", "Documents", "Forum", "Projets"
-- "Pays", "Type de document"
-- Document type values (guide, rapport, presentation, formulaire, autre)
+## 4. Typographie : deja en place (aucun changement)
 
-## Files to change
+Inter est deja configure comme police principale du body, Poppins pour les titres, et Noto Sans Arabic pour le RTL. La configuration est conforme a l'objectif "gouvernemental moderne". Pas de modification necessaire.
 
-| File | Change |
-|------|--------|
-| `src/hooks/useUnifiedSearch.ts` | Add `filters` parameter; conditionally skip queries; apply `.eq()` for country/documentType |
-| `src/components/ui/command-palette.tsx` | Add filter state; render filter chips row below `CommandInput`; pass filters to hook |
-| `public/locales/fr/translation.json` | Add `search.filters.*` keys |
-| `public/locales/en/translation.json` | Add `search.filters.*` keys |
-| `public/locales/ar/translation.json` | Add `search.filters.*` keys |
-| `public/locales/pt/translation.json` | Add `search.filters.*` keys |
+---
 
-## Technical details
+## Details techniques
 
-### `useUnifiedSearch` changes
-- New interface `SearchFilters` with `types`, `country`, `documentType`
-- Default: all types enabled, no country/documentType filter
-- Each `Promise.all` branch wrapped in conditional: only query if `filters.types` includes that type
-- Documents query: add `.eq('country', filters.country)` and `.eq('document_type', filters.documentType)` when set
-- Projects query: add `.eq('location', filters.country)` when country is set (projects use `location` field)
+### Fichiers modifies
 
-### `CommandPalette` filter UI
-- State: `activeTypes` (Set of 'document'|'forum'|'project'), `country` (string|null), `documentType` (string|null)
-- Render a flex-wrap row of small toggle buttons (Badge-like) below the input
-- Three type toggles: Documents, Forum, Projects -- clicking toggles inclusion
-- A small Select dropdown for Country (fetched from `countries` table or hardcoded SUTEL list)
-- A small Select dropdown for Document Type (from the enum values)
-- All labels use `t('search.filters.xxx')` with fallbacks
-- Filters are passed to `useUnifiedSearch(query, filters)`
-- A "Clear filters" button appears when any filter is active
+| Fichier | Nature du changement |
+|---|---|
+| `src/components/ui/glass-card.tsx` | Refonte des variantes pour theme clair |
+| `src/pages/admin/components/AdminStatsGrid.tsx` | Couleurs icones avec meilleur contraste |
+| `src/components/ui/button.tsx` | Hover states plus marques |
 
-### i18n keys added
-```
-search.filters.all: "Tous" / "All" / "الكل" / "Todos"
-search.filters.documents: "Documents" / "Documents" / "وثائق" / "Documentos"
-search.filters.forum: "Forum" / "Forum" / "منتدى" / "Fórum"
-search.filters.projects: "Projets" / "Projects" / "مشاريع" / "Projetos"
-search.filters.country: "Pays" / "Country" / "البلد" / "País"
-search.filters.document_type: "Type" / "Type" / "النوع" / "Tipo"
-search.filters.clear: "Effacer" / "Clear" / "مسح" / "Limpar"
-```
+### Pas de nouvelles dependances
+
+Toutes les modifications utilisent Tailwind CSS existant.
