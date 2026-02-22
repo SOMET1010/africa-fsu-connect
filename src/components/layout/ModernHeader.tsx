@@ -103,6 +103,8 @@ const ModernHeader = () => {
   return (
     <>
       <header 
+        role="banner"
+        aria-label={t('accessibility.appHeader') || 'En-tête de l\'application'}
         className={cn(
           "fixed top-0 left-0 right-0 w-full transition-all duration-300 ease-out z-header",
           scrolled 
@@ -127,7 +129,7 @@ const ModernHeader = () => {
             </Link>
 
             {/* Navigation Desktop avec micro-interactions */}
-            <nav className={cn("hidden lg:flex items-center", isRTL ? "space-x-reverse space-x-0.5" : "space-x-0.5")}>
+            <nav aria-label={t('accessibility.mainNav') || 'Navigation principale'} className={cn("hidden lg:flex items-center", isRTL ? "space-x-reverse space-x-0.5" : "space-x-0.5")}>
               {mainNavigation.map((item) => {
                 const Icon = item.icon;
                 const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -401,10 +403,13 @@ const ModernHeader = () => {
                 size="sm"
                 className="lg:hidden text-muted-foreground hover:text-foreground"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label={isMenuOpen ? (t('accessibility.closeMenu') || 'Fermer le menu') : (t('accessibility.openMenu') || 'Ouvrir le menu')}
+                aria-expanded={isMenuOpen}
+                aria-controls="modern-mobile-nav"
               >
                 {isMenuOpen ? 
-                  <X className="h-5 w-5" /> : 
-                  <Menu className="h-5 w-5" />
+                  <X className="h-5 w-5" aria-hidden="true" /> : 
+                  <Menu className="h-5 w-5" aria-hidden="true" />
                 }
               </ModernButton>
             </div>
@@ -431,6 +436,9 @@ const ModernHeader = () => {
             exit={{ opacity: 0, x: isRTL ? -20 : 20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="fixed inset-x-0 top-16 bottom-0 bg-background z-40 lg:hidden overflow-y-auto border-t border-border"
+            id="modern-mobile-nav"
+            role="navigation"
+            aria-label={t('accessibility.mobileNav') || 'Navigation mobile'}
           >
             <div className="container mx-auto px-4 py-6">
               <div className="space-y-2">

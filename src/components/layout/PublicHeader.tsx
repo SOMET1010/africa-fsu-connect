@@ -21,7 +21,7 @@ export const PublicHeader = () => {
   const headerItems = getNavItems("header");
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border">
+    <header className="sticky top-0 z-50 bg-background border-b border-border" role="banner" aria-label={t('accessibility.publicHeader') || 'En-tête du site public'}>
       <div className="container mx-auto px-4">
         <div className={cn("flex items-center justify-between h-[4.5rem]", isRTL && "flex-row-reverse")}>
           {/* Logo */}
@@ -33,7 +33,7 @@ export const PublicHeader = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className={cn("hidden lg:flex items-center gap-0.5", isRTL && "flex-row-reverse")}>
+          <nav aria-label={t('accessibility.mainNav') || 'Navigation principale'} className={cn("hidden lg:flex items-center gap-0.5", isRTL && "flex-row-reverse")}>
             {headerItems.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -72,8 +72,11 @@ export const PublicHeader = () => {
               size="icon"
               className="lg:hidden text-muted-foreground hover:text-foreground"
               onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? (t('accessibility.closeMenu') || 'Fermer le menu') : (t('accessibility.openMenu') || 'Ouvrir le menu')}
+              aria-expanded={mobileOpen}
+              aria-controls="public-mobile-nav"
             >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
             </Button>
           </div>
         </div>
@@ -89,7 +92,7 @@ export const PublicHeader = () => {
             transition={{ duration: 0.2 }}
             className="lg:hidden border-t border-border overflow-hidden"
           >
-            <nav className="container mx-auto px-4 py-4 space-y-1">
+            <nav id="public-mobile-nav" aria-label={t('accessibility.mobileNav') || 'Navigation mobile'} className="container mx-auto px-4 py-4 space-y-1">
               {headerItems.map((item) => {
                 const isActive = location.pathname === item.href;
                 return (
