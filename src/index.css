@@ -39,7 +39,7 @@ All colors MUST be HSL.
     
     /* Neutral tones */
     --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted-foreground: 215 20% 40%;
     --border: 214 20% 89%;
     --input: 214 20% 93%;
     --ring: 210 73% 28%;
@@ -140,7 +140,7 @@ All colors MUST be HSL.
     --accent-foreground: 0 0% 100%;
     
     --muted: 222 18% 18%;
-    --muted-foreground: 215 20% 70%;
+    --muted-foreground: 215 20% 75%;
     --border: 225 15% 28%;
     --input: 225 15% 18%;
     --ring: 210 65% 50%;
