@@ -6,23 +6,18 @@ import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/shared/LanguageSelector";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDirection } from "@/hooks/useDirection";
+import { useSiteConfig } from "@/hooks/useSiteConfig";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-
-const NAV_ITEMS = [
-  { path: "/", labelKey: "nav.home", fallback: "Accueil" },
-  { path: "/about", labelKey: "nav.about", fallback: "À propos" },
-  { path: "/network", labelKey: "nav.platform", fallback: "Plateforme" },
-  { path: "/strategies", labelKey: "nav.strategies", fallback: "Stratégies" },
-  { path: "/events", labelKey: "nav.events", fallback: "Événements" },
-  { path: "/contact", labelKey: "nav.contact", fallback: "Contact" },
-];
 
 export const PublicHeader = () => {
   const { t } = useTranslation();
   const { isRTL } = useDirection();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { getNavItems, getNavLabel } = useSiteConfig();
+
+  const headerItems = getNavItems("header");
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-[hsl(var(--nx-night))]/80 border-b border-[hsl(var(--nx-gold))]/10">
@@ -37,12 +32,14 @@ export const PublicHeader = () => {
 
           {/* Desktop Nav */}
           <nav className={cn("hidden lg:flex items-center gap-1", isRTL && "flex-row-reverse")}>
-            {NAV_ITEMS.map(({ path, labelKey, fallback }) => {
-              const isActive = location.pathname === path;
+            {headerItems.map((item) => {
+              const isActive = location.pathname === item.href;
               return (
                 <Link
-                  key={path}
-                  to={path}
+                  key={item.href}
+                  to={item.href}
+                  target={item.is_external ? "_blank" : undefined}
+                  rel={item.is_external ? "noopener noreferrer" : undefined}
                   className={cn(
                     "px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
                     isActive
@@ -50,7 +47,7 @@ export const PublicHeader = () => {
                       : "text-white/70 hover:text-white hover:bg-white/5"
                   )}
                 >
-                  {t(labelKey) || fallback}
+                  {getNavLabel(item)}
                 </Link>
               );
             })}
@@ -90,13 +87,15 @@ export const PublicHeader = () => {
             className="lg:hidden border-t border-white/10 overflow-hidden"
           >
             <nav className="container mx-auto px-4 py-4 space-y-1">
-              {NAV_ITEMS.map(({ path, labelKey, fallback }) => {
-                const isActive = location.pathname === path;
+              {headerItems.map((item) => {
+                const isActive = location.pathname === item.href;
                 return (
                   <Link
-                    key={path}
-                    to={path}
+                    key={item.href}
+                    to={item.href}
                     onClick={() => setMobileOpen(false)}
+                    target={item.is_external ? "_blank" : undefined}
+                    rel={item.is_external ? "noopener noreferrer" : undefined}
                     className={cn(
                       "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                       isActive
@@ -104,7 +103,7 @@ export const PublicHeader = () => {
                         : "text-white/70 hover:text-white hover:bg-white/5"
                     )}
                   >
-                    {t(labelKey) || fallback}
+                    {getNavLabel(item)}
                   </Link>
                 );
               })}
