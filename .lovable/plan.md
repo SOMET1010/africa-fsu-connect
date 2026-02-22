@@ -1,100 +1,177 @@
 
-# Audit Navigation & UX -- Plan de corrections
 
-## Inventaire des problemes detectes
+# Refonte Theme Clair / Sombre -- Plan d'implementation
 
-### P0 -- Liens casses (404 garanti)
+## Diagnostic
 
-| # | Fichier | Lien casse | Probleme | Correction |
-|---|---------|-----------|----------|------------|
-| 1 | `src/pages/FocalDashboard.tsx` (l.117, 226, 347) | `href="/indicators/submit"` | Route `/indicators/submit` n'existe pas dans `routes.ts`. Aucune page correspondante. | Remplacer par `/submit` (formulaire de contribution existant) ou `/indicators` selon l'intention |
-| 2 | `src/components/dashboard/NetworkDashboard.tsx` (l.72) | `navigate('/community')` | `/community` est la page "Communautes linguistiques", pas "Activite recente". Le label `onViewAll` de `UserRecentActivity` devrait pointer vers `/activity` | Remplacer par `navigate('/activity')` |
-| 3 | `src/pages/Forum.tsx` (l.270) | `"/api/placeholder/40/40"` | Image placeholder qui 404 en prod -- avatar casse visible | Supprimer le fallback `src`, laisser le composant `AvatarFallback` gerer |
-| 4 | `src/components/dashboard/widgets/LearningWidget.tsx` (l.170) | `to="/projects?filter=inspiring"` | Le query param `filter=inspiring` n'est pas lu par `Projects.tsx` -- le filtre ne s'applique pas | Soit supprimer le query param, soit implementer la lecture dans Projects.tsx |
+### Comment le theme est pilote aujourd'hui
 
-### P1 -- Incoherences de navigation
+Le systeme actuel est **100% dark, sans option de basculer** :
 
-| # | Fichier | Probleme | Correction |
-|---|---------|----------|------------|
-| 5 | `src/components/community/CommunityLanguageMap.tsx` (l.139) | `href="/members?country=${country.code}"` -- utilise `<a href>` au lieu de React Router `<Link>`, provoque un full reload. De plus, `MembersDirectory` ne lit pas le param `country` | Convertir en `Link to=` et ajouter la lecture du param `country` dans MembersDirectory |
-| 6 | `src/components/organizations/LeafletInteractiveMap.tsx` (l.219, 230) | `href="/organizations"` et `href="/forum"` dans un popup Leaflet -- utilise `<a href>` natif, provoque full reload | Acceptable dans un popup Leaflet (pas de contexte React), mais a documenter |
-| 7 | `src/pages/PublicDashboard.tsx` (l.207) | `href="/map"` -- utilise `<a href>` au lieu de `<Link>` | Convertir en `Link to="/map"` |
+- **AppShell.tsx** (ligne 52) force `bg-[hsl(var(--nx-night))] text-white` sur TOUTES les pages internes
+- **102 fichiers** utilisent `text-white` en dur (2943 occurrences) -- tout est code "pour du sombre"
+- **`preferences.theme`** existe (`'light' | 'dark' | 'system'`) mais **n'est jamais applique au DOM** -- c'est un setting fantome
+- **Aucun ThemeProvider** (next-themes est installe mais seulement utilise par sonner.tsx pour les toasts)
+- **Tailwind** est configure avec `darkMode: ["class"]` mais la classe `dark` n'est jamais togglee
+- Les tokens CSS `.dark { ... }` dans `index.css` existent mais sont inutilises
 
-### P2 -- Ameliorations UX
+### Pages/composants "tres dark"
 
-| # | Fichier | Probleme | Correction |
-|---|---------|----------|------------|
-| 8 | `src/components/network/NexusRegions.tsx` | Les liens `?region=slug` fonctionnent grace a la validation ajoutee precedemment, mais RegionCards.tsx utilise `region.name` tandis que NexusRegions.tsx utilise `region.slug` -- risque d'incoherence | Harmoniser sur `region.slug` dans les deux fichiers |
-| 9 | Preloader `routePredictions` | Contient encore des predictions vers routes obsoletes ou rarement visitees | Nettoyer et aligner avec l'architecture actuelle |
+| Zone | Fichier | Probleme |
+|------|---------|----------|
+| Shell global | `AppShell.tsx` | `bg-[hsl(var(--nx-night))] text-white` sur tout |
+| Header interne | `ModernHeader.tsx` | Tout en `text-white`, `bg-nx-night` |
+| Footer | `Footer.tsx` | Tout en `text-white/60`, fond `nx-night` |
+| About | `About.tsx` | Cards `bg-white/5`, textes `text-white` |
+| Dashboard | `NetworkDashboard.tsx` | GlassCards sur fond sombre |
+| Forum, Events, Members... | 95+ fichiers | Hardcode dark partout |
+| Ambient effects | `AppShell.tsx` l.54-67 | Noise texture + glow effects permanents |
 
----
+### Conclusion
 
-## Plan d'implementation
-
-### Etape 1 : Fix P0 -- Liens casses
-
-**Fichier `src/pages/FocalDashboard.tsx`**
-- Remplacer les 3 occurrences de `href="/indicators/submit"` par `href="/submit"` (page de soumission existante)
-- Convertir les `<a href>` en `<Link to>` pour eviter les full reload
-
-**Fichier `src/components/dashboard/NetworkDashboard.tsx`**
-- Ligne 72 : remplacer `navigate('/community')` par `navigate('/activity')`
-
-**Fichier `src/pages/Forum.tsx`**
-- Ligne 270 : remplacer `"/api/placeholder/40/40"` par `""` (laisser AvatarFallback prendre le relais avec les initiales)
-
-**Fichier `src/components/dashboard/widgets/LearningWidget.tsx`**
-- Ligne 170 : remplacer `to="/projects?filter=inspiring"` par `to="/practices"` (page dediee aux bonnes pratiques, plus coherent)
-
-### Etape 2 : Fix P1 -- Incoherences
-
-**Fichier `src/components/community/CommunityLanguageMap.tsx`**
-- Convertir le `<a href="/members?country=...">` en URL interne coherente. Comme c'est dans un popup Leaflet (string HTML), on garde `<a href>` mais on pointe vers `/country/${country.code}` (route existante avec fiche pays)
-
-**Fichier `src/pages/PublicDashboard.tsx`**
-- Convertir `<a href="/map">` en `<Link to="/map">`
-
-### Etape 3 : Fix P2 -- Harmonisation
-
-**Fichier `src/components/network/RegionCards.tsx`**
-- Verifier si `region.name` vs `region.slug` pose un probleme reel (audit rapide)
-
-### Etape 4 : Garde-fous -- Test de verification
-
-**Nouveau fichier `src/test/navigation-routes.test.ts`**
-- Test automatise qui :
-  1. Extrait toutes les routes declarees dans `ROUTES` de `src/config/routes.ts`
-  2. Scanne les liens hardcodes connus (via un tableau de reference)
-  3. Verifie que chaque lien pointe vers une route declaree
-  4. Verifie l'absence de `/api/placeholder` dans le code
-
-**Nouveau fichier `AUDIT_REPORT.md`**
-- Document complet avec tous les fix appliques, les routes validees, et les points restants
+Le probleme n'est pas "un toggle mal configure". Toute l'application a ete construite en dark-only. Passer en "light par defaut" necessite de toucher l'infrastructure + convertir les pages une par une.
 
 ---
 
-## Details techniques
+## Strategie de correction (en 2 phases)
 
-### Fichiers modifies (7 fichiers)
+### Phase 1 -- Infrastructure + Pages publiques (cette implementation)
 
-```text
-src/pages/FocalDashboard.tsx           -- 3x href="/indicators/submit" -> Link to="/submit"
-src/components/dashboard/NetworkDashboard.tsx -- navigate('/community') -> navigate('/activity')
-src/pages/Forum.tsx                    -- "/api/placeholder/40/40" -> ""
-src/components/dashboard/widgets/LearningWidget.tsx -- /projects?filter=inspiring -> /practices
-src/components/community/CommunityLanguageMap.tsx   -- /members?country= -> /country/
-src/pages/PublicDashboard.tsx          -- <a href="/map"> -> <Link to="/map">
+Objectif : rendre l'app **claire par defaut** pour les pages les plus visibles, avec toggle pour repasser en sombre.
+
+### Phase 2 -- Pages internes (future iteration)
+
+Convertir les pages protegees restantes (dashboard widgets, tools, admin...).
+
+---
+
+## Phase 1 -- Plan detaille
+
+### 1. Installer et configurer le ThemeProvider
+
+**Fichier : `src/components/app/AppProviders.tsx`**
+
+- Ajouter `ThemeProvider` de `next-themes` (deja installe) autour de l'app
+- Configuration : `attribute="class"`, `defaultTheme="light"`, `enableSystem={true}`
+- Synchroniser avec `preferences.theme`
+
+### 2. Connecter preferences.theme au DOM
+
+**Fichier : `src/contexts/UserPreferencesContext.tsx`**
+
+- Ajouter un `useEffect` qui appelle `setTheme()` de next-themes quand `preferences.theme` change
+- Le default passe de `'system'` a `'light'`
+
+### 3. Modifier AppShell -- Fond semantique
+
+**Fichier : `src/components/layout/AppShell.tsx`**
+
+Avant :
+```
+<div className="min-h-screen bg-[hsl(var(--nx-night))] text-white ...">
+  <!-- noise texture -->
+  <!-- ambient glow -->
 ```
 
-### Fichiers crees (2 fichiers)
-
-```text
-AUDIT_REPORT.md                        -- Rapport d'audit complet
-src/test/navigation-routes.test.ts     -- Test smoke navigation
+Apres :
+```
+<div className="min-h-screen bg-background text-foreground ...">
+  <!-- noise + glow uniquement en dark -->
 ```
 
-### Routes declarees validees (exhaustif)
+- Remplacer `bg-[hsl(var(--nx-night))] text-white` par `bg-background text-foreground`
+- Conditionner les effets visuels (noise texture, ambient glow) au mode dark uniquement
+- Le contenu des pages utilisera les tokens semantiques
 
-Toutes les routes dans `src/config/routes.ts` ont un composant lazy existant dans `src/pages/`. Les routes du footer, header public, header prive, et navigation mobile pointent toutes vers des routes declarees. Aucune route orpheline detectee.
+### 4. Garder Header et Footer toujours sombres
 
-### Aucune dependance ajoutee, aucune migration SQL.
+Le header (`ModernHeader.tsx`) et le footer (`Footer.tsx`) restent en fond sombre `nx-night` -- c'est un pattern de branding courant et ca evite de toucher ces composants complexes. Pas de modification.
+
+### 5. Ajouter un toggle theme dans le Header
+
+**Fichier : `src/components/layout/ModernHeader.tsx`**
+
+- Ajouter un bouton Sun/Moon/Monitor a cote du selecteur de langue
+- 3 etats : Clair / Sombre / Systeme
+- Appelle `updatePreferences({ theme: ... })` et `setTheme()` de next-themes
+
+### 6. Convertir les pages publiques cles (6 pages)
+
+Pour chaque page, remplacer les classes hardcodees par des tokens semantiques :
+
+| Classe dark hardcodee | Remplacement semantique |
+|---|---|
+| `text-white` | `text-foreground` |
+| `text-white/70` | `text-muted-foreground` |
+| `text-white/60` | `text-muted-foreground` |
+| `text-white/50` | `text-muted-foreground/70` |
+| `bg-white/5` | `bg-muted` |
+| `bg-white/10` | `bg-muted/80` |
+| `border-white/10` | `border-border` |
+| `border-white/20` | `border-border` |
+
+**Pages converties :**
+
+- `src/pages/About.tsx` -- Page "A propos" (actuellement visitee)
+- `src/pages/Auth.tsx` -- Connexion/Inscription
+- `src/pages/Contact.tsx` -- Contact
+- `src/pages/Strategies.tsx` -- Strategies
+- `src/pages/Events.tsx` -- Evenements
+- `src/pages/MembersDirectory.tsx` -- Annuaire membres
+
+### 7. Supprimer HomeLayoutToggle devenu redondant
+
+**Fichier : `src/components/home/HomeLayoutToggle.tsx`**
+
+Le toggle flottant bas-droite (mode immersif/clair pour la homepage) devient redondant avec le toggle global dans le header. Le supprimer ou le remplacer par le toggle global.
+
+### 8. Mettre a jour les tokens dark CSS
+
+**Fichier : `src/index.css`**
+
+Adoucir le mode dark (pas noir pur) :
+- `--background: 222 20% 12%` (au lieu de `225 15% 8%` -- trop sombre)
+- `--card: 222 18% 16%` (au lieu de `225 15% 8%`)
+- Augmenter le contraste du `--muted-foreground`
+
+### 9. Creer THEME_CHANGELOG.md
+
+**Nouveau fichier : `THEME_CHANGELOG.md`**
+
+Documenter :
+- Ce qui a change
+- Comment activer light/dark/system
+- Liste des composants convertis
+- Liste des composants restant en dark-only (Phase 2)
+
+---
+
+## Fichiers modifies (Phase 1)
+
+```
+src/components/app/AppProviders.tsx          -- Ajout ThemeProvider next-themes
+src/contexts/UserPreferencesContext.tsx       -- Sync theme avec DOM + default light
+src/components/layout/AppShell.tsx            -- bg-background au lieu de nx-night
+src/components/layout/ModernHeader.tsx        -- Ajout toggle theme
+src/pages/About.tsx                          -- Tokens semantiques
+src/pages/Auth.tsx                           -- Tokens semantiques
+src/pages/Contact.tsx                        -- Tokens semantiques
+src/pages/Strategies.tsx                     -- Tokens semantiques
+src/pages/Events.tsx                         -- Tokens semantiques
+src/pages/MembersDirectory.tsx               -- Tokens semantiques
+src/index.css                                -- Dark tokens adoucis
+src/pages/Index.tsx                          -- Suppression HomeLayoutToggle
+THEME_CHANGELOG.md                           -- Documentation
+```
+
+**13 fichiers modifies, 1 fichier cree, 0 dependance ajoutee, 0 migration SQL.**
+
+---
+
+## Ce qui reste apres Phase 1 (Phase 2, future)
+
+- ~95 fichiers internes (dashboard, forum, tools, admin...) encore en dark hardcode
+- Ces pages fonctionneront toujours en mode sombre grace au wrapper `dark` sur `<html>`, mais en mode clair elles auront un fond clair avec du texte blanc (illisible)
+- Solution temporaire : ces pages peuvent forcer `.dark` localement en attendant la conversion
+- La Phase 2 les convertira progressivement vers les tokens semantiques
+
