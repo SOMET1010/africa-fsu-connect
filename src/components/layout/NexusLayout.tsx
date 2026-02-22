@@ -20,7 +20,7 @@ export function NexusLayout({ children, preserveScroll = false }: NexusLayoutPro
   }, [pathname, preserveScroll]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground relative">
+    <div className="min-h-screen bg-slate-50 dark:bg-background text-foreground relative">
       <div className="relative z-10">
         {children}
       </div>
