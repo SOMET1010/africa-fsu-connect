@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback, type ReactNode } from "react";
 import { Search, ChevronRight, FileText, MessageSquare, FolderKanban, Loader2, X } from "lucide-react";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { useNavigate } from "react-router-dom";
@@ -117,6 +117,22 @@ export const CommandPalette = () => {
     { id: "nav-resources", title: t("nav.resources") || "Ressources", category: "Navigation", action: () => go("/resources") },
   ];
 
+  const highlightMatch = useCallback((text: string, q: string): ReactNode => {
+    const trimmed = q.trim();
+    if (trimmed.length < 2) return text;
+    try {
+      const escaped = trimmed.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`(${escaped})`, 'gi');
+      const parts = text.split(regex);
+      if (parts.length === 1) return text;
+      return parts.map((part, i) =>
+        regex.test(part) ? <mark key={i} className="bg-primary/20 text-foreground rounded-sm px-0.5">{part}</mark> : part
+      );
+    } catch {
+      return text;
+    }
+  }, []);
+
   const actionCommands: NavCommand[] = user
     ? [
         { id: "create-project", title: t("nav.submit") || "Créer un projet", category: "Actions", action: () => go("/projects?action=create") },
@@ -228,13 +244,17 @@ export const CommandPalette = () => {
                 <CommandItem key={r.id} onSelect={() => go(r.url)} className="flex items-center gap-3 p-3 cursor-pointer">
                   <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <div className="min-w-0 flex-1">
-                    <div className="font-medium truncate">{r.title}</div>
-                    {r.description && <div className="text-sm text-muted-foreground truncate">{r.description}</div>}
+                    <div className="font-medium truncate">{highlightMatch(r.title, query)}</div>
+                    {r.description && <div className="text-sm text-muted-foreground truncate">{highlightMatch(r.description, query)}</div>}
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                 </CommandItem>
               ))}
             </CommandGroup>
+          )}
+
+          {isSearching && results.documents.length > 0 && results.forum.length > 0 && (
+            <div className="mx-3 my-1 h-px bg-border" />
           )}
 
           {isSearching && results.forum.length > 0 && (
@@ -243,13 +263,17 @@ export const CommandPalette = () => {
                 <CommandItem key={r.id} onSelect={() => go(r.url)} className="flex items-center gap-3 p-3 cursor-pointer">
                   <MessageSquare className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <div className="min-w-0 flex-1">
-                    <div className="font-medium truncate">{r.title}</div>
-                    {r.description && <div className="text-sm text-muted-foreground truncate">{r.description}</div>}
+                    <div className="font-medium truncate">{highlightMatch(r.title, query)}</div>
+                    {r.description && <div className="text-sm text-muted-foreground truncate">{highlightMatch(r.description, query)}</div>}
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                 </CommandItem>
               ))}
             </CommandGroup>
+          )}
+
+          {isSearching && (results.documents.length > 0 || results.forum.length > 0) && results.projects.length > 0 && (
+            <div className="mx-3 my-1 h-px bg-border" />
           )}
 
           {isSearching && results.projects.length > 0 && (
@@ -258,8 +282,8 @@ export const CommandPalette = () => {
                 <CommandItem key={r.id} onSelect={() => go(r.url)} className="flex items-center gap-3 p-3 cursor-pointer">
                   <FolderKanban className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <div className="min-w-0 flex-1">
-                    <div className="font-medium truncate">{r.title}</div>
-                    {r.description && <div className="text-sm text-muted-foreground truncate">{r.description}</div>}
+                    <div className="font-medium truncate">{highlightMatch(r.title, query)}</div>
+                    {r.description && <div className="text-sm text-muted-foreground truncate">{highlightMatch(r.description, query)}</div>}
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                 </CommandItem>
