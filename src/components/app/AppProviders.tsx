@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
 import { DemoModeProvider } from "@/contexts/DemoModeContext";
@@ -45,9 +46,10 @@ export function AppProviders({ children }: AppProvidersProps) {
       }}
     >
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Sonner />
-          <BrowserRouter>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem storageKey="nexus-theme">
+          <TooltipProvider>
+            <Sonner />
+            <BrowserRouter>
             <ErrorBoundary
               onError={(error) => {
                 logger.error('Auth context error', error, {
@@ -74,7 +76,8 @@ export function AppProviders({ children }: AppProvidersProps) {
               </AuthProvider>
             </ErrorBoundary>
           </BrowserRouter>
-        </TooltipProvider>
+          </TooltipProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );

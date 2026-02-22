@@ -16,7 +16,10 @@ import {
   Settings,
   LogIn,
   ChevronDown,
-  ArrowRight
+  ArrowRight,
+  Sun,
+  Moon,
+  Monitor
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -34,8 +37,31 @@ import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDirection } from "@/hooks/useDirection";
+import { useTheme } from "next-themes";
 import { mainNavigation } from "@/config/navigation";
 import { shouldShowAdminLinks } from "@/config/blueprintGuards";
+
+// Theme Toggle Button
+function ThemeToggleButton() {
+  const { theme, setTheme } = useTheme();
+  const cycle = () => {
+    if (theme === 'light') setTheme('dark');
+    else if (theme === 'dark') setTheme('system');
+    else setTheme('light');
+  };
+  const icon = theme === 'dark' ? <Moon className="h-4 w-4" /> : theme === 'system' ? <Monitor className="h-4 w-4" /> : <Sun className="h-4 w-4" />;
+  const label = theme === 'dark' ? 'Sombre' : theme === 'system' ? 'Système' : 'Clair';
+  return (
+    <button
+      onClick={cycle}
+      className="p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200"
+      aria-label={`Thème: ${label}`}
+      title={`Thème: ${label}`}
+    >
+      {icon}
+    </button>
+  );
+}
 
 const ModernHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -262,6 +288,9 @@ const ModernHeader = () => {
 
             {/* Actions de droite avec effets premium */}
             <div className={cn("flex items-center", isRTL ? "space-x-reverse space-x-2" : "space-x-2")}>
+              {/* Theme Toggle */}
+              <ThemeToggleButton />
+
               {/* Sélecteur de langue - visible pour TOUS les utilisateurs */}
               <LanguageSelector variant="ghost" size="sm" showLabel={false} />
               

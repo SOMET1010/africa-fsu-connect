@@ -37,7 +37,7 @@ export interface UserPreferences {
 }
 
 const defaultPreferences: UserPreferences = {
-  theme: 'system',
+  theme: 'light',
   language: 'fr',
   navigation_level: 'beginner',
   homeLayout: 'light',

@@ -11,7 +11,7 @@ import { HomeTrustBadge } from "@/components/home/HomeTrustBadge";
 import { HomeTrustSection } from "@/components/home/HomeTrustSection";
 import { HomeMemberMapBlock } from "@/components/home/HomeMemberMapBlock";
 import { AdminLocaleConsistencyAlert } from "@/components/home/AdminLocaleConsistencyAlert";
-import { HomeLayoutToggle } from "@/components/home/HomeLayoutToggle";
+
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import Footer from "@/components/layout/Footer";
 
@@ -52,7 +52,6 @@ const Index = () => {
         <Footer />
       </div>
 
-      <HomeLayoutToggle />
     </div>
   );
 };
