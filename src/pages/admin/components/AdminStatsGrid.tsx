@@ -33,7 +33,7 @@ export const AdminStatsGrid = ({ stats }: AdminStatsGridProps) => {
                   </span>
                 </div>
               </div>
-              <div className={`p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors ${stat.color}`}>
+              <div className={`p-3 rounded-xl transition-colors ${stat.color || 'bg-blue-100 text-blue-700 group-hover:bg-blue-200'}`}>
                 <Icon className="h-6 w-6" />
               </div>
             </div>
