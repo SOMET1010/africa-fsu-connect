@@ -66,11 +66,11 @@ export function WelcomeMessage({ show, onDismiss, variant = 'network' }: Welcome
 
   // Variant Network (nouvelle promesse UX NEXUS)
   return (
-    <Card className="overflow-hidden border-0 shadow-lg bg-gradient-to-br from-[#0B3C5D] to-[#328E6E] text-white">
+    <Card className="overflow-hidden border shadow-sm bg-gradient-to-br from-[#0B3C5D] to-[#328E6E] text-white">
       <CardContent className="p-6 md:p-8">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
           {/* Icon */}
-          <div className="w-16 h-16 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center flex-shrink-0">
+          <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center flex-shrink-0">
             <Globe className="h-8 w-8 text-white" />
           </div>
 

@@ -52,14 +52,14 @@ export const MapFiltersHUD = ({
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className="bg-slate-900/80 backdrop-blur-xl border-white/10 text-white hover:bg-slate-800 hover:text-white gap-2"
+            className="bg-slate-900 border-slate-700 text-white hover:bg-slate-800 hover:text-white gap-2"
           >
             <Layers className="h-4 w-4" />
             <span>{currentLayer.icon} {currentLayer.label}</span>
             <ChevronDown className="h-3 w-3 opacity-50" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-slate-900/95 backdrop-blur-xl border-white/10">
+        <DropdownMenuContent className="bg-slate-900 border-slate-700">
           {layers.map((layer) => (
             <DropdownMenuItem
               key={layer.id}

@@ -106,7 +106,7 @@ export function DemoOverlay() {
           }}
           className="absolute w-[400px] max-w-[90vw]"
         >
-          <Card className="p-6 shadow-2xl demo-tooltip">
+          <Card className="p-6 shadow-md demo-tooltip">
             <div className="flex items-start justify-between mb-4">
               <Badge variant="secondary" className="text-sm">
                 Étape {currentStepIndex + 1} / {demoSteps.length}

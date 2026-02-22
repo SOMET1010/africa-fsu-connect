@@ -246,7 +246,7 @@ export function VirtualAssistant() {
     return (
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-50"
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-sm hover:shadow-md transition-all duration-200 z-50"
         size="lg"
       >
         <MessageSquare className="h-6 w-6" />
@@ -255,7 +255,7 @@ export function VirtualAssistant() {
   }
   
   return (
-    <Card className={`fixed bottom-6 right-6 z-50 shadow-2xl transition-all duration-300 ${
+    <Card className={`fixed bottom-6 right-6 z-50 shadow-md transition-all duration-300 ${
       isMinimized ? 'w-80 h-16' : 'w-96 h-[500px]'
     }`}>
       <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">

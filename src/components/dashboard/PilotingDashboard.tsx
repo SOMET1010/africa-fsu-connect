@@ -39,15 +39,15 @@ export const PilotingDashboard = () => {
           </div>
           
           <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" className="backdrop-blur-sm">
+            <Button variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
               Exporter
             </Button>
-            <Button variant="outline" size="sm" className="backdrop-blur-sm">
+            <Button variant="outline" size="sm">
               <Bell className="h-4 w-4 mr-2" />
               Alertes
             </Button>
-            <Button variant="outline" size="sm" className="backdrop-blur-sm">
+            <Button variant="outline" size="sm">
               <Settings className="h-4 w-4 mr-2" />
               Configurer
             </Button>

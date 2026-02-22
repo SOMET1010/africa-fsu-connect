@@ -211,11 +211,9 @@ export function NexusRegions() {
                   {/* Card */}
                   <div 
                     className={cn(
-                      "relative h-full rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm",
+                      "relative h-full rounded-2xl border border-white/10 bg-white/5",
                       "p-5 flex flex-col transition-all duration-300",
-                      region.borderGlow,
-                      "group-hover:shadow-xl",
-                      region.shadowGlow
+                      "group-hover:shadow-sm"
                     )}
                   >
                     {/* Header with icon and count - RTL-aware */}

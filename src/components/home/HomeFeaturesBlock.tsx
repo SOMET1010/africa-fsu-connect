@@ -58,7 +58,7 @@ function FeatureCard({ feature, index, isVisible, variant = 'light' }: {
       <div
         className={cn(
           "group p-6 rounded-xl transition-all duration-300 hover:-translate-y-1",
-          d ? "bg-white/5 border border-white/10 hover:border-[hsl(var(--nx-gold))]/40 hover:shadow-lg" : "bg-[hsl(var(--nx-surface))] border border-[hsl(var(--nx-border))] shadow-[var(--nx-shadow-sm)] hover:border-[hsl(var(--nx-gold))]/40 hover:shadow-[var(--nx-shadow-md)]",
+          d ? "bg-white/5 border border-white/10 hover:border-[hsl(var(--nx-gold))]/40 hover:shadow-sm" : "bg-[hsl(var(--nx-surface))] border border-[hsl(var(--nx-border))] shadow-[var(--nx-shadow-sm)] hover:border-[hsl(var(--nx-gold))]/40 hover:shadow-sm",
           isRTL && "text-right"
         )}
       >

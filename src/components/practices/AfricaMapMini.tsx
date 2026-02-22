@@ -96,7 +96,7 @@ export function AfricaMapMini({ onCountryClick, selectedCountry, className }: Af
           {/* Tooltip on hover */}
           <div className={cn(
             "absolute left-1/2 -translate-x-1/2 -top-12 px-2 py-1 rounded-lg",
-            "bg-popover border shadow-lg text-xs font-medium whitespace-nowrap",
+            "bg-popover border shadow-sm text-xs font-medium whitespace-nowrap",
             "opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none",
             "z-20"
           )}>
@@ -107,7 +107,7 @@ export function AfricaMapMini({ onCountryClick, selectedCountry, className }: Af
       ))}
 
       {/* Stats overlay */}
-      <div className="absolute bottom-3 left-3 bg-card/90 backdrop-blur-sm rounded-lg px-3 py-2 border shadow-sm">
+      <div className="absolute bottom-3 left-3 bg-card rounded-lg px-3 py-2 border shadow-sm">
         <p className="text-xs text-muted-foreground">Présence dans</p>
         <p className="text-lg font-bold text-primary">{countryPoints.length} pays</p>
       </div>

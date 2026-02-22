@@ -163,7 +163,7 @@ export function SutaChatbot() {
           >
             <Button
               onClick={() => setIsOpen(true)}
-              className="h-14 w-14 rounded-full bg-gradient-to-r from-primary to-accent shadow-lg hover:shadow-xl transition-all duration-300"
+              className="h-14 w-14 rounded-full bg-primary shadow-sm hover:shadow-md transition-all duration-300"
               aria-label="Ouvrir l'assistant SUTA"
             >
               <Bot className="h-6 w-6" />
@@ -181,7 +181,7 @@ export function SutaChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             className={cn(
-              "fixed z-50 bg-background border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col",
+              "fixed z-50 bg-background border border-border rounded-2xl shadow-md overflow-hidden flex flex-col",
               isExpanded 
                 ? "inset-4 md:inset-8" 
                 : "bottom-20 right-4 md:bottom-6 md:right-6 w-[calc(100%-2rem)] md:w-96 h-[500px] max-h-[80vh]"

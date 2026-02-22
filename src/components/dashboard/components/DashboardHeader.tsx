@@ -39,7 +39,7 @@ export function DashboardHeader({
         </div>
         
         {/* Progression du jour */}
-        <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
+        <div className="bg-white/20 rounded-lg p-4 text-center">
           <div className="text-2xl font-bold">{totalPoints}</div>
           <div className="text-sm text-white/80">Points aujourd'hui</div>
           <div className="text-xs text-white/70 mt-1">

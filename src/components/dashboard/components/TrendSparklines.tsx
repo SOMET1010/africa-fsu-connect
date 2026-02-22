@@ -28,7 +28,7 @@ const MiniSparkline = ({ data, color }: { data: number[]; color: string }) => {
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 return (
-                  <div className="bg-background border border-border rounded px-2 py-1 text-xs shadow-lg">
+                  <div className="bg-background border border-border rounded px-2 py-1 text-xs shadow-sm">
                     {payload[0].value}
                   </div>
                 );

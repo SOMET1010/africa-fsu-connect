@@ -63,7 +63,7 @@ export const CommunityHero = ({ totalCountries, totalCommunities }: CommunityHer
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.4 }}
-              className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:bg-white/[0.06] transition-all group"
+              className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] transition-all group"
             >
               <div className="w-10 h-10 rounded-xl bg-[hsl(var(--nx-gold)/0.15)] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <Globe className="w-5 h-5 text-[hsl(var(--nx-gold))]" />
@@ -76,7 +76,7 @@ export const CommunityHero = ({ totalCountries, totalCommunities }: CommunityHer
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.4 }}
-              className="sm:mt-8 bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:bg-white/[0.06] transition-all group"
+              className="sm:mt-8 bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] transition-all group"
             >
               <div className="w-10 h-10 rounded-xl bg-[hsl(var(--nx-cyan)/0.15)] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <Users className="w-5 h-5 text-[hsl(var(--nx-cyan))]" />

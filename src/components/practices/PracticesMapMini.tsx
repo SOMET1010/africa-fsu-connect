@@ -143,7 +143,7 @@ export function PracticesMapMini({
       ))}
 
       {/* Stats badge */}
-      <div className="absolute bottom-2 left-2 bg-card/95 backdrop-blur-sm rounded-lg px-2.5 py-1.5 border shadow-sm">
+      <div className="absolute bottom-2 left-2 bg-card rounded-lg px-2.5 py-1.5 border shadow-sm">
         <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Présence</p>
         <p className="text-base font-bold text-primary">{totalCountries} <span className="text-xs font-normal text-muted-foreground">pays</span></p>
       </div>

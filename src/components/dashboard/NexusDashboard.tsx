@@ -133,15 +133,15 @@ export function NexusDashboard() {
           </div>
           
           <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" className="backdrop-blur-sm">
+            <Button variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
               Exporter
             </Button>
-            <Button variant="outline" size="sm" className="backdrop-blur-sm">
+            <Button variant="outline" size="sm">
               <Bell className="h-4 w-4 mr-2" />
               Alertes
             </Button>
-            <Button variant="outline" size="sm" className="backdrop-blur-sm">
+            <Button variant="outline" size="sm">
               <Settings className="h-4 w-4 mr-2" />
               Configurer
             </Button>
@@ -160,7 +160,7 @@ export function NexusDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="p-6 hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary">
+                <Card className="p-6 hover:shadow-sm transition-all duration-300 border-l-4 border-l-primary">
                   <div className="flex items-start justify-between">
                     <div className="space-y-2">
                       <div className={`inline-flex p-2 rounded-lg ${stat.bgColor}`}>
