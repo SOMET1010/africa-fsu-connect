@@ -1,74 +1,76 @@
 
 
-# Theme Switch institutionnel avec contraste WCAG
+# Audit de contraste et typographie accessible sur les dashboards et cartes
 
-## Contexte
+## Probleme identifie
 
-Le projet dispose deja de `next-themes` avec un `ThemeToggleButton` dans le `ModernHeader`, mais plusieurs problemes existent :
-- Le toggle actuel est minimaliste (icone seule, pas de label)
-- Le `PublicHeader` utilise des couleurs hardcodees dark (`nx-night`, `text-white`) -- il ne reagit pas au changement de theme
-- Le `HomeLayoutToggle` (light/immersive) est un concept different du theme dark/light, ce qui cree de la confusion
-- Les tokens dark mode dans `index.css` doivent etre verifies pour le contraste WCAG AA (ratio 4.5:1 minimum)
+Tous les composants du dashboard utilisent des couleurs hardcodees pour un fond sombre (`bg-white/5`, `text-white`, `text-white/50`, `border-white/10`) au lieu des tokens semantiques du design system (`bg-card`, `text-foreground`, `text-muted-foreground`, `border-border`). En mode clair, ces composants sont quasi invisibles ou illisibles.
+
+**10 fichiers concernes**, tous dans `src/components/dashboard/`.
 
 ## Changements prevus
 
-### 1. Creer un composant `ThemeSwitch` institutionnel dedie
+### 1. Convertir tous les widgets dashboard en tokens semantiques
 
-Nouveau fichier : `src/components/shared/ThemeSwitch.tsx`
+Remplacement systematique dans chaque fichier :
 
-- Bouton accessible avec icone Sun/Moon et label textuel optionnel
-- Animation douce de transition entre les icones
-- Utilise `useTheme` de `next-themes`
-- Cycle simplifie : light <-> dark (suppression du mode "system" pour la clarte)
-- Attributs ARIA complets (`aria-label`, `role`)
-- Style institutionnel : bordure subtile, fond `bg-muted`, texte `text-foreground`
+| Couleur hardcodee | Token semantique |
+|---|---|
+| `bg-white/5 backdrop-blur-md border-white/10` | `bg-card border-border shadow-sm` |
+| `text-white` | `text-foreground` |
+| `text-white/80`, `text-white/70` | `text-foreground/80` ou `text-muted-foreground` |
+| `text-white/50`, `text-white/40` | `text-muted-foreground` |
+| `bg-white/10` (hover) | `hover:bg-muted` |
+| `border-white/20` | `border-border` |
+| `bg-white/10` (skeleton) | `bg-muted` |
+| `text-[hsl(var(--nx-gold))]` (hover) | `text-primary` (hover) |
+| `text-[hsl(var(--nx-electric))]` (icones) | `text-primary` |
 
-### 2. Auditer et corriger les tokens dark mode (WCAG AA)
+### Fichiers modifies
 
-Fichier : `src/index.css`
+**Widgets :**
+- `src/components/dashboard/widgets/UserKPICards.tsx` -- cartes KPI + bouton export
+- `src/components/dashboard/widgets/DashboardMapWidget.tsx` -- carte reseau + stats overlay
+- `src/components/dashboard/widgets/NetworkActivityWidget.tsx` -- activite reseau
+- `src/components/dashboard/widgets/UserRecentActivity.tsx` -- activite recente utilisateur
 
-Corrections sur les tokens `.dark` :
-- `--muted-foreground` : passer de `215 20% 65%` a `215 20% 70%` pour atteindre un ratio 4.5:1 sur fond `222 20% 10%`
-- `--border` : passer de `225 15% 22%` a `225 15% 28%` pour une meilleure visibilite des separateurs
-- Ajouter `--card-foreground: 210 40% 98%` explicitement pour garantir le contraste texte/carte
-- Verifier que `--destructive` sur fond dark atteint 4.5:1
+**Composants :**
+- `src/components/dashboard/components/InspiringProjects.tsx` -- cartes projets
+- `src/components/dashboard/components/RecentResources.tsx` -- ressources recentes
+- `src/components/dashboard/components/UpcomingEvents.tsx` -- evenements a venir
+- `src/components/dashboard/components/NetworkSummary.tsx` -- synthese narrative
+- `src/components/dashboard/components/DashboardHero.tsx` -- hero (deja sur fond primaire, ajuster textes secondaires)
+- `src/components/dashboard/NetworkDashboard.tsx` -- bouton replay tour
 
-### 3. Rendre le `PublicHeader` theme-aware
+### 2. Ameliorer la hierarchie typographique
 
-Fichier : `src/components/layout/PublicHeader.tsx`
+- Uniformiser les titres de section en `text-lg font-semibold text-foreground`
+- Uniformiser les textes secondaires en `text-sm text-muted-foreground` (minimum)
+- Remplacer `text-xs text-white/40` par `text-xs text-muted-foreground` -- le `text-xs` reste pour les metadonnees mais avec un contraste suffisant
+- Les valeurs numeriques (KPIs, stats) restent en `text-2xl font-bold text-foreground`
 
-Le header public utilise actuellement des couleurs hardcodees (`bg-[hsl(var(--nx-night))]`, `text-white`). Les changements :
-- Remplacer `bg-[hsl(var(--nx-night))]/80` par `bg-background/80`
-- Remplacer `text-white/70` par `text-muted-foreground`
-- Remplacer `text-white` par `text-foreground`
-- Remplacer les references `nx-gold` par `text-primary` et `bg-primary/10` pour les liens actifs
-- Remplacer les bordures `border-white/10` par `border-border`
-- Le header fonctionnera alors correctement en mode clair ET sombre
+### 3. Tokens de couleur pour icones (palette coherente)
 
-### 4. Integrer le `ThemeSwitch` dans les headers
+Remplacer les references `nx-gold` et `nx-electric` par des couleurs semantiques du design system :
+- Icones primaires : `text-primary`
+- Icones or/accent : `text-amber-600 dark:text-amber-400` (ratio WCAG valide dans les deux modes)
+- Icones emerald : `text-emerald-600 dark:text-emerald-400`
+- Icones violet : `text-purple-600 dark:text-purple-400`
+- Fonds d'icones : `bg-primary/10`, `bg-amber-100 dark:bg-amber-500/10`, etc.
 
-Fichiers : `src/components/layout/ModernHeader.tsx`, `src/components/layout/PublicHeader.tsx`
+### 4. Skeleton loading states
 
-- Remplacer le `ThemeToggleButton` inline dans `ModernHeader` par le nouveau `ThemeSwitch`
-- Ajouter le `ThemeSwitch` dans le `PublicHeader` (section "Right side", a cote du `LanguageSelector`)
-
-### 5. Supprimer le `HomeLayoutToggle` redondant
-
-Le `THEME_CHANGELOG.md` indique deja que le `HomeLayoutToggle` est redondant. Il sera supprime de `Index.tsx` (s'il y est encore utilise) pour eviter la confusion entre "theme" et "layout variant".
+Remplacer `bg-white/10` par `bg-muted` dans tous les etats de chargement (UserKPICards, DashboardMapWidget, UserRecentActivity).
 
 ---
 
-## Details techniques
+## Verification WCAG
 
-| Fichier | Changement |
-|---|---|
-| `src/components/shared/ThemeSwitch.tsx` | Nouveau composant theme toggle institutionnel |
-| `src/index.css` | Correction tokens dark pour WCAG AA |
-| `src/components/layout/PublicHeader.tsx` | Remplacement couleurs hardcodees par tokens semantiques |
-| `src/components/layout/ModernHeader.tsx` | Remplacement du `ThemeToggleButton` inline par `ThemeSwitch` |
-| `src/components/home/HomeLayoutToggle.tsx` | Suppression (redondant) |
+Tous les remplacements garantissent :
+- Ratio **4.5:1** minimum pour le texte principal (`text-foreground` sur `bg-card`)
+- Ratio **3:1** minimum pour le texte secondaire large (`text-muted-foreground` sur `bg-card`)
+- Les tokens sont deja audites dans `index.css` (corrections precedentes)
 
-### Pas de nouvelles dependances
+## Pas de nouvelles dependances
 
-Tout repose sur `next-themes` (deja installe) et Tailwind CSS.
-
+Tout utilise les tokens Tailwind existants.
