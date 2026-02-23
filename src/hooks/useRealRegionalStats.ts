@@ -10,110 +10,106 @@ interface RegionalData {
   color: string;
 }
 
+// Bidirectional mapping: geographic name ↔ community code
+const REGION_TO_CODE: Record<string, string> = {
+  "Afrique de l'Ouest": "CEDEAO",
+  "Afrique Australe": "SADC",
+  "Afrique de l'Est": "EAC",
+  "Afrique Centrale": "CEMAC",
+  "Afrique du Nord": "COMESA",
+};
+
+const CODE_TO_REGION: Record<string, string> = Object.fromEntries(
+  Object.entries(REGION_TO_CODE).map(([k, v]) => [v, k])
+);
+
+// Some agencies may use variant codes (EACO instead of EAC, ECOWAS instead of CEDEAO)
+const CODE_ALIASES: Record<string, string> = {
+  EACO: "EAC",
+  ECOWAS: "CEDEAO",
+  CRTEL: "CEDEAO", // francophone community maps to West Africa
+  UMA: "COMESA",   // Maghreb maps to North Africa
+  CPLP: "SADC",    // Lusophone maps to Southern Africa
+};
+
+function normalizeToCode(regionOrCode: string | null): string | null {
+  if (!regionOrCode) return null;
+  // Already a known code
+  if (CODE_TO_REGION[regionOrCode]) return regionOrCode;
+  // Geographic name → code
+  if (REGION_TO_CODE[regionOrCode]) return REGION_TO_CODE[regionOrCode];
+  // Alias → canonical code
+  if (CODE_ALIASES[regionOrCode]) return CODE_ALIASES[regionOrCode];
+  return null;
+}
+
+const CANONICAL_REGIONS = ["CEDEAO", "SADC", "EAC", "COMESA", "CEMAC"] as const;
+const MAX_COUNTRIES: Record<string, number> = { CEDEAO: 15, SADC: 16, EAC: 7, COMESA: 12, CEMAC: 6 };
+
 export const useRealRegionalStats = () => {
   return useQuery({
     queryKey: ["real-regional-stats"],
     queryFn: async () => {
-      // Fetch agencies with country info
-      const { data: agencies, error: agenciesError } = await supabase
-        .from("agencies")
-        .select("region, country, is_active")
-        .eq("is_active", true);
+      const [agenciesRes, projectsRes, countriesRes] = await Promise.all([
+        supabase.from("agencies").select("id, region, country, is_active").eq("is_active", true),
+        supabase.from("agency_projects").select("agency_id, status"),
+        supabase.from("countries").select("code, region, sutel_community"),
+      ]);
 
-      if (agenciesError) throw agenciesError;
+      if (agenciesRes.error) throw agenciesRes.error;
+      if (projectsRes.error) throw projectsRes.error;
+      if (countriesRes.error) throw countriesRes.error;
 
-      // Fetch projects
-      const { data: projects, error: projectsError } = await supabase
-        .from("agency_projects")
-        .select("agency_id, status");
+      const agencies = agenciesRes.data ?? [];
+      const projects = projectsRes.data ?? [];
+      const countries = countriesRes.data ?? [];
 
-      if (projectsError) throw projectsError;
+      // Init stats
+      const regionStats: Record<string, RegionalData> = {};
+      for (const code of CANONICAL_REGIONS) {
+        regionStats[code] = { name: code, countries: 0, projects: 0, agencies: 0, coverage: 0, color: "" };
+      }
 
-      // Fetch countries
-      const { data: countries, error: countriesError } = await supabase
-        .from("countries")
-        .select("code, region");
-
-      if (countriesError) throw countriesError;
-
-      // Map region names to standardized format (French names from DB)
-      const regionMapping: { [key: string]: string } = {
-        "Afrique de l'Ouest": "CEDEAO",
-        "Afrique Australe": "SADC",
-        "Afrique de l'Est": "EAC",
-        "Afrique Centrale": "CEMAC",
-        "Afrique du Nord": "COMESA"
-      };
-
-      // Calculate stats by region
-      const regionStats: { [key: string]: RegionalData } = {
-        "CEDEAO": { name: "CEDEAO", countries: 0, projects: 0, agencies: 0, coverage: 0, color: "bg-blue-500" },
-        "SADC": { name: "SADC", countries: 0, projects: 0, agencies: 0, coverage: 0, color: "bg-green-500" },
-        "EAC": { name: "EAC", countries: 0, projects: 0, agencies: 0, coverage: 0, color: "bg-purple-500" },
-        "COMESA": { name: "COMESA", countries: 0, projects: 0, agencies: 0, coverage: 0, color: "bg-orange-500" },
-        "CEMAC": { name: "CEMAC", countries: 0, projects: 0, agencies: 0, coverage: 0, color: "bg-red-500" }
-      };
-
-      // Count countries by region
-      const regionCountries: { [key: string]: Set<string> } = {};
-      countries?.forEach(country => {
-        const mappedRegion = regionMapping[country.region || ""] || country.region;
-        if (mappedRegion && regionStats[mappedRegion]) {
-          if (!regionCountries[mappedRegion]) {
-            regionCountries[mappedRegion] = new Set();
-          }
-          regionCountries[mappedRegion].add(country.code);
+      // Count countries by geographic region
+      const regionCountrySets: Record<string, Set<string>> = {};
+      for (const c of countries) {
+        const code = normalizeToCode(c.region);
+        if (code && regionStats[code]) {
+          if (!regionCountrySets[code]) regionCountrySets[code] = new Set();
+          regionCountrySets[code].add(c.code);
         }
-      });
+      }
+      for (const [code, set] of Object.entries(regionCountrySets)) {
+        regionStats[code].countries = set.size;
+      }
 
-      Object.keys(regionCountries).forEach(region => {
-        regionStats[region].countries = regionCountries[region].size;
-      });
-
-      // Count agencies by region
-      const agencyByRegion: { [key: string]: string[] } = {};
-      agencies?.forEach(agency => {
-        const mappedRegion = regionMapping[agency.region || ""] || agency.region;
-        if (mappedRegion && regionStats[mappedRegion]) {
-          regionStats[mappedRegion].agencies++;
-          if (!agencyByRegion[mappedRegion]) {
-            agencyByRegion[mappedRegion] = [];
-          }
-          agencyByRegion[mappedRegion].push(agency.country);
+      // Count agencies — their `region` field may be a code or alias
+      const agencyIdToCode: Record<string, string> = {};
+      for (const agency of agencies) {
+        const code = normalizeToCode(agency.region);
+        if (code && regionStats[code]) {
+          regionStats[code].agencies++;
+          agencyIdToCode[agency.id] = code;
         }
-      });
+      }
 
-      // Count projects by region
-      const agencyRegionMap: { [agencyId: string]: string } = {};
-      agencies?.forEach(agency => {
-        const mappedRegion = regionMapping[agency.region || ""] || agency.region;
-        if (mappedRegion) {
-          agencyRegionMap[agency.country] = mappedRegion;
+      // Count projects by agency region
+      for (const project of projects) {
+        const code = agencyIdToCode[project.agency_id];
+        if (code && regionStats[code]) {
+          regionStats[code].projects++;
         }
-      });
+      }
 
-      projects?.forEach(project => {
-        // Find agency region
-        const agency = agencies?.find(a => a.country === project.agency_id);
-        if (agency) {
-          const mappedRegion = regionMapping[agency.region || ""] || agency.region;
-          if (mappedRegion && regionStats[mappedRegion]) {
-            regionStats[mappedRegion].projects++;
-          }
-        }
-      });
+      // Coverage
+      for (const code of CANONICAL_REGIONS) {
+        const max = MAX_COUNTRIES[code] || 10;
+        regionStats[code].coverage = Math.round((regionStats[code].countries / max) * 100);
+      }
 
-      // Calculate coverage
-      const maxCountries = { CEDEAO: 15, SADC: 16, EAC: 7, COMESA: 12, CEMAC: 6 };
-      Object.keys(regionStats).forEach(region => {
-        const max = maxCountries[region as keyof typeof maxCountries] || 10;
-        regionStats[region].coverage = Math.round((regionStats[region].countries / max) * 100);
-      });
-
-      // Global stats
-      const totalCountries = Object.values(regionStats).reduce((sum, r) => sum + r.countries, 0);
-      const totalProjects = Object.values(regionStats).reduce((sum, r) => sum + r.projects, 0);
-      const totalAgencies = agencies?.length || 0;
+      const totalCountries = Object.values(regionStats).reduce((s, r) => s + r.countries, 0);
+      const totalProjects = Object.values(regionStats).reduce((s, r) => s + r.projects, 0);
+      const totalAgencies = agencies.length;
 
       return {
         regions: Object.values(regionStats),
@@ -121,8 +117,8 @@ export const useRealRegionalStats = () => {
           countries: totalCountries,
           projects: totalProjects,
           agencies: totalAgencies,
-          users: Math.round(totalAgencies * 3500) // Estimate based on agencies
-        }
+          users: Math.round(totalAgencies * 3500),
+        },
       };
     },
   });
