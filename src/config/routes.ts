@@ -20,6 +20,7 @@ import {
   Video,
   Handshake,
   Mail,
+  Database,
 } from 'lucide-react';
 
 // UX Universe types for organized navigation
@@ -94,6 +95,7 @@ const PrivacyPolicy = lazy(() => import('@/pages/legal/PrivacyPolicy'));
 const TermsOfUse = lazy(() => import('@/pages/legal/TermsOfUse'));
 const MyCountry = lazy(() => import('@/pages/MyCountry'));
 const CrossBorderCollaboration = lazy(() => import('@/pages/CrossBorderCollaboration'));
+const MigrationStatus = lazy(() => import('@/pages/debug/MigrationStatus'));
 
 // New network pages (3-layer architecture)
 const NetworkView = lazy(() => import('@/pages/NetworkView'));
@@ -611,6 +613,20 @@ export const ROUTES: RouteConfig[] = [
     showInMobileNav: false,
     hideFromNav: true,
     category: 'main',
+  },
+
+  // Debug pages (public)
+  {
+    path: '/debug/migrations',
+    component: MigrationStatus,
+    title: 'Migration Status',
+    description: 'Tableau de bord de santé des migrations Supabase',
+    icon: Database,
+    isProtected: false,
+    showInSidebar: false,
+    showInMobileNav: false,
+    hideFromNav: true,
+    category: 'admin',
   },
 
   {
