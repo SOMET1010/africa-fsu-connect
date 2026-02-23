@@ -524,13 +524,13 @@ Ces tables proviennent d'un module immobilier/gestion locative. Elles ne sont **
 
 | Région géographique | Code communauté | `countries.region` | `agencies.region` | `countries.sutel_community` |
 |---------------------|----------------|--------------------|--------------------|-----------------------------|
-| Afrique de l'Ouest | CEDEAO | ✅ `Afrique de l'Ouest` | ✅ `CEDEAO` | `CRTEL`, `ECOWAS` |
-| Afrique Centrale | CEMAC | ✅ `Afrique Centrale` | — (pas d'agence) | `CRTEL` |
-| Afrique de l'Est | EAC | ✅ `Afrique de l'Est` | ✅ `EACO` | `EACO` |
-| Afrique du Nord | COMESA | ✅ `Afrique du Nord` | — (pas d'agence) | `COMESA`, `UMA` |
-| Afrique Australe | SADC | ✅ `Afrique Australe` | ✅ `SADC` | `SADC` |
+| Afrique de l'Ouest | CEDEAO | ✅ | ✅ | `CRTEL`, `ECOWAS` |
+| Afrique Centrale | CEMAC | ✅ | ✅ | `CRTEL` |
+| Afrique de l'Est | EAC | ✅ | ✅ | `EACO` |
+| Afrique du Nord | COMESA | ✅ | ✅ | `COMESA`, `UMA` |
+| Afrique Australe | SADC | ✅ | ✅ | `SADC` |
 
-> **⚠️ Incohérence connue** : les `agencies` utilisent des codes communauté dans leur champ `region`, tandis que les `countries` utilisent des noms géographiques. Le hook `useRealRegionalStats` gère cette normalisation via un mapping bidirectionnel avec alias.
+> ✅ **Corrigé le 23/02/2026** : Les `agencies` et `countries` utilisent désormais le même format de région géographique. Une contrainte CHECK garantit les valeurs valides. Le champ `sutel_community` dans `countries` reste un code communauté distinct.
 
 ---
 

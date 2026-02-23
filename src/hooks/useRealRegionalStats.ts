@@ -10,8 +10,8 @@ interface RegionalData {
   color: string;
 }
 
-// Bidirectional mapping: geographic name ↔ community code
-const REGION_TO_CODE: Record<string, string> = {
+// Canonical region names (now consistent between countries and agencies tables)
+const REGION_CODES: Record<string, string> = {
   "Afrique de l'Ouest": "CEDEAO",
   "Afrique Australe": "SADC",
   "Afrique de l'Est": "EAC",
@@ -19,32 +19,9 @@ const REGION_TO_CODE: Record<string, string> = {
   "Afrique du Nord": "COMESA",
 };
 
-const CODE_TO_REGION: Record<string, string> = Object.fromEntries(
-  Object.entries(REGION_TO_CODE).map(([k, v]) => [v, k])
-);
-
-// Some agencies may use variant codes (EACO instead of EAC, ECOWAS instead of CEDEAO)
-const CODE_ALIASES: Record<string, string> = {
-  EACO: "EAC",
-  ECOWAS: "CEDEAO",
-  CRTEL: "CEDEAO", // francophone community maps to West Africa
-  UMA: "COMESA",   // Maghreb maps to North Africa
-  CPLP: "SADC",    // Lusophone maps to Southern Africa
+const MAX_COUNTRIES: Record<string, number> = {
+  CEDEAO: 15, SADC: 16, EAC: 7, COMESA: 12, CEMAC: 6,
 };
-
-function normalizeToCode(regionOrCode: string | null): string | null {
-  if (!regionOrCode) return null;
-  // Already a known code
-  if (CODE_TO_REGION[regionOrCode]) return regionOrCode;
-  // Geographic name → code
-  if (REGION_TO_CODE[regionOrCode]) return REGION_TO_CODE[regionOrCode];
-  // Alias → canonical code
-  if (CODE_ALIASES[regionOrCode]) return CODE_ALIASES[regionOrCode];
-  return null;
-}
-
-const CANONICAL_REGIONS = ["CEDEAO", "SADC", "EAC", "COMESA", "CEMAC"] as const;
-const MAX_COUNTRIES: Record<string, number> = { CEDEAO: 15, SADC: 16, EAC: 7, COMESA: 12, CEMAC: 6 };
 
 export const useRealRegionalStats = () => {
   return useQuery({
@@ -53,7 +30,7 @@ export const useRealRegionalStats = () => {
       const [agenciesRes, projectsRes, countriesRes] = await Promise.all([
         supabase.from("agencies").select("id, region, country, is_active").eq("is_active", true),
         supabase.from("agency_projects").select("agency_id, status"),
-        supabase.from("countries").select("code, region, sutel_community"),
+        supabase.from("countries").select("code, region"),
       ]);
 
       if (agenciesRes.error) throw agenciesRes.error;
@@ -64,17 +41,17 @@ export const useRealRegionalStats = () => {
       const projects = projectsRes.data ?? [];
       const countries = countriesRes.data ?? [];
 
-      // Init stats
+      // Init stats per canonical code
       const regionStats: Record<string, RegionalData> = {};
-      for (const code of CANONICAL_REGIONS) {
+      for (const [regionName, code] of Object.entries(REGION_CODES)) {
         regionStats[code] = { name: code, countries: 0, projects: 0, agencies: 0, coverage: 0, color: "" };
       }
 
-      // Count countries by geographic region
+      // Count countries by region (both tables now use geographic names)
       const regionCountrySets: Record<string, Set<string>> = {};
       for (const c of countries) {
-        const code = normalizeToCode(c.region);
-        if (code && regionStats[code]) {
+        const code = REGION_CODES[c.region ?? ""];
+        if (code) {
           if (!regionCountrySets[code]) regionCountrySets[code] = new Set();
           regionCountrySets[code].add(c.code);
         }
@@ -83,17 +60,17 @@ export const useRealRegionalStats = () => {
         regionStats[code].countries = set.size;
       }
 
-      // Count agencies — their `region` field may be a code or alias
+      // Count agencies by region
       const agencyIdToCode: Record<string, string> = {};
       for (const agency of agencies) {
-        const code = normalizeToCode(agency.region);
+        const code = REGION_CODES[agency.region ?? ""];
         if (code && regionStats[code]) {
           regionStats[code].agencies++;
           agencyIdToCode[agency.id] = code;
         }
       }
 
-      // Count projects by agency region
+      // Count projects by agency
       for (const project of projects) {
         const code = agencyIdToCode[project.agency_id];
         if (code && regionStats[code]) {
@@ -102,7 +79,7 @@ export const useRealRegionalStats = () => {
       }
 
       // Coverage
-      for (const code of CANONICAL_REGIONS) {
+      for (const code of Object.values(REGION_CODES)) {
         const max = MAX_COUNTRIES[code] || 10;
         regionStats[code].coverage = Math.round((regionStats[code].countries / max) * 100);
       }
