@@ -17,7 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface ModernForumCardProps {
-  id: number;
+  id: string | number;
   title: string;
   content: string;
   author: {

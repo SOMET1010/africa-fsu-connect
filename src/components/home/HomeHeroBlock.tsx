@@ -6,6 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
 import { useHomepageContent } from "@/hooks/useHomepageContent";
+import { useHomeStats } from "@/hooks/useHomeStats";
 import { useAfricanCountries } from "@/hooks/useCountries";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { HomeMemberMap } from "@/components/home/HomeMemberMap";
@@ -32,11 +33,45 @@ export function HomeHeroBlock() {
   const countByLevel = (level: ActivityLevel): number =>
     countries.filter((c) => getCountryActivity(c.code).level === level).length;
 
-  const kpis = [
-    { icon: Users, label: "Pays membres", value: countries.length || 54, delta: "+3 cette année", color: "text-blue-600", bg: "bg-blue-50", href: "/network" },
-    { icon: FolderOpen, label: "Projets actifs", value: 127, delta: "+18 ce trimestre", color: "text-emerald-600", bg: "bg-emerald-50", href: "/projects" },
-    { icon: Globe, label: "Partenariats", value: 892, delta: "+24 ce mois", color: "text-violet-600", bg: "bg-violet-50", href: "/network" },
-    { icon: Calendar, label: "Événements", value: 45, delta: "cette année", color: "text-amber-600", bg: "bg-amber-50", href: "/events" },
+  const { data: homeStats, isLoading: statsLoading } = useHomeStats();
+  const countriesCount = homeStats?.countries ?? countries.length;
+  const heroKpis = [
+    {
+      icon: Users,
+      label: "Pays membres",
+      value: countriesCount || 0,
+      delta: statsLoading ? "Actualisation..." : "Réseau panafricain",
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+      href: "/network",
+    },
+    {
+      icon: FolderOpen,
+      label: "Projets actifs",
+      value: homeStats?.projects ?? 127,
+      delta: homeStats ? `+${homeStats.newProjectsThisQuarter} ce trimestre` : "+18 ce trimestre",
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
+      href: "/projects",
+    },
+    {
+      icon: Globe,
+      label: "Partenariats",
+      value: homeStats?.partners ?? 892,
+      delta: homeStats ? `+${homeStats.newPartnersThisMonth} ce mois` : "+24 ce mois",
+      color: "text-violet-600",
+      bg: "bg-violet-50",
+      href: "/network",
+    },
+    {
+      icon: Calendar,
+      label: "Événements",
+      value: homeStats?.events ?? 45,
+      delta: homeStats ? `${homeStats.eventsThisYear} cette année` : "cette année",
+      color: "text-amber-600",
+      bg: "bg-amber-50",
+      href: "/events",
+    },
   ];
 
   return (
@@ -106,7 +141,7 @@ export function HomeHeroBlock() {
       <div className="border-t border-b border-gray-100 bg-gray-50/50">
         <div className="container mx-auto px-4 py-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {kpis.map((kpi, i) => (
+            {heroKpis.map((kpi, i) => (
               <Link key={i} to={kpi.href} className="group">
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}

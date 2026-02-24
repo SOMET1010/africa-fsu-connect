@@ -1,6 +1,7 @@
 import { Activity, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useNetworkActivity } from "@/hooks/useNetworkActivity";
 
 interface NetworkActivity {
   id: string;
@@ -63,10 +64,39 @@ const activityTypeColors: Record<NetworkActivity["type"], string> = {
   collaboration: "bg-purple-600 dark:bg-purple-400"
 };
 
+const mapFeedType = (type: string): NetworkActivity["type"] => {
+  switch (type) {
+    case "project":
+      return "project";
+    case "event":
+      return "event";
+    case "document":
+      return "resource";
+    default:
+      return "collaboration";
+  }
+};
+
 export function NetworkActivityWidget({ 
-  activities = defaultActivities,
+  activities,
   onViewAll
 }: NetworkActivityWidgetProps) {
+  const { activities: liveActivities, loading } = useNetworkActivity(6);
+  const dataSource = activities?.length
+    ? activities
+    : liveActivities.length
+      ? liveActivities.map((activity) => ({
+          id: activity.id,
+          title: activity.title,
+          description: activity.action,
+          time: activity.timeAgo,
+          country: activity.country,
+          countryFlag: activity.flag,
+          type: mapFeedType(activity.type),
+        }))
+      : defaultActivities;
+  const visibleActivities = dataSource.slice(0, 4);
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 10 }}
@@ -93,7 +123,7 @@ export function NetworkActivityWidget({
       </div>
       
       <div className="space-y-4">
-        {activities.slice(0, 4).map((activity) => (
+        {visibleActivities.map((activity) => (
           <div key={activity.id} className="flex items-start gap-3 group">
             <div className="relative mt-1">
               <div className={`w-2.5 h-2.5 rounded-full ${activityTypeColors[activity.type]}`} />

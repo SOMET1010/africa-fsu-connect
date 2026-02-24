@@ -35,7 +35,7 @@ import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDirection } from "@/hooks/useDirection";
-import { mainNavigation } from "@/config/navigation";
+import { mainNavigation, type NavItem } from "@/config/navigation";
 import { shouldShowAdminLinks } from "@/config/blueprintGuards";
 
 
@@ -65,6 +65,14 @@ const ModernHeader = () => {
   const isActive = (path: string) => location.pathname === path;
   const isInSubmenu = (submenu?: { href: string }[]) => 
     submenu?.some(item => location.pathname === item.href);
+
+  const resolveNavHref = (item: NavItem) => item.href ?? item.submenu?.[0]?.href ?? "/";
+  const resolveNavLabel = (item: NavItem) => item.labelKey ? t(item.labelKey) : item.label;
+  const isNavActive = (item: NavItem) => {
+    if (item.href) return isActive(item.href);
+    if (item.submenu) return isInSubmenu(item.submenu);
+    return false;
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -326,6 +334,32 @@ const ModernHeader = () => {
                         </Link>
                       </DropdownMenuItem>
                     )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="px-4 py-1 text-[0.65rem] font-semibold tracking-[0.3em] text-muted-foreground uppercase">
+                      Explorer
+                    </DropdownMenuLabel>
+                    {mainNavigation.map((item) => {
+                      const target = resolveNavHref(item);
+                      const active = isNavActive(item);
+                      const Icon = item.icon;
+                      return (
+                        <DropdownMenuItem key={item.id ?? item.label} className="p-0">
+                          <Link
+                            to={target}
+                            className={cn(
+                              "flex items-center gap-3 px-4 py-2 text-sm transition-all duration-200 rounded-none w-full",
+                              active
+                                ? "text-primary bg-primary/10"
+                                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                              isRTL && "flex-row-reverse"
+                            )}
+                          >
+                            <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-muted-foreground")} />
+                            <span>{resolveNavLabel(item)}</span>
+                          </Link>
+                        </DropdownMenuItem>
+                      );
+                    })}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className={cn("cursor-pointer text-destructive hover:bg-destructive/10", isRTL && "flex-row-reverse")}>
                       <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />

@@ -1,36 +1,14 @@
 // Timeline narrative — design institutionnel clair
 
-import { FileText, Users, MessageCircle, Calendar, FolderOpen } from "lucide-react";
+import { FileText, MessageCircle, Calendar, FolderOpen } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { LucideIcon } from "lucide-react";
-
-type ActivityType = 'project' | 'collaboration' | 'document' | 'event' | 'discussion';
-
-interface ActivityItem {
-  id: string;
-  type: ActivityType;
-  country: string;
-  flag: string;
-  action: string;
-  title: string;
-  timeAgo: string;
-}
-
-const mockActivities: ActivityItem[] = [
-  { id: '1', type: 'project', country: 'Mali', flag: '🇲🇱', action: 'a partagé un projet', title: 'Connectivité rurale dans la région de Mopti', timeAgo: 'il y a 2 heures' },
-  { id: '2', type: 'document', country: 'Kenya', flag: '🇰🇪', action: 'a documenté une bonne pratique', title: 'Méthodologie de suivi des bénéficiaires', timeAgo: 'il y a 5 heures' },
-  { id: '3', type: 'event', country: 'Réseau SUTEL', flag: '🌍', action: 'organise un webinaire', title: 'Financement innovant des FSU', timeAgo: 'demain à 14h' },
-  { id: '4', type: 'collaboration', country: 'Sénégal', flag: '🇸🇳', action: 'et Côte d\'Ivoire collaborent sur', title: 'Partage d\'infrastructures backbone', timeAgo: 'il y a 1 jour' },
-  { id: '5', type: 'discussion', country: 'Ghana', flag: '🇬🇭', action: 'a lancé une discussion', title: 'Harmonisation des indicateurs régionaux', timeAgo: 'il y a 2 jours' },
-  { id: '6', type: 'project', country: 'Côte d\'Ivoire', flag: '🇨🇮', action: 'a mis à jour un projet', title: 'Extension réseau 4G rural', timeAgo: 'il y a 3 jours' },
-  { id: '7', type: 'document', country: 'Nigeria', flag: '🇳🇬', action: 'a partagé un document', title: 'Rapport annuel FSU 2024', timeAgo: 'il y a 4 jours' },
-  { id: '8', type: 'event', country: 'Cameroun', flag: '🇨🇲', action: 'a participé à un événement', title: 'Conférence régionale CEDEAO', timeAgo: 'il y a 5 jours' },
-];
+import { ActivityType, ActivityFeedItem } from "@/services/activityFeedService";
+import { useActivityFeed } from "@/hooks/useActivityFeed";
 
 const getIcon = (type: ActivityType): LucideIcon => {
   const icons: Record<ActivityType, LucideIcon> = {
     project: FolderOpen,
-    collaboration: Users,
     document: FileText,
     event: Calendar,
     discussion: MessageCircle
@@ -39,7 +17,7 @@ const getIcon = (type: ActivityType): LucideIcon => {
 };
 
 const getIconStyle = (type: ActivityType): string => {
-  if (type === 'project' || type === 'collaboration') {
+  if (type === 'project') {
     return 'bg-primary/10 text-primary';
   }
   return 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-500';
@@ -47,15 +25,51 @@ const getIconStyle = (type: ActivityType): string => {
 
 interface ActivityTimelineProps {
   maxItems?: number;
+  activities?: ActivityFeedItem[];
+  loading?: boolean;
+  error?: string | null;
 }
 
-export const ActivityTimeline = ({ maxItems = 5 }: ActivityTimelineProps) => {
+const formatTimeAgo = (timestamp: string) => {
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) return '';
+  const diffSeconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diffSeconds < 60) return `${diffSeconds}s`;
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  if (diffMinutes < 60) return `${diffMinutes}m`;
+  const diffHours = Math.floor(diffMinutes / 60);
+  if (diffHours < 24) return `${diffHours}h`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays}j`;
+};
+
+export const ActivityTimeline = ({ maxItems = 5, activities: externalActivities, loading: externalLoading, error: externalError }: ActivityTimelineProps) => {
   const { t } = useTranslation();
-  const displayActivities = mockActivities.slice(0, maxItems);
+  const { activities: feedActivities, loading, error } = useActivityFeed(maxItems);
+
+  const timelineActivities = externalActivities ?? feedActivities;
+  const timelineLoading = externalLoading ?? loading;
+  const timelineError = externalError ?? error;
 
   return (
     <div className="divide-y divide-gray-100 dark:divide-border rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card shadow-sm overflow-hidden">
-      {displayActivities.map((activity, index) => {
+      {timelineLoading && (
+        <div className="p-6 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
+        </div>
+      )}
+      {!timelineLoading && timelineError && (
+        <div className="p-6 text-center text-sm text-destructive">
+          {timelineError}
+        </div>
+      )}
+      {!timelineLoading && !timelineError && timelineActivities.length === 0 && (
+        <div className="p-6 text-center text-sm text-muted-foreground">
+          {t('activity.empty') || 'Aucune activité récente disponible.'}
+        </div>
+      )}
+
+      {!timelineLoading && !timelineError && timelineActivities.map((activity, index) => {
         const Icon = getIcon(activity.type);
         const iconStyle = getIconStyle(activity.type);
         
@@ -80,11 +94,14 @@ export const ActivityTimeline = ({ maxItems = 5 }: ActivityTimelineProps) => {
                 <p className="text-gray-900 dark:text-foreground font-medium mt-0.5 truncate">
                   {activity.title}
                 </p>
+                {activity.meta && (
+                  <p className="text-xs text-muted-foreground mt-1">{activity.meta}</p>
+                )}
               </div>
 
               {/* Temps */}
               <span className="text-xs text-gray-400 dark:text-muted-foreground flex-shrink-0">
-                {activity.timeAgo}
+                {formatTimeAgo(activity.timestamp)}
               </span>
             </div>
           </div>

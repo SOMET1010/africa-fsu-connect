@@ -28,13 +28,19 @@ export interface ForumPost {
   updated_at: string;
   // Joined data
   author?: {
+    id: string;
     first_name: string;
     last_name: string;
     role: string;
     country?: string;
     avatar_url?: string;
   };
-  category?: ForumCategory;
+  category?: {
+    id: string;
+    name: string;
+    description: string | null;
+    color?: string | null;
+  };
 }
 
 export interface ForumReply {
@@ -87,11 +93,28 @@ export const useForum = () => {
   // Fetch posts with author and category data
   const fetchPosts = async (categoryId?: string) => {
     try {
+    try {
       let query = supabase
         .from('forum_posts')
-        .select('*')
-        .order('is_pinned', { ascending: false })
-        .order('created_at', { ascending: false });
+        .select(`
+          *,
+          author:profiles (
+            id,
+            first_name,
+            last_name,
+            role,
+            country,
+            avatar_url
+          ),
+          category:forum_categories (
+            id,
+            name,
+            description,
+            color
+          )
+        `)
+      .order('is_pinned', { ascending: false })
+      .order('created_at', { ascending: false });
 
       if (categoryId) {
         query = query.eq('category_id', categoryId);

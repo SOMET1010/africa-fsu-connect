@@ -49,7 +49,7 @@ VALUES
   ('SC', 'Seychelles', 'Seychelles', 'Afrique de l''Est', 'Afrique', -4.6796, 55.4920, 'Victoria', 'fr', ARRAY['fr','en'], NULL),
   ('SL', 'Sierra Leone', 'Sierra Leone', 'Afrique de l''Ouest', 'Afrique', 8.4606, -11.7799, 'Freetown', 'en', ARRAY['en'], NULL),
   ('SO', 'Somalie', 'Somalia', 'Afrique de l''Est', 'Afrique', 5.1521, 46.1996, 'Mogadiscio', 'so', ARRAY['so','ar'], NULL),
-  ('ZA', 'Afrique du Sud', 'South Africa', 'Afrique australe', 'Afrique', -30.5595, 22.9375, 'Pretoria', 'af', ARRAY['af','en','zu','xh',...], NULL),
+  ('ZA', 'Afrique du Sud', 'South Africa', 'Afrique australe', 'Afrique', -30.5595, 22.9375, 'Pretoria', 'af', ARRAY['af','en','zu','xh','nr','st','tn','ts','ss','ve','nso'], NULL),
   ('SS', 'Soudan du Sud', 'South Sudan', 'Afrique de l''Est', 'Afrique', 6.8770, 31.3070, 'Djouba', 'en', ARRAY['en'], NULL),
   ('SD', 'Soudan', 'Sudan', 'Afrique du Nord', 'Afrique', 12.8628, 30.2176, 'Khartoum', 'ar', ARRAY['ar','en'], NULL),
   ('TZ', 'Tanzanie', 'Tanzania', 'Afrique de l''Est', 'Afrique', -6.3690, 34.8888, 'Dodoma', 'sw', ARRAY['sw','en'], NULL),
