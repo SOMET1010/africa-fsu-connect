@@ -9,10 +9,21 @@ const SUPABASE_PUBLISHABLE_KEY =
   import.meta.env.VITE_SUPABASE_ANON_KEY ??
   'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH';
 
+const nativeFetch = globalThis.fetch?.bind(globalThis);
+
+const supabaseFetch: typeof fetch = (input, init) => {
+  const headers = new Headers(init?.headers ?? undefined);
+  headers.set('accept', 'application/json');
+  return (nativeFetch ?? fetch)(input, { ...init, headers });
+};
+
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
-  }
+  },
+  global: {
+    fetch: supabaseFetch,
+  },
 });

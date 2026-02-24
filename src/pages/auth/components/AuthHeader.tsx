@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { NexusLogo } from '@/components/shared/NexusLogo';
+import atuLogo from '@/assets/atu-logo.png';
 
 export const AuthHeader = () => {
   return (
@@ -15,7 +15,7 @@ export const AuthHeader = () => {
       
       <div className="flex items-center justify-center mb-6">
         <div className="w-24 h-24 bg-white rounded-2xl shadow-sm flex items-center justify-center border border-border">
-          <NexusLogo size="lg" variant="icon" animated={false} />
+          <img src={atuLogo} alt="UDC logo" className="h-12 w-auto" />
         </div>
       </div>
       
