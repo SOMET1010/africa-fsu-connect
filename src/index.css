@@ -22,10 +22,16 @@ All colors MUST be HSL.
     --popover-foreground: 222 47% 11%;
     
     /* Primary — Bleu UAT profond (#1E3A8A) */
-    --primary: 224 65% 33%;
+    --primary: 110 90% 24%;
+    --primary-light: 224 55% 45%;
+    --primary-dark: 120 90% 10%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Primary — Bleu UAT profond (#1E3A8A) */
+    /*--primary: 224 65% 33%;
     --primary-light: 224 55% 45%;
     --primary-dark: 224 70% 25%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 0 0% 100%;*/
     
     /* Secondary — Vert africain institutionnel (#0F766E) */
     --secondary: 175 77% 26%;
