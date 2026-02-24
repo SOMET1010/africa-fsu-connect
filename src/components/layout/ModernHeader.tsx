@@ -7,7 +7,7 @@ import { ModernButton } from "@/components/ui/modern-button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { GlassCard } from "@/components/ui/glass-card";
-import { NexusLogo } from "@/components/shared/NexusLogo";
+import atuLogo from "@/assets/atu-logo.png";
 import { ThemeSwitch } from "@/components/shared/ThemeSwitch";
 import { 
   Menu, 
@@ -115,17 +115,18 @@ const ModernHeader = () => {
         <div className="container mx-auto px-4">
           <div className={cn("flex items-center justify-between h-[4.5rem]", isRTL && "flex-row-reverse")}>
             {/* Premium Logo avec animation hover */}
-            <Link to="/" className={cn("flex items-center group", isRTL ? "space-x-reverse space-x-3" : "space-x-3")}>
-              <motion.div
+            <Link to="/" className={cn("flex items-center gap-3 group", isRTL && "flex-row-reverse")}> 
+              <motion.img
+                src={atuLogo}
+                alt="UDC logo"
+                className="h-10 w-auto"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <NexusLogo size="md" variant="full" showSubtext={false} animated />
-              </motion.div>
-              <div className="border-l border-border/60 h-8 hidden sm:block" />
-              <span className="text-primary font-bold text-xl hidden sm:inline-block">
-                UDC
-              </span>
+              />
+              <div className="hidden sm:flex flex-col leading-tight">
+                <span className="text-primary font-bold text-xl">UDC</span>
+                <span className="text-xs text-muted-foreground tracking-widest uppercase">USF • Universal Digital Connect</span>
+              </div>
             </Link>
 
             {/* Navigation Desktop avec micro-interactions */}

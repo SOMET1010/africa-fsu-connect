@@ -14,6 +14,7 @@ import {
   CheckCircle
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { SITE_LOGO, SITE_LOGO_ALT } from "@/assets/logo";
 
 const About = () => {
   const pillars = [
@@ -51,6 +52,9 @@ const About = () => {
           <Building2 className="h-4 w-4 mr-2" />
           À Propos d'UDC
         </Badge>
+        <div className="flex justify-center mt-4">
+          <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-12 w-auto" />
+        </div>
         <h1 className="text-4xl md:text-5xl font-bold text-foreground">
           La Première Plateforme Africaine pour le
           <span className="text-[hsl(var(--nx-gold))]"> Service Universel</span>

@@ -2,6 +2,10 @@
  * Utilitaires pour la gestion d'environnement
  */
 
+const BASE_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? 'http://127.0.0.1:54311';
+const STORAGE_URL = import.meta.env.VITE_STORAGE_URL ?? `${BASE_SUPABASE_URL}/storage/v1`;
+const FUNCTIONS_URL = import.meta.env.VITE_EDGE_FUNCTIONS_URL ?? `${BASE_SUPABASE_URL}/functions/v1`;
+
 export const Environment = {
   isDevelopment: import.meta.env.DEV,
   isProduction: import.meta.env.PROD,
@@ -33,11 +37,9 @@ export const Environment = {
 
   // URLs selon l'environnement
   urls: {
-    api: import.meta.env.DEV 
-      ? 'https://wsbawdvqfbmtjtdtyddy.supabase.co' 
-      : 'https://wsbawdvqfbmtjtdtyddy.supabase.co',
-    storage: 'https://wsbawdvqfbmtjtdtyddy.supabase.co/storage/v1',
-    functions: 'https://wsbawdvqfbmtjtdtyddy.supabase.co/functions/v1'
+    api: BASE_SUPABASE_URL,
+    storage: STORAGE_URL,
+    functions: FUNCTIONS_URL
   },
 
   // Méthodes utilitaires

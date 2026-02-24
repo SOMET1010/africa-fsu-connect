@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import ModernHeader from "./ModernHeader";
+import { PublicHeader } from "@/components/layout/PublicHeader";
 import Footer from "./Footer";
 import { FloatingMapButton } from "@/components/shared/FloatingMapButton";
 import ImprovedMobileBottomNav from "@/components/navigation/ImprovedMobileBottomNav";
@@ -52,9 +53,9 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
       <div className="min-h-screen bg-background text-foreground flex w-full relative">
         {/* Clean background - no decorative effects */}
         <div className="flex flex-col flex-1 min-w-0">
-            <div id="app-navigation">
-              <ModernHeader />
-            </div>
+          <div id="app-navigation">
+            {user ? <ModernHeader /> : <PublicHeader />}
+          </div>
           <main id="main-content" className="flex-1 relative" tabIndex={-1}>
             <PageTransition variant="fade" duration="normal">
               {children}
