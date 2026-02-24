@@ -20,6 +20,8 @@ interface SignupFormProps {
   onEmailChange: (value: string) => void;
   password: string;
   onPasswordChange: (value: string) => void;
+  confirmPassword: string;
+  onConfirmPasswordChange: (value: string) => void;
   showPassword: boolean;
   onTogglePassword: () => void;
   error: string | null;
@@ -40,6 +42,8 @@ export const SignupForm = ({
   onEmailChange,
   password,
   onPasswordChange,
+  confirmPassword,
+  onConfirmPasswordChange,
   showPassword,
   onTogglePassword,
   error,
@@ -49,12 +53,20 @@ export const SignupForm = ({
   onCountryChange,
   organization = '',
   onOrganizationChange,
+  confirmPassword,
+  onConfirmPasswordChange,
 }: SignupFormProps) => {
   const emailValidation = useEmailValidation(email);
   const passwordValidation = usePasswordValidation(password);
   const { data: countries, isLoading: countriesLoading } = useAfricanCountries();
   
-  const isFormValid = emailValidation.isValid && passwordValidation.score >= 3 && firstName.trim() && lastName.trim();
+  const isPasswordMatch = password === confirmPassword;
+  const isFormValid =
+    emailValidation.isValid &&
+    passwordValidation.score >= 3 &&
+    firstName.trim() &&
+    lastName.trim() &&
+    isPasswordMatch;
 
   return (
     <form onSubmit={onSubmit} className="space-y-5">
@@ -175,6 +187,41 @@ export const SignupForm = ({
           validation={passwordValidation}
           show={password.length > 0}
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="signup-confirm-password" className="font-medium text-foreground">Confirmez le mot de passe</Label>
+        <div className="relative">
+          <Input
+            id="signup-confirm-password"
+            type={showPassword ? 'text' : 'password'}
+            value={confirmPassword}
+            onChange={(e) => onConfirmPasswordChange(e.target.value)}
+            placeholder="Reprenez votre mot de passe"
+            required
+            className={cn(
+              "h-12 bg-muted/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pr-12",
+              confirmPassword.length > 0 && isPasswordMatch && "border-success focus:border-success focus:ring-success/20",
+              confirmPassword.length > 0 && !isPasswordMatch && "border-destructive focus:border-destructive focus:ring-destructive/20"
+            )}
+          />
+          <ModernButton
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
+            onClick={onTogglePassword}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+          </ModernButton>
+        </div>
+        {confirmPassword.length > 0 && !isPasswordMatch && (
+          <p className="text-xs text-destructive">Les mots de passe ne correspondent pas.</p>
+        )}
       </div>
 
       {error && (

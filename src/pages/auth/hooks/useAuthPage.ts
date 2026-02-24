@@ -19,6 +19,7 @@ export const useAuthPage = () => {
   // Signup form state
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
+  const [signupConfirmPassword, setSignupConfirmPassword] = useState('');
   const [signupFirstName, setSignupFirstName] = useState('');
   const [signupLastName, setSignupLastName] = useState('');
   const [signupCountry, setSignupCountry] = useState('');
@@ -79,6 +80,12 @@ export const useAuthPage = () => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
+
+    if (signupPassword !== signupConfirmPassword) {
+      setError('Les mots de passe ne correspondent pas');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const { error } = await signUp(signupEmail, signupPassword, signupFirstName, signupLastName, signupCountry, signupOrganization);
@@ -180,6 +187,8 @@ export const useAuthPage = () => {
     setSignupCountry,
     signupOrganization,
     setSignupOrganization,
+    signupConfirmPassword,
+    setSignupConfirmPassword,
     handleSignup,
     signupSuccess,
     signupData,

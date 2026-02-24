@@ -44,6 +44,8 @@ const Auth = () => {
     setSignupCountry,
     signupOrganization,
     setSignupOrganization,
+    signupConfirmPassword,
+    setSignupConfirmPassword,
     handleSignup,
     signupSuccess,
     signupData,
@@ -77,22 +79,19 @@ const Auth = () => {
         {/* Auth Forms */}
         <div className="bg-white rounded-2xl shadow-sm border border-border overflow-hidden">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-gray-100/80 p-1.5 m-4 w-[calc(100%-2rem)] rounded-xl">
-              <TabsTrigger 
-                value="login" 
-                className="rounded-lg py-3 font-semibold transition-all data-[state=active]:bg-white data-[state=active]:text-[#0B3C5D] data-[state=active]:shadow-md data-[state=inactive]:text-gray-500"
-              >
-                Connexion
-              </TabsTrigger>
-              <TabsTrigger 
-                value="signup" 
-                className="rounded-lg py-3 font-semibold transition-all data-[state=active]:bg-white data-[state=active]:text-[#0B3C5D] data-[state=active]:shadow-md data-[state=inactive]:text-gray-500"
-              >
-                Inscription
-              </TabsTrigger>
+            <TabsList className="grid w-[calc(100%-2rem)] grid-cols-2 gap-2 rounded-2xl border border-border bg-white/90 p-1.5 m-4 shadow-sm">
+              {['login', 'signup'].map((tab) => (
+                <TabsTrigger
+                  key={tab}
+                  value={tab}
+                  className="rounded-xl py-3 text-sm font-semibold transition-all data-[state=active]:bg-primary/90 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-muted-foreground"
+                >
+                  {tab === 'login' ? 'Connexion' : 'Inscription'}
+                </TabsTrigger>
+              ))}
             </TabsList>
 
-            <TabsContent value="login" className="p-8 space-y-6">
+            <TabsContent value="login" className="space-y-6 p-8">
               <div className="text-center space-y-2">
                 <h2 className="text-2xl font-bold text-foreground font-poppins">
                   {resetMode ? 'Définir un nouveau mot de passe' : forgotMode ? 'Réinitialiser votre mot de passe' : 'Se connecter'}
@@ -148,7 +147,7 @@ const Auth = () => {
               </p>
             </TabsContent>
 
-            <TabsContent value="signup" className="p-8 space-y-6">
+            <TabsContent value="signup" className="space-y-6 p-8">
               {signupSuccess ? (
                 <SignupConfirmation
                   firstName={signupData.firstName}
@@ -174,6 +173,8 @@ const Auth = () => {
                     onEmailChange={setSignupEmail}
                     password={signupPassword}
                     onPasswordChange={setSignupPassword}
+                    confirmPassword={signupConfirmPassword}
+                    onConfirmPasswordChange={setSignupConfirmPassword}
                     showPassword={showPassword}
                     onTogglePassword={() => setShowPassword(!showPassword)}
                     error={error}

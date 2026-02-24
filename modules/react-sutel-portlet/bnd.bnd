@@ -1,7 +1,0 @@
-
-Bundle-Name: React SUTEL Portlet
-Bundle-SymbolicName: com.sutel.react.portlet
-Bundle-Version: 1.0.0
-Export-Package: com.sutel.react.portlet.constants
-Web-ContextPath: /react-sutel-portlet
--includeresource: META-INF/resources=src/main/resources/META-INF/resources
