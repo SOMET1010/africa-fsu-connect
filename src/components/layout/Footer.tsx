@@ -10,7 +10,7 @@ const Footer = () => {
   const { isRTL } = useDirection();
 
   return (
-    <footer className="relative bg-primary-dark border-t border-border mt-16" dir={isRTL ? 'rtl' : 'ltr'}>
+    <footer className="relative bg-primary-dark border-t border-border" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* About */}
