@@ -98,7 +98,6 @@ const Projects = () => {
           onStatusChange={setSelectedStatus}
           regions={regions}
           statuses={statuses}
-          variant="dark"
         />
 
         {/* Grille de projets inspirants */}
@@ -106,11 +105,11 @@ const Projects = () => {
           projects={filteredProjects}
           onViewProject={handleViewProject}
           loading={loading}
-          variant="dark"
+          variant="light"
         />
 
         {/* CTA pour proposer un projet */}
-        <ProposeProjectCTA variant="dark" />
+        <ProposeProjectCTA variant="light" />
 
         {/* Dialog pour édition (gardé pour admin) */}
         <ProjectDialog

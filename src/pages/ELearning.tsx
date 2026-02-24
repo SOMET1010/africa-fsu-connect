@@ -127,11 +127,11 @@ const ELearning = () => {
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in">
           {stats.map((stat) => (
-            <GlassCard key={stat.label} className="p-4">
+            <GlassCard key={stat.label} className="p-4 bg-white/90 border border-border shadow-sm text-foreground">
               <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <div>
-                  <p className="text-2xl font-bold text-white">{stat.value}</p>
-                  <p className="text-xs text-white/60">{stat.label}</p>
+                  <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                  <p className="text-xs text-muted-foreground">{stat.label}</p>
                 </div>
                 <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
               </div>
@@ -147,69 +147,78 @@ const ELearning = () => {
           </TabsList>
 
           <TabsContent value="courses" className="space-y-4 animate-fade-in">
-            <div className="grid md:grid-cols-2 gap-6">
-              {courses.map((course) => (
-                <GlassCard key={course.id} className="p-6 group hover:bg-white/[0.08] transition-all duration-300">
-                  <div className="flex justify-between items-start mb-4">
-                    <Badge variant="outline" className="border-white/20 text-white/70">{course.category}</Badge>
-                    <Badge variant={course.progress === 100 ? "default" : "secondary"} className={course.progress === 100 ? "bg-green-500" : "bg-white/10 text-white/70"}>
-                      {course.level}
-                    </Badge>
-                  </div>
-                  <h3 className="text-lg font-semibold text-white group-hover:text-[hsl(var(--nx-gold))] transition-colors mb-2">
-                    {course.title}
-                  </h3>
-                  <p className="text-sm text-white/60 mb-4">{course.description}</p>
-                  
-                  <div className={`flex items-center gap-4 text-sm text-white/50 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <Clock className="h-4 w-4" />
-                      {course.duration}
-                    </span>
-                    <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <BookOpen className="h-4 w-4" />
-                      {course.modules} {t('elearning.modules')}
-                    </span>
-                    <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <Users className="h-4 w-4" />
-                      {course.enrolled}
-                    </span>
-                  </div>
-                  
-                  {course.progress > 0 && (
-                    <div className="space-y-2 mb-4">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-white/60">{t('elearning.course.progress')}</span>
-                        <span className="font-medium text-white">{course.progress}%</span>
-                      </div>
-                      <Progress value={course.progress} className="h-2" />
-                    </div>
-                  )}
-                  
-                  <ModernButton 
-                    className={`w-full ${isRTL ? 'flex-row-reverse' : ''}`}
-                    variant={course.progress > 0 ? "default" : "outline"}
+          <div className="grid md:grid-cols-2 gap-6">
+            {courses.map((course) => (
+              <GlassCard
+                key={course.id}
+                className="p-6 group transition-all duration-300 bg-white/90 border border-border shadow-sm text-foreground"
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <Badge variant="outline" className="border-border text-foreground/70">{course.category}</Badge>
+                  <Badge
+                    variant={course.progress === 100 ? "default" : "secondary"}
+                    className={course.progress === 100 ? "bg-green-500 text-white" : "bg-foreground/10 text-foreground/80"}
                   >
-                    <Play className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                    {course.progress === 0 
-                      ? t('elearning.course.start') 
-                      : course.progress === 100 
-                        ? t('elearning.course.review') 
-                        : t('elearning.course.continue')}
-                  </ModernButton>
-                </GlassCard>
-              ))}
-            </div>
+                    {course.level}
+                  </Badge>
+                </div>
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-[hsl(var(--nx-gold))] transition-colors mb-2">
+                  {course.title}
+                </h3>
+                <p className="text-sm text-foreground/70 mb-4">{course.description}</p>
+                
+                <div className={`flex items-center gap-4 text-sm text-muted-foreground mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <Clock className="h-4 w-4" />
+                    {course.duration}
+                  </span>
+                  <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <BookOpen className="h-4 w-4" />
+                    {course.modules} {t('elearning.modules')}
+                  </span>
+                  <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <Users className="h-4 w-4" />
+                    {course.enrolled}
+                  </span>
+                </div>
+                
+                {course.progress > 0 && (
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{t('elearning.course.progress')}</span>
+                      <span className="font-medium text-foreground">{course.progress}%</span>
+                    </div>
+                    <Progress value={course.progress} className="h-2" />
+                  </div>
+                )}
+                
+                <ModernButton 
+                  className={`w-full ${isRTL ? 'flex-row-reverse' : ''}`}
+                  variant={course.progress > 0 ? "default" : "outline"}
+                >
+                  <Play className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                  {course.progress === 0 
+                    ? t('elearning.course.start') 
+                    : course.progress === 100 
+                      ? t('elearning.course.review') 
+                      : t('elearning.course.continue')}
+                </ModernButton>
+              </GlassCard>
+            ))}
+          </div>
           </TabsContent>
 
           <TabsContent value="webinars" className="space-y-4 animate-fade-in">
             <div className="space-y-4">
               {webinars.map((webinar) => (
-                <GlassCard key={webinar.id} className="p-6 hover:bg-white/[0.08] transition-all duration-300">
+                <GlassCard
+                  key={webinar.id}
+                  className="p-6 transition-all duration-300 bg-white/90 border border-border shadow-sm text-foreground"
+                >
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="space-y-2">
-                      <h3 className="text-lg font-semibold text-white">{webinar.title}</h3>
-                      <div className={`flex items-center gap-4 text-sm text-white/50 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <h3 className="text-lg font-semibold text-foreground">{webinar.title}</h3>
+                      <div className={`flex items-center gap-4 text-sm text-muted-foreground ${isRTL ? 'flex-row-reverse' : ''}`}>
                         <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                           <Calendar className="h-4 w-4" />
                           {new Date(webinar.date).toLocaleDateString(isRTL ? 'ar-EG' : 'fr-FR', { 
@@ -223,17 +232,17 @@ const ELearning = () => {
                           {webinar.time}
                         </span>
                       </div>
-                      <p className="text-sm text-white/70">
+                      <p className="text-sm text-foreground/70">
                         <span className="font-medium">{webinar.speaker}</span>
-                        <span className="text-white/50"> • {webinar.organization}</span>
+                        <span className="text-muted-foreground"> • {webinar.organization}</span>
                       </p>
                     </div>
                     <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <Badge variant="outline" className={`border-white/20 text-white/70 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <Badge variant="outline" className={`border-border text-muted-foreground ${isRTL ? 'flex-row-reverse' : ''}`}>
                         <Users className={`h-3 w-3 ${isRTL ? 'ml-1' : 'mr-1'}`} />
                         {webinar.registered} {t('elearning.enrolled')}
                       </Badge>
-                      <ModernButton className={isRTL ? 'flex-row-reverse' : ''}>
+                      <ModernButton className={isRTL ? 'flex-row-reverse' : ''} variant="ghost">
                         <Video className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                         {t('elearning.register')}
                       </ModernButton>
@@ -249,20 +258,18 @@ const ELearning = () => {
               {achievements.map((achievement) => (
                 <GlassCard 
                   key={achievement.name} 
-                  className={`p-6 text-center ${
-                    achievement.earned 
-                      ? 'bg-[hsl(var(--nx-gold)/0.1)] border-[hsl(var(--nx-gold)/0.2)]' 
-                      : 'opacity-60'
+                  className={`p-6 text-center bg-white/90 border border-border shadow-sm ${
+                    achievement.earned ? 'ring-2 ring-[hsl(var(--nx-gold)/0.25)]' : 'opacity-70'
                   }`}
                 >
                   <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                    achievement.earned ? 'bg-[hsl(var(--nx-gold)/0.2)]' : 'bg-white/10'
+                    achievement.earned ? 'bg-[hsl(var(--nx-gold)/0.2)]' : 'bg-muted/40'
                   }`}>
                     <achievement.icon className={`h-8 w-8 ${
-                      achievement.earned ? 'text-[hsl(var(--nx-gold))]' : 'text-white/40'
+                      achievement.earned ? 'text-[hsl(var(--nx-gold))]' : 'text-muted-foreground'
                     }`} />
                   </div>
-                  <p className="font-medium text-sm text-white">{achievement.name}</p>
+                  <p className="font-medium text-sm text-foreground">{achievement.name}</p>
                   {achievement.earned && (
                     <Badge className="mt-2 bg-green-500/10 text-green-400 border-green-500/20">
                       {t('elearning.badge.earned')}

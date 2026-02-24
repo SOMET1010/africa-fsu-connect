@@ -46,8 +46,8 @@ export function InspiringProjectsGrid({
   if (projects.length === 0) {
     return (
       <div className="text-center py-16 px-4">
-        <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${isDark ? 'bg-white/10' : 'bg-muted/50'}`}>
-          <Rocket className={`h-8 w-8 ${isDark ? 'text-white/50' : 'text-muted-foreground'}`} />
+        <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${isDark ? 'bg-[hsl(var(--nx-night)/0.4)]' : 'bg-muted/50'}`}>
+          <Rocket className={`h-8 w-8 ${isDark ? 'text-muted-foreground' : 'text-muted-foreground'}`} />
         </div>
         <h3 className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-foreground'}`}>
           Aucun projet pour le moment
@@ -72,17 +72,17 @@ export function InspiringProjectsGrid({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {projects.map((project) => (
-        <div
-          key={project.id}
-          className={`
-            group cursor-pointer overflow-hidden rounded-xl border transition-all duration-300
-            ${isDark 
-              ? 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-[hsl(var(--nx-gold)/0.4)]' 
-              : 'bg-card border-border hover:shadow-lg'
-            }
-          `}
-          onClick={() => onViewProject?.(project)}
-        >
+                <div
+                  key={project.id}
+                  className={`
+                    group cursor-pointer overflow-hidden rounded-xl border transition-all duration-300
+                    ${isDark 
+                      ? 'bg-[hsl(var(--nx-night)/0.6)] border-white/10 hover:bg-[hsl(var(--nx-night)/0.8)] hover:border-[hsl(var(--nx-gold)/0.4)]' 
+                      : 'bg-card border-border hover:shadow-lg'
+                    }
+                  `}
+                  onClick={() => onViewProject?.(project)}
+                >
           {/* Header with country flag/badge */}
           <div className="p-6 pb-4">
             <div className="flex items-start justify-between mb-4">
@@ -119,15 +119,15 @@ export function InspiringProjectsGrid({
             </h3>
 
             {/* Description */}
-            {project.description && (
-              <p className={`text-sm line-clamp-3 mb-4 ${isDark ? 'text-white/60' : 'text-muted-foreground'}`}>
-                {project.description}
-              </p>
-            )}
+                {project.description && (
+                  <p className={`text-sm line-clamp-3 mb-4 ${isDark ? 'text-muted-foreground/70' : 'text-muted-foreground'}`}>
+                    {project.description}
+                  </p>
+                )}
 
-            {/* Meta info */}
-            <div className={`flex flex-wrap gap-3 text-xs ${isDark ? 'text-white/50' : 'text-muted-foreground'}`}>
-              {project.location && (
+                {/* Meta info */}
+                <div className={`flex flex-wrap gap-3 text-xs ${isDark ? 'text-muted-foreground/70' : 'text-muted-foreground'}`}>
+                  {project.location && (
                 <div className="flex items-center gap-1">
                   <MapPin className="h-3.5 w-3.5" />
                   <span>{project.location}</span>
@@ -143,14 +143,14 @@ export function InspiringProjectsGrid({
           </div>
 
           {/* Footer CTA */}
-          <div className={`px-6 py-4 border-t ${isDark ? 'border-white/10 bg-white/5' : 'border-border/50 bg-muted/30'}`}>
-            <div className="flex items-center justify-between">
-              <span className={`text-sm ${isDark ? 'text-white/60' : 'text-muted-foreground'}`}>
-                En savoir plus
-              </span>
-              <ArrowRight className={`h-4 w-4 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all ${isDark ? 'text-[hsl(var(--nx-gold))]' : 'text-primary'}`} />
-            </div>
-          </div>
+                  <div className={`px-6 py-4 border-t ${isDark ? 'border-white/10 bg-[hsl(var(--nx-night)/0.4)]' : 'border-border/50 bg-muted/30'}`}>
+                    <div className="flex items-center justify-between">
+                      <span className={`text-sm ${isDark ? 'text-muted-foreground/70' : 'text-muted-foreground'}`}>
+                        En savoir plus
+                      </span>
+                      <ArrowRight className={`h-4 w-4 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all ${isDark ? 'text-[hsl(var(--nx-gold))]' : 'text-primary'}`} />
+                    </div>
+                  </div>
         </div>
       ))}
     </div>

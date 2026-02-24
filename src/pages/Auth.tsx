@@ -79,12 +79,12 @@ const Auth = () => {
         {/* Auth Forms */}
         <div className="bg-white rounded-2xl shadow-sm border border-border overflow-hidden">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-[calc(100%-2rem)] grid-cols-2 gap-2 rounded-2xl border border-border bg-white/90 p-1.5 m-4 shadow-sm">
+            <TabsList className="grid w-full grid-cols-2 gap-1.5 rounded-[999px] border border-border bg-white/90 p-[0.1875rem] shadow-sm">
               {['login', 'signup'].map((tab) => (
                 <TabsTrigger
                   key={tab}
                   value={tab}
-                  className="rounded-xl py-3 text-sm font-semibold transition-all data-[state=active]:bg-primary/90 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-muted-foreground"
+                  className="flex h-12 w-full items-center justify-center rounded-[calc(999px-0.375rem)] text-sm font-semibold transition-all data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-muted-foreground data-[state=inactive]:bg-transparent"
                 >
                   {tab === 'login' ? 'Connexion' : 'Inscription'}
                 </TabsTrigger>

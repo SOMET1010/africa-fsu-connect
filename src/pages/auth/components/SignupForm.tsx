@@ -53,8 +53,6 @@ export const SignupForm = ({
   onCountryChange,
   organization = '',
   onOrganizationChange,
-  confirmPassword,
-  onConfirmPasswordChange,
 }: SignupFormProps) => {
   const emailValidation = useEmailValidation(email);
   const passwordValidation = usePasswordValidation(password);
