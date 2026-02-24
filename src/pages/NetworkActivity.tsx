@@ -6,9 +6,11 @@ import { ActivityTimeline } from "@/components/network/ActivityTimeline";
 import { PresenceIndicator } from "@/components/network/PresenceIndicator";
 import { PageHero } from "@/components/shared/PageHero";
 import { Activity, Globe, Filter, Calendar } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDirection } from "@/hooks/useDirection";
+import { useCountries } from "@/hooks/useCountries";
+import { useNetworkActivity } from "@/hooks/useNetworkActivity";
 
 const NetworkActivity = () => {
   const { t } = useTranslation();
@@ -16,6 +18,8 @@ const NetworkActivity = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [selectedType, setSelectedType] = useState<string>("all");
   const [selectedPeriod, setSelectedPeriod] = useState<string>("month");
+  const { data: countries } = useCountries();
+  const { activities, loading: activityLoading, error: activityError } = useNetworkActivity(50);
 
   const regions = [
     { value: "all", label: t('filter.region.all') },
@@ -41,6 +45,76 @@ const NetworkActivity = () => {
     { value: "quarter", label: t('filter.period.quarter') },
     { value: "year", label: t('filter.period.year') },
   ];
+
+  const normalizeLabel = (value?: string) => value
+    ? value
+        .normalize("NFD")
+        .replace(/\p{Diacritic}/gu, "")
+        .toLowerCase()
+        .replace(/[^a-z]/g, "")
+    : "";
+
+  const findCountryByLabel = (label?: string) => {
+    if (!label || !countries) return null;
+    const normalizedLabel = normalizeLabel(label);
+    return countries.find((country) => {
+      const codeMatch = normalizeLabel(country.code) === normalizedLabel;
+      const nameFrMatch = normalizeLabel(country.name_fr) === normalizedLabel;
+      const nameEnMatch = normalizeLabel(country.name_en) === normalizedLabel;
+      const partialFr = normalizeLabel(country.name_fr).includes(normalizedLabel);
+      const partialEn = normalizeLabel(country.name_en).includes(normalizedLabel);
+      return codeMatch || nameFrMatch || nameEnMatch || partialFr || partialEn;
+    });
+  };
+
+  const REGION_KEYWORDS: Record<string, string[]> = {
+    west: ["ouest"],
+    central: ["centrale"],
+    east: ["est"],
+    south: ["australe", "sud"],
+    north: ["nord", "maghreb"],
+  };
+
+  const matchesRegion = (countryLabel: string) => {
+    if (selectedRegion === "all") return true;
+    const country = findCountryByLabel(countryLabel);
+    if (!country || !country.region) return false;
+    const regionKeywords = REGION_KEYWORDS[selectedRegion] || [];
+    const regionValue = country.region.toLowerCase();
+    return regionKeywords.some((keyword) => regionValue.includes(keyword));
+  };
+
+  const periodDays: Record<string, number> = {
+    week: 7,
+    month: 30,
+    quarter: 90,
+    year: 365,
+  };
+
+  const filteredActivities = useMemo(() => {
+    if (!activities) return [];
+    const thresholdMs = periodDays[selectedPeriod] * 24 * 60 * 60 * 1000;
+    const minTimestamp = Date.now() - thresholdMs;
+
+    return activities.filter((activity) => {
+      const matchesType =
+        selectedType === "all"
+          ? true
+          : selectedType === "collaboration"
+            ? activity.type === "discussion"
+            : activity.type === selectedType;
+
+      const matchesRegionFilter = activity.country
+        ? matchesRegion(activity.country)
+        : selectedRegion === "all";
+
+      const matchesPeriod = activity.timestamp >= minTimestamp;
+
+      return matchesType && matchesRegionFilter && matchesPeriod;
+    });
+  }, [activities, selectedType, selectedRegion, selectedPeriod]);
+
+  const timelineActivities = filteredActivities.slice(0, 20);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10">
@@ -155,7 +229,12 @@ const NetworkActivity = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ActivityTimeline maxItems={20} />
+            <ActivityTimeline
+              maxItems={20}
+              activities={timelineActivities}
+              loading={activityLoading}
+              error={activityError}
+            />
           </CardContent>
         </Card>
       </PageContainer>

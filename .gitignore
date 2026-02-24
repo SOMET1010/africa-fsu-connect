@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 .env
 .vs
+docs/MOCK_DATA_AUDIT.md
+data.txt

@@ -86,7 +86,7 @@ const Projects = () => {
 
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Bouton données démo si vide */}
-        {projects.length === 0 && <SampleProjectData />}
+        {projects.length === 0 && import.meta.env.DEV && <SampleProjectData />}
 
         {/* Filtres avec style sombre */}
         <ProjectFilters

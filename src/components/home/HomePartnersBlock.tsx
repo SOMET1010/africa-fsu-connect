@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import atuLogo from "@/assets/atu-logo.png";
 import { useHomepageContent } from "@/hooks/useHomepageContent";
+import { t } from "i18next";
 
 export function HomePartnersBlock() {
   const { getBlock } = useHomepageContent();
@@ -12,7 +13,7 @@ export function HomePartnersBlock() {
   return (
     <section className="bg-gray-50 border-t border-gray-200 py-8">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-6">
             <span className="text-xs uppercase tracking-widest text-gray-400 font-medium">Partenaires</span>
             <img src={atuLogo} alt="ATU" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity" />
@@ -24,7 +25,7 @@ export function HomePartnersBlock() {
           </div>
           <Button asChild className="bg-amber-500 text-white hover:bg-amber-600 font-semibold shrink-0">
             <Link to="/projects" className="flex items-center gap-2">
-              Proposer un Projet
+              {t("nav.collaborate.submit")}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
