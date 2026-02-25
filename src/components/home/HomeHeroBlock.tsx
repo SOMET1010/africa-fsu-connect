@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Globe, MapPin, Users, FolderOpen, Calendar, ChevronRight, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
-import { useTranslation } from "@/hooks/useTranslation";
+//import { useTranslation } from "@/hooks/useTranslation";
 import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
 import { useHomepageContent } from "@/hooks/useHomepageContent";
@@ -21,7 +21,6 @@ const LEGEND_ITEMS: { level: ActivityLevel; label: string }[] = [
 ];
 
 export function HomeHeroBlock() {
-  const { t } = useTranslation();
   const { isRTL } = useDirection();
   const { getBlock } = useHomepageContent();
   const { data: countries = [] } = useAfricanCountries();
@@ -123,7 +122,7 @@ export function HomeHeroBlock() {
           <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.1 }}>
             <div className="relative rounded-xl border border-gray-200 overflow-hidden bg-gray-900" style={{ height: 'clamp(280px, 40vw, 380px)' }}>
               {countries.length > 0 && (
-                <HomeMemberMap countries={countries} mode="members" />
+                  <HomeMemberMap countries={countries} mode="members" />
               )}
             </div>
             {/* Legend */}

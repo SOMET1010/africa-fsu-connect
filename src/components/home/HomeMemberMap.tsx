@@ -3,6 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Country } from "@/services/countriesService";
 import { getCountryActivity, ACTIVITY_LEVELS, type MapMode, getValueByMode } from "@/components/map/activityData";
+import { t } from "i18next";
 
 interface HomeMemberMapProps {
   countries: Country[];
@@ -20,10 +21,10 @@ const getCountryFlag = (code: string): string => {
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  high: "Très actif",
-  medium: "Membre actif",
-  onboarding: "En intégration",
-  observer: "Observateur",
+  high: "label.carto.itemInfo.high",
+  medium: "label.carto.itemInfo.medium",
+  onboarding: "label.carto.itemInfo.onboarding",
+  observer: "label.carto.itemInfo.observer",
 };
 
 const getMarkerSize = (value: number, maxValue: number): number => {
@@ -119,7 +120,7 @@ export const HomeMemberMap = ({ countries, onCountryClick, mode = 'members' }: H
 
       const marker = L.marker([country.latitude, country.longitude], { icon });
 
-      const popupContent = `
+        const popupContent = `
         <div style="
           min-width: 180px;
           font-family: system-ui, -apple-system, sans-serif;
@@ -130,7 +131,7 @@ export const HomeMemberMap = ({ countries, onCountryClick, mode = 'members' }: H
           backdrop-filter: blur(12px);
         ">
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-            <span style="font-size:20px;">${flag}</span>
+            <span style="font-size:20px; color:#999;">${flag}</span>
             <strong style="font-size:14px; color:#fff; font-weight:600;">${country.name_fr}</strong>
           </div>
           <div style="
@@ -143,23 +144,23 @@ export const HomeMemberMap = ({ countries, onCountryClick, mode = 'members' }: H
             padding:3px 8px;
             font-weight:500;
             margin-bottom:10px;
-          ">${statusLabel}</div>
+          ">${t(statusLabel)}</div>
           <div style="display:flex; gap:16px; font-size:12px; color:#ccc;">
             <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
               <span style="font-size:16px; font-weight:700; color:#fff;">${activity.contributions}</span>
-              <span style="font-size:10px; color:#999;">contributions</span>
+              <span style="font-size:10px; color:#999;">${t("label.carto.itemInfo.contributions")}</span>
             </div>
             <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
               <span style="font-size:16px; font-weight:700; color:#fff;">${activity.projects}</span>
-              <span style="font-size:10px; color:#999;">projets</span>
+              <span style="font-size:10px; color:#999;">${t("label.carto.itemInfo.projets")}</span>
             </div>
             <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
               <span style="font-size:16px; font-weight:700; color:#fff;">${activity.trendScore}%</span>
-              <span style="font-size:10px; color:#999;">tendance</span>
+              <span style="font-size:10px; color:#999;">${t("label.carto.itemInfo.tendance")}</span>
             </div>
           </div>
           <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08); font-size:10px; color:#777;">
-            Dernière activité : ${activity.lastActivity}
+            ${t("label.carto.itemInfo.lastactivity")} : ${activity.lastActivity}
           </div>
         </div>
       `;
@@ -177,7 +178,7 @@ export const HomeMemberMap = ({ countries, onCountryClick, mode = 'members' }: H
 
       markersRef.current?.addLayer(marker);
     });
-  }, [countries, onCountryClick, mode]);
+  }, [countries, onCountryClick, mode, t]);
 
   return (
     <>

@@ -991,6 +991,13 @@
   "label.platform.slogan.description": "Pan-African platform for coordination, innovation and pooling of resources for Universal Telecommunications Service.",
   "label.legend.activity.high": "Very active",
   "label.legend.activity.medium": "Member",
-  "label.legend.activity.onboarding": "In integration"
+  "label.legend.activity.onboarding": "In integration",
+  "label.carto.itemInfo.high": "Very active",
+  "label.carto.itemInfo.medium": "Active member",
+  "label.carto.itemInfo.onboarding": "In integration",
+  "label.carto.itemInfo.observer": "Observer",
+  "label.carto.itemInfo.projets": "projects",
+  "label.carto.itemInfo.tendance": "tendency",
+  "label.carto.itemInfo.lastactivity": "Last activity"
 
 }

@@ -984,7 +984,16 @@
   "label.platform.slogan.description": "Plateforme panafricaine pour la coordination, l'innovation et la mutualisation des ressources du Service Universel des Télécommunications.",
   "label.legend.activity.high": "Très actif",
   "label.legend.activity.medium": "Membre",
-  "label.legend.activity.onboarding": "En intégration"
+  "label.legend.activity.onboarding": "En intégration",
+  "label.carto.itemInfo.high": "Très actif",
+  "label.carto.itemInfo.medium": "Membre actif",
+  "label.carto.itemInfo.onboarding": "En intégration",
+  "label.carto.itemInfo.observer": "Observateur",
+  "label.carto.itemInfo.contributions": "contributions",
+  "label.carto.itemInfo.projets": "projets",
+  "label.carto.itemInfo.tendance": "tendance",
+  "label.carto.itemInfo.lastactivity": "Dernière activité"
+
 
 
 }

@@ -984,7 +984,14 @@
   "label.platform.slogan.description": "Plataforma pan-africana de coordenação, inovação e partilha de recursos para o Serviço Universal de Telecomunicações.",
   "label.legend.activity.high": "Muito ativo",
   "label.legend.activity.medium": "Membro",
-  "label.legend.activity.onboarding": "Em integração"
+  "label.legend.activity.onboarding": "Em integração",
+  "label.carto.itemInfo.high": "Très actif",
+  "label.carto.itemInfo.medium": "Membro ativo",
+  "label.carto.itemInfo.onboarding": "Em integração",
+  "label.carto.itemInfo.observer": "Observador",
+  "label.carto.itemInfo.projets": "projetos",
+  "label.carto.itemInfo.tendance": "tendência",
+  "label.carto.itemInfo.lastactivity": "Última atividade"
 
 
 }
