@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import ModernHeader from "./ModernHeader";
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import Footer from "./Footer";
 import { FloatingMapButton } from "@/components/shared/FloatingMapButton";
@@ -19,7 +18,7 @@ interface AppShellProps {
 export default function AppShell({ children, hideFooter = false }: AppShellProps) {
   const { user } = useAuth();
   const location = useLocation();
-  const { manageFocus } = useAccessibility({
+  useAccessibility({
     enableSkipLinks: true,
     enableFocusManagement: true
   });
@@ -45,9 +44,6 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
     { href: "#app-navigation", label: "Aller à la navigation" }
   ];
 
-  const isHomePage = location.pathname === "/";
-  const useModernHeader = user && !isHomePage;
-
   return (
     <>
       {/* Skip Links pour l'accessibilité */}
@@ -57,7 +53,7 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
         {/* Clean background - no decorative effects */}
         <div className="flex flex-col flex-1 min-w-0">
           <div id="app-navigation">
-            {useModernHeader ? <ModernHeader /> : <PublicHeader />}
+            <PublicHeader />
           </div>
           <main id="main-content" className="flex-1 relative" tabIndex={-1}>
             <PageTransition variant="fade" duration="normal">

@@ -93,7 +93,6 @@ export const useForum = () => {
   // Fetch posts with author and category data
   const fetchPosts = async (categoryId?: string) => {
     try {
-    try {
       let query = supabase
         .from('forum_posts')
         .select(`

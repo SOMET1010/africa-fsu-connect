@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { logger } from '@/utils/logger';
-import { fetchLearningCourses, fetchLearningWebinars } from '@/services/learningContentService';
+import { fetchLearningCourses, fetchLearningWebinars, formatMinutesToLabel } from '@/services/learningContentService';
 import type { LearningCourse, LearningWebinar } from '@/services/learningContentService';
+
+export { formatMinutesToLabel };
 
 export const useLearningContent = () => {
   const [courses, setCourses] = useState<LearningCourse[]>([]);
