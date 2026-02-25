@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import NotificationCenter from "@/components/shared/NotificationCenter";
 import { LanguageSelector } from "@/components/shared/LanguageSelector";
 import Breadcrumb from "@/components/shared/Breadcrumb";
@@ -45,6 +46,9 @@ const ModernHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const submenuCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [expandedNavGroup, setExpandedNavGroup] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, profile, signOut, isAdmin } = useAuth();
@@ -62,6 +66,10 @@ const ModernHeader = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    return () => clearSubmenuCloseTimeout();
+  }, []);
+
   const isActive = (path: string) => location.pathname === path;
   const isInSubmenu = (submenu?: { href: string }[]) => 
     submenu?.some(item => location.pathname === item.href);
@@ -72,6 +80,31 @@ const ModernHeader = () => {
     if (item.href) return isActive(item.href);
     if (item.submenu) return isInSubmenu(item.submenu);
     return false;
+  };
+
+  const clearSubmenuCloseTimeout = () => {
+    if (submenuCloseTimeout.current) {
+      clearTimeout(submenuCloseTimeout.current);
+      submenuCloseTimeout.current = null;
+    }
+  };
+
+  const scheduleSubmenuClose = (delay = 150) => {
+    clearSubmenuCloseTimeout();
+    submenuCloseTimeout.current = setTimeout(() => {
+      setOpenDropdownId(null);
+      submenuCloseTimeout.current = null;
+    }, delay);
+  };
+
+  const handleSubmenuOpen = (itemId: string) => {
+    clearSubmenuCloseTimeout();
+    setOpenDropdownId(itemId);
+  };
+
+  const handleSubmenuClose = () => {
+    clearSubmenuCloseTimeout();
+    setOpenDropdownId(null);
   };
 
   const handleSignOut = async () => {
@@ -147,7 +180,17 @@ const ModernHeader = () => {
                 // Item avec sous-menu
                 if (hasSubmenu) {
                   return (
-                    <DropdownMenu key={item.id}>
+                    <DropdownMenu
+                      key={item.id}
+                      open={openDropdownId === item.id}
+                      onOpenChange={(isOpen) => {
+                        if (isOpen) {
+                          handleSubmenuOpen(item.id);
+                        } else {
+                          handleSubmenuClose();
+                        }
+                      }}
+                    >
                       <DropdownMenuTrigger asChild>
                         <button
                           className={cn(
@@ -157,8 +200,14 @@ const ModernHeader = () => {
                               : "text-muted-foreground hover:text-foreground",
                             isRTL && "flex-row-reverse"
                           )}
-                          onMouseEnter={() => setHoveredLink(item.id)}
-                          onMouseLeave={() => setHoveredLink(null)}
+                          onMouseEnter={() => {
+                            setHoveredLink(item.id);
+                            handleSubmenuOpen(item.id);
+                          }}
+                          onMouseLeave={() => {
+                            setHoveredLink(null);
+                            scheduleSubmenuClose();
+                          }}
                           aria-label={`${item.labelKey ? t(item.labelKey) : item.label} menu`}
                           aria-haspopup="menu"
                         >
@@ -182,6 +231,8 @@ const ModernHeader = () => {
                       <DropdownMenuContent 
                         align={isRTL ? "end" : "start"} 
                         className="w-64 animate-scale-in bg-popover border-border p-2"
+                        onMouseEnter={() => handleSubmenuOpen(item.id)}
+                        onMouseLeave={() => scheduleSubmenuClose()}
                       >
                         {item.submenu?.map((subItem) => {
                           const SubIcon = subItem.icon;
@@ -292,79 +343,131 @@ const ModernHeader = () => {
                       )} aria-hidden="true" />
                     </ModernButton>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align={isRTL ? "start" : "end"} className="w-64 animate-scale-in bg-popover border-border">
-                    <DropdownMenuLabel className="font-normal p-4">
-                      <GlassCard variant="subtle" className="p-3">
-                        <div className={cn("flex flex-col space-y-2", isRTL && "text-right")}>
-                          <p className="text-sm font-medium leading-none text-foreground">
-                            {profile?.first_name && profile?.last_name 
-                              ? `${profile.first_name} ${profile.last_name}`
-                              : user.email?.split('@')[0]
-                            }
-                          </p>
-                          <p className="text-xs leading-none text-muted-foreground">
-                            {user.email}
-                          </p>
-                          {profile?.role && (
-                            <Badge 
-                              className={cn(
-                                "text-xs w-fit transition-all hover:scale-105",
-                                getRoleColor(profile.role)
-                              )}
-                            >
-                              {getRoleLabel(profile.role)}
-                            </Badge>
-                          )}
-                        </div>
-                      </GlassCard>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-muted">
-                      <Link to="/profile" className={cn("flex items-center w-full", isRTL && "flex-row-reverse")}>
-                        <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                  <DropdownMenuContent align={isRTL ? "start" : "end"} className="w-[23rem] max-h-[76vh] animate-scale-in bg-white border border-slate-200 shadow-[0_10px_40px_rgba(15,23,42,0.25)] rounded-[32px] p-0 overflow-hidden">
+                    <div className="px-5 py-4">
+                      <div className="rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-2">
+                        <p className="text-sm font-semibold text-slate-900">
+                          {profile?.first_name && profile?.last_name 
+                            ? `${profile.first_name} ${profile.last_name}`
+                            : user.email?.split('@')[0]
+                          }
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {user.email}
+                        </p>
+                        {profile?.role && (
+                          <span className={cn(
+                            "inline-flex mt-2 items-center rounded-full px-2 py-0.5 text-[0.65rem] font-semibold tracking-widest uppercase",
+                            getRoleColor(profile.role)
+                          )}>
+                            {getRoleLabel(profile.role)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <DropdownMenuSeparator className="mx-5" />
+                    <div className="space-y-2 px-5 pb-3">
+                      <DropdownMenuItem className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 hover:bg-slate-50">
+                        <User className="h-4 w-4 text-slate-500" />
                         <span>{t('nav.profile')}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    {/* NEXUS BLUEPRINT GARDE-FOU */}
-                    {isAdmin() && shouldShowAdminLinks(location.pathname) && (
-                      <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-muted">
-                        <Link to="/admin" className={cn("flex items-center w-full", isRTL && "flex-row-reverse")}>
-                          <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                          <span>{t('nav.admin')}</span>
-                        </Link>
                       </DropdownMenuItem>
-                    )}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuLabel className="px-4 py-1 text-[0.65rem] font-semibold tracking-[0.3em] text-muted-foreground uppercase">
-                      Explorer
-                    </DropdownMenuLabel>
-                    {mainNavigation.map((item) => {
-                      const target = resolveNavHref(item);
-                      const active = isNavActive(item);
-                      const Icon = item.icon;
-                      return (
-                        <DropdownMenuItem key={item.id ?? item.label} className="p-0">
-                          <Link
-                            to={target}
-                            className={cn(
-                              "flex items-center gap-3 px-4 py-2 text-sm transition-all duration-200 rounded-none w-full",
-                              active
-                                ? "text-primary bg-primary/10"
-                                : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                              isRTL && "flex-row-reverse"
-                            )}
-                          >
-                            <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-muted-foreground")} />
-                            <span>{resolveNavLabel(item)}</span>
-                          </Link>
+                      {isAdmin() && shouldShowAdminLinks(location.pathname) && (
+                        <DropdownMenuItem className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 hover:bg-slate-50">
+                          <Settings className="h-4 w-4 text-slate-500" />
+                          <span>{t('nav.admin')}</span>
                         </DropdownMenuItem>
-                      );
-                    })}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut} className={cn("cursor-pointer text-destructive hover:bg-destructive/10", isRTL && "flex-row-reverse")}>
-                      <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                      <span>{t('nav.logout')}</span>
-                    </DropdownMenuItem>
+                      )}
+                    </div>
+                    <DropdownMenuSeparator className="mx-5" />
+                    <div className="px-5 pb-4">
+                      <p className="text-[0.6rem] font-semibold tracking-[0.4em] text-slate-400 uppercase mb-2">Explorer</p>
+                    <Accordion
+                      type="single"
+                      collapsible
+                      className="space-y-2"
+                      value={expandedNavGroup ?? undefined}
+                      onValueChange={(value) => setExpandedNavGroup(value ?? null)}
+                    >
+                        {mainNavigation.map((item) => {
+                          const Icon = item.icon;
+                          const hasSubmenu = Boolean(item.submenu?.length);
+                          const active = isNavActive(item);
+                          return (
+                            <Fragment key={item.id ?? item.label}>
+                              {hasSubmenu ? (
+                                <AccordionItem value={item.id} className="rounded-2xl border border-slate-200 bg-slate-100">
+                                  <AccordionTrigger
+                                    className={cn(
+                                      "flex items-center justify-between gap-3 px-4 py-3 text-[0.7rem] font-semibold tracking-[0.4em] uppercase",
+                                      active ? "text-primary" : "text-slate-600"
+                                    )}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <Icon className="h-4 w-4" />
+                                      <span>{resolveNavLabel(item)}</span>
+                                    </div>
+                                </AccordionTrigger>
+                                  <AccordionContent className="px-2 pb-3 pt-0">
+                                    <div className="space-y-2">
+                                      {item.submenu?.map((subItem) => {
+                                        const subActive = isActive(subItem.href);
+                                        const SubIcon = subItem.icon;
+                                        return (
+                                          <Link
+                                            key={subItem.href}
+                                            to={subItem.href}
+                                            className={cn(
+                                              "flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition duration-150",
+                                              subActive
+                                                ? "bg-primary/10 text-primary"
+                                                : "text-slate-600 hover:bg-slate-100 hover:text-foreground",
+                                              isRTL && "flex-row-reverse"
+                                            )}
+                                          >
+                                            <SubIcon className="h-4 w-4 text-slate-500 shrink-0" />
+                                            <div className="flex flex-col leading-tight">
+                                              <span className="text-sm font-semibold text-slate-900">
+                                                {subItem.labelKey ? t(subItem.labelKey) : subItem.label}
+                                              </span>
+                                              <span className="text-[0.65rem] text-slate-500">
+                                                {subItem.descriptionKey ? t(subItem.descriptionKey) : subItem.description}
+                                              </span>
+                                            </div>
+                                          </Link>
+                                        );
+                                      })}
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                              ) : (
+                                <Link
+                                  key={item.id ?? item.label}
+                                  to={resolveNavHref(item)}
+                                  className={cn(
+                                    "flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-600 uppercase tracking-[0.3em] transition hover:border-slate-300 hover:bg-white hover:text-foreground",
+                                    active ? "border-primary/70 bg-white text-primary" : "",
+                                    isRTL && "flex-row-reverse"
+                                  )}
+                                >
+                                  <Icon className="h-4 w-4 text-slate-500" />
+                                  <span>{resolveNavLabel(item)}</span>
+                                </Link>
+                              )}
+                            </Fragment>
+                          );
+                        })}
+                      </Accordion>
+                    </div>
+                    <DropdownMenuSeparator className="mx-5" />
+                    <div className="px-5 pb-4">
+                      <button
+                        onClick={handleSignOut}
+                        className="flex items-center gap-3 text-destructive font-semibold text-sm text-left w-full rounded-xl px-4 py-3 hover:bg-slate-50"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>{t('nav.logout')}</span>
+                      </button>
+                    </div>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (

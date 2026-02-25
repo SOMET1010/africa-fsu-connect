@@ -17,6 +17,7 @@ create table public.agency_projects (
   completion_percentage integer default 0 check (completion_percentage >= 0 and completion_percentage <= 100),
   tags text[],
   location text,
+  metadata jsonb default '{}'::jsonb,
   coordinates point,
   source_url text,
   last_updated_at timestamp with time zone,

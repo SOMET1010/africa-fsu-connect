@@ -26,3 +26,6 @@ dist-ssr
 .vs
 docs/MOCK_DATA_AUDIT.md
 data.txt
+supabase/config.toml
+supabase/config.toml
+supabase/config.toml

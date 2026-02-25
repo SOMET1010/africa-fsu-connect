@@ -62,3 +62,51 @@ VALUES
 
 -- Note : Pour l'Afrique du Sud (ZA), les langues officielles sont nombreuses (11). Nous avons mis un exemple simplifié.
 -- Les colonnes `official_language` et `working_languages` peuvent être ajustées selon vos besoins précis.
+
+-- Global CMS data ------------------------------------------------------------
+insert into auth.users (id, aud, email, email_confirmed_at, created_at, updated_at)
+values 
+  ('00000000-0000-0000-0000-000000000001', 'authenticated', 'seed@udc.local', now(), now(), now());
+
+insert into public.site_settings (key, value) values
+  ('platform_name', '{"fr":"UDC • Union Africaine des Télécommunications","en":"UDC • African Telecommunications Union"}'),
+  ('hero', '{"fr":{"title":"Connecter l''Afrique","subtitle_highlight":"Ensemble","description":"Une plateforme panafricaine pour coordonner les projets d''inclusion numérique et diffuser les meilleures pratiques du Service Universel."},"en":{"title":"Connecting Africa","subtitle_highlight":"Together","description":"A pan-African platform to coordinate digital inclusion initiatives and share Universal Service best practices."}}'),
+  ('hero_cta', '{"fr":"Explorer le réseau","en":"Explore the network"}');
+
+insert into public.navigation_items (href, location, label, sort_order, is_visible, is_external) values
+  ('/', 'header', '{"fr":"Accueil","en":"Home"}', 0, true, false),
+  ('/network', 'header', '{"fr":"Réseau","en":"Network"}', 1, true, false),
+  ('/projects', 'header', '{"fr":"Collaborer","en":"Collaborate"}', 2, true, false),
+  ('/elearning', 'header', '{"fr":"Apprendre","en":"Learn"}', 3, true, false),
+  ('/about', 'header', '{"fr":"À propos","en":"About"}', 4, true, false);
+
+insert into public.homepage_content_blocks (block_key, content_fr, content_en, sort_order, is_visible) values
+  ('hero', 
+    '{"title":"Connecter l''Afrique","subtitle_highlight":"Ensemble","description":"Une plateforme panafricaine pour coordonner les projets d''inclusion numérique et diffuser les meilleures pratiques du Service Universel.","cta_text":"Explorer le réseau","cta_url":"/network"}',
+    '{"title":"Connecting Africa","subtitle_highlight":"Together","description":"A pan-African platform to coordinate digital inclusion initiatives and share Universal Service best practices.","cta_text":"Explore the network","cta_url":"/network"}',
+    0,
+    true
+  );
+
+insert into public.agencies (id, name, acronym, country, region, website_url, description, contact_email, established_date) values
+  ('00000000-0000-0000-0000-000000000010', 'Agence Nationale du Service Universel (ANSUT)', 'ANSUT', 'Côte d''Ivoire', 'cedeao', 'https://www.ansut.ci', 'Coordonne les programmes d''accès universel et les investissements en Côte d''Ivoire.', 'secretariat@ansut.ci', '2002-02-17'),
+  ('00000000-0000-0000-0000-000000000011', 'Union Africaine des Télécommunications (UAT)', 'UAT', 'Éthiopie', 'uma', 'https://www.itu.int', 'Mandatée pour piloter la stratégie numérique continentale.', 'contact@uat.africa', '1997-01-01'),
+  ('00000000-0000-0000-0000-000000000012', 'Agence Tunisienne du Développement des Télécommunications (ATDT)', 'ATDT', 'Tunisie', 'uma', 'https://www.mtc.tn', 'Déploie des plateformes de connectivité éducative et de santé.', 'info@atdt.tn', '2004-07-11');
+
+insert into public.agency_projects (id, agency_id, title, description, status, budget, beneficiaries, start_date, end_date, completion_percentage, tags, location, source_url, metadata, created_at, last_updated_at, sync_status)
+values
+  ('00000000-0000-0000-0000-000000000100', '00000000-0000-0000-0000-000000000010', 'Villages connectés Phase II', 'Mise à niveau des infrastructures ICT dans 120 villages en Côte d''Ivoire.', 'active', 12500000, 350000, '2025-06-01', '2025-12-31', 65, array['connectivity','villages'], 'Côte d''Ivoire', 'https://example.org/projects/villages-connectes', '{"villages_connected": 120, "jobs_created": 450}', '2024-01-05T00:00:00+00', now(), 'synced'),
+  ('00000000-0000-0000-0000-000000000101', '00000000-0000-0000-0000-000000000011', 'Observatoire numérique africain', 'Collecte et analyse des indicateurs FSU pour 15 pays.', 'active', 22000000, 780000, '2024-09-15', '2026-03-01', 80, array['data','observatory'], 'Afrique', 'https://example.org/projects/observatoire', '{"villages_connected": 0, "jobs_created": 820}', '2024-03-10T00:00:00+00', now(), 'synced'),
+  ('00000000-0000-0000-0000-000000000102', '00000000-0000-0000-0000-000000000012', 'Campus numérique Tunisie', 'Équipement de 80 campus ruraux avec plateformes d''apprentissage.', 'in_progress', 8400000, 210000, '2025-01-10', '2026-08-20', 45, array['education','campus'], 'Tunisie', 'https://example.org/projects/campus-tunisie', '{"villages_connected": 40, "jobs_created": 200}', '2024-05-20T00:00:00+00', now(), 'synced'),
+  ('00000000-0000-0000-0000-000000000103', '00000000-0000-0000-0000-000000000011', 'Clinics numériques régionales', 'Déploiement de centres de télémédecine pour 42 districts.', 'in_progress', 9600000, 260000, '2024-10-01', '2025-04-30', 52, array['telemedicine'], 'Afrique de l''Est', 'https://example.org/projects/digital-clinics', '{"villages_connected": 0, "jobs_created": 210}', '2024-07-08T00:00:00+00', now(), 'synced'),
+  ('00000000-0000-0000-0000-000000000104', '00000000-0000-0000-0000-000000000010', 'Échange de données e-gouvernement', 'Plateforme de data sharing pour les régulateurs.', 'active', 4300000, 130000, '2024-11-10', '2025-03-15', 72, array['e-government','data'], 'Afrique', 'https://example.org/projects/data-exchange', '{"villages_connected": 0, "jobs_created": 190}', '2024-09-14T00:00:00+00', now(), 'synced'),
+  ('00000000-0000-0000-0000-000000000105', '00000000-0000-0000-0000-000000000012', 'Laboratoires connectés ruraux', 'Pôles d''innovation pour 60 villages pilotes.', 'planned', 5100000, 95000, '2025-02-01', '2025-09-30', 30, array['connectivity','villages'], 'Afrique du Nord', 'https://example.org/projects/rural-labs', '{"villages_connected": 60, "jobs_created": 160}', '2024-11-02T00:00:00+00', now(), 'synced');
+
+insert into public.events (id, title, description, start_date, end_date, location, is_virtual, max_attendees, current_attendees, created_by)
+values
+  ('00000000-0000-0000-0000-000000010001', 'Forum Régional USF', 'Rencontre régionale pour co-construire les feuilles de route 2026', '2025-11-15T09:00:00+00', '2025-11-17T17:00:00+00', 'Abidjan, Côte d\''Ivoire', false, 250, 180, '00000000-0000-0000-0000-000000000001'),
+  ('00000000-0000-0000-0000-000000010002', 'Atelier Données Ouvertes', 'Session hands-on pour ouvrir les jeux de données FSU.', '2025-12-08T10:00:00+00', '2025-12-08T16:00:00+00', 'Nairobi, Kenya', false, 120, 94, '00000000-0000-0000-0000-000000000001'),
+  ('00000000-0000-0000-0000-000000010003', 'Conférence Annuelle UDC', 'Point de synthèse annuel sur l''impact du réseau.', '2026-01-20T09:00:00+00', '2026-01-22T16:00:00+00', 'Dakar, Sénégal', false, 350, 220, '00000000-0000-0000-0000-000000000001'),
+  ('00000000-0000-0000-0000-000000010004', 'Forum Innovation Numérique', 'Exploration des outils d''IA pour l''inclusion.', '2026-03-15T08:30:00+00', '2026-03-16T18:00:00+00', 'Casablanca, Maroc', false, 180, 60, '00000000-0000-0000-0000-000000000001'),
+  ('00000000-0000-0000-0000-000000010005', 'Bootcamp Smart Villages', 'Ateliers pratiques pour accélérer les villages intelligents.', '2026-04-08T09:00:00+00', '2026-04-10T17:00:00+00', 'Kigali, Rwanda', false, 150, 30, '00000000-0000-0000-0000-000000000001'),
+  ('00000000-0000-0000-0000-000000010006', 'Sommet Connectivité Éducation', 'Tables rondes sur les infrastructures scolaires.', '2026-05-22T09:00:00+00', '2026-05-23T15:00:00+00', 'Niamey, Niger', false, 200, 45, '00000000-0000-0000-0000-000000000001');

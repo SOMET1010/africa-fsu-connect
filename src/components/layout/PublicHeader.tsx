@@ -10,6 +10,7 @@ import { useDirection } from "@/hooks/useDirection";
 import { useSiteConfig } from "@/hooks/useSiteConfig";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const PublicHeader = () => {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ export const PublicHeader = () => {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { getNavItems, getNavLabel } = useSiteConfig();
+  const { user } = useAuth();
 
   const headerItems = getNavItems("header");
 
@@ -61,12 +63,16 @@ export const PublicHeader = () => {
           <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
             <ThemeSwitch />
             <LanguageSelector variant="ghost" size="sm" showLabel={true} />
-            <Button asChild variant="ghost" className="hidden sm:inline-flex text-muted-foreground hover:text-foreground hover:bg-muted text-sm">
-              <Link to="/auth">{t("common.login") || "Connexion"}</Link>
-            </Button>
-            <Button asChild className="hidden sm:inline-flex bg-primary text-primary-foreground hover:bg-primary/90 text-sm">
-              <Link to="/auth?tab=signup">{t("common.register") || "S'inscrire"}</Link>
-            </Button>
+            {!user && (
+              <>
+                <Button asChild variant="ghost" className="hidden sm:inline-flex text-muted-foreground hover:text-foreground hover:bg-muted text-sm">
+                  <Link to="/auth">{t("common.login") || "Connexion"}</Link>
+                </Button>
+                <Button asChild className="hidden sm:inline-flex bg-primary text-primary-foreground hover:bg-primary/90 text-sm">
+                  <Link to="/auth?tab=signup">{t("common.register") || "S'inscrire"}</Link>
+                </Button>
+              </>
+            )}
 
             {/* Mobile toggle */}
             <Button
@@ -115,14 +121,16 @@ export const PublicHeader = () => {
                   </Link>
                 );
               })}
-              <div className="flex gap-2 pt-3 border-t border-border">
-                <Button asChild variant="ghost" className="flex-1 text-muted-foreground hover:text-foreground">
-                  <Link to="/auth" onClick={() => setMobileOpen(false)}>{t("common.login") || "Connexion"}</Link>
-                </Button>
-                <Button asChild className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
-                  <Link to="/auth?tab=signup" onClick={() => setMobileOpen(false)}>{t("common.register") || "S'inscrire"}</Link>
-                </Button>
-              </div>
+              {!user && (
+                <div className="flex gap-2 pt-3 border-t border-border">
+                  <Button asChild variant="ghost" className="flex-1 text-muted-foreground hover:text-foreground">
+                    <Link to="/auth" onClick={() => setMobileOpen(false)}>{t("common.login") || "Connexion"}</Link>
+                  </Button>
+                  <Button asChild className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
+                    <Link to="/auth?tab=signup" onClick={() => setMobileOpen(false)}>{t("common.register") || "S'inscrire"}</Link>
+                  </Button>
+                </div>
+              )}
             </nav>
           </motion.div>
         )}
