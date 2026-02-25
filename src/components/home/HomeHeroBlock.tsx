@@ -12,11 +12,12 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { HomeMemberMap } from "@/components/home/HomeMemberMap";
 import { Country } from "@/services/countriesService";
 import { getCountryActivity, ACTIVITY_LEVELS, type ActivityLevel } from "@/components/map/activityData";
+import { t } from "i18next";
 
 const LEGEND_ITEMS: { level: ActivityLevel; label: string }[] = [
-  { level: 'high', label: 'Très actif' },
-  { level: 'medium', label: 'Membre' },
-  { level: 'onboarding', label: 'En intégration' },
+  { level: 'high', label: 'label.legend.activity.high' },
+  { level: 'medium', label: 'label.legend.activity.medium' },
+  { level: 'onboarding', label: 'label.legend.activity.onboarding' },
 ];
 
 export function HomeHeroBlock() {
@@ -130,7 +131,7 @@ export function HomeHeroBlock() {
               {LEGEND_ITEMS.map(({ level, label }) => (
                 <div key={level} className="flex items-center gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: ACTIVITY_LEVELS[level].color }} />
-                  <span className="text-[11px] text-gray-500">{label} ({countByLevel(level)})</span>
+                  <span className="text-[11px] text-gray-500">{t(label)} ({countByLevel(level)})</span>
                 </div>
               ))}
             </div>

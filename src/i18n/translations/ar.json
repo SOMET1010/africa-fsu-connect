@@ -981,7 +981,10 @@
   "label.hero.view": "انظر المشاريع",
   "label.platform.slogan.title": "ربط أفريقيا",
   "label.platform.slogan.highlight": "معاً",
-  "label.platform.slogan.description": "منصة عموم أفريقية للتنسيق والابتكار وتجميع الموارد لخدمة الاتصالات العالمية."
+  "label.platform.slogan.description": "منصة عموم أفريقية للتنسيق والابتكار وتجميع الموارد لخدمة الاتصالات العالمية.",
+  "label.legend.activity.high": "نشط جدا",
+  "label.legend.activity.medium": "عضو",
+  "label.legend.activity.onboarding": "في التكامل"
 
 
 }

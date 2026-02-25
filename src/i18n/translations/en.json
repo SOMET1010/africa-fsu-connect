@@ -988,6 +988,9 @@
   "label.hero.view": "See the Projects",
   "label.platform.slogan.title": "Connecting Africa",
   "label.platform.slogan.highlight": "Together",
-  "label.platform.slogan.description": "Pan-African platform for coordination, innovation and pooling of resources for Universal Telecommunications Service."
+  "label.platform.slogan.description": "Pan-African platform for coordination, innovation and pooling of resources for Universal Telecommunications Service.",
+  "label.legend.activity.high": "Very active",
+  "label.legend.activity.medium": "Member",
+  "label.legend.activity.onboarding": "In integration"
 
 }

@@ -981,7 +981,10 @@
   "label.hero.view": "Veja os Projetos",
   "label.platform.slogan.title": "Conectar África",
   "label.platform.slogan.highlight": "Juntos",
-  "label.platform.slogan.description": "Plataforma pan-africana de coordenação, inovação e partilha de recursos para o Serviço Universal de Telecomunicações."
+  "label.platform.slogan.description": "Plataforma pan-africana de coordenação, inovação e partilha de recursos para o Serviço Universal de Telecomunicações.",
+  "label.legend.activity.high": "Muito ativo",
+  "label.legend.activity.medium": "Membro",
+  "label.legend.activity.onboarding": "Em integração"
 
 
 }

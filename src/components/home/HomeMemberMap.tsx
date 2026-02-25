@@ -55,7 +55,7 @@ export const HomeMemberMap = ({ countries, onCountryClick, mode = 'members' }: H
     });
 
     // CartoDB Dark Matter WITH labels/borders
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
       subdomains: "abcd",
       maxZoom: 19,
     }).addTo(map);

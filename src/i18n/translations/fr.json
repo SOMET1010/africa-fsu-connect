@@ -981,7 +981,10 @@
   "label.hero.view": "Voir les Projets",
   "label.platform.slogan.title": "Connecter l'Afrique",
   "label.platform.slogan.highlight": "Ensemble",
-  "label.platform.slogan.description": "Plateforme panafricaine pour la coordination, l'innovation et la mutualisation des ressources du Service Universel des Télécommunications."
+  "label.platform.slogan.description": "Plateforme panafricaine pour la coordination, l'innovation et la mutualisation des ressources du Service Universel des Télécommunications.",
+  "label.legend.activity.high": "Très actif",
+  "label.legend.activity.medium": "Membre",
+  "label.legend.activity.onboarding": "En intégration"
 
 
 }
