@@ -973,5 +973,15 @@
   "messages.sg.text": "A plataforma UDC representa um passo decisivo para a coordenação digital pan-africana. A nossa ambição é conectar 55 estados membros para acelerar a implantação do serviço universal em todo o continente.",
   "messages.dg.title": "Mensagem do Diretor-Geral",
   "messages.dg.name": "Diretor-Geral da ANSUT",
-  "messages.dg.text": "A ANSUT compromete-se ao lado da UAT a fazer do UDC uma ferramenta estratégica ao serviço da implantação do serviço universal. Esta plataforma reforça a nossa capacidade coletiva para reduzir a exclusão digital e conectar as comunidades mais isoladas."
+  "messages.dg.text": "A ANSUT compromete-se ao lado da UAT a fazer do UDC uma ferramenta estratégica ao serviço da implantação do serviço universal. Esta plataforma reforça a nossa capacidade coletiva para reduzir a exclusão digital e conectar as comunidades mais isoladas.",
+
+  "label.network.active": "Rede ativa",
+  "label.countries": "países",
+  "label.hero.explore": "Explorar a rede",
+  "label.hero.view": "Veja os Projetos",
+  "label.platform.slogan.title": "Conectar África",
+  "label.platform.slogan.highlight": "Juntos",
+  "label.platform.slogan.description": "Plataforma pan-africana de coordenação, inovação e partilha de recursos para o Serviço Universal de Telecomunicações."
+
+
 }

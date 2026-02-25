@@ -25,10 +25,11 @@ export function HomeHeroBlock() {
   const { getBlock } = useHomepageContent();
   const { data: countries = [] } = useAfricanCountries();
 
-  const hero = getBlock('hero');
+  /*const hero = getBlock('hero');
   const title = (hero?.title as string) ?? "Connecter l'Afrique";
   const highlight = (hero?.subtitle_highlight as string) ?? "Ensemble";
   const description = (hero?.description as string) ?? "Plateforme panafricaine pour la coordination, l'innovation et la mutualisation des ressources du Service Universel des Télécommunications.";
+  */
 
   const countByLevel = (level: ActivityLevel): number =>
     countries.filter((c) => getCountryActivity(c.code).level === level).length;
@@ -79,9 +80,9 @@ export function HomeHeroBlock() {
       {/* Breadcrumb */}
       <div className="container mx-auto px-4 pt-4 pb-2">
         <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-          <Link to="/" className="hover:text-gray-600">Accueil</Link>
+          <Link to="/" className="hover:text-gray-600">{t('nav.home')}</Link>
           <ChevronRight className="h-3 w-3" />
-          <span className="text-gray-600 font-medium">Réseau</span>
+          <span className="text-gray-600 font-medium">{t('nav.network')}</span>
         </nav>
       </div>
 
@@ -92,27 +93,27 @@ export function HomeHeroBlock() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className={cn("pt-4", isRTL && "text-right")}>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-medium mb-5">
               <MapPin className="h-3.5 w-3.5" />
-              Réseau actif — {countries.length || 54} pays
+              {t('label.network.active')} — {countries.length || 54} {t('label.countries')}
             </div>
 
             <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 leading-tight mb-4">
-              {title}{' '}
-              <span className="text-primary">{highlight}</span>
+              {t('label.platform.slogan.title')}
+              <span className="text-primary">{t('label.platform.slogan.highlight')}</span>
             </h1>
 
             <p className="text-base text-gray-500 leading-relaxed mb-8 max-w-lg">
-              {description}
+              {t('label.platform.slogan.description')}
             </p>
 
             <div className={cn("flex gap-3", isRTL && "flex-row-reverse")}>
               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
                 <Link to="/network" className="flex items-center gap-2">
-                  Explorer le Réseau
+                  {t('label.hero.explore')}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-gray-200 text-gray-700 hover:bg-gray-50">
-                <Link to="/projects">Voir les Projets</Link>
+                <Link to="/projects">{t('label.hero.view')}</Link>
               </Button>
             </div>
           </motion.div>

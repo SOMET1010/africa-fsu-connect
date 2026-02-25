@@ -888,7 +888,6 @@
   "forum.new.cancel": "Annuler",
   "forum.new.publish": "Publier la Discussion",
   "forum.error.fill": "Veuillez remplir tous les champs obligatoires.",
-  "forum.reaction.added": "Réaction ajoutée",
   "forum.reaction.desc": "Votre réaction a été enregistrée.",
 
   "library.page.badge": "Bibliothèque",
@@ -974,5 +973,15 @@
   "messages.sg.text": "La plateforme UDC représente un pas décisif vers la coordination numérique panafricaine. Notre ambition est de connecter les 55 États membres pour accélérer le déploiement du service universel sur tout le continent.",
   "messages.dg.title": "Message du Directeur Général",
   "messages.dg.name": "Directeur Général de l'ANSUT",
-  "messages.dg.text": "L'ANSUT s'engage aux côtés de l'UAT pour faire d'UDC un outil stratégique au service du déploiement du service universel. Cette plateforme renforce notre capacité collective à réduire la fracture numérique et à connecter les communautés les plus isolées."
+  "messages.dg.text": "L'ANSUT s'engage aux côtés de l'UAT pour faire d'UDC un outil stratégique au service du déploiement du service universel. Cette plateforme renforce notre capacité collective à réduire la fracture numérique et à connecter les communautés les plus isolées.",
+
+  "label.network.active": "Réseau Actif",
+  "label.countries": "pays",
+  "label.hero.explore": "Explorer le réseau",
+  "label.hero.view": "Voir les Projets",
+  "label.platform.slogan.title": "Connecter l'Afrique",
+  "label.platform.slogan.highlight": "Ensemble",
+  "label.platform.slogan.description": "Plateforme panafricaine pour la coordination, l'innovation et la mutualisation des ressources du Service Universel des Télécommunications."
+
+
 }
