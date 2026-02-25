@@ -98,7 +98,7 @@ export function HomeHeroBlock() {
 
             <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 leading-tight mb-4">
               {t('label.platform.slogan.title')}
-              <span className="text-primary">{t('label.platform.slogan.highlight')}</span>
+              <span className="text-primary"> {t('label.platform.slogan.highlight')}</span>
             </h1>
 
             <p className="text-base text-gray-500 leading-relaxed mb-8 max-w-lg">
