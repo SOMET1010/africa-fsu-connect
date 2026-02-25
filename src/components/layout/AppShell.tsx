@@ -45,6 +45,9 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
     { href: "#app-navigation", label: "Aller à la navigation" }
   ];
 
+  const isHomePage = location.pathname === "/";
+  const useModernHeader = user && !isHomePage;
+
   return (
     <>
       {/* Skip Links pour l'accessibilité */}
@@ -54,7 +57,7 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
         {/* Clean background - no decorative effects */}
         <div className="flex flex-col flex-1 min-w-0">
           <div id="app-navigation">
-            {user ? <ModernHeader /> : <PublicHeader />}
+            {useModernHeader ? <ModernHeader /> : <PublicHeader />}
           </div>
           <main id="main-content" className="flex-1 relative" tabIndex={-1}>
             <PageTransition variant="fade" duration="normal">
