@@ -57,6 +57,8 @@ const Auth = () => {
     setSignupCountry,
     signupOrganization,
     setSignupOrganization,
+    signupRole,
+    setSignupRole,
     signupConfirmPassword,
     setSignupConfirmPassword,
     handleSignup,
@@ -184,6 +186,7 @@ const Auth = () => {
                     lastName={signupData.lastName}
                     country={signupData.country}
                     organization={signupData.organization}
+                    role={signupData.role}
                   />
                 ) : (
                   <>
@@ -214,6 +217,8 @@ const Auth = () => {
                       onCountryChange={setSignupCountry}
                       organization={signupOrganization}
                       onOrganizationChange={setSignupOrganization}
+                      role={signupRole}
+                      onRoleChange={setSignupRole}
                     />
                   </>
                 )}

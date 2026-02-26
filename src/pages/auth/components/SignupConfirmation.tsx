@@ -1,10 +1,12 @@
 import { CheckCircle, Mail } from "lucide-react";
+import { USER_ROLE_LABELS, type UserRole } from "@/types/userRole";
 
 interface SignupConfirmationProps {
   firstName: string;
   lastName: string;
   country: string;
   organization: string;
+  role: UserRole;
 }
 
 export const SignupConfirmation = ({
@@ -12,6 +14,7 @@ export const SignupConfirmation = ({
   lastName,
   country,
   organization,
+  role,
 }: SignupConfirmationProps) => {
   return (
     <div className="text-center space-y-6 py-4">
@@ -41,6 +44,12 @@ export const SignupConfirmation = ({
           <div>
             <p className="text-xs text-muted-foreground uppercase tracking-wide">Organisation</p>
             <p className="font-medium text-foreground">{organization}</p>
+          </div>
+        )}
+        {role && (
+          <div>
+            <p className="text-xs text-muted-foreground uppercase tracking-wide">Rôle</p>
+            <p className="font-medium text-foreground">{USER_ROLE_LABELS[role]}</p>
           </div>
         )}
       </div>

@@ -3,6 +3,7 @@ import { ModernButton } from '@/components/ui/modern-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { useEmailValidation, usePasswordValidation } from '../hooks/useFormValidation';
 import { EmailValidationIcon, EmailValidationMessage } from './EmailValidationIndicator';
@@ -10,6 +11,7 @@ import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 import { useAfricanCountries } from '@/hooks/useCountries';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import { PUBLIC_SIGNUP_ROLE_OPTIONS, type UserRole } from '@/types/userRole';
 
 interface SignupFormProps {
   firstName: string;
@@ -31,6 +33,8 @@ interface SignupFormProps {
   onCountryChange?: (value: string) => void;
   organization?: string;
   onOrganizationChange?: (value: string) => void;
+  role: UserRole;
+  onRoleChange: (value: UserRole) => void;
 }
 
 export const SignupForm = ({
@@ -53,6 +57,8 @@ export const SignupForm = ({
   onCountryChange,
   organization = '',
   onOrganizationChange,
+  role,
+  onRoleChange,
 }: SignupFormProps) => {
   const emailValidation = useEmailValidation(email);
   const passwordValidation = usePasswordValidation(password);
@@ -124,6 +130,26 @@ export const SignupForm = ({
           placeholder="Votre organisme ou institution"
           className="h-12 bg-muted/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
         />
+      </div>
+      
+      {/* Role */}
+      <div className="space-y-2">
+        <Label htmlFor="signup-role" className="font-medium text-foreground">Rôle</Label>
+        <Select value={role} onValueChange={(value) => onRoleChange(value as UserRole)}>
+          <SelectTrigger
+            id="signup-role"
+            className="flex h-12 w-full rounded-md border border-border bg-muted/50 px-3 py-2 text-sm ring-offset-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+          >
+            <SelectValue placeholder="Sélectionnez un rôle" />
+          </SelectTrigger>
+          <SelectContent>
+            {PUBLIC_SIGNUP_ROLE_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       
       <div className="space-y-2">

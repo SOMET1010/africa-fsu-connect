@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import type { UserRole } from '@/types/userRole';
 
 // Auth helper pure functions extracted for testing
 // These mirror the logic in AuthContext
-
-type UserRole = 'super_admin' | 'country_admin' | 'editor' | 'contributor' | 'reader';
 
 interface MockProfile {
   role: UserRole;
@@ -75,7 +74,7 @@ describe('Auth Helpers', () => {
     });
 
     it('should work with all roles', () => {
-      const allRoles: UserRole[] = ['super_admin', 'country_admin', 'editor', 'contributor', 'reader'];
+      const allRoles: UserRole[] = ['super_admin', 'country_admin', 'editor', 'contributor', 'reader', 'focal_point'];
       
       allRoles.forEach(role => {
         const profile: MockProfile = { role };
@@ -96,6 +95,7 @@ describe('Auth Helpers', () => {
       { role: 'editor', canEdit: true, canModerate: true, canAdmin: true },
       { role: 'contributor', canEdit: true, canModerate: false, canAdmin: false },
       { role: 'reader', canEdit: false, canModerate: false, canAdmin: false },
+      { role: 'focal_point', canEdit: false, canModerate: false, canAdmin: false },
     ];
 
     scenarios.forEach(({ role, canEdit, canModerate, canAdmin }) => {
