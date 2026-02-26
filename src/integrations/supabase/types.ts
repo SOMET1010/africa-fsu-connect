@@ -7633,10 +7633,10 @@ export type Database = {
       contribution_type: "afcp" | "proposal" | "amendment" | "comment"
       document_type:
         | "guide"
-        | "rapport"
+        | "report"
         | "presentation"
-        | "formulaire"
-        | "autre"
+        | "form"
+        | "other"
       participant_role:
         | "delegate"
         | "rapporteur"
@@ -7647,18 +7647,18 @@ export type Database = {
       question_status: "pending" | "approved" | "rejected" | "answered"
       session_type: "plenary" | "working_group" | "presentation" | "break"
       submission_status:
-        | "brouillon"
-        | "soumis"
-        | "en_revision"
-        | "approuve"
-        | "rejete"
+        | "draft"
+        | "submitted"
+        | "in_review"
+        | "approved"
+        | "rejected"
       user_role:
         | "super_admin"
-        | "admin_pays"
-        | "editeur"
-        | "contributeur"
-        | "lecteur"
-        | "point_focal"
+        | "country_admin"
+        | "editor"
+        | "contributor"
+        | "reader"
+        | "focal_point"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -7789,10 +7789,10 @@ export const Constants = {
       contribution_type: ["afcp", "proposal", "amendment", "comment"],
       document_type: [
         "guide",
-        "rapport",
+        "report",
         "presentation",
-        "formulaire",
-        "autre",
+        "form",
+        "other",
       ],
       participant_role: [
         "delegate",
@@ -7805,19 +7805,19 @@ export const Constants = {
       question_status: ["pending", "approved", "rejected", "answered"],
       session_type: ["plenary", "working_group", "presentation", "break"],
       submission_status: [
-        "brouillon",
-        "soumis",
-        "en_revision",
-        "approuve",
-        "rejete",
+        "draft",
+        "submitted",
+        "in_review",
+        "approved",
+        "rejected",
       ],
       user_role: [
         "super_admin",
-        "admin_pays",
-        "editeur",
-        "contributeur",
-        "lecteur",
-        "point_focal",
+        "country_admin",
+        "editor",
+        "contributor",
+        "reader",
+        "focal_point",
       ],
     },
   },

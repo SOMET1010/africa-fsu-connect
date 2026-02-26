@@ -109,7 +109,7 @@ const availableWidgets: Widget[] = [
     category: 'system',
     size: 'medium',
     enabled: false,
-    requiredRole: ['admin_pays', 'super_admin']
+    requiredRole: ['country_admin', 'super_admin']
   }
 ];
 

@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { toErrorMessage } from '@/utils/errors';
+import { PUBLIC_SIGNUP_ROLE_OPTIONS, type UserRole } from '@/types/userRole';
 
 export const useAuthPage = () => {
   const { signIn, signUp, user, loading, requestPasswordReset, updatePassword } = useAuth();
@@ -24,8 +25,10 @@ export const useAuthPage = () => {
   const [signupLastName, setSignupLastName] = useState('');
   const [signupCountry, setSignupCountry] = useState('');
   const [signupOrganization, setSignupOrganization] = useState('');
+  const defaultSignupRole = PUBLIC_SIGNUP_ROLE_OPTIONS[0]?.value ?? 'reader';
+  const [signupRole, setSignupRole] = useState<UserRole>(defaultSignupRole);
   const [signupSuccess, setSignupSuccess] = useState(false);
-  const [signupData, setSignupData] = useState({ firstName: '', lastName: '', country: '', organization: '' });
+  const [signupData, setSignupData] = useState({ firstName: '', lastName: '', country: '', organization: '', role: defaultSignupRole });
   // Password reset state
   const [forgotMode, setForgotMode] = useState(false);
   const [resetMode, setResetMode] = useState(false);
@@ -88,7 +91,7 @@ export const useAuthPage = () => {
     }
 
     try {
-      const { error } = await signUp(signupEmail, signupPassword, signupFirstName, signupLastName, signupCountry, signupOrganization);
+      const { error } = await signUp(signupEmail, signupPassword, signupFirstName, signupLastName, signupCountry, signupOrganization, signupRole);
       
       if (error) {
         const errorMessage = toErrorMessage(error);
@@ -100,7 +103,7 @@ export const useAuthPage = () => {
           setError(errorMessage);
         }
       } else {
-        setSignupData({ firstName: signupFirstName, lastName: signupLastName, country: signupCountry, organization: signupOrganization });
+        setSignupData({ firstName: signupFirstName, lastName: signupLastName, country: signupCountry, organization: signupOrganization, role: signupRole });
         setSignupSuccess(true);
         toast.success('Compte créé ! Vérifiez votre email pour confirmer votre inscription.');
       }
@@ -187,6 +190,8 @@ export const useAuthPage = () => {
     setSignupCountry,
     signupOrganization,
     setSignupOrganization,
+    signupRole,
+    setSignupRole,
     signupConfirmPassword,
     setSignupConfirmPassword,
     handleSignup,

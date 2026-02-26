@@ -60,11 +60,11 @@ export function ModernSidebar() {
     switch (role) {
       case 'super_admin':
         return 'bg-gradient-to-r from-red-500/20 to-red-600/20 text-red-700 border-red-200/50';
-      case 'admin_pays':
+      case 'country_admin':
         return 'bg-primary/20 text-primary border-primary/30';
-      case 'editeur':
+      case 'editor':
         return 'bg-gradient-to-r from-green-500/20 to-green-600/20 text-green-700 border-green-200/50';
-      case 'contributeur':
+      case 'contributor':
         return 'bg-gradient-to-r from-orange-500/20 to-orange-600/20 text-orange-700 border-orange-200/50';
       default:
         return 'bg-gradient-to-r from-gray-500/20 to-gray-600/20 text-gray-700 border-gray-200/50';
@@ -74,10 +74,10 @@ export function ModernSidebar() {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'super_admin': return 'Super Admin';
-      case 'admin_pays': return 'Admin Pays';
-      case 'editeur': return 'Éditeur';
-      case 'contributeur': return 'Contributeur';
-      case 'lecteur': return 'Lecteur';
+      case 'country_admin': return 'Admin Pays';
+      case 'editor': return 'Éditeur';
+      case 'contributor': return 'Contributeur';
+      case 'reader': return 'Lecteur';
       default: return role;
     }
   };

@@ -26,7 +26,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
     {
       title: "Rapport d'Impact - Projets FSU 2023",
       description: "Analyse détaillée de l'impact des projets FSU menés en 2023 à travers différents pays africains, avec des données sur l'efficacité et les résultats obtenus.",
-      document_type: "rapport" as const,
+      document_type: "report" as const,
       country: "Côte d'Ivoire",
       mime_type: "application/pdf",
       file_name: "rapport_impact_fsu_2023.pdf",
@@ -46,7 +46,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
     {
       title: "Formulaire de Candidature - Programme de Formation",
       description: "Formulaire standardisé pour les candidatures aux programmes de formation FSU destinés aux professionnels du développement en Afrique.",
-      document_type: "formulaire" as const,
+      document_type: "form" as const,
       country: "Ghana",
       mime_type: "application/vnd.ms-excel",
       file_name: "formulaire_candidature_formation.xlsx",
@@ -56,7 +56,7 @@ const SampleDataButton = ({ onDataAdded }: { onDataAdded: () => void }) => {
     {
       title: "Étude de Cas - Microfinance et Inclusion Financière",
       description: "Analyse approfondie des programmes de microfinance mis en place dans plusieurs pays africains et leur impact sur l'inclusion financière des populations rurales.",
-      document_type: "rapport" as const,
+      document_type: "report" as const,
       country: "Tanzanie",
       mime_type: "application/pdf",
       file_name: "etude_microfinance_2024.pdf",

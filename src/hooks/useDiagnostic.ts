@@ -297,7 +297,7 @@ export const useDiagnostic = () => {
       const { data: adminUsers } = await supabase
         .from('profiles')
         .select('role')
-        .in('role', ['super_admin', 'admin_pays']);
+        .in('role', ['super_admin', 'country_admin']);
 
       if (!adminUsers || adminUsers.length === 0) {
         checks.push({

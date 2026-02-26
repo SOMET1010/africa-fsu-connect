@@ -22,11 +22,11 @@ import {
 
 const ROLES = [
   { value: 'super_admin', label: 'Super Admin' },
-  { value: 'admin_pays', label: 'Admin Pays' },
-  { value: 'editeur', label: 'Éditeur' },
-  { value: 'contributeur', label: 'Contributeur' },
-  { value: 'point_focal', label: 'Point Focal' },
-  { value: 'lecteur', label: 'Lecteur' },
+  { value: 'country_admin', label: 'Admin Pays' },
+  { value: 'editor', label: 'Éditeur' },
+  { value: 'contributor', label: 'Contributeur' },
+  { value: 'focal_point', label: 'Point Focal' },
+  { value: 'reader', label: 'Lecteur' },
 ];
 
 const AgencyDocuments = () => {

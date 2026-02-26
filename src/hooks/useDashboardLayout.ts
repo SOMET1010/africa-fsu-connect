@@ -24,7 +24,7 @@ const getDefaultLayout = (userRole: string | undefined): DashboardLayout => {
   ];
 
   // Add regional progress for admins and editors
-  if (userRole === 'super_admin' || userRole === 'admin_pays' || userRole === 'editeur') {
+  if (userRole === 'super_admin' || userRole === 'country_admin' || userRole === 'editor') {
     baseWidgets.push({ 
       id: 'regional-progress', 
       type: 'regional-progress', 
@@ -53,7 +53,7 @@ export const useDashboardLayout = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // Storage key based on user ID and role
-  const storageKey = `dashboard-layout-${profile?.user_id || 'anonymous'}-${profile?.role || 'lecteur'}`;
+  const storageKey = `dashboard-layout-${profile?.user_id || 'anonymous'}-${profile?.role || 'reader'}`;
 
   // Load layout from localStorage on mount
   useEffect(() => {

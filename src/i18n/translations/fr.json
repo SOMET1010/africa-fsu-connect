@@ -927,10 +927,10 @@
   "search.filters.document_type": "Type",
   "search.filters.clear": "Effacer",
   "search.filters.doctype.guide": "Guide",
-  "search.filters.doctype.rapport": "Rapport",
+  "search.filters.doctype.report": "Rapport",
   "search.filters.doctype.presentation": "Présentation",
-  "search.filters.doctype.formulaire": "Formulaire",
-  "search.filters.doctype.autre": "Autre",
+  "search.filters.doctype.form": "Formulaire",
+  "search.filters.doctype.other": "Autre",
 
   "cookie.banner.text": "Ce site utilise des cookies pour améliorer votre expérience et produire des statistiques anonymisées.",
   "cookie.banner.accept": "Accepter",

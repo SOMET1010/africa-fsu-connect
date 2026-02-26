@@ -90,10 +90,10 @@ export const getStatusBadgeConfig = (status: string) => {
 export const getRoleLabel = (role: string) => {
   const roles = {
     super_admin: "Super Admin",
-    admin_pays: "Admin Pays",
-    editeur: "Éditeur",
-    contributeur: "Contributeur",
-    lecteur: "Lecteur"
+    country_admin: "Admin Pays",
+    editor: "Éditeur",
+    contributor: "Contributeur",
+    reader: "Lecteur"
   };
   return roles[role as keyof typeof roles] || role;
 };

@@ -51,12 +51,12 @@ export const AppNavigation = () => {
   ];
 
   const adminNavItems: NavItem[] = [
-    { name: t('nav.admin'), path: '/admin', icon: Settings, roles: ['super_admin', 'admin_pays', 'editeur'] },
-    { name: t('nav.admin_users'), path: '/admin/users', icon: Users, roles: ['super_admin', 'admin_pays'] },
-    { name: t('nav.security'), path: '/security', icon: Shield, roles: ['super_admin', 'admin_pays'] }
+    { name: t('nav.admin'), path: '/admin', icon: Settings, roles: ['super_admin', 'country_admin', 'editor'] },
+    { name: t('nav.admin_users'), path: '/admin/users', icon: Users, roles: ['super_admin', 'country_admin'] },
+    { name: t('nav.security'), path: '/security', icon: Shield, roles: ['super_admin', 'country_admin'] }
   ];
 
-  const userRole = profile?.role || 'lecteur';
+  const userRole = profile?.role || 'reader';
 
   const filteredAdminItems = adminNavItems.filter(item => 
     !item.roles || item.roles.includes(userRole)

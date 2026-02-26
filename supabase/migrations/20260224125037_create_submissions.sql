@@ -8,7 +8,7 @@ create table public.submissions (
   title text not null,
   description text,
   content text,
-  status public.submission_status not null default 'brouillon'::public.submission_status,
+  status public.submission_status not null default 'draft'::public.submission_status,
   submitted_by uuid not null,
   reviewed_by uuid,
   review_notes text,

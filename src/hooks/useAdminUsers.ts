@@ -91,9 +91,9 @@ export const useAdminUsers = () => {
       newUsersThisMonth: usersData.filter(user => 
         new Date(user.created_at) >= thisMonth
       ).length,
-      adminUsers: usersData.filter(user => 
-        ['super_admin', 'admin_pays', 'editeur'].includes(user.role)
-      ).length,
+    adminUsers: usersData.filter(user => 
+      ['super_admin', 'country_admin', 'editor'].includes(user.role)
+    ).length,
       usersByRole: {},
       usersByCountry: {}
     };
@@ -114,7 +114,7 @@ export const useAdminUsers = () => {
   };
 
   // Update user role using secure RPC function
-  const updateUserRole = async (userId: string, newRole: 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur') => {
+  const updateUserRole = async (userId: string, newRole: 'super_admin' | 'country_admin' | 'editor' | 'contributor' | 'reader') => {
     try {
       const { error } = await supabase.rpc('admin_update_user_role', {
         target_user_id: userId,

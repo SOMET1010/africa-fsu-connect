@@ -58,35 +58,35 @@ const SHORTCUTS: Shortcut[] = [
     label: { fr: "Gestion contenu", en: "Content management", ar: "إدارة المحتوى", pt: "Gestão de conteúdo" },
     href: "/admin/content",
     icon: Layout,
-    roles: ["super_admin", "admin_pays", "editeur"],
+    roles: ["super_admin", "country_admin", "editor"],
     description: { fr: "CMS, navigation, paramètres", en: "CMS, navigation, settings", ar: "نظام إدارة المحتوى", pt: "CMS, navegação, configurações" },
   },
   {
     label: { fr: "Utilisateurs", en: "Users", ar: "المستخدمون", pt: "Utilizadores" },
     href: "/admin/users",
     icon: Users,
-    roles: ["super_admin", "admin_pays"],
+    roles: ["super_admin", "country_admin"],
     description: { fr: "Rôles, permissions, comptes", en: "Roles, permissions, accounts", ar: "الأدوار والصلاحيات", pt: "Funções, permissões, contas" },
   },
   {
     label: { fr: "Points focaux", en: "Focal points", ar: "نقاط الاتصال", pt: "Pontos focais" },
     href: "/admin/focal-points",
     icon: Flag,
-    roles: ["super_admin", "admin_pays"],
+    roles: ["super_admin", "country_admin"],
     description: { fr: "Correspondants nationaux", en: "National correspondents", ar: "المراسلون الوطنيون", pt: "Correspondentes nacionais" },
   },
   {
     label: { fr: "Ressources", en: "Resources", ar: "الموارد", pt: "Recursos" },
     href: "/admin/resources",
     icon: BookOpen,
-    roles: ["super_admin", "admin_pays", "editeur"],
+    roles: ["super_admin", "country_admin", "editor"],
     description: { fr: "Documents et bibliothèque", en: "Documents & library", ar: "الوثائق والمكتبة", pt: "Documentos e biblioteca" },
   },
   {
     label: { fr: "Forum", en: "Forum", ar: "المنتدى", pt: "Fórum" },
     href: "/admin/forum",
     icon: MessageSquare,
-    roles: ["super_admin", "admin_pays"],
+    roles: ["super_admin", "country_admin"],
     description: { fr: "Modération des discussions", en: "Discussion moderation", ar: "إدارة النقاشات", pt: "Moderação de discussões" },
   },
   {
@@ -100,14 +100,14 @@ const SHORTCUTS: Shortcut[] = [
     label: { fr: "Tableau de pilotage", en: "Analytics dashboard", ar: "لوحة التحليلات", pt: "Painel analítico" },
     href: "/admin/dashboard",
     icon: TrendingUp,
-    roles: ["super_admin", "admin_pays"],
+    roles: ["super_admin", "country_admin"],
     description: { fr: "Métriques et KPIs détaillés", en: "Detailed metrics & KPIs", ar: "المقاييس التفصيلية", pt: "Métricas e KPIs detalhados" },
   },
   {
     label: { fr: "Sécurité", en: "Security", ar: "الأمان", pt: "Segurança" },
     href: "/security",
     icon: Shield,
-    roles: ["super_admin", "admin_pays"],
+    roles: ["super_admin", "country_admin"],
     description: { fr: "Audit, sessions, anomalies", en: "Audit, sessions, anomalies", ar: "التدقيق والجلسات", pt: "Auditoria, sessões, anomalias" },
   },
 ];
@@ -120,7 +120,7 @@ const Admin = () => {
   const { isRTL } = useDirection();
   const { resetTour } = useAdminOnboarding();
   const lang = currentLanguage || "fr";
-  const userRole = profile?.role ?? "lecteur";
+  const userRole = profile?.role ?? "reader";
 
   // ── Live KPI queries (parallel) ──
   const { data: userCount = 0, isLoading: loadingUsers } = useQuery({
@@ -212,7 +212,7 @@ const Admin = () => {
       return data ?? [];
     },
     staleTime: 2 * 60 * 1000,
-    enabled: ["super_admin", "admin_pays"].includes(userRole),
+    enabled: ["super_admin", "country_admin"].includes(userRole),
   });
 
   const isLoading = loadingUsers || loadingDocs || loadingEvents;
@@ -369,7 +369,7 @@ const Admin = () => {
             </section>
 
             {/* Alerts & Moderation */}
-            {["super_admin", "admin_pays"].includes(userRole) && (
+            {["super_admin", "country_admin"].includes(userRole) && (
               <section data-tour="alerts">
                 <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                   {l("alerts", lang)}

@@ -201,11 +201,11 @@ Modules réservés aux administrateurs de la plateforme.
 | Rôle | Code | Description |
 |------|------|-------------|
 | **Super Administrateur** | `super_admin` | Accès total à la plateforme. Gestion globale du système |
-| **Administrateur Pays** | `admin_pays` | Administration au niveau national. Gestion des utilisateurs et données de son pays |
-| **Éditeur** | `editeur` | Création et modification de contenus (ressources, projets, événements) |
-| **Contributeur** | `contributeur` | Soumission de contenus soumis à validation |
-| **Point Focal** | `point_focal` | Saisie et validation des indicateurs nationaux. Rôle clé de la collecte |
-| **Lecteur** | `lecteur` | Consultation des données publiques et des ressources partagées |
+| **Administrateur Pays** | `country_admin` | Administration au niveau national. Gestion des utilisateurs et données de son pays |
+| **Éditeur** | `editor` | Création et modification de contenus (ressources, projets, événements) |
+| **Contributeur** | `contributor` | Soumission de contenus soumis à validation |
+| **Point Focal** | `focal_point` | Saisie et validation des indicateurs nationaux. Rôle clé de la collecte |
+| **Lecteur** | `reader` | Consultation des données publiques et des ressources partagées |
 
 ### 5.2 Matrice d'accès
 

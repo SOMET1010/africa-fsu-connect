@@ -4,8 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Tables } from '@/integrations/supabase/types';
 import { logger } from '@/utils/logger';
 import type { SecurityEventDetails, ApiResponse } from '@/types/common';
-
-export type UserRole = 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur' | 'point_focal';
+import type { UserRole } from '@/types/userRole';
 
 interface AuthContextType {
   user: User | null;
@@ -13,7 +12,7 @@ interface AuthContextType {
   profile: Tables<'profiles'> | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<ApiResponse>;
-  signUp: (email: string, password: string, firstName?: string, lastName?: string, country?: string, organization?: string) => Promise<ApiResponse>;
+  signUp: (email: string, password: string, firstName?: string, lastName?: string, country?: string, organization?: string, role?: UserRole) => Promise<ApiResponse>;
   signOut: () => Promise<void>;
   requestPasswordReset: (email: string) => Promise<ApiResponse>;
   updatePassword: (newPassword: string) => Promise<ApiResponse>;
@@ -120,8 +119,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return { error };
   };
 
-  const signUp = async (email: string, password: string, firstName?: string, lastName?: string, country?: string, organization?: string) => {
+  const signUp = async (email: string, password: string, firstName?: string, lastName?: string, country?: string, organization?: string, role?: UserRole) => {
     const redirectUrl = `${window.location.origin}/`;
+    const normalizedRole = role ?? 'reader';
     
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -133,6 +133,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           last_name: lastName,
           country: country,
           organization: organization,
+          role: normalizedRole,
         }
       }
     });
@@ -145,6 +146,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         { email }, 
         !error
       );
+    }
+
+    if (!error && data.user) {
+      try {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert(
+            {
+              user_id: data.user.id,
+              first_name: firstName,
+              last_name: lastName,
+              email,
+              country,
+              organization,
+              role: normalizedRole,
+            },
+            { onConflict: 'user_id' }
+          );
+
+        if (profileError) {
+          logger.error('Failed to sync profile after signup', profileError, { component: 'AuthContext', action: 'signUp' });
+        }
+      } catch (profileError) {
+        logger.error('Unexpected profile sync error', profileError, { component: 'AuthContext', action: 'signUp' });
+      }
     }
 
     return { error };
@@ -200,7 +226,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const isAdmin = () => {
     if (!profile) return false;
-    return ['super_admin', 'admin_pays', 'editeur'].includes(profile.role);
+    return ['super_admin', 'country_admin', 'editor'].includes(profile.role);
   };
 
   const hasRole = (roles: UserRole[]) => {
@@ -235,3 +261,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+export type { UserRole } from '@/types/userRole';

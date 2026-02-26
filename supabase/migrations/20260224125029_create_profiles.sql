@@ -9,7 +9,7 @@ create table public.profiles (
   first_name text,
   last_name text,
   email text,
-  role public.user_role not null default 'lecteur'::public.user_role,
+  role public.user_role not null default 'reader'::public.user_role,
   country text,
   organization text,
   avatar_url text,

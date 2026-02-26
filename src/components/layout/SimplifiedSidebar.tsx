@@ -122,7 +122,7 @@ export function SimplifiedSidebar() {
   const isCollapsed = collapsed;
   
   const isActive = (path: string) => currentPath === path;
-  const isAdminUser = profile?.role && ['super_admin', 'admin_pays', 'editeur'].includes(profile.role);
+  const isAdminUser = profile?.role && ['super_admin', 'country_admin', 'editor'].includes(profile.role);
 
   const getNavClassName = (path: string) => {
     const baseClasses = "w-full justify-start transition-all duration-200 h-12";
@@ -150,11 +150,11 @@ export function SimplifiedSidebar() {
     switch (role) {
       case 'super_admin':
         return 'bg-red-100 text-red-700 border-red-200';
-      case 'admin_pays':
+      case 'country_admin':
         return 'bg-blue-100 text-blue-700 border-blue-200';
-      case 'editeur':
+      case 'editor':
         return 'bg-green-100 text-green-700 border-green-200';
-      case 'contributeur':
+      case 'contributor':
         return 'bg-orange-100 text-orange-700 border-orange-200';
       default:
         return 'bg-gray-100 text-gray-700 border-gray-200';
@@ -164,10 +164,10 @@ export function SimplifiedSidebar() {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'super_admin': return 'Super Admin';
-      case 'admin_pays': return 'Admin Pays';
-      case 'editeur': return 'Éditeur';
-      case 'contributeur': return 'Contributeur';
-      case 'lecteur': return 'Lecteur';
+      case 'country_admin': return 'Admin Pays';
+      case 'editor': return 'Éditeur';
+      case 'contributor': return 'Contributeur';
+      case 'reader': return 'Lecteur';
       default: return role;
     }
   };
