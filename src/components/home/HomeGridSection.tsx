@@ -5,6 +5,7 @@ import { getCountryActivity, ACTIVITY_LEVELS } from "@/components/map/activityDa
 import { cn } from "@/lib/utils";
 import { HomeMemberMap } from "@/components/home/HomeMemberMap";
 import { motion } from "framer-motion";
+import { t } from "i18next";
 
 const getCountryFlag = (code: string): string => {
   if (!code || code.length !== 2) return "🌍";
@@ -42,7 +43,7 @@ export function HomeGridSection() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Globe className="h-4 w-4 text-primary" />
-                <h3 className="text-sm font-semibold text-gray-900">Pays Membres</h3>
+                <h3 className="text-sm font-semibold text-gray-900">{t("label.homegridsession.title")}</h3>
               </div>
               <Link to="/network" className="text-xs text-primary hover:underline flex items-center gap-1">
                 Voir tout <ArrowRight className="h-3 w-3" />
@@ -74,7 +75,7 @@ export function HomeGridSection() {
           </div>
 
           {/* Column 2: Network Map */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
+          {/*<div className="bg-white border border-gray-200 rounded-xl p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-semibold text-gray-900">Carte du Réseau UDC</h3>
               <Link to="/network" className="text-xs text-primary hover:underline flex items-center gap-1">
@@ -86,7 +87,32 @@ export function HomeGridSection() {
                 <HomeMemberMap countries={countries} mode="members" />
               )}
             </div>
-          </div>
+          </div>*/}
+
+            {/* Upcoming Events */}
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-4">
+                    <Calendar className="h-4 w-4 text-amber-500" />
+                    <h3 className="text-sm font-semibold text-gray-900">Prochains Événements</h3>
+                </div>
+                <div className="space-y-3">
+                    {UPCOMING_EVENTS.map((evt, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                            <div className="w-11 h-11 rounded-lg bg-primary/5 border border-primary/10 flex flex-col items-center justify-center shrink-0">
+                                <span className="text-[9px] font-bold text-primary uppercase leading-none">{evt.month}</span>
+                                <span className="text-sm font-bold text-gray-900 leading-none">{evt.day}</span>
+                            </div>
+                            <div>
+                                <p className="text-xs font-medium text-gray-800">{evt.title}</p>
+                                <p className="text-[11px] text-gray-400 flex items-center gap-1">
+                                    <MapPin className="h-2.5 w-2.5" />
+                                    {evt.location}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
           {/* Column 3: Activity + Events */}
           <div className="space-y-4">
@@ -107,31 +133,6 @@ export function HomeGridSection() {
                       <p className="text-xs font-medium text-gray-800">{item.title}</p>
                       <p className="text-[11px] text-gray-500">{item.desc}</p>
                       <p className="text-[10px] text-gray-400 mt-0.5">{item.time}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Upcoming Events */}
-            <div className="bg-white border border-gray-200 rounded-xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Calendar className="h-4 w-4 text-amber-500" />
-                <h3 className="text-sm font-semibold text-gray-900">Prochains Événements</h3>
-              </div>
-              <div className="space-y-3">
-                {UPCOMING_EVENTS.map((evt, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <div className="w-11 h-11 rounded-lg bg-primary/5 border border-primary/10 flex flex-col items-center justify-center shrink-0">
-                      <span className="text-[9px] font-bold text-primary uppercase leading-none">{evt.month}</span>
-                      <span className="text-sm font-bold text-gray-900 leading-none">{evt.day}</span>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-gray-800">{evt.title}</p>
-                      <p className="text-[11px] text-gray-400 flex items-center gap-1">
-                        <MapPin className="h-2.5 w-2.5" />
-                        {evt.location}
-                      </p>
                     </div>
                   </div>
                 ))}

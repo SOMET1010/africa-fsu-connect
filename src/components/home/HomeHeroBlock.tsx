@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Globe, MapPin, Users, FolderOpen, Calendar, ChevronRight, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
-//import { useTranslation } from "@/hooks/useTranslation";
 import { useDirection } from "@/hooks/useDirection";
 import { cn } from "@/lib/utils";
 import { useHomepageContent } from "@/hooks/useHomepageContent";

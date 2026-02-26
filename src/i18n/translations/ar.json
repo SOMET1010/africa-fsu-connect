@@ -991,7 +991,8 @@
   "label.carto.itemInfo.observer": "المراقب",
   "label.carto.itemInfo.projets": "المشاريع",
   "label.carto.itemInfo.tendance": "نزعة",
-  "label.carto.itemInfo.lastactivity": "النشاط الأخير"
+  "label.carto.itemInfo.lastactivity": "النشاط الأخير",
+  "label.homegridsession.title": "الدول الأعضاء"
 
 
 }

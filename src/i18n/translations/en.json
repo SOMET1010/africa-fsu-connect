@@ -998,6 +998,7 @@
   "label.carto.itemInfo.observer": "Observer",
   "label.carto.itemInfo.projets": "projects",
   "label.carto.itemInfo.tendance": "tendency",
-  "label.carto.itemInfo.lastactivity": "Last activity"
+  "label.carto.itemInfo.lastactivity": "Last activity",
+  "label.homegridsession.title": "Member Countries"
 
 }

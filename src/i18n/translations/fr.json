@@ -869,12 +869,6 @@
   "forum.page.badge": "Communauté",
   "forum.page.title": "Forum de Discussion FSU",
   "forum.page.subtitle": "Partagez vos idées et questions avec la communauté FSU",
-  "forum.all.discussions": "Toutes les discussions",
-  "forum.sort.recent": "Récentes",
-  "forum.sort.popular": "Populaires",
-  "forum.sort.replies": "Plus de réponses",
-  "forum.sort.by": "Trier par",
-  "forum.empty.title": "Aucune discussion trouvée",
   "forum.empty.desc": "Soyez le premier à créer une discussion dans cette catégorie",
   "forum.empty.cta": "Créer une discussion",
   "forum.new.title": "Créer une Nouvelle Discussion",
@@ -992,7 +986,9 @@
   "label.carto.itemInfo.contributions": "contributions",
   "label.carto.itemInfo.projets": "projets",
   "label.carto.itemInfo.tendance": "tendance",
-  "label.carto.itemInfo.lastactivity": "Dernière activité"
+  "label.carto.itemInfo.lastactivity": "Dernière activité",
+  "label.homegridsession.title": "Pays membres"
+
 
 
 

@@ -3,7 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Country } from "@/services/countriesService";
 import { getCountryActivity, ACTIVITY_LEVELS, type MapMode, getValueByMode } from "@/components/map/activityData";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface HomeMemberMapProps {
   countries: Country[];
@@ -33,6 +33,7 @@ const getMarkerSize = (value: number, maxValue: number): number => {
 };
 
 export const HomeMemberMap = ({ countries, onCountryClick, mode = 'members' }: HomeMemberMapProps) => {
+  const { t } = useTranslation();
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
@@ -45,9 +46,9 @@ export const HomeMemberMap = ({ countries, onCountryClick, mode = 'members' }: H
       center: [5, 20],
       zoom: 3.2,
       minZoom: 3,
-      maxZoom: 6,
+      //maxZoom: 10,
       zoomControl: false,
-      scrollWheelZoom: false,
+      scrollWheelZoom: true,
       dragging: true,
       doubleClickZoom: false,
       attributionControl: false,
