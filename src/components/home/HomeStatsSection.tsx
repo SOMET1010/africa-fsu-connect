@@ -2,51 +2,63 @@ import { BarChart3, TrendingUp } from "lucide-react";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { motion } from "framer-motion";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 const GROWTH_DATA = [
-  { month: "Jan", value: 32 },
-  { month: "Fév", value: 35 },
-  { month: "Mar", value: 38 },
-  { month: "Avr", value: 40 },
-  { month: "Mai", value: 42 },
-  { month: "Jun", value: 45 },
-  { month: "Jul", value: 47 },
-  { month: "Aoû", value: 49 },
-  { month: "Sep", value: 51 },
-  { month: "Oct", value: 52 },
-  { month: "Nov", value: 53 },
-  { month: "Déc", value: 54 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.jan"), value: 32 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.feb"), value: 35 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.mar"), value: 38 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.apr"), value: 40 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.may"), value: 42 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.jun"), value: 45 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.jul"), value: 47 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.aug"), value: 49 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.sep"), value: 51 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.oct"), value: 52 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.nov"), value: 53 },
+    { month: t("label.homeStatsSection.statsGrowth.legend.dec"), value: 54 }
 ];
 
 const DOMAIN_DATA = [
-  { name: "Connectivité rurale", value: 35, color: "#3B82F6" },
-  { name: "Éducation numérique", value: 25, color: "#10B981" },
-  { name: "Télémédecine", value: 20, color: "#F59E0B" },
-  { name: "E-Gouvernement", value: 15, color: "#8B5CF6" },
-  { name: "Autre", value: 5, color: "#9CA3AF" },
+    { name: "label.homeStatsSection.statsDomain.legend.ruralConnectivity", value: 35, color: "#3B82F6" },
+    { name: "label.homeStatsSection.statsDomain.legend.digitalEducation", value: 25, color: "#10B981" },
+    { name: "label.homeStatsSection.statsDomain.legend.telemedicine", value: 20, color: "#F59E0B" },
+    { name: "label.homeStatsSection.statsDomain.legend.eGovernment", value: 15, color: "#8B5CF6" },
+    { name: "label.homeStatsSection.statsDomain.legend.other", value: 5, color: "#9CA3AF" }
 ];
 
 const IMPACT_STATS = [
-  { label: "Bénéficiaires directs", value: 2400000, suffix: "", prefix: "" },
-  { label: "Villages connectés", value: 1847, suffix: "", prefix: "" },
-  { label: "Budget mobilisé (M$)", value: 340, suffix: "M$", prefix: "" },
-  { label: "Emplois créés", value: 12500, suffix: "", prefix: "" },
+    { label: "label.homeStatsSection.statsImpact.legend.directBeneficiaries", value: 2400000, suffix: "", prefix: "" },
+    { label: "label.homeStatsSection.statsImpact.legend.connectedVillages", value: 1847, suffix: "", prefix: "" },
+    { label: "label.homeStatsSection.statsImpact.legend.budgetAllocated (M$)", value: 340, suffix: "M$", prefix: "" },
+    { label: "label.homeStatsSection.statsImpact.legend.jobsCreated", value: 12500, suffix: "", prefix: "" }
 ];
 
 export function HomeStatsSection() {
+    const { t } = useTranslation();
+
+    //useEffect(() => { }, []);
+    /*useEffect(() => {
+        
+    }, [t]);*/
+    
+
   return (
     <section className="bg-gray-50/50 py-10 border-t border-gray-100">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-2 mb-6">
           <BarChart3 className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-bold text-gray-900">Statistiques 2024</h2>
+          <h2 className="text-lg font-bold text-gray-900">{t("label.homeStatsSection.title")}</h2>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Growth chart */}
+                  {/* Growth chart */}
+          
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white border border-gray-200 rounded-xl p-5">
-            <h3 className="text-sm font-semibold text-gray-700 mb-1">Croissance du Réseau</h3>
-            <p className="text-[11px] text-gray-400 mb-4">Nombre de pays membres actifs</p>
+            <h3 className="text-sm font-semibold text-gray-700 mb-1">{t("label.homeStatsSection.subtitle.networkGrowth")}</h3>
+            <p className="text-[11px] text-gray-400 mb-4">{t("label.homeStatsSection.subtitle.networkGrowth.desc")}</p>
             <div className="h-44">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={GROWTH_DATA}>
@@ -59,10 +71,11 @@ export function HomeStatsSection() {
             </div>
           </motion.div>
 
+
           {/* Domain donut */}
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="bg-white border border-gray-200 rounded-xl p-5">
-            <h3 className="text-sm font-semibold text-gray-700 mb-1">Projets par Domaine</h3>
-            <p className="text-[11px] text-gray-400 mb-4">Répartition des projets actifs</p>
+            <h3 className="text-sm font-semibold text-gray-700 mb-1">{t("label.homeStatsSection.subtitle.projectsByDomain")}</h3>
+            <p className="text-[11px] text-gray-400 mb-4">{t("label.homeStatsSection.subtitle.projectsByDomain.desc")}</p>
             <div className="flex items-center gap-4">
               <div className="h-36 w-36 shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
@@ -80,7 +93,7 @@ export function HomeStatsSection() {
                 {DOMAIN_DATA.map((d, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: d.color }} />
-                    <span className="text-[11px] text-gray-600">{d.name}</span>
+                    <span className="text-[11px] text-gray-600">{t(d.name)}</span>
                     <span className="text-[11px] font-semibold text-gray-800 ml-auto">{d.value}%</span>
                   </div>
                 ))}
@@ -90,8 +103,8 @@ export function HomeStatsSection() {
 
           {/* Impact numbers */}
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="bg-white border border-gray-200 rounded-xl p-5">
-            <h3 className="text-sm font-semibold text-gray-700 mb-1">Impact</h3>
-            <p className="text-[11px] text-gray-400 mb-4">Chiffres clés cumulés</p>
+            <h3 className="text-sm font-semibold text-gray-700 mb-1">{t("label.homeStatsSection.subtitle.impact")}</h3>
+            <p className="text-[11px] text-gray-400 mb-4">{t("label.homeStatsSection.subtitle.impact.desc")}</p>
             <div className="grid grid-cols-2 gap-4">
               {IMPACT_STATS.map((stat, i) => (
                 <div key={i} className="text-center py-3 rounded-lg bg-gray-50 border border-gray-100">

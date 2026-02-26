@@ -5,7 +5,8 @@ import { getCountryActivity, ACTIVITY_LEVELS } from "@/components/map/activityDa
 import { cn } from "@/lib/utils";
 import { HomeMemberMap } from "@/components/home/HomeMemberMap";
 import { motion } from "framer-motion";
-import { t } from "i18next";
+//import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const getCountryFlag = (code: string): string => {
   if (!code || code.length !== 2) return "🌍";
@@ -29,12 +30,14 @@ const UPCOMING_EVENTS = [
 ];
 
 export function HomeGridSection() {
+  const { t } = useTranslation();
   const { data: countries = [] } = useAfricanCountries();
 
   const displayCountries = countries.slice(0, 6);
   const remaining = Math.max(0, countries.length - 6);
 
-  return (
+    return (
+
     <section className="bg-white py-10">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-3 gap-6">
