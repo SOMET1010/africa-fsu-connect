@@ -36,6 +36,10 @@ const IMPACT_STATS = [
     { label: "label.homeStatsSection.statsImpact.legend.jobsCreated", value: 12500, suffix: "", prefix: "" }
 ];
 
+
+
+
+
 export function HomeStatsSection() {
     const { t } = useTranslation();
 
@@ -80,14 +84,12 @@ export function HomeStatsSection() {
               <div className="h-36 w-36 shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={DOMAIN_DATA} innerRadius={35} outerRadius={60} dataKey="value" strokeWidth={2} stroke="#fff">
+                    <Pie data={DOMAIN_DATA} innerRadius={35} outerRadius={60} dataKey="value" strokeWidth={2} stroke="#fff" label>
                       {DOMAIN_DATA.map((entry, i) => (
                         <Cell key={i} fill={entry.color} />
                       ))}
                     </Pie>
-                    {DOMAIN_DATA.map((e, i) => (
-                    <Tooltip  contentStyle={{ fontSize: 11, borderRadius: 8 }} />
-                    ))}
+                    <Tooltip  contentStyle={{ fontSize: 11, borderRadius: 8 }}  />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
