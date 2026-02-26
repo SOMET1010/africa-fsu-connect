@@ -85,7 +85,9 @@ export function HomeStatsSection() {
                         <Cell key={i} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
+                    {DOMAIN_DATA.map((e, i) => (
+                    <Tooltip  contentStyle={{ fontSize: 11, borderRadius: 8 }} />
+                    ))}
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -109,7 +111,7 @@ export function HomeStatsSection() {
               {IMPACT_STATS.map((stat, i) => (
                 <div key={i} className="text-center py-3 rounded-lg bg-gray-50 border border-gray-100">
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} className="text-xl font-bold text-gray-900" />
-                  <p className="text-[10px] text-gray-500 mt-1">{stat.label}</p>
+                  <p className="text-[10px] text-gray-500 mt-1">{t(stat.label)}</p>
                 </div>
               ))}
             </div>
