@@ -992,7 +992,20 @@
   "label.carto.itemInfo.projets": "المشاريع",
   "label.carto.itemInfo.tendance": "نزعة",
   "label.carto.itemInfo.lastactivity": "النشاط الأخير",
-  "label.homegridsession.title": "الدول الأعضاء"
+  "label.heroKpis.countries": "الدول الأعضاء",
+  "label.heroKpis.statsLoading.loading": "تحديث...",
+  "label.heroKpis.statsLoading.default": "شبكة عموم أفريقيا",
+  "label.heroKpis.activeprojects": "مشاريع نشطة",
+  "label.heroKpis.homestats.quarter": "هذا الربع",
+  "label.heroKpis.homestats.month": "هذا الشهر",
+  "label.heroKpis.homestats.year": "هذا العام",
+  "label.heroKpis.partnerships": "الشراكات",
+  "label.heroKpis.events": "الأحداث",
+  "label.homegridsession.title": "الدول الأعضاء",
+  "label.homegridsession.allview": "شاهد الكل",
+  "label.homegridsession.othercontries": "بلدان أخرى",
+  "label.homegridsession.upcomingEvents": "الأحداث القادمة",
+  "label.homegridsession.recentActivity": "النشاط الأخير"
 
 
 }

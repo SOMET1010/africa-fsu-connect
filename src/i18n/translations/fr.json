@@ -987,7 +987,20 @@
   "label.carto.itemInfo.projets": "projets",
   "label.carto.itemInfo.tendance": "tendance",
   "label.carto.itemInfo.lastactivity": "Dernière activité",
-  "label.homegridsession.title": "Pays membres"
+  "label.heroKpis.countries": "Pays membres",
+  "label.heroKpis.statsLoading.loading": "Actualisation...",
+  "label.heroKpis.statsLoading.default": "Réseau panafricain",
+  "label.heroKpis.activeprojects": "Projets actifs",
+  "label.heroKpis.homestats.quarter": "ce trimestre",
+  "label.heroKpis.homestats.month": "ce mois",
+  "label.heroKpis.homestats.year": "cette année",
+  "label.heroKpis.partnerships": "Partenariats",
+  "label.heroKpis.events": "Événements",
+  "label.homegridsession.title": "Pays membres",
+  "label.homegridsession.allview": "Voir tout",
+  "label.homegridsession.othercontries": "autres pays",
+  "label.homegridsession.upcomingEvents": "Prochains Événements",
+  "label.homegridsession.recentActivity": "Activité Récente"
 
 
 

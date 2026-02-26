@@ -992,7 +992,20 @@
   "label.carto.itemInfo.projets": "projetos",
   "label.carto.itemInfo.tendance": "tendência",
   "label.carto.itemInfo.lastactivity": "Última atividade",
-  "label.homegridsession.title": "Países Membros"
+  "label.heroKpis.countries": "Países Membros",
+  "label.heroKpis.statsLoading.loading": "Atualizar...",
+  "label.heroKpis.statsLoading.default": "Rede Pan-Africana",
+  "label.heroKpis.activeprojects": "Projetos ativos",
+  "label.heroKpis.homestats.quarter": "este trimestre",
+  "label.heroKpis.homestats.month": "este mês",
+  "label.heroKpis.homestats.year": "Este ano",
+  "label.heroKpis.partnerships": "Parcerias",
+  "label.heroKpis.events": "Eventos",
+  "label.homegridsession.title": "Países membros",
+  "label.homegridsession.allview": "Ver tudo",
+  "label.homegridsession.othercontries": "outros países",
+  "label.homegridsession.upcomingEvents": "Próximos eventos",
+  "label.homegridsession.recentActivity": "Atividade recente"
 
 
 }

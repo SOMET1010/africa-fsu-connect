@@ -999,6 +999,19 @@
   "label.carto.itemInfo.projets": "projects",
   "label.carto.itemInfo.tendance": "tendency",
   "label.carto.itemInfo.lastactivity": "Last activity",
-  "label.homegridsession.title": "Member Countries"
+  "label.heroKpis.countries": "Member Countries",
+  "label.heroKpis.statsLoading.loading": "Update...",
+  "label.heroKpis.statsLoading.default": "Pan-African Network",
+  "label.heroKpis.activeprojects": "Active projects",
+  "label.heroKpis.homestats.quarter": "this quarter",
+  "label.heroKpis.homestats.month": "this month",
+  "label.heroKpis.homestats.year": "this year",
+  "label.heroKpis.partnerships": "Partnerships",
+  "label.heroKpis.events": "Events",
+  "label.homegridsession.title": "Member countries",
+  "label.homegridsession.allview": "View all",
+  "label.homegridsession.othercontries": "other countries",
+  "label.homegridsession.upcomingEvents": "Upcoming Events",
+  "label.homegridsession.recentActivity": "Recent Activity"
 
 }

@@ -46,7 +46,7 @@ export function HomeGridSection() {
                 <h3 className="text-sm font-semibold text-gray-900">{t("label.homegridsession.title")}</h3>
               </div>
               <Link to="/network" className="text-xs text-primary hover:underline flex items-center gap-1">
-                Voir tout <ArrowRight className="h-3 w-3" />
+                {t("label.homegridsession.allview")} <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -60,7 +60,7 @@ export function HomeGridSection() {
                       <p className="text-xs font-medium text-gray-800 truncate">{country.name_fr}</p>
                       <span className="inline-flex items-center gap-1 text-[10px]" style={{ color: levelColor }}>
                         <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: levelColor }} />
-                        {activity.level === 'high' ? 'Actif' : activity.level === 'medium' ? 'Membre' : 'En intégration'}
+                        {activity.level === 'high' ? 'Actif' : activity.level === 'medium' ? t("label.legend.activity.medium") : t("label.carto.itemInfo.onboarding")}
                       </span>
                     </div>
                   </div>
@@ -69,7 +69,7 @@ export function HomeGridSection() {
             </div>
             {remaining > 0 && (
               <Link to="/network" className="block mt-3 text-center text-xs text-gray-400 hover:text-primary transition-colors">
-                +{remaining} autres pays →
+                +{remaining} {t("label.homegridsession.othercontries")} →
               </Link>
             )}
           </div>
@@ -93,7 +93,7 @@ export function HomeGridSection() {
             <div className="bg-white border border-gray-200 rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-4">
                     <Calendar className="h-4 w-4 text-amber-500" />
-                    <h3 className="text-sm font-semibold text-gray-900">Prochains Événements</h3>
+                    <h3 className="text-sm font-semibold text-gray-900">{t("label.homegridsession.upcomingEvents")}</h3>
                 </div>
                 <div className="space-y-3">
                     {UPCOMING_EVENTS.map((evt, i) => (
@@ -120,7 +120,7 @@ export function HomeGridSection() {
             <div className="bg-white border border-gray-200 rounded-xl p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Clock className="h-4 w-4 text-primary" />
-                <h3 className="text-sm font-semibold text-gray-900">Activité Récente</h3>
+                <h3 className="text-sm font-semibold text-gray-900">{t("label.homegridsession.recentActivity")}</h3>
               </div>
               <div className="space-y-3">
                 {RECENT_ACTIVITY.map((item, i) => (
