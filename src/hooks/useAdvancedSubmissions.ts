@@ -31,19 +31,19 @@ export interface CreateSubmissionData {
 }
 
 const SubmissionStatusMap: Record<AdvancedSubmission['status'], Database['public']['Enums']['submission_status']> = {
-  draft: 'brouillon',
-  submitted: 'soumis',
-  under_review: 'en_revision',
-  approved: 'approuve',
-  rejected: 'rejete',
+  draft: 'draft',
+  submitted: 'submitted',
+  under_review: 'in_review',
+  approved: 'approved',
+  rejected: 'rejected',
 };
 
 const InverseSubmissionStatusMap: Record<Database['public']['Enums']['submission_status'], AdvancedSubmission['status']> = {
-  brouillon: 'draft',
-  soumis: 'submitted',
-  en_revision: 'under_review',
-  approuve: 'approved',
-  rejete: 'rejected',
+  draft: 'draft',
+  submitted: 'submitted',
+  in_review: 'under_review',
+  approved: 'approved',
+  rejected: 'rejected',
 };
 
 const parseJson = (value?: string | null): Record<string, any> => {

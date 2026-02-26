@@ -17,7 +17,7 @@ export function AdminLocaleConsistencyAlert() {
   const { blocks, isLoading } = useHomepageContent();
   const [dismissed, setDismissed] = useState(false);
 
-  const isAdmin = profile?.role && ['super_admin', 'admin_pays', 'editeur'].includes(profile.role);
+  const isAdmin = profile?.role && ['super_admin', 'country_admin', 'editor'].includes(profile.role);
 
   if (!isAdmin || isLoading || dismissed) return null;
 

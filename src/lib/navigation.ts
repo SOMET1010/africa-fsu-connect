@@ -172,7 +172,7 @@ export const getSidebarNavByLayers = (
   ];
 
   // COUCHE 3 : MODE AVANCÉ (admin uniquement)
-  if (userRole && ['super_admin', 'admin_pays'].includes(userRole)) {
+  if (userRole && ['super_admin', 'country_admin'].includes(userRole)) {
     sections.push({
       label: NEXUS_LAYERS.advanced.labelFr,
       icon: NEXUS_LAYERS.advanced.icon,

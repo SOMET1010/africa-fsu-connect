@@ -273,10 +273,10 @@ function extractResourceData(page: any, agency: any) {
   const description = lines.slice(1, 3).join(' ').substring(0, 500)
 
   // Detect resource type
-  let resourceType = 'autre'
+  let resourceType = 'other'
   if (url.includes('.pdf') || markdown.includes('PDF')) resourceType = 'guide'
-  else if (markdown.toLowerCase().includes('rapport')) resourceType = 'rapport'
-  else if (markdown.toLowerCase().includes('formulaire')) resourceType = 'formulaire'
+  else if (markdown.toLowerCase().includes('rapport')) resourceType = 'report'
+  else if (markdown.toLowerCase().includes('formulaire')) resourceType = 'form'
 
   return {
     agency_id: agency.id,

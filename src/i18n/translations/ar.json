@@ -933,10 +933,10 @@
   "search.filters.document_type": "النوع",
   "search.filters.clear": "مسح",
   "search.filters.doctype.guide": "دليل",
-  "search.filters.doctype.rapport": "تقرير",
+  "search.filters.doctype.report": "تقرير",
   "search.filters.doctype.presentation": "عرض تقديمي",
-  "search.filters.doctype.formulaire": "استمارة",
-  "search.filters.doctype.autre": "أخرى",
+  "search.filters.doctype.form": "استمارة",
+  "search.filters.doctype.other": "أخرى",
 
   "cookie.banner.text": "يستخدم هذا الموقع ملفات تعريف الارتباط لتحسين تجربتك وإنتاج إحصائيات مجهولة المصدر.",
   "cookie.banner.accept": "قبول",

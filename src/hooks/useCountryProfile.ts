@@ -98,7 +98,7 @@ const matchesCountry = (value: string | null | undefined, countryData: { code: s
   return targets.some(target => target && (normalizedValue === target || normalizedValue.includes(target) || target.includes(normalizedValue)));
 };
 
-const practiceDocumentTypes = new Set(['guide', 'rapport', 'presentation']);
+const practiceDocumentTypes = new Set(['guide', 'report', 'presentation']);
 
 interface CountryAgency {
   id: string;

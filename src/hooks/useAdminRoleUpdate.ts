@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { logger } from '@/utils/logger';
 
-export type UserRole = 'super_admin' | 'admin_pays' | 'editeur' | 'contributeur' | 'lecteur';
+export type UserRole = 'super_admin' | 'country_admin' | 'editor' | 'contributor' | 'reader';
 
 export const useAdminRoleUpdate = () => {
   const { toast } = useToast();

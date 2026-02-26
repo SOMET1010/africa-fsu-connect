@@ -92,7 +92,7 @@ export function AppSidebar() {
   };
   
   const isActive = (path: string) => currentPath === path;
-  const isAdminUser = profile?.role && ['super_admin', 'admin_pays', 'editeur'].includes(profile.role);
+  const isAdminUser = profile?.role && ['super_admin', 'country_admin', 'editor'].includes(profile.role);
 
   const getNavClassName = (path: string) => {
     const baseClasses = "w-full justify-start transition-colors duration-200";

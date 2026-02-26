@@ -13,8 +13,8 @@ const SUGGESTED_ROUTES = [
   { path: "/events", label: "Événements", icon: Calendar, auth: false },
   { path: "/contact", label: "Contact", icon: MessageSquare, auth: false },
   { path: "/map", label: "Carte", icon: MapPin, auth: true },
-  { path: "/admin", label: "Administration", icon: Settings, auth: true, roles: ["super_admin", "admin_pays", "editeur"] },
-  { path: "/admin/content", label: "Gestion du contenu", icon: Settings, auth: true, roles: ["super_admin", "admin_pays", "editeur"] },
+  { path: "/admin", label: "Administration", icon: Settings, auth: true, roles: ["super_admin", "country_admin", "editor"] },
+  { path: "/admin/content", label: "Gestion du contenu", icon: Settings, auth: true, roles: ["super_admin", "country_admin", "editor"] },
   { path: "/security", label: "Sécurité", icon: Shield, auth: true },
 ];
 

@@ -41,13 +41,13 @@ const COUNTRY_INFO: Record<string, { flag: string; name: string; nameFr: string 
 
 const TYPE_LABELS: Record<string, { en: string; fr: string; icon: string }> = {
   guide: { en: 'Guide', fr: 'Guide', icon: '📘' },
-  rapport: { en: 'Report', fr: 'Rapport', icon: '📊' },
+  report: { en: 'Report', fr: 'Rapport', icon: '📊' },
   'note-conceptuelle': { en: 'Concept Note', fr: 'Note conceptuelle', icon: '💡' },
   'bonne-pratique': { en: 'Best Practice', fr: 'Bonne pratique', icon: '✨' },
   modele: { en: 'Template', fr: 'Modèle', icon: '📝' },
   presentation: { en: 'Presentation', fr: 'Présentation', icon: '📽️' },
-  formulaire: { en: 'Form', fr: 'Formulaire', icon: '📋' },
-  autre: { en: 'Other', fr: 'Autre', icon: '📄' },
+  form: { en: 'Form', fr: 'Formulaire', icon: '📋' },
+  other: { en: 'Other', fr: 'Autre', icon: '📄' },
 };
 
 export const ResourceLibraryCard: React.FC<ResourceLibraryCardProps> = ({
@@ -60,7 +60,7 @@ export const ResourceLibraryCard: React.FC<ResourceLibraryCardProps> = ({
   
   const countryCode = doc.country?.toLowerCase() || '';
   const countryInfo = COUNTRY_INFO[countryCode];
-  const typeInfo = TYPE_LABELS[doc.document_type] || TYPE_LABELS.autre;
+  const typeInfo = TYPE_LABELS[doc.document_type] || TYPE_LABELS.other;
   const year = new Date(doc.created_at).getFullYear();
 
   // Build metadata line: 🇰🇪 Kenya · Guide · Français · 2024

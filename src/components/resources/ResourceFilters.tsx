@@ -33,12 +33,13 @@ const STORAGE_KEY = 'resource_saved_filters';
 
 const DOCUMENT_TYPES = [
   { value: 'guide', labelFr: 'Guide', labelEn: 'Guide', labelAr: 'دليل', labelPt: 'Guia', icon: '📘' },
-  { value: 'rapport', labelFr: 'Rapport', labelEn: 'Report', labelAr: 'تقرير', labelPt: 'Relatório', icon: '📊' },
+  { value: 'report', labelFr: 'Rapport', labelEn: 'Report', labelAr: 'تقرير', labelPt: 'Relatório', icon: '📊' },
   { value: 'note-conceptuelle', labelFr: 'Note conceptuelle', labelEn: 'Concept Note', labelAr: 'مذكرة مفاهيمية', labelPt: 'Nota conceitual', icon: '💡' },
   { value: 'bonne-pratique', labelFr: 'Bonne pratique', labelEn: 'Best Practice', labelAr: 'أفضل ممارسة', labelPt: 'Boa prática', icon: '✨' },
   { value: 'modele', labelFr: 'Modèle / Template', labelEn: 'Template', labelAr: 'نموذج', labelPt: 'Modelo', icon: '📝' },
   { value: 'presentation', labelFr: 'Présentation', labelEn: 'Presentation', labelAr: 'عرض تقديمي', labelPt: 'Apresentação', icon: '📽️' },
-  { value: 'autre', labelFr: 'Autre', labelEn: 'Other', labelAr: 'أخرى', labelPt: 'Outro', icon: '📄' },
+  { value: 'form', labelFr: 'Formulaire', labelEn: 'Form', labelAr: 'استمارة', labelPt: 'Formulário', icon: '📋' },
+  { value: 'other', labelFr: 'Autre', labelEn: 'Other', labelAr: 'أخرى', labelPt: 'Outro', icon: '📄' },
 ];
 
 const THEMES = [

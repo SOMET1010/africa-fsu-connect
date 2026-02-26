@@ -106,7 +106,7 @@ serve(async (req) => {
               type: 'moderation_required',
               title: 'Contenu nécessitant une modération',
               message: `Un nouveau post nécessite une révision: "${post.title}". Raisons: ${postModeration.reasons.join(', ')}`,
-              roleFilter: 'admin_pays',
+              roleFilter: 'country_admin',
               actionUrl: '/forum'
             }
           });
@@ -117,7 +117,7 @@ serve(async (req) => {
               type: 'new_forum_post',
               title: 'Nouvelle discussion',
               message: `${post.profiles?.first_name} ${post.profiles?.last_name} a commencé une nouvelle discussion: "${post.title}"`,
-              roleFilter: 'lecteur',
+              roleFilter: 'reader',
               actionUrl: '/forum'
             }
           });
@@ -162,7 +162,7 @@ serve(async (req) => {
               type: 'moderation_required',
               title: 'Réponse nécessitant une modération',
               message: `Une réponse nécessite une révision. Raisons: ${replyModeration.reasons.join(', ')}`,
-              roleFilter: 'admin_pays',
+              roleFilter: 'country_admin',
               actionUrl: '/forum'
             }
           });

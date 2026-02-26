@@ -119,7 +119,7 @@ export const fetchLearningCourses = async (limit = 8): Promise<LearningCourse[]>
     .from('documents')
     .select('id,title,description,document_type,download_count,view_count,country,file_size,updated_at,tags,is_public')
     .eq('is_public', true)
-    .in('document_type', ['guide', 'presentation', 'rapport'])
+    .in('document_type', ['guide', 'presentation', 'report'])
     .order('updated_at', { ascending: false })
     .limit(limit);
 

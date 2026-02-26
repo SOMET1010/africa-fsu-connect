@@ -269,7 +269,7 @@ export function useActivateFocalPoint() {
         await supabase
           .from('profiles')
           .update({ 
-            role: 'point_focal',
+            role: 'focal_point',
             country: focalPoint.country_code,
           })
           .eq('user_id', user.id);

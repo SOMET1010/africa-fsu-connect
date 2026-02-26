@@ -5,12 +5,12 @@
 
 -- define the enum that maps directly to the frontend role labels
 create type public.user_role as enum (
-  'super_admin',        -- ANSUT/UAT Administrateur (accès total)
-  'country_admin',      -- Admin national par pays (gestion locale)
-  'editor',             -- Validation éditoriale (workflow publication)
-  'contributor',        -- Point focal FSU, experts (peut publier)
-  'member',             -- Lecteur authentifié (forum, téléchargement)
-  'guest'               -- Visiteur public (lecture seule) - OPTIONNEL
+  'super_admin',        -- ANSUT/UAT Administrator (full access)
+  'country_admin',      -- National admin per country (local management)
+  'editor',             -- Editorial validation (publication workflow)
+  'contributor',        -- FSU focal point, experts (can publish)
+  'reader',             -- Authenticated reader (forum, download)
+  'focal_point'         -- Dedicated focal point (sensory, moderation) - OPTIONAL
 );
 
 -- keep the owner aligned with the default postgres user

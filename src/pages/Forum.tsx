@@ -43,7 +43,7 @@ const Forum = () => {
   const { toast } = useToast();
   const { profile } = useAuth();
   const { categories, posts, loading, createPost, refetch } = useForum();
-  const isAdmin = ['super_admin', 'admin_pays'].includes(profile?.role ?? '');
+  const isAdmin = ['super_admin', 'country_admin'].includes(profile?.role ?? '');
 
   const [isNewPostOpen, setIsNewPostOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');

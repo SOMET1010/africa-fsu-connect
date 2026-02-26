@@ -52,7 +52,7 @@ export const QuickActionsWidget = ({ id, onRemove }: QuickActionsWidgetProps) =>
       icon: BarChart3,
       action: () => navigate("/organizations"),
       color: "bg-orange-600 hover:bg-orange-700",
-      available: profile?.role === 'super_admin' || profile?.role === 'admin_pays'
+      available: profile?.role === 'super_admin' || profile?.role === 'country_admin'
     },
     {
       label: "Administration",
@@ -60,7 +60,7 @@ export const QuickActionsWidget = ({ id, onRemove }: QuickActionsWidgetProps) =>
       icon: Settings,
       action: () => navigate("/admin"),
       color: "bg-gray-600 hover:bg-gray-700",
-      available: profile?.role === 'super_admin' || profile?.role === 'admin_pays'
+      available: profile?.role === 'super_admin' || profile?.role === 'country_admin'
     },
     {
       label: "Sécurité",

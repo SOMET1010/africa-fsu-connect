@@ -53,7 +53,7 @@ export function AppRoutes() {
       <Route 
         path="/presentation/analytics" 
         element={
-          <ProtectedRoute requiredRoles={['super_admin', 'admin_pays']}>
+          <ProtectedRoute requiredRoles={['super_admin', 'country_admin']}>
             <AppShell>
               <Suspense fallback={<PageLoadingFallback />}>
                 <PresentationAnalytics />

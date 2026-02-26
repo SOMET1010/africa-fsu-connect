@@ -143,7 +143,7 @@ Deno.serve(async (req) => {
       .eq('user_id', userId)
       .single()
 
-    if (!profile || !['super_admin', 'admin_pays', 'editeur'].includes(profile.role)) {
+    if (!profile || !['super_admin', 'country_admin', 'editor'].includes(profile.role)) {
       return new Response(JSON.stringify({ error: 'Forbidden: admin only' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
 

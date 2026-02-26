@@ -61,13 +61,13 @@ const AdminUsers = () => {
     switch (role) {
       case "super_admin":
         return "bg-red-500/10 text-red-400 border-red-500/20";
-      case "admin_pays":
+      case "country_admin":
         return "bg-orange-500/10 text-orange-400 border-orange-500/20";
-      case "editeur":
+      case "editor":
         return "bg-[hsl(var(--nx-cyan)/0.1)] text-[hsl(var(--nx-cyan))] border-[hsl(var(--nx-cyan)/0.2)]";
-      case "contributeur":
+      case "contributor":
         return "bg-green-500/10 text-green-400 border-green-500/20";
-      case "lecteur":
+      case "reader":
         return "bg-white/5 text-white/60 border-white/10";
       default:
         return "bg-white/5 text-white/60 border-white/10";
@@ -219,10 +219,10 @@ const AdminUsers = () => {
               <SelectContent>
                 <SelectItem value="all">Tous les rôles</SelectItem>
                 <SelectItem value="super_admin">Super Admin</SelectItem>
-                <SelectItem value="admin_pays">Admin Pays</SelectItem>
-                <SelectItem value="editeur">Éditeur</SelectItem>
-                <SelectItem value="contributeur">Contributeur</SelectItem>
-                <SelectItem value="lecteur">Lecteur</SelectItem>
+                <SelectItem value="country_admin">Admin Pays</SelectItem>
+                <SelectItem value="editor">Éditeur</SelectItem>
+                <SelectItem value="contributor">Contributeur</SelectItem>
+                <SelectItem value="reader">Lecteur</SelectItem>
               </SelectContent>
             </Select>
 
@@ -308,18 +308,18 @@ const AdminUsers = () => {
                         <SelectTrigger className="w-36 bg-transparent border-0 p-0 h-auto">
                           <Badge className={getRoleColor(user.role)}>
                             {user.role === "super_admin" && "Super Admin"}
-                            {user.role === "admin_pays" && "Admin Pays"}
-                            {user.role === "editeur" && "Éditeur"}
-                            {user.role === "contributeur" && "Contributeur"}
-                            {user.role === "lecteur" && "Lecteur"}
+                            {user.role === "country_admin" && "Admin Pays"}
+                            {user.role === "editor" && "Éditeur"}
+                            {user.role === "contributor" && "Contributeur"}
+                            {user.role === "reader" && "Lecteur"}
                           </Badge>
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="super_admin">Super Admin</SelectItem>
-                          <SelectItem value="admin_pays">Admin Pays</SelectItem>
-                          <SelectItem value="editeur">Éditeur</SelectItem>
-                          <SelectItem value="contributeur">Contributeur</SelectItem>
-                          <SelectItem value="lecteur">Lecteur</SelectItem>
+                          <SelectItem value="country_admin">Admin Pays</SelectItem>
+                          <SelectItem value="editor">Éditeur</SelectItem>
+                          <SelectItem value="contributor">Contributeur</SelectItem>
+                          <SelectItem value="reader">Lecteur</SelectItem>
                         </SelectContent>
                       </Select>
                     </TableCell>

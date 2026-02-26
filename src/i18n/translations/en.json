@@ -940,10 +940,10 @@
   "search.filters.document_type": "Type",
   "search.filters.clear": "Clear",
   "search.filters.doctype.guide": "Guide",
-  "search.filters.doctype.rapport": "Report",
+  "search.filters.doctype.report": "Report",
   "search.filters.doctype.presentation": "Presentation",
-  "search.filters.doctype.formulaire": "Form",
-  "search.filters.doctype.autre": "Other",
+  "search.filters.doctype.form": "Form",
+  "search.filters.doctype.other": "Other",
 
   "cookie.banner.text": "This site uses cookies to improve your experience and produce anonymised statistics.",
   "cookie.banner.accept": "Accept",

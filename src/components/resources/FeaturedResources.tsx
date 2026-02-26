@@ -43,12 +43,13 @@ const COUNTRY_INFO: Record<string, { flag: string; name: string; nameFr: string 
 
 const TYPE_LABELS: Record<string, { en: string; fr: string; icon: string }> = {
   guide: { en: 'Practical guide', fr: 'Guide pratique', icon: '📘' },
-  rapport: { en: 'Strategic report', fr: 'Rapport stratégique', icon: '📊' },
+  report: { en: 'Strategic report', fr: 'Rapport stratégique', icon: '📊' },
   'note-conceptuelle': { en: 'Concept note', fr: 'Note conceptuelle', icon: '💡' },
   'bonne-pratique': { en: 'Best practice', fr: 'Bonne pratique', icon: '✨' },
   modele: { en: 'Template', fr: 'Modèle', icon: '📝' },
   presentation: { en: 'Presentation', fr: 'Présentation', icon: '📽️' },
-  autre: { en: 'Resource', fr: 'Ressource', icon: '📄' },
+  form: { en: 'Form', fr: 'Formulaire', icon: '📋' },
+  other: { en: 'Resource', fr: 'Ressource', icon: '📄' },
 };
 
 export const FeaturedResources: React.FC<FeaturedResourcesProps> = ({
@@ -90,7 +91,7 @@ export const FeaturedResources: React.FC<FeaturedResourcesProps> = ({
           {displayDocs.map((doc) => {
             const countryCode = doc.country?.toLowerCase() || '';
             const countryInfo = COUNTRY_INFO[countryCode];
-            const typeInfo = TYPE_LABELS[doc.document_type] || TYPE_LABELS.autre;
+            const typeInfo = TYPE_LABELS[doc.document_type] || TYPE_LABELS.other;
             
             return (
               <Card

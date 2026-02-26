@@ -933,10 +933,10 @@
   "search.filters.document_type": "Tipo",
   "search.filters.clear": "Limpar",
   "search.filters.doctype.guide": "Guia",
-  "search.filters.doctype.rapport": "Relatório",
+  "search.filters.doctype.report": "Relatório",
   "search.filters.doctype.presentation": "Apresentação",
-  "search.filters.doctype.formulaire": "Formulário",
-  "search.filters.doctype.autre": "Outro",
+  "search.filters.doctype.form": "Formulário",
+  "search.filters.doctype.other": "Outro",
 
   "cookie.banner.text": "Este site utiliza cookies para melhorar a sua experiência e produzir estatísticas anónimas.",
   "cookie.banner.accept": "Aceitar",

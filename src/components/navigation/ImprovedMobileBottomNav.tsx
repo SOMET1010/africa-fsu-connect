@@ -31,36 +31,36 @@ export function ImprovedMobileBottomNav() {
       to: "/dashboard",
       icon: Home,
       label: "Pilotage",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+      roles: ["reader", "contributor", "editor", "country_admin", "super_admin"]
     },
     {
       to: "/projects",
       icon: FolderOpen,
       label: "Projets",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+      roles: ["reader", "contributor", "editor", "country_admin", "super_admin"]
     },
     {
       to: "/resources",
       icon: BookOpen,
       label: "Biblio",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+      roles: ["reader", "contributor", "editor", "country_admin", "super_admin"]
     },
     {
       to: "/forum",
       icon: Building2,
       label: "Communauté",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+      roles: ["reader", "contributor", "editor", "country_admin", "super_admin"]
     },
     {
       to: "/profile",
       icon: User,
       label: "Profil",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+      roles: ["reader", "contributor", "editor", "country_admin", "super_admin"]
     }
   ];
 
   const visibleItems = navItems.filter(item => 
-    item.roles.includes(profile?.role || "lecteur")
+    item.roles.includes(profile?.role || "reader")
   );
 
   return (

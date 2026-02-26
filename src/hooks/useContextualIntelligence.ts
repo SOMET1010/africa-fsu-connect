@@ -70,7 +70,7 @@ export const useContextualIntelligence = () => {
     const frequentPages = getFrequentPages();
 
     // Role-based suggestions
-    if (profile.role === 'super_admin' || profile.role === 'admin_pays') {
+    if (profile.role === 'super_admin' || profile.role === 'country_admin') {
       suggestions.push({
         id: 'admin-dashboard',
         type: 'navigation',
@@ -132,7 +132,7 @@ export const useContextualIntelligence = () => {
     }
 
     // Workflow suggestions
-    if (profile.role !== 'lecteur' && !recentPages.includes('/submit')) {
+    if (profile.role !== 'reader' && !recentPages.includes('/submit')) {
       suggestions.push({
         id: 'new-submission',
         type: 'workflow',

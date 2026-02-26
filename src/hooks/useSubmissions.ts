@@ -10,7 +10,7 @@ export interface Submission {
   title: string;
   description?: string;
   content?: string;
-  status: 'brouillon' | 'soumis' | 'en_revision' | 'approuve' | 'rejete';
+  status: 'draft' | 'submitted' | 'in_review' | 'approved' | 'rejected';
   submitted_by: string;
   reviewed_by?: string;
   review_notes?: string;
@@ -106,7 +106,7 @@ export const useSubmissions = () => {
         .insert([{
           ...submissionData,
           submitted_by: user.id,
-          status: 'brouillon'
+          status: 'draft'
         }])
         .select()
         .single();
@@ -169,7 +169,7 @@ export const useSubmissions = () => {
       const { data, error } = await supabase
         .from('submissions')
         .update({
-          status: 'soumis',
+          status: 'submitted',
           submitted_at: new Date().toISOString()
         })
         .eq('id', id)
@@ -214,7 +214,7 @@ export const useSubmissions = () => {
   // Review submission (for admins)
   const reviewSubmission = async (
     id: string, 
-    status: 'approuve' | 'rejete', 
+    status: 'approved' | 'rejected', 
     reviewNotes?: string
   ) => {
     try {
@@ -224,7 +224,7 @@ export const useSubmissions = () => {
       const { data, error } = await supabase
         .from('submissions')
         .update({
-          status,
+          status: status === 'approved' ? 'approved' : 'rejected',
           reviewed_by: user.id,
           reviewed_at: new Date().toISOString(),
           review_notes: reviewNotes
@@ -237,7 +237,7 @@ export const useSubmissions = () => {
 
       toast({
         title: "Révision enregistrée",
-        description: `La soumission a été ${status === 'approuve' ? 'approuvée' : 'rejetée'}.`,
+        description: `La soumission a été ${status === 'approved' ? 'approuvée' : 'rejetée'}.`,
       });
 
       await fetchAllSubmissions();

@@ -519,7 +519,7 @@ Le projet définit ces rôles dans la table `profiles` :
 | Rôle | Description | Permissions |
 |------|-------------|-------------|
 | `super_admin` | Administrateur global | Tout |
-| `admin_pays` | Administrateur pays | Gestion pays spécifique |
+| `country_admin` | Administrateur pays | Gestion pays spécifique |
 | `editeur` | Éditeur de contenu | Modification données |
 | `user` | Utilisateur standard | Lecture seule |
 

@@ -8,11 +8,11 @@
 
 | Enum | Valeurs |
 |------|---------|
-| `user_role` | `super_admin`, `admin_pays`, `editeur`, `contributeur`, `lecteur`, `point_focal` |
+| `user_role` | `super_admin`, `country_admin`, `editor`, `contributor`, `reader`, `focal_point` |
 | `participant_role` | `delegate`, `rapporteur`, `president`, `moderator`, `admin` |
-| `document_type` | `guide`, `rapport`, `presentation`, `formulaire`, `autre` |
+| `document_type` | `guide`, `report`, `presentation`, `form`, `other` |
 | `contribution_type` | `afcp`, `proposal`, `amendment`, `comment` |
-| `submission_status` | `brouillon`, `soumis`, `en_revision`, `approuve`, `rejete` |
+| `submission_status` | `draft`, `submitted`, `in_review`, `approved`, `rejected` |
 | `session_type` | `plenary`, `working_group`, `presentation`, `break` |
 | `poll_type` | `simple`, `multiple_choice`, `nomination`, `adoption` |
 | `question_status` | `pending`, `approved`, `rejected`, `answered` |
@@ -183,7 +183,7 @@
 | `last_name` | text | YES | — |
 | `country` | text | YES | — |
 | `organization` | text | YES | — |
-| `role` | user_role | NO | `'lecteur'` |
+| `role` | user_role | NO | `'reader'` |
 | `avatar_url` | text | YES | — |
 | `created_at` | timestamptz | NO | `now()` |
 | `updated_at` | timestamptz | NO | `now()` |
@@ -310,7 +310,7 @@ Soumissions générales (status: `submission_status` enum).
 | `id` | uuid | NO | `gen_random_uuid()` |
 | `title` | text | NO | — |
 | `description` | text | YES | — |
-| `document_type` | document_type (enum) | NO | `'autre'` |
+| `document_type` | document_type (enum) | NO | `'other'` |
 | `file_url` | text | YES | — |
 | `file_name` | text | YES | — |
 | `file_size` | integer | YES | — |

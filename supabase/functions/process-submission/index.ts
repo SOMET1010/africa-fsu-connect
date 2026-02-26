@@ -57,7 +57,7 @@ serve(async (req) => {
     switch (action) {
       case 'approve':
         updateData = {
-          status: 'approuve',
+          status: 'approved',
           reviewed_at: new Date().toISOString(),
           review_notes: reviewNotes
         };
@@ -73,7 +73,7 @@ serve(async (req) => {
 
       case 'reject':
         updateData = {
-          status: 'rejete',
+          status: 'rejected',
           reviewed_at: new Date().toISOString(),
           review_notes: reviewNotes
         };
@@ -91,7 +91,7 @@ serve(async (req) => {
         if (!reviewerId) throw new Error('Reviewer ID required for assignment');
         
         updateData = {
-          status: 'en_revision',
+          status: 'in_review',
           reviewed_by: reviewerId
         };
         

@@ -11,7 +11,7 @@ create table public.documents (
   file_name text,
   file_size bigint,
   mime_type text,
-  document_type public.document_type not null default 'autre'::public.document_type,
+  document_type public.document_type not null default 'other'::public.document_type,
   country text,
   tags text[],
   uploaded_by uuid not null,

@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 type ContentType = 'document' | 'forum' | 'project';
 
-const DOCUMENT_TYPES = ['guide', 'rapport', 'presentation', 'formulaire', 'autre'] as const;
+const DOCUMENT_TYPES = ['guide', 'report', 'presentation', 'form', 'other'] as const;
 const STORAGE_KEY = 'search-filters';
 
 const ALL_TYPES: ContentType[] = ['document', 'forum', 'project'];

@@ -40,7 +40,7 @@ export function QuickActionsCard() {
       icon: Plus,
       route: "/projects",
       variant: "default",
-      roles: ["contributeur", "editeur", "admin_pays", "super_admin"],
+      roles: ["contributor", "editor", "country_admin", "super_admin"],
       badge: t('actions.priority')
     },
     {
@@ -50,7 +50,7 @@ export function QuickActionsCard() {
       icon: FileText,
       route: "/submit",
       variant: "outline",
-      roles: ["contributeur", "editeur", "admin_pays", "super_admin"]
+      roles: ["contributor", "editor", "country_admin", "super_admin"]
     },
     {
       id: "organizations",
@@ -59,7 +59,7 @@ export function QuickActionsCard() {
       icon: Building2,
       route: "/organizations",
       variant: "outline",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+      roles: ["reader", "contributor", "editor", "country_admin", "super_admin"]
     },
     {
       id: "events",
@@ -68,7 +68,7 @@ export function QuickActionsCard() {
       icon: Calendar,
       route: "/events",
       variant: "outline",
-      roles: ["editeur", "admin_pays", "super_admin"]
+      roles: ["editor", "country_admin", "super_admin"]
     },
     {
       id: "forum",
@@ -77,7 +77,7 @@ export function QuickActionsCard() {
       icon: MessageSquare,
       route: "/forum",
       variant: "outline",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+      roles: ["reader", "contributor", "editor", "country_admin", "super_admin"]
     },
     {
       id: "resources",
@@ -86,11 +86,11 @@ export function QuickActionsCard() {
       icon: BookOpen,
       route: "/resources",
       variant: "secondary",
-      roles: ["lecteur", "contributeur", "editeur", "admin_pays", "super_admin"]
+      roles: ["reader", "contributor", "editor", "country_admin", "super_admin"]
     }
   ];
 
-  const userRole = profile?.role || "lecteur";
+  const userRole = profile?.role || "reader";
   const availableActions = quickActions.filter(action => 
     action.roles.includes(userRole)
   );

@@ -22,12 +22,12 @@ const DocumentCard = ({ document, onPreview, onDownload }: DocumentCardProps) =>
   const getDocumentTypeColor = (type: string) => {
     const colors = {
       'guide': 'bg-uat-primary-100 text-primary',
-      'rapport': 'bg-green-100 text-green-800',
+      'report': 'bg-green-100 text-green-800',
       'presentation': 'bg-purple-100 text-purple-800',
-      'formulaire': 'bg-orange-100 text-orange-800',
-      'autre': 'bg-gray-100 text-gray-800'
+      'form': 'bg-orange-100 text-orange-800',
+      'other': 'bg-gray-100 text-gray-800'
     };
-    return colors[type as keyof typeof colors] || colors.autre;
+    return colors[type as keyof typeof colors] || colors.other;
   };
 
   return (

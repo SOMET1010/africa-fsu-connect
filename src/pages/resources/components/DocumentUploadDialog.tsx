@@ -22,7 +22,7 @@ const DocumentUploadDialog = ({ onUpload, isOpen: controlledIsOpen, onClose }: D
   const [metadata, setMetadata] = useState({
     title: '',
     description: '',
-    document_type: 'autre' as const,
+    document_type: 'other' as const,
     country: '',
     tags: [] as string[],
     access_level: 'public',
@@ -31,11 +31,11 @@ const DocumentUploadDialog = ({ onUpload, isOpen: controlledIsOpen, onClose }: D
 
   const ROLES = [
     { value: 'super_admin', label: 'Super Admin' },
-    { value: 'admin_pays', label: 'Admin Pays' },
-    { value: 'editeur', label: 'Éditeur' },
-    { value: 'contributeur', label: 'Contributeur' },
-    { value: 'point_focal', label: 'Point Focal' },
-    { value: 'lecteur', label: 'Lecteur' },
+    { value: 'country_admin', label: 'Admin Pays' },
+    { value: 'editor', label: 'Éditeur' },
+    { value: 'contributor', label: 'Contributeur' },
+    { value: 'focal_point', label: 'Point Focal' },
+    { value: 'reader', label: 'Lecteur' },
   ];
 
   const handleUpload = async (files: File[]) => {
@@ -48,7 +48,7 @@ const DocumentUploadDialog = ({ onUpload, isOpen: controlledIsOpen, onClose }: D
     setMetadata({
       title: '',
       description: '',
-      document_type: 'autre',
+      document_type: 'other',
       country: '',
       tags: [],
       access_level: 'public',
@@ -115,10 +115,10 @@ const DocumentUploadDialog = ({ onUpload, isOpen: controlledIsOpen, onClose }: D
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="guide">Guide</SelectItem>
-                    <SelectItem value="rapport">Rapport</SelectItem>
+                    <SelectItem value="report">Rapport</SelectItem>
                     <SelectItem value="presentation">Présentation</SelectItem>
-                    <SelectItem value="formulaire">Formulaire</SelectItem>
-                    <SelectItem value="autre">Autre</SelectItem>
+                    <SelectItem value="form">Formulaire</SelectItem>
+                    <SelectItem value="other">Autre</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
