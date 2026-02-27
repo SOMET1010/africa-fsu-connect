@@ -11,7 +11,8 @@ interface AuthContextType {
   session: Session | null;
   profile: Tables<'profiles'> | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<ApiResponse>;
+  profileLoading: boolean;
+  signIn: (email: string, password: string) => Promise<ApiResponse<Session | null>>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string, country?: string, organization?: string, role?: UserRole) => Promise<ApiResponse>;
   signOut: () => Promise<void>;
   requestPasswordReset: (email: string) => Promise<ApiResponse>;
@@ -32,8 +33,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Tables<'profiles'> | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(false);
 
   const fetchProfile = async (userId: string) => {
+    logger.debug('Fetching profile', { userId, component: 'AuthContext', action: 'fetchProfile' });
+    setProfileLoading(true);
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -42,13 +46,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         .single();
 
       if (error) {
-        logger.error('Error fetching profile:', error, { component: 'AuthContext', action: 'fetchProfile' });
+        logger.error('Error fetching profile:', error, { component: 'AuthContext', action: 'fetchProfile', userId });
         return;
       }
 
+      logger.debug('Profile fetched successfully', {
+        userId,
+        role: data?.role,
+        email: data?.email,
+        component: 'AuthContext',
+        action: 'fetchProfile',
+      });
       setProfile(data);
     } catch (error) {
-      logger.error('Error fetching profile:', error, { component: 'AuthContext', action: 'fetchProfile' });
+      logger.error('Error fetching profile:', error, { component: 'AuthContext', action: 'fetchProfile', userId });
+    }
+    finally {
+      setProfileLoading(false);
     }
   };
 
@@ -80,6 +94,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           }, 0);
         } else {
           setProfile(null);
+          setProfileLoading(false);
         }
       }
     );
@@ -94,6 +109,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setTimeout(() => {
           fetchProfile(session.user.id);
         }, 0);
+      } else {
+        setProfileLoading(false);
       }
     });
 
@@ -105,6 +122,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       email,
       password,
     });
+    logger.debug('Supabase signIn executed', { email });
 
     // Log security event
     if (data.user) {
@@ -115,8 +133,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         !error
       );
     }
+    logger.debug('Supabase signIn result', {
+      userId: data.user?.id,
+      success: !error,
+      error: error ? error.message : undefined,
+      metadataRole: data.user?.user_metadata?.role,
+    });
 
-    return { error };
+    return { data, error };
   };
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string, country?: string, organization?: string, role?: UserRole) => {
@@ -240,6 +264,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       session,
       profile,
       loading,
+      profileLoading,
       signIn,
       signUp,
       signOut,

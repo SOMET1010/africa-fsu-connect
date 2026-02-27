@@ -27,7 +27,10 @@
 - The `user_role` enum remains English; the new `role` dropdown reuses those values to avoid mismatches between UI labels and stored data.
 - Signup now upserts a `profiles` row with the chosen role, first/last name, country and organization, ensuring the backend reflects the registration immediately.
 - Tests: `npm run lint` currently fails because `eslint-plugin-react-hooks` expects a different API (`context.getSourceCode`) in this ESLint version; no code changes were flagged beyond that plugin error.
+- L’espace Administration repose sur `src/data/adminMenuConfig.ts`, des routes dynamiques `/admin/features/*` et `AdminFeaturePage` ; les sections, rôles et références CDC ont été explicitement alignés.
+- `20260226153000_create_admin_management_tables.sql` ajoute les tables `admin_*` pour les nouvelles vues (activités, support, veille, formations, exports, CI/CD, RGPD, etc.).
 
 ## Next actions
 1. Decide whether `focal_point` users should share the same editing permissions as contributors and update guards if needed.
 2. Complete the remaining Module 4/5/6/API gaps noted above before the next release milestone.
+3. Vérifier les nouvelles routes `/admin/features/*`, les statistiques exposées par `useAdminOverviewCounts` et l’alimentation des tables `admin_*` via un reset Supabase local.

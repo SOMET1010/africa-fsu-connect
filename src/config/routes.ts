@@ -22,6 +22,7 @@ import {
   Mail,
   Database,
 } from 'lucide-react';
+import { ADMIN_MENU_FEATURES } from '@/data/adminMenuConfig';
 
 // UX Universe types for organized navigation
 export type UniversType = 
@@ -81,6 +82,7 @@ const TranslationsExport = lazy(() => import('@/pages/admin/TranslationsExport')
 const I18nQAChecklist = lazy(() => import('@/pages/admin/I18nQAChecklist'));
 const HomepageEditor = lazy(() => import('@/pages/admin/HomepageEditor'));
 const ContentManager = lazy(() => import('@/pages/admin/ContentManager'));
+const AdminFeaturePage = lazy(() => import('@/pages/admin/AdminFeaturePage'));
 // New SUTEL modules
 const ELearning = lazy(() => import('@/pages/ELearning'));
 const StrategicWatch = lazy(() => import('@/pages/StrategicWatch'));
@@ -112,7 +114,7 @@ const MyContributions = lazy(() => import('@/pages/MyContributions'));
 const AgencyDocuments = lazy(() => import('@/pages/AgencyDocuments'));
 
 // Configuration centralisée des routes
-export const ROUTES: RouteConfig[] = [
+const STATIC_ROUTES: RouteConfig[] = [
   // COUCHE 1 - RÉSEAU (visible par défaut)
   {
     path: '/network',
@@ -796,6 +798,22 @@ export const ROUTES: RouteConfig[] = [
     univers: 'admin',
   },
 ];
+
+const adminFeatureRoutes: RouteConfig[] = ADMIN_MENU_FEATURES.map((feature) => ({
+  path: feature.path,
+  component: AdminFeaturePage,
+  title: feature.title,
+  description: feature.description,
+  icon: feature.icon,
+  isProtected: true,
+  requiredRoles: feature.roles,
+  showInSidebar: false,
+  showInMobileNav: false,
+  category: "admin",
+  univers: "admin",
+}));
+
+export const ROUTES: RouteConfig[] = [...STATIC_ROUTES, ...adminFeatureRoutes];
 
 // Utilitaires pour filtrer les routes
 export const getRoutesByCategory = (category: RouteConfig['category']) =>

@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AnimatedPage } from '@/components/ui/animated-page';
 import { SmartSuggestions } from '@/components/intelligence/SmartSuggestions';
-import { CollaborationPresence } from '@/components/collaboration/CollaborationPresence';
 import { UserPreferencesProvider } from '@/contexts/UserPreferencesContext';
 import { useContextualIntelligence } from '@/hooks/useContextualIntelligence';
 import { useAccessibilityPreferences } from '@/hooks/useAccessibilityPreferences';
@@ -35,14 +34,6 @@ const IntelligentLayoutInner = ({ children }: IntelligentLayoutInnerProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Collaboration presence indicator */}
-      <div className="fixed top-4 right-4 z-50">
-        <CollaborationPresence 
-          roomId={location.pathname} 
-          showDetails={false}
-        />
-      </div>
-
       {/* Content with conditional animations - no main element as it's handled by AppShell */}
       <div className="relative">
         {animationsEnabled ? (

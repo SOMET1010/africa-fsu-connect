@@ -71,3 +71,28 @@ create policy "authenticated delete profiles" on public.profiles
   for delete
   to authenticated
   using (true);
+
+-- Update existing profiles with null role (if any) by syncing from auth.users metadata
+-- This handles cases where profiles were created before the role column was properly set
+update public.profiles p
+set role = (
+  select (raw_user_meta_data->>'role')::public.user_role
+  from auth.users u
+  where u.id = p.user_id
+)
+where role is null
+and exists (
+  select 1
+  from auth.users u
+  where u.id = p.user_id
+  and raw_user_meta_data->>'role' is not null
+);
+
+-- Fallback to 'reader' for profiles with no role in metadata either
+update public.profiles
+set role = 'reader'::public.user_role
+where role is null;
+
+-- Ensure not null constraint is properly set
+alter table public.profiles
+alter column role set not null;

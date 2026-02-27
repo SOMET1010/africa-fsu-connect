@@ -1,5 +1,8 @@
-import { useState } from "react";
-import { Users, FileText, Calendar, MessageSquare, Settings, BarChart3, Shield, Bell } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ADMIN_MENU_SECTIONS, ADMIN_ROLE_LABELS } from "@/data/adminMenuConfig";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSidebar } from "@/components/ui/sidebar";
+import { Shield } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "@/hooks/useTranslation";
 import {
@@ -11,66 +14,24 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
-  useSidebar,
 } from "@/components/ui/sidebar";
 
 export function AdminSidebar() {
   const { t } = useTranslation();
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed } = useSidebar();
   const location = useLocation();
   const currentPath = location.pathname;
+  const { profile } = useAuth();
+  const userRole = profile?.role;
 
-  const adminMenuItems = [
-    {
-      title: t('admin.dashboard'),
-      url: "/admin",
-      icon: BarChart3,
-      description: t('admin.dashboard.description')
-    },
-    {
-      title: t('admin.users'),
-      url: "/admin/users",
-      icon: Users,
-      description: t('admin.users.description')
-    },
-    {
-      title: t('admin.forum.moderation'),
-      url: "/admin/forum",
-      icon: MessageSquare,
-      description: t('admin.forum.description')
-    },
-    {
-      title: t('admin.documents'),
-      url: "/admin/documents",
-      icon: FileText,
-      description: t('admin.documents.description')
-    },
-    {
-      title: t('admin.events'),
-      url: "/admin/events",
-      icon: Calendar,
-      description: t('admin.events.description')
-    },
-    {
-      title: t('admin.submissions'),
-      url: "/admin/submissions",
-      icon: Shield,
-      description: t('admin.submissions.description')
-    },
-    {
-      title: t('admin.notifications'),
-      url: "/admin/notifications",
-      icon: Bell,
-      description: t('admin.notifications.description')
-    },
-    {
-      title: t('admin.settings'),
-      url: "/admin/settings",
-      icon: Settings,
-      description: t('admin.settings.description')
-    }
-  ];
+  const filteredSections = ADMIN_MENU_SECTIONS
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) =>
+        userRole ? item.roles.includes(userRole) : false
+      ),
+    }))
+    .filter((section) => section.items.length > 0);
 
   const isActive = (path: string) => {
     if (path === "/admin") {
@@ -80,13 +41,13 @@ export function AdminSidebar() {
   };
 
   const getNavClassName = (path: string) => {
-    return isActive(path) 
-      ? "bg-primary/10 text-primary font-medium border-r-2 border-primary" 
+    return isActive(path)
+      ? "bg-primary/10 text-primary font-medium border-r-2 border-primary"
       : "hover:bg-muted/50 text-muted-foreground hover:text-foreground";
   };
 
   return (
-    <Sidebar className={collapsed ? "w-16" : "w-64"}>
+    <Sidebar>
       <SidebarContent className="bg-background border-r">
         {/* Admin Header */}
         <div className="p-4 border-b">
@@ -103,37 +64,51 @@ export function AdminSidebar() {
           </div>
         </div>
 
-        <SidebarGroup className="px-2">
-          <SidebarGroupLabel className="px-2 py-2 text-xs font-medium text-muted-foreground">
-            {!collapsed ? t('admin.menu.main') : ""}
-          </SidebarGroupLabel>
-          
-          <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
-              {adminMenuItems.map((item) => (
-                <SidebarMenuItem key={item.url}>
-                  <SidebarMenuButton asChild className="h-10">
-                    <NavLink 
-                      to={item.url} 
-                      className={`${getNavClassName(item.url)} flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200`}
-                      title={collapsed ? item.title : ""}
-                    >
-                      <item.icon className="h-4 w-4 flex-shrink-0" />
-                      {!collapsed && (
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-medium">{item.title}</div>
-                          <div className="text-xs text-muted-foreground truncate">
-                            {item.description}
+        {filteredSections.map((section) => (
+          <SidebarGroup key={section.id} className="px-2">
+            <SidebarGroupLabel className="px-2 py-2 text-xs font-medium text-muted-foreground">
+              {!collapsed ? section.title : ""}
+            </SidebarGroupLabel>
+
+            <SidebarGroupContent>
+              <SidebarMenu className="space-y-1">
+                {section.items.map((item) => (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton asChild className="h-10">
+                      <NavLink
+                        to={item.path}
+                        className={`${getNavClassName(item.path)} flex items-start gap-3 px-3 py-2 rounded-lg transition-all duration-200`}
+                        title={collapsed ? item.title : ""}
+                      >
+                        <item.icon className="mt-1 h-4 w-4 flex-shrink-0" />
+                        {!collapsed && (
+                          <div className="flex-1 min-w-0 space-y-1">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="text-sm font-medium">{item.title}</div>
+                              <Badge variant="outline" size="sm">
+                                CDC {item.cdcRef}
+                              </Badge>
+                            </div>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {item.description}
+                            </p>
+                            <div className="flex flex-wrap gap-1">
+                              {item.roles.map((role) => (
+                                <Badge key={role} variant="secondary" className="text-[10px]">
+                                  {ADMIN_ROLE_LABELS[role]}
+                                </Badge>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                        )}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
 
         {/* Quick Actions */}
         {!collapsed && (

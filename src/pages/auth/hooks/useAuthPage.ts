@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 import { toErrorMessage } from '@/utils/errors';
 import { PUBLIC_SIGNUP_ROLE_OPTIONS, type UserRole } from '@/types/userRole';
+import { getRoleHomePath } from '@/utils/roleRedirect';
 
 export const useAuthPage = () => {
-  const { signIn, signUp, user, loading, requestPasswordReset, updatePassword } = useAuth();
+  const { signIn, signUp, user, profile, loading, requestPasswordReset, updatePassword } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -36,13 +40,84 @@ export const useAuthPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
+  const redirectState = useRef<{ userId: string | null; redirected: boolean }>({
+    userId: null,
+    redirected: false,
+  });
 
-  // Redirect authenticated users
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard');
+  const getPersistedRole = async (userId?: string) => {
+    if (!userId) return undefined;
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('user_id', userId)
+      .single();
+
+    if (error) {
+      console.error('Failed to fetch persisted role', error);
+      return undefined;
     }
-  }, [user, navigate]);
+
+    return data?.role as UserRole | undefined;
+  };
+
+  // Attend que le profil soit chargé dans le contexte Auth
+  const waitForProfile = async (userId: string, maxRetries = 10, delay = 100): Promise<UserRole | null> => {
+    logger.debug('waitForProfile: starting', { userId, maxRetries, delay });
+    for (let i = 0; i < maxRetries; i++) {
+      const role = await getPersistedRole(userId);
+      logger.debug('waitForProfile: attempt', {
+        userId,
+        attempt: i + 1,
+        roleFound: !!role,
+        role: role ?? 'null',
+      });
+      if (role) {
+        logger.debug('Profile role found', { userId, role, attempt: i + 1 });
+        return role;
+      }
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+    logger.warn('Profile role not found after retries', { userId, maxRetries });
+    return null;
+  };
+
+  useEffect(() => {
+    if (!user || !profile) {
+      redirectState.current = { userId: null, redirected: false };
+      return;
+    }
+
+    if (redirectState.current.userId === user.id && redirectState.current.redirected) {
+      return;
+    }
+
+    if (!profile.role) {
+      logger.debug('Auth redirect paused - profile role pending', {
+        userId: user.id,
+        currentPath: location.pathname,
+      });
+      return;
+    }
+
+    const targetPath = getRoleHomePath(profile.role);
+    logger.debug('Auth redirect candidate', {
+      userId: user.id,
+      currentPath: location.pathname,
+      targetPath,
+      role: profile.role,
+    });
+    if (location.pathname !== targetPath) {
+      logger.debug('Auth redirect executing', {
+        userId: user.id,
+        targetPath,
+        role: profile.role,
+      });
+      navigate(targetPath, { replace: true });
+    }
+
+    redirectState.current = { userId: user.id, redirected: true };
+  }, [user, profile, navigate, location.pathname]);
 
   // Detect reset mode from URL
   useEffect(() => {
@@ -55,10 +130,11 @@ export const useAuthPage = () => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
+    logger.debug('Attempting login', { email: loginEmail });
 
     try {
-      const { error } = await signIn(loginEmail, loginPassword);
-      
+      const { data, error } = await signIn(loginEmail, loginPassword);
+
       if (error) {
         const errorMessage = toErrorMessage(error);
         if (errorMessage.includes('Invalid login credentials')) {
@@ -69,8 +145,32 @@ export const useAuthPage = () => {
           setError(errorMessage);
         }
       } else {
+        const userId = data.user?.id;
+        if (!userId) {
+          setError('Impossible de récupérer votre identifiant utilisateur');
+          return;
+        }
+
+        // Attendre que le profil soit chargé
+        const storedRole = await waitForProfile(userId);
+        const metadataRole = data?.user?.user_metadata?.role as UserRole | undefined;
+        const fallbackRole = storedRole ?? metadataRole ?? profile?.role ?? 'reader';
+        const targetPath = getRoleHomePath(fallbackRole);
+        logger.debug('Login success, resolving redirect', {
+          userId,
+          storedRole,
+          metadataRole,
+          profileRole: profile?.role,
+          fallbackRole,
+          targetPath,
+        });
         toast.success('Connexion réussie !');
-        navigate('/dashboard');
+        if (location.pathname !== targetPath) {
+          logger.debug('Login redirect navigation', { targetPath });
+          navigate(targetPath, { replace: true });
+        } else {
+          logger.debug('Login redirect no-op', { targetPath });
+        }
       }
     } catch (err) {
       setError("Une erreur inattendue s'est produite");
