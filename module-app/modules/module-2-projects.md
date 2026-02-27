@@ -2,40 +2,40 @@
 
 ## 🎯 Objectif
 
-Centraliser tous les projets FSU du continent.
+Centraliser tous les Projets du continent.
 
 ## 📌 Portée Fonctionnelle
 
-* Création fiche projet
-* Modification
-* Filtrage multicritère
-* Carte interactive
-* Dashboard indicateurs
-* Export PDF/Excel
+- Création fiche projet
+- Modification
+- Filtrage multicritère
+- Carte interactive
+- Dashboard indicateurs
+- Export PDF/Excel
 
 ## 🗂 Base de données
 
 **Table projects**
 
-* id
-* title
-* description
-* country
-* region
-* budget
-* status
-* start_date
-* end_date
-* beneficiaries
-* latitude
-* longitude
-* created_by
+- id
+- title
+- description
+- country
+- region
+- budget
+- status
+- start_date
+- end_date
+- beneficiaries
+- latitude
+- longitude
+- created_by
 
 ## 🗺 Cartographie
 
-* OpenStreetMap / Mapbox
-* Clustering markers
-* Filtres dynamiques
+- OpenStreetMap / Mapbox
+- Clustering markers
+- Filtres dynamiques
 
 ## 📤 API
 

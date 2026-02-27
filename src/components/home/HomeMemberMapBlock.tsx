@@ -70,7 +70,7 @@ export function HomeMemberMapBlock({ variant = 'light' }: { variant?: 'light' | 
         </div>
 
         <div
-          className="relative rounded-2xl overflow-hidden border border-[hsl(var(--nx-gold))]/20 bg-[hsl(var(--nx-night))]"
+          className="relative rounded-2xl overflow-hidden border border-[hsl(var(--nx-gold))]/20 bg-[hsl(var(--nx-night))] z-0"
           style={{ height: 'clamp(380px, 55vw, 520px)' }}
         >
           {isLoading ? (

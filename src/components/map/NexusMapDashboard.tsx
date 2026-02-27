@@ -49,7 +49,7 @@ export const NexusMapDashboard = () => {
   };
 
   return (
-    <div className="fixed inset-0 bg-[hsl(var(--nx-night))] overflow-hidden">
+    <div className="fixed inset-0 bg-[hsl(var(--nx-night))] z-10 overflow-hidden">
       
       {/* 1. TOP BAR - Floating HUD */}
       <motion.div 

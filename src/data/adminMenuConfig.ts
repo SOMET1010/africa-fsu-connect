@@ -6,8 +6,6 @@ import {
   GraduationCap,
   MessageCircle,
   PieChart,
-  Plug,
-  Rss,
   Shield,
   ShieldCheck,
   Settings,
@@ -44,6 +42,11 @@ export interface AdminMenuSection {
   items: BaseFeature[];
 }
 
+// ============================================================
+// MENU ADMINISTRATION (BACK OFFICE)
+// Accessible selon les droits : Administrateur, Super Admin (ANSUT/UAT)
+// ============================================================
+
 export const ADMIN_MENU_SECTIONS: AdminMenuSection[] = [
   {
     id: "admin",
@@ -54,7 +57,7 @@ export const ADMIN_MENU_SECTIONS: AdminMenuSection[] = [
       {
         id: "admin-dashboard",
         title: "Dashboard",
-        description: "Vue globale, KPIs et alertes en temps réel.",
+        description: "Vue synthétique (Activité, Publications, Inscriptions), Alertes système & modération.",
         roles: ADMIN_PLUS_ROLES,
         cdcRef: "4.2",
         tables: ["admin_activity_stream", "admin_alerts", "admin_export_jobs", "performance_metrics"],
@@ -64,7 +67,7 @@ export const ADMIN_MENU_SECTIONS: AdminMenuSection[] = [
       {
         id: "admin-users",
         title: "Utilisateurs",
-        description: "Gestion complète des comptes, rôles et validations.",
+        description: "Gestion des Comptes (CRUD), Rôles & Permissions, Validation Inscriptions, Répertoire Points Focaux.",
         roles: SUPER_ADMIN_ONLY,
         cdcRef: "4.2",
         tables: ["profiles", "role_permissions", "admin_account_validations", "focal_points"],
@@ -74,7 +77,7 @@ export const ADMIN_MENU_SECTIONS: AdminMenuSection[] = [
       {
         id: "admin-contents",
         title: "Contenus",
-        description: "Validation des projets, documents et publications.",
+        description: "Validation Projets (Workflow éditorial), Gestion Documents, Actualités & Newsletters.",
         roles: ADMIN_PLUS_ROLES,
         cdcRef: "4.2",
         tables: ["agency_projects", "documents", "document_versions", "document_comments", "admin_watch_sources"],
@@ -84,7 +87,7 @@ export const ADMIN_MENU_SECTIONS: AdminMenuSection[] = [
       {
         id: "admin-moderation",
         title: "Modération",
-        description: "Surveillance des forums, signalements et blocages.",
+        description: "Forums & Commentaires (Validation/Blocage), Signalements, Utilisateurs Bannis.",
         roles: ADMIN_PLUS_ROLES,
         cdcRef: "4.2",
         tables: ["forum_posts", "forum_replies", "admin_alerts", "admin_activity_stream"],
@@ -92,19 +95,9 @@ export const ADMIN_MENU_SECTIONS: AdminMenuSection[] = [
         icon: ShieldCheck,
       },
       {
-        id: "admin-training",
-        title: "Formation",
-        description: "Catalogue, participants et certifications des sessions.",
-        roles: ADMIN_PLUS_ROLES,
-        cdcRef: "4.1",
-        tables: ["training_courses", "training_participants", "training_certifications", "presentation_sessions"],
-        actions: ["Programmer les webinaires", "Valider les attestations diplômantes"],
-        icon: GraduationCap,
-      },
-      {
         id: "admin-statistics",
         title: "Statistiques",
-        description: "Indicateurs d'utilisation, projets, export de données.",
+        description: "Analyse d'Audience, Reporting Projets (Export CSV/PDF), Impact Formation.",
         roles: ADMIN_PLUS_ROLES,
         cdcRef: "4.2",
         tables: ["admin_support_tickets", "agency_projects", "admin_export_jobs"],
@@ -112,9 +105,19 @@ export const ADMIN_MENU_SECTIONS: AdminMenuSection[] = [
         icon: PieChart,
       },
       {
+        id: "admin-training",
+        title: "Formation",
+        description: "Gestion Catalogue (Création sessions), Participants, Certificats (Génération).",
+        roles: ADMIN_PLUS_ROLES,
+        cdcRef: "4.1",
+        tables: ["training_courses", "training_participants", "training_certifications", "presentation_sessions"],
+        actions: ["Programmer les webinaires", "Valider les attestations diplômantes"],
+        icon: GraduationCap,
+      },
+      {
         id: "admin-calendar",
-        title: "Calendrier",
-        description: "Événements, échéances CMDT et rappels automatisés.",
+        title: "Agenda",
+        description: "Gestion Événements (Création/Modification), CMDT-25 (Configuration échéances).",
         roles: ADMIN_PLUS_ROLES,
         cdcRef: "4.1",
         tables: ["events", "admin_calendar_deadlines", "admin_calendar_reminders"],
@@ -122,29 +125,9 @@ export const ADMIN_MENU_SECTIONS: AdminMenuSection[] = [
         icon: Calendar,
       },
       {
-        id: "admin-watch",
-        title: "Veille",
-        description: "Sources RSS externes et règles d'alertes avancées.",
-        roles: ADMIN_PLUS_ROLES,
-        cdcRef: "4.1",
-        tables: ["admin_watch_sources", "admin_alert_rules"],
-        actions: ["Relier les flux UIT/Smart Africa", "Déclarer les alertes techniques"],
-        icon: Rss,
-      },
-      {
-        id: "admin-integrations",
-        title: "API & Intégrations",
-        description: "Cartographie et connecteurs aux services externes.",
-        roles: SUPER_ADMIN_ONLY,
-        cdcRef: "4.2",
-        tables: ["admin_map_configurations", "admin_connectors"],
-        actions: ["Configurer Leaflet/Mapbox", "Activer les connecteurs statistics et SSO"],
-        icon: Plug,
-      },
-      {
         id: "admin-support",
         title: "Support",
-        description: "Messagerie, tickets et FAQ du support technique.",
+        description: "Messagerie Interne (Admin ↔ Utilisateurs), Tickets & Anomalies, FAQ.",
         roles: ADMIN_PLUS_ROLES,
         cdcRef: "4.2",
         tables: ["admin_internal_messages", "admin_support_tickets", "admin_support_faq"],
@@ -154,7 +137,7 @@ export const ADMIN_MENU_SECTIONS: AdminMenuSection[] = [
       {
         id: "admin-settings",
         title: "Paramètres",
-        description: "Identité, sécurité, sauvegardes et conformité RGPD.",
+        description: "Général (Langues, Logos, Couleurs), Sécurité (Logs, Sessions, RGPD), API & Intégrations, Sauvegardes.",
         roles: SUPER_ADMIN_ONLY,
         cdcRef: "5",
         tables: ["site_settings", "admin_security_policies", "admin_backups", "admin_data_requests"],
