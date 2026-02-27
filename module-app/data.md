@@ -20,23 +20,23 @@ Je te donne :
 **Niveau digital :** Intermédiaire
 **Objectifs :**
 
-* Publier les projets de son pays
-* Comparer les stratégies africaines
-* Trouver des partenaires techniques et financiers
-* Suivre les indicateurs régionaux
+- Publier les projets de son pays
+- Comparer les stratégies africaines
+- Trouver des partenaires techniques et financiers
+- Suivre les indicateurs régionaux
 
 **Frustrations :**
 
-* Manque de visibilité continentale
-* Données dispersées
-* Difficulté de coordination régionale
+- Manque de visibilité continentale
+- Données dispersées
+- Difficulté de coordination régionale
 
 **Ce qu’elle attend de la plateforme :**
 
-* Simplicité
-* Fiabilité des données
-* Cartographie claire
-* Reporting exportable
+- Simplicité
+- Fiabilité des données
+- Cartographie claire
+- Reporting exportable
 
 ---
 
@@ -46,15 +46,15 @@ Je te donne :
 **Rôle :** Juriste / expert politique TIC
 **Objectifs :**
 
-* Accéder aux cadres réglementaires comparés
-* Participer à la co-rédaction des contributions
-* Télécharger documents stratégiques
+- Accéder aux cadres réglementaires comparés
+- Participer à la co-rédaction des contributions
+- Télécharger documents stratégiques
 
 **Besoins :**
 
-* Moteur de recherche puissant
-* Versioning des documents
-* Espace collaboratif sécurisé
+- Moteur de recherche puissant
+- Versioning des documents
+- Espace collaboratif sécurisé
 
 ---
 
@@ -64,15 +64,15 @@ Je te donne :
 **Organisation :** UAT
 **Objectifs :**
 
-* Suivre les statistiques continentales
-* Préparer rapports régionaux
-* Consolider les contributions
+- Suivre les statistiques continentales
+- Préparer rapports régionaux
+- Consolider les contributions
 
 **Besoins :**
 
-* Dashboard dynamique
-* Export Excel / PDF
-* Indicateurs automatiques
+- Dashboard dynamique
+- Export Excel / PDF
+- Indicateurs automatiques
 
 ---
 
@@ -82,15 +82,15 @@ Je te donne :
 **Organisation :** Entreprise technologique
 **Objectifs :**
 
-* Identifier projets financés
-* Proposer solutions
-* Contacter agences
+- Identifier projets financés
+- Proposer solutions
+- Contacter agences
 
 **Besoins :**
 
-* Filtres par budget
-* Carte interactive
-* Fiches projets détaillées
+- Filtres par budget
+- Carte interactive
+- Fiches projets détaillées
 
 ---
 
@@ -99,10 +99,10 @@ Je te donne :
 **Nom :** Admin ANSUT
 **Objectifs :**
 
-* Gérer utilisateurs
-* Valider contenus
-* Modérer forums
-* Superviser plateforme
+- Gérer utilisateurs
+- Valider contenus
+- Modérer forums
+- Superviser plateforme
 
 ---
 
@@ -150,7 +150,7 @@ Afin de récupérer l’accès.
 
 ---
 
-# 🌍 EPIC 2 — Gestion des Projets FSU
+# 🌍 EPIC 2 — Gestion des Projets
 
 ### US-04
 
@@ -258,47 +258,46 @@ Afin de le présenter à mon ministère.
 
 ## 🔥 PRIORITÉ 1 — MVP (Critique)
 
-| ID | Fonctionnalité   | Epic   | Priorité |
-| -- | ---------------- | ------ | -------- |
-| 1  | Authentification | EPIC 1 | Haute    |
-| 2  | Gestion rôles    | EPIC 1 | Haute    |
-| 3  | Création projet  | EPIC 2 | Haute    |
-| 4  | Cartographie     | EPIC 2 | Haute    |
-| 5  | Upload documents | EPIC 3 | Haute    |
-| 6  | Dashboard simple | EPIC 7 | Haute    |
+| ID  | Fonctionnalité   | Epic   | Priorité |
+| --- | ---------------- | ------ | -------- |
+| 1   | Authentification | EPIC 1 | Haute    |
+| 2   | Gestion rôles    | EPIC 1 | Haute    |
+| 3   | Création projet  | EPIC 2 | Haute    |
+| 4   | Cartographie     | EPIC 2 | Haute    |
+| 5   | Upload documents | EPIC 3 | Haute    |
+| 6   | Dashboard simple | EPIC 7 | Haute    |
 
 ---
 
 ## 🟡 PRIORITÉ 2 — Phase 2
 
-| ID | Fonctionnalité | Epic   |
-| -- | -------------- | ------ |
-| 7  | Forum          | EPIC 4 |
-| 8  | Notifications  | EPIC 4 |
-| 9  | Co-rédaction   | EPIC 5 |
-| 10 | Agenda partagé | EPIC 7 |
+| ID  | Fonctionnalité | Epic   |
+| --- | -------------- | ------ |
+| 7   | Forum          | EPIC 4 |
+| 8   | Notifications  | EPIC 4 |
+| 9   | Co-rédaction   | EPIC 5 |
+| 10  | Agenda partagé | EPIC 7 |
 
 ---
 
 ## 🟢 PRIORITÉ 3 — Phase 3
 
-| ID | Fonctionnalité         | Epic   |
-| -- | ---------------------- | ------ |
-| 11 | LMS complet            | EPIC 6 |
-| 12 | API publique           | EPIC 8 |
-| 13 | 2FA                    | EPIC 1 |
-| 14 | Certificat automatique | EPIC 6 |
+| ID  | Fonctionnalité         | Epic   |
+| --- | ---------------------- | ------ |
+| 11  | LMS complet            | EPIC 6 |
+| 12  | API publique           | EPIC 8 |
+| 13  | 2FA                    | EPIC 1 |
+| 14  | Certificat automatique | EPIC 6 |
 
 ---
 
 # 🎯 KPIs DE SUCCÈS
 
-* Nombre de pays inscrits
-* Nombre de projets publiés
-* Taux d’engagement forum
-* Taux complétion formation
-* Nombre téléchargements documents
-* Contributions validées
+- Nombre de pays inscrits
+- Nombre de projets publiés
+- Taux d’engagement forum
+- Taux complétion formation
+- Nombre téléchargements documents
+- Contributions validées
 
 ---
-

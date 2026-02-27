@@ -74,11 +74,14 @@ insert into public.site_settings (key, value) values
   ('hero_cta', '{"fr":"Explorer le réseau","en":"Explore the network"}');
 
 insert into public.navigation_items (href, location, label, sort_order, is_visible, is_external) values
-  ('/', 'header', '{"fr":"Accueil","en":"Home"}', 0, true, false),
-  ('/network', 'header', '{"fr":"Réseau","en":"Network"}', 1, true, false),
-  ('/projects', 'header', '{"fr":"Collaborer","en":"Collaborate"}', 2, true, false),
-  ('/elearning', 'header', '{"fr":"Apprendre","en":"Learn"}', 3, true, false),
-  ('/about', 'header', '{"fr":"À propos","en":"About"}', 4, true, false);
+  ('/', 'header', '{"fr":"Accueil","en":"Home","ar":"الرئيسية","pt":"Início"}', 0, true, false),
+  ('/projects', 'header', '{"fr":"Projets","en":"FSU Projects","ar":"مشاريع الخدمة الشاملة","pt":"Projetos FSU"}', 1, true, false),
+  ('/resources', 'header', '{"fr":"Ressources","en":"Resources","ar":"الموارد","pt":"Recursos"}', 2, true, false),
+  ('/forum', 'header', '{"fr":"Communauté","en":"Community","ar":"المجتمع","pt":"Comunidade"}', 3, true, false),
+  ('/elearning', 'header', '{"fr":"Formation","en":"Training","ar":"التدريب","pt":"Formação"}', 4, true, false),
+  ('/events', 'header', '{"fr":"Agenda","en":"Agenda","ar":"الجدول الزمني","pt":"Agenda"}', 5, true, false),
+  ('/watch', 'header', '{"fr":"Veille","en":"Watch","ar":"المراقبة","pt":"Vigilância"}', 6, true, false),
+  ('/public-dashboard', 'header', '{"fr":"Tableau de Bord","en":"Dashboard","ar":"لوحة القيادة","pt":"Painel"}', 7, false, false);
 
 insert into public.homepage_content_blocks (block_key, content_fr, content_en, sort_order, is_visible) values
   ('hero', 
