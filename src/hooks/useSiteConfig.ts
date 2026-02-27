@@ -5,6 +5,18 @@ import { useTranslation } from "@/hooks/useTranslation"
 // Fallback navigation items (used when CMS is empty or on error)
 // MENU PRINCIPAL (FRONT OFFICE) - Selon CDC 4.1
 // Tableau de Bord masqué pour les invités (visible uniquement pour les connectés)
+
+/*location: string
+label: Record<string, string>
+href: string
+sort_order: number
+is_visible: boolean
+is_external: boolean
+icon ?: string | null
+user_role: any[]
+reference: string
+parent: string*/
+
 const FALLBACK_HEADER_NAV = [
     {
         href: "/",
@@ -88,6 +100,9 @@ export interface NavItem {
     is_visible: boolean
     is_external: boolean
     icon?: string | null
+    user_role: any[]
+    reference: string
+    parent: string
 }
 
 export function useSiteConfig() {
@@ -139,17 +154,17 @@ export function useSiteConfig() {
         return val[l] ?? val.fr ?? val.value ?? ""
     }
 
-    function getNavItems(location: string): NavItem[] {
-        const items = navItems.filter(n => n.location === location)
+    function getNavItems(location: string, parent: string): NavItem[] {
+        const items = navItems.filter(n => n.location === location && n.parent === parent)
         if (items.length > 0) return items
         // Fallback for header
         if (location === "header") {
-            return FALLBACK_HEADER_NAV.map(f => ({
+            /*return FALLBACK_HEADER_NAV.map(f => ({
                 ...f,
                 location: "header",
                 is_visible: true,
                 is_external: false,
-            }))
+            }))*/
         }
         return []
     }
@@ -157,7 +172,7 @@ export function useSiteConfig() {
     function getNavLabel(item: NavItem, lang?: string): string {
         const l = lang ?? language ?? "fr"
         const label = item.label as Record<string, string>
-        return label[l] ?? label.fr ?? label.en ?? ""
+        return label[l] ?? label.fr ?? label.en ?? label.ar ?? label.pt
     }
 
     return {

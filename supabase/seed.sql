@@ -73,15 +73,35 @@ insert into public.site_settings (key, value) values
   ('hero', '{"fr":{"title":"Connecter l''Afrique","subtitle_highlight":"Ensemble","description":"Une plateforme panafricaine pour coordonner les projets d''inclusion numérique et diffuser les meilleures pratiques du Service Universel."},"en":{"title":"Connecting Africa","subtitle_highlight":"Together","description":"A pan-African platform to coordinate digital inclusion initiatives and share Universal Service best practices."}}'),
   ('hero_cta', '{"fr":"Explorer le réseau","en":"Explore the network"}');
 
-insert into public.navigation_items (href, location, label, sort_order, is_visible, is_external) values
-  ('/', 'header', '{"fr":"Accueil","en":"Home","ar":"الرئيسية","pt":"Início"}', 0, true, false),
-  ('/projects', 'header', '{"fr":"Projets","en":"FSU Projects","ar":"مشاريع الخدمة الشاملة","pt":"Projetos FSU"}', 1, true, false),
-  ('/resources', 'header', '{"fr":"Ressources","en":"Resources","ar":"الموارد","pt":"Recursos"}', 2, true, false),
-  ('/forum', 'header', '{"fr":"Communauté","en":"Community","ar":"المجتمع","pt":"Comunidade"}', 3, true, false),
-  ('/elearning', 'header', '{"fr":"Formation","en":"Training","ar":"التدريب","pt":"Formação"}', 4, true, false),
-  ('/events', 'header', '{"fr":"Agenda","en":"Agenda","ar":"الجدول الزمني","pt":"Agenda"}', 5, true, false),
-  ('/watch', 'header', '{"fr":"Veille","en":"Watch","ar":"المراقبة","pt":"Vigilância"}', 6, true, false),
-  ('/public-dashboard', 'header', '{"fr":"Tableau de Bord","en":"Dashboard","ar":"لوحة القيادة","pt":"Painel"}', 7, false, false);
+
+INSERT INTO public.navigation_items (href, location, label, sort_order, is_visible, is_external, user_role, reference, parent) VALUES
+  ('/projects', 'header', '{"ar": "مشاريع الخدمة الشاملة", "en": "FSU Projects", "fr": "Projets", "pt": "Projetos FSU"}', '1', 'true', 'false', ARRAY['public','reader'], 'projects', null), 
+  ('/about', 'header', '{"ar": "عن", "en": "About", "fr": "A Propos", "pt": "Sobre"}', '0', 'true', 'false', ARRAY['public','reader'], 'about', 'home'), 
+  ('/watch', 'header', '{"ar": "أخبار", "en": "News", "fr": "Actualités", "pt": "Notícias"}', '0', 'true', 'false', ARRAY['public','reader'], 'news-watch', 'watch'), 
+  ('/my-contributions', 'header', '{"ar": "مشاريعي", "en": "My Projects", "fr": "Mes Projets", "pt": "Os meus projetos"}', '2', 'true', 'false', ARRAY['public','reader'], 'my-contributions', 'projects'), 
+  ('/resources', 'header', '{"ar": "الموارد", "en": "Resources", "fr": "Ressources", "pt": "Recursos"}', '2', 'true', 'false', ARRAY['public','reader'], 'resources', null), 
+  ('/events?cmdt25=true', 'header', '{"ar": "CMDT-25", "en": "CMDT-25", "fr": "CMDT-25", "pt": "CMDT-25"}', '1', 'true', 'false', ARRAY['public','reader'], 'events?cmdt25=true', 'events'), 
+  ('/watch', 'header', '{"ar": "تغذية آر إس إس", "en": "RSS feed", "fr": "Flux RSS", "pt": "Feed RSS"}', '1', 'true', 'false', ARRAY['public','reader'], 'rss-watch', 'watch'), 
+  ('/events-calendar', 'header', '{"ar": "تقويم", "en": "Calendar", "fr": "Calendrier", "pt": "Calendário"}', '0', 'true', 'false', ARRAY['public','reader'], 'events-calendar', 'events'), 
+  ('/agency-documents', 'header', '{"ar": "القوالب والنماذج", "en": "Templates & Forms", "fr": "Modèles & Formulaires", "pt": "Modelos e formulários"}', '2', 'true', 'false', ARRAY['public','reader'], 'agency-documents', 'resources'), 
+  ('/members', 'header', '{"ar": "دليل", "en": "Members", "fr": "Annuaire", "pt": "Diretório"}', '1', 'true', 'false', ARRAY['public','reader'], 'directory', 'forum'), 
+  ('/watch', 'header', '{"ar": "المراقبة", "en": "Watch", "fr": "Veille", "pt": "Vigilância"}', '6', 'true', 'false', ARRAY['public','reader'], 'watch', null), 
+  ('/', 'header', '{"ar": "الرئيسية", "en": "Home", "fr": "Accueil", "pt": "Início"}', '0', 'true', 'false', ARRAY['public','reader'], 'home', null), 
+  ('/strategies', 'header', '{"ar": "السياسات والأطر", "en": "Policies & Frameworks", "fr": "Politiques & Cadres", "pt": "Políticas e Estruturas"}', '1', 'true', 'false', ARRAY['public','reader'], 'strategies', 'resources'), 
+  ('/resources', 'header', '{"ar": "مكتبة", "en": "Library", "fr": "Bibliothèque", "pt": "Biblioteca"}', '0', 'true', 'false', ARRAY['public','reader'], 'library', 'resources'), 
+  ('/public-dashboard', 'header', '{"ar": "لوحة القيادة", "en": "Dashboard", "fr": "Tableau de Bord", "pt": "Painel"}', '7', 'false', 'false', ARRAY['public','reader'], 'public-dashboard', null), 
+  ('/', 'header', '{"ar": "الرئيسية", "en": "Home", "fr": "Accueil", "pt": "Início"}', '0', 'true', 'false', ARRAY['public','reader'], 'public-home', 'home'), 
+  ('/events', 'header', '{"ar": "الجدول الزمني", "en": "Agenda", "fr": "Agenda", "pt": "Agenda"}', '5', 'true', 'false', ARRAY['public','reader'], 'events', null), 
+  ('/registrations-elearning', 'header', '{"ar": "تسجيلاتي", "en": "My Registrations", "fr": "Mes Inscriptions", "pt": "Minhas Inscrições"}', '2', 'true', 'false', ARRAY['public','reader'], 'registrations-elearning', 'elearning'), 
+  ('/coauthoring', 'header', '{"ar": "التأليف المشترك", "en": "Co-authoring", "fr": "Co-rédaction", "pt": "Coautoria"}', '2', 'true', 'false', ARRAY['public','reader'], 'coauthoring', 'forum'), 
+  ('/map', 'header', '{"ar": "الخريطة التفاعلية", "en": "Interactive Map", "fr": "Carte Interactive", "pt": "Mapa interativo"}', '0', 'true', 'false', ARRAY['public','reader'], 'map', 'projects'), 
+  ('/catalog', 'header', '{"ar": "كتالوج", "en": "Catalog", "fr": "Catalogue", "pt": "Catálogo"}', '0', 'true', 'false', ARRAY['public','reader'], 'catalog', 'elearning'), 
+  ('/elearning', 'header', '{"ar": "التعلم الإلكتروني", "en": "E-Learning", "fr": "E-Learning", "pt": "E-Learning"}', '1', 'true', 'false', ARRAY['public','reader'], 'elearning-view', 'elearning'), 
+  ('/projects', 'header', '{"ar": "قائمة المشاريع", "en": "FSU Projects", "fr": "Liste des Projets", "pt": "Projetos FSU"}', '1', 'true', 'false', ARRAY['public','reader'], 'project-view', 'projects'), 
+  ('/forum', 'header', '{"ar": "منتدى المناقشة", "en": "Discussion Forum", "fr": "Forum de Discussion", "pt": "Fórum de discussão"}', '0', 'true', 'false', ARRAY['public','reader'], 'forum-view', 'forum'), 
+  ('/elearning', 'header', '{"ar": "التدريب", "en": "Training", "fr": "Formation", "pt": "Formação"}', '4', 'true', 'false', ARRAY['public','reader'], 'elearning', null), 
+  ('/forum', 'header', '{"ar": "المجتمع", "en": "Community", "fr": "Communauté", "pt": "Comunidade"}', '3', 'true', 'false', ARRAY['public','reader'], 'forum', null);
+
 
 insert into public.homepage_content_blocks (block_key, content_fr, content_en, sort_order, is_visible) values
   ('hero', 
@@ -96,8 +116,7 @@ insert into public.agencies (id, name, acronym, country, region, website_url, de
   ('00000000-0000-0000-0000-000000000011', 'Union Africaine des Télécommunications (UAT)', 'UAT', 'Éthiopie', 'uma', 'https://www.itu.int', 'Mandatée pour piloter la stratégie numérique continentale.', 'contact@uat.africa', '1997-01-01'),
   ('00000000-0000-0000-0000-000000000012', 'Agence Tunisienne du Développement des Télécommunications (ATDT)', 'ATDT', 'Tunisie', 'uma', 'https://www.mtc.tn', 'Déploie des plateformes de connectivité éducative et de santé.', 'info@atdt.tn', '2004-07-11');
 
-insert into public.agency_projects (id, agency_id, title, description, status, budget, beneficiaries, start_date, end_date, completion_percentage, tags, location, source_url, metadata, created_at, last_updated_at, sync_status)
-values
+insert into public.agency_projects (id, agency_id, title, description, status, budget, beneficiaries, start_date, end_date, completion_percentage, tags, location, source_url, metadata, created_at, last_updated_at, sync_status) values
   ('00000000-0000-0000-0000-000000000100', '00000000-0000-0000-0000-000000000010', 'Villages connectés Phase II', 'Mise à niveau des infrastructures ICT dans 120 villages en Côte d''Ivoire.', 'active', 12500000, 350000, '2025-06-01', '2025-12-31', 65, array['connectivity','villages'], 'Côte d''Ivoire', 'https://example.org/projects/villages-connectes', '{"villages_connected": 120, "jobs_created": 450}', '2024-01-05T00:00:00+00', now(), 'synced'),
   ('00000000-0000-0000-0000-000000000101', '00000000-0000-0000-0000-000000000011', 'Observatoire numérique africain', 'Collecte et analyse des indicateurs FSU pour 15 pays.', 'active', 22000000, 780000, '2024-09-15', '2026-03-01', 80, array['data','observatory'], 'Afrique', 'https://example.org/projects/observatoire', '{"villages_connected": 0, "jobs_created": 820}', '2024-03-10T00:00:00+00', now(), 'synced'),
   ('00000000-0000-0000-0000-000000000102', '00000000-0000-0000-0000-000000000012', 'Campus numérique Tunisie', 'Équipement de 80 campus ruraux avec plateformes d''apprentissage.', 'in_progress', 8400000, 210000, '2025-01-10', '2026-08-20', 45, array['education','campus'], 'Tunisie', 'https://example.org/projects/campus-tunisie', '{"villages_connected": 40, "jobs_created": 200}', '2024-05-20T00:00:00+00', now(), 'synced'),
@@ -105,8 +124,7 @@ values
   ('00000000-0000-0000-0000-000000000104', '00000000-0000-0000-0000-000000000010', 'Échange de données e-gouvernement', 'Plateforme de data sharing pour les régulateurs.', 'active', 4300000, 130000, '2024-11-10', '2025-03-15', 72, array['e-government','data'], 'Afrique', 'https://example.org/projects/data-exchange', '{"villages_connected": 0, "jobs_created": 190}', '2024-09-14T00:00:00+00', now(), 'synced'),
   ('00000000-0000-0000-0000-000000000105', '00000000-0000-0000-0000-000000000012', 'Laboratoires connectés ruraux', 'Pôles d''innovation pour 60 villages pilotes.', 'planned', 5100000, 95000, '2025-02-01', '2025-09-30', 30, array['connectivity','villages'], 'Afrique du Nord', 'https://example.org/projects/rural-labs', '{"villages_connected": 60, "jobs_created": 160}', '2024-11-02T00:00:00+00', now(), 'synced');
 
-insert into public.events (id, title, description, start_date, end_date, location, is_virtual, max_attendees, current_attendees, created_by)
-values
+insert into public.events (id, title, description, start_date, end_date, location, is_virtual, max_attendees, current_attendees, created_by) values
   ('00000000-0000-0000-0000-000000010001', 'Forum Régional USF', 'Rencontre régionale pour co-construire les feuilles de route 2026', '2025-11-15T09:00:00+00', '2025-11-17T17:00:00+00', 'Abidjan, Côte d\''Ivoire', false, 250, 180, '00000000-0000-0000-0000-000000000001'),
   ('00000000-0000-0000-0000-000000010002', 'Atelier Données Ouvertes', 'Session hands-on pour ouvrir les jeux de données FSU.', '2025-12-08T10:00:00+00', '2025-12-08T16:00:00+00', 'Nairobi, Kenya', false, 120, 94, '00000000-0000-0000-0000-000000000001'),
   ('00000000-0000-0000-0000-000000010003', 'Conférence Annuelle UDC', 'Point de synthèse annuel sur l''impact du réseau.', '2026-01-20T09:00:00+00', '2026-01-22T16:00:00+00', 'Dakar, Sénégal', false, 350, 220, '00000000-0000-0000-0000-000000000001'),

@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu, X, User, LogOut, ChevronDown,
@@ -35,13 +35,13 @@ export const PublicHeader = () => {
   const { user, profile, signOut } = useAuth();
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
 
-  const headerItems = getNavItems("header");
+  const headerItems = getNavItems("header", null);
 
   const isActivePath = (path?: string) => path ? location.pathname === path : false;
-  const isNavActive = (item: NavItem) => {
+  /*const isNavActive = (item: NavItem) => {
     if (item.href) return isActivePath(item.href);
     return item.submenu?.some((sub) => isActivePath(sub.href)) ?? false;
-  };
+  };*/
 
   const resolveNavLabel = (item: NavItem) => item.labelKey ? t(item.labelKey) : item.label;
 
@@ -68,9 +68,9 @@ export const PublicHeader = () => {
       { label: 'Co-rédaction', href: '/coauthoring', description: 'Espace collaboratif', icon: FileText },
     ],
     '/elearning': [
-      { label: 'Catalogue', href: '/elearning', description: 'Webinaires & Sessions', icon: GraduationCap },
+      { label: 'Catalogue', href: '/catalog', description: 'Webinaires & Sessions', icon: GraduationCap },
       { label: 'E-Learning', href: '/elearning', description: 'Modules en différé', icon: Video },
-      { label: 'Mes Inscriptions', href: '/events', description: 'Suivi', icon: Calendar },
+      { label: 'Mes Inscriptions', href: '/registrations-elearning', description: 'Suivi', icon: Calendar },
     ],
     '/events': [
       { label: 'Calendrier', href: '/events', description: 'Événements & Deadlines', icon: Calendar },
@@ -102,7 +102,13 @@ export const PublicHeader = () => {
           <nav aria-label={t('accessibility.mainNav') || 'Navigation principale'} className={cn("hidden xl:flex items-center gap-0.5 relative", isRTL && "flex-row-reverse")}>
             {headerItems.map((item) => {
               const isActive = location.pathname === item.href;
-              const itemHasSubmenu = hasSubmenu(item.href);
+                const itemHasSubmenu = headerItems.filter(person => { person.parent === null });//hasSubmenu(item.href);
+
+                /*const itemHasSubmenu = headerItems.filter(itemMenu => {
+                    return itemMenu.parent === null;
+                });*/
+
+              console.log("item--->" + item);
               return (
                 <div key={item.href} className="relative group">
                   {itemHasSubmenu ? (
@@ -110,8 +116,8 @@ export const PublicHeader = () => {
                       className={cn(
                         "flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                         isActive
-                          ? "text-primary bg-primary/10 font-semibold"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
+                          ? "sarus text-primary bg-primary/10 font-semibold"
+                          : "sarus2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
                       )}
                     >
                       {getNavLabel(item)}
@@ -123,7 +129,7 @@ export const PublicHeader = () => {
                       target={item.is_external ? "_blank" : undefined}
                       rel={item.is_external ? "noopener noreferrer" : undefined}
                       className={cn(
-                        "block px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                        "sarus3 block px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                         isActive
                           ? "text-primary bg-primary/10 font-semibold"
                           : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
@@ -132,6 +138,9 @@ export const PublicHeader = () => {
                       {getNavLabel(item)}
                     </Link>
                   )}
+
+
+
                   {/* Submenu Dropdown */}
                   {itemHasSubmenu && (
                     <div className="absolute left-0 top-full mt-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999] min-w-[320px]">
@@ -230,7 +239,7 @@ export const PublicHeader = () => {
                       {mainNavigation.map((item) => {
                         const Icon = item.icon;
                         const hasSubmenu = Boolean(item.submenu?.length);
-                        const active = isNavActive(item);
+                          const active = true; //isNavActive(item);
                         return (
                           <Fragment key={item.id ?? item.label}>
                             {hasSubmenu ? (
