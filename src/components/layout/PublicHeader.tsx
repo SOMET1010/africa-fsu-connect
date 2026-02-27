@@ -86,10 +86,10 @@ export const PublicHeader = () => {
             {!user ? (
               <>
                 <Button asChild variant="ghost" className="hidden sm:inline-flex text-muted-foreground hover:text-foreground hover:bg-muted text-sm">
-                  <Link to="/auth">{t("common.login") || "Connexion"}</Link>
+                  <Link to="/auth">{t("common.login") || t("home.hero.cta.login")}</Link>
                 </Button>
                 <Button asChild className="hidden sm:inline-flex bg-primary text-primary-foreground hover:bg-primary/90 text-sm">
-                  <Link to="/auth?tab=signup">{t("common.register") || "S'inscrire"}</Link>
+                  <Link to="/auth?tab=signup">{t("common.register") || t("home.hero.cta.signup")}</Link>
                 </Button>
               </>
             ) : (

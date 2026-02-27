@@ -65,41 +65,41 @@ const About = () => {
         </p>
       </div>
 
-          {/* Mission */}
-          <section className="bg-white py-10">
-              <Card className="bg-card backdrop-blur-md border-border container mx-auto px-0 py-8">
-                  <CardContent className="p-8">
-                      <div className="grid md:grid-cols-2 gap-8 items-center">
-                          <div className="space-y-4">
-                              <h2 className="text-2xl font-bold text-foreground">Notre Mission</h2>
-                              <p className="text-muted-foreground leading-relaxed">
-                                  La Plateforme UDC vise à créer un guichet unique panafricain pour la collaboration,
-                                  l'innovation et la mutualisation des ressources dans le domaine du Service Universel
-                                  des Télécommunications.
-                              </p>
-                              <p className="text-muted-foreground leading-relaxed">
-                                  En connectant les 54 pays africains, nous facilitons le partage des meilleures pratiques,
-                                  l'harmonisation des politiques et l'optimisation des investissements pour garantir
-                                  l'accès aux services de télécommunications pour tous les citoyens africains.
-                              </p>
-                          </div>
-                          <div className="grid grid-cols-2 gap-4">
-                              {[
-                                  { value: "54", label: "Pays membres" },
-                                  { value: "127", label: "Projets actifs" },
-                                  { value: "$2.4B", label: "Budget total" },
-                                  { value: "68%", label: "Couverture" }
-                              ].map((stat) => (
-                                  <div key={stat.label} className="text-center p-4 bg-muted backdrop-blur-sm rounded-xl border border-border">
-                                      <p className="text-3xl font-bold text-[hsl(var(--nx-gold))]">{stat.value}</p>
-                                      <p className="text-sm text-muted-foreground">{stat.label}</p>
-                                  </div>
-                              ))}
-                          </div>
-                      </div>
-                  </CardContent>
-              </Card>
-          </section>
+        {/* Mission */}
+        <section className="bg-white py-10">
+            <Card className="bg-card backdrop-blur-md border-border container mx-auto px-0 py-8">
+                <CardContent className="p-8">
+                    <div className="grid md:grid-cols-2 gap-8 items-center">
+                        <div className="space-y-4">
+                            <h2 className="text-2xl font-bold text-foreground">Notre Mission</h2>
+                            <p className="text-muted-foreground leading-relaxed">
+                                La Plateforme UDC vise à créer un guichet unique panafricain pour la collaboration,
+                                l'innovation et la mutualisation des ressources dans le domaine du Service Universel
+                                des Télécommunications.
+                            </p>
+                            <p className="text-muted-foreground leading-relaxed">
+                                En connectant les 54 pays africains, nous facilitons le partage des meilleures pratiques,
+                                l'harmonisation des politiques et l'optimisation des investissements pour garantir
+                                l'accès aux services de télécommunications pour tous les citoyens africains.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            {[
+                                { value: "54", label: "Pays membres" },
+                                { value: "127", label: "Projets actifs" },
+                                { value: "$2.4B", label: "Budget total" },
+                                { value: "68%", label: "Couverture" }
+                            ].map((stat) => (
+                                <div key={stat.label} className="text-center p-4 bg-muted backdrop-blur-sm rounded-xl border border-border">
+                                    <p className="text-3xl font-bold text-[hsl(var(--nx-gold))]">{stat.value}</p>
+                                    <p className="text-sm text-muted-foreground">{stat.label}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </section>
       
 
       {/* 5 Pillars */}
