@@ -119,7 +119,7 @@ export function HomeHeroBlock() {
 
           {/* Right column — Map */}
           <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.1 }}>
-            <div className="relative rounded-xl border border-gray-200 overflow-hidden bg-gray-900" style={{ height: 'clamp(280px, 40vw, 380px)' }}>
+            <div className="relative rounded-xl border border-gray-200 overflow-hidden bg-gray-900" style={{ height: 'clamp(280px, 40vw, 380px)', zIndex: 10}}>
               {countries.length > 0 && (
                   <HomeMemberMap countries={countries} mode="members" />
               )}
