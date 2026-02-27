@@ -38,16 +38,21 @@ const IMPACT_STATS = [
 
 
 
+const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+        return (
+            <div style={{ backgroundColor: '#fff', padding: '10px', border: '1px solid #ccc', fontSize:11 }}>
+                <p>{`${t(payload[0].name)}`}</p>
+                <p className="font-bold">{`(${payload[0].value} %)`}</p>
+            </div>
+        );
+    }
+    return null;
+};
 
 
 export function HomeStatsSection() {
-    const { t } = useTranslation();
-
-    //useEffect(() => { }, []);
-    /*useEffect(() => {
-        
-    }, [t]);*/
-    
+    const { t } = useTranslation();  
 
   return (
     <section className="bg-gray-50/50 py-10 border-t border-gray-100">
@@ -84,12 +89,12 @@ export function HomeStatsSection() {
               <div className="h-36 w-36 shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={DOMAIN_DATA} innerRadius={35} outerRadius={60} dataKey="value" strokeWidth={2} stroke="#fff" label>
+                    <Pie data={DOMAIN_DATA} innerRadius={35} outerRadius={60} dataKey="value" nameKey="name" strokeWidth={2} stroke="#fff">
                       {DOMAIN_DATA.map((entry, i) => (
                         <Cell key={i} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip  contentStyle={{ fontSize: 11, borderRadius: 8 }}  />
+                    <Tooltip  contentStyle={{ fontSize: 11, borderRadius: 8 }} content={<CustomTooltip active={undefined} payload={undefined} />} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
