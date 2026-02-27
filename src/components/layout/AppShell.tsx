@@ -48,13 +48,12 @@ export default function AppShell({ children, hideFooter = false }: AppShellProps
     <>
       {/* Skip Links pour l'accessibilité */}
       <SkipLinks links={skipLinks} />
-      
+      <PublicHeader />
+      <div id="app-navigation"></div>
       <div className="min-h-screen bg-background text-foreground flex w-full relative">
         {/* Clean background - no decorative effects */}
         <div className="flex flex-col flex-1 min-w-0">
-          <div id="app-navigation">
-            <PublicHeader />
-          </div>
+          
           <main id="main-content" className="flex-1 relative" tabIndex={-1}>
             <PageTransition variant="fade" duration="normal">
               {children}

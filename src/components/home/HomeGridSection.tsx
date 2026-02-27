@@ -5,7 +5,6 @@ import { getCountryActivity, ACTIVITY_LEVELS } from "@/components/map/activityDa
 import { cn } from "@/lib/utils";
 import { HomeMemberMap } from "@/components/home/HomeMemberMap";
 import { motion } from "framer-motion";
-//import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 const getCountryFlag = (code: string): string => {
