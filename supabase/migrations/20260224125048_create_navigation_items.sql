@@ -4,16 +4,21 @@
 
 -- create the navigation_items table with canonical columns
 create table public.navigation_items (
-  id uuid not null default gen_random_uuid(),
+  id uuid not null default gen_random_uuid (),
   href text not null,
   location text not null,
   label jsonb not null default '{}'::jsonb,
   sort_order integer not null default 0,
+  user_role text[] DEFAULT ARRAY['public','reader'] NOT NULL,
+  reference text default null,
+  parent text default null,
   is_visible boolean not null default true,
   is_external boolean not null default false,
-  icon text,
+  icon text null,
   updated_at timestamp with time zone not null default now(),
+  description text default null,
   constraint navigation_items_pkey primary key (id)
+
 );
 
 -- enable row level security so policies can govern access

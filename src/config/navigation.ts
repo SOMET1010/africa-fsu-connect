@@ -24,6 +24,10 @@ export interface NavSubItem {
     description: string
     descriptionKey?: string
     roles?: string[] // Pour les restrictions d'accès
+    sort_order?: string
+    user_role?: string[] // Pour les restrictions d'accès
+    reference: string
+    parent: string
 }
 
 export interface NavItem {
@@ -35,14 +39,19 @@ export interface NavItem {
     highlight?: boolean
     submenu?: NavSubItem[]
     roles?: string[] // Pour les restrictions d'accès
+    sort_order?: string
+    user_role?: string[] // Pour les restrictions d'accès
+    reference: string
+    parent: string
 }
+
 
 // ============================================================
 // MENU PRINCIPAL (FRONT OFFICE)
 // Accessible selon les droits : Invité, Lecteur, Contributeur, Administrateur
 // ============================================================
 
-export const mainNavigation: NavItem[] = [
+export const mainNavigation: any[] = [
     {
         id: "home",
         label: "Accueil",
@@ -57,6 +66,7 @@ export const mainNavigation: NavItem[] = [
                 href: "/",
                 icon: Home,
                 description: "Vue d'ensemble dynamique du programme FSU",
+
             },
             {
                 label: "Mot des autorités",
@@ -310,7 +320,7 @@ export const mainNavigation: NavItem[] = [
 // MENU MON COMPTE (Connectés uniquement)
 // ============================================================
 
-export const accountMenu: NavItem[] = [
+export const accountMenu: any[] = [
     {
         id: "profile",
         label: "Profil",
