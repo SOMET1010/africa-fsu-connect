@@ -157,15 +157,6 @@ export function useSiteConfig() {
     function getNavItems(location: string, parent: string): NavItem[] {
         const items = navItems.filter(n => n.location === location && n.parent === parent)
         if (items.length > 0) return items
-        // Fallback for header
-        if (location === "header") {
-            /*return FALLBACK_HEADER_NAV.map(f => ({
-                ...f,
-                location: "header",
-                is_visible: true,
-                is_external: false,
-            }))*/
-        }
         return []
     }
 

@@ -35,54 +35,11 @@ export const PublicHeader = () => {
   const { user, profile, signOut } = useAuth();
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
 
-  const headerItems = getNavItems("header", null);
-
+  const itemsNavMenuStock = getNavItems("header", null);
   const isActivePath = (path?: string) => path ? location.pathname === path : false;
-  /*const isNavActive = (item: NavItem) => {
-    if (item.href) return isActivePath(item.href);
-    return item.submenu?.some((sub) => isActivePath(sub.href)) ?? false;
-  };*/
-
   const resolveNavLabel = (item: NavItem) => item.labelKey ? t(item.labelKey) : item.label;
 
-  // Submenu definitions based on header items
-  const submenuConfig: Record<string, Array<{ label: string; labelKey?: string; href: string; description: string; icon: any }>> = {
-    '/': [
-      { label: 'Vue d\'ensemble', href: '/', description: 'Vue d\'ensemble dynamique', icon: Home },
-      { label: 'Mot des autorités', href: '/about', description: 'Mot de la DG ANSUT et du SG UAT', icon: Users },
-    ],
-    '/projects': [
-      { label: 'Carte Interactive', href: '/map', description: 'Par région/pays/statut', icon: Map },
-      { label: 'Liste des Projets', href: '/projects', description: 'Fiches normalisées', icon: FileText },
-      { label: 'Soumettre un Projet', href: '/submit', description: 'Formulaire', icon: FileText },
-      { label: 'Mes Projets', href: '/my-contributions', description: 'Suivi personnel', icon: FileText },
-    ],
-    '/resources': [
-      { label: 'Bibliothèque', href: '/resources', description: 'Guides, Rapports, Bulletins', icon: BookOpen },
-      { label: 'Politiques & Cadres', href: '/strategies', description: 'Documents réglementaires', icon: FileText },
-      { label: 'Modèles & Formulaires', href: '/agency-documents', description: 'Téléchargement', icon: FileText },
-    ],
-    '/forum': [
-      { label: 'Forum de Discussion', href: '/forum', description: 'Thématiques', icon: MessageSquare },
-      { label: 'Annuaire', href: '/members', description: 'Agences & Points Focaux', icon: Users },
-      { label: 'Co-rédaction', href: '/coauthoring', description: 'Espace collaboratif', icon: FileText },
-    ],
-    '/elearning': [
-      { label: 'Catalogue', href: '/catalog', description: 'Webinaires & Sessions', icon: GraduationCap },
-      { label: 'E-Learning', href: '/elearning', description: 'Modules en différé', icon: Video },
-      { label: 'Mes Inscriptions', href: '/registrations-elearning', description: 'Suivi', icon: Calendar },
-    ],
-    '/events': [
-      { label: 'Calendrier', href: '/events', description: 'Événements & Deadlines', icon: Calendar },
-      { label: 'CMDT-25', href: '/events?cmdt25=true', description: 'Section dédiée & échéances', icon: Calendar },
-    ],
-    '/watch': [
-      { label: 'Actualités', href: '/watch', description: 'News FSU/TIC', icon: Rss },
-      { label: 'Flux RSS', href: '/watch', description: 'UIT, Smart Africa, UA', icon: Rss },
-    ],
-  };
-
-  const hasSubmenu = (href: string) => submenuConfig[href]?.length > 0;
+   
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-card border-b border-border shadow-sm" role="banner" aria-label={t('accessibility.publicHeader') || 'En-tête du site public'}>
@@ -99,84 +56,78 @@ export const PublicHeader = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <nav aria-label={t('accessibility.mainNav') || 'Navigation principale'} className={cn("hidden xl:flex items-center gap-0.5 relative", isRTL && "flex-row-reverse")}>
-            {headerItems.map((item) => {
-              const isActive = location.pathname === item.href;
-                const itemHasSubmenu = headerItems.filter(person => { person.parent === null });//hasSubmenu(item.href);
+            <nav aria-label={t('accessibility.mainNav') || 'Navigation principale'} className={cn("hidden xl:flex items-center gap-0.5 relative", isRTL && "flex-row-reverse")}>
+                {itemsNavMenuStock?.map((item) => {
+                    const isActive = location.pathname === item.href;
+                    const itemsNavSubMenuStock = getNavItems("header", item.reference);
 
-                /*const itemHasSubmenu = headerItems.filter(itemMenu => {
-                    return itemMenu.parent === null;
-                });*/
-
-              console.log("item--->" + item);
-              return (
-                <div key={item.href} className="relative group">
-                  {itemHasSubmenu ? (
-                    <button
-                      className={cn(
-                        "flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
-                        isActive
-                          ? "sarus text-primary bg-primary/10 font-semibold"
-                          : "sarus2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
-                      )}
-                    >
-                      {getNavLabel(item)}
-                      <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
-                    </button>
-                  ) : (
-                    <Link
-                      to={item.href}
-                      target={item.is_external ? "_blank" : undefined}
-                      rel={item.is_external ? "noopener noreferrer" : undefined}
-                      className={cn(
-                        "sarus3 block px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
-                        isActive
-                          ? "text-primary bg-primary/10 font-semibold"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
-                      )}
-                    >
-                      {getNavLabel(item)}
-                    </Link>
-                  )}
+                    return (
+                        <div key={item.href} className="relative group">
+                            {itemsNavMenuStock ? (
+                                <button
+                                    className={cn(
+                                        "flex items-center gap-1.5 px-2.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                                        isActive
+                                            ? "sarus text-primary bg-primary/10 font-semibold"
+                                            : "sarus2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
+                                    )}
+                                >
+                                    {getNavLabel(item)}
+                                    <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
+                                </button>
+                            ) : (
+                                <Link
+                                    to={item.href}
+                                    target={item.is_external ? "_blank" : undefined}
+                                    rel={item.is_external ? "noopener noreferrer" : undefined}
+                                    className={cn(
+                                        "sarus3 block px-2.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                                        isActive
+                                            ? "text-primary bg-primary/10 font-semibold"
+                                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
+                                    )}
+                                >
+                                    {getNavLabel(item)}
+                                </Link>
+                            )}
 
 
 
-                  {/* Submenu Dropdown */}
-                  {itemHasSubmenu && (
-                    <div className="absolute left-0 top-full mt-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999] min-w-[320px]">
-                      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl py-1 overflow-hidden">
-                        {submenuConfig[item.href]?.map((subItem, index) => {
-                          const SubIcon = subItem.icon;
-                          const subActive = isActivePath(subItem.href);
-                          return (
-                            <Link
-                              key={subItem.href}
-                              to={subItem.href}
-                              className={cn(
-                                "flex items-center gap-4 px-4 py-3.5 text-sm transition-all duration-150",
-                                subActive
-                                  ? "bg-primary text-white"
-                                  : "text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800",
-                                index > 0 && "border-t border-slate-100 dark:border-slate-800"
-                              )}
-                            >
-                              <div className="flex-shrink-0 bg-slate-100 dark:bg-slate-700 rounded-xl p-2.5">
-                                <SubIcon className="h-5 w-5 text-primary dark:text-primary" />
-                              </div>
-                              <div className="flex flex-col leading-tight flex-1 min-w-0">
-                                <span className="font-semibold text-slate-900 dark:text-slate-100 text-base">{subItem.label}</span>
-                                <span className="text-xs text-slate-500 dark:text-slate-500 mt-0.5">{subItem.description}</span>
-                              </div>
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </nav>
+                            {/* Submenu Dropdown */}
+                            {itemsNavMenuStock && (
+                                <div className="absolute left-0 top-full mt-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999] min-w-[320px]">
+                                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl py-1 overflow-hidden">
+                                        {itemsNavSubMenuStock?.map((subItem, index) => {
+                                            const SubIcon = subItem.icon;
+                                            const subActive = isActivePath(subItem.href);
+                                            return (
+                                                <Link
+                                                    key={subItem.href}
+                                                    to={subItem.href}
+                                                    className={cn(
+                                                        "flex items-center gap-4 px-4 py-3.5 text-sm transition-all duration-150",
+                                                        subActive
+                                                            ? "bg-primary text-white"
+                                                            : "text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800",
+                                                        index > 0 && "border-t border-slate-100 dark:border-slate-800"
+                                                    )}
+                                                >
+                                                    {/*<div className="flex-shrink-0 bg-slate-100 dark:bg-slate-700 rounded-xl p-2.5">
+                                                        <SubIcon className="h-5 w-5 text-primary dark:text-primary" />
+                                                    </div>*/}
+                                                    <div className="flex flex-col leading-tight flex-1 min-w-0">
+                                                        <span className="font-semibold text-slate-900 dark:text-slate-100 text-base">{getNavLabel(subItem)}</span>
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+            </nav>
 
           {/* Right side */}
           <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
@@ -341,37 +292,87 @@ export const PublicHeader = () => {
             className="xl:hidden border-t border-border overflow-hidden bg-white dark:bg-card"
           >
             <nav id="public-mobile-nav" aria-label={t('accessibility.mobileNav') || 'Navigation mobile'} className="container mx-auto px-4 py-4 space-y-1">
-              {headerItems.map((item) => {
-                const isActive = location.pathname === item.href;
-                return (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    onClick={() => setMobileOpen(false)}
-                    target={item.is_external ? "_blank" : undefined}
-                    rel={item.is_external ? "noopener noreferrer" : undefined}
-                    className={cn(
-                      "flex items-center px-4 py-3.5 rounded-xl text-sm font-medium transition-colors",
-                      isActive
-                        ? "text-primary bg-primary/10 font-semibold border-l-4 border-primary"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800",
-                      isRTL && "border-l-0 border-r-4"
-                    )}
-                  >
-                    {getNavLabel(item)}
-                  </Link>
-                );
-              })}
-              {!user && (
-                <div className="flex gap-2 pt-4 border-t border-border">
-                  <Button asChild variant="ghost" className="flex-1 text-muted-foreground hover:text-foreground">
-                    <Link to="/auth" onClick={() => setMobileOpen(false)}>{t("common.login") || "Connexion"}</Link>
-                  </Button>
-                  <Button asChild className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
-                    <Link to="/auth?tab=signup" onClick={() => setMobileOpen(false)}>{t("common.register") || "S'inscrire"}</Link>
-                  </Button>
-                </div>
-              )}
+                {itemsNavMenuStock?.map((item) => {
+                    const isActive = location.pathname === item.href;
+                    const itemsNavSubMenuStock = getNavItems("header", item.reference);
+
+                    return (
+                        <div key={item.href} className="relative group">
+                            {itemsNavMenuStock ? (
+                                <button
+                                    className={cn(
+                                        "flex items-center px-4 py-3.5 rounded-xl text-sm font-medium transition-colors",
+                                        isActive
+                                            ? "text-primary bg-primary/10 font-semibold border-l-4 border-primary"
+                                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800",
+                                        isRTL && "border-l-0 border-r-4"
+                                    )}
+                                >
+                                    {getNavLabel(item)}
+                                    <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
+                                </button>
+                            ) : (
+                                <Link
+                                    to={item.href}
+                                    target={item.is_external ? "_blank" : undefined}
+                                    onClick={() => setMobileOpen(false)}
+                                    rel={item.is_external ? "noopener noreferrer" : undefined}
+                                    className={cn(
+                                        "flex items-center px-4 py-3.5 rounded-xl text-sm font-medium transition-colors",
+                                        isActive
+                                            ? "text-primary bg-primary/10 font-semibold border-l-4 border-primary"
+                                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800",
+                                        isRTL && "border-l-0 border-r-4"
+                                    )}
+                                >
+                                    {getNavLabel(item)}
+                                </Link>
+                            )}
+
+
+
+                            {/* Submenu Dropdown */}
+                            {itemsNavMenuStock && (
+                                <div className="absolute left-0 top-full mt-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999] min-w-[320px]">
+                                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl py-1 overflow-hidden">
+                                        {itemsNavSubMenuStock?.map((subItem, index) => {
+                                            const SubIcon = subItem.icon;
+                                            const subActive = isActivePath(subItem.href);
+                                            return (
+                                                <Link
+                                                    key={subItem.href}
+                                                    to={subItem.href}
+                                                    className={cn(
+                                                        "flex items-center gap-4 px-4 py-3.5 text-sm transition-all duration-150",
+                                                        subActive
+                                                            ? "bg-primary text-white"
+                                                            : "text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800",
+                                                        index > 0 && "border-t border-slate-100 dark:border-slate-800"
+                                                    )}
+                                                >
+
+                                                    <div className="flex flex-col leading-tight flex-1 min-w-0">
+                                                        <span className="font-semibold text-slate-900 dark:text-slate-100 text-base">{getNavLabel(subItem)}</span>
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+                {!user && (
+                    <div className="flex gap-2 pt-4 border-t border-border">
+                        <Button asChild variant="ghost" className="flex-1 text-muted-foreground hover:text-foreground">
+                            <Link to="/auth" onClick={() => setMobileOpen(false)}>{t("common.login") || "Connexion"}</Link>
+                        </Button>
+                        <Button asChild className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
+                            <Link to="/auth?tab=signup" onClick={() => setMobileOpen(false)}>{t("common.register") || "S'inscrire"}</Link>
+                        </Button>
+                    </div>
+                )}
             </nav>
           </motion.div>
         )}
