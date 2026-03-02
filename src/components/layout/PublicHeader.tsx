@@ -1,6 +1,16 @@
 import React, { Fragment, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+import {
   Menu, X, User, LogOut, ChevronDown,
   Home, Map, BookOpen, MessageSquare, GraduationCap, Calendar, Rss, FileText, Video, Users
 } from "lucide-react";
@@ -25,6 +35,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { mainNavigation, type NavItem } from "@/config/navigation";
 
+
 export const PublicHeader = () => {
   const { t } = useTranslation();
   const { isRTL } = useDirection();
@@ -39,8 +50,16 @@ export const PublicHeader = () => {
   const isActivePath = (path?: string) => path ? location.pathname === path : false;
   const resolveNavLabel = (item: NavItem) => item.labelKey ? t(item.labelKey) : item.label;
 
+<<<<<<< HEAD
    
 
+=======
+  const [open, setOpen] = React.useState(false);
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
+  
+>>>>>>> 6760311ed17381d3e383b5962f396e40a0a66d73
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-card border-b border-border shadow-sm" role="banner" aria-label={t('accessibility.publicHeader') || 'En-tête du site public'}>
       <div className="container mx-auto px-4">
@@ -266,21 +285,117 @@ export const PublicHeader = () => {
             )}
 
             {/* Mobile toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="xl:hidden text-muted-foreground hover:text-foreground"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label={mobileOpen ? (t('accessibility.closeMenu') || 'Fermer le menu') : (t('accessibility.openMenu') || 'Ouvrir le menu')}
-              aria-expanded={mobileOpen}
-              aria-controls="public-mobile-nav"
-            >
-              {mobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
-            </Button>
+          {/* Mobile nav */}
+          <AnimatePresence>
+                <Drawer direction="right">
+                  <DrawerTrigger asChild>
+                    <Button
+                    variant="ghost"
+                    size="icon"
+                    className="xl:hidden text-muted-foreground hover:text-foreground"
+                    onClick={() => setMobileOpen(!mobileOpen)}
+                    aria-label={mobileOpen ? (t('accessibility.closeMenu') || 'Fermer le menu') : (t('accessibility.openMenu') || 'Ouvrir le menu')}
+                    aria-expanded={mobileOpen}
+                    aria-controls="public-mobile-nav"
+                  >
+                    {mobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+                  </Button>
+                  </DrawerTrigger>
+                  <DrawerContent>
+                    <DrawerHeader>
+                      <DrawerTitle>Move Goal</DrawerTitle>
+                      <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+                    </DrawerHeader>
+
+
+                    
+                    <div className="no-scrollbar overflow-y-auto px-4 ">
+                       {itemsNavMenuStock?.map((item) => {
+                          const isActive = location.pathname === item.href;
+                          const itemsNavSubMenuStock = getNavItems("header", item.reference);
+                          return (
+                            <div key={item.href} className="relative group">
+                                {itemsNavMenuStock ? (
+                                    <button
+                                        className={cn(
+                                            "flex items-center gap-1.5 px-2.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 w-full",
+                                            isActive
+                                                ? "sarus text-primary bg-primary/10 font-semibold"
+                                                : "sarus2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
+                                        )}
+                                    >
+                                        {getNavLabel(item)}
+                                        <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180 " />
+                                    </button>
+                                ) : (
+                                    <Link
+                                        to={item.href}
+                                        target={item.is_external ? "_blank" : undefined}
+                                        rel={item.is_external ? "noopener noreferrer" : undefined}
+                                        className={cn(
+                                            "sarus3 block px-2.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 w-full",
+                                            isActive
+                                                ? "text-primary bg-primary/10 font-semibold"
+                                                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
+                                        )}
+                                    >
+                                        {getNavLabel(item)}
+                                    </Link>
+                                )}
+
+                                {/* Submenu Dropdown */}
+                                {itemsNavMenuStock && (
+                                    <div className="absolute left-0 top-full mt-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999] w-full">
+                                        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl py-1 overflow-hidden">
+                                            {itemsNavSubMenuStock?.map((subItem, index) => {
+                                            const SubIcon = subItem.icon;
+                                            const subActive = isActivePath(subItem.href);
+                                            return (
+                                                <Link
+                                                    key={subItem.href}
+                                                    to={subItem.href}
+                                                    className={cn(
+                                                        "flex items-center gap-4 px-4 py-3.5 text-sm transition-all duration-150",
+                                                        subActive
+                                                            ? "bg-primary text-white"
+                                                            : "text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800",
+                                                        index > 0 && "border-t border-slate-100 dark:border-slate-800"
+                                                    )}
+                                                >
+                                                    {/*<div className="flex-shrink-0 bg-slate-100 dark:bg-slate-700 rounded-xl p-2.5">
+                                                        <SubIcon className="h-5 w-5 text-primary dark:text-primary" />
+                                                    </div>*/}
+                                                    <div className="flex flex-col leading-tight flex-1 min-w-0">
+                                                        <span className="font-semibold text-slate-900 dark:text-slate-100 text-base">{getNavLabel(subItem)}</span>
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                            </div>
+                          );
+                          
+                        })}
+                    </div>
+
+
+                    
+                    <DrawerFooter>
+                      <Button>Submit</Button>
+                      <DrawerClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                      </DrawerClose>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
+          </AnimatePresence>
           </div>
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Mobile nav */}
       <AnimatePresence>
         {mobileOpen && (
@@ -377,6 +492,9 @@ export const PublicHeader = () => {
           </motion.div>
         )}
       </AnimatePresence>
+=======
+
+>>>>>>> 6760311ed17381d3e383b5962f396e40a0a66d73
     </header>
   );
 };
