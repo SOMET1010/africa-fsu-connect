@@ -157,7 +157,7 @@ export const PublicHeader = () => {
                     </Avatar>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-72 bg-white border border-border shadow-lg p-0 overflow-hidden">
+                <DropdownMenuContent align="end" className="bg-white border border-border shadow-lg p-0 overflow-hidden w-200">
                   <div className="px-5 py-4">
                     <p className="text-sm font-semibold text-foreground">
                       {profile?.first_name && profile?.last_name

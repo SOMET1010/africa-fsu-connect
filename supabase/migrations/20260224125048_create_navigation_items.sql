@@ -16,6 +16,7 @@ create table public.navigation_items (
   is_external boolean not null default false,
   icon text null,
   updated_at timestamp with time zone not null default now(),
+  description text default null,
   constraint navigation_items_pkey primary key (id)
 );
 
