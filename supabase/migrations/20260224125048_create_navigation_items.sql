@@ -17,8 +17,8 @@ create table public.navigation_items (
   icon text null,
   updated_at timestamp with time zone not null default now(),
   description text default null,
-  constraint navigation_items_pkey primary key (id)
-
+  constraint navigation_items_pkey primary key (id),
+  constraint navigation_items_reference_key unique (reference)
 );
 
 -- enable row level security so policies can govern access

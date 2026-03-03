@@ -1,0 +1,1 @@
+SELECT user_id, role, first_name, last_name FROM profiles LIMIT 5;

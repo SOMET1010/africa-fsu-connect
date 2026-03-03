@@ -103,6 +103,7 @@ export interface NavItem {
     user_role: any[]
     reference: string
     parent: string
+    description?: string
 }
 
 export function useSiteConfig() {
