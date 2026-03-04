@@ -44,12 +44,6 @@ const ProtectedRoute = ({
         return <Navigate to='/dashboard' replace />;
     }
 
-    console.log("Controle liens ", {
-        requireAuth: !hasRole(requiredRoles),
-        requiredRoles: requiredRoles,
-        user: user.user_metadata
-    });
-
     return <>{children}</>;
 };
 

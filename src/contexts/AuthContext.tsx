@@ -5,7 +5,6 @@ import { Tables } from '@/integrations/supabase/types';
 import { logger } from '@/utils/logger';
 import type { SecurityEventDetails, ApiResponse } from '@/types/common';
 import type { UserRole } from '@/types/userRole';
-import { permission } from 'node:process';
 import { NavItem } from '../hooks/useSiteConfig';
 
 interface AuthContextType {
@@ -24,6 +23,7 @@ interface AuthContextType {
     hasRole: (roles: UserRole[]) => boolean;
     hasPermission: (navItem: NavItem) => boolean;
     hasPermissionURL: (url: string) => boolean;
+    navigationItems: NavItem[];
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [loading, setLoading] = useState(true);
     const [profileLoading, setProfileLoading] = useState(false);
 
+    const [navigationItems, setNavigationItems] = useState<NavItem[]>([]);
 
     const fetchProfile = async (userId: string) => {
         logger.debug('Fetching profile', { userId, component: 'AuthContext', action: 'fetchProfile' });
@@ -77,6 +78,45 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
     };
 
+    //a corriger
+    const fetchNavigationItems = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('navigation_items')
+                .select('*')
+                .eq('is_active', true)
+                .order('sort_order', { ascending: true });
+
+            if (error) {
+                logger.error('Error fetching navigation items', error);
+                return;
+            }
+
+            if (!data) {
+                setNavigationItems([]);
+                return;
+            }
+
+            const mappedNavItems: any[] = data.map(item => ({
+                id: item.id,
+                href: item.href,
+                icon: item.icon,
+                sort_order: item.sort_order,
+                user_role: item.user_role ?? [],
+                is_visible: item.is_visible,
+                is_external: item.is_external,
+                label:
+                    typeof item.label === 'object' && item.label !== null
+                        ? item.label as Record<string, string>
+                        : {},
+            }));
+
+            setNavigationItems(mappedNavItems);
+
+        } catch (err) {
+            logger.error('Unexpected error fetching navigation items', err);
+        }
+    };
 
 
 
@@ -128,8 +168,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             }
         });
 
+
         return () => subscription.unsubscribe();
     }, []);
+
+
+    useEffect(() => {
+        fetchNavigationItems();
+    }, []);
+
+
 
     const signIn = async (email: string, password: string): Promise<ApiResponse<Session>> => {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -283,9 +331,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     //const hasPermissionURL = ()
 
 
+    const getNavigation = () => {
+
+    };
+
+
     const getNavItemByUrl = (url: string): NavItem | undefined => {
         // Cherche dans toutes les routes déclarées
-        return null;// ROUTES.find(route => route.path === url);
+        return navigationItems.find(item => item.href === url);
     };
 
 
@@ -303,11 +356,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
 
-    const hasPermissionURL = (url: string) => {
+    const hasPermissionURL = (url: string): boolean => {
         const navItem = getNavItemByUrl(url);
-        if (!navItem) return false; // page non trouvée => pas d'accès
 
-        return hasPermission(navItem); // utilise la fonction existante
+        // Si la route n'existe pas → on refuse
+        if (!navItem) return false;
+
+        // Si pas de restriction → public
+        if (!navItem.user_role || navItem.user_role.length === 0)
+            return true;
+
+        const currentRole =
+            profile?.role ??
+            session?.user?.user_metadata?.role ??
+            'public';
+
+        return navItem.user_role.includes(currentRole);
     };
 
 
@@ -329,6 +393,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             hasRole,
             hasPermission,
             hasPermissionURL,
+            navigationItems,
         }}>
             {children}
         </AuthContext.Provider>
