@@ -1,52 +1,56 @@
 import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
-  children: ReactNode;
-  requireAuth?: boolean;
-  requiredRoles?: UserRole[];
-  fallbackPath?: string;
+    children: ReactNode;
+    requireAuth?: boolean;
+    requiredRoles?: UserRole[];
+    fallbackPath?: string; // redirection si non autorisé
 }
 
-const ProtectedRoute = ({ 
-  children, 
-  requireAuth = true, 
-  requiredRoles = [],
-  fallbackPath = '/auth'
+const ProtectedRoute = ({
+    children,
+    requireAuth = true,
+    requiredRoles = ["super_admin","country_admin", "editor", "focal_point", "contributor", "reader"]
+    //requiredRoles = []
 }: ProtectedRouteProps) => {
-  const { user, profile, loading, profileLoading, hasRole } = useAuth();
+    const { user, profile, loading, profileLoading, hasRole, hasPermissionURL } = useAuth();
+    const location = useLocation();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  // Check authentication
-  if (requireAuth && !user) {
-    return <Navigate to={fallbackPath} replace />;
-  }
-
-  // Check role requirements
-  if (requiredRoles.length > 0) {
-    if (profileLoading || !profile) {
-      return (
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      );
+    // 🔹 Loading global auth
+    if (loading || profileLoading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
     }
 
-    if (!hasRole(requiredRoles)) {
-      return <Navigate to="/dashboard" replace />;
+    // 🔹 Vérification authentification
+    if (requireAuth && !user) {
+        return <Navigate to="/auth" replace />;
     }
-  }
 
-  return <>{children}</>;
+    // 🔹 Vérification des rôles
+    /*if (requiredRoles.length > 0 && !hasRole(requiredRoles)) {
+        return <Navigate to="/dashboard" replace />;
+    }*/
+
+    // 🔹 Vérification de la permission sur la page, sauf pour les pages publiques essentielles
+    const publicPaths = ['/dashboard', '/auth', '/']; // Autoriser ces pages même si non listées
+    if (!publicPaths.includes(location.pathname) && !hasPermissionURL(location.pathname)) {
+        return <Navigate to='/dashboard' replace />;
+    }
+
+    console.log("Controle liens ", {
+        requireAuth: !hasRole(requiredRoles),
+        requiredRoles: requiredRoles,
+        user: user.user_metadata
+    });
+
+    return <>{children}</>;
 };
 
 export default ProtectedRoute;

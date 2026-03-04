@@ -106,6 +106,7 @@ export interface NavItem {
     description?: string
 }
 
+
 export function useSiteConfig() {
     const { currentLanguage: language } = useTranslation()
 
@@ -166,6 +167,9 @@ export function useSiteConfig() {
         const label = item.label as Record<string, string>
         return label[l] ?? label.fr ?? label.en ?? label.ar ?? label.pt
     }
+
+
+
 
     return {
         settings,

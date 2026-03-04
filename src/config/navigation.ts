@@ -16,7 +16,7 @@ import {
     LogOut,
 } from "lucide-react"
 
-export interface NavSubItem {
+/*export interface NavSubItem {
     label: string
     labelKey?: string
     href: string
@@ -28,9 +28,9 @@ export interface NavSubItem {
     user_role?: string[] // Pour les restrictions d'accès
     reference: string
     parent: string
-}
+}*/
 
-export interface NavItem {
+/*export interface NavItem {
     id: string
     label: string
     labelKey?: string
@@ -43,7 +43,8 @@ export interface NavItem {
     user_role?: string[] // Pour les restrictions d'accès
     reference: string
     parent: string
-}
+    description?: string
+}*/
 
 
 // ============================================================
@@ -51,7 +52,7 @@ export interface NavItem {
 // Accessible selon les droits : Invité, Lecteur, Contributeur, Administrateur
 // ============================================================
 
-export const mainNavigation: any[] = [
+/*export const mainNavigation: any[] = [
     {
         id: "home",
         label: "Accueil",
@@ -314,13 +315,13 @@ export const mainNavigation: any[] = [
             },
         ],
     },
-]
+]*/
 
 // ============================================================
 // MENU MON COMPTE (Connectés uniquement)
 // ============================================================
 
-export const accountMenu: any[] = [
+/*export const accountMenu: any[] = [
     {
         id: "profile",
         label: "Profil",
@@ -385,7 +386,7 @@ export const accountMenu: any[] = [
             "super_admin",
         ],
     },
-]
+]*/
 
 // Labels de navigation pour les sidebars
 export const sidebarLabels = {

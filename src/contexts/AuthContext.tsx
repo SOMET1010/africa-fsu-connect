@@ -23,6 +23,7 @@ interface AuthContextType {
     isAdmin: () => boolean;
     hasRole: (roles: UserRole[]) => boolean;
     hasPermission: (navItem: NavItem) => boolean;
+    hasPermissionURL: (url: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -128,7 +129,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         });
 
         return () => subscription.unsubscribe();
-    }, [session]);
+    }, []);
 
     const signIn = async (email: string, password: string): Promise<ApiResponse<Session>> => {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -278,31 +279,36 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         return roles.includes(profile.role);
     };
 
+    // --- hasPermissionURL ---
+    //const hasPermissionURL = ()
+
+
+    const getNavItemByUrl = (url: string): NavItem | undefined => {
+        // Cherche dans toutes les routes déclarées
+        return null;// ROUTES.find(route => route.path === url);
+    };
+
 
 
     // --- hasPermission ---
     const hasPermission = (navItem: NavItem) => {
-        if (!profile && !session?.user) return false;
+        // Si aucune restriction → menu public
+        if (!navItem?.user_role?.length) return true;
 
-        // Récupérer le rôle actuel : profile.role si disponible, sinon user_metadata.role
+        // Si pas connecté → vérifier si "public" est autorisé
         const currentRole = profile?.role ?? session?.user?.user_metadata?.role ?? 'public';
 
-        const allowedRoles = [currentRole, 'public'];
-
-        console.log('Checking permission', {
-            metadata: {
-                userRoleRequired: navItem.user_role,
-                currentUserRole: currentRole
-            },
-            component: 'AuthContext',
-            action: 'hasPermission'
-        });
-
-        // Vérifie si l'un des rôles du navItem correspond au rôle actuel
-        return navItem?.user_role?.some(role => allowedRoles.includes(role)) ?? false;
+        // Vérifie si l'un des rôles requis correspond au rôle actuel ou "public"
+        return navItem.user_role.some(role => role === currentRole || role === 'public');
     };
 
 
+    const hasPermissionURL = (url: string) => {
+        const navItem = getNavItemByUrl(url);
+        if (!navItem) return false; // page non trouvée => pas d'accès
+
+        return hasPermission(navItem); // utilise la fonction existante
+    };
 
 
 
@@ -321,7 +327,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             updateProfile,
             isAdmin,
             hasRole,
-            hasPermission
+            hasPermission,
+            hasPermissionURL,
         }}>
             {children}
         </AuthContext.Provider>
